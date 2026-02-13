@@ -1,0 +1,6 @@
+@dir www/cloudbsd-admin
+www/cloudbsd-admin/package.json
+www/cloudbsd-admin/Makefile
+www/cloudbsd-admin/server/src/index.ts
+www/cloudbsd-admin/src/main.tsx
+# ... more files ...

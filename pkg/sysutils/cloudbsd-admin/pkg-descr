@@ -1,0 +1,10 @@
+CloudBSD Admin is a modern, responsive web-based management panel for
+CloudBSD infrastructure. It provides a centralized interface for managing
+Virtual Machines (bhyve), Docker containers, FreeBSD Jails, and Podman.
+
+Features:
+- Real-time updates via WebSockets
+- JWT-based authentication
+- Role-based access control
+- Comprehensive action logging
+- Responsive design with Tailwind CSS
