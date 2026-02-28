@@ -201,8 +201,8 @@ app.get('/api/health', (req, res) => {
  */
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
-  if (!db) initDb();
-  const user = db.prepare('SELECT * FROM users WHERE username = ?').get(username) as any;
+  const currentDb = initDb();
+  const user = currentDb.prepare('SELECT * FROM users WHERE username = ?').get(username) as any;
 
   if (user && bcrypt.compareSync(password, user.password)) {
     logAction(user.id, 'LOGIN_SUCCESS', `User ${username} logged in`);

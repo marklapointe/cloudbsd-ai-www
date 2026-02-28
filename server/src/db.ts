@@ -25,10 +25,10 @@ export function initDb() {
     console.log(`Using existing database file at ${config.dbPath}`);
   }
 
-  db = new Database(config.dbPath);
-  db.pragma('journal_mode = WAL');
+  const newDb = new Database(config.dbPath);
+  newDb.pragma('journal_mode = WAL');
 
-  db.exec(`
+  newDb.exec(`
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       username TEXT UNIQUE NOT NULL,
@@ -67,14 +67,14 @@ export function initDb() {
   `);
 
   // Create default admin if not exists
-  const admin = db.prepare('SELECT id FROM users WHERE username = ?').get('admin');
+  const admin = newDb.prepare('SELECT id FROM users WHERE username = ?').get('admin');
   if (!admin) {
     const hashedPassword = bcrypt.hashSync('admin', 10);
-    db.prepare('INSERT INTO users (username, password, role) VALUES (?, ?, ?)').run('admin', hashedPassword, 'admin');
+    newDb.prepare('INSERT INTO users (username, password, role) VALUES (?, ?, ?)').run('admin', hashedPassword, 'admin');
   }
 
   // Seed some initial data if table is empty
-  const resourceCount = db.prepare('SELECT COUNT(*) as count FROM resources').get() as any;
+  const resourceCount = newDb.prepare('SELECT COUNT(*) as count FROM resources').get() as any;
   if (resourceCount.count === 0 && config.demoMode) {
     const seedResources = [
       { type: 'vms', name: 'web-server', status: 'running', cpu: 1, memory: '2GB' },
@@ -85,11 +85,14 @@ export function initDb() {
       { type: 'podman', name: 'podman-worker', status: 'running', image: 'fedora:latest' }
     ];
 
-    const stmt = db.prepare('INSERT INTO resources (type, name, status, image, ip, cpu, memory) VALUES (?, ?, ?, ?, ?, ?, ?)');
+    const stmt = newDb.prepare('INSERT INTO resources (type, name, status, image, ip, cpu, memory) VALUES (?, ?, ?, ?, ?, ?, ?)');
     for (const res of seedResources) {
       stmt.run(res.type, res.name, res.status, res.image || null, res.ip || null, res.cpu || null, res.memory || null);
     }
   }
+
+  db = newDb;
+  return db;
 }
 
 export function logAction(userId: number | null, action: string, details?: string) {
