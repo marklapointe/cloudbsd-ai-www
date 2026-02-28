@@ -47,7 +47,7 @@ const HostNode = ({ data }: any) => {
             e.stopPropagation();
             data.onToggleExpand();
           }}
-          className={`p-1 rounded-lg transition-colors ${data.isExpanded ? 'hover:bg-white/10' : 'hover:bg-slate-100'}`}
+          className={`p-1 rounded-lg transition-colors flex items-center justify-center min-w-0 min-h-0 border-none bg-transparent ${data.isExpanded ? 'hover:bg-white/10 text-white' : 'hover:bg-slate-100 text-slate-600'}`}
         >
           {data.isExpanded ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
         </button>
@@ -87,7 +87,7 @@ const ResourceNode = ({ data }: any) => {
           </div>
           <div className="font-bold text-sm truncate text-slate-900">{data.label}</div>
         </div>
-        <div className="text-slate-300 group-hover:text-slate-400">
+        <div className="text-slate-300 group-hover:text-slate-400 p-1 flex items-center justify-center">
           <MoreVertical size={14} />
         </div>
       </div>

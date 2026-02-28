@@ -80,20 +80,27 @@ button:focus-visible {
 }
 
 /* React Flow Overrides */
-.react-flow__controls button {
+.react-flow__controls button,
+.react-flow__panel button {
   background-color: white !important;
   color: #1e293b !important;
   fill: #1e293b !important;
+  border: none !important;
   border-bottom: 1px solid #f1f5f9 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  padding: 0 !important;
+  width: 24px !important;
+  height: 24px !important;
 }
 
-.react-flow__controls button:hover {
+.react-flow__controls button:hover,
+.react-flow__panel button:hover {
   background-color: #f8fafc !important;
 }
 
-.react-flow__controls button svg {
+.react-flow__controls button svg,
+.react-flow__panel button svg {
   fill: currentColor !important;
 }
