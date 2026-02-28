@@ -280,26 +280,27 @@ const NetworkMap: React.FC = () => {
   }, [createGraph]);
 
   return (
-    <div className="h-[calc(100vh-120px)] w-full flex flex-col space-y-4">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Network Map</h1>
-          <p className="text-slate-500 mt-1 font-medium">Visual infrastructure overview and node management</p>
+    <div className="h-screen w-full flex flex-col relative overflow-hidden">
+      {/* Absolute Search and Header for full-screen map */}
+      <div className="absolute top-6 left-6 right-6 z-50 pointer-events-none flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="pointer-events-auto bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-slate-100 shadow-xl">
+          <h1 className="text-xl font-extrabold text-slate-900 tracking-tight leading-tight">Network Map</h1>
+          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Visual infrastructure overview</p>
         </div>
         
-        <div className="relative">
+        <div className="relative pointer-events-auto">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
           <input 
             type="text"
             placeholder="Search nodes..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-12 pr-6 py-2.5 bg-white border border-slate-100 rounded-2xl shadow-soft focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 outline-none w-full md:w-64 transition-all"
+            className="pl-12 pr-6 py-2.5 bg-white border border-slate-100 rounded-2xl shadow-xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 outline-none w-full md:w-64 transition-all text-slate-900 font-bold"
           />
         </div>
       </div>
 
-      <div className="flex-1 bg-white rounded-[2.5rem] border border-slate-100 shadow-soft overflow-hidden relative">
+      <div className="flex-1 w-full h-full">
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -307,11 +308,12 @@ const NetworkMap: React.FC = () => {
           onEdgesChange={onEdgesChange}
           nodeTypes={nodeTypes}
           fitView
+          fitViewOptions={{ padding: 0.5 }}
           onPaneClick={() => setContextMenu(null)}
         >
           <Background color="#f1f5f9" gap={20} />
           <Controls />
-          <Panel position="top-right" className="bg-white/80 backdrop-blur-md p-2 rounded-xl border border-slate-100 shadow-lg m-4">
+          <Panel position="bottom-right" className="bg-white/80 backdrop-blur-md p-2 rounded-xl border border-slate-100 shadow-lg m-4">
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2 px-2 py-1">
                 <div className="w-3 h-3 rounded-full bg-emerald-500" />

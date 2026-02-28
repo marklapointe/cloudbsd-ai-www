@@ -141,7 +141,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
       {/* Main Content */}
       <main className="flex-1 overflow-auto bg-slate-50/50 lg:h-screen">
-        <div className="p-6 lg:p-10 max-w-7xl mx-auto">
+        <div className={`
+          p-6 lg:p-10 mx-auto
+          ${location.pathname === '/network' ? 'max-w-none w-full h-full p-0 lg:p-0' : 'max-w-7xl'}
+        `}>
           {children}
         </div>
       </main>
