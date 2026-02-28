@@ -103,17 +103,19 @@ const NetworkMap: React.FC = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [resources, setResources] = useState<any[]>([]);
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [clusterNodes, setClusterNodes] = useState<any[]>([]);
+  const [expandedNodes, setExpandedNodes] = useState<Record<string, boolean>>({ 'host-main': true });
   const [searchTerm, setSearchTerm] = useState('');
   const [contextMenu, setContextMenu] = useState<{ x: number, y: number, resource: any } | null>(null);
   const navigate = useNavigate();
 
-  const fetchResources = useCallback(async () => {
+  const fetchData = useCallback(async () => {
     try {
-      const [vms, containers, jails] = await Promise.all([
+      const [vms, containers, jails, nodesRes] = await Promise.all([
         api.get('/vms'),
         api.get('/containers'),
-        api.get('/jails')
+        api.get('/jails'),
+        api.get('/nodes')
       ]);
 
       const allResources = [
@@ -122,16 +124,34 @@ const NetworkMap: React.FC = () => {
         ...jails.data.map((r: any) => ({ ...r, type: 'jails', icon: HardDrive }))
       ];
       setResources(allResources);
+      setClusterNodes(nodesRes.data);
+      
+      // Initialize expanded state for new nodes if not present
+      setExpandedNodes(prev => {
+        const next = { ...prev };
+        nodesRes.data.forEach((n: any) => {
+          const key = `node-${n.id}`;
+          if (next[key] === undefined) next[key] = true;
+        });
+        return next;
+      });
     } catch (err) {
-      console.error('Failed to fetch resources for network map', err);
+      console.error('Failed to fetch data for network map', err);
     }
   }, []);
 
   useEffect(() => {
-    fetchResources();
-    const interval = setInterval(fetchResources, 10000);
+    fetchData();
+    const interval = setInterval(fetchData, 10000);
     return () => clearInterval(interval);
-  }, [fetchResources]);
+  }, [fetchData]);
+
+  const toggleNodeExpand = (nodeKey: string) => {
+    setExpandedNodes(prev => ({
+      ...prev,
+      [nodeKey]: !prev[nodeKey]
+    }));
+  };
 
   const handleContextMenu = useCallback((event: React.MouseEvent, resource: any) => {
     event.preventDefault();
@@ -147,7 +167,7 @@ const NetworkMap: React.FC = () => {
     const { resource } = contextMenu;
     try {
       await api.post(`/${resource.type}/${resource.id}/${action}`);
-      fetchResources();
+      fetchData();
     } catch (err) {
       console.error(`Failed to ${action} resource`, err);
     }
@@ -160,33 +180,74 @@ const NetworkMap: React.FC = () => {
       r.type.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const hostNode = {
-      id: 'host',
-      type: 'host',
-      position: { x: 400, y: 50 },
-      data: { 
-        label: 'CloudBSD-Node-01', 
-        isExpanded,
-        onToggleExpand: () => setIsExpanded(!isExpanded)
-      },
-    };
-
-    const newNodes: any[] = [hostNode];
+    const newNodes: any[] = [];
     const newEdges: any[] = [];
 
-    if (isExpanded) {
-      filteredResources.forEach((res, index) => {
-        const nodeId = `${res.type}-${res.id}`;
-        // Simple circle/grid layout
-        const radius = 250;
-        const angle = (index / filteredResources.length) * 2 * Math.PI;
-        const x = 400 + radius * Math.cos(angle);
-        const y = 300 + radius * Math.sin(angle);
+    // Main system (Host) node usually represents the management plane
+    const mainNodeData = clusterNodes.find(n => n.role === 'main');
+    const mainNodeId = mainNodeData ? `node-${mainNodeData.id}` : 'host-main';
+    
+    newNodes.push({
+      id: mainNodeId,
+      type: 'host',
+      position: { x: 400, y: 0 },
+      data: { 
+        label: mainNodeData?.name || 'CloudBSD Master', 
+        isExpanded: expandedNodes[mainNodeId],
+        onToggleExpand: () => toggleNodeExpand(mainNodeId)
+      },
+    });
+
+    // Add other cluster nodes
+    const otherNodes = clusterNodes.filter(n => n.role !== 'main');
+    otherNodes.forEach((node, idx) => {
+      const nodeId = `node-${node.id}`;
+      const xOffset = (idx - (otherNodes.length - 1) / 2) * 350;
+      
+      newNodes.push({
+        id: nodeId,
+        type: 'host',
+        position: { x: 400 + xOffset, y: 250 },
+        data: { 
+          label: node.name, 
+          isExpanded: expandedNodes[nodeId],
+          onToggleExpand: () => toggleNodeExpand(nodeId)
+        },
+      });
+
+      // Connect workers to main
+      newEdges.push({
+        id: `edge-main-${nodeId}`,
+        source: mainNodeId,
+        target: nodeId,
+        style: { stroke: '#94a3b8', strokeWidth: 2, strokeDasharray: '5,5' },
+        markerEnd: { type: MarkerType.ArrowClosed, color: '#94a3b8' },
+      });
+    });
+
+    // Add resources under their respective nodes
+    const allNodes = clusterNodes.length > 0 ? clusterNodes : [{ id: null, role: 'main' }];
+    
+    allNodes.forEach((node) => {
+      const nodeId = node.id ? `node-${node.id}` : 'host-main';
+      if (!expandedNodes[nodeId]) return;
+
+      const nodeResources = filteredResources.filter(r => r.node_id === node.id || (node.role === 'main' && !r.node_id));
+      
+      nodeResources.forEach((res, resIdx) => {
+        const resNodeId = `${res.type}-${res.id}`;
+        const nodePos = newNodes.find(n => n.id === nodeId)?.position || { x: 400, y: 0 };
+        
+        // Layout resources in a semi-circle below the node
+        const angle = ((resIdx + 1) / (nodeResources.length + 1)) * Math.PI;
+        const radius = 180;
+        const x = nodePos.x + radius * Math.cos(angle + Math.PI/2 - Math.PI/2);
+        const y = nodePos.y + radius * Math.sin(angle);
 
         newNodes.push({
-          id: nodeId,
+          id: resNodeId,
           type: 'resource',
-          position: { x, y },
+          position: { x, y: nodePos.y + 150 },
           data: { 
             label: res.name, 
             status: res.status, 
@@ -198,22 +259,19 @@ const NetworkMap: React.FC = () => {
         });
 
         newEdges.push({
-          id: `edge-${nodeId}`,
-          source: 'host',
-          target: nodeId,
+          id: `edge-${resNodeId}`,
+          source: nodeId,
+          target: resNodeId,
           animated: res.status === 'running' || res.status === 'up' || res.status === 'active',
           style: { stroke: '#6366f1', strokeWidth: 2 },
-          markerEnd: {
-            type: MarkerType.ArrowClosed,
-            color: '#6366f1',
-          },
+          markerEnd: { type: MarkerType.ArrowClosed, color: '#6366f1' },
         });
       });
-    }
+    });
 
     setNodes(newNodes);
     setEdges(newEdges);
-  }, [resources, isExpanded, searchTerm, handleContextMenu, setNodes, setEdges]);
+  }, [resources, clusterNodes, expandedNodes, searchTerm, handleContextMenu, setNodes, setEdges]);
 
   useEffect(() => {
     createGraph();

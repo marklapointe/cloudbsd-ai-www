@@ -6,6 +6,7 @@ import {
   Container, 
   Box, 
   HardDrive, 
+  Server,
   Network,
   LogOut, 
   Menu, 
@@ -32,6 +33,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const navItems = [
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+    { name: 'Cluster', path: '/cluster', icon: Server },
     { name: 'Virtual Machines', path: '/vms', icon: Monitor },
     { name: 'OCI Containers', path: '/containers', icon: Container },
     { name: 'Jails', path: '/jails', icon: HardDrive },

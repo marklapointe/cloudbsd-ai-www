@@ -317,6 +317,132 @@ app.delete('/api/users/:id', authenticateToken, isAdmin, (req, res) => {
   res.sendStatus(204);
 });
 
+// Cluster node management routes
+/**
+ * @openapi
+ * /api/nodes:
+ *   get:
+ *     summary: List all cluster nodes
+ *     tags: [Cluster]
+ *     responses:
+ *       200:
+ *         description: List of nodes
+ */
+app.get('/api/nodes', authenticateToken, (req, res) => {
+  const currentDb = initDb();
+  const nodes = currentDb.prepare('SELECT * FROM nodes ORDER BY role DESC, name ASC').all();
+  res.json(nodes);
+});
+
+/**
+ * @openapi
+ * /api/nodes:
+ *   post:
+ *     summary: Create new node (Admin/Operator only)
+ *     tags: [Cluster]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               role:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *               ip:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Node created
+ */
+app.post('/api/nodes', authenticateToken, isOperator, (req, res) => {
+  const { name, role, status, ip } = req.body;
+  const currentDb = initDb();
+  try {
+    const result = currentDb.prepare('INSERT INTO nodes (name, role, status, ip) VALUES (?, ?, ?, ?)').run(name, role || 'worker', status || 'online', ip || '');
+    logAction((req as any).user.id, 'NODE_CREATE', `Created node ${name} with role ${role}`);
+    res.status(201).json({ id: result.lastInsertRowid, name, role, status, ip });
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+/**
+ * @openapi
+ * /api/nodes/{id}:
+ *   put:
+ *     summary: Update a node (Admin/Operator only)
+ *     tags: [Cluster]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               role:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *               ip:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Node updated
+ */
+app.put('/api/nodes/:id', authenticateToken, isOperator, (req, res) => {
+  const { id } = req.params;
+  const { name, role, status, ip } = req.body;
+  const currentDb = initDb();
+  try {
+    currentDb.prepare('UPDATE nodes SET name = ?, role = ?, status = ?, ip = ? WHERE id = ?').run(name, role, status, ip, id);
+    logAction((req as any).user.id, 'NODE_UPDATE', `Updated node ${name} (ID: ${id})`);
+    res.json({ id, name, role, status, ip });
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+/**
+ * @openapi
+ * /api/nodes/{id}:
+ *   delete:
+ *     summary: Delete a node (Admin only)
+ *     tags: [Cluster]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       204:
+ *         description: Node deleted
+ */
+app.delete('/api/nodes/:id', authenticateToken, isAdmin, (req, res) => {
+  const { id } = req.params;
+  const currentDb = initDb();
+  
+  // Before deleting, assign resources to another node or set to NULL
+  currentDb.prepare('UPDATE resources SET node_id = NULL WHERE node_id = ?').run(id);
+  
+  currentDb.prepare('DELETE FROM nodes WHERE id = ?').run(id);
+  logAction((req as any).user.id, 'NODE_DELETE', `Deleted node ID: ${id}`);
+  res.sendStatus(204);
+});
+
 // Resource routes
 /**
  * @openapi
@@ -343,8 +469,13 @@ app.get('/api/:resource', authenticateToken, (req, res) => {
   }
 
   const currentDb = initDb();
-  const resources = currentDb.prepare('SELECT * FROM resources WHERE type = ?').all(resource);
-  res.json(resources);
+  const items = currentDb.prepare(`
+    SELECT resources.*, nodes.name as node_name 
+    FROM resources 
+    LEFT JOIN nodes ON resources.node_id = nodes.id 
+    WHERE type = ?
+  `).all(resource);
+  res.json(items);
 });
 
 /**
@@ -397,9 +528,9 @@ app.post('/api/:resource', authenticateToken, isOperator, (req, res) => {
   const currentDb = initDb();
   try {
     const result = currentDb.prepare(`
-      INSERT INTO resources (type, name, status, image, ip, cpu, memory) 
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    `).run(resource, name, status, image || null, ip || null, cpu || null, memory || null);
+      INSERT INTO resources (type, name, status, image, ip, cpu, memory, node_id) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(resource, name, status, image || null, ip || null, cpu || null, memory || null, req.body.node_id || null);
     
     logAction((req as any).user.id, `RESOURCE_CREATE`, `Created ${resource} ${name}`);
     io.emit('resource_update', { resource, timestamp: new Date() });
@@ -506,9 +637,9 @@ app.put('/api/:resource/:id', authenticateToken, isOperator, (req, res) => {
   try {
     const result = currentDb.prepare(`
       UPDATE resources 
-      SET name = ?, image = ?, ip = ?, cpu = ?, memory = ?
+      SET name = ?, image = ?, ip = ?, cpu = ?, memory = ?, node_id = ?
       WHERE id = ? AND type = ?
-    `).run(name, image || null, ip || null, cpu || null, memory || null, id, resource);
+    `).run(name, image || null, ip || null, cpu || null, memory || null, req.body.node_id || null, id, resource);
     
     if (result.changes === 0) return res.status(404).json({ message: 'Resource not found' });
 
