@@ -946,9 +946,26 @@ app.get('/api/system/config', authenticateToken, isAdmin, (req, res) => {
 app.get('/api/system/license', authenticateToken, (req, res) => {
   const currentDb = initDb();
   const license = currentDb.prepare('SELECT * FROM license LIMIT 1').get() as any;
-  if (license && license.features) {
-    license.features = JSON.parse(license.features);
+  
+  if (license) {
+    if (license.features) {
+      license.features = JSON.parse(license.features);
+    }
+
+    // Get current usage counts
+    const nodesCount = currentDb.prepare('SELECT COUNT(*) as count FROM nodes').get() as any;
+    const vmsCount = currentDb.prepare("SELECT COUNT(*) as count FROM resources WHERE type = 'vms'").get() as any;
+    const containersCount = currentDb.prepare("SELECT COUNT(*) as count FROM resources WHERE type = 'containers'").get() as any;
+    const jailsCount = currentDb.prepare("SELECT COUNT(*) as count FROM resources WHERE type = 'jails'").get() as any;
+
+    license.usage = {
+      nodes: nodesCount.count,
+      vms: vmsCount.count,
+      containers: containersCount.count,
+      jails: jailsCount.count
+    };
   }
+  
   res.json(license || null);
 });
 
@@ -995,10 +1012,10 @@ app.post('/api/system/license', authenticateToken, isAdmin, (req, res) => {
 
     if (isEnterprise) {
       type = 'enterprise';
-      nodes = 999;
-      vms = 9999;
+      nodes = 99999;
+      vms = 99999;
       containers = 99999;
-      jails = 9999;
+      jails = 99999;
       support = '24/7';
       features = [...features, 'high_availability', 'advanced_backup', 'dedicated_support'];
     } else if (isStandard) {

@@ -55,6 +55,16 @@ const Settings: React.FC = () => {
     </div>
   );
 
+  const getLimitLabel = (limit: number) => {
+    if (limit >= 99999) return '∞';
+    return limit.toString();
+  };
+
+  const getUsagePercent = (used: number, limit: number) => {
+    if (limit >= 99999) return 5; // Minimal bar for unlimited
+    return Math.min(100, (used / limit) * 100);
+  };
+
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -224,10 +234,17 @@ const Settings: React.FC = () => {
                         <Server size={14} className="text-brand-500" />
                         <span className="text-xs font-bold text-slate-600">Nodes</span>
                       </div>
-                      <span className="text-xs font-black text-slate-900">{license?.nodes_limit}</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-black text-slate-900">{license?.usage?.nodes || 0}</span>
+                        <span className="text-[10px] font-black text-slate-300">/</span>
+                        <span className="text-xs font-black text-slate-400">{getLimitLabel(license?.nodes_limit)}</span>
+                      </div>
                     </div>
                     <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                      <div className="h-full bg-brand-500 w-[60%]"></div>
+                      <div 
+                        className="h-full bg-brand-500 transition-all duration-1000" 
+                        style={{ width: `${getUsagePercent(license?.usage?.nodes || 0, license?.nodes_limit || 1)}%` }}
+                      ></div>
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -236,10 +253,17 @@ const Settings: React.FC = () => {
                         <Hexagon size={14} className="text-purple-500" />
                         <span className="text-xs font-bold text-slate-600">VMs</span>
                       </div>
-                      <span className="text-xs font-black text-slate-900">{license?.vms_limit}</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-black text-slate-900">{license?.usage?.vms || 0}</span>
+                        <span className="text-[10px] font-black text-slate-300">/</span>
+                        <span className="text-xs font-black text-slate-400">{getLimitLabel(license?.vms_limit)}</span>
+                      </div>
                     </div>
                     <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                      <div className="h-full bg-purple-500 w-[30%]"></div>
+                      <div 
+                        className="h-full bg-purple-500 transition-all duration-1000" 
+                        style={{ width: `${getUsagePercent(license?.usage?.vms || 0, license?.vms_limit || 1)}%` }}
+                      ></div>
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -248,10 +272,17 @@ const Settings: React.FC = () => {
                         <Box size={14} className="text-blue-500" />
                         <span className="text-xs font-bold text-slate-600">Containers</span>
                       </div>
-                      <span className="text-xs font-black text-slate-900">{license?.containers_limit}</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-black text-slate-900">{license?.usage?.containers || 0}</span>
+                        <span className="text-[10px] font-black text-slate-300">/</span>
+                        <span className="text-xs font-black text-slate-400">{getLimitLabel(license?.containers_limit)}</span>
+                      </div>
                     </div>
                     <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                      <div className="h-full bg-blue-500 w-[45%]"></div>
+                      <div 
+                        className="h-full bg-blue-500 transition-all duration-1000" 
+                        style={{ width: `${getUsagePercent(license?.usage?.containers || 0, license?.containers_limit || 1)}%` }}
+                      ></div>
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -260,10 +291,17 @@ const Settings: React.FC = () => {
                         <Activity size={14} className="text-emerald-500" />
                         <span className="text-xs font-bold text-slate-600">Jails</span>
                       </div>
-                      <span className="text-xs font-black text-slate-900">{license?.jails_limit}</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-black text-slate-900">{license?.usage?.jails || 0}</span>
+                        <span className="text-[10px] font-black text-slate-300">/</span>
+                        <span className="text-xs font-black text-slate-400">{getLimitLabel(license?.jails_limit)}</span>
+                      </div>
                     </div>
                     <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                      <div className="h-full bg-emerald-500 w-[20%]"></div>
+                      <div 
+                        className="h-full bg-emerald-500 transition-all duration-1000" 
+                        style={{ width: `${getUsagePercent(license?.usage?.jails || 0, license?.jails_limit || 1)}%` }}
+                      ></div>
                     </div>
                   </div>
                 </div>
