@@ -32,9 +32,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const navItems = [
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { name: 'Virtual Machines', path: '/vms', icon: Monitor },
-    { name: 'Docker', path: '/docker', icon: Container },
-    { name: 'FreeBSD Jails', path: '/jails', icon: HardDrive },
-    { name: 'Podman', path: '/podman', icon: Box },
+    { name: 'OCI Containers', path: '/containers', icon: Container },
+    { name: 'Jails', path: '/jails', icon: HardDrive },
   ];
 
   if (role === 'admin') {

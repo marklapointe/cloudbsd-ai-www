@@ -5,8 +5,8 @@ import ResourceList from '../components/ResourceList';
 const Jails: React.FC = () => {
   return (
     <ResourceList
-      title="FreeBSD Jails"
-      description="Manage your native FreeBSD jails and isolation"
+      title="Jails"
+      description="Manage your native jails and isolation"
       endpoint="/jails"
       icon={HardDrive}
       resourceName="Jail"

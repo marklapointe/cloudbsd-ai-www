@@ -115,7 +115,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
             />
           </div>
 
-          {(resourceType === 'docker' || resourceType === 'podman') && (
+          {(resourceType === 'containers') && (
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Image</label>
               <input

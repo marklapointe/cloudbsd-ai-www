@@ -5,9 +5,8 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Index from './pages/Index';
 import VMs from './pages/VMs';
-import Docker from './pages/Docker';
+import OCIContainers from './pages/OCIContainers';
 import Jails from './pages/Jails';
-import Podman from './pages/Podman';
 import Users from './pages/Users';
 import Logs from './pages/Logs';
 import Settings from './pages/Settings';
@@ -46,11 +45,11 @@ function App() {
             } 
           />
           <Route 
-            path="/docker" 
+            path="/containers" 
             element={
               <PrivateRoute>
                 <Layout>
-                  <Docker />
+                  <OCIContainers />
                 </Layout>
               </PrivateRoute>
             } 
@@ -61,16 +60,6 @@ function App() {
               <PrivateRoute>
                 <Layout>
                   <Jails />
-                </Layout>
-              </PrivateRoute>
-            } 
-          />
-          <Route 
-            path="/podman" 
-            element={
-              <PrivateRoute>
-                <Layout>
-                  <Podman />
                 </Layout>
               </PrivateRoute>
             } 

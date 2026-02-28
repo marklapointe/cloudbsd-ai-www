@@ -226,7 +226,8 @@ app.post('/api/login', (req, res) => {
  *         description: List of users
  */
 app.get('/api/users', authenticateToken, isAdmin, (req, res) => {
-  const users = db.prepare('SELECT id, username, role FROM users').all();
+  const currentDb = initDb();
+  const users = currentDb.prepare('SELECT id, username, role FROM users').all();
   res.json(users);
 });
 
@@ -241,7 +242,8 @@ app.get('/api/users', authenticateToken, isAdmin, (req, res) => {
  *         description: List of logs
  */
 app.get('/api/logs', authenticateToken, isAdmin, (req, res) => {
-  const logs = db.prepare(`
+  const currentDb = initDb();
+  const logs = currentDb.prepare(`
     SELECT logs.*, users.username 
     FROM logs 
     LEFT JOIN users ON logs.user_id = users.id 
@@ -278,8 +280,9 @@ app.get('/api/logs', authenticateToken, isAdmin, (req, res) => {
 app.post('/api/users', authenticateToken, isAdmin, (req, res) => {
   const { username, password, role } = req.body;
   const hashedPassword = bcrypt.hashSync(password, 10);
+  const currentDb = initDb();
   try {
-    const result = db.prepare('INSERT INTO users (username, password, role) VALUES (?, ?, ?)').run(username, hashedPassword, role || 'viewer');
+    const result = currentDb.prepare('INSERT INTO users (username, password, role) VALUES (?, ?, ?)').run(username, hashedPassword, role || 'viewer');
     logAction((req as any).user.id, 'USER_CREATE', `Created user ${username} with role ${role}`);
     res.status(201).json({ id: result.lastInsertRowid, username, role });
   } catch (error: any) {
@@ -305,10 +308,11 @@ app.post('/api/users', authenticateToken, isAdmin, (req, res) => {
  */
 app.delete('/api/users/:id', authenticateToken, isAdmin, (req, res) => {
   const { id } = req.params;
-  const user = db.prepare('SELECT username FROM users WHERE id = ?').get(id) as any;
+  const currentDb = initDb();
+  const user = currentDb.prepare('SELECT username FROM users WHERE id = ?').get(id) as any;
   if (!user) return res.status(404).json({ message: 'User not found' });
   
-  db.prepare('DELETE FROM users WHERE id = ?').run(id);
+  currentDb.prepare('DELETE FROM users WHERE id = ?').run(id);
   logAction((req as any).user.id, 'USER_DELETE', `Deleted user ${user.username}`);
   res.sendStatus(204);
 });
@@ -326,19 +330,20 @@ app.delete('/api/users/:id', authenticateToken, isAdmin, (req, res) => {
  *         required: true
  *         schema:
  *           type: string
- *           enum: [vms, docker, jails, podman]
+ *           enum: [vms, containers, jails]
  *     responses:
  *       200:
  *         description: List of resources
  */
 app.get('/api/:resource', authenticateToken, (req, res) => {
   const { resource } = req.params;
-  const validResources = ['vms', 'docker', 'jails', 'podman'];
+  const validResources = ['vms', 'containers', 'jails'];
   if (!validResources.includes(resource)) {
     return res.status(400).json({ message: 'Invalid resource type' });
   }
 
-  const resources = db.prepare('SELECT * FROM resources WHERE type = ?').all(resource);
+  const currentDb = initDb();
+  const resources = currentDb.prepare('SELECT * FROM resources WHERE type = ?').all(resource);
   res.json(resources);
 });
 
@@ -354,7 +359,7 @@ app.get('/api/:resource', authenticateToken, (req, res) => {
  *         required: true
  *         schema:
  *           type: string
- *           enum: [vms, docker, jails, podman]
+ *           enum: [vms, containers, jails]
  *     requestBody:
  *       required: true
  *       content:
@@ -379,7 +384,7 @@ app.get('/api/:resource', authenticateToken, (req, res) => {
 app.post('/api/:resource', authenticateToken, isOperator, (req, res) => {
   const { resource } = req.params;
   const { name, image, ip, cpu, memory } = req.body;
-  const validResources = ['vms', 'docker', 'jails', 'podman'];
+  const validResources = ['vms', 'containers', 'jails'];
   
   if (!validResources.includes(resource)) {
     return res.status(400).json({ message: 'Invalid resource type' });
@@ -387,10 +392,11 @@ app.post('/api/:resource', authenticateToken, isOperator, (req, res) => {
 
   let status = 'stopped';
   if (resource === 'jails') status = 'inactive';
-  if (resource === 'docker' || resource === 'podman') status = 'exited';
+  if (resource === 'containers') status = 'exited';
 
+  const currentDb = initDb();
   try {
-    const result = db.prepare(`
+    const result = currentDb.prepare(`
       INSERT INTO resources (type, name, status, image, ip, cpu, memory) 
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `).run(resource, name, status, image || null, ip || null, cpu || null, memory || null);
@@ -416,7 +422,7 @@ app.post('/api/:resource', authenticateToken, isOperator, (req, res) => {
  *         required: true
  *         schema:
  *           type: string
- *           enum: [vms, docker, jails, podman]
+ *           enum: [vms, containers, jails]
  *       - in: path
  *         name: id
  *         required: true
@@ -428,14 +434,15 @@ app.post('/api/:resource', authenticateToken, isOperator, (req, res) => {
  */
 app.delete('/api/:resource/:id', authenticateToken, isOperator, (req, res) => {
   const { resource, id } = req.params;
-  const validResources = ['vms', 'docker', 'jails', 'podman'];
+  const validResources = ['vms', 'containers', 'jails'];
   
   if (!validResources.includes(resource)) {
     return res.status(400).json({ message: 'Invalid resource type' });
   }
 
+  const currentDb = initDb();
   try {
-    const result = db.prepare('DELETE FROM resources WHERE id = ? AND type = ?').run(id, resource);
+    const result = currentDb.prepare('DELETE FROM resources WHERE id = ? AND type = ?').run(id, resource);
     if (result.changes === 0) return res.status(404).json({ message: 'Resource not found' });
     
     logAction((req as any).user.id, `RESOURCE_DELETE`, `Deleted ${resource} ${id}`);
@@ -459,7 +466,7 @@ app.delete('/api/:resource/:id', authenticateToken, isOperator, (req, res) => {
  *         required: true
  *         schema:
  *           type: string
- *           enum: [vms, docker, jails, podman]
+ *           enum: [vms, containers, jails]
  *       - in: path
  *         name: id
  *         required: true
@@ -489,14 +496,15 @@ app.delete('/api/:resource/:id', authenticateToken, isOperator, (req, res) => {
 app.put('/api/:resource/:id', authenticateToken, isOperator, (req, res) => {
   const { resource, id } = req.params;
   const { name, image, ip, cpu, memory } = req.body;
-  const validResources = ['vms', 'docker', 'jails', 'podman'];
+  const validResources = ['vms', 'containers', 'jails'];
   
   if (!validResources.includes(resource)) {
     return res.status(400).json({ message: 'Invalid resource type' });
   }
 
+  const currentDb = initDb();
   try {
-    const result = db.prepare(`
+    const result = currentDb.prepare(`
       UPDATE resources 
       SET name = ?, image = ?, ip = ?, cpu = ?, memory = ?
       WHERE id = ? AND type = ?
@@ -526,7 +534,7 @@ app.put('/api/:resource/:id', authenticateToken, isOperator, (req, res) => {
  *         required: true
  *         schema:
  *           type: string
- *           enum: [vms, docker, jails, podman]
+ *           enum: [vms, containers, jails]
  *       - in: path
  *         name: id
  *         required: true
@@ -544,21 +552,22 @@ app.put('/api/:resource/:id', authenticateToken, isOperator, (req, res) => {
  */
 app.post('/api/:resource/:id/:action', authenticateToken, isOperator, (req, res) => {
   const { resource, id, action } = req.params;
-  const validResources = ['vms', 'docker', 'jails', 'podman'];
+  const validResources = ['vms', 'containers', 'jails'];
   const validActions = ['start', 'stop', 'restart'];
 
   if (!validResources.includes(resource) || !validActions.includes(action)) {
     return res.status(400).json({ message: 'Invalid resource or action' });
   }
 
+  const currentDb = initDb();
   if (config.demoMode) {
     let nextStatus = '';
     if (action === 'start' || action === 'restart') {
-      nextStatus = resource === 'jails' ? 'active' : (resource === 'docker' || resource === 'podman' ? 'up' : 'running');
+      nextStatus = resource === 'jails' ? 'active' : (resource === 'containers' ? 'up' : 'running');
     } else {
-      nextStatus = resource === 'jails' ? 'inactive' : (resource === 'docker' || resource === 'podman' ? 'exited' : 'stopped');
+      nextStatus = resource === 'jails' ? 'inactive' : (resource === 'containers' ? 'exited' : 'stopped');
     }
-    db.prepare('UPDATE resources SET status = ? WHERE id = ? AND type = ?').run(nextStatus, id, resource);
+    currentDb.prepare('UPDATE resources SET status = ? WHERE id = ? AND type = ?').run(nextStatus, id, resource);
   }
 
   logAction((req as any).user.id, `RESOURCE_${action.toUpperCase()}`, `${action}ed ${resource} ${id}`);

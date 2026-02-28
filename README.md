@@ -1,13 +1,13 @@
 # CloudBSD Admin Web UI
 
-A modern, responsive web interface for managing Virtual Machines (bhyve), Docker containers, FreeBSD Jails, and Podman.
+A modern, responsive web interface for managing Virtual Machines (bhyve), OCI containers, and Jails.
 
 ## Features
 
 -   **Dashboard**: Real-time system health monitoring and resource overview.
 -   **VM Management**: Control bhyve virtual machines.
--   **Container Management**: Support for both Docker and Podman.
--   **Isolation**: Management of native FreeBSD Jails.
+-   **Container Management**: Support for OCI-compliant containers (Docker/Podman).
+-   **Isolation**: Management of native Jails.
 -   **Multi-user Support**: SQLite-backed authentication with role-based permissions.
 -   **Mobile Friendly**: Fully responsive design optimized for mobile devices.
 

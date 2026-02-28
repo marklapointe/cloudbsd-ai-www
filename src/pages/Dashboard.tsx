@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   Monitor, 
   Container, 
@@ -18,9 +19,8 @@ import api from '../api/client';
 const Dashboard: React.FC = () => {
   const [stats, setStats] = useState({
     vms: 0,
-    docker: 0,
-    jails: 0,
-    podman: 0
+    containers: 0,
+    jails: 0
   });
   const [systemHealth, setSystemHealth] = useState({
     cpu: 0,
@@ -59,20 +59,18 @@ const Dashboard: React.FC = () => {
 
     const fetchDashboardData = async () => {
       try {
-        const [vms, docker, jails, podman, statsRes, infoRes, hostRes] = await Promise.all([
+        const [vms, containers, jails, statsRes, infoRes, hostRes] = await Promise.all([
           api.get('/vms'),
-          api.get('/docker'),
+          api.get('/containers'),
           api.get('/jails'),
-          api.get('/podman'),
           api.get('/system/stats'),
           api.get('/system/info'),
           api.get('/system/host')
         ]);
         setStats({
           vms: vms.data.length,
-          docker: docker.data.length,
-          jails: jails.data.length,
-          podman: podman.data.length
+          containers: containers.data.length,
+          jails: jails.data.length
         });
         setSystemHealth(statsRes.data);
         setSystemInfo(infoRes.data);
@@ -88,10 +86,9 @@ const Dashboard: React.FC = () => {
   }, []);
 
   const statCards = [
-    { name: 'Virtual Machines', count: stats.vms, icon: Monitor, color: 'from-blue-500 to-blue-600', shadow: 'shadow-blue-500/20' },
-    { name: 'Docker Containers', count: stats.docker, icon: Container, color: 'from-cyan-500 to-cyan-600', shadow: 'shadow-cyan-500/20' },
-    { name: 'FreeBSD Jails', count: stats.jails, icon: HardDrive, color: 'from-emerald-500 to-emerald-600', shadow: 'shadow-emerald-500/20' },
-    { name: 'Podman Containers', count: stats.podman, icon: Box, color: 'from-purple-500 to-purple-600', shadow: 'shadow-purple-500/20' },
+    { name: 'Virtual Machines', count: stats.vms, icon: Monitor, color: 'from-blue-500 to-blue-600', shadow: 'shadow-blue-500/20', path: '/vms' },
+    { name: 'OCI Containers', count: stats.containers, icon: Container, color: 'from-cyan-500 to-cyan-600', shadow: 'shadow-cyan-500/20', path: '/containers' },
+    { name: 'Jails', count: stats.jails, icon: HardDrive, color: 'from-emerald-500 to-emerald-600', shadow: 'shadow-emerald-500/20', path: '/jails' },
   ];
 
   return (
@@ -110,7 +107,7 @@ const Dashboard: React.FC = () => {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((stat) => (
-          <div key={stat.name} className="group bg-white p-6 rounded-3xl shadow-soft border border-slate-100 flex items-center gap-5 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 active:scale-95">
+          <Link key={stat.name} to={stat.path} className="group bg-white p-6 rounded-3xl shadow-soft border border-slate-100 flex items-center gap-5 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 active:scale-95">
             <div className={`bg-gradient-to-br ${stat.color} p-4 rounded-2xl text-white shadow-lg ${stat.shadow} transform transition-transform group-hover:rotate-6`}>
               <stat.icon size={26} />
             </div>
@@ -118,7 +115,7 @@ const Dashboard: React.FC = () => {
               <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">{stat.name}</p>
               <p className="text-3xl font-black text-slate-900 mt-1">{stat.count}</p>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 

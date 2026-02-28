@@ -2,12 +2,12 @@ import React from 'react';
 import { Container } from 'lucide-react';
 import ResourceList from '../components/ResourceList';
 
-const Docker: React.FC = () => {
+const OCIContainers: React.FC = () => {
   return (
     <ResourceList
-      title="Docker Containers"
-      description="Manage your Docker containers and images"
-      endpoint="/docker"
+      title="OCI Containers"
+      description="Manage your OCI-compliant containers and images"
+      endpoint="/containers"
       icon={Container}
       resourceName="Container"
       columns={[
@@ -28,4 +28,4 @@ const Docker: React.FC = () => {
   );
 };
 
-export default Docker;
+export default OCIContainers;

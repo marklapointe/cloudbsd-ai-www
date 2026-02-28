@@ -39,7 +39,7 @@ export function initDb() {
     CREATE TABLE IF NOT EXISTS permissions (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER NOT NULL,
-      resource TEXT NOT NULL, -- 'vms', 'docker', 'jails', 'podman'
+      resource TEXT NOT NULL, -- 'vms', 'containers', 'jails'
       action TEXT NOT NULL,   -- 'read', 'write', 'admin'
       FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
     );
@@ -55,7 +55,7 @@ export function initDb() {
 
     CREATE TABLE IF NOT EXISTS resources (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      type TEXT NOT NULL, -- 'vms', 'docker', 'jails', 'podman'
+      type TEXT NOT NULL, -- 'vms', 'containers', 'jails'
       name TEXT NOT NULL,
       status TEXT NOT NULL,
       image TEXT,
@@ -79,10 +79,10 @@ export function initDb() {
     const seedResources = [
       { type: 'vms', name: 'web-server', status: 'running', cpu: 1, memory: '2GB' },
       { type: 'vms', name: 'db-server', status: 'stopped', cpu: 2, memory: '4GB' },
-      { type: 'docker', name: 'nginx-proxy', status: 'up', image: 'nginx:latest' },
-      { type: 'docker', name: 'redis-cache', status: 'exited', image: 'redis:6' },
+      { type: 'containers', name: 'nginx-proxy', status: 'up', image: 'nginx:latest' },
+      { type: 'containers', name: 'redis-cache', status: 'exited', image: 'redis:6' },
       { type: 'jails', name: 'app-jail', status: 'active', ip: '192.168.1.10' },
-      { type: 'podman', name: 'podman-worker', status: 'running', image: 'fedora:latest' }
+      { type: 'containers', name: 'container-worker', status: 'running', image: 'fedora:latest' }
     ];
 
     const stmt = newDb.prepare('INSERT INTO resources (type, name, status, image, ip, cpu, memory) VALUES (?, ?, ?, ?, ?, ?, ?)');
