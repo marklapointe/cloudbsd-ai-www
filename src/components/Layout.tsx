@@ -6,6 +6,7 @@ import {
   Container, 
   Box, 
   HardDrive, 
+  Network,
   LogOut, 
   Menu, 
   X,
@@ -34,6 +35,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     { name: 'Virtual Machines', path: '/vms', icon: Monitor },
     { name: 'OCI Containers', path: '/containers', icon: Container },
     { name: 'Jails', path: '/jails', icon: HardDrive },
+    { name: 'Network Map', path: '/network', icon: Network },
   ];
 
   if (role === 'admin') {

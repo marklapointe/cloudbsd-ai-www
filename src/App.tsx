@@ -7,6 +7,7 @@ import Index from './pages/Index';
 import VMs from './pages/VMs';
 import OCIContainers from './pages/OCIContainers';
 import Jails from './pages/Jails';
+import NetworkMap from './pages/NetworkMap';
 import Users from './pages/Users';
 import Logs from './pages/Logs';
 import Settings from './pages/Settings';
@@ -60,6 +61,16 @@ function App() {
               <PrivateRoute>
                 <Layout>
                   <Jails />
+                </Layout>
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/network" 
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <NetworkMap />
                 </Layout>
               </PrivateRoute>
             } 
