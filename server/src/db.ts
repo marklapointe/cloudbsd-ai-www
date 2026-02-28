@@ -33,7 +33,8 @@ export function initDb() {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       username TEXT UNIQUE NOT NULL,
       password TEXT NOT NULL,
-      role TEXT NOT NULL DEFAULT 'viewer' -- 'admin', 'operator', 'viewer'
+      role TEXT NOT NULL DEFAULT 'viewer', -- 'admin', 'operator', 'viewer'
+      language TEXT NOT NULL DEFAULT 'en'
     );
 
     CREATE TABLE IF NOT EXISTS permissions (
@@ -121,6 +122,17 @@ export function initDb() {
       newDb.exec("ALTER TABLE resources ADD COLUMN disk TEXT;");
     } catch (e) {
       console.error("Migration failed (disk): ", e);
+    }
+  }
+
+  // Migration for language column in users table
+  const usersInfo = newDb.prepare("PRAGMA table_info(users)").all() as any[];
+  const hasLanguage = usersInfo.some(col => col.name === 'language');
+  if (!hasLanguage) {
+    try {
+      newDb.exec("ALTER TABLE users ADD COLUMN language TEXT NOT NULL DEFAULT 'en';");
+    } catch (e) {
+      console.error("Migration failed (language): ", e);
     }
   }
 

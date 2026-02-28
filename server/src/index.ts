@@ -206,8 +206,8 @@ app.post('/api/login', (req, res) => {
 
   if (user && bcrypt.compareSync(password, user.password)) {
     logAction(user.id, 'LOGIN_SUCCESS', `User ${username} logged in`);
-    const token = jwt.sign({ id: user.id, username: user.username, role: user.role }, SECRET_KEY, { expiresIn: '8h' });
-    res.json({ token, user: { id: user.id, username: user.username, role: user.role } });
+    const token = jwt.sign({ id: user.id, username: user.username, role: user.role, language: user.language }, SECRET_KEY, { expiresIn: '8h' });
+    res.json({ token, user: { id: user.id, username: user.username, role: user.role, language: user.language } });
   } else {
     logAction(null, 'LOGIN_FAILURE', `Failed login attempt for user: ${username}`);
     res.status(401).json({ message: 'Invalid credentials' });
@@ -227,7 +227,7 @@ app.post('/api/login', (req, res) => {
  */
 app.get('/api/users', authenticateToken, isAdmin, (req, res) => {
   const currentDb = initDb();
-  const users = currentDb.prepare('SELECT id, username, role FROM users').all();
+  const users = currentDb.prepare('SELECT id, username, role, language FROM users').all();
   res.json(users);
 });
 
@@ -273,18 +273,21 @@ app.get('/api/logs', authenticateToken, isAdmin, (req, res) => {
  *               role:
  *                 type: string
  *                 enum: [admin, operator, viewer]
+ *               language:
+ *                 type: string
+ *                 enum: [en, fr, es]
  *     responses:
  *       201:
  *         description: User created
  */
 app.post('/api/users', authenticateToken, isAdmin, (req, res) => {
-  const { username, password, role } = req.body;
+  const { username, password, role, language } = req.body;
   const hashedPassword = bcrypt.hashSync(password, 10);
   const currentDb = initDb();
   try {
-    const result = currentDb.prepare('INSERT INTO users (username, password, role) VALUES (?, ?, ?)').run(username, hashedPassword, role || 'viewer');
-    logAction((req as any).user.id, 'USER_CREATE', `Created user ${username} with role ${role}`);
-    res.status(201).json({ id: result.lastInsertRowid, username, role });
+    const result = currentDb.prepare('INSERT INTO users (username, password, role, language) VALUES (?, ?, ?, ?)').run(username, hashedPassword, role || 'viewer', language || 'en');
+    logAction((req as any).user.id, 'USER_CREATE', `Created user ${username} with role ${role} and language ${language}`);
+    res.status(201).json({ id: result.lastInsertRowid, username, role, language });
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }

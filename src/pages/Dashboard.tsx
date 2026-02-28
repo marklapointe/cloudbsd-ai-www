@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { 
   Monitor, 
   Container, 
@@ -17,6 +18,7 @@ import {
 import api from '../api/client';
 
 const Dashboard: React.FC = () => {
+  const { t } = useTranslation();
   const [stats, setStats] = useState({
     vms: 0,
     containers: 0,
@@ -89,9 +91,9 @@ const Dashboard: React.FC = () => {
   }, []);
 
   const statCards = [
-    { name: 'Virtual Machines', count: stats.vms, icon: Monitor, color: 'from-blue-500 to-blue-600', shadow: 'shadow-blue-500/20', path: '/vms' },
-    { name: 'OCI Containers', count: stats.containers, icon: Container, color: 'from-cyan-500 to-cyan-600', shadow: 'shadow-cyan-500/20', path: '/containers' },
-    { name: 'Jails', count: stats.jails, icon: HardDrive, color: 'from-emerald-500 to-emerald-600', shadow: 'shadow-emerald-500/20', path: '/jails' },
+    { name: t('common.vms'), count: stats.vms, icon: Monitor, color: 'from-blue-500 to-blue-600', shadow: 'shadow-blue-500/20', path: '/vms' },
+    { name: t('common.containers'), count: stats.containers, icon: Container, color: 'from-cyan-500 to-cyan-600', shadow: 'shadow-cyan-500/20', path: '/containers' },
+    { name: t('common.jails'), count: stats.jails, icon: HardDrive, color: 'from-emerald-500 to-emerald-600', shadow: 'shadow-emerald-500/20', path: '/jails' },
   ];
 
   const ClusterResourceCard = ({ title, used, total, percentage, icon: Icon, color }: any) => (
@@ -122,8 +124,8 @@ const Dashboard: React.FC = () => {
     <div className="space-y-10 animate-in fade-in duration-700">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Dashboard</h1>
-          <p className="text-slate-500 mt-1 font-medium">Real-time system overview and resource monitoring</p>
+          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">{t('common.dashboard')}</h1>
+          <p className="text-slate-500 mt-1 font-medium">{t('dashboard.title')}</p>
         </div>
         <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-2xl shadow-soft border border-slate-100">
           <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -136,17 +138,17 @@ const Dashboard: React.FC = () => {
         <div className="space-y-6">
           <div className="flex items-center gap-3">
             <Server className="text-brand-600" size={24} />
-            <h2 className="text-xl font-black text-slate-900 tracking-tight">Total Cluster Resources</h2>
+            <h2 className="text-xl font-black text-slate-900 tracking-tight">{t('dashboard.cluster_resources')}</h2>
             <div className="ml-auto flex items-center gap-2 px-3 py-1 bg-brand-50 rounded-full border border-brand-100">
               <Activity size={14} className="text-brand-600" />
               <span className="text-[10px] font-black text-brand-600 uppercase tracking-widest">
-                {clusterStats.nodes.online} / {clusterStats.nodes.total} Nodes Online
+                {clusterStats.nodes.online} / {clusterStats.nodes.total} {t('common.cluster')} Nodes Online
               </span>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <ClusterResourceCard 
-              title="Aggregate CPU" 
+              title={t('dashboard.vcpus')} 
               used={`${clusterStats.cpu.used} vCPUs`} 
               total={`${clusterStats.cpu.total} vCPUs`} 
               percentage={clusterStats.cpu.percentage} 
@@ -154,7 +156,7 @@ const Dashboard: React.FC = () => {
               color="blue" 
             />
             <ClusterResourceCard 
-              title="Aggregate Memory" 
+              title={t('dashboard.memory')} 
               used={clusterStats.memory.used} 
               total={clusterStats.memory.total} 
               percentage={clusterStats.memory.percentage} 
@@ -162,7 +164,7 @@ const Dashboard: React.FC = () => {
               color="purple" 
             />
             <ClusterResourceCard 
-              title="Aggregate Storage" 
+              title={t('dashboard.storage')} 
               used={clusterStats.disk.used} 
               total={clusterStats.disk.total} 
               percentage={clusterStats.disk.percentage} 
@@ -193,8 +195,8 @@ const Dashboard: React.FC = () => {
         <div className="lg:col-span-2 bg-white p-8 rounded-3xl shadow-soft border border-slate-100">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-xl font-bold text-slate-900">System Health</h2>
-              <p className="text-sm text-slate-500 font-medium">Live resource utilization metrics</p>
+              <h2 className="text-xl font-bold text-slate-900">{t('dashboard.system_health')}</h2>
+              <p className="text-sm text-slate-500 font-medium">{t('dashboard.live_metrics')}</p>
             </div>
             <div className="p-3 bg-slate-50 rounded-2xl text-slate-400">
               <Activity size={24} />

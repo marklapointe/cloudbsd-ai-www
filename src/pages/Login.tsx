@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 const Login: React.FC = () => {
+  const { i18n } = useTranslation();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -25,6 +27,12 @@ const Login: React.FC = () => {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('username', response.data.user.username);
       localStorage.setItem('role', response.data.user.role);
+      
+      // Update language if the user has a preference
+      if (response.data.user.language) {
+        i18n.changeLanguage(response.data.user.language);
+      }
+
       navigate('/dashboard');
     } catch (err: any) {
       setError('Invalid username or password');

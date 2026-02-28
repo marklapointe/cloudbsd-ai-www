@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { 
   LayoutDashboard, 
   Monitor, 
@@ -17,6 +18,7 @@ import {
 } from 'lucide-react';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { t } = useTranslation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,18 +34,18 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   };
 
   const navItems = [
-    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-    { name: 'Cluster', path: '/cluster', icon: Server },
-    { name: 'Virtual Machines', path: '/vms', icon: Monitor },
-    { name: 'OCI Containers', path: '/containers', icon: Container },
-    { name: 'Jails', path: '/jails', icon: HardDrive },
-    { name: 'Network Map', path: '/network', icon: Network },
+    { name: t('common.dashboard'), path: '/dashboard', icon: LayoutDashboard },
+    { name: t('common.cluster'), path: '/cluster', icon: Server },
+    { name: t('common.vms'), path: '/vms', icon: Monitor },
+    { name: t('common.containers'), path: '/containers', icon: Container },
+    { name: t('common.jails'), path: '/jails', icon: HardDrive },
+    { name: t('common.network'), path: '/network', icon: Network },
   ];
 
   if (role === 'admin') {
-    navItems.push({ name: 'Users', path: '/users', icon: User });
-    navItems.push({ name: 'Logs', path: '/logs', icon: History });
-    navItems.push({ name: 'Settings', path: '/settings', icon: Settings });
+    navItems.push({ name: t('common.users'), path: '/users', icon: User });
+    navItems.push({ name: t('common.logs'), path: '/logs', icon: History });
+    navItems.push({ name: t('common.settings'), path: '/settings', icon: Settings });
   }
 
   return (
@@ -132,7 +134,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 hover:bg-red-500/10 hover:text-red-400 text-slate-400 rounded-lg transition-all duration-200 text-sm font-medium border border-slate-700/50 hover:border-red-500/30"
               >
                 <LogOut size={16} />
-                <span>Logout</span>
+                <span>{t('common.logout')}</span>
               </button>
             </div>
           </div>
