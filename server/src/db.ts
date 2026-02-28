@@ -122,7 +122,7 @@ export function initDb() {
   const mainNode = newDb.prepare('SELECT id FROM nodes WHERE role = ?').get('main') as any;
   if (!mainNode) {
     newDb.prepare('INSERT INTO nodes (name, role, status, ip, cpu_total, cpu_used, mem_total, mem_used, disk_total, disk_used) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-      .run('CloudBSD Master', 'main', 'online', '127.0.0.1', 8, 2, '32GB', '8GB', '500GB', '120GB');
+      .run('CloudBSD Main', 'main', 'online', '127.0.0.1', 8, 2, '32GB', '8GB', '500GB', '120GB');
   } else {
     // Update existing main node with metrics if they are null
     newDb.prepare('UPDATE nodes SET cpu_total = ?, cpu_used = ?, mem_total = ?, mem_used = ?, disk_total = ?, disk_used = ? WHERE id = ? AND cpu_total IS NULL')
@@ -170,7 +170,10 @@ export function initDb() {
       { type: 'containers', name: 'nginx-proxy', status: 'up', image: 'nginx:latest', disk: '1GB', node_id: worker1?.id || defaultNode.id },
       { type: 'containers', name: 'redis-cache', status: 'exited', image: 'redis:6', disk: '2GB', node_id: worker1?.id || defaultNode.id },
       { type: 'jails', name: 'app-jail', status: 'active', ip: '192.168.1.10', cpu: 1, memory: '1GB', disk: '10GB', node_id: worker2?.id || defaultNode.id },
-      { type: 'containers', name: 'container-worker', status: 'running', image: 'fedora:latest', disk: '5GB', node_id: worker1?.id || defaultNode.id }
+      { type: 'containers', name: 'container-worker', status: 'running', image: 'fedora:latest', disk: '5GB', node_id: worker1?.id || defaultNode.id },
+      { type: 'containers', name: 'postgres-db', status: 'running', image: 'postgres:15-alpine', disk: '10GB', node_id: worker2?.id || defaultNode.id },
+      { type: 'containers', name: 'monitoring-agent', status: 'running', image: 'prometheus:latest', disk: '5GB', node_id: worker1?.id || defaultNode.id },
+      { type: 'containers', name: 'logging-sidecar', status: 'up', image: 'fluentd:latest', disk: '1GB', node_id: worker2?.id || defaultNode.id }
     ];
 
     const stmt = newDb.prepare('INSERT INTO resources (type, name, status, image, ip, cpu, memory, disk, node_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');

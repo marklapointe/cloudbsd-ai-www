@@ -174,68 +174,78 @@ const Cluster: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              <div className="space-y-2">
-                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">CPU Total</label>
-                <input 
-                  type="number" 
-                  value={formData.cpu_total}
-                  onChange={(e) => setFormData({...formData, cpu_total: e.target.value})}
-                  className="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:border-brand-500 text-slate-900 font-bold outline-none"
-                  placeholder="e.g. 8"
-                />
+            {editingNode && (
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 animate-in fade-in duration-300">
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">CPU Total</label>
+                  <input 
+                    type="number" 
+                    value={formData.cpu_total}
+                    onChange={(e) => setFormData({...formData, cpu_total: e.target.value})}
+                    className="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:border-brand-500 text-slate-900 font-bold outline-none"
+                    placeholder="e.g. 8"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">CPU Used</label>
+                  <input 
+                    type="number" 
+                    value={formData.cpu_used}
+                    onChange={(e) => setFormData({...formData, cpu_used: e.target.value})}
+                    className="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:border-brand-500 text-slate-900 font-bold outline-none"
+                    placeholder="e.g. 2"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">RAM Total</label>
+                  <input 
+                    type="text" 
+                    value={formData.mem_total}
+                    onChange={(e) => setFormData({...formData, mem_total: e.target.value})}
+                    className="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:border-brand-500 text-slate-900 font-bold outline-none"
+                    placeholder="e.g. 32GB"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">RAM Used</label>
+                  <input 
+                    type="text" 
+                    value={formData.mem_used}
+                    onChange={(e) => setFormData({...formData, mem_used: e.target.value})}
+                    className="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:border-brand-500 text-slate-900 font-bold outline-none"
+                    placeholder="e.g. 8GB"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Disk Total</label>
+                  <input 
+                    type="text" 
+                    value={formData.disk_total}
+                    onChange={(e) => setFormData({...formData, disk_total: e.target.value})}
+                    className="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:border-brand-500 text-slate-900 font-bold outline-none"
+                    placeholder="e.g. 500GB"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Disk Used</label>
+                  <input 
+                    type="text" 
+                    value={formData.disk_used}
+                    onChange={(e) => setFormData({...formData, disk_used: e.target.value})}
+                    className="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:border-brand-500 text-slate-900 font-bold outline-none"
+                    placeholder="e.g. 120GB"
+                  />
+                </div>
               </div>
-              <div className="space-y-2">
-                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">CPU Used</label>
-                <input 
-                  type="number" 
-                  value={formData.cpu_used}
-                  onChange={(e) => setFormData({...formData, cpu_used: e.target.value})}
-                  className="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:border-brand-500 text-slate-900 font-bold outline-none"
-                  placeholder="e.g. 2"
-                />
+            )}
+            {!editingNode && (
+              <div className="bg-brand-50 p-4 rounded-2xl border border-brand-100">
+                <p className="text-sm font-bold text-brand-700 flex items-center gap-2">
+                  <Activity size={16} />
+                  Node resources (CPU, RAM, Disk) will be automatically discovered upon connection.
+                </p>
               </div>
-              <div className="space-y-2">
-                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">RAM Total</label>
-                <input 
-                  type="text" 
-                  value={formData.mem_total}
-                  onChange={(e) => setFormData({...formData, mem_total: e.target.value})}
-                  className="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:border-brand-500 text-slate-900 font-bold outline-none"
-                  placeholder="e.g. 32GB"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">RAM Used</label>
-                <input 
-                  type="text" 
-                  value={formData.mem_used}
-                  onChange={(e) => setFormData({...formData, mem_used: e.target.value})}
-                  className="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:border-brand-500 text-slate-900 font-bold outline-none"
-                  placeholder="e.g. 8GB"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Disk Total</label>
-                <input 
-                  type="text" 
-                  value={formData.disk_total}
-                  onChange={(e) => setFormData({...formData, disk_total: e.target.value})}
-                  className="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:border-brand-500 text-slate-900 font-bold outline-none"
-                  placeholder="e.g. 500GB"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Disk Used</label>
-                <input 
-                  type="text" 
-                  value={formData.disk_used}
-                  onChange={(e) => setFormData({...formData, disk_used: e.target.value})}
-                  className="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:border-brand-500 text-slate-900 font-bold outline-none"
-                  placeholder="e.g. 120GB"
-                />
-              </div>
-            </div>
+            )}
 
             <button 
               type="submit"
@@ -293,7 +303,7 @@ const Cluster: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <h3 className="text-xl font-black text-slate-900">{node.name}</h3>
                   {node.role === 'main' && (
-                    <span className="px-2 py-0.5 bg-brand-500/10 text-brand-500 text-[8px] font-black uppercase tracking-widest rounded-md">Master</span>
+                    <span className="px-2 py-0.5 bg-brand-500/10 text-brand-500 text-[8px] font-black uppercase tracking-widest rounded-md">Main</span>
                   )}
                 </div>
                 <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">

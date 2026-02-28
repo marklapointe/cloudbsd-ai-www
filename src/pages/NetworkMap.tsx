@@ -192,7 +192,7 @@ const NetworkMap: React.FC = () => {
       type: 'host',
       position: { x: 400, y: 0 },
       data: { 
-        label: mainNodeData?.name || 'CloudBSD Master', 
+        label: mainNodeData?.name || 'CloudBSD Main', 
         isExpanded: expandedNodes[mainNodeId],
         onToggleExpand: () => toggleNodeExpand(mainNodeId)
       },
