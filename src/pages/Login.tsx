@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -7,6 +7,13 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const isAuthenticated = !!localStorage.getItem('token');
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,7 +25,7 @@ const Login: React.FC = () => {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('username', response.data.user.username);
       localStorage.setItem('role', response.data.user.role);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err: any) {
       setError('Invalid username or password');
     }

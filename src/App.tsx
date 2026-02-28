@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import Index from './pages/Index';
 import VMs from './pages/VMs';
 import Docker from './pages/Docker';
 import Jails from './pages/Jails';
@@ -22,9 +23,10 @@ function App() {
     <BackendStatusProvider>
       <Router>
         <Routes>
+          <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
           <Route 
-            path="/" 
+            path="/dashboard" 
             element={
               <PrivateRoute>
                 <Layout>

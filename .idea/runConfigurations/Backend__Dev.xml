@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Backend: Dev" type="NodeJSConfigurationType" nameIsGenerated="true" path-to-js-file="server/src/index.ts" working-dir="$PROJECT_DIR$">
+    <method v="2" />
+    <node-interpreter value="project" />
+    <envs />
+    <node-options value="--loader ts-node/esm" />
+  </configuration>
+</component>
