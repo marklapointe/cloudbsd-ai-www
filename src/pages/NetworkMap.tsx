@@ -31,6 +31,7 @@ import { useNavigate } from 'react-router-dom';
 const HostNode = ({ data }: any) => {
   return (
     <div className={`px-4 py-3 rounded-2xl border-2 shadow-xl min-w-[200px] transition-all duration-300 ${data.isExpanded ? 'bg-slate-900 border-brand-500 text-white' : 'bg-white border-slate-200 text-slate-900'}`}>
+      <Handle type="target" position={Position.Top} className="w-3 h-3 bg-brand-500 border-2 border-white" />
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <div className={`p-2 rounded-xl ${data.isExpanded ? 'bg-brand-500/20 text-brand-400' : 'bg-slate-100 text-slate-600'}`}>
@@ -220,8 +221,9 @@ const NetworkMap: React.FC = () => {
         id: `edge-core-${nodeId}`,
         source: coreNodeId,
         target: nodeId,
-        style: { stroke: '#94a3b8', strokeWidth: 2, strokeDasharray: '5,5' },
-        markerEnd: { type: MarkerType.ArrowClosed, color: '#94a3b8' },
+        animated: true,
+        style: { stroke: '#6366f1', strokeWidth: 3, strokeDasharray: '0' },
+        markerEnd: { type: MarkerType.ArrowClosed, color: '#6366f1' },
       });
     });
 

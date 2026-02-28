@@ -82,6 +82,22 @@ export function initDb() {
       disk_used TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
+
+    CREATE TABLE IF NOT EXISTS license (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      license_key TEXT NOT NULL,
+      license_type TEXT NOT NULL, -- 'trial', 'standard', 'enterprise'
+      status TEXT NOT NULL, -- 'active', 'expired', 'invalid'
+      nodes_limit INTEGER,
+      vms_limit INTEGER,
+      containers_limit INTEGER,
+      jails_limit INTEGER,
+      expiry_date DATETIME,
+      support_tier TEXT, -- 'none', 'community', 'business', '24/7'
+      registered_to TEXT,
+      features TEXT, -- JSON array of features
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
   `);
 
   // Migration for terminology if needed
@@ -160,6 +176,30 @@ export function initDb() {
   if (!admin) {
     const hashedPassword = bcrypt.hashSync('admin', 10);
     newDb.prepare('INSERT INTO users (username, password, role) VALUES (?, ?, ?)').run('admin', hashedPassword, 'admin');
+  }
+
+  // Create default license if not exists
+  const license = newDb.prepare('SELECT id FROM license LIMIT 1').get();
+  if (!license) {
+    const expiryDate = new Date();
+    expiryDate.setFullYear(expiryDate.getFullYear() + 1); // 1 year from now
+    
+    newDb.prepare(`
+      INSERT INTO license (
+        license_key, license_type, status, nodes_limit, vms_limit, 
+        containers_limit, jails_limit, expiry_date, support_tier, 
+        registered_to, features
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      'CBSD-TRIAL-0000-0000', 
+      'trial', 
+      'active', 
+      5, 20, 100, 50, 
+      expiryDate.toISOString(), 
+      'community', 
+      'CloudBSD Trial User',
+      JSON.stringify(['clustering', 'api_access', 'live_migration'])
+    );
   }
 
   // Seed some initial data if table is empty

@@ -933,6 +933,117 @@ app.get('/api/system/config', authenticateToken, isAdmin, (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /api/system/license:
+ *   get:
+ *     summary: Get license information
+ *     tags: [System]
+ *     responses:
+ *       200:
+ *         description: License details
+ */
+app.get('/api/system/license', authenticateToken, (req, res) => {
+  const currentDb = initDb();
+  const license = currentDb.prepare('SELECT * FROM license LIMIT 1').get() as any;
+  if (license && license.features) {
+    license.features = JSON.parse(license.features);
+  }
+  res.json(license || null);
+});
+
+/**
+ * @openapi
+ * /api/system/license:
+ *   post:
+ *     summary: Update license key
+ *     tags: [System]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               license_key:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: License updated
+ */
+app.post('/api/system/license', authenticateToken, isAdmin, (req, res) => {
+  const { license_key } = req.body;
+  if (!license_key) {
+    return res.status(400).json({ message: 'License key is required' });
+  }
+
+  const currentDb = initDb();
+  
+  // In a real app, you would validate the key against a server or use crypto
+  // For demo, we'll simulate a successful update if the key starts with 'CBSD-'
+  if (license_key.startsWith('CBSD-')) {
+    const isEnterprise = license_key.includes('ENT');
+    const isStandard = license_key.includes('STD');
+    
+    let type = 'trial';
+    let nodes = 5;
+    let vms = 20;
+    let containers = 100;
+    let jails = 50;
+    let support = 'community';
+    let features = ['clustering', 'api_access', 'live_migration'];
+
+    if (isEnterprise) {
+      type = 'enterprise';
+      nodes = 999;
+      vms = 9999;
+      containers = 99999;
+      jails = 9999;
+      support = '24/7';
+      features = [...features, 'high_availability', 'advanced_backup', 'dedicated_support'];
+    } else if (isStandard) {
+      type = 'standard';
+      nodes = 25;
+      vms = 100;
+      containers = 500;
+      jails = 200;
+      support = 'business';
+      features = [...features, 'advanced_backup'];
+    }
+
+    const expiryDate = new Date();
+    expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+
+    currentDb.prepare(`
+      UPDATE license SET 
+        license_key = ?, license_type = ?, status = 'active', 
+        nodes_limit = ?, vms_limit = ?, containers_limit = ?, 
+        jails_limit = ?, expiry_date = ?, support_tier = ?, 
+        registered_to = 'Licensed Customer', features = ?,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = (SELECT id FROM license LIMIT 1)
+    `).run(
+      license_key, type, nodes, vms, containers, jails, 
+      expiryDate.toISOString(), support, JSON.stringify(features)
+    );
+
+    logAction((req as any).user.id, 'LICENSE_UPDATE', `Updated license to ${type}`);
+    
+    // Fetch updated license to return
+    const updatedLicense = currentDb.prepare('SELECT * FROM license LIMIT 1').get() as any;
+    if (updatedLicense && updatedLicense.features) {
+      updatedLicense.features = JSON.parse(updatedLicense.features);
+    }
+    
+    return res.json({ 
+      message: 'License registered successfully',
+      license: updatedLicense
+    });
+  } else {
+    return res.status(400).json({ message: 'Invalid license key format' });
+  }
+});
+
 io.on('connection', (socket) => {
   console.log('A user connected');
   socket.on('disconnect', () => {
