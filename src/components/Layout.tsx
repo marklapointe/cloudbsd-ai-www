@@ -44,21 +44,29 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex font-sans">
-      {/* Mobile Sidebar Toggle */}
-      <div className="lg:hidden fixed top-4 left-4 z-50">
+    <div className="min-h-screen bg-slate-50 flex flex-col lg:flex-row font-sans">
+      {/* Mobile Top Bar */}
+      <div className="lg:hidden sticky top-0 left-0 right-0 h-16 bg-slate-950 flex items-center justify-between px-6 z-50 border-b border-slate-800/50">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 flex items-center justify-center">
+            <img src="/logo.png" alt="CloudBSD" className="w-full h-full object-contain drop-shadow-brand" />
+          </div>
+          <span className="text-lg font-bold text-slate-100 tracking-tight leading-none">CloudBSD</span>
+        </div>
+        
         <button 
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className="p-2 bg-white rounded-xl shadow-soft border border-slate-100 transition-all hover:bg-slate-50 active:scale-95"
+          className="p-2 text-slate-100 hover:bg-slate-900 rounded-lg transition-colors flex items-center justify-center"
+          aria-label="Toggle Menu"
         >
-          {isSidebarOpen ? <X size={24} className="text-slate-600" /> : <Menu size={24} className="text-slate-600" />}
+          {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
       {/* Sidebar Overlay */}
       {isSidebarOpen && (
         <div 
-          className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-30 lg:hidden"
+          className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-30 lg:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
@@ -67,7 +75,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <aside className={`
         fixed inset-y-0 left-0 z-40 w-64 bg-slate-950 text-slate-100 shadow-2xl transform transition-all duration-300 ease-in-out border-r border-slate-800/50
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        lg:translate-x-0 lg:static lg:inset-0
+        lg:translate-x-0 lg:static lg:inset-0 lg:h-screen
       `}>
         <div className="flex flex-col h-full">
           <div className="p-8 flex items-center gap-4">
@@ -129,7 +137,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto bg-slate-50/50">
+      <main className="flex-1 overflow-auto bg-slate-50/50 lg:h-screen">
         <div className="p-6 lg:p-10 max-w-7xl mx-auto">
           {children}
         </div>

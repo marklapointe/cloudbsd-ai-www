@@ -35,11 +35,6 @@ const Login: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-slate-950 p-4 relative overflow-hidden font-sans">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src="/background.jpg" 
-          alt="Background" 
-          className="w-full h-full object-cover opacity-30"
-        />
         <div className="absolute inset-0 bg-gradient-to-br from-slate-950/80 via-slate-950/50 to-brand-900/40" />
       </div>
 
