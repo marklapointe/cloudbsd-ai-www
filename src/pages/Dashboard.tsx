@@ -29,6 +29,7 @@ const Dashboard: React.FC = () => {
     network: { in: '0', out: '0' },
     uptime: 'Loading...'
   });
+  const [clusterStats, setClusterStats] = useState<any>(null);
   const [systemInfo, setSystemInfo] = useState({
     hostname: 'Loading...',
     os: 'Loading...',
@@ -59,13 +60,14 @@ const Dashboard: React.FC = () => {
 
     const fetchDashboardData = async () => {
       try {
-        const [vms, containers, jails, statsRes, infoRes, hostRes] = await Promise.all([
+        const [vms, containers, jails, statsRes, infoRes, hostRes, clusterRes] = await Promise.all([
           api.get('/vms'),
           api.get('/containers'),
           api.get('/jails'),
           api.get('/system/stats'),
           api.get('/system/info'),
-          api.get('/system/host')
+          api.get('/system/host'),
+          api.get('/cluster/stats')
         ]);
         setStats({
           vms: vms.data.length,
@@ -75,6 +77,7 @@ const Dashboard: React.FC = () => {
         setSystemHealth(statsRes.data);
         setSystemInfo(infoRes.data);
         setHostDetail(hostRes.data);
+        setClusterStats(clusterRes.data);
       } catch (err) {
         console.error('Failed to fetch dashboard data', err);
       }
@@ -91,6 +94,30 @@ const Dashboard: React.FC = () => {
     { name: 'Jails', count: stats.jails, icon: HardDrive, color: 'from-emerald-500 to-emerald-600', shadow: 'shadow-emerald-500/20', path: '/jails' },
   ];
 
+  const ClusterResourceCard = ({ title, used, total, percentage, icon: Icon, color }: any) => (
+    <div className="bg-white p-5 rounded-3xl border border-slate-100 shadow-soft">
+      <div className="flex items-center justify-between mb-4">
+        <div className={`p-2.5 rounded-xl bg-${color}-50 text-${color}-600`}>
+          <Icon size={20} />
+        </div>
+        <span className="text-xs font-black text-slate-400 uppercase tracking-widest">{title}</span>
+      </div>
+      <div className="flex items-end justify-between mb-2">
+        <div className="text-2xl font-black text-slate-900">{used}</div>
+        <div className="text-xs font-bold text-slate-400 mb-1">of {total}</div>
+      </div>
+      <div className="w-full h-2 bg-slate-50 rounded-full overflow-hidden">
+        <div 
+          className={`h-full bg-${color}-500 rounded-full transition-all duration-1000`} 
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
+      <div className="mt-2 text-right">
+        <span className={`text-[10px] font-black text-${color}-600 tracking-tighter`}>{percentage}% UTILIZED</span>
+      </div>
+    </div>
+  );
+
   return (
     <div className="space-y-10 animate-in fade-in duration-700">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -103,6 +130,48 @@ const Dashboard: React.FC = () => {
           <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">System Live</span>
         </div>
       </div>
+
+      {/* Cluster Resources section */}
+      {clusterStats && (
+        <div className="space-y-6">
+          <div className="flex items-center gap-3">
+            <Server className="text-brand-600" size={24} />
+            <h2 className="text-xl font-black text-slate-900 tracking-tight">Total Cluster Resources</h2>
+            <div className="ml-auto flex items-center gap-2 px-3 py-1 bg-brand-50 rounded-full border border-brand-100">
+              <Activity size={14} className="text-brand-600" />
+              <span className="text-[10px] font-black text-brand-600 uppercase tracking-widest">
+                {clusterStats.nodes.online} / {clusterStats.nodes.total} Nodes Online
+              </span>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <ClusterResourceCard 
+              title="Aggregate CPU" 
+              used={`${clusterStats.cpu.used} vCPUs`} 
+              total={`${clusterStats.cpu.total} vCPUs`} 
+              percentage={clusterStats.cpu.percentage} 
+              icon={Cpu} 
+              color="blue" 
+            />
+            <ClusterResourceCard 
+              title="Aggregate Memory" 
+              used={clusterStats.memory.used} 
+              total={clusterStats.memory.total} 
+              percentage={clusterStats.memory.percentage} 
+              icon={Activity} 
+              color="purple" 
+            />
+            <ClusterResourceCard 
+              title="Aggregate Storage" 
+              used={clusterStats.disk.used} 
+              total={clusterStats.disk.total} 
+              percentage={clusterStats.disk.percentage} 
+              icon={HardDrive} 
+              color="emerald" 
+            />
+          </div>
+        </div>
+      )}
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

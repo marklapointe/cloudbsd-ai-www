@@ -355,17 +355,43 @@ app.get('/api/nodes', authenticateToken, (req, res) => {
  *                 type: string
  *               ip:
  *                 type: string
+ *               cpu_total:
+ *                 type: integer
+ *               cpu_used:
+ *                 type: integer
+ *               mem_total:
+ *                 type: string
+ *               mem_used:
+ *                 type: string
+ *               disk_total:
+ *                 type: string
+ *               disk_used:
+ *                 type: string
  *     responses:
  *       201:
  *         description: Node created
  */
 app.post('/api/nodes', authenticateToken, isOperator, (req, res) => {
-  const { name, role, status, ip } = req.body;
+  const { name, role, status, ip, cpu_total, cpu_used, mem_total, mem_used, disk_total, disk_used } = req.body;
   const currentDb = initDb();
   try {
-    const result = currentDb.prepare('INSERT INTO nodes (name, role, status, ip) VALUES (?, ?, ?, ?)').run(name, role || 'worker', status || 'online', ip || '');
+    const result = currentDb.prepare(`
+      INSERT INTO nodes (name, role, status, ip, cpu_total, cpu_used, mem_total, mem_used, disk_total, disk_used) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      name, 
+      role || 'worker', 
+      status || 'online', 
+      ip || '', 
+      cpu_total || null, 
+      cpu_used || null, 
+      mem_total || null, 
+      mem_used || null, 
+      disk_total || null, 
+      disk_used || null
+    );
     logAction((req as any).user.id, 'NODE_CREATE', `Created node ${name} with role ${role}`);
-    res.status(201).json({ id: result.lastInsertRowid, name, role, status, ip });
+    res.status(201).json({ id: result.lastInsertRowid, ...req.body });
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }
@@ -398,21 +424,118 @@ app.post('/api/nodes', authenticateToken, isOperator, (req, res) => {
  *                 type: string
  *               ip:
  *                 type: string
+ *               cpu_total:
+ *                 type: integer
+ *               cpu_used:
+ *                 type: integer
+ *               mem_total:
+ *                 type: string
+ *               mem_used:
+ *                 type: string
+ *               disk_total:
+ *                 type: string
+ *               disk_used:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Node updated
  */
 app.put('/api/nodes/:id', authenticateToken, isOperator, (req, res) => {
   const { id } = req.params;
-  const { name, role, status, ip } = req.body;
+  const { name, role, status, ip, cpu_total, cpu_used, mem_total, mem_used, disk_total, disk_used } = req.body;
   const currentDb = initDb();
   try {
-    currentDb.prepare('UPDATE nodes SET name = ?, role = ?, status = ?, ip = ? WHERE id = ?').run(name, role, status, ip, id);
+    currentDb.prepare(`
+      UPDATE nodes 
+      SET name = ?, role = ?, status = ?, ip = ?, cpu_total = ?, cpu_used = ?, mem_total = ?, mem_used = ?, disk_total = ?, disk_used = ? 
+      WHERE id = ?
+    `).run(
+      name, role, status, ip, cpu_total, cpu_used, mem_total, mem_used, disk_total, disk_used, id
+    );
     logAction((req as any).user.id, 'NODE_UPDATE', `Updated node ${name} (ID: ${id})`);
-    res.json({ id, name, role, status, ip });
+    res.json({ id, ...req.body });
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }
+});
+
+/**
+ * @openapi
+ * /api/cluster/stats:
+ *   get:
+ *     summary: Get aggregated cluster stats
+ *     tags: [Cluster]
+ *     responses:
+ *       200:
+ *         description: Aggregated stats
+ */
+app.get('/api/cluster/stats', authenticateToken, (req, res) => {
+  const currentDb = initDb();
+  const nodes = currentDb.prepare('SELECT * FROM nodes').all() as any[];
+  
+  const parseMemory = (mem: string | null) => {
+    if (!mem) return 0;
+    const match = mem.match(/(\d+)\s*(GB|MB|TB)/i);
+    if (!match) return 0;
+    const value = parseInt(match[1]);
+    const unit = match[2].toUpperCase();
+    if (unit === 'GB') return value * 1024;
+    if (unit === 'TB') return value * 1024 * 1024;
+    return value;
+  };
+
+  const parseDisk = (disk: string | null) => {
+    if (!disk) return 0;
+    const match = disk.match(/(\d+)\s*(GB|MB|TB)/i);
+    if (!match) return 0;
+    const value = parseInt(match[1]);
+    const unit = match[2].toUpperCase();
+    if (unit === 'GB') return value;
+    if (unit === 'TB') return value * 1024;
+    return value / 1024; // MB to GB
+  };
+
+  const stats = {
+    total_cpu: 0,
+    used_cpu: 0,
+    total_mem_mb: 0,
+    used_mem_mb: 0,
+    total_disk_gb: 0,
+    used_disk_gb: 0,
+    node_count: nodes.length,
+    online_nodes: nodes.filter(n => n.status === 'online').length
+  };
+
+  nodes.forEach(node => {
+    stats.total_cpu += node.cpu_total || 0;
+    stats.used_cpu += node.cpu_used || 0;
+    stats.total_mem_mb += parseMemory(node.mem_total);
+    stats.used_mem_mb += parseMemory(node.mem_used);
+    stats.total_disk_gb += parseDisk(node.disk_total);
+    stats.used_disk_gb += parseDisk(node.disk_used);
+  });
+
+  res.json({
+    cpu: {
+      total: stats.total_cpu,
+      used: stats.used_cpu,
+      percentage: stats.total_cpu > 0 ? Math.round((stats.used_cpu / stats.total_cpu) * 100) : 0
+    },
+    memory: {
+      total: `${(stats.total_mem_mb / 1024).toFixed(1)}GB`,
+      used: `${(stats.used_mem_mb / 1024).toFixed(1)}GB`,
+      percentage: stats.total_mem_mb > 0 ? Math.round((stats.used_mem_mb / stats.total_mem_mb) * 100) : 0
+    },
+    disk: {
+      total: stats.total_disk_gb >= 1024 ? `${(stats.total_disk_gb / 1024).toFixed(1)}TB` : `${stats.total_disk_gb.toFixed(1)}GB`,
+      used: stats.used_disk_gb >= 1024 ? `${(stats.used_disk_gb / 1024).toFixed(1)}TB` : `${stats.used_disk_gb.toFixed(1)}GB`,
+      percentage: stats.total_disk_gb > 0 ? Math.round((stats.used_disk_gb / stats.total_disk_gb) * 100) : 0
+    },
+    nodes: {
+      total: stats.node_count,
+      online: stats.online_nodes
+    }
+  });
 });
 
 /**
