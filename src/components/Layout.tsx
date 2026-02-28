@@ -44,68 +44,93 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
+    <div className="min-h-screen bg-slate-50 flex font-sans">
       {/* Mobile Sidebar Toggle */}
       <div className="lg:hidden fixed top-4 left-4 z-50">
         <button 
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className="p-2 bg-white rounded-md shadow-md"
+          className="p-2 bg-white rounded-xl shadow-soft border border-slate-100 transition-all hover:bg-slate-50 active:scale-95"
         >
-          {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+          {isSidebarOpen ? <X size={24} className="text-slate-600" /> : <Menu size={24} className="text-slate-600" />}
         </button>
       </div>
 
+      {/* Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-30 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <aside className={`
-        fixed inset-y-0 left-0 z-40 w-64 bg-slate-900 text-white transform transition-transform duration-300 ease-in-out
+        fixed inset-y-0 left-0 z-40 w-64 bg-slate-950 text-slate-100 shadow-2xl transform transition-all duration-300 ease-in-out border-r border-slate-800/50
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         lg:translate-x-0 lg:static lg:inset-0
       `}>
         <div className="flex flex-col h-full">
-          <div className="p-6 flex items-center gap-3">
-            <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center font-bold">C</div>
-            <span className="text-xl font-bold tracking-tight">CloudBSD Admin</span>
+          <div className="p-8 flex items-center gap-4">
+            <div className="w-12 h-12 flex items-center justify-center transform hover:rotate-6 transition-transform">
+              <img src="/logo.png" alt="CloudBSD" className="w-full h-full object-contain drop-shadow-brand" />
+            </div>
+            <div>
+              <span className="text-xl font-bold tracking-tight block leading-none">CloudBSD</span>
+              <span className="text-[10px] text-brand-400 font-bold uppercase tracking-widest">Admin Panel</span>
+            </div>
           </div>
 
-          <nav className="flex-1 px-4 space-y-1">
+          <nav className="flex-1 px-4 py-2 space-y-1">
+            <div className="px-4 py-2 mb-2">
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Main Menu</p>
+            </div>
             {navItems.map((item) => (
               <Link
                 key={item.name}
                 to={item.path}
                 className={`
-                  flex items-center gap-3 px-4 py-3 rounded-lg transition-colors
-                  ${location.pathname === item.path ? 'bg-blue-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}
+                  flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
+                  ${location.pathname === item.path 
+                    ? 'bg-brand-600/10 text-brand-400 shadow-sm' 
+                    : 'text-slate-400 hover:bg-slate-900 hover:text-slate-200'}
                 `}
                 onClick={() => setIsSidebarOpen(false)}
               >
-                <item.icon size={20} />
-                <span>{item.name}</span>
+                <item.icon size={20} className={`transition-transform duration-200 ${location.pathname === item.path ? 'scale-110' : 'group-hover:scale-110'}`} />
+                <span className="font-medium">{item.name}</span>
+                {location.pathname === item.path && (
+                  <div className="ml-auto w-1.5 h-1.5 rounded-full bg-brand-500 shadow-lg shadow-brand-500/50" />
+                )}
               </Link>
             ))}
           </nav>
 
-          <div className="p-4 mt-auto border-t border-slate-800">
-            <div className="flex items-center gap-3 px-4 py-3 mb-2">
-              <User size={20} className="text-slate-400" />
-              <div className="flex flex-col">
-                <span className="text-sm font-medium">{username}</span>
-                <span className="text-xs text-slate-500 capitalize">{localStorage.getItem('role') || 'viewer'}</span>
+          <div className="p-6 mt-auto">
+            <div className="bg-slate-900/50 rounded-2xl p-4 mb-4 border border-slate-800/50">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 border border-slate-700">
+                  <User size={20} />
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="text-sm font-semibold truncate text-slate-200">{username}</span>
+                  <span className="text-[10px] text-brand-500 font-bold uppercase tracking-wider truncate">{localStorage.getItem('role') || 'viewer'}</span>
+                </div>
               </div>
+              <button 
+                onClick={handleLogout}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 hover:bg-red-500/10 hover:text-red-400 text-slate-400 rounded-lg transition-all duration-200 text-sm font-medium border border-slate-700/50 hover:border-red-500/30"
+              >
+                <LogOut size={16} />
+                <span>Logout</span>
+              </button>
             </div>
-            <button 
-              onClick={handleLogout}
-              className="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg transition-colors"
-            >
-              <LogOut size={20} />
-              <span>Logout</span>
-            </button>
           </div>
         </div>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto">
-        <div className="p-8">
+      <main className="flex-1 overflow-auto bg-slate-50/50">
+        <div className="p-6 lg:p-10 max-w-7xl mx-auto">
           {children}
         </div>
       </main>
