@@ -47,7 +47,7 @@ const HostNode = ({ data }: any) => {
             e.stopPropagation();
             data.onToggleExpand();
           }}
-          className={`p-1 rounded-lg transition-colors flex items-center justify-center min-w-0 min-h-0 border-none bg-transparent ${data.isExpanded ? 'hover:bg-white/10 text-white' : 'hover:bg-slate-100 text-slate-600'}`}
+          className={`p-1 rounded-lg transition-colors flex items-center justify-center min-w-0 min-h-0 border-none bg-transparent shadow-none ${data.isExpanded ? 'hover:bg-white/10 text-white' : 'hover:bg-slate-100 text-slate-600'}`}
         >
           {data.isExpanded ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
         </button>
@@ -339,7 +339,7 @@ const NetworkMap: React.FC = () => {
             
             <button 
               onClick={() => handleAction('start')}
-              className="w-full flex items-center gap-3 px-3 py-2 hover:bg-emerald-50 text-slate-700 hover:text-emerald-600 rounded-xl transition-colors text-sm font-semibold"
+              className="w-full flex items-center gap-3 px-3 py-2 bg-transparent hover:bg-emerald-50 border-none text-slate-700 hover:text-emerald-600 rounded-xl transition-colors text-sm font-semibold text-left shadow-none"
             >
               <Play size={16} />
               <span>Start</span>
@@ -347,7 +347,7 @@ const NetworkMap: React.FC = () => {
             
             <button 
               onClick={() => handleAction('stop')}
-              className="w-full flex items-center gap-3 px-3 py-2 hover:bg-red-50 text-slate-700 hover:text-red-600 rounded-xl transition-colors text-sm font-semibold"
+              className="w-full flex items-center gap-3 px-3 py-2 bg-transparent hover:bg-red-50 border-none text-slate-700 hover:text-red-600 rounded-xl transition-colors text-sm font-semibold text-left shadow-none"
             >
               <Square size={16} />
               <span>Stop</span>
@@ -358,7 +358,7 @@ const NetworkMap: React.FC = () => {
                 navigate(`/${contextMenu.resource.type}`);
                 setContextMenu(null);
               }}
-              className="w-full flex items-center gap-3 px-3 py-2 hover:bg-slate-50 text-slate-700 hover:text-brand-600 rounded-xl transition-colors text-sm font-semibold border-t border-slate-50 mt-1 pt-2"
+              className="w-full flex items-center gap-3 px-3 py-2 bg-transparent hover:bg-slate-50 border-none text-slate-700 hover:text-brand-600 rounded-xl transition-colors text-sm font-semibold text-left border-t border-slate-50 mt-1 pt-2 shadow-none"
             >
               <SettingsIcon size={16} />
               <span>Settings</span>

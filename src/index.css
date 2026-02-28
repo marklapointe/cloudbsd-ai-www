@@ -47,7 +47,7 @@ h1 {
   line-height: 1.1;
 }
 
-button {
+button:not(.border-none):not(.bg-transparent) {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -58,7 +58,7 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
-button:hover {
+button:not(.border-none):not(.bg-transparent):hover {
   border-color: #646cff;
 }
 button:focus,
@@ -74,14 +74,13 @@ button:focus-visible {
   a:hover {
     color: #747bff;
   }
-  button {
+  button:not(.border-none):not(.bg-transparent) {
     background-color: #f9f9f9;
   }
 }
 
 /* React Flow Overrides */
-.react-flow__controls button,
-.react-flow__panel button {
+.react-flow__controls button {
   background-color: white !important;
   color: #1e293b !important;
   fill: #1e293b !important;
@@ -95,12 +94,10 @@ button:focus-visible {
   height: 24px !important;
 }
 
-.react-flow__controls button:hover,
-.react-flow__panel button:hover {
+.react-flow__controls button:hover {
   background-color: #f8fafc !important;
 }
 
-.react-flow__controls button svg,
-.react-flow__panel button svg {
+.react-flow__controls button svg {
   fill: currentColor !important;
 }
