@@ -380,7 +380,7 @@ app.post('/api/nodes', authenticateToken, isOperator, (req, res) => {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
       name, 
-      role || 'worker', 
+      role || 'agent', 
       status || 'online', 
       ip || '', 
       cpu_total || null, 

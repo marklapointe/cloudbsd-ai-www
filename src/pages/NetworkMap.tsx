@@ -104,7 +104,7 @@ const NetworkMap: React.FC = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [resources, setResources] = useState<any[]>([]);
   const [clusterNodes, setClusterNodes] = useState<any[]>([]);
-  const [expandedNodes, setExpandedNodes] = useState<Record<string, boolean>>({ 'host-main': true });
+  const [expandedNodes, setExpandedNodes] = useState<Record<string, boolean>>({ 'host-core': true });
   const [searchTerm, setSearchTerm] = useState('');
   const [contextMenu, setContextMenu] = useState<{ x: number, y: number, resource: any } | null>(null);
   const navigate = useNavigate();
@@ -183,23 +183,23 @@ const NetworkMap: React.FC = () => {
     const newNodes: any[] = [];
     const newEdges: any[] = [];
 
-    // Main system (Host) node usually represents the management plane
-    const mainNodeData = clusterNodes.find(n => n.role === 'main');
-    const mainNodeId = mainNodeData ? `node-${mainNodeData.id}` : 'host-main';
+    // Core system (Host) node usually represents the management plane
+    const coreNodeData = clusterNodes.find(n => n.role === 'core');
+    const coreNodeId = coreNodeData ? `node-${coreNodeData.id}` : 'host-core';
     
     newNodes.push({
-      id: mainNodeId,
+      id: coreNodeId,
       type: 'host',
       position: { x: 400, y: 0 },
       data: { 
-        label: mainNodeData?.name || 'CloudBSD Main', 
-        isExpanded: expandedNodes[mainNodeId],
-        onToggleExpand: () => toggleNodeExpand(mainNodeId)
+        label: coreNodeData?.name || 'CloudBSD Core', 
+        isExpanded: expandedNodes[coreNodeId],
+        onToggleExpand: () => toggleNodeExpand(coreNodeId)
       },
     });
 
     // Add other cluster nodes
-    const otherNodes = clusterNodes.filter(n => n.role !== 'main');
+    const otherNodes = clusterNodes.filter(n => n.role !== 'core');
     otherNodes.forEach((node, idx) => {
       const nodeId = `node-${node.id}`;
       const xOffset = (idx - (otherNodes.length - 1) / 2) * 350;
@@ -215,10 +215,10 @@ const NetworkMap: React.FC = () => {
         },
       });
 
-      // Connect workers to main
+      // Connect agents to core
       newEdges.push({
-        id: `edge-main-${nodeId}`,
-        source: mainNodeId,
+        id: `edge-core-${nodeId}`,
+        source: coreNodeId,
         target: nodeId,
         style: { stroke: '#94a3b8', strokeWidth: 2, strokeDasharray: '5,5' },
         markerEnd: { type: MarkerType.ArrowClosed, color: '#94a3b8' },
@@ -226,13 +226,13 @@ const NetworkMap: React.FC = () => {
     });
 
     // Add resources under their respective nodes
-    const allNodes = clusterNodes.length > 0 ? clusterNodes : [{ id: null, role: 'main' }];
+    const allNodes = clusterNodes.length > 0 ? clusterNodes : [{ id: null, role: 'core' }];
     
     allNodes.forEach((node) => {
-      const nodeId = node.id ? `node-${node.id}` : 'host-main';
+      const nodeId = node.id ? `node-${node.id}` : 'host-core';
       if (!expandedNodes[nodeId]) return;
 
-      const nodeResources = filteredResources.filter(r => r.node_id === node.id || (node.role === 'main' && !r.node_id));
+      const nodeResources = filteredResources.filter(r => r.node_id === node.id || (node.role === 'core' && !r.node_id));
       
       nodeResources.forEach((res, resIdx) => {
         const resNodeId = `${res.type}-${res.id}`;

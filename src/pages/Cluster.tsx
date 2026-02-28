@@ -26,7 +26,7 @@ const Cluster: React.FC = () => {
   
   const [formData, setFormData] = useState({
     name: '',
-    role: 'worker',
+    role: 'agent',
     status: 'online',
     ip: '',
     cpu_total: '',
@@ -62,7 +62,7 @@ const Cluster: React.FC = () => {
         await api.post('/nodes', formData);
       }
       setFormData({ 
-        name: '', role: 'worker', status: 'online', ip: '',
+        name: '', role: 'agent', status: 'online', ip: '',
         cpu_total: '', cpu_used: '', mem_total: '', mem_used: '', disk_total: '', disk_used: ''
       });
       setShowAddForm(false);
@@ -105,7 +105,7 @@ const Cluster: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Cluster Management</h1>
-          <p className="text-slate-500 mt-1 font-medium">Manage main and worker nodes in your infrastructure</p>
+          <p className="text-slate-500 mt-1 font-medium">Manage core and agent nodes in your infrastructure</p>
         </div>
         <button 
           onClick={() => {
@@ -135,7 +135,7 @@ const Cluster: React.FC = () => {
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white transition-all duration-200 text-slate-900 font-bold placeholder-slate-300 outline-none"
-                  placeholder="e.g. Worker-01"
+                  placeholder="e.g. Agent-01"
                   required
                 />
               </div>
@@ -156,8 +156,8 @@ const Cluster: React.FC = () => {
                   onChange={(e) => setFormData({...formData, role: e.target.value})}
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white transition-all duration-200 text-slate-900 font-bold outline-none appearance-none cursor-pointer"
                 >
-                  <option value="main">Main (Control Plane)</option>
-                  <option value="worker">Worker Node</option>
+                  <option value="core">Core (Control Plane)</option>
+                  <option value="agent">Agent Node</option>
                 </select>
               </div>
               <div className="space-y-2">
@@ -279,7 +279,7 @@ const Cluster: React.FC = () => {
 
               <div className="flex items-center justify-between mb-6 relative z-10">
                 <div className={`p-4 rounded-2xl ${
-                  node.role === 'main' ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/30' : 'bg-slate-100 text-slate-600'
+                  node.role === 'core' ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/30' : 'bg-slate-100 text-slate-600'
                 }`}>
                   <Server size={24} />
                 </div>
@@ -302,8 +302,8 @@ const Cluster: React.FC = () => {
               <div className="space-y-1 relative z-10">
                 <div className="flex items-center gap-2">
                   <h3 className="text-xl font-black text-slate-900">{node.name}</h3>
-                  {node.role === 'main' && (
-                    <span className="px-2 py-0.5 bg-brand-500/10 text-brand-500 text-[8px] font-black uppercase tracking-widest rounded-md">Main</span>
+                  {node.role === 'core' && (
+                    <span className="px-2 py-0.5 bg-brand-500/10 text-brand-500 text-[8px] font-black uppercase tracking-widest rounded-md">Core</span>
                   )}
                 </div>
                 <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">
