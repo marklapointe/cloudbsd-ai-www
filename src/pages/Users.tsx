@@ -147,8 +147,12 @@ const Users: React.FC = () => {
                   <option value="es">Español</option>
                   <option value="pt">Português</option>
                   <option value="ro">Română</option>
+                  <option value="ru">Русский</option>
+                  <option value="hi">हिन्दी (Hindi)</option>
+                  <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
                   <option value="zh">中文</option>
                   <option value="ja">日本語</option>
+                  <option value="iu">ᐃᓄᒃᑎᑐᑦ (Inuktitut)</option>
                   <option value="ar-IQ">العراقية (IRAQ)</option>
                 </select>
                 <Languages size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-500 transition-colors pointer-events-none" />

@@ -114,8 +114,12 @@ const Settings: React.FC = () => {
                     <option value="es">Español</option>
                     <option value="pt">Português</option>
                     <option value="ro">Română</option>
+                    <option value="ru">Русский</option>
+                    <option value="hi">हिन्दी (Hindi)</option>
+                    <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
                     <option value="zh">中文</option>
                     <option value="ja">日本語</option>
+                    <option value="iu">ᐃᓄᒃᑎᑐᑦ (Inuktitut)</option>
                     <option value="ar-IQ">العراقية (IRAQ)</option>
                   </select>
                   <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 group-hover:text-brand-500 transition-colors">
