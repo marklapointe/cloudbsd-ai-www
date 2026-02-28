@@ -275,7 +275,7 @@ app.get('/api/logs', authenticateToken, isAdmin, (req, res) => {
  *                 enum: [admin, operator, viewer]
  *               language:
  *                 type: string
- *                 enum: [en, fr, es, pt, ro, ru, hi, pa, zh, ja, iu, "ar-IQ"]
+ *                 enum: [en, fr, es, "es-ES", pt, ro, ru, hi, pa, zh, ja, iu, "ar-IQ", tlh]
  *     responses:
  *       201:
  *         description: User created
