@@ -109,9 +109,14 @@ const Settings: React.FC = () => {
                     onChange={(e) => i18n.changeLanguage(e.target.value)}
                     className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 font-bold outline-none appearance-none focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white transition-all duration-200 cursor-pointer"
                   >
-                    <option value="en">{t('settings.english')}</option>
-                    <option value="fr">{t('settings.french')}</option>
-                    <option value="es">{t('settings.spanish')}</option>
+                    <option value="en">English</option>
+                    <option value="fr">Français</option>
+                    <option value="es">Español</option>
+                    <option value="pt">Português</option>
+                    <option value="ro">Română</option>
+                    <option value="zh">中文</option>
+                    <option value="ja">日本語</option>
+                    <option value="ar-IQ">العراقية (IRAQ)</option>
                   </select>
                   <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 group-hover:text-brand-500 transition-colors">
                     <Languages size={18} />
