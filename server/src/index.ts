@@ -910,7 +910,7 @@ app.get('/api/system/info', authenticateToken, (req, res) => {
     hostname: os.hostname(),
     os: `${os.type()} ${os.release()}`,
     cpu: os.cpus()[0].model,
-    cores: `${os.cpus().length} Cores`
+    cores: os.cpus().length
   });
 });
 
