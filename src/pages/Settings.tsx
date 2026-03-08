@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Settings as SettingsIcon, Save, RefreshCw, Key, ShieldCheck, CreditCard, Activity, Users, Server, Box, Hexagon, Clock, CheckCircle2, Languages } from 'lucide-react';
+import { Settings as SettingsIcon, Save, RefreshCw, Key, ShieldCheck, CreditCard, Activity, Server, Box, Hexagon, Clock, CheckCircle2, Languages } from 'lucide-react';
 import api from '../api/client';
 import { useTranslation } from 'react-i18next';
 
@@ -36,7 +36,7 @@ const Settings: React.FC = () => {
     setSavingLicense(true);
     setMessage(null);
     try {
-      const response = await api.post('/api/system/license', { license_key: licenseKey });
+      const response = await api.post('/system/license', { license_key: licenseKey });
       setLicense(response.data.license);
       setLicenseKey('');
       setMessage({ text: response.data.message, type: 'success' });
@@ -67,12 +67,65 @@ const Settings: React.FC = () => {
     return Math.min(100, (used / limit) * 100);
   };
 
+  const supportedLanguages = [
+    { code: 'en', name: 'English' },
+    { code: 'es', name: 'Español' },
+    { code: 'fr', name: 'Français' },
+    { code: 'eo', name: 'Esperanto' },
+    { code: 'it', name: 'Italiano' },
+    { code: 'no', name: 'Norsk' },
+    { code: 'sv', name: 'Svenska' },
+    { code: 'pa', name: 'ਪੰਜਾਬੀ' },
+    { code: 'tlh', name: 'tlhIngan Hol' },
+    { code: 'elv', name: 'Elvish' },
+    { code: 'de', name: 'Deutsch' },
+    { code: 'zh', name: '中文' },
+    { code: 'ja', name: '日本語' },
+    { code: 'ar', name: 'العربية' },
+    { code: 'sw', name: 'Kiswahili' },
+    { code: 'yo', name: 'Yorùbá' },
+    { code: 'hi', name: 'हिन्दी' },
+    { code: 'ko', name: '한국어' },
+    { code: 'fi', name: 'Suomi' },
+    { code: 'ru', name: 'Русский' },
+    { code: 'pl', name: 'Polski' },
+    { code: 'doth', name: 'Dothraki' },
+    { code: 'qvy', name: 'High Valyrian' },
+    { code: 'qav', name: 'Na\'vi' },
+    { code: 'atl', name: 'Atlantean' },
+    { code: 'tr', name: 'Türkçe' },
+    { code: 'ca', name: 'Català' },
+    { code: 'cs', name: 'Čeština' },
+    { code: 'el', name: 'Ελληνικά' },
+    { code: 'he', name: 'עברית' },
+    { code: 'uk', name: 'Українська' },
+    { code: 'sr', name: 'Српски' },
+    { code: 'sk', name: 'Slovenčina' },
+    { code: 'sl', name: 'Slovenščina' },
+    { code: 'ur', name: 'اردو' },
+    { code: 'bg', name: 'Български' },
+    { code: 'hr', name: 'Hrvatski' },
+    { code: 'hu', name: 'Magyar' },
+    { code: 'lt', name: 'Lietuvių' },
+    { code: 'lv', name: 'Latviešu' },
+    { code: 'id', name: 'Bahasa Indonesia' },
+    { code: 'pt', name: 'Português (Brasil)' },
+    { code: 'pt-PT', name: 'Português (Portugal)' },
+    { code: 'ro', name: 'Română' },
+  ];
+
+  const sortedLanguages = [...supportedLanguages].sort((a, b) => {
+    if (a.code === 'en') return -1;
+    if (b.code === 'en') return 1;
+    return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
+  });
+
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">{t('settings.title')}</h1>
-          <p className="text-slate-500 mt-1 font-medium">System configuration and preferences</p>
+          <p className="text-slate-500 mt-1 font-medium">{t('settings.subtitle')}</p>
         </div>
       </div>
 
@@ -101,30 +154,21 @@ const Settings: React.FC = () => {
                   <div className="p-1.5 bg-brand-100 text-brand-600 rounded-lg">
                     <Languages size={16} />
                   </div>
-                  <h3 className="text-sm font-bold text-slate-900">{t('settings.language')}</h3>
+                  <h3 className="text-sm font-bold text-slate-900">{t('settings.language_select')}</h3>
                 </div>
                 <div className="relative group">
                   <select
                     value={i18n.language}
                     onChange={(e) => i18n.changeLanguage(e.target.value)}
                     className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 font-bold outline-none appearance-none focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white transition-all duration-200 cursor-pointer"
+                    aria-label={t('common.language')}
+                    title={t('common.language')}
                   >
-                    <option value="en">English</option>
-                    <option value="fr">Français</option>
-                    <option value="de">Deutsch</option>
-                    <option value="it">Italiano</option>
-                    <option value="es">Español</option>
-                    <option value="es-ES">Castellano</option>
-                    <option value="pt">Português</option>
-                    <option value="ro">Română</option>
-                    <option value="ru">Русский</option>
-                    <option value="hi">हिन्दी (Hindi)</option>
-                    <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
-                    <option value="zh">中文</option>
-                    <option value="ja">日本語</option>
-                    <option value="iu">ᐃᓄᒃᑎᑐᑦ (Inuktitut)</option>
-                    <option value="ar-IQ">العراقية (IRAQ)</option>
-                    <option value="tlh">tlhIngan Hol (Klingon)</option>
+                    {sortedLanguages.map((lang) => (
+                      <option key={lang.code} value={lang.code}>
+                        {lang.name}
+                      </option>
+                    ))}
                   </select>
                   <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 group-hover:text-brand-500 transition-colors">
                     <Languages size={18} />
@@ -205,7 +249,7 @@ const Settings: React.FC = () => {
             <div className="p-8">
               <button 
                 className="px-6 py-3 bg-white border-2 border-red-500/20 text-red-500 font-black uppercase text-xs tracking-widest rounded-2xl hover:bg-red-500 hover:text-white hover:border-red-500 transition-all duration-300 active:scale-95 shadow-sm"
-                onClick={() => alert('This would restart the admin panel service.')}
+                onClick={() => alert(t('settings.restart_alert'))}
               >
                 {t('settings.restart_service')}
               </button>
@@ -223,7 +267,7 @@ const Settings: React.FC = () => {
                 <h2 className="text-lg font-black text-slate-900 uppercase tracking-tight">{t('settings.license_status')}</h2>
               </div>
               {license?.status === 'active' && (
-                <span className="px-3 py-1 bg-emerald-100 text-emerald-600 text-[10px] font-black uppercase tracking-widest rounded-lg">Active</span>
+                <span className="px-3 py-1 bg-emerald-100 text-emerald-600 text-[10px] font-black uppercase tracking-widest rounded-lg">{t('settings.active')}</span>
               )}
             </div>
             
@@ -234,12 +278,12 @@ const Settings: React.FC = () => {
                     <CreditCard className="text-slate-400" size={20} />
                     <div>
                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('settings.license_type')}</p>
-                      <p className="text-sm font-bold text-slate-900 capitalize">{license?.license_type || 'None'}</p>
+                      <p className="text-sm font-bold text-slate-900 capitalize">{license?.license_type ? t(`settings.${license.license_type}`) : t('settings.none')}</p>
                     </div>
                   </div>
                   <div className="text-right">
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('settings.registered_to')}</p>
-                    <p className="text-sm font-bold text-slate-900">{license?.registered_to || 'Unregistered'}</p>
+                    <p className="text-sm font-bold text-slate-900">{license?.registered_to || t('settings.unregistered')}</p>
                   </div>
                 </div>
 
@@ -250,7 +294,7 @@ const Settings: React.FC = () => {
                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('settings.expires_on')}</p>
                     </div>
                     <p className="text-sm font-bold text-slate-900">
-                      {license?.expiry_date ? new Date(license.expiry_date).toLocaleDateString() : 'N/A'}
+                      {license?.expiry_date ? new Date(license.expiry_date).toLocaleDateString() : t('settings.not_applicable')}
                     </p>
                   </div>
                   <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
@@ -258,7 +302,7 @@ const Settings: React.FC = () => {
                       <Activity className="text-slate-400" size={16} />
                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('settings.support_tier')}</p>
                     </div>
-                    <p className="text-sm font-bold text-slate-900 capitalize">{license?.support_tier || 'None'}</p>
+                    <p className="text-sm font-bold text-slate-900 capitalize">{license?.support_tier ? t(`settings.${license.support_tier}`) : t('settings.none')}</p>
                   </div>
                 </div>
               </div>
@@ -352,7 +396,7 @@ const Settings: React.FC = () => {
                     {license.features.map((feature: string) => (
                       <span key={feature} className="px-3 py-1.5 bg-brand-50 text-brand-700 text-[10px] font-bold rounded-xl border border-brand-100 flex items-center gap-1.5">
                         <CheckCircle2 size={12} className="text-brand-500" />
-                        {feature.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                        {t(`settings.feature_${feature}`)}
                       </span>
                     ))}
                   </div>

@@ -29,8 +29,14 @@ const tlh = {
       operator: "lo'wI'",
       viewer: "bej"
     },
+    layout: {
+      admin_panel: "la'ghal rav",
+      main_menu: "muyu'",
+      logo_text: "CloudBSD"
+    },
     settings: {
       title: "choH",
+      subtitle: "De'wI' choHmey",
       language: "Hol",
       language_select: "Hol wiv",
       english: "English",
@@ -58,14 +64,7 @@ const tlh = {
       ssl_security_desc: "HTTPS/WSS lo'.",
       system_actions: "vang",
       restart_service: "qaH",
-      license_type: "chaw' Segh",
-      registered_to: "lo'wI'",
-      expires_on: "puv",
-      support_tier: "mI'",
-      allowed_resources: "De'wI'mey",
-      included_features: "Segh",
-      register_license: "chaw' pol",
-      example: "ghov"
+      restart_alert: "De'wI' qaHqa'."
     },
     users: {
       management: "lo'wI'pu' choH",

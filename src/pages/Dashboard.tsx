@@ -5,7 +5,6 @@ import {
   Monitor, 
   Container, 
   HardDrive, 
-  Box,
   Activity,
   Server,
   Cpu,
@@ -28,27 +27,27 @@ const Dashboard: React.FC = () => {
     cpu: 0,
     memory: 0,
     disk: 0,
-    network: { in: '0', out: '0' },
-    uptime: 'Loading...'
+    network: { in: 0, out: 0 },
+    uptime: '—'
   });
   const [clusterStats, setClusterStats] = useState<any>(null);
   const [systemInfo, setSystemInfo] = useState({
-    hostname: 'Loading...',
-    os: 'Loading...',
-    cpu: 'Loading...',
-    cores: 'Loading...'
+    hostname: '—',
+    os: '—',
+    cpu: '—',
+    cores: '—'
   });
   const [hostDetail, setHostDetail] = useState<any>(null);
   const [browserInfo, setBrowserInfo] = useState({
-    browser: 'Loading...',
-    platform: 'Loading...',
-    language: 'Loading...'
+    browser: '—',
+    platform: '—',
+    language: '—'
   });
 
   useEffect(() => {
     // Get browser info
     const ua = navigator.userAgent;
-    let browser = "Unknown";
+    let browser = t('common.unknown');
     if (ua.indexOf("Firefox") > -1) browser = "Firefox";
     else if (ua.indexOf("Chrome") > -1) browser = "Chrome";
     else if (ua.indexOf("Safari") > -1) browser = "Safari";
@@ -106,7 +105,7 @@ const Dashboard: React.FC = () => {
       </div>
       <div className="flex items-end justify-between mb-2">
         <div className="text-2xl font-black text-slate-900">{used}</div>
-        <div className="text-xs font-bold text-slate-400 mb-1">of {total}</div>
+        <div className="text-xs font-bold text-slate-400 mb-1">{t('dashboard.of')} {total}</div>
       </div>
       <div className="w-full h-2 bg-slate-50 rounded-full overflow-hidden">
         <div 
@@ -115,7 +114,7 @@ const Dashboard: React.FC = () => {
         />
       </div>
       <div className="mt-2 text-right">
-        <span className={`text-[10px] font-black text-${color}-600 tracking-tighter`}>{percentage}% UTILIZED</span>
+        <span className={`text-[10px] font-black text-${color}-600 tracking-tighter`}>{percentage}% {t('dashboard.utilized')}</span>
       </div>
     </div>
   );
@@ -129,7 +128,7 @@ const Dashboard: React.FC = () => {
         </div>
         <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-2xl shadow-soft border border-slate-100">
           <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">System Live</span>
+          <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">{t('dashboard.system_live')}</span>
         </div>
       </div>
 
@@ -142,15 +141,15 @@ const Dashboard: React.FC = () => {
             <div className="ml-auto flex items-center gap-2 px-3 py-1 bg-brand-50 rounded-full border border-brand-100">
               <Activity size={14} className="text-brand-600" />
               <span className="text-[10px] font-black text-brand-600 uppercase tracking-widest">
-                {clusterStats.nodes.online} / {clusterStats.nodes.total} {t('common.cluster')} Nodes Online
+                {clusterStats.nodes.online} / {clusterStats.nodes.total} {t('dashboard.nodes_online')}
               </span>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <ClusterResourceCard 
               title={t('dashboard.vcpus')} 
-              used={`${clusterStats.cpu.used} vCPUs`} 
-              total={`${clusterStats.cpu.total} vCPUs`} 
+              used={`${clusterStats.cpu.used} ${t('common.vcpu')}`} 
+              total={`${clusterStats.cpu.total} ${t('common.vcpu')}`} 
               percentage={clusterStats.cpu.percentage} 
               icon={Cpu} 
               color="blue" 
@@ -205,7 +204,7 @@ const Dashboard: React.FC = () => {
           <div className="space-y-8">
             <div className="group">
               <div className="flex justify-between mb-3 items-end">
-                <span className="text-sm font-bold text-slate-700 uppercase tracking-wider">CPU Usage</span>
+                <span className="text-sm font-bold text-slate-700 uppercase tracking-wider">{t('dashboard.cpu_usage')}</span>
                 <span className="text-lg font-black text-blue-600">{systemHealth.cpu}%</span>
               </div>
               <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
@@ -217,7 +216,7 @@ const Dashboard: React.FC = () => {
             </div>
             <div className="group">
               <div className="flex justify-between mb-3 items-end">
-                <span className="text-sm font-bold text-slate-700 uppercase tracking-wider">Memory Usage</span>
+                <span className="text-sm font-bold text-slate-700 uppercase tracking-wider">{t('dashboard.memory_usage')}</span>
                 <span className="text-lg font-black text-emerald-600">{systemHealth.memory}%</span>
               </div>
               <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
@@ -229,7 +228,7 @@ const Dashboard: React.FC = () => {
             </div>
             <div className="group">
               <div className="flex justify-between mb-3 items-end">
-                <span className="text-sm font-bold text-slate-700 uppercase tracking-wider">Disk Usage</span>
+                <span className="text-sm font-bold text-slate-700 uppercase tracking-wider">{t('dashboard.disk_usage')}</span>
                 <span className="text-lg font-black text-amber-600">{systemHealth.disk}%</span>
               </div>
               <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
@@ -246,8 +245,8 @@ const Dashboard: React.FC = () => {
                   <ArrowDownLeft size={20} />
                 </div>
                 <div>
-                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Network In</p>
-                  <p className="text-lg font-black text-slate-900 leading-tight">{systemHealth.network.in} <span className="text-xs font-bold text-slate-500">Mbps</span></p>
+                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{t('dashboard.network_in')}</p>
+                  <p className="text-lg font-black text-slate-900 leading-tight">{systemHealth.network?.in ?? 0} <span className="text-xs font-bold text-slate-500">{t('dashboard.mbps')}</span></p>
                 </div>
               </div>
               <div className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50/50 border border-slate-100 transition-colors hover:bg-slate-50">
@@ -255,8 +254,8 @@ const Dashboard: React.FC = () => {
                   <ArrowUpRight size={20} />
                 </div>
                 <div>
-                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Network Out</p>
-                  <p className="text-lg font-black text-slate-900 leading-tight">{systemHealth.network.out} <span className="text-xs font-bold text-slate-500">Mbps</span></p>
+                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{t('dashboard.network_out')}</p>
+                  <p className="text-lg font-black text-slate-900 leading-tight">{systemHealth.network?.out ?? 0} <span className="text-xs font-bold text-slate-500">{t('dashboard.mbps')}</span></p>
                 </div>
               </div>
             </div>
@@ -270,7 +269,7 @@ const Dashboard: React.FC = () => {
               <div className="p-2 bg-brand-100 text-brand-600 rounded-lg">
                 <Server size={20} />
               </div>
-              Server Info
+              {t('dashboard.server_info')}
             </h2>
             <div className="space-y-6">
               <div className="flex items-start gap-4">
@@ -278,8 +277,10 @@ const Dashboard: React.FC = () => {
                   <Info size={16} />
                 </div>
                 <div>
-                  <p className="text-sm font-black text-slate-900">{systemInfo.hostname}</p>
-                  <p className="text-[11px] font-bold text-slate-500 uppercase tracking-tighter">{systemInfo.os} • {hostDetail?.arch}</p>
+                  <p className="text-sm font-black text-slate-900">{systemInfo.hostname === '—' ? t('common.loading') : systemInfo.hostname}</p>
+                  <p className="text-[11px] font-bold text-slate-500 uppercase tracking-tighter">
+                    {systemInfo.os === '—' ? t('common.loading') : systemInfo.os} • {hostDetail?.arch || '—'}
+                  </p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
@@ -287,9 +288,9 @@ const Dashboard: React.FC = () => {
                   <Cpu size={16} />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-black text-slate-900 truncate">{systemInfo.cpu}</p>
+                  <p className="text-sm font-black text-slate-900 truncate">{systemInfo.cpu === '—' ? t('common.loading') : systemInfo.cpu}</p>
                   <p className="text-[11px] font-bold text-slate-500 uppercase tracking-tighter">
-                    {systemInfo.cores} • Load: {hostDetail?.loadAverage?.map((l: number) => l.toFixed(2)).join(', ')}
+                    {systemInfo.cores === '—' ? t('common.loading') : systemInfo.cores} • {t('dashboard.load')}: {hostDetail?.loadAverage?.map((l: number) => l.toFixed(2)).join(', ') || '—'}
                   </p>
                 </div>
               </div>
@@ -298,18 +299,18 @@ const Dashboard: React.FC = () => {
                   <Clock size={16} />
                 </div>
                 <div>
-                  <p className="text-sm font-black text-slate-900">Uptime</p>
-                  <p className="text-[11px] font-bold text-slate-500 uppercase tracking-tighter">{systemHealth.uptime}</p>
+                  <p className="text-sm font-black text-slate-900">{t('dashboard.uptime')}</p>
+                  <p className="text-[11px] font-bold text-slate-500 uppercase tracking-tighter">{systemHealth.uptime === '—' ? t('common.loading') : systemHealth.uptime}</p>
                 </div>
               </div>
               {hostDetail && (
                 <div className="pt-6 border-t border-slate-50 mt-4 grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Total RAM</p>
+                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">{t('dashboard.total_ram')}</p>
                     <p className="text-sm font-black text-slate-700">{hostDetail.totalMemory}</p>
                   </div>
                   <div>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Free RAM</p>
+                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">{t('dashboard.free_ram')}</p>
                     <p className="text-sm font-black text-emerald-600">{hostDetail.freeMemory}</p>
                   </div>
                 </div>
@@ -325,7 +326,7 @@ const Dashboard: React.FC = () => {
               <div className="p-2 bg-white/10 text-white rounded-lg backdrop-blur-md">
                 <Globe size={20} />
               </div>
-              Client Info
+              {t('dashboard.client_info')}
             </h2>
             <div className="space-y-6 relative z-10">
               <div className="flex items-start gap-4">
@@ -333,13 +334,13 @@ const Dashboard: React.FC = () => {
                   <Monitor size={16} />
                 </div>
                 <div>
-                  <p className="text-sm font-black text-white">{browserInfo.browser}</p>
-                  <p className="text-[11px] font-bold text-slate-400 uppercase tracking-tighter">{browserInfo.platform}</p>
+                  <p className="text-sm font-black text-white">{browserInfo.browser === '—' ? t('common.loading') : browserInfo.browser}</p>
+                  <p className="text-[11px] font-bold text-slate-400 uppercase tracking-tighter">{browserInfo.platform === '—' ? t('common.loading') : browserInfo.platform}</p>
                 </div>
               </div>
               <div className="pt-6 border-t border-white/5 mt-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest space-y-2">
-                <p>Language: <span className="text-slate-300 ml-1">{browserInfo.language}</span></p>
-                <p className="truncate">URL: <span className="text-slate-300 ml-1 font-mono">{window.location.origin}</span></p>
+                <p>{t('dashboard.language')}: <span className="text-slate-300 ml-1">{browserInfo.language === '—' ? t('common.loading') : browserInfo.language}</span></p>
+                <p className="truncate">{t('dashboard.url')}: <span className="text-slate-300 ml-1 font-mono">{window.location.origin}</span></p>
               </div>
             </div>
           </div>

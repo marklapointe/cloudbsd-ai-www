@@ -21,6 +21,59 @@ const Users: React.FC = () => {
   const [newRole, setNewRole] = useState('viewer');
   const [newLanguage, setNewLanguage] = useState('en');
 
+  const supportedLanguages = [
+    { code: 'en', name: 'English' },
+    { code: 'es', name: 'Español' },
+    { code: 'fr', name: 'Français' },
+    { code: 'eo', name: 'Esperanto' },
+    { code: 'it', name: 'Italiano' },
+    { code: 'no', name: 'Norsk' },
+    { code: 'sv', name: 'Svenska' },
+    { code: 'pa', name: 'ਪੰਜਾਬੀ' },
+    { code: 'tlh', name: 'tlhIngan Hol' },
+    { code: 'elv', name: 'Elvish' },
+    { code: 'de', name: 'Deutsch' },
+    { code: 'zh', name: '中文' },
+    { code: 'ja', name: '日本語' },
+    { code: 'ar', name: 'العربية' },
+    { code: 'sw', name: 'Kiswahili' },
+    { code: 'yo', name: 'Yorùbá' },
+    { code: 'hi', name: 'हिन्दी' },
+    { code: 'ko', name: '한국어' },
+    { code: 'fi', name: 'Suomi' },
+    { code: 'ru', name: 'Русский' },
+    { code: 'pl', name: 'Polski' },
+    { code: 'doth', name: 'Dothraki' },
+    { code: 'qvy', name: 'High Valyrian' },
+    { code: 'qav', name: 'Na\'vi' },
+    { code: 'atl', name: 'Atlantean' },
+    { code: 'tr', name: 'Türkçe' },
+    { code: 'ca', name: 'Català' },
+    { code: 'cs', name: 'Čeština' },
+    { code: 'el', name: 'Ελληνικά' },
+    { code: 'he', name: 'עברית' },
+    { code: 'uk', name: 'Українська' },
+    { code: 'sr', name: 'Српски' },
+    { code: 'sk', name: 'Slovenčina' },
+    { code: 'sl', name: 'Slovenščina' },
+    { code: 'ur', name: 'اردو' },
+    { code: 'bg', name: 'Български' },
+    { code: 'hr', name: 'Hrvatski' },
+    { code: 'hu', name: 'Magyar' },
+    { code: 'lt', name: 'Lietuvių' },
+    { code: 'lv', name: 'Latviešu' },
+    { code: 'id', name: 'Bahasa Indonesia' },
+    { code: 'pt', name: 'Português (Brasil)' },
+    { code: 'pt-PT', name: 'Português (Portugal)' },
+    { code: 'ro', name: 'Română' },
+  ];
+
+  const sortedLanguages = [...supportedLanguages].sort((a, b) => {
+    if (a.code === 'en') return -1;
+    if (b.code === 'en') return 1;
+    return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
+  });
+
   const fetchUsers = async () => {
     try {
       setLoading(true);
@@ -142,20 +195,9 @@ const Users: React.FC = () => {
                   onChange={(e) => setNewLanguage(e.target.value)}
                   className="w-full pl-11 pr-10 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white transition-all duration-200 text-slate-900 font-bold outline-none appearance-none cursor-pointer"
                 >
-                  <option value="en">English</option>
-                  <option value="fr">Français</option>
-                  <option value="es">Español</option>
-                  <option value="es-ES">Castellano</option>
-                  <option value="pt">Português</option>
-                  <option value="ro">Română</option>
-                  <option value="ru">Русский</option>
-                  <option value="hi">हिन्दी (Hindi)</option>
-                  <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
-                  <option value="zh">中文</option>
-                  <option value="ja">日本語</option>
-                  <option value="iu">ᐃᓄᒃᑎᑐᑦ (Inuktitut)</option>
-                  <option value="ar-IQ">العراقية (IRAQ)</option>
-                  <option value="tlh">tlhIngan Hol (Klingon)</option>
+                  {sortedLanguages.map(lang => (
+                    <option key={lang.code} value={lang.code}>{lang.name}</option>
+                  ))}
                 </select>
                 <Languages size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-500 transition-colors pointer-events-none" />
               </div>

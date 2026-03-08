@@ -1,0 +1,90 @@
+const yo = {
+  translation: {
+    common: {
+      save: "Fipamọ",
+      cancel: "Fagilee",
+      loading: "Nṣiṣẹ lọwọ...",
+      actions: "Awọn iṣe",
+      search: "Wa",
+      status: "Ipo",
+      name: "Orukọ",
+      type: "Iru",
+      host: "Olugbejo",
+      settings: "Ètò",
+      logout: "Jade",
+      dashboard: "Dasibodu",
+      vms: "Awọn ẹrọ foju",
+      containers: "Awọn apoti OCI",
+      jails: "Jails",
+      network: "Maapu nẹtiwọọki",
+      cluster: "Ìṣùpọ̀",
+      users: "Awọn olumulo",
+      logs: "Awọn akọọlẹ",
+      license: "Iwe-aṣẹ",
+      role: "Ipa",
+      username: "Orukọ olumulo",
+      password: "Ọrọigbaniwọle",
+      language: "Èdè",
+      admin: "Oludari",
+      operator: "Oṣiṣẹ",
+      viewer: "Olwo"
+    },
+    layout: {
+      admin_panel: "Panti Isakoso",
+      main_menu: "Akojọ aṣyn akọkọ",
+      logo_text: "CloudBSD"
+    },
+    settings: {
+      title: "Ètò",
+      subtitle: "Iṣeto eto ati awọn ayanfẹ",
+      language: "Èdè",
+      language_select: "Yan Èdè",
+      english: "Gẹẹsi",
+      french: "Faranse",
+      spanish: "Sipaniisi",
+      chinese: "Ṣaina",
+      japanese: "Japanese",
+      portuguese: "Potogí",
+      arabic: "Arabic",
+      swahili: "Swahili",
+      yoruba: "Yoruba",
+      server_config: "Iṣeto Olupin",
+      server_name: "Orukọ Olupin",
+      port: "Ibudo",
+      db_path: "Ipa ọna data",
+      demo_mode: "Ipo Ifihan",
+      demo_mode_desc: "Lọwọlọwọ nṣiṣẹ ni agbegbe ti a ṣe afiwe.",
+      ssl_security: "Aabo SSL/TLS",
+      ssl_security_desc: "HTTPS ati WSS ti ṣiṣẹ fun ibaraẹnisọrọ to ni aabo.",
+      system_actions: "Awọn iṣe eto",
+      restart_service: "Tun iṣẹ bẹrẹ",
+      restart_alert: "Eyi yoo tun iṣẹ nronu iṣakoso bẹrẹ."
+    },
+    users: {
+      management: "Isakoso olumulo",
+      management_desc: "Ṣakoso awọn akọọlẹ oludari ati oṣiṣẹ",
+      new_user: "Olumulo Tuntun",
+      create_new: "Ṣẹda Olumulo Tuntun",
+      delete_confirm: "Ṣe o da ọ loju pe o fẹ pa olumulo yii rẹ?",
+      no_users: "Ko si awọn olumulo ti a rii"
+    },
+    dashboard: {
+      title: "Akopọ Amayederun",
+      system_health: "Ilera eto",
+      live_metrics: "Awọn metiriki lilo ohun elo gidi",
+      cpu_usage: "Lilo CPU",
+      memory_usage: "Lilo Iranti",
+      disk_usage: "Lilo Disiki",
+      network_in: "Nẹtiwọọki Wọle",
+      network_out: "Nẹtiwọọki Jade",
+      server_info: "Alaye olupin",
+      browser_info: "Alaye aṣawakiri",
+      uptime: "Akoko iṣẹ",
+      total_vms: "Lapapọ Awọn ẹrọ foju",
+      total_containers: "Lapapọ Awọn apoti OCI",
+      total_jails: "Lapapọ Jails"
+    }
+  }
+};
+
+export default yo;

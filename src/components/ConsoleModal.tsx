@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { X, Terminal as TerminalIcon, Monitor } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import '@xterm/xterm/css/xterm.css';
@@ -19,6 +20,7 @@ interface ConsoleModalProps {
 }
 
 const ConsoleModal: React.FC<ConsoleModalProps> = ({ isOpen, onClose, resource, resourceType }) => {
+  const { t } = useTranslation();
   const terminalRef = useRef<HTMLDivElement>(null);
   const xtermRef = useRef<Terminal | null>(null);
 
@@ -52,8 +54,8 @@ const ConsoleModal: React.FC<ConsoleModalProps> = ({ isOpen, onClose, resource, 
         }
       });
 
-      term.writeln(`\x1b[1;32mConnected to ${resource.name} (${resourceType})\x1b[0m`);
-      term.writeln('Type "exit" to close the console.');
+      term.writeln(`\x1b[1;32m${t('console_modal.connected_to')} ${resource.name} (${resourceType})\x1b[0m`);
+      term.writeln(t('console_modal.type_exit'));
       term.write('\r\n$ ');
 
       const handleResize = () => fitAddon.fit();
@@ -76,7 +78,7 @@ const ConsoleModal: React.FC<ConsoleModalProps> = ({ isOpen, onClose, resource, 
         <div className="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
           <div className="flex items-center gap-2">
             {resourceType === 'vms' ? <Monitor className="text-blue-600" size={20} /> : <TerminalIcon className="text-blue-600" size={20} />}
-            <h2 className="text-lg font-bold text-slate-900">Console: {resource.name}</h2>
+            <h2 className="text-lg font-bold text-slate-900">{t('console_modal.title')}: {resource.name}</h2>
           </div>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors">
             <X size={24} />
@@ -90,13 +92,13 @@ const ConsoleModal: React.FC<ConsoleModalProps> = ({ isOpen, onClose, resource, 
                 <Monitor size={48} />
               </div>
               <div className="text-center">
-                <p className="text-lg font-medium text-white">VNC Console Placeholder</p>
-                <p className="text-sm">noVNC integration would appear here for VM management.</p>
+                <p className="text-lg font-medium text-white">{t('console_modal.vnc_placeholder')}</p>
+                <p className="text-sm">{t('console_modal.vnc_desc')}</p>
                 <button 
                   className="mt-6 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                  onClick={() => alert('VNC Connection would be established to bhyve instance.')}
+                  onClick={() => alert(t('console_modal.vnc_alert'))}
                 >
-                  Connect via VNC
+                  {t('console_modal.connect_vnc')}
                 </button>
               </div>
             </div>
@@ -105,9 +107,9 @@ const ConsoleModal: React.FC<ConsoleModalProps> = ({ isOpen, onClose, resource, 
           )}
         </div>
         
-        <div className="px-6 py-3 border-t border-slate-200 bg-slate-50 flex justify-between items-center text-xs text-slate-500">
-          <div>Status: <span className="text-emerald-600 font-medium">Connected</span></div>
-          <div>Resource ID: {resource.id} | Type: {resourceType}</div>
+        <div className="px-6 py-3 border-t border-slate-200 bg-slate-50 flex justify-between items-center text-xs text-slate-500 font-bold">
+          <div>{t('console_modal.status')}: <span className="text-emerald-600 font-black uppercase tracking-widest">{t('console_modal.connected')}</span></div>
+          <div>{t('console_modal.resource_id')}: {resource.id} | {t('common.type')}: {resourceType}</div>
         </div>
       </div>
     </div>

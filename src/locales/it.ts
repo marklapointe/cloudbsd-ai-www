@@ -29,8 +29,14 @@ const it = {
       operator: "Operatore",
       viewer: "Osservatore"
     },
+    layout: {
+      admin_panel: "Pannello di Amministrazione",
+      main_menu: "Menu Principale",
+      logo_text: "CloudBSD"
+    },
     settings: {
       title: "Impostazioni",
+      subtitle: "Configurazione del sistema e preferenze",
       language: "Lingua",
       language_select: "Seleziona Lingua",
       english: "Inglese",
@@ -60,6 +66,7 @@ const it = {
       ssl_security_desc: "HTTPS e WSS sono abilitati per comunicazioni sicure.",
       system_actions: "Azioni di Sistema",
       restart_service: "Riavvia Servizio",
+      restart_alert: "Questo riavvierà il servizio del pannello di amministrazione.",
       license_type: "Tipo di Licenza",
       registered_to: "Registrato a",
       expires_on: "Scade il",

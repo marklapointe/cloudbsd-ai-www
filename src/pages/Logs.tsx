@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Search, Filter } from 'lucide-react';
 import api from '../api/client';
+import { useTranslation } from 'react-i18next';
 
 interface Log {
   id: number;
@@ -12,6 +13,7 @@ interface Log {
 }
 
 const Logs: React.FC = () => {
+  const { t } = useTranslation();
   const [logs, setLogs] = useState<Log[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -47,8 +49,8 @@ const Logs: React.FC = () => {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Audit Logs</h1>
-          <p className="text-slate-500 mt-1 font-medium">Historical record of system actions and events</p>
+          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">{t('logs.title')}</h1>
+          <p className="text-slate-500 mt-1 font-medium">{t('logs.description')}</p>
         </div>
       </div>
 
@@ -57,7 +59,7 @@ const Logs: React.FC = () => {
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
           <input 
             type="text" 
-            placeholder="Search activity logs..." 
+            placeholder={t('logs.search_placeholder')}
             className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white transition-all duration-200 text-slate-900 font-bold placeholder-slate-400 outline-none"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -65,7 +67,7 @@ const Logs: React.FC = () => {
         </div>
         <button className="flex items-center justify-center gap-2 px-6 py-3 border border-slate-200 rounded-2xl text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 font-bold text-sm shadow-sm active:scale-95">
           <Filter size={18} />
-          <span>Advanced Filter</span>
+          <span>{t('logs.advanced_filter')}</span>
         </button>
       </div>
 
@@ -74,10 +76,10 @@ const Logs: React.FC = () => {
           <table className="w-full text-left">
             <thead>
               <tr className="bg-slate-50/50 border-b border-slate-100">
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Timestamp</th>
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">User</th>
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Action</th>
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Details</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">{t('logs.timestamp')}</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">{t('logs.user')}</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">{t('logs.action')}</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('logs.details')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
@@ -86,7 +88,7 @@ const Logs: React.FC = () => {
                   <td colSpan={4} className="px-8 py-20 text-center">
                     <div className="flex flex-col items-center gap-3">
                       <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-brand-500"></div>
-                      <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">Loading logs...</span>
+                      <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">{t('logs.loading')}</span>
                     </div>
                   </td>
                 </tr>
@@ -95,7 +97,7 @@ const Logs: React.FC = () => {
                   <td colSpan={4} className="px-8 py-20 text-center">
                     <div className="flex flex-col items-center gap-2 text-slate-300">
                       <Search size={48} className="opacity-20" />
-                      <span className="text-sm font-bold uppercase tracking-widest">No logs found</span>
+                      <span className="text-sm font-bold uppercase tracking-widest">{t('logs.no_logs')}</span>
                     </div>
                   </td>
                 </tr>
@@ -117,7 +119,7 @@ const Logs: React.FC = () => {
                         {(log.username || 'S')[0].toUpperCase()}
                       </div>
                       <span className="font-bold text-slate-900 group-hover:text-brand-700 transition-colors">
-                        {log.username || 'System'}
+                        {log.username || t('common.server')}
                       </span>
                     </div>
                   </td>

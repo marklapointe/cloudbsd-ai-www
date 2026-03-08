@@ -5,7 +5,6 @@ import {
   LayoutDashboard, 
   Monitor, 
   Container, 
-  Box, 
   HardDrive, 
   Server,
   Network,
@@ -46,6 +45,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     navItems.push({ name: t('common.users'), path: '/users', icon: User });
     navItems.push({ name: t('common.logs'), path: '/logs', icon: History });
     navItems.push({ name: t('common.settings'), path: '/settings', icon: Settings });
+  } else if (role === 'operator') {
+    navItems.push({ name: t('common.settings'), path: '/settings', icon: Settings });
   }
 
   return (
@@ -62,7 +63,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <button 
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           className="p-2 text-slate-100 hover:bg-slate-900 rounded-lg transition-colors flex items-center justify-center"
-          aria-label="Toggle Menu"
+          aria-label={t('layout.toggle_menu')}
+          title={t('layout.toggle_menu')}
         >
           {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -89,13 +91,13 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             </div>
             <div>
               <span className="text-xl font-bold tracking-tight block leading-none">CloudBSD</span>
-              <span className="text-[10px] text-brand-400 font-bold uppercase tracking-widest">Admin Panel</span>
+              <span className="text-[10px] text-brand-400 font-bold uppercase tracking-widest">{t('layout.admin_panel')}</span>
             </div>
           </div>
 
           <nav className="flex-1 px-4 py-2 space-y-1">
             <div className="px-4 py-2 mb-2">
-              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Main Menu</p>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('layout.main_menu')}</p>
             </div>
             {navItems.map((item) => (
               <Link
@@ -126,7 +128,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 </div>
                 <div className="flex flex-col min-w-0">
                   <span className="text-sm font-semibold truncate text-slate-200">{username}</span>
-                  <span className="text-[10px] text-brand-500 font-bold uppercase tracking-wider truncate">{localStorage.getItem('role') || 'viewer'}</span>
+                  <span className="text-[10px] text-brand-500 font-bold uppercase tracking-wider truncate">{t(`common.${localStorage.getItem('role') || 'viewer'}`)}</span>
                 </div>
               </div>
               <button 

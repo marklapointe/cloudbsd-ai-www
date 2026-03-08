@@ -29,8 +29,14 @@ const de = {
       operator: "Bediener",
       viewer: "Betrachter"
     },
+    layout: {
+      admin_panel: "Admin-Panel",
+      main_menu: "Hauptmenü",
+      logo_text: "CloudBSD"
+    },
     settings: {
       title: "Einstellungen",
+      subtitle: "Systemkonfiguration und Präferenzen",
       language: "Sprache",
       language_select: "Sprache auswählen",
       english: "Englisch",
@@ -60,6 +66,7 @@ const de = {
       ssl_security_desc: "HTTPS und WSS sind für sichere Kommunikation aktiviert.",
       system_actions: "Systemaktionen",
       restart_service: "Dienst neustarten",
+      restart_alert: "Dies würde den Admin-Panel-Dienst neu starten.",
       license_type: "Lizenztyp",
       registered_to: "Registriert für",
       expires_on: "Läuft ab am",

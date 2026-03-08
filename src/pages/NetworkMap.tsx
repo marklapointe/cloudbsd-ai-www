@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   ReactFlow, 
   Background, 
@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import api from '../api/client';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 // Custom Node Components
 const HostNode = ({ data }: any) => {
@@ -38,7 +39,7 @@ const HostNode = ({ data }: any) => {
             <Server size={20} />
           </div>
           <div>
-            <div className="text-xs font-bold uppercase tracking-widest opacity-60">Host System</div>
+            <div className="text-xs font-bold uppercase tracking-widest opacity-60">{data.t('common.host_system')}</div>
             <div className="font-black text-sm">{data.label}</div>
           </div>
         </div>
@@ -83,7 +84,7 @@ const ResourceNode = ({ data }: any) => {
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
             <div className={`w-1.5 h-1.5 rounded-full ${statusColor}`} />
-            <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{data.type}</div>
+            <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{data.t(`${data.type}.resource_name`)}</div>
           </div>
           <div className="font-bold text-sm truncate text-slate-900">{data.label}</div>
         </div>
@@ -101,8 +102,9 @@ const nodeTypes = {
 };
 
 const NetworkMap: React.FC = () => {
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const { t } = useTranslation();
+  const [nodes, setNodes, onNodesChange] = useNodesState<any>([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<any>([]);
   const [resources, setResources] = useState<any[]>([]);
   const [clusterNodes, setClusterNodes] = useState<any[]>([]);
   const [expandedNodes, setExpandedNodes] = useState<Record<string, boolean>>({ 'host-core': true });
@@ -195,7 +197,8 @@ const NetworkMap: React.FC = () => {
       data: { 
         label: coreNodeData?.name || 'CloudBSD Core', 
         isExpanded: expandedNodes[coreNodeId],
-        onToggleExpand: () => toggleNodeExpand(coreNodeId)
+        onToggleExpand: () => toggleNodeExpand(coreNodeId),
+        t
       },
     });
 
@@ -212,7 +215,8 @@ const NetworkMap: React.FC = () => {
         data: { 
           label: node.name, 
           isExpanded: expandedNodes[nodeId],
-          onToggleExpand: () => toggleNodeExpand(nodeId)
+          onToggleExpand: () => toggleNodeExpand(nodeId),
+          t
         },
       });
 
@@ -242,21 +246,22 @@ const NetworkMap: React.FC = () => {
         
         // Layout resources in a semi-circle below the node
         const angle = ((resIdx + 1) / (nodeResources.length + 1)) * Math.PI;
-        const radius = 180;
-        const x = nodePos.x + radius * Math.cos(angle + Math.PI/2 - Math.PI/2);
-        const y = nodePos.y + radius * Math.sin(angle);
+        const radius = 220;
+        const x = nodePos.x + radius * Math.cos(angle + Math.PI);
+        const y = nodePos.y + radius * Math.sin(angle) + 100;
 
         newNodes.push({
           id: resNodeId,
           type: 'resource',
-          position: { x, y: nodePos.y + 150 },
+          position: { x, y },
           data: { 
             label: res.name, 
             status: res.status, 
             type: res.type,
             icon: res.icon,
             resource: res,
-            onContextMenu: handleContextMenu
+            onContextMenu: handleContextMenu,
+            t
           },
         });
 
@@ -273,7 +278,7 @@ const NetworkMap: React.FC = () => {
 
     setNodes(newNodes);
     setEdges(newEdges);
-  }, [resources, clusterNodes, expandedNodes, searchTerm, handleContextMenu, setNodes, setEdges]);
+  }, [resources, clusterNodes, expandedNodes, searchTerm, handleContextMenu, setNodes, setEdges, t]);
 
   useEffect(() => {
     createGraph();
@@ -284,15 +289,15 @@ const NetworkMap: React.FC = () => {
       {/* Absolute Search and Header for full-screen map */}
       <div className="absolute top-6 left-6 right-6 z-50 pointer-events-none flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="pointer-events-auto bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-slate-100 shadow-xl">
-          <h1 className="text-xl font-extrabold text-slate-900 tracking-tight leading-tight">Network Map</h1>
-          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Visual infrastructure overview</p>
+          <h1 className="text-xl font-extrabold text-slate-900 tracking-tight leading-tight">{t('network.title')}</h1>
+          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{t('network.visual_overview')}</p>
         </div>
         
         <div className="relative pointer-events-auto">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
           <input 
             type="text"
-            placeholder="Search nodes..."
+            placeholder={t('network.search_nodes')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-12 pr-6 py-2.5 bg-white border border-slate-100 rounded-2xl shadow-xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 outline-none w-full md:w-64 transition-all text-slate-900 font-bold"
@@ -317,11 +322,11 @@ const NetworkMap: React.FC = () => {
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2 px-2 py-1">
                 <div className="w-3 h-3 rounded-full bg-emerald-500" />
-                <span className="text-[10px] font-bold uppercase text-slate-500">Running</span>
+                <span className="text-[10px] font-bold uppercase text-slate-500">{t('network.running')}</span>
               </div>
               <div className="flex items-center gap-2 px-2 py-1">
                 <div className="w-3 h-3 rounded-full bg-slate-400" />
-                <span className="text-[10px] font-bold uppercase text-slate-500">Stopped</span>
+                <span className="text-[10px] font-bold uppercase text-slate-500">{t('network.stopped')}</span>
               </div>
             </div>
           </Panel>
@@ -333,7 +338,7 @@ const NetworkMap: React.FC = () => {
             style={{ left: contextMenu.x, top: contextMenu.y }}
           >
             <div className="px-3 py-2 border-b border-slate-50 mb-1">
-              <div className="text-[10px] font-bold uppercase text-slate-400 tracking-widest">{contextMenu.resource.type}</div>
+              <div className="text-[10px] font-bold uppercase text-slate-400 tracking-widest">{t(`${contextMenu.resource.type}.resource_name`)}</div>
               <div className="font-bold text-slate-900">{contextMenu.resource.name}</div>
             </div>
             
@@ -342,7 +347,7 @@ const NetworkMap: React.FC = () => {
               className="w-full flex items-center gap-3 px-3 py-2 bg-transparent hover:bg-emerald-50 border-none text-slate-700 hover:text-emerald-600 rounded-xl transition-colors text-sm font-semibold text-left shadow-none"
             >
               <Play size={16} />
-              <span>Start</span>
+              <span>{t('resource_list.start')}</span>
             </button>
             
             <button 
@@ -350,7 +355,7 @@ const NetworkMap: React.FC = () => {
               className="w-full flex items-center gap-3 px-3 py-2 bg-transparent hover:bg-red-50 border-none text-slate-700 hover:text-red-600 rounded-xl transition-colors text-sm font-semibold text-left shadow-none"
             >
               <Square size={16} />
-              <span>Stop</span>
+              <span>{t('resource_list.stop')}</span>
             </button>
             
             <button 
@@ -361,7 +366,7 @@ const NetworkMap: React.FC = () => {
               className="w-full flex items-center gap-3 px-3 py-2 bg-transparent hover:bg-slate-50 border-none text-slate-700 hover:text-brand-600 rounded-xl transition-colors text-sm font-semibold text-left border-t border-slate-50 mt-1 pt-2 shadow-none"
             >
               <SettingsIcon size={16} />
-              <span>Settings</span>
+              <span>{t('common.settings')}</span>
             </button>
           </div>
         )}

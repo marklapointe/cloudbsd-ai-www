@@ -29,8 +29,14 @@ const fr = {
       operator: "Opérateur",
       viewer: "Spectateur"
     },
+    layout: {
+      admin_panel: "Panneau d'administration",
+      main_menu: "Menu principal",
+      logo_text: "CloudBSD"
+    },
     settings: {
       title: "Paramètres",
+      subtitle: "Configuration et préférences du système",
       language: "Langue",
       language_select: "Choisir la langue",
       english: "Anglais",
@@ -43,6 +49,12 @@ const fr = {
       portuguese: "Portugais",
       iraqi: "Irakien",
       klingon: "tlhIngan Hol",
+      german: "Allemand",
+      italian: "Italien",
+      arabic: "Arabe",
+      swahili: "Swahili",
+      yoruba: "Yoruba",
+      esperanto: "Espéranto",
       license_status: "Statut de la licence",
       license_reg: "Enregistrement de la licence",
       reg_new_key: "Enregistrer une nouvelle clé",
@@ -58,6 +70,7 @@ const fr = {
       ssl_security_desc: "HTTPS et WSS sont activés pour une communication sécurisée.",
       system_actions: "Actions du système",
       restart_service: "Redémarrer le service",
+      restart_alert: "Cela redémarrerait le service du panneau d'administration.",
       license_type: "Type de licence",
       registered_to: "Enregistré à",
       expires_on: "Expire le",

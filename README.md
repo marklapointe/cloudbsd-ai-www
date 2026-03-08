@@ -9,6 +9,7 @@ A modern, responsive web interface for managing Virtual Machines (bhyve), OCI co
 -   **Container Management**: Support for OCI-compliant containers (Docker/Podman).
 -   **Isolation**: Management of native Jails.
 -   **Multi-user Support**: SQLite-backed authentication with role-based permissions.
+-   **Internationalization**: Multi-language support for common languages across North America, South America, Europe, Asia, and Africa (English, Spanish, French, Portuguese, German, Italian, Chinese, Japanese, Korean, Hindi, Arabic, Swahili, Yoruba).
 -   **Mobile Friendly**: Fully responsive design optimized for mobile devices.
 
 ## Tech Stack

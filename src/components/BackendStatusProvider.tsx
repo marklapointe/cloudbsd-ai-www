@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import api from '../api/client';
 import socket from '../api/socket';
+import { useTranslation } from 'react-i18next';
 
 interface BackendStatusContextType {
   isOffline: boolean;
@@ -15,6 +16,7 @@ const BackendStatusContext = createContext<BackendStatusContextType>({
 export const useBackendStatus = () => useContext(BackendStatusContext);
 
 export const BackendStatusProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { t } = useTranslation();
   const [isOffline, setIsOffline] = useState(false);
 
   const checkHealth = async () => {
@@ -61,7 +63,7 @@ export const BackendStatusProvider: React.FC<{ children: React.ReactNode }> = ({
     <BackendStatusContext.Provider value={{ isOffline, setOffline: setIsOffline }}>
       {isOffline && (
         <div className="fixed top-0 left-0 right-0 z-[9999] bg-red-600 text-white text-center py-2 px-4 font-bold shadow-lg">
-          Backend is offline. Some features may be unavailable. Retrying...
+          {t('layout.backend_offline')}
         </div>
       )}
       <div className={isOffline ? 'pt-10' : ''}>

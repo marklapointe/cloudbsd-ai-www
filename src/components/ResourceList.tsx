@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { LucideIcon } from 'lucide-react';
-import { Play, Square, MoreVertical, RotateCw, Trash2, Edit, Terminal } from 'lucide-react';
+import { Play, Square, RotateCw, Trash2, Edit, Terminal, Plus, Search } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import api from '../api/client';
 import socket from '../api/socket';
 import ResourceModal from './ResourceModal';
@@ -37,6 +38,7 @@ const ResourceList: React.FC<ResourceListProps> = ({
   resourceName,
   columns 
 }) => {
+  const { t } = useTranslation();
   const [data, setData] = useState<Resource[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,6 +54,7 @@ const ResourceList: React.FC<ResourceListProps> = ({
       setData(response.data);
     } catch (err) {
       console.error(`Failed to fetch ${resourceName}`, err);
+      alert(t('resource_list.fetch_failed', { resource: resourceName }));
     } finally {
       setLoading(false);
     }
@@ -76,23 +79,25 @@ const ResourceList: React.FC<ResourceListProps> = ({
     try {
       const resourceType = endpoint.replace(/^\//, '').replace('api/', '');
       await api.post(`/${resourceType}/${id}/${action}`);
-      // fetchData() will be called via socket event
+      // Refresh data after action
+      await fetchData();
     } catch (err) {
       console.error(`Failed to ${action} ${resourceName}`, err);
-      alert(`Failed to ${action} ${resourceName}. Check your permissions.`);
+      alert(t('resource_list.action_failed', { action, resource: resourceName }));
     }
   };
 
   const handleDelete = async (id: string | number) => {
     if (!isOperator) return;
-    if (!confirm(`Are you sure you want to delete this ${resourceName}?`)) return;
+    if (!confirm(t('resource_list.delete_confirm', { resource: resourceName }))) return;
 
     try {
       const resourceType = endpoint.replace(/^\//, '').replace('api/', '');
       await api.delete(`/${resourceType}/${id}`);
+      await fetchData();
     } catch (err) {
       console.error(`Failed to delete ${resourceName}`, err);
-      alert(`Failed to delete ${resourceName}.`);
+      alert(t('resource_list.delete_failed', { resource: resourceName }));
     }
   };
 
@@ -114,22 +119,34 @@ const ResourceList: React.FC<ResourceListProps> = ({
               : 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'
           }`}
           disabled={!isOperator}
+          aria-label={t(`common.add_${resourceName.toLowerCase()}`)}
+          title={t(`common.add_${resourceName.toLowerCase()}`)}
         >
-          <div className="w-5 h-5 rounded-lg bg-white/20 flex items-center justify-center font-bold text-xs">+</div>
-          New {resourceName}
+          <Plus size={20} />
+          {t(`common.add_${resourceName.toLowerCase()}`)}
         </button>
       </div>
 
       <div className="bg-white rounded-[2rem] shadow-soft border border-slate-100 overflow-hidden transition-all duration-300 hover:shadow-xl">
+        <div className="p-6 border-b border-slate-50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+            <input 
+              type="text" 
+              placeholder={t('resource_list.search_placeholder')}
+              className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white transition-all duration-200 outline-none font-bold text-slate-900"
+            />
+          </div>
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
               <tr className="bg-slate-50/50 border-b border-slate-100">
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Name</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('common.name')}</th>
                 {columns.map(col => (
                   <th key={col.header} className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">{col.header}</th>
                 ))}
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Actions</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">{t('resource_list.actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
@@ -138,7 +155,7 @@ const ResourceList: React.FC<ResourceListProps> = ({
                   <td colSpan={columns.length + 2} className="px-8 py-20 text-center">
                     <div className="flex flex-col items-center gap-3">
                       <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-brand-500"></div>
-                      <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">Loading {title.toLowerCase()}...</span>
+                      <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">{t('resource_list.loading', { title })}</span>
                     </div>
                   </td>
                 </tr>
@@ -147,7 +164,7 @@ const ResourceList: React.FC<ResourceListProps> = ({
                   <td colSpan={columns.length + 2} className="px-8 py-20 text-center">
                     <div className="flex flex-col items-center gap-2 text-slate-300">
                       <Icon size={48} className="opacity-20" />
-                      <span className="text-sm font-bold uppercase tracking-widest">No {title.toLowerCase()} found</span>
+                      <span className="text-sm font-bold uppercase tracking-widest">{t('resource_list.no_resources', { title })}</span>
                     </div>
                   </td>
                 </tr>
@@ -177,7 +194,8 @@ const ResourceList: React.FC<ResourceListProps> = ({
                         className={`p-2.5 rounded-xl transition-all duration-200 active:scale-90 ${
                           isOperator ? 'text-slate-400 hover:text-brand-600 hover:bg-brand-50 hover:shadow-sm' : 'text-slate-200 cursor-not-allowed'
                         }`}
-                        title="Console"
+                        title={t('resource_list.console')}
+                        aria-label={t('resource_list.console')}
                         disabled={!isOperator}
                         onClick={() => {
                           setConsoleResource(item);
@@ -190,7 +208,8 @@ const ResourceList: React.FC<ResourceListProps> = ({
                         className={`p-2.5 rounded-xl transition-all duration-200 active:scale-90 ${
                           isOperator ? 'text-slate-400 hover:text-brand-600 hover:bg-brand-50 hover:shadow-sm' : 'text-slate-200 cursor-not-allowed'
                         }`}
-                        title="Edit Settings"
+                        title={t('resource_list.edit')}
+                        aria-label={t('resource_list.edit')}
                         disabled={!isOperator}
                         onClick={() => {
                           setEditingResource(item);
@@ -204,7 +223,8 @@ const ResourceList: React.FC<ResourceListProps> = ({
                         className={`p-2.5 rounded-xl transition-all duration-200 active:scale-90 ${
                           isOperator ? 'text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 hover:shadow-sm' : 'text-slate-200 cursor-not-allowed'
                         }`}
-                        title="Start"
+                        title={t('resource_list.start')}
+                        aria-label={t('resource_list.start')}
                         disabled={!isOperator}
                         onClick={() => handleAction(item.id, 'start')}
                       >
@@ -214,7 +234,8 @@ const ResourceList: React.FC<ResourceListProps> = ({
                         className={`p-2.5 rounded-xl transition-all duration-200 active:scale-90 ${
                           isOperator ? 'text-slate-400 hover:text-amber-600 hover:bg-amber-50 hover:shadow-sm' : 'text-slate-200 cursor-not-allowed'
                         }`}
-                        title="Restart"
+                        title={t('resource_list.restart')}
+                        aria-label={t('resource_list.restart')}
                         disabled={!isOperator}
                         onClick={() => handleAction(item.id, 'restart')}
                       >
@@ -224,18 +245,19 @@ const ResourceList: React.FC<ResourceListProps> = ({
                         className={`p-2.5 rounded-xl transition-all duration-200 active:scale-90 ${
                           isOperator ? 'text-slate-400 hover:text-red-500 hover:bg-red-50 hover:shadow-sm' : 'text-slate-200 cursor-not-allowed'
                         }`}
-                        title="Stop"
+                        title={t('resource_list.stop')}
+                        aria-label={t('resource_list.stop')}
                         disabled={!isOperator}
                         onClick={() => handleAction(item.id, 'stop')}
                       >
                         <Square size={18} />
                       </button>
-                      <div className="w-px h-6 bg-slate-100 mx-1 self-center" />
                       <button 
                         className={`p-2.5 rounded-xl transition-all duration-200 active:scale-90 ${
                           isOperator ? 'text-slate-400 hover:text-red-600 hover:bg-red-50 hover:shadow-sm' : 'text-slate-200 cursor-not-allowed'
                         }`}
-                        title="Delete"
+                        title={t('resource_list.delete')}
+                        aria-label={t('resource_list.delete')}
                         disabled={!isOperator}
                         onClick={() => handleDelete(item.id)}
                       >

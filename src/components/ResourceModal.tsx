@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import api from '../api/client';
 
 interface Resource {
@@ -27,6 +28,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
   resourceName,
   initialData
 }) => {
+  const { t } = useTranslation();
   const [name, setName] = useState('');
   const [image, setImage] = useState('');
   const [ip, setIp] = useState('');
@@ -78,7 +80,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
       }
       onClose();
     } catch (err: any) {
-      setError(err.response?.data?.message || `Failed to ${initialData ? 'update' : 'create'} ${resourceName}`);
+      setError(err.response?.data?.message || t(`resource_modal.${initialData ? 'update_failed' : 'create_failed'}`, { resource: resourceName }));
     } finally {
       setLoading(false);
     }
@@ -86,58 +88,63 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden">
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
           <h2 className="text-lg font-bold text-slate-900">
-            {initialData ? 'Edit' : 'Create New'} {resourceName}
+            {initialData ? t('resource_modal.edit') : t('resource_modal.create_new')} {resourceName}
           </h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors">
+          <button 
+            onClick={onClose} 
+            className="text-slate-400 hover:text-slate-600 transition-colors"
+            aria-label={t('common.close')}
+            title={t('common.close')}
+          >
             <X size={20} />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {error && (
-            <div className="p-3 bg-red-50 text-red-700 text-sm rounded-lg border border-red-100">
+            <div className="p-3 bg-red-50 text-red-700 text-sm rounded-lg border border-red-100 font-bold">
               {error}
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Name</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">{t('resource_modal.name')}</label>
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-              placeholder={`e.g. my-${resourceName.toLowerCase()}`}
+              className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-bold"
+              placeholder={t('resource_modal.name_placeholder', { resource: resourceName.toLowerCase() })}
             />
           </div>
 
           {(resourceType === 'containers') && (
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Image</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">{t('resource_modal.image')}</label>
               <input
                 type="text"
                 required
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                placeholder="e.g. nginx:latest"
+                className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-bold"
+                placeholder={t('resource_modal.image_placeholder')}
               />
             </div>
           )}
 
           {resourceType === 'jails' && (
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">IP Address</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">{t('resource_modal.ip_address')}</label>
               <input
                 type="text"
                 value={ip}
                 onChange={(e) => setIp(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                placeholder="e.g. 192.168.1.100"
+                className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-bold"
+                placeholder={t('resource_modal.ip_placeholder')}
               />
             </div>
           )}
@@ -145,21 +152,21 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
           {resourceType === 'vms' && (
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">vCPUs</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">{t('resource_modal.vcpus')}</label>
                 <input
                   type="number"
                   min="1"
                   value={cpu}
                   onChange={(e) => setCpu(parseInt(e.target.value))}
-                  className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-bold"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Memory</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">{t('resource_modal.memory')}</label>
                 <select
                   value={memory}
                   onChange={(e) => setMemory(e.target.value)}
-                  className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-bold cursor-pointer"
                 >
                   <option value="512MB">512MB</option>
                   <option value="1GB">1GB</option>
@@ -175,16 +182,16 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-slate-200 text-slate-700 font-medium rounded-lg hover:bg-slate-50 transition-colors"
+              className="flex-1 px-4 py-2 border border-slate-200 text-slate-700 font-bold rounded-lg hover:bg-slate-50 transition-colors"
             >
-              Cancel
+              {t('common.cancel')}
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="flex-1 px-4 py-2 bg-blue-600 text-white font-black rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg shadow-blue-500/20 active:scale-95"
             >
-              {loading ? (initialData ? 'Updating...' : 'Creating...') : (initialData ? 'Update' : 'Create')}
+              {loading ? (initialData ? t('resource_modal.updating') : t('resource_modal.creating')) : (initialData ? t('resource_modal.update') : t('resource_modal.create'))}
             </button>
           </div>
         </form>

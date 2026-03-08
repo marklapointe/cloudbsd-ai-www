@@ -29,8 +29,14 @@ const zh = {
       operator: "操作员",
       viewer: "查看者"
     },
+    layout: {
+      admin_panel: "管理面板",
+      main_menu: "主菜单",
+      logo_text: "CloudBSD"
+    },
     settings: {
       title: "设置",
+      subtitle: "系统配置和偏好设置",
       language: "语言",
       language_select: "选择语言",
       english: "英语",
@@ -58,6 +64,7 @@ const zh = {
       ssl_security_desc: "已启用 HTTPS 和 WSS 以进行安全通信。",
       system_actions: "系统操作",
       restart_service: "重启服务",
+      restart_alert: "这将重启管理面板服务。",
       license_type: "许可类型",
       registered_to: "注册给",
       expires_on: "到期日",
