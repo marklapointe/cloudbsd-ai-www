@@ -12,6 +12,7 @@ const VMs: React.FC = () => {
       endpoint="/vms"
       icon={Monitor}
       resourceName={t('vms.resource_name')}
+      resourceType="vm"
       columns={[
         { 
           header: t('common.status'), 

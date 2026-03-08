@@ -23,6 +23,7 @@ interface ResourceListProps {
   endpoint: string;
   icon: LucideIcon;
   resourceName: string;
+  resourceType: string;
   columns: {
     header: string;
     accessor: keyof Resource;
@@ -36,6 +37,7 @@ const ResourceList: React.FC<ResourceListProps> = ({
   endpoint, 
   icon: Icon, 
   resourceName,
+  resourceType,
   columns 
 }) => {
   const { t } = useTranslation();
@@ -119,11 +121,11 @@ const ResourceList: React.FC<ResourceListProps> = ({
               : 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'
           }`}
           disabled={!isOperator}
-          aria-label={t(`common.add_${resourceName.toLowerCase()}`)}
-          title={t(`common.add_${resourceName.toLowerCase()}`)}
+          aria-label={t(`common.add_${resourceType}`)}
+          title={t(`common.add_${resourceType}`)}
         >
           <Plus size={20} />
-          {t(`common.add_${resourceName.toLowerCase()}`)}
+          {t(`common.add_${resourceType}`)}
         </button>
       </div>
 

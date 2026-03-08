@@ -11,6 +11,8 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 - Consistent sorting of language lists: English first, followed by alphabetical order of native names.
 
 ### Fixed
+- Improved `ResourceList` internationalization to ensure "Add Resource" button labels are correctly localized in all 44 languages by using language-agnostic resource type keys.
+- Fixed a bug where translated resource names were incorrectly used to construct i18n lookup keys (e.g., `common.add_contenedor` instead of `common.add_container` in Spanish).
 - Harmonized audit log action translation keys (e.g., `LOGIN_SUCCESS` now uses `action_login_success`) and ensured 100% parity across all 44 languages.
 - Updated `Logs.tsx` to handle dynamic log details and prevent incorrect translation fallbacks for strings containing specific keywords.
 - Missing `common.storage` translation key across all 44 locale files.

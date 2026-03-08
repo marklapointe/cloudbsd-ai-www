@@ -12,6 +12,7 @@ const OCIContainers: React.FC = () => {
       endpoint="/containers"
       icon={Container}
       resourceName={t('containers.resource_name')}
+      resourceType="container"
       columns={[
         { header: t('common.image'), accessor: 'image' },
         { 

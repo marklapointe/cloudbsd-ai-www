@@ -12,6 +12,7 @@ const Jails: React.FC = () => {
       endpoint="/jails"
       icon={HardDrive}
       resourceName={t('jails.resource_name')}
+      resourceType="jail"
       columns={[
         { header: t('common.ip_address'), accessor: 'ip' },
         { 
