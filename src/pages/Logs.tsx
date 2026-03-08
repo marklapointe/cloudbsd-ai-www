@@ -65,7 +65,17 @@ const Logs: React.FC = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <button className="flex items-center justify-center gap-2 px-6 py-3 border border-slate-200 rounded-2xl text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 font-bold text-sm shadow-sm active:scale-95">
+        <button className="
+        flex
+        items-center
+        justify-center
+        gap-2
+        px-6
+        py-3
+        border
+        border-slate-200
+        rounded-2xl
+        text-white hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 font-bold text-sm shadow-sm active:scale-95">
           <Filter size={18} />
           <span>{t('logs.advanced_filter')}</span>
         </button>
