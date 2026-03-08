@@ -37,6 +37,7 @@ const sw = {
       "system": "Mfumo",
       "cpu": "CPU",
       "memory": "Kumbukumbu",
+      storage: "Hifadhi",
       "image": "Picha",
       "ip_address": "Anwani ya IP",
       "save_changes": "Hifadhi Mabadiliko",

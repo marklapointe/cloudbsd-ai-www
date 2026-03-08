@@ -37,6 +37,7 @@ const ca = {
       "system": "Sistema",
       "cpu": "CPU",
       "memory": "Memòria",
+      storage: "Emmagatzematge",
       "image": "Imatge",
       "ip_address": "Adreça IP",
       "save_changes": "Desar canvis",

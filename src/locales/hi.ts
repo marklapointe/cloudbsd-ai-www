@@ -37,6 +37,7 @@ const hi = {
       "system": "सिस्टम",
       "cpu": "सीपीयू",
       "memory": "मेमोरी",
+      storage: "स्टोरेज",
       "image": "इमेज",
       "ip_address": "आईपी एड्रेस",
       "save_changes": "परिवर्तन सहेजें",

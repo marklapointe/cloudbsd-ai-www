@@ -37,6 +37,7 @@ const uk = {
       "system": "Система",
       "cpu": "ЦП",
       "memory": "Пам'ять",
+      storage: "Сховище",
       "image": "Образ",
       "ip_address": "IP-адреса",
       "save_changes": "Зберегти зміни",

@@ -37,6 +37,7 @@ const he = {
       "system": "מערכת",
       "cpu": "מעבד",
       "memory": "זיכרון",
+      storage: "אחסון",
       "image": "תמונה",
       "ip_address": "כתובת IP",
       "save_changes": "שמור שינויים",

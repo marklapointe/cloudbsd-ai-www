@@ -37,6 +37,7 @@ const el = {
       "system": "Σύστημα",
       "cpu": "CPU",
       "memory": "Μνήμη",
+      storage: "Αποθηκευτικός Χώρος",
       "image": "Εικόνα",
       "ip_address": "Διεύθυνση IP",
       "save_changes": "Αποθήκευση Αλλαγών",

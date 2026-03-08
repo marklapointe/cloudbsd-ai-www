@@ -37,6 +37,7 @@ const tr = {
       "system": "Sistem",
       "cpu": "İşlemci",
       "memory": "Bellek",
+      storage: "Depolama",
       "image": "Görüntü",
       "ip_address": "IP Adresi",
       "save_changes": "Değişiklikleri Kaydet",

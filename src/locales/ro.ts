@@ -37,6 +37,7 @@ const ro = {
       system: "Sistem",
       cpu: "CPU",
       memory: "Memorie",
+      storage: "Stocare",
       image: "Imagine",
       ip_address: "Adresă IP",
       save_changes: "Salvează Modificările",

@@ -37,6 +37,7 @@ const eo = {
       "system": "Sistemo",
       "cpu": "CPU",
       "memory": "Memoro",
+      storage: "Stokado",
       "image": "Bildo",
       "ip_address": "IP-adreso",
       "save_changes": "Konservi Ŝanĝojn",

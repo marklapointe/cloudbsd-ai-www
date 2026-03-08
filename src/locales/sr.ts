@@ -37,6 +37,7 @@ const sr = {
       "system": "Sistem",
       "cpu": "CPU",
       "memory": "Memorija",
+      storage: "Skladištenje",
       "image": "Slika",
       "ip_address": "IP adresa",
       "save_changes": "Sačuvaj promene",

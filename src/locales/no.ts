@@ -37,6 +37,7 @@ const no = {
       "system": "System",
       "cpu": "CPU",
       "memory": "Minne",
+      storage: "Lagring",
       "image": "Bilde",
       "ip_address": "IP-adresse",
       "save_changes": "Lagre endringer",

@@ -37,6 +37,7 @@ const pa = {
       system: "ਸਿਸਟਮ",
       cpu: "CPU",
       memory: "ਮੈਮੋਰੀ",
+      storage: "ਸਟੋਰੇਜ",
       image: "ਚਿੱਤਰ (Image)",
       ip_address: "IP ਪਤਾ",
       save_changes: "ਤਬਦੀਲੀਆਂ ਸੰਭਾਲੋ",

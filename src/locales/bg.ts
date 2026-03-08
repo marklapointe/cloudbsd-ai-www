@@ -37,6 +37,7 @@ const bg = {
       "system": "Система",
       "cpu": "ЦП",
       "memory": "Памет",
+      storage: "Съхранение",
       "image": "Изображение",
       "ip_address": "IP адрес",
       "save_changes": "Запази промените",

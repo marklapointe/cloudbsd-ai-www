@@ -37,6 +37,7 @@ const hr = {
       system: "Sustav",
       cpu: "CPU",
       memory: "Memorija",
+      storage: "Pohrana",
       image: "Slika",
       ip_address: "IP adresa",
       save_changes: "Spremi promjene",

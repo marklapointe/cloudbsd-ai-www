@@ -37,6 +37,7 @@ const ur = {
       "system": "سسٹم",
       "cpu": "سی پی یو",
       "memory": "میموری",
+      storage: "اسٹوریج",
       "image": "امیج",
       "ip_address": "آئی پی ایڈریس",
       "save_changes": "تبدیلیاں محفوظ کریں",

@@ -37,6 +37,7 @@ const zh = {
       "system": "系统",
       "cpu": "CPU",
       "memory": "内存",
+      storage: "存储",
       "image": "镜像",
       "ip_address": "IP 地址",
       "save_changes": "保存更改",

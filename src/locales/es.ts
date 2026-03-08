@@ -37,6 +37,7 @@ const es = {
       system: "Sistema",
       cpu: "CPU",
       memory: "Memoria",
+      storage: "Almacenamiento",
       image: "Imagen",
       ip_address: "Dirección IP",
       save_changes: "Guardar Cambios",

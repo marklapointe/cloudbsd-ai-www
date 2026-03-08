@@ -11,6 +11,7 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 - Consistent sorting of language lists: English first, followed by alphabetical order of native names.
 
 ### Fixed
+- Missing `common.storage` translation key across all 44 locale files.
 - Missing translation keys across multiple locale files (`es`, `ro`, `hr`, `sl`, `pa`, `elv`, `qav`, `qvy`, `atl`, `doth`).
 - Inconsistent language names in `Settings` and `Users` pages.
 - Synchronization of all translation files with the primary English master file.

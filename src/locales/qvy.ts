@@ -37,6 +37,7 @@ const qvy = {
       system: "Axë",
       cpu: "CPE",
       memory: "Samil",
+      storage: "Disc",
       image: "Emna",
       ip_address: "IP-mentë",
       save_changes: "Hapa Vistari",

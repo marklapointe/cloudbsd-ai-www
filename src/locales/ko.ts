@@ -37,6 +37,7 @@ const ko = {
       "system": "시스템",
       "cpu": "CPU",
       "memory": "메모리",
+      storage: "스토리지",
       "image": "이미지",
       "ip_address": "IP 주소",
       "save_changes": "변경 사항 저장",

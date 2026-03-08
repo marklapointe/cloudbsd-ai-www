@@ -37,6 +37,7 @@ const cs = {
       "system": "Systém",
       "cpu": "CPU",
       "memory": "Paměť",
+      storage: "Úložiště",
       "image": "Obraz",
       "ip_address": "IP adresa",
       "save_changes": "Uložit změny",

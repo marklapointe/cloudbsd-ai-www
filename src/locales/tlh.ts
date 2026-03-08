@@ -37,6 +37,7 @@ const tlh = {
       "system": "pat",
       "cpu": "CPU",
       "memory": "qaw",
+      storage: "stokado",
       "image": "Hausta",
       "ip_address": "IP adresa",
       "save_changes": "pol choH",

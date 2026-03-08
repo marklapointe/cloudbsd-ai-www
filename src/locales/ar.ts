@@ -37,6 +37,7 @@ const ar = {
       "system": "النظام",
       "cpu": "المعالج",
       "memory": "الذاكرة",
+      storage: "التخزين",
       "image": "الصورة",
       "ip_address": "عنوان IP",
       "save_changes": "حفظ التغييرات",

@@ -37,6 +37,7 @@ const de = {
       "system": "System",
       "cpu": "CPU",
       "memory": "Speicher",
+      storage: "Speicherplatz",
       "image": "Bild",
       "ip_address": "IP-Adresse",
       "save_changes": "Änderungen speichern",

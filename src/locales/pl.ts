@@ -37,6 +37,7 @@ const pl = {
       "system": "System",
       "cpu": "CPU",
       "memory": "Pamięć",
+      storage: "Miejsce",
       "image": "Obraz",
       "ip_address": "Adres IP",
       "save_changes": "Zapisz zmiany",

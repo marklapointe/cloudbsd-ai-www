@@ -37,6 +37,7 @@ const sl = {
       system: "Sistem",
       cpu: "CPE",
       memory: "Pomnilnik",
+      storage: "Shramba",
       image: "Slika",
       ip_address: "IP naslov",
       save_changes: "Shrani spremembe",

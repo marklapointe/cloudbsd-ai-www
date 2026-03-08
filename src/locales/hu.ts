@@ -37,6 +37,7 @@ const hu = {
       "system": "Rendszer",
       "cpu": "CPU",
       "memory": "Memória",
+      storage: "Tárhely",
       "image": "Kép",
       "ip_address": "IP-cím",
       "save_changes": "Módosítások mentése",

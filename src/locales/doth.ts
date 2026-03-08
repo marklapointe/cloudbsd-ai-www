@@ -37,6 +37,7 @@ const doth = {
       system: "System",
       cpu: "CPU",
       memory: "Memory",
+      storage: "Storage",
       image: "Image",
       ip_address: "IP Address",
       save_changes: "Save Changes",

@@ -37,6 +37,7 @@ const fr = {
       "system": "Système",
       "cpu": "CPU",
       "memory": "Mémoire",
+      storage: "Stockage",
       "image": "Image",
       "ip_address": "Adresse IP",
       "save_changes": "Enregistrer les modifications",

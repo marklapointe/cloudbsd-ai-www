@@ -37,6 +37,7 @@ const yo = {
       "system": "Eto",
       "cpu": "CPU",
       "memory": "Iranti",
+      storage: "Ibi ipamọ",
       "image": "Aworan",
       "ip_address": "Adirẹsi IP",
       "save_changes": "Fipamọ awọn ayipada",

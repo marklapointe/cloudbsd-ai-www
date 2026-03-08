@@ -37,6 +37,7 @@ const id = {
       "system": "Sistem",
       "cpu": "CPU",
       "memory": "Memori",
+      storage: "Penyimpanan",
       "image": "Gambar",
       "ip_address": "Alamat IP",
       "save_changes": "Simpan Perubahan",

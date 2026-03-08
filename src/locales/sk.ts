@@ -37,6 +37,7 @@ const sk = {
       "system": "Systém",
       "cpu": "CPU",
       "memory": "Pamäť",
+      storage: "Úložisko",
       "image": "Obraz",
       "ip_address": "IP adresa",
       "save_changes": "Uložiť zmeny",

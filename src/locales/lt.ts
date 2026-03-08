@@ -37,6 +37,7 @@ const lt = {
       "system": "Sistema",
       "cpu": "CPU",
       "memory": "Atmintis",
+      storage: "Saugykla",
       "image": "Atvaizdas",
       "ip_address": "IP adresas",
       "save_changes": "Išsaugoti pakeitimus",

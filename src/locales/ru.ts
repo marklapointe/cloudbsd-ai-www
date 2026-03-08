@@ -37,6 +37,7 @@ const ru = {
       "system": "Система",
       "cpu": "ЦП",
       "memory": "Память",
+      storage: "Хранилище",
       "image": "Образ",
       "ip_address": "IP-адрес",
       "save_changes": "Сохранить изменения",

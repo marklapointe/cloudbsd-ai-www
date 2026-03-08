@@ -37,6 +37,7 @@ const pt_PT = {
       system: "Sistema",
       cpu: "CPU",
       memory: "Memória",
+      storage: "Armazenamento",
       image: "Imagem",
       ip_address: "Endereço IP",
       save_changes: "Salvar Alterações",

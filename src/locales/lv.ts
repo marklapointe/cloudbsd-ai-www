@@ -37,6 +37,7 @@ const lv = {
       "system": "Sistēma",
       "cpu": "CPU",
       "memory": "Atmiņa",
+      storage: "Krātuve",
       "image": "Attēls",
       "ip_address": "IP adrese",
       "save_changes": "Saglabāt izmaiņas",

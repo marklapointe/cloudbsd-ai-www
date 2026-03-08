@@ -37,6 +37,7 @@ const sv = {
       "system": "System",
       "cpu": "CPU",
       "memory": "Minne",
+      storage: "Lagring",
       "image": "Bild",
       "ip_address": "IP-adress",
       "save_changes": "Spara ändringar",

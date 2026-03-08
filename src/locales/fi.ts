@@ -37,6 +37,7 @@ const fi = {
       "system": "Järjestelmä",
       "cpu": "Suoritin",
       "memory": "Muisti",
+      storage: "Tallennustila",
       "image": "Kuva",
       "ip_address": "IP-osoite",
       "save_changes": "Tallenna muutokset",

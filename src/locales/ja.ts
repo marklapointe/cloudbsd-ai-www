@@ -37,6 +37,7 @@ const ja = {
       "system": "システム",
       "cpu": "CPU",
       "memory": "メモリ",
+      storage: "ストレージ",
       "image": "イメージ",
       "ip_address": "IPアドレス",
       "save_changes": "変更を保存",
