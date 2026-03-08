@@ -190,7 +190,13 @@ const fi = {
       "stopped": "Pysäytetty"
     },
     "settings": {
-      "title": "Asetukset",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "Asetukset",
       "subtitle": "Järjestelmän konfigurointi ja asetukset",
       "language": "Kieli",
       "language_select": "Valitse kieli",
@@ -250,12 +256,7 @@ const fi = {
       "allowed_resources": "Sallitut resurssit",
       "example": "Esimerkki",
       "included_features": "Sisältyvät ominaisuudet",
-      "feature_live_migration": "Live-migraatio",
-      "feature_api_access": "API-pääsy",
-      "feature_high_availability": "Korkea käytettävyys",
-      "feature_custom_branding": "Mukautettu brändäys",
-      "feature_snapshot_management": "Snapshot-hallinta",
-      "feature_role_based_access": "Roolipohjainen pääsy"
+    
     },
     "users": {
       "management": "Käyttäjien hallinta",

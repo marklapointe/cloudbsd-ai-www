@@ -190,7 +190,13 @@ const ur = {
       "stopped": "رکا ہوا"
     },
     "settings": {
-      "title": "ترتیبات",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "ترتیبات",
       "subtitle": "سسٹم کنفیگریشن اور ترجیحات",
       "language": "زبان",
       "language_select": "زبان منتخب کریں",
@@ -250,12 +256,7 @@ const ur = {
       "allowed_resources": "اجازت یافتہ وسائل",
       "example": "مثال",
       "included_features": "شامل خصوصیات",
-      "feature_live_migration": "لائیو مائیگریشن",
-      "feature_api_access": "API رسائی",
-      "feature_high_availability": "اعلی دستیابی",
-      "feature_custom_branding": "حسب ضرورت برانڈنگ",
-      "feature_snapshot_management": "اسنیپ شاٹ مینجمنٹ",
-      "feature_role_based_access": "کردار پر مبنی رسائی"
+    
     },
     "users": {
       "management": "صارف مینجمنٹ",

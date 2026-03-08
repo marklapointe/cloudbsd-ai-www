@@ -190,7 +190,13 @@ const no = {
       "stopped": "Stoppet"
     },
     "settings": {
-      "title": "Innstillinger",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "Innstillinger",
       "subtitle": "Systemkonfigurasjon og preferanser",
       "language": "Språk",
       "language_select": "Velg språk",
@@ -250,12 +256,7 @@ const no = {
       "allowed_resources": "Tillatte ressurser",
       "example": "Eksempel",
       "included_features": "Inkluderte funksjoner",
-      "feature_live_migration": "Live-migrering",
-      "feature_api_access": "API-tilgang",
-      "feature_high_availability": "Høy tilgjengelighet",
-      "feature_custom_branding": "Tilpasset merkevarebygging",
-      "feature_snapshot_management": "Snapshot-håndtering",
-      "feature_role_based_access": "Rollebasert tilgang"
+    
     },
     "users": {
       "management": "Brukeradministrasjon",

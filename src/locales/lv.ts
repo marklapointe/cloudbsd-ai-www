@@ -190,7 +190,13 @@ const lv = {
       "stopped": "Apturēts"
     },
     "settings": {
-      "title": "Iestatījumi",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "Iestatījumi",
       "subtitle": "Sistēmas konfigurācija un preferences",
       "language": "Valoda",
       "language_select": "Izvēlēties valodu",
@@ -250,12 +256,7 @@ const lv = {
       "allowed_resources": "Atļautie resursi",
       "example": "Piemērs",
       "included_features": "Iekļautās funkcijas",
-      "feature_live_migration": "Tiešā migrācija",
-      "feature_api_access": "API piekļuve",
-      "feature_high_availability": "Augsta pieejamība",
-      "feature_custom_branding": "Pielāgota zīmolrade",
-      "feature_snapshot_management": "Momentuzņēmumu pārvaldība",
-      "feature_role_based_access": "Lomās balstīta piekļuve"
+    
     },
     "users": {
       "management": "Lietotāju pārvaldība",

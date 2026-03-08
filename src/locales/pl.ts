@@ -190,7 +190,13 @@ const pl = {
       "stopped": "Zatrzymany"
     },
     "settings": {
-      "title": "Ustawienia",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "Ustawienia",
       "subtitle": "Konfiguracja systemu i preferencje",
       "language": "Język",
       "language_select": "Wybierz język",
@@ -250,12 +256,7 @@ const pl = {
       "allowed_resources": "Dozwolone zasoby",
       "example": "Przykład",
       "included_features": "Zawarte funkcje",
-      "feature_live_migration": "Migracja na żywo",
-      "feature_api_access": "Dostęp do API",
-      "feature_high_availability": "Wysoka dostępność",
-      "feature_custom_branding": "Własny branding",
-      "feature_snapshot_management": "Zarządzanie migawkami",
-      "feature_role_based_access": "Dostęp oparty na rolach"
+    
     },
     "users": {
       "management": "Zarządzanie użytkownikami",

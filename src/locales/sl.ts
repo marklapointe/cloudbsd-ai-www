@@ -190,7 +190,13 @@ const sl = {
       stopped: "Ustavljeno"
     },
     settings: {
-      title: "Nastavitve",
+      feature_clustering: 'Clustering',
+      feature_api_access: 'API Access',
+      feature_live_migration: 'Live Migration',
+      feature_high_availability: 'High Availability',
+      feature_advanced_backup: 'Advanced Backup',
+      feature_dedicated_support: 'Dedicated Support',
+title: "Nastavitve",
       subtitle: "Konfiguracije in preference sistema",
       language: "Jezik",
       language_select: "Izberite jezik",
@@ -250,12 +256,7 @@ const sl = {
       standard: "Standardno",
       premium: "Premium",
       example: "Primer",
-      feature_live_migration: "Migracija v živo",
-      feature_api_access: "API dostop",
-      feature_high_availability: "Visoka razpoložljivost",
-      feature_custom_branding: "Blagovna znamka po meri",
-      feature_snapshot_management: "Upravljanje posnetkov",
-      feature_role_based_access: "Dostop na podlagi vlog"
+    
     },
     users: {
       management: "Upravljanje uporabnikov",

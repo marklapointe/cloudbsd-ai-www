@@ -190,7 +190,13 @@ const ca = {
       "stopped": "Aturat"
     },
     "settings": {
-      "title": "Configuració",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "Configuració",
       "subtitle": "Configuració i preferències del sistema",
       "language": "Idioma",
       "language_select": "Seleccionar Idioma",
@@ -250,12 +256,7 @@ const ca = {
       "allowed_resources": "Recursos Permesos",
       "example": "Exemple",
       "included_features": "Funcions Incloses",
-      "feature_live_migration": "Migració en viu",
-      "feature_api_access": "Accés API",
-      "feature_high_availability": "Alta disponibilitat",
-      "feature_custom_branding": "Marca personalitzada",
-      "feature_snapshot_management": "Gestió d'instantànies",
-      "feature_role_based_access": "Accés basat en rols"
+    
     },
     "users": {
       "management": "Gestió d'Usuaris",

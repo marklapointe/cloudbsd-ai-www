@@ -190,7 +190,13 @@ const sv = {
       "stopped": "Stoppad"
     },
     "settings": {
-      "title": "Inställningar",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "Inställningar",
       "subtitle": "Systemkonfiguration och preferenser",
       "language": "Språk",
       "language_select": "Välj språk",
@@ -250,12 +256,7 @@ const sv = {
       "allowed_resources": "Tillåtna resurser",
       "example": "Exempel",
       "included_features": "Inkluderade funktioner",
-      "feature_live_migration": "Live-migrering",
-      "feature_api_access": "API-åtkomst",
-      "feature_high_availability": "Hög tillgänglighet",
-      "feature_custom_branding": "Anpassad profilering",
-      "feature_snapshot_management": "Snapshot-hantering",
-      "feature_role_based_access": "Rollbaserad åtkomst"
+    
     },
     "users": {
       "management": "Användarhantering",

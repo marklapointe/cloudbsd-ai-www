@@ -190,7 +190,13 @@ const el = {
       "stopped": "Σταματημένο"
     },
     "settings": {
-      "title": "Ρυθμίσεις",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "Ρυθμίσεις",
       "subtitle": "Διαμόρφωση συστήματος και προτιμήσεις",
       "language": "Γλώσσα",
       "language_select": "Επιλογή Γλώσσας",
@@ -250,12 +256,7 @@ const el = {
       "allowed_resources": "Επιτρεπόμενοι Πόροι",
       "example": "Παράδειγμα",
       "included_features": "Περιλαμβανόμενα Χαρακτηριστικά",
-      "feature_live_migration": "Ζωντανή μεταφορά",
-      "feature_api_access": "Πρόσβαση API",
-      "feature_high_availability": "Υψηλή διαθεσιμότητα",
-      "feature_custom_branding": "Προσαρμοσμένη επωνυμία",
-      "feature_snapshot_management": "Διαχείριση στιγμιότυπων",
-      "feature_role_based_access": "Πρόσβαση βάσει ρόλων"
+    
     },
     "users": {
       "management": "Διαχείριση Χρηστών",

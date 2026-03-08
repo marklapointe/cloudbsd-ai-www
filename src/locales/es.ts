@@ -79,7 +79,13 @@ const es = {
       backend_offline: "El backend está fuera de línea. Algunas funciones pueden no estar disponibles. Reintentando..."
     },
     settings: {
-      title: "Configuración",
+      feature_clustering: 'Agrupamiento',
+      feature_api_access: 'Acceso API',
+      feature_live_migration: 'Migración en vivo',
+      feature_high_availability: 'Alta disponibilidad',
+      feature_advanced_backup: 'Copia de seguridad avanzada',
+      feature_dedicated_support: 'Soporte dedicado',
+title: "Configuración",
       subtitle: "Configuración y preferencias del sistema",
       language: "Idioma",
       language_select: "Seleccionar Idioma",
@@ -139,12 +145,7 @@ const es = {
       standard: "Estándar",
       premium: "Premium",
       example: "Ejemplo",
-      feature_live_migration: "Migración en vivo",
-      feature_api_access: "Acceso API",
-      feature_high_availability: "Alta disponibilidad",
-      feature_custom_branding: "Marca personalizada",
-      feature_snapshot_management: "Gestión de instantáneas",
-      feature_role_based_access: "Acceso basado en roles"
+    
     },
     users: {
       management: "Gestión de Usuarios",

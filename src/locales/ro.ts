@@ -190,7 +190,13 @@ const ro = {
       stopped: "Oprit"
     },
     settings: {
-      title: "Setări",
+      feature_clustering: 'Clustering',
+      feature_api_access: 'API Access',
+      feature_live_migration: 'Live Migration',
+      feature_high_availability: 'High Availability',
+      feature_advanced_backup: 'Advanced Backup',
+      feature_dedicated_support: 'Dedicated Support',
+title: "Setări",
       subtitle: "Configurații și preferințe de sistem",
       language: "Limbă",
       language_select: "Selectați Limba",
@@ -250,12 +256,7 @@ const ro = {
       standard: "Standard",
       premium: "Premium",
       example: "Exemplu",
-      feature_live_migration: "Migrare Live",
-      feature_api_access: "Acces API",
-      feature_high_availability: "Disponibilitate Ridicată",
-      feature_custom_branding: "Branding Personalizat",
-      feature_snapshot_management: "Management Snapshot",
-      feature_role_based_access: "Acces Bazat pe Roluri"
+    
     },
     users: {
       management: "Management Utilizatori",

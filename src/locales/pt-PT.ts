@@ -190,7 +190,13 @@ const pt_PT = {
       stopped: "Parado"
     },
     settings: {
-      title: "Configurações",
+      feature_clustering: 'Clustering',
+      feature_api_access: 'API Access',
+      feature_live_migration: 'Live Migration',
+      feature_high_availability: 'High Availability',
+      feature_advanced_backup: 'Advanced Backup',
+      feature_dedicated_support: 'Dedicated Support',
+title: "Configurações",
       subtitle: "Configuração do sistema e preferências",
       language: "Idioma",
       language_select: "Selecionar Idioma",
@@ -250,12 +256,7 @@ const pt_PT = {
       allowed_resources: "Recursos Permitidos",
       example: "Exemplo",
       included_features: "Recursos Incluídos",
-      feature_live_migration: "Migração ao Vivo",
-      feature_api_access: "Acesso à API",
-      feature_high_availability: "Alta Disponibilidade",
-      feature_custom_branding: "Branding Personalizado",
-      feature_snapshot_management: "Gerenciamento de Snapshots",
-      feature_role_based_access: "Acesso Baseado em Funções"
+    
     },
     users: {
       management: "Gerenciamento de Usuários",

@@ -190,7 +190,13 @@ const cs = {
       "stopped": "Zastaveno"
     },
     "settings": {
-      "title": "Nastavení",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "Nastavení",
       "subtitle": "Konfigurace systému a předvolby",
       "language": "Jazyk",
       "language_select": "Vybrat jazyk",
@@ -250,12 +256,7 @@ const cs = {
       "allowed_resources": "Povolené zdroje",
       "example": "Příklad",
       "included_features": "Zahrnuté funkce",
-      "feature_live_migration": "Živá migrace",
-      "feature_api_access": "Přístup k API",
-      "feature_high_availability": "Vysoká dostupnost",
-      "feature_custom_branding": "Vlastní branding",
-      "feature_snapshot_management": "Správa snapshotů",
-      "feature_role_based_access": "Přístup na základě rolí"
+    
     },
     "users": {
       "management": "Správa uživatelů",

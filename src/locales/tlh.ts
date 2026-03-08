@@ -190,7 +190,13 @@ const tlh = {
       "stopped": "halto"
     },
     "settings": {
-      "title": "Agordoj",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "Agordoj",
       "subtitle": "agordoj",
       "language": "lingvo",
       "language_select": "elekti",
@@ -250,12 +256,7 @@ const tlh = {
       "allowed_resources": "awọn orisun",
       "example": "apeere",
       "included_features": "awọn ẹya",
-      "feature_live_migration": "migrado",
-      "feature_api_access": "API",
-      "feature_high_availability": "HA",
-      "feature_custom_branding": "branding",
-      "feature_snapshot_management": "snapshot",
-      "feature_role_based_access": "RBAC"
+    
     },
     "users": {
       "management": "uzantoj",

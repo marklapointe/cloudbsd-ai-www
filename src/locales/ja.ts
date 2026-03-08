@@ -190,7 +190,13 @@ const ja = {
       "stopped": "停止"
     },
     "settings": {
-      "title": "設定",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "設定",
       "subtitle": "システム構成と設定",
       "language": "言語",
       "language_select": "言語を選択",
@@ -250,12 +256,7 @@ const ja = {
       "allowed_resources": "許可されたリソース",
       "example": "例",
       "included_features": "含まれる機能",
-      "feature_live_migration": "ライブマイグレーション",
-      "feature_api_access": "APIアクセス",
-      "feature_high_availability": "高可用性",
-      "feature_custom_branding": "カスタムブランディング",
-      "feature_snapshot_management": "スナップショット管理",
-      "feature_role_based_access": "ロールベースのアクセス"
+    
     },
     "users": {
       "management": "ユーザー管理",

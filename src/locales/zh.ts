@@ -190,7 +190,13 @@ const zh = {
       "stopped": "已停止"
     },
     "settings": {
-      "title": "设置",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "设置",
       "subtitle": "系统配置和偏好",
       "language": "语言",
       "language_select": "选择语言",
@@ -250,12 +256,7 @@ const zh = {
       "allowed_resources": "允许的资源",
       "example": "示例",
       "included_features": "包含的功能",
-      "feature_live_migration": "实时迁移",
-      "feature_api_access": "API 访问",
-      "feature_high_availability": "高可用性",
-      "feature_custom_branding": "自定义品牌",
-      "feature_snapshot_management": "快照管理",
-      "feature_role_based_access": "基于角色的访问"
+    
     },
     "users": {
       "management": "用户管理",

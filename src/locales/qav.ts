@@ -190,7 +190,13 @@ const qav = {
       stopped: "Pusta"
     },
     settings: {
-      title: "Namnë",
+      feature_clustering: 'Clustering',
+      feature_api_access: 'API Access',
+      feature_live_migration: 'Live Migration',
+      feature_high_availability: 'High Availability',
+      feature_advanced_backup: 'Advanced Backup',
+      feature_dedicated_support: 'Dedicated Support',
+title: "Namnë",
       subtitle: "Axë configurations ar preferences",
       language: "Lì'fya",
       language_select: "Cilë Lì'fya",
@@ -250,12 +256,7 @@ const qav = {
       standard: "Standard",
       premium: "Premium",
       example: "Example",
-      feature_live_migration: "Live Migration",
-      feature_api_access: "API Access",
-      feature_high_availability: "High Availability",
-      feature_custom_branding: "Custom Branding",
-      feature_snapshot_management: "Snapshot Management",
-      feature_role_based_access: "Role-Based Access"
+    
     },
     users: {
       management: "Na'vi Management",

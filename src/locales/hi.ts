@@ -190,7 +190,13 @@ const hi = {
       "stopped": "रुका हुआ"
     },
     "settings": {
-      "title": "सेटिंग्स",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "सेटिंग्स",
       "subtitle": "सिस्टम कॉन्फ़िगरेशन और प्राथमिकताएं",
       "language": "भाषा",
       "language_select": "भाषा चुनें",
@@ -250,12 +256,7 @@ const hi = {
       "allowed_resources": "अनुमत संसाधन",
       "example": "उदाहरण",
       "included_features": "शामिल सुविधाएं",
-      "feature_live_migration": "लाइव माइग्रेशन",
-      "feature_api_access": "API एक्सेस",
-      "feature_high_availability": "उच्च उपलब्धता",
-      "feature_custom_branding": "कस्टम ब्रांडिंग",
-      "feature_snapshot_management": "स्नैपशॉट प्रबंधन",
-      "feature_role_based_access": "भूमिका आधारित पहुंच"
+    
     },
     "users": {
       "management": "उपयोगकर्ता प्रबंधन",

@@ -190,7 +190,13 @@ const hu = {
       "stopped": "Leállítva"
     },
     "settings": {
-      "title": "Beállítások",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "Beállítások",
       "subtitle": "Rendszerkonfiguráció és preferenciák",
       "language": "Nyelv",
       "language_select": "Nyelv kiválasztása",
@@ -250,12 +256,7 @@ const hu = {
       "allowed_resources": "Engedélyezett erőforrások",
       "example": "Példa",
       "included_features": "Tartalmazott funkciók",
-      "feature_live_migration": "Élő migráció",
-      "feature_api_access": "API hozzáférés",
-      "feature_high_availability": "Magas rendelkezésre állás",
-      "feature_custom_branding": "Egyedi arculat",
-      "feature_snapshot_management": "Pillanatkép-kezelés",
-      "feature_role_based_access": "Szerepkör alapú hozzáférés"
+    
     },
     "users": {
       "management": "Felhasználókezelés",

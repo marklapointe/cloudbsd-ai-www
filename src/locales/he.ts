@@ -190,7 +190,13 @@ const he = {
       "stopped": "מופסק"
     },
     "settings": {
-      "title": "הגדרות",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "הגדרות",
       "subtitle": "תצורת מערכת והעדפות",
       "language": "שפה",
       "language_select": "בחר שפה",
@@ -250,12 +256,7 @@ const he = {
       "allowed_resources": "משאבים מורשים",
       "example": "דוגמה",
       "included_features": "תכונות כלולות",
-      "feature_live_migration": "הגירה חיה",
-      "feature_api_access": "גישת API",
-      "feature_high_availability": "זמינות גבוהה",
-      "feature_custom_branding": "מיתוג מותאם אישית",
-      "feature_snapshot_management": "ניהול Snapshot",
-      "feature_role_based_access": "גישה מבוססת תפקידים"
+    
     },
     "users": {
       "management": "ניהול משתמשים",

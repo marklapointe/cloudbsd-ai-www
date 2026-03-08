@@ -190,7 +190,13 @@ const bg = {
       "stopped": "Спряно"
     },
     "settings": {
-      "title": "Настройки",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "Настройки",
       "subtitle": "Системна конфигурация и предпочитания",
       "language": "Език",
       "language_select": "Избор на език",
@@ -250,12 +256,7 @@ const bg = {
       "allowed_resources": "Позволени ресурси",
       "example": "Пример",
       "included_features": "Включени функции",
-      "feature_live_migration": "Миграция на живо",
-      "feature_api_access": "API достъп",
-      "feature_high_availability": "Висока наличност",
-      "feature_custom_branding": "Персонализирано брандиране",
-      "feature_snapshot_management": "Управление на моментни снимки",
-      "feature_role_based_access": "Достъп на база роли"
+    
     },
     "users": {
       "management": "Управление на потребители",

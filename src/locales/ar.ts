@@ -190,7 +190,13 @@ const ar = {
       "stopped": "متوقف"
     },
     "settings": {
-      "title": "الإعدادات",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "الإعدادات",
       "subtitle": "تكوين النظام والتفضيلات",
       "language": "اللغة",
       "language_select": "اختر اللغة",
@@ -250,12 +256,7 @@ const ar = {
       "allowed_resources": "الموارد المسموح بها",
       "example": "مثال",
       "included_features": "الميزات المضمنة",
-      "feature_live_migration": "الهجرة الحية",
-      "feature_api_access": "الوصول إلى API",
-      "feature_high_availability": "التوفر العالي",
-      "feature_custom_branding": "العلامة التجارية المخصصة",
-      "feature_snapshot_management": "إدارة اللقطات",
-      "feature_role_based_access": "الوصول القائم على الأدوار"
+    
     },
     "users": {
       "management": "إدارة المستخدمين",

@@ -190,7 +190,13 @@ const de = {
       "stopped": "Gestoppt"
     },
     "settings": {
-      "title": "Einstellungen",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API-Zugriff',
+      "feature_live_migration": 'Live-Migration',
+      "feature_high_availability": 'Hochverfügbarkeit',
+      "feature_advanced_backup": 'Erweitertes Backup',
+      "feature_dedicated_support": 'Dedizierter Support',
+"title": "Einstellungen",
       "subtitle": "Systemkonfiguration und Präferenzen",
       "language": "Sprache",
       "language_select": "Sprache auswählen",
@@ -250,12 +256,7 @@ const de = {
       "allowed_resources": "Zulässige Ressourcen",
       "example": "Beispiel",
       "included_features": "Enthaltene Funktionen",
-      "feature_live_migration": "Live-Migration",
-      "feature_api_access": "API-Zugriff",
-      "feature_high_availability": "Hochverfügbarkeit",
-      "feature_custom_branding": "Benutzerdefiniertes Branding",
-      "feature_snapshot_management": "Snapshot-Verwaltung",
-      "feature_role_based_access": "Rollenbasierter Zugriff"
+    
     },
     "users": {
       "management": "Benutzerverwaltung",

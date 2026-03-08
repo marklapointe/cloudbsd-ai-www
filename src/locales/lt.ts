@@ -190,7 +190,13 @@ const lt = {
       "stopped": "Sustabdyta"
     },
     "settings": {
-      "title": "Nustatymai",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "Nustatymai",
       "subtitle": "Sistemos konfigūracija ir parinktys",
       "language": "Kalba",
       "language_select": "Pasirinkti kalbą",
@@ -250,12 +256,7 @@ const lt = {
       "allowed_resources": "Leidžiami ištekliai",
       "example": "Pavyzdys",
       "included_features": "Įtrauktos funkcijos",
-      "feature_live_migration": "Tiesioginis migravimas",
-      "feature_api_access": "API prieiga",
-      "feature_high_availability": "Aukštas pasiekiamumas",
-      "feature_custom_branding": "Individualus prekės ženklas",
-      "feature_snapshot_management": "Momentinių kopijų valdymas",
-      "feature_role_based_access": "Vaidmenimis pagrįsta prieiga"
+    
     },
     "users": {
       "management": "Vartotojų valdymas",

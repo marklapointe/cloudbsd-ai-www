@@ -190,7 +190,13 @@ const sw = {
       "stopped": "Imesimamishwa"
     },
     "settings": {
-      "title": "Mipangilio",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "Mipangilio",
       "subtitle": "Usanidi wa mfumo na mapendeleo",
       "language": "Lugha",
       "language_select": "Chagua Lugha",
@@ -250,12 +256,7 @@ const sw = {
       "allowed_resources": "Rasilimali Zinazoruhusiwa",
       "example": "Mfano",
       "included_features": "Vipengele Vilivyojumuishwa",
-      "feature_live_migration": "Uhamiaji mubashara",
-      "feature_api_access": "Ufikiaji wa API",
-      "feature_high_availability": "Upatikanaji wa juu",
-      "feature_custom_branding": "Chapa maalum",
-      "feature_snapshot_management": "Usimamizi wa picha za papo hapo",
-      "feature_role_based_access": "Ufikiaji kulingana na jukumu"
+    
     },
     "users": {
       "management": "Usimamizi wa Watumiaji",

@@ -190,7 +190,13 @@ const yo = {
       "stopped": "Duro"
     },
     "settings": {
-      "title": "Eto",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "Eto",
       "subtitle": "Iṣeto eto ati awọn ayanfẹ",
       "language": "Ede",
       "language_select": "Yan Ede",
@@ -250,12 +256,7 @@ const yo = {
       "allowed_resources": "Awọn orisun ti a gba laaye",
       "example": "Apeere",
       "included_features": "Awọn ẹya ti o wa pẹlu",
-      "feature_live_migration": "Iṣilọ laaye",
-      "feature_api_access": "Wiwọle API",
-      "feature_high_availability": "Wiwa giga",
-      "feature_custom_branding": "Iyasọtọ aṣa",
-      "feature_snapshot_management": "Isakoso akoko kukuru",
-      "feature_role_based_access": "Wiwọle orisun-ipa"
+    
     },
     "users": {
       "management": "Isakoso Olumulo",

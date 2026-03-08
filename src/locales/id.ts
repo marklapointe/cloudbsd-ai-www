@@ -190,7 +190,13 @@ const id = {
       "stopped": "Berhenti"
     },
     "settings": {
-      "title": "Pengaturan",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "Pengaturan",
       "subtitle": "Konfigurasi sistem dan preferensi",
       "language": "Bahasa",
       "language_select": "Pilih Bahasa",
@@ -250,12 +256,7 @@ const id = {
       "allowed_resources": "Sumber Daya yang Diizinkan",
       "example": "Contoh",
       "included_features": "Fitur yang Disertakan",
-      "feature_live_migration": "Migrasi langsung",
-      "feature_api_access": "Akses API",
-      "feature_high_availability": "Ketersediaan tinggi",
-      "feature_custom_branding": "Pencitraan merek kustom",
-      "feature_snapshot_management": "Manajemen snapshot",
-      "feature_role_based_access": "Akses berbasis peran"
+    
     },
     "users": {
       "management": "Manajemen Pengguna",

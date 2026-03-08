@@ -190,7 +190,13 @@ const sk = {
       "stopped": "Zastavené"
     },
     "settings": {
-      "title": "Nastavenia",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "Nastavenia",
       "subtitle": "Konfigurácia systému a predvoľby",
       "language": "Jazyk",
       "language_select": "Vybrať jazyk",
@@ -250,12 +256,7 @@ const sk = {
       "allowed_resources": "Povolené zdroje",
       "example": "Príklad",
       "included_features": "Zahrnuté funkcie",
-      "feature_live_migration": "Živá migrácia",
-      "feature_api_access": "Prístup k API",
-      "feature_high_availability": "Vysoká dostupnosť",
-      "feature_custom_branding": "Vlastný branding",
-      "feature_snapshot_management": "Správa snímok",
-      "feature_role_based_access": "Prístup na základe rolí"
+    
     },
     "users": {
       "management": "Správa používateľov",

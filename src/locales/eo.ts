@@ -190,7 +190,13 @@ const eo = {
       "stopped": "Haltigita"
     },
     "settings": {
-      "title": "Agordoj",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "Agordoj",
       "subtitle": "Sistema agordo kaj preferoj",
       "language": "Lingvo",
       "language_select": "Elekti Lingvon",
@@ -250,12 +256,7 @@ const eo = {
       "allowed_resources": "Permesitaj Rimedoj",
       "example": "Ekzemplo",
       "included_features": "Inkluzivitaj Funkcioj",
-      "feature_live_migration": "Viva migrado",
-      "feature_api_access": "API-aliro",
-      "feature_high_availability": "Alta havebleco",
-      "feature_custom_branding": "Propra markigo",
-      "feature_snapshot_management": "Administrado de momentfotoj",
-      "feature_role_based_access": "Rolo-bazita aliro"
+    
     },
     "users": {
       "management": "Uzanta Mastrumado",

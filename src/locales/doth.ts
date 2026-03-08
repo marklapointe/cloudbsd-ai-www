@@ -190,7 +190,13 @@ const doth = {
       stopped: "Stopped"
     },
     settings: {
-      title: "Settings",
+      feature_clustering: 'Clustering',
+      feature_api_access: 'API Access',
+      feature_live_migration: 'Live Migration',
+      feature_high_availability: 'High Availability',
+      feature_advanced_backup: 'Advanced Backup',
+      feature_dedicated_support: 'Dedicated Support',
+title: "Settings",
       subtitle: "System configurations and preferences",
       language: "Language",
       language_select: "Select Language",
@@ -250,12 +256,7 @@ const doth = {
       standard: "Standard",
       premium: "Premium",
       example: "Example",
-      feature_live_migration: "Live Migration",
-      feature_api_access: "API Access",
-      feature_high_availability: "High Availability",
-      feature_custom_branding: "Custom Branding",
-      feature_snapshot_management: "Snapshot Management",
-      feature_role_based_access: "Role-Based Access"
+    
     },
     users: {
       management: "User Management",

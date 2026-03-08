@@ -190,7 +190,13 @@ const tr = {
       "stopped": "Durduruldu"
     },
     "settings": {
-      "title": "Ayarlar",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "Ayarlar",
       "subtitle": "Sistem yapılandırması ve tercihler",
       "language": "Dil",
       "language_select": "Dil Seçin",
@@ -250,12 +256,7 @@ const tr = {
       "allowed_resources": "İzin Verilen Kaynaklar",
       "example": "Örnek",
       "included_features": "Dahil Olan Özellikler",
-      "feature_live_migration": "Canlı Taşıma",
-      "feature_api_access": "API Erişimi",
-      "feature_high_availability": "Yüksek Erişilebilirlik",
-      "feature_custom_branding": "Özel Markalama",
-      "feature_snapshot_management": "Anlık Görüntü Yönetimi",
-      "feature_role_based_access": "Rol Tabanlı Erişim"
+    
     },
     "users": {
       "management": "Kullanıcı Yönetimi",

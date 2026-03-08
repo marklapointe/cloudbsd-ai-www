@@ -190,7 +190,13 @@ const ko = {
       "stopped": "중지됨"
     },
     "settings": {
-      "title": "설정",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "설정",
       "subtitle": "시스템 구성 및 기본 설정",
       "language": "언어",
       "language_select": "언어 선택",
@@ -250,12 +256,7 @@ const ko = {
       "allowed_resources": "허용된 리소스",
       "example": "예시",
       "included_features": "포함된 기능",
-      "feature_live_migration": "라이브 마이그레이션",
-      "feature_api_access": "API 액세스",
-      "feature_high_availability": "고가용성",
-      "feature_custom_branding": "커스텀 브랜딩",
-      "feature_snapshot_management": "스냅샷 관리",
-      "feature_role_based_access": "역할 기반 액세스"
+    
     },
     "users": {
       "management": "사용자 관리",

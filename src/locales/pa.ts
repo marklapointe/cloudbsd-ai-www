@@ -190,7 +190,13 @@ const pa = {
       stopped: "ਰੁਕਿਆ ਹੋਇਆ"
     },
     settings: {
-      title: "ਸੈਟਿੰਗਾਂ",
+      feature_clustering: 'Clustering',
+      feature_api_access: 'API Access',
+      feature_live_migration: 'Live Migration',
+      feature_high_availability: 'High Availability',
+      feature_advanced_backup: 'Advanced Backup',
+      feature_dedicated_support: 'Dedicated Support',
+title: "ਸੈਟਿੰਗਾਂ",
       subtitle: "ਸਿਸਟਮ ਸੰਰਚਨਾ ਅਤੇ ਤਰਜੀਹਾਂ",
       language: "ਭਾਸ਼ਾ",
       language_select: "ਭਾਸ਼ਾ ਚੁਣੋ",
@@ -250,12 +256,7 @@ const pa = {
       standard: "ਸਟੈਂਡਰਡ",
       premium: "ਪ੍ਰੀਮੀਅਮ",
       example: "ਉਦਾਹਰਨ",
-      feature_live_migration: "ਲਾਈਵ ਮਾਈਗ੍ਰੇਸ਼ਨ",
-      feature_api_access: "API ਪਹੁੰਚ",
-      feature_high_availability: "ਉੱਚ ਉਪਲਬਧਤਾ",
-      feature_custom_branding: "ਕਸਟਮ ਬ੍ਰਾਂਡਿੰਗ",
-      feature_snapshot_management: "ਸਨੈਪਸ਼ਾਟ ਪ੍ਰਬੰਧਨ",
-      feature_role_based_access: "ਭੂਮਿਕਾ-ਅਧਾਰਤ ਪਹੁੰਚ"
+    
     },
     users: {
       management: "ਉਪਭੋਗਤਾ ਪ੍ਰਬੰਧਨ",

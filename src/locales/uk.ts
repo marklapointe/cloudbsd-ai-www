@@ -190,7 +190,13 @@ const uk = {
       "stopped": "Зупинено"
     },
     "settings": {
-      "title": "Налаштування",
+      "feature_clustering": 'Clustering',
+      "feature_api_access": 'API Access',
+      "feature_live_migration": 'Live Migration',
+      "feature_high_availability": 'High Availability',
+      "feature_advanced_backup": 'Advanced Backup',
+      "feature_dedicated_support": 'Dedicated Support',
+"title": "Налаштування",
       "subtitle": "Конфігурація системи та вподобання",
       "language": "Мова",
       "language_select": "Виберіть мову",
@@ -250,12 +256,7 @@ const uk = {
       "allowed_resources": "Дозволені ресурси",
       "example": "Приклад",
       "included_features": "Включені функції",
-      "feature_live_migration": "Жива міграція",
-      "feature_api_access": "Доступ до API",
-      "feature_high_availability": "Висока доступність",
-      "feature_custom_branding": "Брендування",
-      "feature_snapshot_management": "Управління знімками",
-      "feature_role_based_access": "Доступ на основі ролей"
+    
     },
     "users": {
       "management": "Управління користувачами",

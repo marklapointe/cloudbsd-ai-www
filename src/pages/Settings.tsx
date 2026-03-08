@@ -396,7 +396,7 @@ const Settings: React.FC = () => {
                     {license.features.map((feature: string) => (
                       <span key={feature} className="px-3 py-1.5 bg-brand-50 text-brand-700 text-[10px] font-bold rounded-xl border border-brand-100 flex items-center gap-1.5">
                         <CheckCircle2 size={12} className="text-brand-500" />
-                        {t(`settings.feature_${feature.toLowerCase().replace(/ /g, '_')}`)}
+                        {t(`settings.feature_${feature.toLowerCase().replace(/ /g, '_')}`, { defaultValue: feature })}
                       </span>
                     ))}
                   </div>

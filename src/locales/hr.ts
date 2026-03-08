@@ -190,7 +190,13 @@ const hr = {
       stopped: "Zaustavljeno"
     },
     settings: {
-      title: "Postavke",
+      feature_clustering: 'Clustering',
+      feature_api_access: 'API Access',
+      feature_live_migration: 'Live Migration',
+      feature_high_availability: 'High Availability',
+      feature_advanced_backup: 'Advanced Backup',
+      feature_dedicated_support: 'Dedicated Support',
+title: "Postavke",
       subtitle: "Konfiguracije i preferencije sustava",
       language: "Jezik",
       language_select: "Odaberite jezik",
@@ -250,12 +256,7 @@ const hr = {
       standard: "Standardno",
       premium: "Premium",
       example: "Primjer",
-      feature_live_migration: "Migracija uživo",
-      feature_api_access: "API pristup",
-      feature_high_availability: "Visoka dostupnost",
-      feature_custom_branding: "Prilagođeno brendiranje",
-      feature_snapshot_management: "Upravljanje snapshotima",
-      feature_role_based_access: "Pristup temeljen na ulogama"
+    
     },
     users: {
       management: "Upravljanje korisnicima",
