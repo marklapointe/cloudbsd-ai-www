@@ -125,12 +125,12 @@ const Logs: React.FC = () => {
                   </td>
                   <td className="px-8 py-5 whitespace-nowrap">
                     <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${getActionColor(log.action)}`}>
-                      {log.action}
+                      {t(`logs.action_${log.action.toLowerCase()}`, { defaultValue: log.action })}
                     </span>
                   </td>
                   <td className="px-8 py-5">
                     <p className="text-sm font-bold text-slate-600 group-hover:text-slate-900 transition-colors line-clamp-2 max-w-md">
-                      {log.details}
+                      {log.details ? (log.details.startsWith('ID:') ? log.details : t(`logs.details_${log.action.toLowerCase()}`, { defaultValue: log.details })) : '—'}
                     </p>
                   </td>
                 </tr>

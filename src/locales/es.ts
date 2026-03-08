@@ -52,7 +52,9 @@ const es = {
       add_node: "Agregar Nodo",
       add_container: "Agregar Contenedor",
       add_jail: "Agregar Jail",
-      utilized: "UTILIZADO"
+      utilized: "UTILIZADO",
+      gb: "GB",
+      tb: "TB"
     },
     layout: {
       admin_panel: "Panel de Administración",
@@ -166,7 +168,8 @@ const es = {
       mbps: "Mbps",
       total_ram: "RAM Total",
       free_ram: "RAM Libre",
-      load: "Carga",
+      load: "CARGA",
+      cores: "NÚCLEOS",
       client_info: "Información del Cliente",
       url: "URL"
     },
@@ -276,6 +279,40 @@ const es = {
       status: "Estado",
       connected: "Conectado",
       resource_id: "ID de Recurso"
+    },
+    logs: {
+      title: "Logs de Auditoría",
+      description: "Registro histórico de acciones y eventos del sistema",
+      search_placeholder: "Buscar logs de actividad...",
+      advanced_filter: "Filtro Avanzado",
+      timestamp: "Marca de tiempo",
+      user: "Usuario",
+      action: "Acción",
+      details: "Detalles",
+      loading: "Cargando logs...",
+      no_logs: "No se encontraron logs",
+      action_user_login_success: "Inicio de sesión exitoso",
+      action_user_login_failure: "Fallo de inicio de sesión",
+      action_vm_start: "Iniciar VM",
+      action_vm_stop: "Detener VM",
+      action_vm_create: "Crear VM",
+      action_vm_delete: "Eliminar VM",
+      action_container_start: "Iniciar Contenedor",
+      action_container_stop: "Detener Contenedor",
+      action_container_create: "Crear Contenedor",
+      action_container_delete: "Eliminar Contenedor",
+      action_jail_start: "Iniciar Jail",
+      action_jail_stop: "Detener Jail",
+      action_jail_create: "Crear Jail",
+      action_jail_delete: "Eliminar Jail",
+      details_user_login_success: "Usuario autenticado exitosamente",
+      details_user_login_failure: "Intento de inicio de sesión fallido",
+      details_vm_start: "Máquina virtual iniciada",
+      details_vm_stop: "Máquina virtual detenida",
+      details_container_start: "Contenedor OCI iniciado",
+      details_container_stop: "Contenedor OCI detenido",
+      details_jail_start: "FreeBSD jail iniciada",
+      details_jail_stop: "FreeBSD jail detenida"
     }
   }
 };

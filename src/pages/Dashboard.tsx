@@ -147,7 +147,7 @@ const Dashboard: React.FC = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <ClusterResourceCard 
-              title={t('dashboard.vcpus')} 
+              title={t('common.cpu')} 
               used={`${clusterStats.cpu.used} ${t('common.vcpu')}`} 
               total={`${clusterStats.cpu.total} ${t('common.vcpu')}`} 
               percentage={clusterStats.cpu.percentage} 
@@ -155,17 +155,17 @@ const Dashboard: React.FC = () => {
               color="blue" 
             />
             <ClusterResourceCard 
-              title={t('dashboard.memory')} 
-              used={clusterStats.memory.used} 
-              total={clusterStats.memory.total} 
+              title={t('common.memory')} 
+              used={`${clusterStats.memory.used}`.replace('GB', t('common.gb')).replace('TB', t('common.tb'))} 
+              total={`${clusterStats.memory.total}`.replace('GB', t('common.gb')).replace('TB', t('common.tb'))} 
               percentage={clusterStats.memory.percentage} 
               icon={Activity} 
               color="purple" 
             />
             <ClusterResourceCard 
-              title={t('dashboard.storage')} 
-              used={clusterStats.disk.used} 
-              total={clusterStats.disk.total} 
+              title={t('common.storage')} 
+              used={`${clusterStats.disk.used}`.replace('GB', t('common.gb')).replace('TB', t('common.tb'))} 
+              total={`${clusterStats.disk.total}`.replace('GB', t('common.gb')).replace('TB', t('common.tb'))} 
               percentage={clusterStats.disk.percentage} 
               icon={HardDrive} 
               color="emerald" 
@@ -290,7 +290,7 @@ const Dashboard: React.FC = () => {
                 <div className="min-w-0">
                   <p className="text-sm font-black text-slate-900 truncate">{systemInfo.cpu === '—' ? t('common.loading') : systemInfo.cpu}</p>
                   <p className="text-[11px] font-bold text-slate-500 uppercase tracking-tighter">
-                    {systemInfo.cores === '—' ? t('common.loading') : systemInfo.cores} • {t('dashboard.load')}: {hostDetail?.loadAverage?.map((l: number) => l.toFixed(2)).join(', ') || '—'}
+                    {systemInfo.cores === '—' ? t('common.loading') : `${systemInfo.cores} ${t('dashboard.cores')}`} • {t('dashboard.load')}: {hostDetail?.loadAverage?.map((l: number) => l.toFixed(2)).join(', ') || '—'}
                   </p>
                 </div>
               </div>

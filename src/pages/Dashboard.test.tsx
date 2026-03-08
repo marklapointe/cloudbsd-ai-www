@@ -60,6 +60,8 @@ describe('Dashboard Page', () => {
       expect(screen.getByText(new RegExp(i18n.t('dashboard.nodes_online')))).toBeInTheDocument();
     });
     
-    expect(screen.getByText(i18n.t('dashboard.vcpus'))).toBeInTheDocument();
+    expect(screen.getByText(i18n.t('common.cpu'))).toBeInTheDocument();
+    expect(screen.getByText(i18n.t('common.memory'))).toBeInTheDocument();
+    expect(screen.getByText(i18n.t('common.storage'))).toBeInTheDocument();
   });
 });

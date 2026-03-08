@@ -278,7 +278,7 @@ const Settings: React.FC = () => {
                     <CreditCard className="text-slate-400" size={20} />
                     <div>
                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('settings.license_type')}</p>
-                      <p className="text-sm font-bold text-slate-900 capitalize">{license?.license_type ? t(`settings.${license.license_type}`) : t('settings.none')}</p>
+                      <p className="text-sm font-bold text-slate-900 capitalize">{license?.license_type ? t(`settings.${license.license_type.toLowerCase()}`) : t('settings.none')}</p>
                     </div>
                   </div>
                   <div className="text-right">
@@ -302,7 +302,7 @@ const Settings: React.FC = () => {
                       <Activity className="text-slate-400" size={16} />
                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('settings.support_tier')}</p>
                     </div>
-                    <p className="text-sm font-bold text-slate-900 capitalize">{license?.support_tier ? t(`settings.${license.support_tier}`) : t('settings.none')}</p>
+                    <p className="text-sm font-bold text-slate-900 capitalize">{license?.support_tier ? t(`settings.${license.support_tier.toLowerCase()}`) : t('settings.none')}</p>
                   </div>
                 </div>
               </div>
@@ -396,7 +396,7 @@ const Settings: React.FC = () => {
                     {license.features.map((feature: string) => (
                       <span key={feature} className="px-3 py-1.5 bg-brand-50 text-brand-700 text-[10px] font-bold rounded-xl border border-brand-100 flex items-center gap-1.5">
                         <CheckCircle2 size={12} className="text-brand-500" />
-                        {t(`settings.feature_${feature}`)}
+                        {t(`settings.feature_${feature.toLowerCase().replace(/ /g, '_')}`)}
                       </span>
                     ))}
                   </div>
