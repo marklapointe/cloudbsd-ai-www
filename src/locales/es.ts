@@ -32,6 +32,9 @@ const es = {
       admin: "Administrador",
       operator: "Operador",
       viewer: "Espectador",
+      unknown: "Desconocido",
+      host_system: "Sistema Host",
+      system: "Sistema",
       cpu: "CPU",
       memory: "Memoria",
       image: "Imagen",
@@ -56,10 +59,23 @@ const es = {
       gb: "GB",
       tb: "TB"
     },
+    login: {
+      title: "CloudBSD Admin",
+      subtitle: "Infraestructura de Gestión",
+      username_label: "Nombre de usuario",
+      password_label: "Contraseña",
+      username_placeholder: "Ingrese su nombre de usuario",
+      password_placeholder: "••••••••",
+      sign_in: "Iniciar Sesión",
+      footer: "Entorno Cloud Seguro",
+      error_invalid: "Nombre de usuario o contraseña inválidos"
+    },
     layout: {
       admin_panel: "Panel de Administración",
       main_menu: "Menú Principal",
-      logo_text: "CloudBSD"
+      logo_text: "CloudBSD",
+      toggle_menu: "Alternar Menú",
+      backend_offline: "El backend está fuera de línea. Algunas funciones pueden no estar disponibles. Reintentando..."
     },
     settings: {
       title: "Configuración",
@@ -82,6 +98,10 @@ const es = {
       swahili: "Suajili",
       yoruba: "Yoruba",
       esperanto: "Esperanto",
+      russian: "Ruso",
+      hindi: "Hindi",
+      punjabi: "Punjabi",
+      inuktitut: "Inuktitut",
       license_status: "Estado de la Licencia",
       license_reg: "Registro de Licencia",
       reg_new_key: "Registrar Nueva Clave",
@@ -97,6 +117,7 @@ const es = {
       ssl_security_desc: "HTTPS y WSS están habilitados para una comunicación segura.",
       system_actions: "Acciones del Sistema",
       restart_service: "Reiniciar Servicio",
+      restart_alert: "El servicio se reiniciará. ¿Continuar?",
       license_type: "Tipo de Licencia",
       registered_to: "Registrado a",
       expires_on: "Expira el",
@@ -176,6 +197,9 @@ const es = {
     cluster: {
       title: "Gestión del Clúster",
       description: "Administrar nodos centrales y agentes en su infraestructura",
+      node_count: "Número de Nodos",
+      total_cores: "Núcleos Totales",
+      total_ram: "RAM Total",
       nodes: "Nodos",
       add_node: "Agregar Nodo",
       edit_node: "Editar Nodo",
@@ -216,6 +240,14 @@ const es = {
       placeholder_vcpus: "ej. 8",
       placeholder_memory: "ej. 32GB",
       placeholder_storage: "ej. 500GB"
+    },
+    network: {
+      title: "Mapa de Red",
+      description: "Visualización de la topología de red de su infraestructura",
+      visual_overview: "Vista General Visual",
+      search_nodes: "Buscar nodos...",
+      running: "En ejecución",
+      stopped: "Detenido"
     },
     vms: {
       title: "Máquinas Virtuales",
@@ -266,7 +298,8 @@ const es = {
       updating: "Actualizando...",
       creating: "Creando...",
       update: "Actualizar",
-      create: "Crear"
+      create: "Crear",
+      ip_placeholder: "ej. 192.168.1.100"
     },
     console_modal: {
       title: "Consola",

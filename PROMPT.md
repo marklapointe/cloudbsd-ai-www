@@ -104,11 +104,21 @@ This document is intended to be as descriptive as possible so that any LLM can u
     - Added new `/api/system/host` endpoint for detailed server telemetry.
     - Enhanced Dashboard with comprehensive Server Info and Web Frontend Info sections.
     - Provided `Containerfile`s for both backend and frontend services with SSL support (port 443), entrypoint scripts for environment-based configuration, and volume mounts for Certbot/SSL certificates.
-23. **Internationalization & Guidelines**:
-    - Established project-specific guidelines in `.junie/guidelines.md`.
-    - Expanded i18n support to include common languages for North America, South America, Europe, Asia, and Africa (English, Spanish, French, Portuguese, German, Italian, Chinese, Japanese, Korean, Hindi, Arabic, Swahili, Yoruba).
-    - Added Hindi (hi) and Korean (ko) translation support.
-    - Added Esperanto (eo) translation support.
+23. **Internationalization & Multi-Language Support**:
+    - Comprehensive support for 44 mandatory languages, including real-world and fictional languages (Klingon, Elvish, Dothraki, High Valyrian, Na'vi, Atlantean).
+    - Native language name support in all selection menus.
+    - Systematic sorting of languages: English first, then alphabetical by native name.
+    - Full synchronization of translation keys across all locale files, ensuring consistent UI behavior.
+    - Established internationalization standards in `.junie/guidelines.md`.
+24. **Cluster Management Enhancements**:
+    - Refactored `Cluster` management view with real-time resource discovery.
+    - Integrated multi-language support for node roles, statuses, and discovery info.
+25. **Network Topology Map**:
+    - Implemented a visual Network Map view to visualize infrastructure nodes and their connectivity status.
+    - Dynamic search and filtering of network nodes.
+26. **Audit Logs & Historical Data**:
+    - Comprehensive audit logging system for all administrative actions.
+    - Multi-language support for action types and detailed log entries.
     - Conducted a full internationalization audit and implementation across all system sections (Cluster Management, Dashboard, Settings).
     - Standardized resource units (vCPUs, Mbps, GB/TB) and labels across all infrastructure views.
     - Internationalized all placeholders, fallback values, and dynamic status labels.
@@ -187,6 +197,20 @@ The application follows a **Desktop-First** layout but is fully responsive for m
 #### 6. Audit Logs View
 - **Logs Table**: Chronological list of system actions.
     - Columns: Timestamp, User, Action (e.g., LOGIN_SUCCESS, RESOURCE_START), Details.
+
+#### 7. Settings View
+- **Header**: Title and Description.
+- **System Config Section**:
+    - **Language Selection**: Dropdown menu containing 44 supported languages.
+        - Names: All languages presented in their **native names**.
+        - Sorting: **English** must always be the first option, followed by the remaining languages in alphabetical order of their native names.
+    - **Server Config Display**: Shows Server Name, Port, and Database Path.
+    - **Demonstration Mode**: Toggle/Status for read-only simulation mode.
+    - **SSL/TLS Security**: Status indicator for secure communications.
+- **License Management Section**:
+    - **Status Card**: Displays registered user, expiration date, support tier, and included features.
+    - **Registration Form**: Input field for license key and "Register" button.
+- **System Actions**: "Restart Service" button with confirmation alert.
 
 ### User Roles & Permissions
 

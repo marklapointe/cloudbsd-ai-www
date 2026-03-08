@@ -5,6 +5,17 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 ## [Unreleased]
 
 ### Added
+- Mandatory support for 44 languages, including real-world and fictional languages (Klingon, Elvish, Dothraki, High Valyrian, Na'vi, Atlantean).
+- Comprehensive translation of all UI strings across all 44 supported languages.
+- Native language name support in all language selection menus.
+- Consistent sorting of language lists: English first, followed by alphabetical order of native names.
+
+### Fixed
+- Missing translation keys across multiple locale files (`es`, `ro`, `hr`, `sl`, `pa`, `elv`, `qav`, `qvy`, `atl`, `doth`).
+- Inconsistent language names in `Settings` and `Users` pages.
+- Synchronization of all translation files with the primary English master file.
+
+### Added
 - Esperanto (eo) translation support.
 - Project-specific guidelines in `.junie/guidelines.md`.
 - Expanded internationalization (i18n) support for common languages in North America, South America, Europe, Asia, and Africa.
