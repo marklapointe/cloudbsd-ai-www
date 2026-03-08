@@ -11,6 +11,10 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 - Consistent sorting of language lists: English first, followed by alphabetical order of native names.
 
 ### Fixed
+- Improved the `NetworkMap` layout and behavior:
+  - Persisted user-defined node positions across data refreshes to prevent "snapping back" when moving items.
+  - Increased spacing between host nodes and expanded the resource semi-circle radius to reduce grouping.
+  - Fixed a bug where `fitView` was triggered on every refresh, potentially overriding user zoom/pan.
 - Fixed missing translation for `common.storage` across all locales.
 - Fixed missing and inconsistent translations for license features on the Settings page (e.g., `feature_clustering`).
 - Standardized feature translation keys and ensured 100% parity across all 44 supported languages.

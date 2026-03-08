@@ -110,6 +110,7 @@ const NetworkMap: React.FC = () => {
   const [expandedNodes, setExpandedNodes] = useState<Record<string, boolean>>({ 'host-core': true });
   const [searchTerm, setSearchTerm] = useState('');
   const [contextMenu, setContextMenu] = useState<{ x: number, y: number, resource: any } | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
   const navigate = useNavigate();
 
   const fetchData = useCallback(async () => {
@@ -186,6 +187,12 @@ const NetworkMap: React.FC = () => {
     const newNodes: any[] = [];
     const newEdges: any[] = [];
 
+    // Capture current node positions to preserve them
+    const currentPositions: Record<string, { x: number, y: number }> = {};
+    nodes.forEach((node: any) => {
+      currentPositions[node.id] = node.position;
+    });
+
     // Core system (Host) node usually represents the management plane
     const coreNodeData = clusterNodes.find(n => n.role === 'core');
     const coreNodeId = coreNodeData ? `node-${coreNodeData.id}` : 'host-core';
@@ -193,7 +200,7 @@ const NetworkMap: React.FC = () => {
     newNodes.push({
       id: coreNodeId,
       type: 'host',
-      position: { x: 400, y: 0 },
+      position: currentPositions[coreNodeId] || { x: 400, y: 50 },
       data: { 
         label: coreNodeData?.name || 'CloudBSD Core', 
         isExpanded: expandedNodes[coreNodeId],
@@ -206,12 +213,12 @@ const NetworkMap: React.FC = () => {
     const otherNodes = clusterNodes.filter(n => n.role !== 'core');
     otherNodes.forEach((node, idx) => {
       const nodeId = `node-${node.id}`;
-      const xOffset = (idx - (otherNodes.length - 1) / 2) * 350;
+      const xOffset = (idx - (otherNodes.length - 1) / 2) * 500; // Increased spacing between host nodes
       
       newNodes.push({
         id: nodeId,
         type: 'host',
-        position: { x: 400 + xOffset, y: 250 },
+        position: currentPositions[nodeId] || { x: 400 + xOffset, y: 350 }, // Increased y-offset
         data: { 
           label: node.name, 
           isExpanded: expandedNodes[nodeId],
@@ -232,9 +239,9 @@ const NetworkMap: React.FC = () => {
     });
 
     // Add resources under their respective nodes
-    const allNodes = clusterNodes.length > 0 ? clusterNodes : [{ id: null, role: 'core' }];
+    const allNodesInGraph = clusterNodes.length > 0 ? clusterNodes : [{ id: null, role: 'core' }];
     
-    allNodes.forEach((node) => {
+    allNodesInGraph.forEach((node) => {
       const nodeId = node.id ? `node-${node.id}` : 'host-core';
       if (!expandedNodes[nodeId]) return;
 
@@ -242,28 +249,49 @@ const NetworkMap: React.FC = () => {
       
       nodeResources.forEach((res, resIdx) => {
         const resNodeId = `${res.type}-${res.id}`;
-        const nodePos = newNodes.find(n => n.id === nodeId)?.position || { x: 400, y: 0 };
         
-        // Layout resources in a semi-circle below the node
-        const angle = ((resIdx + 1) / (nodeResources.length + 1)) * Math.PI;
-        const radius = 220;
-        const x = nodePos.x + radius * Math.cos(angle + Math.PI);
-        const y = nodePos.y + radius * Math.sin(angle) + 100;
+        // If node already exists, use its current position
+        if (currentPositions[resNodeId]) {
+          newNodes.push({
+            id: resNodeId,
+            type: 'resource',
+            position: currentPositions[resNodeId],
+            data: { 
+              label: res.name, 
+              status: res.status, 
+              type: res.type,
+              icon: res.icon,
+              resource: res,
+              onContextMenu: handleContextMenu,
+              t
+            },
+          });
+        } else {
+          // Calculate new position only for new nodes
+          const hostNode = newNodes.find(n => n.id === nodeId);
+          const nodePos = hostNode?.position || { x: 400, y: 0 };
+          
+          // Layout resources in a wider semi-circle below the node
+          const angle = ((resIdx + 1) / (nodeResources.length + 1)) * Math.PI;
+          const radius = 350; // Increased radius to prevent grouping
+          const x = nodePos.x + radius * Math.cos(angle + Math.PI);
+          const y = nodePos.y + radius * Math.sin(angle) + 150; // Increased vertical distance
 
-        newNodes.push({
-          id: resNodeId,
-          type: 'resource',
-          position: { x, y },
-          data: { 
-            label: res.name, 
-            status: res.status, 
-            type: res.type,
-            icon: res.icon,
-            resource: res,
-            onContextMenu: handleContextMenu,
-            t
-          },
-        });
+          newNodes.push({
+            id: resNodeId,
+            type: 'resource',
+            position: { x, y },
+            data: { 
+              label: res.name, 
+              status: res.status, 
+              type: res.type,
+              icon: res.icon,
+              resource: res,
+              onContextMenu: handleContextMenu,
+              t
+            },
+          });
+        }
 
         newEdges.push({
           id: `edge-${resNodeId}`,
@@ -281,8 +309,11 @@ const NetworkMap: React.FC = () => {
   }, [resources, clusterNodes, expandedNodes, searchTerm, handleContextMenu, setNodes, setEdges, t]);
 
   useEffect(() => {
-    createGraph();
-  }, [createGraph]);
+    if (resources.length > 0 || clusterNodes.length > 0) {
+      createGraph();
+      if (!isInitialized) setIsInitialized(true);
+    }
+  }, [createGraph, resources, clusterNodes, isInitialized]);
 
   return (
     <div className="h-screen w-full flex flex-col relative overflow-hidden">
@@ -312,7 +343,7 @@ const NetworkMap: React.FC = () => {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           nodeTypes={nodeTypes}
-          fitView
+          fitView={!isInitialized}
           fitViewOptions={{ padding: 0.5 }}
           onPaneClick={() => setContextMenu(null)}
         >
