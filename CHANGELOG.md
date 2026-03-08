@@ -11,6 +11,8 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 - Consistent sorting of language lists: English first, followed by alphabetical order of native names.
 
 ### Fixed
+- Harmonized audit log action translation keys (e.g., `LOGIN_SUCCESS` now uses `action_login_success`) and ensured 100% parity across all 44 languages.
+- Updated `Logs.tsx` to handle dynamic log details and prevent incorrect translation fallbacks for strings containing specific keywords.
 - Missing `common.storage` translation key across all 44 locale files.
 - Missing translation keys across multiple locale files (`es`, `ro`, `hr`, `sl`, `pa`, `elv`, `qav`, `qvy`, `atl`, `doth`).
 - Inconsistent language names in `Settings` and `Users` pages.

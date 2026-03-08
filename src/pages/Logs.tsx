@@ -130,7 +130,7 @@ const Logs: React.FC = () => {
                   </td>
                   <td className="px-8 py-5">
                     <p className="text-sm font-bold text-slate-600 group-hover:text-slate-900 transition-colors line-clamp-2 max-w-md">
-                      {log.details ? (log.details.startsWith('ID:') ? log.details : t(`logs.details_${log.action.toLowerCase()}`, { defaultValue: log.details })) : '—'}
+                      {log.details ? (log.details.startsWith('ID:') || log.details.includes('logged in') ? log.details : t(`logs.details_${log.action.toLowerCase()}`, { defaultValue: log.details })) : '—'}
                     </p>
                   </td>
                 </tr>
