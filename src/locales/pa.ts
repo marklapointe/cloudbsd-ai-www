@@ -190,6 +190,9 @@ const pa = {
       stopped: "ਰੁਕਿਆ ਹੋਇਆ"
     },
     settings: {
+      "config_update_failed": "Failed to update configuration",
+      "language_update_failed": "Failed to save language preference",
+      "language_updated": "Language preference saved successfully",
       feature_clustering: 'Clustering',
       feature_api_access: 'API Access',
       feature_live_migration: 'Live Migration',
@@ -257,6 +260,10 @@ title: "ਸੈਟਿੰਗਾਂ",
       premium: "ਪ੍ਰੀਮੀਅਮ",
       example: "ਉਦਾਹਰਨ",
     
+    },
+    manual: {
+      download_manual: "Download User Manual",
+      title: "CloudBSD User Manual"
     },
     users: {
       management: "ਉਪਭੋਗਤਾ ਪ੍ਰਬੰਧਨ",

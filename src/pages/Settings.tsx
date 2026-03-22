@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Settings as SettingsIcon, Save, RefreshCw, Key, ShieldCheck, CreditCard, Activity, Server, Box, Hexagon, Clock, CheckCircle2, Languages } from 'lucide-react';
 import api from '../api/client';
+import { getSortedLanguages } from '../constants/languages';
 import { useTranslation } from 'react-i18next';
 
 const Settings: React.FC = () => {
@@ -11,6 +12,11 @@ const Settings: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [savingLicense, setSavingLicense] = useState(false);
   const [message, setMessage] = useState<{ text: string, type: 'success' | 'error' } | null>(null);
+  const [savingLanguage, setSavingLanguage] = useState(false);
+  const [savingConfig, setSavingConfig] = useState(false);
+  const [serverName, setServerName] = useState('');
+  const [demoMode, setDemoMode] = useState(false);
+  const [sslEnabled, setSslEnabled] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -23,6 +29,9 @@ const Settings: React.FC = () => {
         api.get('/system/license')
       ]);
       setConfig(configRes.data);
+      setServerName(configRes.data.servername || '');
+      setDemoMode(configRes.data.demoMode || false);
+      setSslEnabled(configRes.data.ssl?.enabled || false);
       setLicense(licenseRes.data);
     } catch (err) {
       console.error('Failed to fetch settings', err);
@@ -67,58 +76,45 @@ const Settings: React.FC = () => {
     return Math.min(100, (used / limit) * 100);
   };
 
-  const supportedLanguages = [
-    { code: 'en', name: 'English' },
-    { code: 'es', name: 'Español' },
-    { code: 'fr', name: 'Français' },
-    { code: 'eo', name: 'Esperanto' },
-    { code: 'it', name: 'Italiano' },
-    { code: 'no', name: 'Norsk' },
-    { code: 'sv', name: 'Svenska' },
-    { code: 'pa', name: 'ਪੰਜਾਬੀ' },
-    { code: 'tlh', name: 'tlhIngan Hol' },
-    { code: 'elv', name: 'Quenya' },
-    { code: 'de', name: 'Deutsch' },
-    { code: 'zh', name: '中文' },
-    { code: 'ja', name: '日本語' },
-    { code: 'ar', name: 'العربية' },
-    { code: 'sw', name: 'Kiswahili' },
-    { code: 'yo', name: 'Yorùbá' },
-    { code: 'hi', name: 'हिन्दी' },
-    { code: 'ko', name: '한국어' },
-    { code: 'fi', name: 'Suomi' },
-    { code: 'ru', name: 'Русский' },
-    { code: 'pl', name: 'Polski' },
-    { code: 'doth', name: 'Lekh Dothraki' },
-    { code: 'qvy', name: 'Valyrio' },
-    { code: 'qav', name: 'Lìʼfya leNaʼvi' },
-    { code: 'atl', name: 'Dig Adlantis' },
-    { code: 'tr', name: 'Türkçe' },
-    { code: 'ca', name: 'Català' },
-    { code: 'cs', name: 'Čeština' },
-    { code: 'el', name: 'Ελληνικά' },
-    { code: 'he', name: 'עברית' },
-    { code: 'uk', name: 'Українська' },
-    { code: 'sr', name: 'Српски' },
-    { code: 'sk', name: 'Slovenčina' },
-    { code: 'sl', name: 'Slovenščina' },
-    { code: 'ur', name: 'اردو' },
-    { code: 'bg', name: 'Български' },
-    { code: 'hr', name: 'Hrvatski' },
-    { code: 'hu', name: 'Magyar' },
-    { code: 'lt', name: 'Lietuvių' },
-    { code: 'lv', name: 'Latviešu' },
-    { code: 'id', name: 'Bahasa Indonesia' },
-    { code: 'pt', name: 'Português (Brasil)' },
-    { code: 'pt-PT', name: 'Português (Portugal)' },
-    { code: 'ro', name: 'Română' },
-  ];
+  const sortedLanguages = getSortedLanguages();
 
-  const sortedLanguages = [...supportedLanguages].sort((a, b) => {
-    if (a.code === 'en') return -1;
-    if (b.code === 'en') return 1;
-    return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
-  });
+  const handleLanguageChange = async (newLang: string) => {
+    setSavingLanguage(true);
+    setMessage(null);
+    try {
+      localStorage.setItem('i18nextLng', newLang);
+      await i18n.changeLanguage(newLang);
+      await api.put('/users/profile', { language: newLang });
+      setMessage({ text: t('settings.language_updated'), type: 'success' });
+    } catch (err: any) {
+      console.error('Failed to update language', err);
+      setMessage({ text: t('settings.language_update_failed'), type: 'error' });
+    } finally {
+      setSavingLanguage(false);
+    }
+  };
+
+  const handleSaveConfig = async () => {
+    setSavingConfig(true);
+    setMessage(null);
+    try {
+      const response = await api.put('/system/config', {
+        servername: serverName,
+        demoMode,
+        ssl: { enabled: sslEnabled }
+      });
+      setConfig(response.data.config);
+      setMessage({ text: response.data.message, type: 'success' });
+    } catch (err: any) {
+      console.error('Failed to update config', err);
+      setMessage({ 
+        text: err.response?.data?.message || t('settings.config_update_failed', { defaultValue: 'Failed to update configuration' }), 
+        type: 'error' 
+      });
+    } finally {
+      setSavingConfig(false);
+    }
+  };
 
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -159,8 +155,9 @@ const Settings: React.FC = () => {
                 <div className="relative group">
                   <select
                     value={i18n.language}
-                    onChange={(e) => i18n.changeLanguage(e.target.value)}
-                    className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 font-bold outline-none appearance-none focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white transition-all duration-200 cursor-pointer"
+                    onChange={(e) => handleLanguageChange(e.target.value)}
+                    disabled={savingLanguage}
+                    className={`w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 font-bold outline-none appearance-none focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white transition-all duration-200 cursor-pointer ${savingLanguage ? 'opacity-50 cursor-wait' : ''}`}
                     aria-label={t('common.language')}
                     title={t('common.language')}
                   >
@@ -176,65 +173,47 @@ const Settings: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-2">
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('settings.server_name')}</label>
-                  <input 
-                    type="text" 
-                    value={config?.servername || ''} 
-                    disabled
-                    className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-slate-400 cursor-not-allowed font-bold"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('settings.port')}</label>
-                  <input 
-                    type="text" 
-                    value={config?.port || ''} 
-                    disabled
-                    className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-slate-400 cursor-not-allowed font-bold"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('settings.db_path')}</label>
-                <input 
-                  type="text" 
-                  value={config?.dbPath || ''} 
-                  disabled
-                  className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-slate-400 cursor-not-allowed font-bold"
-                />
-              </div>
-
-              <div className="flex items-center gap-5 p-6 bg-blue-50 rounded-2xl border border-blue-100/50 transition-colors hover:bg-blue-50/80">
+              <div 
+                className="flex items-center gap-5 p-6 bg-blue-50 rounded-2xl border border-blue-100/50 transition-colors hover:bg-blue-50/80 cursor-pointer"
+                onClick={() => setDemoMode(!demoMode)}
+              >
                 <div className="flex-1">
                   <p className="text-sm font-black text-blue-900 uppercase tracking-wider">{t('settings.demo_mode')}</p>
                   <p className="text-xs text-blue-700/70 font-bold mt-0.5">{t('settings.demo_mode_desc')}</p>
                 </div>
-                <div className={`w-14 h-7 rounded-full transition-all duration-300 relative shadow-inner ${config?.demoMode ? 'bg-blue-600 shadow-blue-900/20' : 'bg-slate-300'}`}>
-                  <div className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-all duration-300 shadow-md ${config?.demoMode ? 'left-8' : 'left-1'}`}></div>
+                <div className={`w-14 h-7 rounded-full transition-all duration-300 relative shadow-inner ${demoMode ? 'bg-blue-600 shadow-blue-900/20' : 'bg-slate-300'}`}>
+                  <div className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-all duration-300 shadow-md ${demoMode ? 'left-8' : 'left-1'}`}></div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-5 p-6 bg-emerald-50 rounded-2xl border border-emerald-100/50 transition-colors hover:bg-emerald-50/80">
+              <div 
+                className="flex items-center gap-5 p-6 bg-emerald-50 rounded-2xl border border-emerald-100/50 transition-colors hover:bg-emerald-50/80 cursor-pointer"
+                onClick={() => setSslEnabled(!sslEnabled)}
+              >
                 <div className="flex-1">
                   <p className="text-sm font-black text-emerald-900 uppercase tracking-wider">{t('settings.ssl_security')}</p>
                   <p className="text-xs text-emerald-700/70 font-bold mt-0.5">{t('settings.ssl_security_desc')}</p>
                 </div>
-                <div className={`w-14 h-7 rounded-full transition-all duration-300 relative shadow-inner ${config?.ssl?.enabled ? 'bg-emerald-600 shadow-emerald-900/20' : 'bg-slate-300'}`}>
-                  <div className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-all duration-300 shadow-md ${config?.ssl?.enabled ? 'left-8' : 'left-1'}`}></div>
+                <div className={`w-14 h-7 rounded-full transition-all duration-300 relative shadow-inner ${sslEnabled ? 'bg-emerald-600 shadow-emerald-900/20' : 'bg-slate-300'}`}>
+                  <div className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-all duration-300 shadow-md ${sslEnabled ? 'left-8' : 'left-1'}`}></div>
                 </div>
               </div>
             </div>
 
             <div className="px-8 py-6 border-t border-slate-50 bg-slate-50/50 flex justify-end">
               <button 
-                disabled 
-                className="flex items-center gap-2 px-6 py-3 bg-slate-200 text-slate-400 font-black uppercase text-xs tracking-widest rounded-2xl cursor-not-allowed transition-all"
+                onClick={handleSaveConfig}
+                disabled={savingConfig}
+                className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white font-black uppercase text-xs tracking-widest rounded-2xl hover:bg-brand-600 transition-all duration-300 active:scale-95 shadow-lg shadow-slate-900/10 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Save size={18} />
-                <span>{t('common.save')}</span>
+                {savingConfig ? (
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                ) : (
+                  <>
+                    <Save size={18} />
+                    <span>{t('common.save')}</span>
+                  </>
+                )}
               </button>
             </div>
           </div>

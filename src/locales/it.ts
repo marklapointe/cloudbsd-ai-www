@@ -190,6 +190,9 @@ const it = {
       "stopped": "Fermato"
     },
     "settings": {
+      "config_update_failed": "Failed to update configuration",
+      "language_updated": "Language preference saved successfully",
+      "language_update_failed": "Failed to save language preference",
       "feature_clustering": 'Clustering',
       "feature_api_access": 'Accesso API',
       "feature_live_migration": 'Migrazione live',

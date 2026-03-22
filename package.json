@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
-    "server": "ts-node-dev --respawn --esm --project server/tsconfig.json server/src/index.ts",
+    "server": "node --experimental-strip-types --watch server/src/index.ts",
     "start": "node server/dist/index.js"
   },
   "dependencies": {

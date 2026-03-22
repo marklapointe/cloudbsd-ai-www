@@ -5,6 +5,7 @@ A modern, responsive web interface for managing Virtual Machines (bhyve), OCI co
 ## Features
 
 -   **Dashboard**: Real-time system health monitoring and resource overview.
+-   **Documentation**: Detailed [User Manual](USER_MANUAL.md) available.
 -   **VM Management**: Control bhyve virtual machines.
 -   **Container Management**: Support for OCI-compliant containers (Docker/Podman).
 -   **Isolation**: Management of native Jails.

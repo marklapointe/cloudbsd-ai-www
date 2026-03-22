@@ -19,7 +19,11 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+    // If we're on the login page or making a login request, don't auto-redirect
+    const isLoginRequest = error.config && error.config.url && error.config.url.endsWith('/login');
+    const isLoginPage = window.location.pathname === '/login';
+
+    if (error.response && (error.response.status === 401 || error.response.status === 403) && !isLoginRequest && !isLoginPage) {
       localStorage.removeItem('token');
       localStorage.removeItem('username');
       localStorage.removeItem('role');

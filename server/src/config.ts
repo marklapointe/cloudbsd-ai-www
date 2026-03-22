@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -54,6 +54,21 @@ export function loadConfig(): Config {
 
   console.warn('Using default configuration settings.');
   return config;
+}
+
+export function saveConfig(newConfig: Partial<Config>): void {
+  const currentConfig = loadConfig();
+  const updatedConfig = { ...currentConfig, ...newConfig };
+  
+  // We save to the first path in CONFIG_PATHS by default
+  const configPath = CONFIG_PATHS[0];
+  try {
+    writeFileSync(configPath, JSON.stringify(updatedConfig, null, 2), 'utf-8');
+    console.log(`Configuration saved to ${configPath}`);
+  } catch (error) {
+    console.error(`Failed to save configuration to ${configPath}:`, error);
+    throw error;
+  }
 }
 
 let config = loadConfig();

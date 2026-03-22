@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Languages } from 'lucide-react';
 import api from '../api/client';
 import { useTranslation } from 'react-i18next';
+import { getSortedLanguages } from '../constants/languages';
 
 const Login: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -9,6 +11,7 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const sortedLanguages = getSortedLanguages();
 
   useEffect(() => {
     const isAuthenticated = !!localStorage.getItem('token');
@@ -28,8 +31,9 @@ const Login: React.FC = () => {
       localStorage.setItem('username', response.data.user.username);
       localStorage.setItem('role', response.data.user.role);
       
-      // Update language if the user has a preference
+      // Update language if the user has a preference and save it to localStorage for the detector
       if (response.data.user.language) {
+        localStorage.setItem('i18nextLng', response.data.user.language);
         i18n.changeLanguage(response.data.user.language);
       }
 
@@ -108,7 +112,31 @@ const Login: React.FC = () => {
         </form>
         
         <div className="mt-10 pt-8 border-t border-slate-50 text-center">
-          <p className="text-xs font-bold text-slate-300 uppercase tracking-widest">{t('login.footer')}</p>
+          <div className="flex flex-col items-center gap-4">
+            <div className="relative group w-full max-w-[200px]">
+              <select
+                value={i18n.language}
+                onChange={(e) => i18n.changeLanguage(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold text-slate-600 outline-none appearance-none focus:ring-2 focus:ring-brand-500/10 focus:border-brand-500 transition-all cursor-pointer"
+                aria-label={t('common.language')}
+              >
+                {sortedLanguages.map((lang) => (
+                  <option key={lang.code} value={lang.code}>
+                    {lang.name}
+                  </option>
+                ))}
+              </select>
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                <Languages size={14} />
+              </div>
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-300">
+                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
+            <p className="text-xs font-bold text-slate-300 uppercase tracking-widest">{t('login.footer')}</p>
+          </div>
         </div>
       </div>
     </div>

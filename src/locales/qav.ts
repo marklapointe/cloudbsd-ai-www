@@ -190,6 +190,9 @@ const qav = {
       stopped: "Pusta"
     },
     settings: {
+      "config_update_failed": "Failed to update configuration",
+      "language_update_failed": "Failed to save language preference",
+      "language_updated": "Language preference saved successfully",
       feature_clustering: 'Clustering',
       feature_api_access: 'API Access',
       feature_live_migration: 'Live Migration',
@@ -257,6 +260,10 @@ title: "Namnë",
       premium: "Premium",
       example: "Example",
     
+    },
+    manual: {
+      download_manual: "Download User Manual",
+      title: "CloudBSD User Manual"
     },
     users: {
       management: "Na'vi Management",

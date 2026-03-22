@@ -190,6 +190,9 @@ const no = {
       "stopped": "Stoppet"
     },
     "settings": {
+      "config_update_failed": "Failed to update configuration",
+      "language_updated": "Language preference saved successfully",
+      "language_update_failed": "Failed to save language preference",
       "feature_clustering": 'Clustering',
       "feature_api_access": 'API Access',
       "feature_live_migration": 'Live Migration',

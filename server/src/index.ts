@@ -8,10 +8,17 @@ import { Server } from 'socket.io';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import os from 'os';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import db, { initDb, logAction } from './db.ts';
 
-import config from './config.ts';
+import config, { reloadConfig, saveConfig } from './config.ts';
 import { ensureCertificates } from './ssl.ts';
+
+initDb();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -51,25 +58,31 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 let httpServer: any;
+let httpServerV6: any;
 
 const sslCerts = ensureCertificates();
 
 if (config.ssl.enabled && sslCerts) {
-  httpServer = createHttpsServer({
+  const options = {
     cert: sslCerts.cert,
     key: sslCerts.key
-  }, app);
+  };
+  httpServer = createHttpsServer(options, app);
+  httpServerV6 = createHttpsServer(options, app);
   console.log('SSL/TLS enabled');
 } else {
   httpServer = createHttpServer(app);
+  httpServerV6 = createHttpServer(app);
 }
 
-const io = new Server(httpServer, {
+const io = new Server({
   cors: {
     origin: "*",
     methods: ["GET", "POST"]
   }
 });
+io.attach(httpServer);
+io.attach(httpServerV6);
 
 // Terminal sessions (mock for now)
 const terminalSessions = new Map<string, string>();
@@ -126,6 +139,10 @@ const SECRET_KEY = config.secretKey;
 
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from the React app dist directory
+const distPath = path.join(__dirname, '../../dist');
+app.use(express.static(distPath));
 
 initDb();
 
@@ -288,6 +305,43 @@ app.post('/api/users', authenticateToken, isAdmin, (req, res) => {
     const result = currentDb.prepare('INSERT INTO users (username, password, role, language) VALUES (?, ?, ?, ?)').run(username, hashedPassword, role || 'viewer', language || 'en');
     logAction((req as any).user.id, 'USER_CREATE', `Created user ${username} with role ${role} and language ${language}`);
     res.status(201).json({ id: result.lastInsertRowid, username, role, language });
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+/**
+ * @openapi
+ * /api/users/profile:
+ *   put:
+ *     summary: Update current user's profile (e.g., language)
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               language:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Profile updated
+ */
+app.put('/api/users/profile', authenticateToken, (req, res) => {
+  const { language } = req.body;
+  const userId = (req as any).user.id;
+  const currentDb = initDb();
+
+  try {
+    if (language) {
+      currentDb.prepare('UPDATE users SET language = ? WHERE id = ?').run(language, userId);
+      logAction(userId, 'USER_UPDATE_PROFILE', `Updated user language to ${language}`);
+      res.json({ message: 'Profile updated', language });
+    } else {
+      res.status(400).json({ message: 'Nothing to update' });
+    }
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }
@@ -938,6 +992,67 @@ app.get('/api/system/config', authenticateToken, isAdmin, (req, res) => {
 
 /**
  * @openapi
+ * /api/system/config:
+ *   put:
+ *     summary: Update system configuration (Admin only)
+ *     tags: [System]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               servername:
+ *                 type: string
+ *               demoMode:
+ *                 type: boolean
+ *               ssl:
+ *                 type: object
+ *                 properties:
+ *                   enabled:
+ *                     type: boolean
+ *     responses:
+ *       200:
+ *         description: Configuration updated
+ *       400:
+ *         description: Invalid input
+ */
+app.put('/api/system/config', authenticateToken, isAdmin, (req, res) => {
+  const { servername, demoMode, ssl } = req.body;
+  
+  try {
+    const update: any = {};
+    if (servername !== undefined) update.servername = servername;
+    if (demoMode !== undefined) update.demoMode = demoMode;
+    if (ssl !== undefined && ssl.enabled !== undefined) {
+      update.ssl = { ...config.ssl, enabled: ssl.enabled };
+    }
+    
+    saveConfig(update);
+    reloadConfig();
+    
+    logAction((req as any).user.id, 'SYSTEM_CONFIG_UPDATE', `Updated system configuration: ${JSON.stringify(update)}`);
+    
+    res.json({ 
+      message: 'Configuration updated successfully. Some changes may require a restart.',
+      config: {
+        port: config.port,
+        servername: config.servername,
+        dbPath: config.dbPath,
+        demoMode: config.demoMode,
+        ssl: {
+          enabled: config.ssl.enabled
+        }
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to save configuration' });
+  }
+});
+
+/**
+ * @openapi
  * /api/system/license:
  *   get:
  *     summary: Get license information
@@ -1064,6 +1179,12 @@ app.post('/api/system/license', authenticateToken, isAdmin, (req, res) => {
   }
 });
 
+// The "catchall" handler: for any request that doesn't
+// match one of the API routes, send back React's index.html file.
+app.get(/^(?!\/api).+/, (req, res) => {
+  res.sendFile(path.join(__dirname, '../../dist/index.html'));
+});
+
 io.on('connection', (socket) => {
   console.log('A user connected');
   socket.on('disconnect', () => {
@@ -1078,7 +1199,12 @@ setInterval(() => {
   io.emit('resource_update', { resource, timestamp: new Date() });
 }, 5000);
 
-httpServer.listen(port, () => {
+httpServer.listen(port, '127.0.0.1', () => {
   const protocol = config.ssl.enabled ? 'https' : 'http';
-  console.log(`Server running on ${protocol}://${config.servername}:${port}`);
+  console.log(`Server (IPv4) running on ${protocol}://127.0.0.1:${port}`);
+});
+
+httpServerV6.listen(port, '::1', () => {
+  const protocol = config.ssl.enabled ? 'https' : 'http';
+  console.log(`Server (IPv6) running on ${protocol}://[::1]:${port}`);
 });

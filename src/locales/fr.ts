@@ -190,6 +190,9 @@ const fr = {
       "stopped": "Arrêté"
     },
     "settings": {
+      "language_updated": "Préférence linguistique enregistrée avec succès",
+      "language_update_failed": "Échec de l'enregistrement de la préférence linguistique",
+      "config_update_failed": "Échec de la mise à jour de la configuration",
       "feature_clustering": 'Mise en grappe',
       "feature_api_access": 'Accès API',
       "feature_live_migration": 'Migration en direct',

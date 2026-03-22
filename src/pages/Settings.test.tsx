@@ -10,6 +10,7 @@ vi.mock('../api/client', () => ({
   default: {
     get: vi.fn(),
     post: vi.fn(),
+    put: vi.fn(),
   },
 }));
 
@@ -57,10 +58,6 @@ describe('Settings Component', () => {
     expect(screen.getByText('Loading...')).toBeDefined();
 
     await waitFor(() => {
-      // Check server config
-      expect(screen.getByDisplayValue('Test Server')).toBeDefined();
-      expect(screen.getByDisplayValue('3001')).toBeDefined();
-      
       // Check license info
       expect(screen.getByText(i18n.t('settings.enterprise'))).toBeDefined();
       expect(screen.getByText('Test User')).toBeDefined();

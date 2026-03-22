@@ -79,6 +79,9 @@ const es = {
       backend_offline: "El backend está fuera de línea. Algunas funciones pueden no estar disponibles. Reintentando..."
     },
     settings: {
+      "language_updated": "Preferencia de idioma guardada con éxito",
+      "language_update_failed": "Error al guardar la preferencia de idioma",
+      "config_update_failed": "Error al actualizar la configuración",
       feature_clustering: 'Agrupamiento',
       feature_api_access: 'Acceso API',
       feature_live_migration: 'Migración en vivo',
@@ -146,6 +149,10 @@ title: "Configuración",
       premium: "Premium",
       example: "Ejemplo",
     
+    },
+    manual: {
+      download_manual: "Download User Manual",
+      title: "CloudBSD User Manual"
     },
     users: {
       management: "Gestión de Usuarios",

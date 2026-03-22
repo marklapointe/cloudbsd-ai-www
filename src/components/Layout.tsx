@@ -13,11 +13,12 @@ import {
   X,
   User,
   History,
-  Settings
+  Settings,
+  FileText
 } from 'lucide-react';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,6 +31,71 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     localStorage.removeItem('username');
     localStorage.removeItem('role');
     navigate('/login');
+  };
+
+  const handleDownloadManual = () => {
+    const manualContent = `# ${t('manual.title')}
+
+## ${t('manual.introduction')}
+${t('manual.intro_text')}
+
+## ${t('manual.authentication')}
+
+### ${t('manual.login')}
+${t('manual.login_text')}
+
+### ${t('manual.language_selection')}
+${t('manual.language_text')}
+
+## ${t('manual.dashboard')}
+${t('manual.dashboard_text')}
+
+## ${t('manual.resource_management')}
+
+### ${t('manual.vms')}
+${t('manual.vms_text')}
+
+### ${t('manual.containers')}
+${t('manual.containers_text')}
+
+### ${t('manual.jails')}
+${t('manual.jails_text')}
+
+## ${t('manual.cluster')}
+${t('manual.cluster_text')}
+
+## ${t('manual.network_map')}
+${t('manual.network_map_text')}
+
+## ${t('manual.roles')}
+- ${t('manual.roles_admin')}
+- ${t('manual.roles_operator')}
+- ${t('manual.roles_viewer')}
+
+## ${t('manual.administration')}
+
+### ${t('manual.user_management')}
+${t('manual.user_management_text')}
+
+### ${t('manual.logs')}
+${t('manual.logs_text')}
+
+### ${t('manual.settings')}
+${t('manual.settings_text')}
+
+## ${t('manual.troubleshooting')}
+- ${t('manual.trouble_auth')}
+- ${t('manual.trouble_lang')}
+`;
+    const blob = new Blob([manualContent], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `CloudBSD_User_Manual_${i18n.language}.md`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const navItems = [
@@ -96,6 +162,16 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           </div>
 
           <nav className="flex-1 px-4 py-2 space-y-1">
+            <div className="bg-slate-900/50 rounded-2xl p-4 mb-6 border border-slate-800/50 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 border border-slate-700">
+                <User size={20} />
+              </div>
+              <div className="flex flex-col min-w-0">
+                <span className="text-sm font-semibold truncate text-slate-200">{username}</span>
+                <span className="text-[10px] text-brand-500 font-bold uppercase tracking-wider truncate">{t(`common.${localStorage.getItem('role') || 'viewer'}`)}</span>
+              </div>
+            </div>
+
             <div className="px-4 py-2 mb-2">
               <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('layout.main_menu')}</p>
             </div>
@@ -121,24 +197,21 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           </nav>
 
           <div className="p-6 mt-auto">
-            <div className="bg-slate-900/50 rounded-2xl p-4 mb-4 border border-slate-800/50">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 border border-slate-700">
-                  <User size={20} />
-                </div>
-                <div className="flex flex-col min-w-0">
-                  <span className="text-sm font-semibold truncate text-slate-200">{username}</span>
-                  <span className="text-[10px] text-brand-500 font-bold uppercase tracking-wider truncate">{t(`common.${localStorage.getItem('role') || 'viewer'}`)}</span>
-                </div>
-              </div>
-              <button 
-                onClick={handleLogout}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 hover:bg-red-500/10 hover:text-red-400 text-slate-400 rounded-lg transition-all duration-200 text-sm font-medium border border-slate-700/50 hover:border-red-500/30"
-              >
-                <LogOut size={16} />
-                <span>{t('common.logout')}</span>
-              </button>
-            </div>
+            <button 
+              onClick={handleDownloadManual}
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand-500/10 hover:bg-brand-500/20 text-brand-400 rounded-xl transition-all duration-200 text-sm font-semibold mb-4 border border-brand-500/20 hover:border-brand-500/40 group"
+            >
+              <FileText size={18} className="group-hover:scale-110 transition-transform" />
+              <span>{t('manual.download_manual')}</span>
+            </button>
+
+            <button 
+              onClick={handleLogout}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-slate-900/50 hover:bg-red-500/10 hover:text-red-400 text-slate-400 rounded-lg transition-all duration-200 text-sm font-medium border border-slate-800/50 hover:border-red-500/30"
+            >
+              <LogOut size={16} />
+              <span>{t('common.logout')}</span>
+            </button>
           </div>
         </div>
       </aside>
