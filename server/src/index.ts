@@ -85,12 +85,12 @@ io.attach(httpServer);
 const terminalSessions = new Map<string, string>();
 
 io.on('connection', (socket) => {
-  console.log('User connected');
+  console.log(`[Socket] User connected: ${socket.id} from ${socket.handshake.address}`);
 
   socket.on('terminal_join', (data: { resourceId: string | number, resourceType: string }) => {
     const sessionId = `${socket.id}-${data.resourceId}`;
     terminalSessions.set(sessionId, '');
-    console.log(`User joined terminal for ${data.resourceType} ${data.resourceId}`);
+    console.log(`[Socket] User joined terminal for ${data.resourceType} ${data.resourceId}`);
     
     // In demo mode, simulate some activity or initial output
     if (config.demoMode) {
@@ -135,6 +135,7 @@ const port = config.port;
 const SECRET_KEY = config.secretKey || 'your-secret-key-change-me';
 if (SECRET_KEY === 'your-secret-key-change-me') {
   console.warn('[Critical] Backend is using the default secret key. This is insecure and can cause issues if not stable.');
+  console.warn('[Critical] Tokens will be invalidated every time the server restarts if a stable key is not provided in etc/config.json.');
 }
 
 app.use(cors({
@@ -168,8 +169,13 @@ const authenticateToken = (req: any, res: any, next: any) => {
   jwt.verify(token, SECRET_KEY, (err: any, user: any) => {
     if (err) {
       console.error(`[Auth] JWT verification failed for ${req.method} ${req.url} from ${req.ip}:`, err.message);
+      if (err.name === 'JsonWebTokenError') {
+        console.error('[Auth] Token is invalid. Possible SECRET_KEY mismatch or malformed token.');
+      } else if (err.name === 'TokenExpiredError') {
+        console.warn('[Auth] Token has expired.');
+      }
       // Log some info about the key (first 4 chars) to see if it changes
-      console.debug(`[Auth] Secret Key check (first 4): ${SECRET_KEY.substring(0, 4)}`);
+      console.debug(`[Auth] Current Secret Key check (first 4): ${SECRET_KEY.substring(0, 4)}`);
       return res.sendStatus(403);
     }
     req.user = user;
@@ -1251,9 +1257,9 @@ app.get(/^(?!\/api).+/, (req, res) => {
 */
 
 io.on('connection', (socket) => {
-  console.log('A user connected');
-  socket.on('disconnect', () => {
-    console.log('User disconnected');
+  console.log(`[Socket] A user connected: ${socket.id} from ${socket.handshake.address}`);
+  socket.on('disconnect', (reason) => {
+    console.log(`[Socket] User disconnected: ${socket.id}, reason: ${reason}`);
   });
 });
 
