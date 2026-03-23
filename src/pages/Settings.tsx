@@ -83,7 +83,6 @@ const Settings: React.FC = () => {
     setMessage(null);
     try {
       localStorage.setItem('i18nextLng', newLang);
-      const prevT = t;
       await i18n.changeLanguage(newLang);
       await api.put('/users/profile', { language: newLang });
       
