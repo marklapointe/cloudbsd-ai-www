@@ -8,6 +8,20 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
+  
+  // Debug logging for token
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('debug')) {
+    if (token) {
+      const tokenPreview = token.length > 20 
+        ? `${token.substring(0, 10)}...${token.substring(token.length - 10)}` 
+        : token;
+      console.log(`[API Request] Token found in localStorage (length: ${token.length}): ${tokenPreview}`);
+    } else {
+      console.warn('[API Request] No token found in localStorage');
+    }
+  }
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

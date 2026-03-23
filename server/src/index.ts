@@ -121,8 +121,8 @@ io.on('connection', (socket) => {
     console.log(`User left terminal for resource ${data.resourceId}`);
   });
 
-  socket.on('disconnect', () => {
-    console.log('User disconnected');
+  socket.on('disconnect', (reason) => {
+    console.log(`[Socket] User disconnected: ${socket.id}, reason: ${reason}`);
     // Cleanup sessions for this socket
     for (const [key] of terminalSessions) {
       if (key.startsWith(socket.id)) {
@@ -171,6 +171,12 @@ const authenticateToken = (req: any, res: any, next: any) => {
       console.error(`[Auth] JWT verification failed for ${req.method} ${req.url} from ${req.ip}:`, err.message);
       if (err.name === 'JsonWebTokenError') {
         console.error('[Auth] Token is invalid. Possible SECRET_KEY mismatch or malformed token.');
+        // Log the token itself (BE CAREFUL IN PRODUCTION, but this is for debugging the "malformed" issue)
+        // We'll log the first 10 and last 10 chars to see if it's truncated or weird
+        const tokenPreview = token.length > 20 
+          ? `${token.substring(0, 10)}...${token.substring(token.length - 10)}` 
+          : token;
+        console.debug(`[Auth] Token preview (length: ${token.length}): ${tokenPreview}`);
       } else if (err.name === 'TokenExpiredError') {
         console.warn('[Auth] Token has expired.');
       }
@@ -249,6 +255,12 @@ app.post('/api/login', (req, res) => {
   if (user && bcrypt.compareSync(password, user.password)) {
     logAction(user.id, 'LOGIN_SUCCESS', `User ${username} logged in`);
     const token = jwt.sign({ id: user.id, username: user.username, role: user.role, language: user.language }, SECRET_KEY, { expiresIn: '8h' });
+    
+    const tokenPreview = token.length > 20 
+      ? `${token.substring(0, 10)}...${token.substring(token.length - 10)}` 
+      : token;
+    console.log(`[Auth] Generated token for ${username} (length: ${token.length}): ${tokenPreview}`);
+    
     res.json({ token, user: { id: user.id, username: user.username, role: user.role, language: user.language } });
   } else {
     logAction(null, 'LOGIN_FAILURE', `Failed login attempt for user: ${username}`);
@@ -1256,12 +1268,14 @@ app.get(/^(?!\/api).+/, (req, res) => {
 });
 */
 
+/*
 io.on('connection', (socket) => {
   console.log(`[Socket] A user connected: ${socket.id} from ${socket.handshake.address}`);
   socket.on('disconnect', (reason) => {
     console.log(`[Socket] User disconnected: ${socket.id}, reason: ${reason}`);
   });
 });
+*/
 
 // Mock real-time updates
 setInterval(() => {
