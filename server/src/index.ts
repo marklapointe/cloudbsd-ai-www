@@ -138,7 +138,7 @@ app.use(express.json());
 
 // Serve static files from the React app dist directory
 const distPath = path.join(__dirname, '../../dist');
-app.use(express.static(distPath));
+// app.use(express.static(distPath));
 
 initDb();
 
@@ -1221,9 +1221,11 @@ app.post('/api/system/license', authenticateToken, isAdmin, (req, res) => {
 
 // The "catchall" handler: for any request that doesn't
 // match one of the API routes, send back React's index.html file.
+/*
 app.get(/^(?!\/api).+/, (req, res) => {
   res.sendFile(path.join(__dirname, '../../dist/index.html'));
 });
+*/
 
 io.on('connection', (socket) => {
   console.log('A user connected');
@@ -1239,7 +1241,7 @@ setInterval(() => {
   io.emit('resource_update', { resource, timestamp: new Date() });
 }, 5000);
 
-httpServer.listen(port, '::', () => {
+httpServer.listen(port, '127.0.0.1', () => {
   const protocol = config.ssl.enabled ? 'https' : 'http';
-  console.log(`Server running on ${protocol}://[::]:${port}`);
+  console.log(`Server running on ${protocol}://127.0.0.1:${port}`);
 });
