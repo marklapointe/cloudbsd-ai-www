@@ -1,8 +1,6 @@
 import axios from 'axios';
 
-const defaultPort = 3001;
-const host = window.location.hostname === 'localhost' ? `localhost:${defaultPort}` : window.location.host;
-const baseURL = `${window.location.protocol}//${host}/api`;
+const baseURL = '/api';
 
 const api = axios.create({
   baseURL: baseURL,

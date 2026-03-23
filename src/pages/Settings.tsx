@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 
 const Settings: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const [config, setConfig] = useState<any>(null);
   const [license, setLicense] = useState<any>(null);
   const [licenseKey, setLicenseKey] = useState('');
   const [loading, setLoading] = useState(true);
@@ -28,10 +27,9 @@ const Settings: React.FC = () => {
         api.get('/system/config'),
         api.get('/system/license')
       ]);
-      setConfig(configRes.data);
+      setSslEnabled(configRes.data.ssl?.enabled || false);
       setServerName(configRes.data.servername || '');
       setDemoMode(configRes.data.demoMode || false);
-      setSslEnabled(configRes.data.ssl?.enabled || false);
       setLicense(licenseRes.data);
     } catch (err) {
       console.error('Failed to fetch settings', err);
@@ -66,14 +64,16 @@ const Settings: React.FC = () => {
     </div>
   );
 
-  const getLimitLabel = (limit: number) => {
-    if (limit >= 99999) return '∞';
+  const getLimitLabel = (limit: any) => {
+    if (limit === undefined || limit === null) return '0';
+    if (Number(limit) >= 99999) return '∞';
     return limit.toString();
   };
 
-  const getUsagePercent = (used: number, limit: number) => {
+  const getUsagePercent = (used: any, limit: any) => {
+    if (!limit || limit === 0) return 0;
     if (limit >= 99999) return 5; // Minimal bar for unlimited
-    return Math.min(100, (used / limit) * 100);
+    return Math.min(100, ((used || 0) / limit) * 100);
   };
 
   const sortedLanguages = getSortedLanguages();
@@ -83,9 +83,12 @@ const Settings: React.FC = () => {
     setMessage(null);
     try {
       localStorage.setItem('i18nextLng', newLang);
+      const prevT = t;
       await i18n.changeLanguage(newLang);
       await api.put('/users/profile', { language: newLang });
-      setMessage({ text: t('settings.language_updated'), type: 'success' });
+      
+      // Use i18n.t directly to ensure we use the new language context immediately
+      setMessage({ text: i18n.t('settings.language_updated'), type: 'success' });
     } catch (err: any) {
       console.error('Failed to update language', err);
       setMessage({ text: t('settings.language_update_failed'), type: 'error' });
@@ -103,7 +106,6 @@ const Settings: React.FC = () => {
         demoMode,
         ssl: { enabled: sslEnabled }
       });
-      setConfig(response.data.config);
       setMessage({ text: response.data.message, type: 'success' });
     } catch (err: any) {
       console.error('Failed to update config', err);

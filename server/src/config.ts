@@ -5,6 +5,8 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export interface Config {
+  listenAddress: string;
+  listenAddressV6: string;
   port: number;
   servername: string;
   secretKey: string;
@@ -18,6 +20,8 @@ export interface Config {
 }
 
 const DEFAULT_CONFIG: Config = {
+  listenAddress: '0.0.0.0',
+  listenAddressV6: '::',
   port: 3001,
   servername: 'localhost',
   secretKey: 'your-secret-key-change-me',

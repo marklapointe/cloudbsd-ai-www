@@ -58,7 +58,6 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 let httpServer: any;
-let httpServerV6: any;
 
 const sslCerts = ensureCertificates();
 
@@ -68,11 +67,9 @@ if (config.ssl.enabled && sslCerts) {
     key: sslCerts.key
   };
   httpServer = createHttpsServer(options, app);
-  httpServerV6 = createHttpsServer(options, app);
   console.log('SSL/TLS enabled');
 } else {
   httpServer = createHttpServer(app);
-  httpServerV6 = createHttpServer(app);
 }
 
 const io = new Server({
@@ -82,7 +79,6 @@ const io = new Server({
   }
 });
 io.attach(httpServer);
-io.attach(httpServerV6);
 
 // Terminal sessions (mock for now)
 const terminalSessions = new Map<string, string>();
@@ -387,8 +383,13 @@ app.delete('/api/users/:id', authenticateToken, isAdmin, (req, res) => {
  */
 app.get('/api/nodes', authenticateToken, (req, res) => {
   const currentDb = initDb();
-  const nodes = currentDb.prepare('SELECT * FROM nodes ORDER BY role DESC, name ASC').all();
-  res.json(nodes);
+  try {
+    const nodes = currentDb.prepare('SELECT * FROM nodes ORDER BY role DESC, name ASC').all();
+    res.json(Array.isArray(nodes) ? nodes : []);
+  } catch (error) {
+    console.error('Error fetching nodes:', error);
+    res.json([]);
+  }
 });
 
 /**
@@ -655,7 +656,7 @@ app.get('/api/:resource', authenticateToken, (req, res) => {
     LEFT JOIN nodes ON resources.node_id = nodes.id 
     WHERE type = ?
   `).all(resource);
-  res.json(items);
+  res.json(Array.isArray(items) ? items : []);
 });
 
 /**
@@ -1063,11 +1064,15 @@ app.put('/api/system/config', authenticateToken, isAdmin, (req, res) => {
  */
 app.get('/api/system/license', authenticateToken, (req, res) => {
   const currentDb = initDb();
-  const license = currentDb.prepare('SELECT * FROM license LIMIT 1').get() as any;
+  let license = currentDb.prepare('SELECT * FROM license LIMIT 1').get() as any;
   
   if (license) {
     if (license.features) {
-      license.features = JSON.parse(license.features);
+      try {
+        license.features = JSON.parse(license.features);
+      } catch (e) {
+        license.features = [];
+      }
     }
 
     // Get current usage counts
@@ -1077,14 +1082,26 @@ app.get('/api/system/license', authenticateToken, (req, res) => {
     const jailsCount = currentDb.prepare("SELECT COUNT(*) as count FROM resources WHERE type = 'jails'").get() as any;
 
     license.usage = {
-      nodes: nodesCount.count,
-      vms: vmsCount.count,
-      containers: containersCount.count,
-      jails: jailsCount.count
+      nodes: nodesCount?.count || 0,
+      vms: vmsCount?.count || 0,
+      containers: containersCount?.count || 0,
+      jails: jailsCount?.count || 0
+    };
+  } else {
+    // Return a dummy license structure if none exists
+    license = {
+      license_type: 'none',
+      status: 'inactive',
+      nodes_limit: 0,
+      vms_limit: 0,
+      containers_limit: 0,
+      jails_limit: 0,
+      usage: { nodes: 0, vms: 0, containers: 0, jails: 0 },
+      features: []
     };
   }
   
-  res.json(license || null);
+  res.json(license);
 });
 
 /**
@@ -1199,12 +1216,7 @@ setInterval(() => {
   io.emit('resource_update', { resource, timestamp: new Date() });
 }, 5000);
 
-httpServer.listen(port, '127.0.0.1', () => {
+httpServer.listen(port, '::', () => {
   const protocol = config.ssl.enabled ? 'https' : 'http';
-  console.log(`Server (IPv4) running on ${protocol}://127.0.0.1:${port}`);
-});
-
-httpServerV6.listen(port, '::1', () => {
-  const protocol = config.ssl.enabled ? 'https' : 'http';
-  console.log(`Server (IPv6) running on ${protocol}://[::1]:${port}`);
+  console.log(`Server running on ${protocol}://[::]:${port}`);
 });

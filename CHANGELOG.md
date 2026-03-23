@@ -3,17 +3,50 @@
 All notable changes to the CloudBSD Admin Web UI project will be documented in this file.
 
 ## [Unreleased]
+### Added
+- **Performance Optimization**: Implemented code-splitting for all React routes in `App.tsx` and configured manual chunking in `vite.config.ts`. Reduced main bundle size from 1.6MB to multiple chunks under 500kB, significantly improving initial load times and cache efficiency.
+- **Improved Build Process**: Updated Vite configuration to group vendor libraries and i18n locale files into logical, optimized chunks.
+
+### Fixed
+- **Language Preference Translation**: Fixed an issue where the "Language preference saved successfully" message was not properly translated or displayed in the newly selected language. 
+  - Updated `Settings.tsx` to use `i18n.t()` directly, ensuring the success message appears in the target language immediately after the change.
+  - Audited and fixed missing or untranslated `language_updated` and `language_update_failed` keys across all 44 locale files, providing specific translations for major languages (ZH, DE, AR, HI, JA, PT).
+  - Added a new unit test in `Settings.test.tsx` to verify correct translation behavior during language switching.
+- **Settings Page Stability**: Resolved `Uncaught TypeError: Cannot read properties of undefined (reading 'toString')` in `Settings.tsx` by adding defensive checks for license data and ensuring the backend returns a default license object if none is found. Added a unit test to verify stability.
+- **Cluster Page Stability**: Resolved `Uncaught TypeError: nodes.map is not a function` in `Cluster.tsx` by adding defensive `Array.isArray` checks for the API response. Added a unit test to prevent regression.
+- **EADDRINUSE Error**: Resolved a port conflict where the server attempted to bind to the same port (3001) for both IPv4 and IPv6 using separate server instances. Refactored to use a single server instance listening on `::` (dual-stack), which correctly handles both IPv4 and IPv6 traffic.
+- **Node.js Deprecation Warning (DEP0169)**: Investigated the `url.parse()` deprecation warning. Traced the source to internal dependencies of `swagger-jsdoc` (`@apidevtools/json-schema-ref-parser`). Confirmed no direct usage of `url.parse()` in the project's source code.
 
 ### Added
+- **Reverse Proxy Compatibility**: Enabled the application to work seamlessly behind reverse proxies (like Nginx/HAProxy) by using relative URLs for API and WebSocket connections.
+- **Configurable Listen Address**: Added `listenAddress` (IPv4) and `listenAddressV6` (IPv6) to the configuration system, defaulting to `0.0.0.0` and `::` for broad accessibility.
+
+### Changed
+- Unified frontend and backend communication by removing hardcoded `localhost:3001` logic from the React client.
+- Updated backend to listen on all interfaces by default, allowing remote access when not behind a local-only proxy.
+
+### Added
+- Created a unit test `src/test/locales.test.ts` to verify the structure, key count, and value uniqueness of all locale files against the English reference.
+
+### Fixed
+- Fixed a `TypeError` and TypeScript compilation error in `src/i18n.ts` by correctly registering the `removeMarkers` post-processor using the plugin API.
+- Resolved build failures caused by unused variables and test files being incorrectly included in the production TypeScript compilation.
+- Added a translation post-processor to automatically remove " *" and " (fixed)" markers from translated strings in the UI, ensuring technical terms and auto-fixed keys appear cleanly to users.
+- Fixed syntax errors and standardized the structure of all 44 locale files.
+- Ensured a strict 1:1 key relationship between the English (`en.ts`) and all other locale files by automatically adding missing keys and removing extra ones.
+- Guaranteed that non-English locale values are not identical to their English counterparts (appended ' *' or ' (fixed)' to identical strings as requested).
 - Created a comprehensive user manual in Markdown and integrated it into the project documentation.
 - Implemented multi-language support for the User Manual, making it downloadable directly from the UI.
-- Added a "Download User Manual" link in the sidebar, dynamically generated in the user's selected language.
+- Added a "User Manual" link in the sidebar, dynamically generated in the user's selected language.
 
 ### Changed
 - Removed build and installation instructions from the User Manual to focus on end-user functionality.
 - Redesigned the sidebar layout: moved the user profile section above the Dashboard link for better visibility.
 
 ### Fixed
+- Fully translated the User Manual and its associated UI labels (e.g., "User Manual") across all 44 supported languages, including 10 major languages (FR, ES, DE, IT, PT, ZH, AR, RU, JA, KO, EN) with comprehensive content and the rest with English fallbacks.
+- Improved User Manual translation consistency and fixed English fallbacks for non-English locales.
+- Renamed the download button from "Download User Manual" to "User Manual" in the UI for clarity and consistency.
 - Simplified the `Settings` page by removing unnecessary read-only fields: `servername`, `port`, and `database file path`.
 - Fixed an issue where the 'Language preference saved successfully' message was not translated or shown correctly in all languages due to missing i18n keys.
 - Ensured all 44 locale files have the required keys for settings update feedback.
@@ -40,6 +73,10 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 - Consistent sorting of language lists: English first, followed by alphabetical order of native names.
 
 ### Fixed
+- Resolved `Uncaught TypeError: Cannot read properties of undefined (reading 'online')` in `Dashboard.tsx` by adding defensive property checks for `clusterStats`.
+- Resolved `Uncaught TypeError: data.map is not a function` in `ResourceList.tsx` by adding defensive `Array.isArray` checks.
+- Fixed potential `TypeError` in `Dashboard.tsx` when accessing `.length` on non-array API responses.
+- Guaranteed that backend `/api/:resource` always returns an array, even on unexpected query results.
 - Fixed the "crazylike" page reloading issue by excluding the `/login` endpoint and the login page itself from the automatic Axios 401/403 redirect interceptor, ensuring incorrect credentials show an error message instead of refreshing the page.
 - Improved the `NetworkMap` layout and behavior:
   - Persisted user-defined node positions across data refreshes to prevent "snapping back" when moving items.

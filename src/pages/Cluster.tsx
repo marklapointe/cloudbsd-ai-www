@@ -43,7 +43,21 @@ const Cluster: React.FC = () => {
     try {
       setLoading(true);
       const response = await api.get('/nodes');
-      setNodes(response.data);
+      const isJson = response.headers?.['content-type']?.includes('application/json') || 
+                   (!response.headers?.['content-type'] && typeof response.data === 'object');
+      
+      if (isJson) {
+        if (Array.isArray(response.data)) {
+          setNodes(response.data);
+        } else {
+          console.error('Invalid nodes data received:', response.data);
+          setNodes([]);
+        }
+      } else {
+        console.error('Unexpected response content type:', response.headers?.['content-type']);
+        setError(t('cluster.fetch_failed'));
+        setNodes([]);
+      }
     } catch (err: any) {
       setError(err.response?.data?.message || t('cluster.fetch_failed'));
     } finally {

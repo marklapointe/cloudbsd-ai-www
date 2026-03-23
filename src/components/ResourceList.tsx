@@ -53,9 +53,15 @@ const ResourceList: React.FC<ResourceListProps> = ({
   const fetchData = async () => {
     try {
       const response = await api.get(endpoint);
-      setData(response.data);
+      if (Array.isArray(response.data)) {
+        setData(response.data);
+      } else {
+        console.error(`Unexpected data format for ${resourceName}:`, response.data);
+        setData([]);
+      }
     } catch (err) {
       console.error(`Failed to fetch ${resourceName}`, err);
+      setData([]);
       alert(t('resource_list.fetch_failed', { resource: resourceName }));
     } finally {
       setLoading(false);
@@ -161,7 +167,7 @@ const ResourceList: React.FC<ResourceListProps> = ({
                     </div>
                   </td>
                 </tr>
-              ) : data.length === 0 ? (
+              ) : !Array.isArray(data) || data.length === 0 ? (
                 <tr>
                   <td colSpan={columns.length + 2} className="px-8 py-20 text-center">
                     <div className="flex flex-col items-center gap-2 text-slate-300">
@@ -170,7 +176,7 @@ const ResourceList: React.FC<ResourceListProps> = ({
                     </div>
                   </td>
                 </tr>
-              ) : data.map((item) => (
+              ) : Array.isArray(data) && data.map((item) => (
                 <tr key={item.id} className="group hover:bg-slate-50/50 transition-all duration-200">
                   <td className="px-8 py-5">
                     <div className="flex items-center gap-4">

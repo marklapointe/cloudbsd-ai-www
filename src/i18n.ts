@@ -50,12 +50,23 @@ import atl from './locales/atl';
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
+  .use({
+    type: 'postProcessor',
+    name: 'removeMarkers',
+    process: function (value: string) {
+      if (typeof value === 'string') {
+        return value.replace(/ \*$/, '').replace(/ \(fixed\)$/, '');
+      }
+      return value;
+    },
+  })
   .init({
     fallbackLng: 'en',
     debug: false,
     interpolation: {
       escapeValue: false,
     },
+    postProcess: ['removeMarkers'],
     resources: {
       en,
       fr,

@@ -202,7 +202,7 @@ ${t('manual.settings_text')}
               className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand-500/10 hover:bg-brand-500/20 text-brand-400 rounded-xl transition-all duration-200 text-sm font-semibold mb-4 border border-brand-500/20 hover:border-brand-500/40 group"
             >
               <FileText size={18} className="group-hover:scale-110 transition-transform" />
-              <span>{t('manual.download_manual')}</span>
+              <span>{t('manual.user_manual')}</span>
             </button>
 
             <button 

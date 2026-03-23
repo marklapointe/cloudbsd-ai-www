@@ -129,4 +129,75 @@ describe('Settings Component', () => {
       expect(screen.getByText('العربية')).toBeDefined();
     });
   });
+
+  it('handles null license response from API without crashing', async () => {
+    // Mock API to return null for license
+    vi.mocked(api.get).mockImplementation((url) => {
+      if (url === '/system/config') return Promise.resolve({ data: mockConfig });
+      if (url === '/system/license') return Promise.resolve({ data: null });
+      return Promise.reject(new Error('Unknown URL'));
+    });
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <BrowserRouter>
+          <Settings />
+        </BrowserRouter>
+      </I18nextProvider>
+    );
+
+    // Should not crash and should show the license section
+    await waitFor(() => {
+      expect(screen.getByText(i18n.t('settings.license_status'))).toBeInTheDocument();
+    });
+    
+    // Check that it shows "0" for limits and "None" for type
+    expect(screen.getAllByText(i18n.t('settings.none')).length).toBeGreaterThan(0);
+    const limitElements = screen.getAllByText('0');
+    expect(limitElements.length).toBeGreaterThan(0);
+  });
+
+  it('displays the language updated message in the new language', async () => {
+    vi.mocked(api.put).mockResolvedValue({ data: { message: 'Success' } });
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <BrowserRouter>
+          <Settings />
+        </BrowserRouter>
+      </I18nextProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByLabelText(i18n.t('common.language'))).toBeDefined();
+    });
+
+    const select = screen.getByLabelText(i18n.t('common.language'));
+    
+    // Switch to Spanish (which has a translation)
+    fireEvent.change(select, { target: { value: 'es' } });
+
+    await waitFor(() => {
+      // Should show the Spanish translation for "Language preference saved successfully"
+      // Which is "Preferencia de idioma guardada con éxito" in es.ts
+      const message = screen.getByText('Preferencia de idioma guardada con éxito');
+      expect(message).toBeDefined();
+      expect(message.textContent).not.toBe('settings.language_updated');
+    });
+
+    // Switch to another language that previously had a placeholder (e.g., Italian 'it')
+    fireEvent.change(select, { target: { value: 'it' } });
+
+    await waitFor(() => {
+      // Once fixed, this should be the Italian translation, not the key
+      const itMessage = screen.queryByText('settings.language_updated');
+      expect(itMessage).toBeNull();
+      
+      // We'll check for the Italian translation once we've added it
+      expect(screen.getByText('Preferenza della lingua salvata con successo')).toBeDefined();
+    });
+    
+    // Reset to English for other tests
+    await i18n.changeLanguage('en');
+  });
 });

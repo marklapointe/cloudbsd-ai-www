@@ -59,7 +59,7 @@ const Dashboard: React.FC = () => {
       language: navigator.language
     });
 
-    const fetchDashboardData = async () => {
+        const fetchDashboardData = async () => {
       try {
         const [vms, containers, jails, statsRes, infoRes, hostRes, clusterRes] = await Promise.all([
           api.get('/vms'),
@@ -70,15 +70,21 @@ const Dashboard: React.FC = () => {
           api.get('/system/host'),
           api.get('/cluster/stats')
         ]);
+        
+        const isJson = (res: any) => 
+          res.headers?.['content-type']?.includes('application/json') || 
+          (!res.headers?.['content-type'] && typeof res.data === 'object');
+
         setStats({
-          vms: vms.data.length,
-          containers: containers.data.length,
-          jails: jails.data.length
+          vms: (isJson(vms) && Array.isArray(vms.data)) ? vms.data.length : 0,
+          containers: (isJson(containers) && Array.isArray(containers.data)) ? containers.data.length : 0,
+          jails: (isJson(jails) && Array.isArray(jails.data)) ? jails.data.length : 0
         });
-        setSystemHealth(statsRes.data);
-        setSystemInfo(infoRes.data);
-        setHostDetail(hostRes.data);
-        setClusterStats(clusterRes.data);
+
+        if (isJson(statsRes) && statsRes.data) setSystemHealth(statsRes.data);
+        if (isJson(infoRes) && infoRes.data) setSystemInfo(infoRes.data);
+        if (isJson(hostRes) && hostRes.data) setHostDetail(hostRes.data);
+        if (isJson(clusterRes) && clusterRes.data) setClusterStats(clusterRes.data);
       } catch (err) {
         console.error('Failed to fetch dashboard data', err);
       }
@@ -133,7 +139,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Cluster Resources section */}
-      {clusterStats && (
+      {clusterStats && clusterStats.nodes && clusterStats.cpu && clusterStats.memory && clusterStats.disk && (
         <div className="space-y-6">
           <div className="flex items-center gap-3">
             <Server className="text-brand-600" size={24} />
@@ -141,32 +147,32 @@ const Dashboard: React.FC = () => {
             <div className="ml-auto flex items-center gap-2 px-3 py-1 bg-brand-50 rounded-full border border-brand-100">
               <Activity size={14} className="text-brand-600" />
               <span className="text-[10px] font-black text-brand-600 uppercase tracking-widest">
-                {clusterStats.nodes.online} / {clusterStats.nodes.total} {t('dashboard.nodes_online')}
+                {`${clusterStats.nodes?.online ?? 0} / ${clusterStats.nodes?.total ?? 0} ${t('dashboard.nodes_online')}`}
               </span>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <ClusterResourceCard 
               title={t('common.cpu')} 
-              used={`${clusterStats.cpu.used} ${t('common.vcpu')}`} 
-              total={`${clusterStats.cpu.total} ${t('common.vcpu')}`} 
-              percentage={clusterStats.cpu.percentage} 
+              used={`${clusterStats.cpu?.used ?? 0} ${t('common.vcpu')}`} 
+              total={`${clusterStats.cpu?.total ?? 0} ${t('common.vcpu')}`} 
+              percentage={clusterStats.cpu?.percentage ?? 0} 
               icon={Cpu} 
               color="blue" 
             />
             <ClusterResourceCard 
               title={t('common.memory')} 
-              used={`${clusterStats.memory.used}`.replace('GB', t('common.gb')).replace('TB', t('common.tb'))} 
-              total={`${clusterStats.memory.total}`.replace('GB', t('common.gb')).replace('TB', t('common.tb'))} 
-              percentage={clusterStats.memory.percentage} 
+              used={`${clusterStats.memory?.used ?? '0GB'}`.replace('GB', t('common.gb')).replace('TB', t('common.tb'))} 
+              total={`${clusterStats.memory?.total ?? '0GB'}`.replace('GB', t('common.gb')).replace('TB', t('common.tb'))} 
+              percentage={clusterStats.memory?.percentage ?? 0} 
               icon={Activity} 
               color="purple" 
             />
             <ClusterResourceCard 
               title={t('common.storage')} 
-              used={`${clusterStats.disk.used}`.replace('GB', t('common.gb')).replace('TB', t('common.tb'))} 
-              total={`${clusterStats.disk.total}`.replace('GB', t('common.gb')).replace('TB', t('common.tb'))} 
-              percentage={clusterStats.disk.percentage} 
+              used={`${clusterStats.disk?.used ?? '0GB'}`.replace('GB', t('common.gb')).replace('TB', t('common.tb'))} 
+              total={`${clusterStats.disk?.total ?? '0GB'}`.replace('GB', t('common.gb')).replace('TB', t('common.tb'))} 
+              percentage={clusterStats.disk?.percentage ?? 0} 
               icon={HardDrive} 
               color="emerald" 
             />
