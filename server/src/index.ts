@@ -21,6 +21,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+app.set('trust proxy', 1); // Trust first proxy (Nginx)
 
 const swaggerOptions = {
   definition: {
@@ -131,9 +132,21 @@ io.on('connection', (socket) => {
   });
 });
 const port = config.port;
-const SECRET_KEY = config.secretKey;
+const SECRET_KEY = config.secretKey || 'your-secret-key-change-me';
+if (SECRET_KEY === 'your-secret-key-change-me') {
+  console.warn('[Critical] Backend is using the default secret key. This is insecure and can cause issues if not stable.');
+}
 
-app.use(cors());
+app.use(cors({
+  origin: (origin, callback) => {
+    // In dev mode, allow all origins
+    // In prod, you'd want to be more specific, but for now, we'll allow all for proxy support
+    callback(null, true);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
+}));
 app.use(express.json());
 
 // Serve static files from the React app dist directory
@@ -147,10 +160,18 @@ const authenticateToken = (req: any, res: any, next: any) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
-  if (!token) return res.sendStatus(401);
+  if (!token) {
+    console.warn(`[Auth] No token provided for ${req.method} ${req.url} from ${req.ip}`);
+    return res.sendStatus(401);
+  }
 
   jwt.verify(token, SECRET_KEY, (err: any, user: any) => {
-    if (err) return res.sendStatus(403);
+    if (err) {
+      console.error(`[Auth] JWT verification failed for ${req.method} ${req.url} from ${req.ip}:`, err.message);
+      // Log some info about the key (first 4 chars) to see if it changes
+      console.debug(`[Auth] Secret Key check (first 4): ${SECRET_KEY.substring(0, 4)}`);
+      return res.sendStatus(403);
+    }
     req.user = user;
     next();
   });
@@ -160,6 +181,7 @@ const isAdmin = (req: any, res: any, next: any) => {
   if (req.user && req.user.role === 'admin') {
     next();
   } else {
+    console.warn(`[Auth] Admin access denied for user ${req.user?.username} (${req.user?.role}) on ${req.method} ${req.url}`);
     res.status(403).json({ message: 'Admin access required' });
   }
 };
@@ -168,6 +190,7 @@ const isOperator = (req: any, res: any, next: any) => {
   if (req.user && (req.user.role === 'admin' || req.user.role === 'operator')) {
     next();
   } else {
+    console.warn(`[Auth] Operator access denied for user ${req.user?.username} (${req.user?.role}) on ${req.method} ${req.url}`);
     res.status(403).json({ message: 'Operator access required' });
   }
 };
