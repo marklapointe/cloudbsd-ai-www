@@ -96,15 +96,17 @@ const Settings: React.FC = () => {
     }
   };
 
-  const handleSaveConfig = async () => {
+  const handleSaveConfig = async (configOverride?: any) => {
     setSavingConfig(true);
     setMessage(null);
     try {
-      const response = await api.put('/system/config', {
+      const config = {
         servername: serverName,
         demoMode,
-        ssl: { enabled: sslEnabled }
-      });
+        ssl: { enabled: sslEnabled },
+        ...configOverride
+      };
+      const response = await api.put('/system/config', config);
       setMessage({ text: response.data.message, type: 'success' });
     } catch (err: any) {
       console.error('Failed to update config', err);
@@ -149,22 +151,6 @@ const Settings: React.FC = () => {
               <div className="space-y-4">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="p-1.5 bg-brand-100 text-brand-600 rounded-lg">
-                    <Server size={16} />
-                  </div>
-                  <h3 className="text-sm font-bold text-slate-900">{t('settings.servername')}</h3>
-                </div>
-                <input
-                  type="text"
-                  value={serverName}
-                  onChange={(e) => setServerName(e.target.value)}
-                  className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 font-bold outline-none focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white transition-all duration-200"
-                  placeholder={t('settings.servername_placeholder')}
-                />
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="p-1.5 bg-brand-100 text-brand-600 rounded-lg">
                     <Languages size={16} />
                   </div>
                   <h3 className="text-sm font-bold text-slate-900">{t('settings.language_select')}</h3>
@@ -192,7 +178,11 @@ const Settings: React.FC = () => {
 
               <div 
                 className="flex items-center gap-5 p-6 bg-blue-50 rounded-2xl border border-blue-100/50 transition-colors hover:bg-blue-50/80 cursor-pointer"
-                onClick={() => setDemoMode(!demoMode)}
+                onClick={() => {
+                  const newValue = !demoMode;
+                  setDemoMode(newValue);
+                  handleSaveConfig({ demoMode: newValue });
+                }}
               >
                 <div className="flex-1">
                   <p className="text-sm font-black text-blue-900 uppercase tracking-wider">{t('settings.demo_mode')}</p>
@@ -205,7 +195,11 @@ const Settings: React.FC = () => {
 
               <div 
                 className="flex items-center gap-5 p-6 bg-emerald-50 rounded-2xl border border-emerald-100/50 transition-colors hover:bg-emerald-50/80 cursor-pointer"
-                onClick={() => setSslEnabled(!sslEnabled)}
+                onClick={() => {
+                  const newValue = !sslEnabled;
+                  setSslEnabled(newValue);
+                  handleSaveConfig({ ssl: { enabled: newValue } });
+                }}
               >
                 <div className="flex-1">
                   <p className="text-sm font-black text-emerald-900 uppercase tracking-wider">{t('settings.ssl_security')}</p>
@@ -215,23 +209,6 @@ const Settings: React.FC = () => {
                   <div className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-all duration-300 shadow-md ${sslEnabled ? 'left-8' : 'left-1'}`}></div>
                 </div>
               </div>
-            </div>
-
-            <div className="px-8 py-6 border-t border-slate-50 bg-slate-50/50 flex justify-end">
-              <button 
-                onClick={handleSaveConfig}
-                disabled={savingConfig}
-                className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white font-black uppercase text-xs tracking-widest rounded-2xl hover:bg-brand-600 transition-all duration-300 active:scale-95 shadow-lg shadow-slate-900/10 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {savingConfig ? (
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                ) : (
-                  <>
-                    <Save size={18} />
-                    <span>{t('common.save')}</span>
-                  </>
-                )}
-              </button>
             </div>
           </div>
 

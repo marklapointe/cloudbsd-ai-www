@@ -72,7 +72,7 @@ This document is intended to be as descriptive as possible so that any LLM can u
     - Implemented SSL/TLS support for the Express server.
     - Automatic self-signed certificate generation if keys are missing.
     - Support for Certbot/Let's Encrypt certificates.
-    - Dynamic servername and port configuration.
+    - Dynamic servername (backend-only) and port configuration.
     - **Unified Backend & Listen Configuration**:
         - Modified the frontend to use relative paths for API (`/api`) and WebSockets, ensuring seamless operation behind reverse proxies.
         - Updated the backend to use a single server instance listening on `::` (dual-stack) by default, resolving `EADDRINUSE` conflicts when binding separately to IPv4 and IPv6 on the same port.
@@ -242,8 +242,9 @@ The application follows a **Desktop-First** layout but is fully responsive for m
     - **Language Selection**: Shared dropdown component (also used on Login page).
         - Names: All languages presented in their **native names**.
         - Sorting: **English** first, then alphabetical by native name.
-    - **Demonstration Mode**: Toggle/Status for read-only simulation mode.
-    - **SSL/TLS Security**: Status indicator for secure communications.
+    - **Demonstration Mode**: Toggle/Status for read-only simulation mode. Changes are auto-saved.
+    - **SSL/TLS Security**: Status indicator for secure communications. Changes are auto-saved.
+    - **Note**: Server name is managed via backend configuration (`etc/config.json`) and is not editable in the UI.
 - **License Management Section**:
     - **Status Card**: Displays registered user, expiration date, support tier, and included features.
     - **Registration Form**: Input field for license key and "Register" button.

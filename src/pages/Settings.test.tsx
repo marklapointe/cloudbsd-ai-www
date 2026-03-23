@@ -201,7 +201,7 @@ describe('Settings Component', () => {
     await i18n.changeLanguage('en');
   });
 
-  it('handles successful config update', async () => {
+  it('handles auto-saving of config toggles', async () => {
     vi.mocked(api.put).mockResolvedValue({ 
       data: { message: 'Configuration updated successfully' } 
     });
@@ -215,27 +215,35 @@ describe('Settings Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByDisplayValue('Test Server')).toBeInTheDocument();
+      expect(screen.getByText(i18n.t('settings.demo_mode'))).toBeInTheDocument();
     });
 
-    const serverNameInput = screen.getByDisplayValue('Test Server');
-    const saveButton = screen.getByText(i18n.t('common.save'));
-
-    fireEvent.change(serverNameInput, { target: { value: 'New Server Name' } });
-    fireEvent.click(saveButton);
+    // Click Demo Mode toggle
+    const demoModeToggle = screen.getByText(i18n.t('settings.demo_mode')).closest('div.flex');
+    fireEvent.click(demoModeToggle!);
 
     await waitFor(() => {
       expect(api.put).toHaveBeenCalledWith('/system/config', expect.objectContaining({
-        servername: 'New Server Name'
+        demoMode: false // It was true in mockConfig, so clicking it should set it to false
       }));
       expect(screen.getByText('Configuration updated successfully')).toBeInTheDocument();
     });
+
+    // Click SSL Security toggle
+    const sslToggle = screen.getByText(i18n.t('settings.ssl_security')).closest('div.flex');
+    fireEvent.click(sslToggle!);
+
+    await waitFor(() => {
+      expect(api.put).toHaveBeenCalledWith('/system/config', expect.objectContaining({
+        ssl: { enabled: false } // It was true in mockConfig, so clicking it should set it to false
+      }));
+    });
   });
 
-  it('handles config update failure', async () => {
+  it('handles auto-save config update failure', async () => {
     vi.mocked(api.put).mockRejectedValue({
       response: {
-        data: { message: 'Invalid server name' }
+        data: { message: 'Failed to update' }
       }
     });
 
@@ -248,14 +256,14 @@ describe('Settings Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByDisplayValue('Test Server')).toBeInTheDocument();
+      expect(screen.getByText(i18n.t('settings.demo_mode'))).toBeInTheDocument();
     });
 
-    const saveButton = screen.getByText(i18n.t('common.save'));
-    fireEvent.click(saveButton);
+    const demoModeToggle = screen.getByText(i18n.t('settings.demo_mode')).closest('div.flex');
+    fireEvent.click(demoModeToggle!);
 
     await waitFor(() => {
-      expect(screen.getByText('Invalid server name')).toBeInTheDocument();
+      expect(screen.getByText('Failed to update')).toBeInTheDocument();
     });
   });
 });
