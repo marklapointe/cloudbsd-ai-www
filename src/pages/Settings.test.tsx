@@ -200,4 +200,62 @@ describe('Settings Component', () => {
     // Reset to English for other tests
     await i18n.changeLanguage('en');
   });
+
+  it('handles successful config update', async () => {
+    vi.mocked(api.put).mockResolvedValue({ 
+      data: { message: 'Configuration updated successfully' } 
+    });
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <BrowserRouter>
+          <Settings />
+        </BrowserRouter>
+      </I18nextProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Test Server')).toBeInTheDocument();
+    });
+
+    const serverNameInput = screen.getByDisplayValue('Test Server');
+    const saveButton = screen.getByText(i18n.t('common.save'));
+
+    fireEvent.change(serverNameInput, { target: { value: 'New Server Name' } });
+    fireEvent.click(saveButton);
+
+    await waitFor(() => {
+      expect(api.put).toHaveBeenCalledWith('/system/config', expect.objectContaining({
+        servername: 'New Server Name'
+      }));
+      expect(screen.getByText('Configuration updated successfully')).toBeInTheDocument();
+    });
+  });
+
+  it('handles config update failure', async () => {
+    vi.mocked(api.put).mockRejectedValue({
+      response: {
+        data: { message: 'Invalid server name' }
+      }
+    });
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <BrowserRouter>
+          <Settings />
+        </BrowserRouter>
+      </I18nextProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Test Server')).toBeInTheDocument();
+    });
+
+    const saveButton = screen.getByText(i18n.t('common.save'));
+    fireEvent.click(saveButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('Invalid server name')).toBeInTheDocument();
+    });
+  });
 });

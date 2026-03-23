@@ -149,6 +149,22 @@ const Settings: React.FC = () => {
               <div className="space-y-4">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="p-1.5 bg-brand-100 text-brand-600 rounded-lg">
+                    <Server size={16} />
+                  </div>
+                  <h3 className="text-sm font-bold text-slate-900">{t('settings.servername')}</h3>
+                </div>
+                <input
+                  type="text"
+                  value={serverName}
+                  onChange={(e) => setServerName(e.target.value)}
+                  className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 font-bold outline-none focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white transition-all duration-200"
+                  placeholder={t('settings.servername_placeholder')}
+                />
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="p-1.5 bg-brand-100 text-brand-600 rounded-lg">
                     <Languages size={16} />
                   </div>
                   <h3 className="text-sm font-bold text-slate-900">{t('settings.language_select')}</h3>

@@ -1022,11 +1022,33 @@ app.get('/api/system/config', authenticateToken, isAdmin, (req, res) => {
 app.put('/api/system/config', authenticateToken, isAdmin, (req, res) => {
   const { servername, demoMode, ssl } = req.body;
   
+  if (servername === undefined && demoMode === undefined && ssl === undefined) {
+    return res.status(400).json({ message: 'At least one field (servername, demoMode, ssl) must be provided' });
+  }
+
   try {
     const update: any = {};
-    if (servername !== undefined) update.servername = servername;
-    if (demoMode !== undefined) update.demoMode = demoMode;
-    if (ssl !== undefined && ssl.enabled !== undefined) {
+    if (servername !== undefined) {
+      if (typeof servername !== 'string' || servername.trim() === '') {
+        return res.status(400).json({ message: 'Server name must be a non-empty string' });
+      }
+      update.servername = servername;
+    }
+    
+    if (demoMode !== undefined) {
+      if (typeof demoMode !== 'boolean') {
+        return res.status(400).json({ message: 'Demo mode must be a boolean' });
+      }
+      update.demoMode = demoMode;
+    }
+    
+    if (ssl !== undefined) {
+      if (typeof ssl !== 'object' || ssl === null || ssl.enabled === undefined) {
+        return res.status(400).json({ message: 'SSL configuration must be an object with an enabled field' });
+      }
+      if (typeof ssl.enabled !== 'boolean') {
+        return res.status(400).json({ message: 'SSL enabled must be a boolean' });
+      }
       update.ssl = { ...config.ssl, enabled: ssl.enabled };
     }
     
@@ -1048,6 +1070,7 @@ app.put('/api/system/config', authenticateToken, isAdmin, (req, res) => {
       }
     });
   } catch (err) {
+    console.error('Failed to update config:', err);
     res.status(500).json({ message: 'Failed to save configuration' });
   }
 });
