@@ -15,8 +15,34 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Check if we should pause on success for debugging
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('debug')) {
+      console.log('API Success captured:', {
+        url: response.config?.url,
+        method: response.config?.method,
+        status: response.status,
+        data: response.data
+      });
+    }
+    return response;
+  },
   (error) => {
+    // Check if we should pause on errors for debugging (if the query param is present)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('debug')) {
+      console.error('API Error captured:', {
+        url: error.config?.url,
+        method: error.config?.method,
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message,
+        error
+      });
+      alert(`API Error: ${error.message}\nCheck the console for details. (Close this alert to continue)`);
+    }
+
     // If we're on the login page or making a login request, don't auto-redirect
     const isLoginRequest = error.config && error.config.url && error.config.url.endsWith('/login');
     const isLoginPage = window.location.pathname === '/login';

@@ -31,6 +31,12 @@ const Login: React.FC = () => {
       localStorage.setItem('username', response.data.user.username);
       localStorage.setItem('role', response.data.user.role);
       
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('debug')) {
+        console.log('Login Success Data:', response.data);
+        alert('Login success. (Close this alert to redirect to dashboard)');
+      }
+
       // Update language if the user has a preference and save it to localStorage for the detector
       if (response.data.user.language) {
         localStorage.setItem('i18nextLng', response.data.user.language);
