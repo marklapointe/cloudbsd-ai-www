@@ -7,7 +7,21 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  let token = localStorage.getItem('token');
+  
+  // Validate token structure (JWT should have 3 parts separated by dots)
+  if (token && (token.split('.').length !== 3 || token.length < 50)) {
+    console.error(`[Auth] Malformed token detected in localStorage (length: ${token.length}). Clearing it.`);
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    localStorage.removeItem('role');
+    token = null;
+    
+    // If we're not already on the login or index page, force a reload to trigger redirect
+    if (window.location.pathname !== '/login' && window.location.pathname !== '/') {
+      window.location.href = '/login?error=session_corrupted';
+    }
+  }
   
   // Debug logging for token
   const urlParams = new URLSearchParams(window.location.search);
@@ -54,7 +68,10 @@ api.interceptors.response.use(
         message: error.message,
         error
       });
-      alert(`API Error: ${error.message}\nCheck the console for details. (Close this alert to continue)`);
+      // Only alert on non-auth errors to avoid infinite loops if the redirect fails
+      if (error.response?.status !== 401 && error.response?.status !== 403) {
+        alert(`API Error: ${error.message}\nCheck the console for details. (Close this alert to continue)`);
+      }
     }
 
     // If we're on the login page or making a login request, don't auto-redirect
