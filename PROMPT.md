@@ -76,6 +76,7 @@ This document is intended to be as descriptive as possible so that any LLM can u
     - **Unified Backend & Listen Configuration**:
         - Modified the frontend to use relative paths for API (`/api`) and WebSockets, ensuring seamless operation behind reverse proxies.
         - Updated the backend to use a single server instance listening on `::` (dual-stack) by default, resolving `EADDRINUSE` conflicts when binding separately to IPv4 and IPv6 on the same port.
+        - Configured Vite's development server to allow all hostnames via `server.allowedHosts: 'all'`, enabling access from custom domains like `demo.cloudbsd.org` without security blocks.
         - Investigated and documented Node.js 24 deprecation warning (DEP0169) caused by `swagger-jsdoc` dependencies.
         - Removed hardcoded `localhost:3001` logic from the frontend, allowing it to adapt to any host/port it is served from.
     - Frontend dynamically adapts to HTTP/HTTPS and WS/WSS based on the environment.

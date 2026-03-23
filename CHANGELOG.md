@@ -8,6 +8,7 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 - **Auto-save Configuration**: Implemented automatic saving for "Demonstration Mode" and "SSL/TLS Security" toggles. Changes are now persisted to the backend immediately upon user interaction, improving the user experience.
 
 ### Added
+- **Vite Host Access**: Configured `server.allowedHosts: 'all'` in `vite.config.ts` to allow access from custom domains (e.g., `demo.cloudbsd.org`) during development, resolving "Blocked request" errors.
 - **Performance Optimization**: Implemented code-splitting for all React routes in `App.tsx` and configured manual chunking in `vite.config.ts`. Reduced main bundle size from 1.6MB to multiple chunks under 500kB, significantly improving initial load times and cache efficiency.
 - **Improved Build Process**: Updated Vite configuration to group vendor libraries and i18n locale files into logical, optimized chunks.
 
