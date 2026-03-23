@@ -76,7 +76,9 @@ const zh = {
       "main_menu": "主菜单",
       "logo_text": "CloudBSD *",
       "toggle_menu": "切换菜单",
-      "backend_offline": "后端已离线。部分功能可能无法使用。正在重试..."
+      "backend_offline": "后端已离线。部分功能可能无法使用。正在重试...",
+      "connecting": "正在连接...",
+      "verifying_connection": "正在验证与基础设施的连接..."
     },
     "dashboard": {
       "title": "基础设施概览",

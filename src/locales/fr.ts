@@ -76,7 +76,9 @@ const fr = {
       "main_menu": "Menu principal",
       "logo_text": "CloudBSD *",
       "toggle_menu": "Basculer le menu",
-      "backend_offline": "Le backend est hors ligne. Certaines fonctionnalités peuvent être indisponibles. Reconnexion..."
+      "backend_offline": "Le backend est hors ligne. Certaines fonctionnalités peuvent être indisponibles. Reconnexion...",
+      "connecting": "Connexion...",
+      "verifying_connection": "Vérification de la connexion à l'infrastructure..."
     },
     "dashboard": {
       "title": "Aperçu de l'infrastructure",

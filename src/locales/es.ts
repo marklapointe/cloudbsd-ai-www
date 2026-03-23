@@ -76,7 +76,9 @@ const es = {
       "main_menu": "Menú Principal",
       "logo_text": "CloudBSD *",
       "toggle_menu": "Alternar Menú",
-      "backend_offline": "El backend está fuera de línea. Algunas funciones pueden no estar disponibles. Reintentando..."
+      "backend_offline": "El backend está fuera de línea. Algunas funciones pueden no estar disponibles. Reintentando...",
+      "connecting": "Conectando...",
+      "verifying_connection": "Verificando la conexión con la infraestructura..."
     },
     "settings": {
       "config_updated": "Configuración actualizada con éxito",
