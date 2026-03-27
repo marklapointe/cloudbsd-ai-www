@@ -89,10 +89,9 @@ api.interceptors.response.use(
     const isLoginPage = window.location.pathname === '/login';
 
     if (error.response && (error.response.status === 401 || error.response.status === 403) && !isLoginRequest && !isLoginPage) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('username');
-      localStorage.removeItem('role');
-      window.location.href = '/login';
+      console.warn(`[Auth] ${error.response.status} Error on ${error.config?.url}. Clearing storage and redirecting to login.`);
+      localStorage.clear();
+      window.location.href = '/login?error=session_expired';
     }
     return Promise.reject(error);
   }

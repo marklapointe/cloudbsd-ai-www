@@ -14,6 +14,14 @@ const Login: React.FC = () => {
   const sortedLanguages = getSortedLanguages();
 
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const errorCode = urlParams.get('error');
+    if (errorCode === 'session_corrupted') {
+      setError('Your session data was corrupted. Please log in again.');
+    } else if (errorCode === 'session_expired') {
+      setError('Your session has expired or is invalid. Please log in again.');
+    }
+    
     const isAuthenticated = !!localStorage.getItem('token');
     if (isAuthenticated) {
       navigate('/dashboard');
