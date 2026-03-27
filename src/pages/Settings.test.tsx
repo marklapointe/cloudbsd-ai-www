@@ -112,7 +112,8 @@ describe('Settings Component', () => {
     );
 
     await waitFor(() => {
-      const options = screen.getAllByRole('option');
+      const langSelect = screen.getByLabelText(i18n.t('common.language')) as HTMLSelectElement;
+      const options = Array.from(langSelect.options);
       expect(options[0].textContent).toBe('English');
       expect(options[0].getAttribute('value')).toBe('en');
 

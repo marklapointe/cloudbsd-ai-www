@@ -202,7 +202,7 @@ const en = {
       feature_high_availability: 'High Availability',
       feature_advanced_backup: 'Advanced Backup',
       feature_dedicated_support: 'Dedicated Support',
-title: "Settings",
+      title: "Settings",
       subtitle: "System configuration and preferences",
       language: "Language",
       language_select: "Select Language",
@@ -421,5 +421,4 @@ title: "Settings",
     }
   }
 };
-
 export default en;

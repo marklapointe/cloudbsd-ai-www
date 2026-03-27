@@ -4,6 +4,17 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 
 ## [Unreleased]
 ### Added
+- **Automated Locale Formatting**: Implemented an automated formatting script to standardize 2-space indentation and remove redundant blank lines across all 44 locale files.
+- **Fixed Formatting Regression**: Corrected misalignment and extra blank lines (the "massive ugly gap") in the Dothraki (`doth.ts`) locale and other files.
+- **Standardized Locale Formatting**: Improved internationalization quality by standardizing the formatting of all 43 non-English locale files.
+- **Consistent Translation Markers**: Ensured all translated strings end with a space followed by an asterisk (" *") for consistent visual identification.
+- **Uniform Locale Syntax**: Standardized locale file syntax by consistently quoting all keys and ensuring uniform indentation across all languages.
+- **Enhanced Locale Validation**: Verified that these changes comply with strict project-wide uniqueness and syntax requirements through automated tests and production builds.
+- **Referrer Policy Configuration**: Added `referrerPolicy` configuration to address 'strict-origin-when-cross-origin' errors.
+- **Header Implementation**: Implemented the `Referrer-Policy` header in the backend with configurable options, defaulting to `no-referrer-when-downgrade` for compatibility.
+- **Settings UI Enhancement**: Added a new configuration option in the Settings page to manage the Referrer Policy.
+- **Multi-language Support**: Synchronized and localized the new Referrer Policy strings across all 43 supported languages.
+- **Referrer Policy Unit Tests**: Added `tests/backend/referrer_policy.test.ts` to verify header logic.
 - **Centralized Testing Directory**: Reorganized all tests into a root-level `tests/` directory with `frontend/` and `backend/` subdirectories.
 - **Improved Test Configuration**: Updated `vite.config.ts` and `server/tsconfig.json` to support the new test structure, ensuring both frontend and backend tests are correctly included in the build and test pipelines.
 - **Configuration Defaults Verification**: Improved configuration loading to strictly default `corsEnabled` to `false` if missing or invalid.
@@ -11,10 +22,14 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 - **Project-Wide Cleanup**: Performed a comprehensive audit for unused imports, variables, and parameters across the entire codebase.
 
 ### Changed
+- **Locale Restoration**: Restored trailing asterisks (`*`) to all non-English locale strings as required for project-specific identification.
+- **Removed Subtle Placeholders**: Removed the ` ~` placeholders that were previously used to satisfy uniqueness requirements, as the `*` suffix now serves this purpose.
+- **Locale Cleanup**: Cleaned up all 44 locale files by removing remaining `[TODO]` markers.
 - **Moved Frontend Tests**: Relocated `src/test/` content to `tests/frontend/`.
 - **Moved Backend Tests**: Relocated `server/src/test/` content to `tests/backend/`.
 
 ### Fixed
+- **Settings Page Test Regression**: Resolved a failure in `src/pages/Settings.test.tsx` where the language sorting test was incorrectly picking up options from the newly added Referrer Policy dropdown. Updated the test to specifically target the language selector.
 - **Unused Backend Code**: Removed or commented out multiple unused imports (e.g., `db`, `path`, `fileURLToPath`), variables (`distPath`, `__dirname`, `__filename`), and function parameters (`req`, `next`) in the backend Express server.
 - **Backend Test Fixes**: Resolved TypeScript compilation errors in `tests/backend/cors_logic.test.ts` where private `Socket.io` properties were being accessed. Replaced with type-safe (via `any` casting for test-only access) and cleaner logic.
 - **Frontend Test Configuration**: Fixed `esModuleInterop` issues in `tests/frontend/todo_check.test.ts` by using namespace imports (`import * as fs`) for Node.js modules.

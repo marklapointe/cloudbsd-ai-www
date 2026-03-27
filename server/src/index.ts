@@ -151,6 +151,12 @@ if (config.corsEnabled) {
   // CORS is disabled - this will restrict access to same-origin requests in modern browsers
   console.log('[Security] CORS is disabled. Only same-origin requests are permitted.');
 }
+
+// Set Referrer-Policy based on configuration
+app.use((_req, res, next) => {
+  res.setHeader('Referrer-Policy', config.referrerPolicy || 'no-referrer-when-downgrade');
+  next();
+});
 app.use(express.json());
 
 // Serve static files from the React app dist directory

@@ -18,6 +18,7 @@ const Settings: React.FC = () => {
   const [demoMode, setDemoMode] = useState(false);
   const [sslEnabled, setSslEnabled] = useState(false);
   const [corsEnabled, setCorsEnabled] = useState(false);
+  const [referrerPolicy, setReferrerPolicy] = useState('no-referrer-when-downgrade');
 
   useEffect(() => {
     fetchData();
@@ -31,6 +32,7 @@ const Settings: React.FC = () => {
       ]);
       setSslEnabled(configRes.data.ssl?.enabled || false);
       setCorsEnabled(configRes.data.corsEnabled || false);
+      setReferrerPolicy(configRes.data.referrerPolicy || 'no-referrer-when-downgrade');
       setServerName(configRes.data.servername || '');
       setDemoMode(configRes.data.demoMode || false);
       setLicense(licenseRes.data);
@@ -108,6 +110,7 @@ const Settings: React.FC = () => {
         demoMode,
         ssl: { enabled: sslEnabled },
         corsEnabled,
+        referrerPolicy,
         ...configOverride
       };
       const response = await api.put('/system/config', config);
@@ -228,6 +231,33 @@ const Settings: React.FC = () => {
                 </div>
                 <div className={`w-14 h-7 rounded-full transition-all duration-300 relative shadow-inner ${corsEnabled ? 'bg-amber-600 shadow-amber-900/20' : 'bg-slate-300'}`}>
                   <div className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-all duration-300 shadow-md ${corsEnabled ? 'left-8' : 'left-1'}`}></div>
+                </div>
+              </div>
+
+              <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100/50">
+                <div className="flex flex-col gap-3">
+                  <div className="flex-1">
+                    <p className="text-sm font-black text-slate-900 uppercase tracking-wider">{t('settings.referrer_policy')}</p>
+                    <p className="text-xs text-slate-700/70 font-bold mt-0.5">{t('settings.referrer_policy_desc')}</p>
+                  </div>
+                  <select 
+                    value={referrerPolicy}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      setReferrerPolicy(newValue);
+                      handleSaveConfig({ referrerPolicy: newValue });
+                    }}
+                    className="w-full mt-2 px-4 py-3 bg-white border border-slate-200 text-slate-900 font-bold text-sm rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all cursor-pointer"
+                  >
+                    <option value="no-referrer">no-referrer</option>
+                    <option value="no-referrer-when-downgrade">no-referrer-when-downgrade</option>
+                    <option value="origin">origin</option>
+                    <option value="origin-when-cross-origin">origin-when-cross-origin</option>
+                    <option value="same-origin">same-origin</option>
+                    <option value="strict-origin">strict-origin</option>
+                    <option value="strict-origin-when-cross-origin">strict-origin-when-cross-origin</option>
+                    <option value="unsafe-url">unsafe-url</option>
+                  </select>
                 </div>
               </div>
             </div>
