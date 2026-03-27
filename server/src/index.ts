@@ -157,7 +157,7 @@ const distPath = path.join(__dirname, '../../dist');
 initDb();
 
 // Request logger middleware
-app.use((req, res, next) => {
+app.use((req: any, res: any, next: any) => {
   const start = Date.now();
   res.on('finish', () => {
     const duration = Date.now() - start;

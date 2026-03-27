@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
-import { Settings as SettingsIcon, Save, RefreshCw, Key, ShieldCheck, CreditCard, Activity, Server, Box, Hexagon, Clock, CheckCircle2, Languages } from 'lucide-react';
+import { Settings as SettingsIcon, RefreshCw, Key, ShieldCheck, CreditCard, Activity, Server, Box, Hexagon, Clock, CheckCircle2, Languages } from 'lucide-react';
 import api from '../api/client';
 import { getSortedLanguages } from '../constants/languages';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +13,7 @@ const Settings: React.FC = () => {
   const [savingLicense, setSavingLicense] = useState(false);
   const [message, setMessage] = useState<{ text: string, type: 'success' | 'error' } | null>(null);
   const [savingLanguage, setSavingLanguage] = useState(false);
-  const [savingConfig, setSavingConfig] = useState(false);
+  const [, setSavingConfig] = useState(false);
   const [serverName, setServerName] = useState('');
   const [demoMode, setDemoMode] = useState(false);
   const [sslEnabled, setSslEnabled] = useState(false);
