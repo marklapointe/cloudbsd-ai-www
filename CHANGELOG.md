@@ -4,11 +4,14 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 
 ## [Unreleased]
 ### Added
+- **CORS Configuration**: Introduced a new `corsEnabled` setting in the system configuration (default: `false`).
+- **Settings Toggle for CORS**: Added a new toggle in the Settings page to enable or disable Cross-Origin Resource Sharing (CORS) dynamically.
+- **CORS Internationalization**: Fully translated all CORS-related configuration strings across all 44 supported languages, ensuring consistent UX regardless of the selected locale.
 - **Enhanced API Logging**: Implemented a global request logger middleware in the Express backend that logs all incoming API requests (method, URL, status code, duration, user, IP) to the console.
-- **Improved Auth Logging**: Enhanced `authenticateToken`, `isAdmin`, and `isOperator` middlewares with descriptive console logging and database-level audit logging (using `logAction`) for 401 (Unauthorized) and 403 (Forbidden) errors to aid in debugging permission issues.
-- **Centralized Error Handling**: Added a global unhandled error middleware and a dedicated 404 handler for `/api` routes to catch, log, and record to the `logs` table any server-side exceptions or missing endpoints, ensuring consistent JSON error responses.
 
 ### Changed
+- **Secure Defaults**: CORS is now disabled by default, restricting the API to same-origin requests for improved security.
+- **Dynamic Socket.io CORS**: The Socket.io server now respects the `corsEnabled` configuration, enabling or disabling CORS headers based on the system setting.
 - **Refactored API Endpoints**: Updated core API endpoints (e.g., `/api/nodes`) to utilize the centralized error handling for more robust failure reporting and logging.
 
 ### Changed

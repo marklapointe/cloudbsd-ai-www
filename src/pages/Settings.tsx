@@ -17,6 +17,7 @@ const Settings: React.FC = () => {
   const [serverName, setServerName] = useState('');
   const [demoMode, setDemoMode] = useState(false);
   const [sslEnabled, setSslEnabled] = useState(false);
+  const [corsEnabled, setCorsEnabled] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -29,6 +30,7 @@ const Settings: React.FC = () => {
         api.get('/system/license')
       ]);
       setSslEnabled(configRes.data.ssl?.enabled || false);
+      setCorsEnabled(configRes.data.corsEnabled || false);
       setServerName(configRes.data.servername || '');
       setDemoMode(configRes.data.demoMode || false);
       setLicense(licenseRes.data);
@@ -105,6 +107,7 @@ const Settings: React.FC = () => {
         servername: serverName,
         demoMode,
         ssl: { enabled: sslEnabled },
+        corsEnabled,
         ...configOverride
       };
       const response = await api.put('/system/config', config);
@@ -208,6 +211,23 @@ const Settings: React.FC = () => {
                 </div>
                 <div className={`w-14 h-7 rounded-full transition-all duration-300 relative shadow-inner ${sslEnabled ? 'bg-emerald-600 shadow-emerald-900/20' : 'bg-slate-300'}`}>
                   <div className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-all duration-300 shadow-md ${sslEnabled ? 'left-8' : 'left-1'}`}></div>
+                </div>
+              </div>
+
+              <div 
+                className="flex items-center gap-5 p-6 bg-amber-50 rounded-2xl border border-amber-100/50 transition-colors hover:bg-amber-50/80 cursor-pointer"
+                onClick={() => {
+                  const newValue = !corsEnabled;
+                  setCorsEnabled(newValue);
+                  handleSaveConfig({ corsEnabled: newValue });
+                }}
+              >
+                <div className="flex-1">
+                  <p className="text-sm font-black text-amber-900 uppercase tracking-wider">{t('settings.cors_config')}</p>
+                  <p className="text-xs text-amber-700/70 font-bold mt-0.5">{t('settings.cors_config_desc')}</p>
+                </div>
+                <div className={`w-14 h-7 rounded-full transition-all duration-300 relative shadow-inner ${corsEnabled ? 'bg-amber-600 shadow-amber-900/20' : 'bg-slate-300'}`}>
+                  <div className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-all duration-300 shadow-md ${corsEnabled ? 'left-8' : 'left-1'}`}></div>
                 </div>
               </div>
             </div>

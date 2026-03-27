@@ -74,10 +74,10 @@ if (config.ssl.enabled && sslCerts) {
 }
 
 const io = new Server({
-  cors: {
+  cors: config.corsEnabled ? {
     origin: "*",
     methods: ["GET", "POST"]
-  }
+  } : undefined
 });
 io.attach(httpServer);
 
@@ -138,16 +138,20 @@ if (SECRET_KEY === 'your-secret-key-change-me') {
   console.warn('[Critical] Tokens will be invalidated every time the server restarts if a stable key is not provided in etc/config.json.');
 }
 
-app.use(cors({
-  origin: (origin, callback) => {
-    // In dev mode, allow all origins
-    // In prod, you'd want to be more specific, but for now, we'll allow all for proxy support
-    callback(null, true);
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
-}));
+if (config.corsEnabled) {
+  app.use(cors({
+    origin: (origin, callback) => {
+      // Allow all origins when CORS is explicitly enabled
+      callback(null, true);
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
+  }));
+} else {
+  // CORS is disabled - this will restrict access to same-origin requests in modern browsers
+  console.log('[Security] CORS is disabled. Only same-origin requests are permitted.');
+}
 app.use(express.json());
 
 // Serve static files from the React app dist directory

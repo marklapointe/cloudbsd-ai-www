@@ -12,6 +12,7 @@ export interface Config {
   secretKey: string;
   dbPath: string;
   demoMode: boolean;
+  corsEnabled: boolean;
   ssl: {
     enabled: boolean;
     certPath?: string;
@@ -27,6 +28,7 @@ const DEFAULT_CONFIG: Config = {
   secretKey: 'your-secret-key-change-me',
   dbPath: path.join(__dirname, '../../data/admin.db'),
   demoMode: true,
+  corsEnabled: false,
   ssl: {
     enabled: false,
     certPath: '/usr/local/etc/cloudbsd/admin-panel/ssl/cert.pem',
