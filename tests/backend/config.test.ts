@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { existsSync, readFileSync } from 'fs';
-import { reloadConfig } from '../config.js';
+import { reloadConfig } from '../../server/src/config.js';
 
 vi.mock('fs', () => {
   const mExistsSync = vi.fn();

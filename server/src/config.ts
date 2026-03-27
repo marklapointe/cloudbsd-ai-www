@@ -50,6 +50,10 @@ export function loadConfig(): Config {
         const fileContent = readFileSync(configPath, 'utf-8');
         const userConfig = JSON.parse(fileContent);
         config = { ...config, ...userConfig };
+        // Ensure corsEnabled defaults to false if not provided or if it's not a boolean
+        if (typeof config.corsEnabled !== 'boolean') {
+          config.corsEnabled = false;
+        }
         console.log(`Loaded configuration from ${configPath}`);
         return config;
       } catch (error) {

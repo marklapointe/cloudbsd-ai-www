@@ -8,17 +8,16 @@ import { Server } from 'socket.io';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import os from 'os';
-import path from 'path';
 import { fileURLToPath } from 'url';
-import db, { initDb, logAction } from './db.ts';
+import { initDb, logAction } from './db.ts';
 
 import config, { reloadConfig, saveConfig } from './config.ts';
 import { ensureCertificates } from './ssl.ts';
 
 initDb();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 const app = express();
 app.set('trust proxy', 1); // Trust first proxy (Nginx)
@@ -140,7 +139,7 @@ if (SECRET_KEY === 'your-secret-key-change-me') {
 
 if (config.corsEnabled) {
   app.use(cors({
-    origin: (origin, callback) => {
+    origin: (_origin, callback) => {
       // Allow all origins when CORS is explicitly enabled
       callback(null, true);
     },
@@ -155,7 +154,7 @@ if (config.corsEnabled) {
 app.use(express.json());
 
 // Serve static files from the React app dist directory
-const distPath = path.join(__dirname, '../../dist');
+// const distPath = path.join(__dirname, '../../dist');
 // app.use(express.static(distPath));
 
 initDb();
@@ -249,7 +248,7 @@ const isOperator = (req: any, res: any, next: any) => {
  *       200:
  *         description: Backend is healthy
  */
-app.get('/api/health', (req, res) => {
+app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date() });
 });
 
@@ -309,7 +308,7 @@ app.post('/api/login', (req, res) => {
  *       200:
  *         description: List of users
  */
-app.get('/api/users', authenticateToken, isAdmin, (req, res) => {
+app.get('/api/users', authenticateToken, isAdmin, (_req, res) => {
   const currentDb = initDb();
   const users = currentDb.prepare('SELECT id, username, role, language FROM users').all();
   res.json(users);
@@ -325,7 +324,7 @@ app.get('/api/users', authenticateToken, isAdmin, (req, res) => {
  *       200:
  *         description: List of logs
  */
-app.get('/api/logs', authenticateToken, isAdmin, (req, res) => {
+app.get('/api/logs', authenticateToken, isAdmin, (_req, res) => {
   const currentDb = initDb();
   const logs = currentDb.prepare(`
     SELECT logs.*, users.username 
@@ -452,13 +451,13 @@ app.delete('/api/users/:id', authenticateToken, isAdmin, (req, res) => {
  *       200:
  *         description: List of nodes
  */
-app.get('/api/nodes', authenticateToken, (req: any, res: any, next: any) => {
+app.get('/api/nodes', authenticateToken, (_req: any, res: any, _next: any) => {
   const currentDb = initDb();
   try {
     const nodes = currentDb.prepare('SELECT * FROM nodes ORDER BY role DESC, name ASC').all();
     res.json(Array.isArray(nodes) ? nodes : []);
   } catch (error) {
-    next(error);
+    _next(error);
   }
 });
 
@@ -597,7 +596,7 @@ app.put('/api/nodes/:id', authenticateToken, isOperator, (req, res) => {
  *       200:
  *         description: Aggregated stats
  */
-app.get('/api/cluster/stats', authenticateToken, (req, res) => {
+app.get('/api/cluster/stats', authenticateToken, (_req, res) => {
   const currentDb = initDb();
   const nodes = currentDb.prepare('SELECT * FROM nodes').all() as any[];
   
@@ -971,7 +970,7 @@ app.post('/api/:resource/:id/:action', authenticateToken, isOperator, (req, res)
  *       200:
  *         description: System stats
  */
-app.get('/api/system/stats', authenticateToken, (req, res) => {
+app.get('/api/system/stats', authenticateToken, (_req, res) => {
   // In a real app, these would come from the OS (e.g. sysctl on FreeBSD)
   const cpuUsage = Math.floor(Math.random() * 25) + 5;
   const freeMem = os.freemem();
@@ -1006,7 +1005,7 @@ app.get('/api/system/stats', authenticateToken, (req, res) => {
  *       200:
  *         description: Host information
  */
-app.get('/api/system/host', authenticateToken, (req, res) => {
+app.get('/api/system/host', authenticateToken, (_req, res) => {
   res.json({
     hostname: os.hostname(),
     platform: os.platform(),
@@ -1030,7 +1029,7 @@ app.get('/api/system/host', authenticateToken, (req, res) => {
  *       200:
  *         description: Server information
  */
-app.get('/api/system/info', authenticateToken, (req, res) => {
+app.get('/api/system/info', authenticateToken, (_req, res) => {
   res.json({
     hostname: os.hostname(),
     os: `${os.type()} ${os.release()}`,
@@ -1049,7 +1048,7 @@ app.get('/api/system/info', authenticateToken, (req, res) => {
  *       200:
  *         description: System configuration
  */
-app.get('/api/system/config', authenticateToken, isAdmin, (req, res) => {
+app.get('/api/system/config', authenticateToken, isAdmin, (_req, res) => {
   res.json({
     port: config.port,
     servername: config.servername,
@@ -1155,7 +1154,7 @@ app.put('/api/system/config', authenticateToken, isAdmin, (req, res) => {
  *       200:
  *         description: License details
  */
-app.get('/api/system/license', authenticateToken, (req, res) => {
+app.get('/api/system/license', authenticateToken, (_req, res) => {
   const currentDb = initDb();
   let license = currentDb.prepare('SELECT * FROM license LIMIT 1').get() as any;
   
@@ -1301,7 +1300,7 @@ app.use('/api', (req, res) => {
 });
 
 // Error handling middleware
-app.use((err: any, req: any, res: any, next: any) => {
+app.use((err: any, req: any, res: any, _next: any) => {
   const msg = `Unhandled error on ${req.method} ${req.originalUrl}: ${err.message}`;
   console.error(`[Critical] ${msg}`);
   console.error(err.stack);

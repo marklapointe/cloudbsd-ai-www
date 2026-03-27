@@ -1,9 +1,9 @@
 import { expect, it, describe } from 'vitest';
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 
 describe('Locale [TODO] Check', () => {
-  const localesDir = path.resolve(__dirname, '../locales');
+  const localesDir = path.resolve(__dirname, '../../src/locales');
   const files = fs.readdirSync(localesDir).filter(f => f.endsWith('.ts'));
 
   it.each(files)('should not contain [TODO] markers in %s', (file) => {

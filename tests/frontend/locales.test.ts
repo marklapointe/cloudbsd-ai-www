@@ -16,11 +16,11 @@ function flattenObject(obj: any, prefix = ''): Record<string, string> {
 }
 
 describe('Locale Files Verification', async () => {
-  const localesDir = path.resolve(__dirname, '../locales');
+  const localesDir = path.resolve(__dirname, '../../src/locales');
   const localeFiles = fs.readdirSync(localesDir).filter(f => f.endsWith('.ts'));
   
   // First, we need the English reference
-  const enModule = await import('../locales/en.ts');
+  const enModule = await import('../../src/locales/en.ts');
   const enTranslations = flattenObject(enModule.default.translation);
   const enKeys = Object.keys(enTranslations);
 
@@ -33,13 +33,13 @@ describe('Locale Files Verification', async () => {
     describe(`Locale: ${file}`, () => {
       // ... (existing tests)
       it(`should load ${file} without syntax errors`, async () => {
-        const module = await import(`../locales/${file}`);
+        const module = await import(`../../src/locales/${file}`);
         expect(module.default).toBeDefined();
         expect(module.default.translation).toBeDefined();
       });
 
       it(`should have a 1:1 key relationship with en.ts for ${file}`, async () => {
-        const module = await import(`../locales/${file}`);
+        const module = await import(`../../src/locales/${file}`);
         const translations = flattenObject(module.default.translation);
         const keys = Object.keys(translations);
         
@@ -56,7 +56,7 @@ describe('Locale Files Verification', async () => {
       it(`should not have identical values to en.ts for ${file}`, async () => {
         if (allowedIdenticalLocales.includes(file)) return;
         
-        const module = await import(`../locales/${file}`);
+        const module = await import(`../../src/locales/${file}`);
         const translations = flattenObject(module.default.translation);
         
         const identicalValues: string[] = [];

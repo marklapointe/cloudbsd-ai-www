@@ -4,10 +4,29 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 
 ## [Unreleased]
 ### Added
+- **Centralized Testing Directory**: Reorganized all tests into a root-level `tests/` directory with `frontend/` and `backend/` subdirectories.
+- **Improved Test Configuration**: Updated `vite.config.ts` and `server/tsconfig.json` to support the new test structure, ensuring both frontend and backend tests are correctly included in the build and test pipelines.
+- **Configuration Defaults Verification**: Improved configuration loading to strictly default `corsEnabled` to `false` if missing or invalid.
+- **New Unit Tests**: Added `tests/backend/config_defaults.test.ts` to verify configuration defaults and `corsEnabled` logic.
+- **Project-Wide Cleanup**: Performed a comprehensive audit for unused imports, variables, and parameters across the entire codebase.
+
+### Changed
+- **Moved Frontend Tests**: Relocated `src/test/` content to `tests/frontend/`.
+- **Moved Backend Tests**: Relocated `server/src/test/` content to `tests/backend/`.
+
+### Fixed
+- **Unused Backend Code**: Removed or commented out multiple unused imports (e.g., `db`, `path`, `fileURLToPath`), variables (`distPath`, `__dirname`, `__filename`), and function parameters (`req`, `next`) in the backend Express server.
+- **Backend Test Fixes**: Resolved TypeScript compilation errors in `tests/backend/cors_logic.test.ts` where private `Socket.io` properties were being accessed. Replaced with type-safe (via `any` casting for test-only access) and cleaner logic.
+- **Frontend Test Configuration**: Fixed `esModuleInterop` issues in `tests/frontend/todo_check.test.ts` by using namespace imports (`import * as fs`) for Node.js modules.
+- **Improved Compilation Hygiene**: Enabled and enforced `noUnusedLocals` and `noUnusedParameters` across all TypeScript configurations (frontend, backend, and tests) to prevent future regressions.
+
+## [0.1.0] - 2026-03-26 (Latest Stable)
+### Added
 - **CORS Configuration**: Introduced a new `corsEnabled` setting in the system configuration (default: `false`).
 - **Settings Toggle for CORS**: Added a new toggle in the Settings page to enable or disable Cross-Origin Resource Sharing (CORS) dynamically.
 - **CORS Internationalization**: Fully translated all CORS-related configuration strings across all 44 supported languages, ensuring consistent UX regardless of the selected locale.
 - **Enhanced API Logging**: Implemented a global request logger middleware in the Express backend that logs all incoming API requests (method, URL, status code, duration, user, IP) to the console.
+- **CORS Unit Tests**: Added a new test suite `server/src/test/cors_logic.test.ts` to verify CORS behavior in both Express and Socket.io, testing various origins and HTTP methods.
 
 ### Changed
 - **Secure Defaults**: CORS is now disabled by default, restricting the API to same-origin requests for improved security.
