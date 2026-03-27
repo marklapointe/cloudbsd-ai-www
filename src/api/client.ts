@@ -11,7 +11,17 @@ api.interceptors.request.use((config) => {
   
   // Validate token structure (JWT should have 3 parts separated by dots)
   if (token && (token.split('.').length !== 3 || token.length < 50)) {
-    console.error(`[Auth] Malformed token detected in localStorage (length: ${token.length}). Clearing it.`);
+    const isMalformed = token.split('.').length !== 3;
+    const isTooShort = token.length < 50;
+    const reason = isMalformed ? 'malformed structure' : (isTooShort ? 'too short' : 'invalid');
+    
+    console.error(`[Auth] Invalid token detected in localStorage (${reason}, length: ${token.length}). Clearing it.`);
+    
+    // Check for "username" as token mistake
+    if (token === localStorage.getItem('username')) {
+      console.error('[Auth] Token matches username in localStorage! Critical implementation error suspected.');
+    }
+    
     localStorage.removeItem('token');
     localStorage.removeItem('username');
     localStorage.removeItem('role');

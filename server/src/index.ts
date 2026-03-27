@@ -188,23 +188,23 @@ const authenticateToken = (req: any, res: any, next: any) => {
 
   jwt.verify(token, SECRET_KEY, (err: any, user: any) => {
     if (err) {
-      const errorMsg = `[Auth] JWT verification failed for ${req.method} ${req.url} from ${req.ip}: ${err.message}`;
-      console.error(errorMsg);
+      const errorMsg = `JWT verification failed for ${req.method} ${req.url} from ${req.ip}: ${err.message}`;
+      console.error(`[Auth] ${errorMsg}`);
       
+      const tokenPreview = token.length > 20 
+        ? `${token.substring(0, 10)}...${token.substring(token.length - 10)}` 
+        : token;
+        
       if (err.name === 'JsonWebTokenError') {
-        console.error('[Auth] Token is invalid. Possible SECRET_KEY mismatch or malformed token.');
-        const tokenPreview = token.length > 20 
-          ? `${token.substring(0, 10)}...${token.substring(token.length - 10)}` 
-          : token;
-        console.debug(`[Auth] Token preview (length: ${token.length}): ${tokenPreview}`);
+        console.error(`[Auth] Token is invalid. Possible SECRET_KEY mismatch or malformed token. Token preview (length: ${token.length}): ${tokenPreview}`);
       } else if (err.name === 'TokenExpiredError') {
-        console.warn('[Auth] Token has expired.');
+        console.warn(`[Auth] Token has expired. Token preview (length: ${token.length}): ${tokenPreview}`);
       }
       
       console.debug(`[Auth] Current Secret Key check (first 4): ${SECRET_KEY.substring(0, 4)}`);
       
       logAction(null, 'AUTH_FAILURE', errorMsg);
-      return res.status(403).json({ message: 'Invalid or expired token', error: err.message });
+      return res.status(403).json({ message: 'Invalid or expired token', error: err.message, token_preview: tokenPreview });
     }
     req.user = user;
     next();

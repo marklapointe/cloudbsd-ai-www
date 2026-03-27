@@ -21,6 +21,8 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 - **Improved Build Process**: Updated Vite configuration to group vendor libraries and i18n locale files into logical, optimized chunks.
 
 ### Fixed
+- **JWT Authentication**: Resolved "jwt malformed" 403 errors by enhancing frontend token validation. The client now automatically detects and clears malformed or too-short tokens from local storage, forcing a re-login to ensure a valid session.
+- **Improved Auth Logging**: Refined backend authentication logging to include token previews and clearer error messages, facilitating faster debugging of session-related issues.
 - **FreeBSD RC Script**: Resolved a "Permission denied" error when starting the service via `daemon` by creating a dedicated, writable subdirectory in `/var/run/` for the PID file and ensuring correct ownership.
 - **Build Errors**: Resolved TypeScript compilation errors caused by unused variables in `src/pages/Settings.tsx` and missing type definitions for the `user` property on the Express `Request` object in `server/src/index.ts`.
 - **Language Preference Translation**: Fixed an issue where the "Language preference saved successfully" message was not properly translated or displayed in the newly selected language. 
