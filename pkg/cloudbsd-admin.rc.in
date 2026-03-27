@@ -18,7 +18,7 @@ load_rc_config $name
 : ${cloudbsd_admin_config:="/usr/local/etc/cloudbsd/admin-panel/config.json"}
 : ${cloudbsd_admin_node:="/usr/local/bin/node24"}
 
-pidfile="/var/run/${name}.pid"
+pidfile="/var/run/cloudbsd-admin/${name}.pid"
 procname="${cloudbsd_admin_node}"
 command="/usr/sbin/daemon"
 command_args="-f -P ${pidfile} -u ${cloudbsd_admin_user} ${cloudbsd_admin_node} ${cloudbsd_admin_dir}/server/dist/index.js"
@@ -29,9 +29,11 @@ restart_precmd="cloudbsd_admin_check_running"
 
 cloudbsd_admin_prestart()
 {
-    if [ ! -d "/var/run" ]; then
-        mkdir -p /var/run
+    if [ ! -d "/var/run/cloudbsd-admin" ]; then
+        mkdir -p /var/run/cloudbsd-admin
     fi
+    chown -R ${cloudbsd_admin_user}:${cloudbsd_admin_group} /var/run/cloudbsd-admin
+    
     # Ensure config exists or uses default
     if [ ! -f "${cloudbsd_admin_config}" ]; then
         warn "Config file ${cloudbsd_admin_config} not found, using internal defaults."
