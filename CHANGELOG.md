@@ -3,6 +3,14 @@
 All notable changes to the CloudBSD Admin Web UI project will be documented in this file.
 
 ## [Unreleased]
+### Added
+- **Enhanced API Logging**: Implemented a global request logger middleware in the Express backend that logs all incoming API requests (method, URL, status code, duration, user, IP) to the console.
+- **Improved Auth Logging**: Enhanced `authenticateToken`, `isAdmin`, and `isOperator` middlewares with descriptive console logging and database-level audit logging (using `logAction`) for 401 (Unauthorized) and 403 (Forbidden) errors to aid in debugging permission issues.
+- **Centralized Error Handling**: Added a global unhandled error middleware and a dedicated 404 handler for `/api` routes to catch, log, and record to the `logs` table any server-side exceptions or missing endpoints, ensuring consistent JSON error responses.
+
+### Changed
+- **Refactored API Endpoints**: Updated core API endpoints (e.g., `/api/nodes`) to utilize the centralized error handling for more robust failure reporting and logging.
+
 ### Changed
 - **Settings UI Simplification**: Removed the redundant "Save" button from the "Server Configuration" section on the Settings page.
 - **Auto-save Configuration**: Implemented automatic saving for "Demonstration Mode" and "SSL/TLS Security" toggles. Changes are now persisted to the backend immediately upon user interaction, improving the user experience.

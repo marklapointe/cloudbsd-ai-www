@@ -156,6 +156,25 @@ const distPath = path.join(__dirname, '../../dist');
 
 initDb();
 
+// Request logger middleware
+app.use((req, res, next) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    const userStr = req.user ? ` (User: ${req.user.username} [${req.user.role}])` : '';
+    const msg = `${req.method} ${req.originalUrl} - ${res.statusCode} - ${duration}ms${userStr} from ${req.ip}`;
+    
+    if (res.statusCode >= 500) {
+      console.error(`[API] ${msg}`);
+    } else if (res.statusCode >= 400) {
+      console.warn(`[API] ${msg}`);
+    } else {
+      console.log(`[API] ${msg}`);
+    }
+  });
+  next();
+});
+
 // Middleware to verify JWT
 const authenticateToken = (req: any, res: any, next: any) => {
   const authHeader = req.headers['authorization'];
@@ -163,16 +182,17 @@ const authenticateToken = (req: any, res: any, next: any) => {
 
   if (!token) {
     console.warn(`[Auth] No token provided for ${req.method} ${req.url} from ${req.ip}`);
-    return res.sendStatus(401);
+    logAction(null, 'AUTH_FAILURE', `No token provided for ${req.method} ${req.url} from ${req.ip}`);
+    return res.status(401).json({ message: 'Authentication required' });
   }
 
   jwt.verify(token, SECRET_KEY, (err: any, user: any) => {
     if (err) {
-      console.error(`[Auth] JWT verification failed for ${req.method} ${req.url} from ${req.ip}:`, err.message);
+      const errorMsg = `[Auth] JWT verification failed for ${req.method} ${req.url} from ${req.ip}: ${err.message}`;
+      console.error(errorMsg);
+      
       if (err.name === 'JsonWebTokenError') {
         console.error('[Auth] Token is invalid. Possible SECRET_KEY mismatch or malformed token.');
-        // Log the token itself (BE CAREFUL IN PRODUCTION, but this is for debugging the "malformed" issue)
-        // We'll log the first 10 and last 10 chars to see if it's truncated or weird
         const tokenPreview = token.length > 20 
           ? `${token.substring(0, 10)}...${token.substring(token.length - 10)}` 
           : token;
@@ -180,9 +200,11 @@ const authenticateToken = (req: any, res: any, next: any) => {
       } else if (err.name === 'TokenExpiredError') {
         console.warn('[Auth] Token has expired.');
       }
-      // Log some info about the key (first 4 chars) to see if it changes
+      
       console.debug(`[Auth] Current Secret Key check (first 4): ${SECRET_KEY.substring(0, 4)}`);
-      return res.sendStatus(403);
+      
+      logAction(null, 'AUTH_FAILURE', errorMsg);
+      return res.status(403).json({ message: 'Invalid or expired token', error: err.message });
     }
     req.user = user;
     next();
@@ -193,8 +215,10 @@ const isAdmin = (req: any, res: any, next: any) => {
   if (req.user && req.user.role === 'admin') {
     next();
   } else {
-    console.warn(`[Auth] Admin access denied for user ${req.user?.username} (${req.user?.role}) on ${req.method} ${req.url}`);
-    res.status(403).json({ message: 'Admin access required' });
+    const errorMsg = `Admin access denied for user ${req.user?.username} (${req.user?.role}) on ${req.method} ${req.url} from ${req.ip}`;
+    console.warn(`[Auth] ${errorMsg}`);
+    logAction(req.user?.id || null, 'PERMISSION_DENIED', errorMsg);
+    res.status(403).json({ message: 'Admin access required', user: req.user?.username, role: req.user?.role });
   }
 };
 
@@ -202,8 +226,10 @@ const isOperator = (req: any, res: any, next: any) => {
   if (req.user && (req.user.role === 'admin' || req.user.role === 'operator')) {
     next();
   } else {
-    console.warn(`[Auth] Operator access denied for user ${req.user?.username} (${req.user?.role}) on ${req.method} ${req.url}`);
-    res.status(403).json({ message: 'Operator access required' });
+    const errorMsg = `Operator access denied for user ${req.user?.username} (${req.user?.role}) on ${req.method} ${req.url} from ${req.ip}`;
+    console.warn(`[Auth] ${errorMsg}`);
+    logAction(req.user?.id || null, 'PERMISSION_DENIED', errorMsg);
+    res.status(403).json({ message: 'Operator access required', user: req.user?.username, role: req.user?.role });
   }
 };
 
@@ -422,14 +448,13 @@ app.delete('/api/users/:id', authenticateToken, isAdmin, (req, res) => {
  *       200:
  *         description: List of nodes
  */
-app.get('/api/nodes', authenticateToken, (req, res) => {
+app.get('/api/nodes', authenticateToken, (req: any, res: any, next: any) => {
   const currentDb = initDb();
   try {
     const nodes = currentDb.prepare('SELECT * FROM nodes ORDER BY role DESC, name ASC').all();
     res.json(Array.isArray(nodes) ? nodes : []);
   } catch (error) {
-    console.error('Error fetching nodes:', error);
-    res.json([]);
+    next(error);
   }
 });
 
@@ -1258,6 +1283,32 @@ app.post('/api/system/license', authenticateToken, isAdmin, (req, res) => {
   } else {
     return res.status(400).json({ message: 'Invalid license key format' });
   }
+});
+
+// 404 handler for API routes
+app.use('/api', (req, res) => {
+  const msg = `API Route not found: ${req.method} ${req.originalUrl} from ${req.ip}`;
+  console.warn(`[API] ${msg}`);
+  res.status(404).json({ 
+    message: 'API endpoint not found',
+    method: req.method,
+    path: req.originalUrl
+  });
+});
+
+// Error handling middleware
+app.use((err: any, req: any, res: any, next: any) => {
+  const msg = `Unhandled error on ${req.method} ${req.originalUrl}: ${err.message}`;
+  console.error(`[Critical] ${msg}`);
+  console.error(err.stack);
+  
+  logAction(req.user?.id || null, 'SYSTEM_ERROR', msg);
+  
+  res.status(res.statusCode === 200 ? 500 : res.statusCode).json({
+    message: 'Internal Server Error',
+    error: process.env.NODE_ENV === 'production' ? 'An unexpected error occurred' : err.message,
+    path: req.originalUrl
+  });
 });
 
 // The "catchall" handler: for any request that doesn't
