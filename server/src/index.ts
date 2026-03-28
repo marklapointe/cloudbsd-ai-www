@@ -156,10 +156,10 @@ if (config.corsEnabled) {
 }
 
 // Set Referrer-Policy based on configuration
-app.use((_req, res, next) => {
-  res.setHeader('Referrer-Policy', config.referrerPolicy || 'no-referrer-when-downgrade');
-  next();
-});
+// app.use((_req, res, next) => {
+//   res.setHeader('Referrer-Policy', config.referrerPolicy || 'no-referrer-when-downgrade');
+//   next();
+// });
 app.use(express.json());
 
 // Parse cookies so we can use cookie-backed CSRF tokens when enabled
