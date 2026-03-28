@@ -7,6 +7,8 @@ import { createServer as createHttpsServer } from 'https';
 import { Server } from 'socket.io';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
+import cookieParser from 'cookie-parser';
+import csurf from 'csurf';
 import os from 'os';
 import { fileURLToPath } from 'url';
 import { initDb, logAction } from './db.ts';
@@ -158,6 +160,38 @@ app.use((_req, res, next) => {
   next();
 });
 app.use(express.json());
+
+// Parse cookies so we can use cookie-backed CSRF tokens when enabled
+app.use(cookieParser());
+
+// Conditional CSRF middleware. Disabled by default in config to remain permissive
+if (config.csrf?.enabled) {
+  app.use((req: any, res: any, next: any) => {
+    const cookieOpts: any = {
+      httpOnly: config.cookie?.httpOnly ?? true,
+      sameSite: (config.cookie?.sameSite as any) ?? 'none',
+    };
+
+    const secureSetting = config.cookie?.secure;
+    const isSecure = secureSetting === null || secureSetting === undefined
+      ? Boolean(req.secure || (req.headers && req.headers['x-forwarded-proto'] === 'https'))
+      : Boolean(secureSetting);
+
+    if (isSecure) cookieOpts.secure = true;
+    if (config.cookie?.domain) cookieOpts.domain = config.cookie.domain;
+
+    csurf({ cookie: cookieOpts })(req, res, (err: any) => {
+      if (err) return next(err);
+      try {
+        const token = req.csrfToken();
+        res.setHeader(config.csrf?.header || 'x-csrf-token', token);
+      } catch (e) {
+        // ignore
+      }
+      next();
+    });
+  });
+}
 
 // Serve static files from the React app dist directory
 // const distPath = path.join(__dirname, '../../dist');

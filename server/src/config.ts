@@ -19,6 +19,19 @@ export interface Config {
     certPath?: string;
     keyPath?: string;
   };
+  // Cookie options control how server-set cookies are emitted
+  cookie?: {
+    sameSite?: 'none' | 'lax' | 'strict';
+    domain?: string | null;
+    // null = auto-detect from request / X-Forwarded-Proto
+    secure?: boolean | null;
+    httpOnly?: boolean;
+  };
+  // CSRF options (disabled by default to remain permissive behind proxies)
+  csrf?: {
+    enabled?: boolean;
+    header?: string; // header used to expose token to clients
+  };
 }
 
 const DEFAULT_CONFIG: Config = {
@@ -35,6 +48,17 @@ const DEFAULT_CONFIG: Config = {
     enabled: false,
     certPath: '/usr/local/etc/cloudbsd/admin-panel/ssl/cert.pem',
     keyPath: '/usr/local/etc/cloudbsd/admin-panel/ssl/key.pem',
+  },
+  // Default cookie and CSRF settings are permissive to support proxy setups
+  cookie: {
+    sameSite: 'none',
+    domain: null,
+    secure: null,
+    httpOnly: true,
+  },
+  csrf: {
+    enabled: false,
+    header: 'x-csrf-token',
   },
 };
 
