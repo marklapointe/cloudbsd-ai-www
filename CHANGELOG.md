@@ -4,6 +4,10 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 
 ## [Unreleased]
 ### Added
+- **Demo Mode Security Hardening**: Implemented read-only restriction for unauthenticated guest users when `demoMode` is enabled. Only safe methods (GET, HEAD, OPTIONS) are permitted without a valid JWT.
+- **New Authentication Unit Tests**: Added `tests/backend/demo_auth.test.ts` to verify authentication behavior, guest access restrictions, and role-based permissions in both demo and standard modes.
+- **Non-Blocking Test Execution**: Modified the backend entry point to skip `httpServer.listen()` when `NODE_ENV` is set to `test`, preventing port conflicts and ensuring tests are non-blocking and clean.
+### Added
 - **Automated Locale Formatting**: Implemented an automated formatting script to standardize 2-space indentation and remove redundant blank lines across all 44 locale files.
 - **Fixed Formatting Regression**: Corrected misalignment and extra blank lines (the "massive ugly gap") in the Dothraki (`doth.ts`) locale and other files.
 - **Standardized Locale Formatting**: Improved internationalization quality by standardizing the formatting of all 43 non-English locale files.

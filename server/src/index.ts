@@ -220,11 +220,18 @@ app.use((req: any, res: any, next: any) => {
 });
 
 // Middleware to verify JWT
-const authenticateToken = (req: any, res: any, next: any) => {
-  // In demo mode, bypass authentication
+export const authenticateToken = (req: any, res: any, next: any) => {
+  // In demo mode, bypass authentication for safe methods for guest users
   if (config.demoMode) {
-    req.user = { id: 1, username: 'demo', role: 'admin', language: 'en' };
-    return next();
+    const safeMethods = ['GET', 'HEAD', 'OPTIONS'];
+    if (safeMethods.includes(req.method)) {
+      req.user = { id: 1, username: 'demo', role: 'admin', language: 'en' };
+      return next();
+    }
+    // For non-safe methods (POST, PUT, DELETE, etc.) in demo mode:
+    // We allow them only if a valid token is provided (meaning a real user is logged in).
+    // If no token is provided, they will fall through to the token check below.
+    // This allows real admins to still manage the system while demo guests are restricted to read-only.
   }
 
   const authHeader = req.headers['authorization'];
@@ -261,7 +268,7 @@ const authenticateToken = (req: any, res: any, next: any) => {
   });
 };
 
-const isAdmin = (req: any, res: any, next: any) => {
+export const isAdmin = (req: any, res: any, next: any) => {
   if (req.user && req.user.role === 'admin') {
     next();
   } else {
@@ -272,7 +279,7 @@ const isAdmin = (req: any, res: any, next: any) => {
   }
 };
 
-const isOperator = (req: any, res: any, next: any) => {
+export const isOperator = (req: any, res: any, next: any) => {
   if (req.user && (req.user.role === 'admin' || req.user.role === 'operator')) {
     next();
   } else {
@@ -1389,7 +1396,9 @@ setInterval(() => {
   io.emit('resource_update', { resource, timestamp: new Date() });
 }, 5000);
 
-httpServer.listen(port, '127.0.0.1', () => {
-  const protocol = config.ssl.enabled ? 'https' : 'http';
-  console.log(`Server running on ${protocol}://127.0.0.1:${port}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  httpServer.listen(port, '127.0.0.1', () => {
+    const protocol = config.ssl.enabled ? 'https' : 'http';
+    console.log(`Server running on ${protocol}://127.0.0.1:${port}`);
+  });
+}

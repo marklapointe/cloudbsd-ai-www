@@ -50,6 +50,7 @@ This document is intended to be as descriptive as possible so that any LLM can u
 10. **Demo Mode**:
     - A demo mode is available for testing purposes.
     - The demo mode is enabled by default.
+    - **Security Restriction**: When `demoMode` is enabled, unauthenticated guest users are restricted to read-only access (GET, HEAD, OPTIONS). All management actions (POST, PUT, DELETE, etc.) still require a valid JWT with appropriate role permissions.
 11. **Configuration Management**:
     - Robust configuration system in `server/src/config.ts`.
     - Priority-based loading: Local `etc/config.json` > `/usr/local/etc/cloudbsd/admin/config.json` > Defaults.
