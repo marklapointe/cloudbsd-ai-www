@@ -13,7 +13,6 @@ export interface Config {
   dbPath: string;
   demoMode: boolean;
   corsEnabled: boolean;
-  referrerPolicy: string;
   ssl: {
     enabled: boolean;
     certPath?: string;
@@ -43,7 +42,6 @@ const DEFAULT_CONFIG: Config = {
   dbPath: path.join(__dirname, '../../data/admin.db'),
   demoMode: true,
   corsEnabled: false,
-  referrerPolicy: 'strict-origin-when-cross-origin',
   ssl: {
     enabled: false,
     certPath: '/usr/local/etc/cloudbsd/admin/ssl/cert.pem',
@@ -79,10 +77,6 @@ export function loadConfig(): Config {
         // Ensure corsEnabled defaults to false if not provided or if it's not a boolean
         if (typeof config.corsEnabled !== 'boolean') {
           config.corsEnabled = false;
-        }
-        // Set default referrerPolicy if missing
-        if (!config.referrerPolicy) {
-          config.referrerPolicy = 'no-referrer-when-downgrade';
         }
         console.log(`Loaded configuration from ${configPath}`);
         return config;
