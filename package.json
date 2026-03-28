@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:unified": "npm run build && node --experimental-strip-types server/src/index.ts",
+    "dev:backend": "node --experimental-strip-types --watch server/src/index.ts",
     "build": "tsc -b && tsc -p server/tsconfig.json && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -19,7 +21,9 @@
     "axios": "^1.13.5",
     "bcryptjs": "^3.0.3",
     "better-sqlite3": "^12.6.2",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.6",
+    "csurf": "^1.11.0",
     "express": "^5.2.1",
     "i18next": "^25.8.13",
     "i18next-browser-languagedetector": "^8.2.1",
@@ -34,9 +38,6 @@
     "socket.io-client": "^4.8.3",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
-    ,
-    "cookie-parser": "^1.4.6",
-    "csurf": "^1.11.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
@@ -45,7 +46,9 @@
     "@testing-library/react": "^16.3.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/better-sqlite3": "^7.6.13",
+    "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
+    "@types/csurf": "^1.11.5",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.10.1",

@@ -10,6 +10,7 @@ import swaggerJsdoc from 'swagger-jsdoc';
 import cookieParser from 'cookie-parser';
 import csurf from 'csurf';
 import os from 'os';
+import path from 'path';
 import { fileURLToPath } from 'url';
 import { initDb, logAction } from './db.ts';
 
@@ -194,8 +195,8 @@ if (config.csrf?.enabled) {
 }
 
 // Serve static files from the React app dist directory
-// const distPath = path.join(__dirname, '../../dist');
-// app.use(express.static(distPath));
+const distPath = path.join(path.dirname(fileURLToPath(import.meta.url)), '../../dist');
+app.use(express.static(distPath));
 
 initDb();
 
@@ -1356,11 +1357,15 @@ app.use((err: any, req: any, res: any, _next: any) => {
 
 // The "catchall" handler: for any request that doesn't
 // match one of the API routes, send back React's index.html file.
-/*
 app.get(/^(?!\/api).+/, (req, res) => {
-  res.sendFile(path.join(__dirname, '../../dist/index.html'));
+  const indexPath = path.join(path.dirname(fileURLToPath(import.meta.url)), '../../dist/index.html');
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      console.warn(`Failed to serve index.html from ${indexPath}:`, err.message);
+      res.status(500).json({ message: 'Failed to load frontend' });
+    }
+  });
 });
-*/
 
 /*
 io.on('connection', (socket) => {
