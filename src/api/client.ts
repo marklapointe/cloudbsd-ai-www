@@ -78,9 +78,9 @@ api.interceptors.response.use(
         message: error.message,
         error
       });
-      // Only alert on non-auth errors to avoid infinite loops if the redirect fails
+      // Only log on non-auth errors to avoid infinite loops if the redirect fails
       if (error.response?.status !== 401 && error.response?.status !== 403) {
-        alert(`API Error: ${error.message}\nCheck the console for details. (Close this alert to continue)`);
+        console.error(`API Error: ${error.message}`);
       }
     }
 

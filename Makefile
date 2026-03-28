@@ -44,7 +44,7 @@ dev:
 start:
 	npm start
 
-test:
+test: build
 	npm test
 
 clean:

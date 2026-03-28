@@ -17,6 +17,7 @@ const VMs: React.FC = () => {
         { 
           header: t('common.status'), 
           accessor: 'status',
+          sortable: true,
           render: (val) => (
             <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
               val === 'running' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-700'
@@ -28,11 +29,13 @@ const VMs: React.FC = () => {
         { 
           header: t('common.cpu'), 
           accessor: 'cpu',
+          sortable: true,
           render: (val) => `${val} ${t('common.vcpu')}`
         },
         { 
           header: t('common.memory'), 
-          accessor: 'memory'
+          accessor: 'memory',
+          sortable: true
         }
       ]}
     />

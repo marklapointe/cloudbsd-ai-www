@@ -4,6 +4,7 @@ import { Settings as SettingsIcon, RefreshCw, Key, ShieldCheck, CreditCard, Acti
 import api from '../api/client';
 import { getSortedLanguages } from '../constants/languages';
 import { useTranslation } from 'react-i18next';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 const Settings: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -18,6 +19,7 @@ const Settings: React.FC = () => {
   const [demoMode, setDemoMode] = useState(false);
   const [sslEnabled, setSslEnabled] = useState(false);
   const [corsEnabled, setCorsEnabled] = useState(false);
+  const [showRestartAlert, setShowRestartAlert] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -243,7 +245,7 @@ const Settings: React.FC = () => {
             <div className="p-8">
               <button 
                 className="px-6 py-3 bg-white border-2 border-red-500/20 text-red-500 font-black uppercase text-xs tracking-widest rounded-2xl hover:bg-red-500 hover:text-white hover:border-red-500 transition-all duration-300 active:scale-95 shadow-sm"
-                onClick={() => alert(t('settings.restart_alert'))}
+                onClick={() => setShowRestartAlert(true)}
               >
                 {t('settings.restart_service')}
               </button>
@@ -442,6 +444,21 @@ const Settings: React.FC = () => {
           </div>
         </div>
       </div>
+      <ConfirmationModal
+        isOpen={showRestartAlert}
+        onClose={() => setShowRestartAlert(false)}
+        onConfirm={async () => {
+          try {
+            await api.post('/system/restart');
+          } catch (err) {
+            console.error('Failed to restart service', err);
+          }
+        }}
+        title={t('common.info')}
+        message={t('settings.restart_alert')}
+        confirmLabel={t('settings.restart_service')}
+        variant="warning"
+      />
     </div>
   );
 };

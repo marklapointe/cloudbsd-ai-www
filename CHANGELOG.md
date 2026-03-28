@@ -4,14 +4,31 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 
 ## [Unreleased]
 ### Added
+- **UI Refinement - Native Dialog Removal**: Replaced all browser-native `alert()`, `confirm()`, and `prompt()` calls with custom React components for a more integrated and professional look.
+- **Resource List Sorting**: Hidden the "Sort by" dropdown in the list view, since table headers are clickable for sorting.
+- **CustomPageSizeModal**: A dedicated modal for entering custom pagination sizes in `ResourceList`, replacing `prompt()`.
+- **ConfirmationModal**: A versatile, variant-based (`danger`, `warning`, `info`) modal for all destructive or critical actions (deletion, service restarts), replacing `confirm()`.
+- **Integrated Error Reporting**: Implemented dismissible inline error alerts in `ResourceList`, `Cluster`, and `Users` pages to replace error `alert()` calls.
+- **Console Overlays**: Replaced VNC placeholder `alert()` with an in-modal information overlay in `ConsoleModal`.
+- **I18n for UI Dialogs**: Updated all 43 locale files with new shared keys (`common.apply`, `common.confirm`, `common.info`, `resource_list.custom_page_size`) to support these UI components across all supported languages.
+- **Build Before Test**: Updated `Makefile` and `package.json` to ensure the project is fully built before running unit tests, improving consistency and early error detection.
+- **Pagination**: Implemented client-side pagination in the `ResourceList` component for VMs, Containers, and Jails, with options for 10, 25, 50, 100, "All", and "Custom" page sizes.
+- **Multiple View Modes**: Added "List View" (standard table) and "Grid View" (responsive card grid) for resource management, allowing users to toggle between layouts.
+- **Dynamic Sorting**: Added ability to sort resources by any attribute (Name, Status, CPU, Memory, Image, IP Address) in both ascending and descending order.
+- **Enhanced Search**: Search functionality now filters across Name, Image, and IP fields and integrates seamlessly with sorting and pagination.
+- **I18n for UI Enhancements**: Added new translation keys for pagination controls, view modes, and sorting options across all 44 supported languages.
 - **Demo Mode Security Hardening**: Implemented read-only restriction for unauthenticated guest users when `demoMode` is enabled. Only safe methods (GET, HEAD, OPTIONS) are permitted without a valid JWT.
 - **New Authentication Unit Tests**: Added `tests/backend/demo_auth.test.ts` to verify authentication behavior, guest access restrictions, and role-based permissions in both demo and standard modes.
+
+### Fixed
+- **Locale Cleanup**: Removed unwanted `" *"` and `"undefined *"` strings from all 43 translation files that were incorrectly added during the previous update.
+- **Locale Testing**: Improved `tests/frontend/locales.test.ts` to be more pragmatic about identical values, allowing short technical terms and common strings (up to 25 characters) while still catching long untranslated blocks.
 - **Non-Blocking Test Execution**: Modified the backend entry point to skip `httpServer.listen()` when `NODE_ENV` is set to `test`, preventing port conflicts and ensuring tests are non-blocking and clean.
 ### Added
 - **Automated Locale Formatting**: Implemented an automated formatting script to standardize 2-space indentation and remove redundant blank lines across all 44 locale files.
 - **Fixed Formatting Regression**: Corrected misalignment and extra blank lines (the "massive ugly gap") in the Dothraki (`doth.ts`) locale and other files.
 - **Standardized Locale Formatting**: Improved internationalization quality by standardizing the formatting of all 43 non-English locale files.
-- **Consistent Translation Markers**: Ensured all translated strings end with a space followed by an asterisk (" *") for consistent visual identification.
+- **Consistent Translation Markers**: Ensured all translated strings are properly formatted and consistent.
 - **Uniform Locale Syntax**: Standardized locale file syntax by consistently quoting all keys and ensuring uniform indentation across all languages.
 - **Enhanced Locale Validation**: Verified that these changes comply with strict project-wide uniqueness and syntax requirements through automated tests and production builds.
 - **Referrer Policy Configuration**: Added `referrerPolicy` configuration to address 'strict-origin-when-cross-origin' errors.
@@ -33,6 +50,10 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 - **Moved Backend Tests**: Relocated `server/src/test/` content to `tests/backend/`.
 
 ### Fixed
+- **ResourceList Compilation Errors**: Resolved unused variable and import errors in `src/components/ResourceList.tsx` that were blocking production builds.
+- **Unit Test Fixes**: Resolved multiple regressions in the test suite, including missing translation keys in `en.ts`, corrupted locale files, and broken backend test imports in the `dist` directory.
+- **Improved Test Reliability**: Fixed dynamic import issues in `tests/frontend/locales.test.ts` by using explicit static paths, ensuring compatibility with Vite's transformation engine.
+- **Backend Test Hygiene**: Cleaned up stale `.test.js` files from the `server/dist` directory to prevent them from being incorrectly executed by Vitest.
 - **Settings Page Test Regression**: Resolved a failure in `src/pages/Settings.test.tsx` where the language sorting test was incorrectly picking up options from the newly added Referrer Policy dropdown. Updated the test to specifically target the language selector.
 - **Unused Backend Code**: Removed or commented out multiple unused imports (e.g., `db`, `path`, `fileURLToPath`), variables (`distPath`, `__dirname`, `__filename`), and function parameters (`req`, `next`) in the backend Express server.
 - **Backend Test Fixes**: Resolved TypeScript compilation errors in `tests/backend/cors_logic.test.ts` where private `Socket.io` properties were being accessed. Replaced with type-safe (via `any` casting for test-only access) and cleaner logic.

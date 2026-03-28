@@ -21,6 +21,7 @@ interface ConsoleModalProps {
 
 const ConsoleModal: React.FC<ConsoleModalProps> = ({ isOpen, onClose, resource, resourceType }) => {
   const { t } = useTranslation();
+  const [showVncAlert, setShowVncAlert] = React.useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
   const xtermRef = useRef<Terminal | null>(null);
 
@@ -95,8 +96,8 @@ const ConsoleModal: React.FC<ConsoleModalProps> = ({ isOpen, onClose, resource, 
                 <p className="text-lg font-medium text-white">{t('console_modal.vnc_placeholder')}</p>
                 <p className="text-sm">{t('console_modal.vnc_desc')}</p>
                 <button 
-                  className="mt-6 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                  onClick={() => alert(t('console_modal.vnc_alert'))}
+                  className="mt-6 px-6 py-3 bg-brand-500 text-white rounded-xl hover:bg-brand-600 transition-all active:scale-95 shadow-lg shadow-brand-500/20 font-bold"
+                  onClick={() => setShowVncAlert(true)}
                 >
                   {t('console_modal.connect_vnc')}
                 </button>
@@ -106,6 +107,28 @@ const ConsoleModal: React.FC<ConsoleModalProps> = ({ isOpen, onClose, resource, 
             <div ref={terminalRef} className="h-full w-full" />
           )}
         </div>
+        
+        {showVncAlert && (
+          <div className="absolute inset-0 z-50 flex items-center justify-center p-6">
+            <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full border border-slate-100 animate-in zoom-in-95 duration-200">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-brand-50 rounded-xl text-brand-600">
+                  <Monitor size={24} />
+                </div>
+                <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">{t('common.info')}</h3>
+              </div>
+              <p className="text-slate-600 font-bold mb-6">
+                {t('console_modal.vnc_alert')}
+              </p>
+              <button 
+                onClick={() => setShowVncAlert(false)}
+                className="w-full py-4 bg-brand-500 text-white font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-brand-600 transition-all active:scale-95 shadow-lg shadow-brand-500/20"
+              >
+                {t('common.close')}
+              </button>
+            </div>
+          </div>
+        )}
         
         <div className="px-6 py-3 border-t border-slate-200 bg-slate-50 flex justify-between items-center text-xs text-slate-500 font-bold">
           <div>{t('console_modal.status')}: <span className="text-emerald-600 font-black uppercase tracking-widest">{t('console_modal.connected')}</span></div>

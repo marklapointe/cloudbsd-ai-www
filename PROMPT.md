@@ -181,6 +181,18 @@ This document is intended to be as descriptive as possible so that any LLM can u
     - **Manual Chunking**: Configured Vite's `rollupOptions.manualChunks` to intelligently group vendor libraries (`vendor-react`, `vendor-terminal`, `vendor-icons`) and i18n locale files into separate, cacheable chunks.
     - **Locale Grouping**: Optimized i18n loading by grouping less-used locale files into shared chunks while keeping major languages (EN, ES, FR, ZH, etc.) in their own dedicated chunks.
     - **Initial Load Performance**: Reduced the main JavaScript chunk from ~1.6MB to multiple smaller chunks, all below the 500kB warning threshold.
+124. **UI Refinement - Native Dialog Removal**:
+    - Replaced all browser-native `alert()`, `confirm()`, and `prompt()` calls with custom React components for a more integrated and professional look.
+    - **CustomPageSizeModal**: A dedicated modal for entering custom pagination sizes in `ResourceList`.
+    - **ConfirmationModal**: A versatile, variant-based (`danger`, `warning`, `info`) modal for all destructive or critical actions (deletion, service restarts).
+    - **Integrated Error Reporting**: Implemented dismissible inline error alerts in `ResourceList`, `Cluster`, and `Users` pages to replace error `alert()` calls.
+    - **Console Overlays**: Replaced VNC placeholder `alert()` with an in-modal information overlay in `ConsoleModal`.
+    - Updated all 43 locale files with new shared keys (`common.apply`, `common.confirm`, `common.info`, `resource_list.custom_page_size`) to support these UI components across all supported languages.
+29. **Enhanced Resource Management UI**:
+    - **Pagination**: Added client-side pagination to `ResourceList` with options for 10, 25, 50, 100, "All", and "Custom" items per page.
+    - **Multiple Views**: Implemented "List View" (table) and "Grid View" (cards) for all resource types.
+    - **Sorting**: Added dynamic sorting by any resource attribute (Name, Status, CPU, Memory, Image, IP). Supports ascending and descending orders.
+    - **Search Integration**: Real-time filtering by name, image, or IP, integrated with pagination and sorting.
 
 ### UI Layout & Components
 
@@ -224,10 +236,19 @@ The application follows a **Desktop-First** layout but is fully responsive for m
         - List items with icons: Hostname (Server icon), CPU (Cpu icon), Uptime (Clock icon), RAM (Total/Free).
         - **Web Frontend Info Section**: Displays browser type, platform, and language.
 
-#### 3. Resource Management Views (VMs, Docker, Jails, Podman)
-- **Header**: Flex container with Title/Description on left and "New [Resource]" button on right.
-- **Resource Table**: Full-width card with overflow-x: auto.
-    - Columns: Name (with icon), Type-specific info (Image, IP, CPU, Memory), Status (Badge), Actions.
+- **Resource Table/Grid**: Full-width card with switching between List and Grid views.
+    - **View Controls**: Toggle between List (`LayoutList` icon) and Grid (`LayoutGrid` icon) in the header.
+    - **Pagination**: Located in the footer, showing "Page X of Y", item counts, and navigation buttons (Previous, Next, Page numbers).
+    - **Controls Bar**:
+        - **Search**: Large input with Search icon.
+        - **Items per page**: Dropdown with predefined and custom options.
+        - **Sort by**: Dropdown for selecting the sort field and a toggle button for Ascending/Descending (hidden in List View, use table headers instead).
+    - **List View (Table)**:
+        - Columns: Name (with icon), Type-specific info (Image, IP, CPU, Memory), Status (Badge), Actions.
+        - Clickable headers for instant sorting (ArrowUp/ArrowDown indicators).
+    - **Grid View (Cards)**:
+        - Responsive grid (1 col mobile, 2 cols tablet, 3 cols desktop).
+        - Each card: Resource icon, Name, ID, attribute list, and action buttons in the footer.
     - **Status Badges**:
         - `running`/`up`/`active`: Emerald-50 background, Emerald-700 text.
         - `stopped`/`exited`/`inactive`: Slate-100 background, Slate-700 text.

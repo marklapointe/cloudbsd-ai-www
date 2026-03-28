@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { User, Trash2, UserPlus, Shield, Languages, Key } from 'lucide-react';
+import { User, Trash2, UserPlus, Shield, Languages, Key, X } from 'lucide-react';
 import api from '../api/client';
 import { useTranslation } from 'react-i18next';
 import { getSortedLanguages } from '../constants/languages';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 interface UserData {
   id: number;
@@ -16,7 +17,10 @@ const Users: React.FC = () => {
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [formError, setFormError] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
   const [newUsername, setNewUsername] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newRole, setNewRole] = useState('viewer');
@@ -54,19 +58,27 @@ const Users: React.FC = () => {
       setNewRole('viewer');
       setNewLanguage('en');
       setShowAddForm(false);
+      setFormError('');
       fetchUsers();
     } catch (err: any) {
-      alert(err.response?.data?.message || t('common.create_error'));
+      setFormError(err.response?.data?.message || t('common.create_error'));
     }
   };
 
   const handleDeleteUser = async (id: number) => {
-    if (!confirm(t('users.delete_confirm'))) return;
+    setDeletingId(id);
+    setIsConfirmationOpen(true);
+  };
+
+  const confirmDeleteUser = async () => {
+    if (deletingId === null) return;
     try {
-      await api.delete(`/users/${id}`);
+      await api.delete(`/users/${deletingId}`);
       fetchUsers();
     } catch (err: any) {
-      alert(err.response?.data?.message || t('common.delete_error'));
+      setError(err.response?.data?.message || t('common.delete_error'));
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -93,6 +105,24 @@ const Users: React.FC = () => {
       {showAddForm && (
         <div className="bg-white p-8 rounded-[2rem] shadow-xl border border-slate-100 animate-in zoom-in-95 duration-300">
           <h2 className="text-xl font-black text-slate-900 mb-6">{t('users.create_new')}</h2>
+          
+          {formError && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl flex items-center justify-between animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-red-100 rounded-xl text-red-600">
+                  <X size={18} />
+                </div>
+                <span className="text-sm font-bold text-red-700">{formError}</span>
+              </div>
+              <button 
+                onClick={() => setFormError('')}
+                className="p-1 text-red-400 hover:text-red-600 transition-colors"
+              >
+                <X size={16} />
+              </button>
+            </div>
+          )}
+
           <form onSubmit={handleCreateUser} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 items-end">
             <div className="space-y-2">
               <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('common.username')}</label>
@@ -241,6 +271,18 @@ const Users: React.FC = () => {
           </tbody>
         </table>
       </div>
+
+      <ConfirmationModal
+        isOpen={isConfirmationOpen}
+        onClose={() => {
+          setIsConfirmationOpen(false);
+          setDeletingId(null);
+        }}
+        onConfirm={confirmDeleteUser}
+        title={t('common.delete')}
+        message={t('users.delete_confirm')}
+        variant="danger"
+      />
     </div>
   );
 };

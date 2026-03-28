@@ -9,7 +9,7 @@
     "build": "tsc -b && vite build",
     "start": "node --experimental-strip-types server/src/index.ts",
     "lint": "eslint .",
-    "test": "vitest"
+    "test": "npm run build && vitest"
   },
   "dependencies": {
     "@xterm/addon-fit": "^0.11.0",

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Server, Plus, Trash2, Edit2, Activity } from 'lucide-react';
+import { Server, Plus, Trash2, Edit2, Activity, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import api from '../api/client';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 interface NodeData {
   id: number;
@@ -23,7 +24,10 @@ const Cluster: React.FC = () => {
   const [nodes, setNodes] = useState<NodeData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [formError, setFormError] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
   const [editingNode, setEditingNode] = useState<NodeData | null>(null);
   
   const [formData, setFormData] = useState({
@@ -83,19 +87,27 @@ const Cluster: React.FC = () => {
       });
       setShowAddForm(false);
       setEditingNode(null);
+      setFormError('');
       fetchNodes();
     } catch (err: any) {
-      alert(err.response?.data?.message || t('cluster.operation_failed'));
+      setFormError(err.response?.data?.message || t('cluster.operation_failed'));
     }
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm(t('cluster.delete_confirm'))) return;
+    setDeletingId(id);
+    setIsConfirmationOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (deletingId === null) return;
     try {
-      await api.delete(`/nodes/${id}`);
+      await api.delete(`/nodes/${deletingId}`);
       fetchNodes();
     } catch (err: any) {
-      alert(err.response?.data?.message || t('cluster.delete_failed'));
+      setError(err.response?.data?.message || t('cluster.delete_failed'));
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -142,6 +154,24 @@ const Cluster: React.FC = () => {
       {showAddForm && (
         <div className="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100 animate-in zoom-in-95 duration-300">
           <h2 className="text-xl font-black text-slate-900 mb-6">{editingNode ? t('cluster.edit_node') : t('cluster.add_new_node')}</h2>
+          
+          {formError && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl flex items-center justify-between animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-red-100 rounded-xl text-red-600">
+                  <X size={18} />
+                </div>
+                <span className="text-sm font-bold text-red-700">{formError}</span>
+              </div>
+              <button 
+                onClick={() => setFormError('')}
+                className="p-1 text-red-400 hover:text-red-600 transition-colors"
+              >
+                <X size={16} />
+              </button>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
               <div className="space-y-2">
@@ -398,6 +428,18 @@ const Cluster: React.FC = () => {
           ))}
         </div>
       )}
+
+      <ConfirmationModal
+        isOpen={isConfirmationOpen}
+        onClose={() => {
+          setIsConfirmationOpen(false);
+          setDeletingId(null);
+        }}
+        onConfirm={confirmDelete}
+        title={t('common.delete')}
+        message={t('cluster.delete_confirm')}
+        variant="danger"
+      />
     </div>
   );
 };

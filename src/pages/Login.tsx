@@ -42,7 +42,6 @@ const Login: React.FC = () => {
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.has('debug')) {
         console.log('Login Success Data:', response.data);
-        alert('Login success. (Close this alert to redirect to dashboard)');
       }
 
       // Update language if the user has a preference and save it to localStorage for the detector

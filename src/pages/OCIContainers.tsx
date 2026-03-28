@@ -14,10 +14,11 @@ const OCIContainers: React.FC = () => {
       resourceName={t('containers.resource_name')}
       resourceType="container"
       columns={[
-        { header: t('common.image'), accessor: 'image' },
+        { header: t('common.image'), accessor: 'image', sortable: true },
         { 
           header: t('common.status'), 
           accessor: 'status',
+          sortable: true,
           render: (val) => (
             <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
               val === 'up' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-700'
