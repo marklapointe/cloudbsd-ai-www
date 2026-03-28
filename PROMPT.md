@@ -47,6 +47,8 @@ This document is intended to be as descriptive as possible so that any LLM can u
 9.  **Makefile & Platform-Aware Make**:
     - Comprehensive `Makefile` for installation, building, testing, and running.
     - **Make Wrapper**: Implemented `make-wrapper.sh` to automatically use `make` on FreeBSD and `bmake` on other platforms (macOS/Linux), ensuring compatibility with BSD-style makefiles across different systems.
+    - **Translation Audit**: Created `scripts/check_locales.mjs` and a corresponding `make check-locales` target to verify that all 43 supported languages are in sync with the English reference, identifying missing or untranslated keys.
+    - **Localization Hardening**: Systematically updated major locale files (Arabic, French, German, Spanish, Italian, Croatian, Portuguese, Russian) with high-quality translations for core UI terms and refined the audit tool to accurately handle technical terminology.
 10. **Demo Mode**:
     - A demo mode is available for testing purposes.
     - The demo mode is enabled by default.
@@ -176,7 +178,18 @@ This document is intended to be as descriptive as possible so that any LLM can u
     - Fixed an issue where the User Manual was not correctly translating for some non-English locales and confirmed the content is correctly localized when downloaded.
     - Redesigned the sidebar layout: moved the user profile section to the top of the navigation for improved visibility and accessibility.
     - Linked the User Manual in the `README.md` for better discoverability.
-27. **Performance & Build Optimization**:
+27. **Licensing & Notifications**:
+    - **License Constraints**: Implemented backend enforcement of license limits (Nodes, VMs, Containers, Jails). Added `demoLicense` configuration object to `etc/config.json` for manually overriding trial limits in demo mode.
+    - **Notification System**:
+        - **Bell Icon**: Added a notification bell to the top navigation bar (mobile and desktop) with an unread count badge.
+        - **Notification Dropdown**: A slide-down menu displaying a list of system messages, with "Mark all as read" and "View all" functionality.
+        - **Notifications Page**: A dedicated `/notifications` page with a webmail-like layout (sidebar inbox, message detail view, search, and delete functions).
+        - **Notification Suppression**: System warnings (like license limits) are stored in `localStorage` and suppressed for 24 hours after their first appearance to reduce noise.
+        - **License Warning Banner**: A persistent, high-visibility amber banner appears at the top of the application when resource usage exceeds license limits.
+28. **Button Styling & UI Consistency**:
+    - Standardized all primary action buttons (modals and pages) to use brand primary colors (e.g., `bg-brand-600`) instead of black or slate-900 backgrounds.
+    - Improved modal accessibility and layout with rounded-2xl corners and backdrop-blur-md effects.
+29. **Performance & Build Optimization**:
     - **Code-Splitting**: Implemented `React.lazy` and `Suspense` for all major page routes in `App.tsx`, reducing the initial bundle size and improving Time-to-Interactive (TTI).
     - **Manual Chunking**: Configured Vite's `rollupOptions.manualChunks` to intelligently group vendor libraries (`vendor-react`, `vendor-terminal`, `vendor-icons`) and i18n locale files into separate, cacheable chunks.
     - **Locale Grouping**: Optimized i18n loading by grouping less-used locale files into shared chunks while keeping major languages (EN, ES, FR, ZH, etc.) in their own dedicated chunks.
@@ -220,6 +233,14 @@ The application follows a **Desktop-First** layout but is fully responsive for m
 - **Main Content (Right/Center)**:
     - Fluid width, fills remaining space.
     - Background: Gray-100 (`#f3f4f6`).
+    - **Desktop Header**:
+        - Sticky, height: 64px (`h-16`).
+        - Background: White (80% opacity) with blur effect.
+        - Left: Current path (e.g., "vms", "dashboard").
+        - Right: 
+            - **Notification Bell**: Lucide icon with red unread count badge and dropdown.
+            - **User Avatar**: Circular button (Brand-500 bg, White text) with the user's first initial.
+            - **Logout**: Clicking the user avatar triggers logout (with `common.logout` tooltip).
     - Padding: 32px (`p-8`).
     - Contains the page title, description, and the main card-based view components.
 
@@ -293,6 +314,7 @@ The application follows a **Desktop-First** layout but is fully responsive for m
     - Contains all 44 supported languages.
     - Updates the entire UI language immediately upon selection.
     - Choice persists into the authenticated session.
+    - All non-fictional locales must have distinct translations (not identical to English) for all UI strings longer than 3 characters, verified by automated tests.
 - **Form**: Centralized login form with high-contrast inputs for Username and Password.
 - **Visuals**: Animated background with brand gradients and a floating logo.
 

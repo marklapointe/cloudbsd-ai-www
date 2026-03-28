@@ -290,6 +290,22 @@ export const isOperator = (req: any, res: any, next: any) => {
   }
 };
 
+const checkLicenseLimit = (resourceType: string) => {
+  const currentDb = initDb();
+  const license = currentDb.prepare('SELECT * FROM license LIMIT 1').get() as any;
+  if (!license) return true; // No license, assume no limits (or should we?)
+
+  const countRow = currentDb.prepare('SELECT COUNT(*) as count FROM resources WHERE type = ?').get(resourceType) as any;
+  const currentCount = countRow?.count || 0;
+
+  let limit = 0;
+  if (resourceType === 'vms') limit = license.vms_limit;
+  else if (resourceType === 'containers') limit = license.containers_limit;
+  else if (resourceType === 'jails') limit = license.jails_limit;
+
+  return currentCount < limit;
+};
+
 // Auth routes
 /**
  * @openapi
@@ -823,6 +839,12 @@ app.post('/api/:resource', authenticateToken, isOperator, (req, res) => {
   
   if (!validResources.includes(resource)) {
     return res.status(400).json({ message: 'Invalid resource type' });
+  }
+
+  if (!checkLicenseLimit(resource)) {
+    return res.status(403).json({ 
+      message: `License limit reached for ${resource}. Please upgrade your license.` 
+    });
   }
 
   let status = 'stopped';
@@ -1395,6 +1417,8 @@ setInterval(() => {
   const resource = resources[Math.floor(Math.random() * resources.length)];
   io.emit('resource_update', { resource, timestamp: new Date() });
 }, 5000);
+
+export { app };
 
 if (process.env.NODE_ENV !== 'test') {
   httpServer.listen(port, '127.0.0.1', () => {

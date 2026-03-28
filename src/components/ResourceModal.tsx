@@ -87,10 +87,10 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
-        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-          <h2 className="text-lg font-bold text-slate-900">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200 border border-slate-200/50">
+        <div className="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">
             {initialData ? t('resource_modal.edit') : t('resource_modal.create_new')} {resourceName}
           </h2>
           <button 
@@ -178,18 +178,18 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
             </div>
           )}
 
-          <div className="pt-4 flex gap-3">
+          <div className="pt-6 flex gap-4">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-slate-200 text-slate-700 font-bold rounded-lg hover:bg-slate-50 transition-colors"
+              className="flex-1 px-6 py-3 border border-slate-200 text-slate-700 font-bold rounded-2xl hover:bg-slate-50 transition-all active:scale-95"
             >
               {t('common.cancel')}
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-4 py-2 bg-blue-600 text-white font-black rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg shadow-blue-500/20 active:scale-95"
+              className="flex-1 px-6 py-3 bg-brand-600 text-white font-black rounded-2xl hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-brand-500/20 active:scale-95"
             >
               {loading ? (initialData ? t('resource_modal.updating') : t('resource_modal.creating')) : (initialData ? t('resource_modal.update') : t('resource_modal.create'))}
             </button>

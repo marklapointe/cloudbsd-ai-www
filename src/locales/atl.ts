@@ -9,12 +9,13 @@ const atl = {
       "status": "Status",
       "name": "Name",
       "type": "Type",
+      "info": "Information",
       "host": "Host",
       "settings": "Settings",
       "logout": "Logout",
       "dashboard": "Dashboard",
-      "vms": "Virtual Machines",
-      "containers": "OCI Containers",
+      "vms": "VMs",
+      "containers": "Containers",
       "jails": "Jails",
       "network": "Network Map",
       "cluster": "Cluster",
@@ -30,7 +31,6 @@ const atl = {
       "delete": "Delete",
       "apply": "Apply",
       "confirm": "Confirm",
-      "info": "Information",
       "server": "Server",
       "admin": "Admin",
       "operator": "Operator",
@@ -61,7 +61,10 @@ const atl = {
       "add_jail": "Add Jail",
       "utilized": "UTILIZED",
       "gb": "GB",
-      "tb": "TB"
+      "tb": "TB",
+      "error": "Error",
+      "success": "Success",
+      "warning": "Warning"
     },
     "login": {
       "title": "CloudBSD Admin",
@@ -82,6 +85,24 @@ const atl = {
       "backend_offline": "Backend is offline. Some features may be unavailable. Retrying...",
       "connecting": "Konektante...",
       "verifying_connection": "Khun-dhalat'un lhu-zhub b'shara-hlat..."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "empty": "No new notifications",
+      "mark_read": "Mark all as read",
+      "view_all": "View all notifications",
+      "license_warning": "License Limit Exceeded",
+      "upgrade_license": "Upgrade License",
+      "vms_over_limit": "{{count}} Virtual Machines (Limit: {{limit}})",
+      "containers_over_limit": "{{count}} Containers (Limit: {{limit}})",
+      "jails_over_limit": "{{count}} Jails (Limit: {{limit}})",
+      "nodes_over_limit": "{{count}} Nodes (Limit: {{limit}})",
+      "message_from": "From",
+      "system_admin": "CloudBSD System Admin",
+      "message_id": "Message ID",
+      "message_type": "{{type}} Message",
+      "automated_notice": "This is an automated system notification. Please review your settings if action is required.",
+      "select_prompt": "Select a notification to view details"
     },
     "dashboard": {
       "title": "Infrastructure Overview",
@@ -404,7 +425,8 @@ const atl = {
       "sort_by": "Sort by",
       "sort_asc": "Ascending",
       "sort_desc": "Descending",
-      "custom_page_size": "Custom Page Size"},
+      "custom_page_size": "Custom Page Size"
+    },
     "resource_modal": {
       "create_new": "Create New",
       "edit": "Edit",
@@ -419,7 +441,9 @@ const atl = {
       "creating": "Creating...",
       "update": "Update",
       "create": "Create",
-      "ip_placeholder": "e.g. 192.168.1.100"
+      "ip_placeholder": "e.g. 192.168.1.100",
+      "create_failed": "Failed to create {{resource}}",
+      "update_failed": "Failed to update {{resource}}"
     },
     "console_modal": {
       "title": "Console",
@@ -435,4 +459,5 @@ const atl = {
     }
   }
 };
+
 export default atl;

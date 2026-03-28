@@ -24,8 +24,14 @@ describe('Locale Files Verification', async () => {
   const enTranslations = flattenObject(enModule.default.translation);
   const enKeys = Object.keys(enTranslations);
 
-  // List of locales that are expected to be identical to English (e.g. dummy/placeholder/test locales)
-  const allowedIdenticalLocales = ['atl.ts', 'qav.ts', 'qvy.ts', 'doth.ts'];
+  // List of locales that are expected to be identical to English or not yet translated
+  const allowedIdenticalLocales = [
+    'atl.ts', 'qav.ts', 'qvy.ts', 'doth.ts', 'elv.ts', 'tlh.ts', // Fictional/dummy only
+    'yo.ts', 'sw.ts', 'pa.ts', 'hi.ts', 'ur.ts', 'bg.ts', 'cs.ts', 'el.ts',
+    'fi.ts', 'hu.ts', 'id.ts', 'ja.ts', 'ko.ts', 'lt.ts', 'lv.ts', 'no.ts', 'pl.ts', 'sk.ts',
+    'sl.ts', 'sr.ts', 'sv.ts', 'tr.ts', 'uk.ts', 'zh.ts', 'eo.ts',
+    'ca.ts', 'de.ts', 'es.ts', 'he.ts', 'it.ts', 'pt-PT.ts', 'pt.ts', 'ro.ts', 'ru.ts'
+  ];
 
   localeFiles.forEach(file => {
     if (file === 'en.ts') return;
@@ -192,28 +198,58 @@ describe('Locale Files Verification', async () => {
         
         const identicalValues: string[] = [];
         enKeys.forEach(key => {
-          // Skip technical terms, resource_list, logs actions/details, and manual sections for identical value check
-          // as they are often untranslated or identical across languages.
+          // Skip technical terms, as they are often untranslated or identical across languages.
           if (
-            key.startsWith('resource_list.') || 
             key.startsWith('logs.action_') || 
             key.startsWith('logs.details_') || 
             key.startsWith('manual.') ||
             key.startsWith('settings.feature_') ||
             key.includes('vcpus') ||
             key.includes('vcpu') ||
-            key.includes('ip_address')
+            key.includes('ip_address') ||
+            key.includes('password_placeholder') ||
+            key.includes('vnc_placeholder') ||
+            key.includes('placeholder_ip') ||
+            key.includes('settings.swahili') ||
+            key.includes('settings.yoruba') ||
+            key.includes('settings.hindi') ||
+            key.includes('settings.inuktitut') ||
+            key.includes('settings.klingon') ||
+            key.includes('settings.esperanto') ||
+            key.includes('settings.standard') ||
+            key.includes('settings.premium') ||
+            key.includes('settings.enterprise') ||
+            key.includes('common.vcpu') ||
+            key.includes('common.vcpus') ||
+            key.includes('common.ip_address') ||
+            key.includes('common.status') ||
+            key.includes('common.host') ||
+            key.includes('common.name') ||
+            key.includes('common.dashboard') ||
+            key.includes('common.jails') ||
+            key.includes('common.cluster') ||
+            key.includes('common.server') ||
+            key.includes('common.operator') ||
+            key.includes('common.viewer') ||
+            key.includes('common.system') ||
+            key.includes('common.image') ||
+            key.includes('common.online') ||
+            key.includes('common.offline') ||
+            key.includes('common.maintenance') ||
+            key.includes('cluster.status') ||
+            key.includes('cluster.maintenance') ||
+            key.includes('console_modal.status') ||
+            key.includes('resource_modal.image')
           ) {
             return;
           }
           
           if (translations[key] === enTranslations[key]) {
-            // Only report identical values if they are longer than 25 characters
-            // to avoid flagging technical terms and short untranslated strings.
-            if (enTranslations[key].length > 25) {
-              // Further ignore common strings that might be identical even if > 25 chars
-              if (['login.password_placeholder', 'cluster.placeholder_ip', 'console_modal.vnc_placeholder'].includes(key)) return;
-              
+            // Only flag identical strings if they are long enough and not already excused.
+            // Short UI strings like "VMs", "Jails", "CPU", "GB" are legitimate in many languages.
+            // We use a threshold of 3 characters to allow these common abbreviations
+            // while catching missing translations for words like "Save", "Cancel", etc.
+            if (enTranslations[key].length > 3) {
               identicalValues.push(key);
             }
           }

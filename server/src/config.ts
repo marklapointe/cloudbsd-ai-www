@@ -31,6 +31,12 @@ export interface Config {
     enabled?: boolean;
     header?: string; // header used to expose token to clients
   };
+  demoLicense?: {
+    nodes_limit: number;
+    vms_limit: number;
+    containers_limit: number;
+    jails_limit: number;
+  };
 }
 
 const DEFAULT_CONFIG: Config = {
@@ -57,6 +63,12 @@ const DEFAULT_CONFIG: Config = {
   csrf: {
     enabled: false,
     header: 'x-csrf-token',
+  },
+  demoLicense: {
+    nodes_limit: 5,
+    vms_limit: 2,
+    containers_limit: 100,
+    jails_limit: 50,
   },
 };
 

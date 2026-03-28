@@ -1,6 +1,6 @@
 # Makefile for CloudBSD Admin (Unified Frontend + Backend)
 
-.PHONY: all install build dev start clean test
+.PHONY: all install build dev start clean test check-locales
 
 PREFIX?=/usr/local
 APPDIR?=$(PREFIX)/www/cloudbsd-admin
@@ -50,3 +50,6 @@ test: build
 clean:
 	rm -rf dist
 	rm -rf node_modules
+
+check-locales:
+	node scripts/check_locales.mjs

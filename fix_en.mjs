@@ -1,4 +1,5 @@
-const en = {
+import fs from 'fs';
+const content = `const en = {
   translation: {
     common: {
       save: "Save",
@@ -96,13 +97,7 @@ const en = {
       vms_over_limit: "{{count}} Virtual Machines (Limit: {{limit}})",
       containers_over_limit: "{{count}} Containers (Limit: {{limit}})",
       jails_over_limit: "{{count}} Jails (Limit: {{limit}})",
-      nodes_over_limit: "{{count}} Nodes (Limit: {{limit}})",
-      message_from: "From",
-      system_admin: "CloudBSD System Admin",
-      message_id: "Message ID",
-      message_type: "{{type}} Message",
-      automated_notice: "This is an automated system notification. Please review your settings if action is required.",
-      select_prompt: "Select a notification to view details"
+      nodes_over_limit: "{{count}} Nodes (Limit: {{limit}})"
     },
     dashboard: {
       title: "Infrastructure Overview",
@@ -448,8 +443,8 @@ const en = {
     console_modal: {
       title: "Console",
       connected_to: "Connected to",
-      type_exit: 'Type "exit" to close the console.',
-      vnc_placeholder: "VNC Console View",
+      type_exit: "Type \"exit\" to close the console.",
+      vnc_placeholder: "VNC Console Placeholder",
       vnc_desc: "noVNC integration would appear here for VM management.",
       connect_vnc: "Connect via VNC",
       vnc_alert: "VNC Connection would be established to bhyve instance.",
@@ -459,4 +454,5 @@ const en = {
     }
   }
 };
-export default en;
+export default en;`;
+fs.writeFileSync('src/locales/en.ts', content);

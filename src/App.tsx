@@ -14,6 +14,7 @@ const Cluster = lazy(() => import('./pages/Cluster'));
 const NetworkMap = lazy(() => import('./pages/NetworkMap'));
 const Users = lazy(() => import('./pages/Users'));
 const Logs = lazy(() => import('./pages/Logs'));
+const Notifications = lazy(() => import('./pages/Notifications'));
 const Settings = lazy(() => import('./pages/Settings'));
 
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -114,6 +115,16 @@ function App() {
                 <PrivateRoute>
                   <Layout>
                     <Logs />
+                  </Layout>
+                </PrivateRoute>
+              } 
+            />
+            <Route 
+              path="/notifications" 
+              element={
+                <PrivateRoute>
+                  <Layout>
+                    <Notifications />
                   </Layout>
                 </PrivateRoute>
               } 
