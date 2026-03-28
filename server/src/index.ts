@@ -221,6 +221,12 @@ app.use((req: any, res: any, next: any) => {
 
 // Middleware to verify JWT
 const authenticateToken = (req: any, res: any, next: any) => {
+  // In demo mode, bypass authentication
+  if (config.demoMode) {
+    req.user = { id: 1, username: 'demo', role: 'admin', language: 'en' };
+    return next();
+  }
+
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
