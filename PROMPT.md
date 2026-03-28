@@ -4,7 +4,7 @@ so I can append to them here and rerun because this is the design document. If I
 So even when stating that there is a view, describe in this document the size of the view area, objects, and their placement
 
 Security is a priority for me; everything should have SSL/TLS enabled.
-If keys aren't present, generate them and store them in `/usr/local/etc/cloudbsd/admin-panel/ssl/`. 
+If keys aren't present, generate them and store them in `/usr/local/etc/cloudbsd/admin/ssl/`. 
 But we should use a self-signed cert for local development in the current project directory, but check for certbot certificates and to be able to use them. 
 In the json config I should be able to set the servername and port.
 This document is intended to be as descriptive as possible so that any LLM can understand it and reproduce the exact same code. That may be unrealistic, but it is a goal.
@@ -52,7 +52,7 @@ This document is intended to be as descriptive as possible so that any LLM can u
     - The demo mode is enabled by default.
 11. **Configuration Management**:
     - Robust configuration system in `server/src/config.ts`.
-    - Priority-based loading: Local `etc/config.json` > `/usr/local/etc/cloudbsd/admin-panel/config.json` > Defaults.
+    - Priority-based loading: Local `etc/config.json` > `/usr/local/etc/cloudbsd/admin/config.json` > Defaults.
     - Supports dynamic port, secret keys, CORS, and database paths.
     - Lazy loading and `reloadConfig` support for testing.
     - **Strict Defaults**: `corsEnabled` is strictly defaulted to `false` if missing from the configuration file or if it contains an invalid type, ensuring maximum security by default.

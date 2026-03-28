@@ -20,7 +20,7 @@ This document outlines the development standards and project-specific guidelines
 #### 4. Backend Standards
 - **API Design**: Follow RESTful principles. All endpoints must be documented with Swagger/OpenAPI (available at `/api-docs`).
 - **Authentication**: JWT-based. Admin users manage roles and permissions.
-- **Configuration**: Priority-based loading: `./etc/config.json` > `/usr/local/etc/cloudbsd/admin-panel/config.json` > Defaults.
+- **Configuration**: Priority-based loading: `./etc/config.json` > `/usr/local/etc/cloudbsd/admin/config.json` > Defaults.
 
 #### 5. Documentation & History
 - **PROMPT.md**: This is the primary design document. Keep it up-to-date with all features and UI descriptions.

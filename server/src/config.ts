@@ -46,8 +46,8 @@ const DEFAULT_CONFIG: Config = {
   referrerPolicy: 'no-referrer-when-downgrade',
   ssl: {
     enabled: false,
-    certPath: '/usr/local/etc/cloudbsd/admin-panel/ssl/cert.pem',
-    keyPath: '/usr/local/etc/cloudbsd/admin-panel/ssl/key.pem',
+    certPath: '/usr/local/etc/cloudbsd/admin/ssl/cert.pem',
+    keyPath: '/usr/local/etc/cloudbsd/admin/ssl/key.pem',
   },
   // Default cookie and CSRF settings are permissive to support proxy setups
   cookie: {
@@ -64,7 +64,7 @@ const DEFAULT_CONFIG: Config = {
 
 const CONFIG_PATHS = [
   path.join(process.cwd(), 'etc/config.json'),
-  '/usr/local/etc/cloudbsd/admin-panel/config.json',
+  '/usr/local/etc/cloudbsd/admin/config.json',
 ];
 
 export function loadConfig(): Config {

@@ -69,7 +69,7 @@ npm test
 The application uses a priority-based configuration system. It looks for a `config.json` file in the following locations:
 
 1.  `./etc/config.json` (Local development)
-2.  `/usr/local/etc/cloudbsd/admin-panel/config.json` (Production FreeBSD)
+2.  `/usr/local/etc/cloudbsd/admin/config.json` (Production FreeBSD)
 
 Example `config.json`:
 ```json

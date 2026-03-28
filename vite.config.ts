@@ -25,13 +25,9 @@ export default defineConfig({
             if (id.includes('xterm')) {
               return 'vendor-terminal';
             }
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom') || id.includes('scheduler') || id.includes('prop-types') || id.includes('lucide-react')) {
-              return 'vendor-react';
-            }
             if (id.includes('i18next') || id.includes('react-i18next')) {
               return 'vendor-i18n';
             }
-            return 'vendor';
           }
           if (id.includes('src/locales/')) {
             const match = id.match(/src\/locales\/([a-z0-9-_]+)\.ts/i);
