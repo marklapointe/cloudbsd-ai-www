@@ -43,7 +43,7 @@ const DEFAULT_CONFIG: Config = {
   dbPath: path.join(__dirname, '../../data/admin.db'),
   demoMode: true,
   corsEnabled: false,
-  referrerPolicy: 'no-referrer-when-downgrade',
+  referrerPolicy: 'strict-origin-when-cross-origin',
   ssl: {
     enabled: false,
     certPath: '/usr/local/etc/cloudbsd/admin/ssl/cert.pem',

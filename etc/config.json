@@ -1,4 +1,14 @@
 {
   "secretKey": "CloudBSD-Admin-Stable-Secret-Key-2024",
-  "demoMode": true
+  "demoMode": true,
+  "corsEnabled": false,
+  "cookie": {
+    "sameSite": "none",
+    "secure": true,
+    "domain": "demo.cloudbsd.org",
+    "httpOnly": true
+  },
+  "csrf": {
+    "enabled": false
+  }
 }
