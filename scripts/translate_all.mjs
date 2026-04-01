@@ -50,6 +50,15 @@ const enContent = fs.readFileSync(enFile, 'utf8');
 const enObj = extractObject(enContent);
 const enFlat = flattenObject(enObj.translation);
 
+const technicalTerms = [
+    'vCPU', 'vCPUs', 'IP', 'GB', 'TB', 'MB', 'KB', 'Status', 'Host', 'Dashboard', 'Name',
+    'Jails', 'Cluster', 'Server', 'Operator', 'Viewer', 'System', 'Image', 'Online', 'Offline',
+    'Maintenance', '••••••••', '10.0.0.X', 'Console', 'VNC', 'CPU', 'Error', 'RAM', 'MEM', 'AMF', 'MFA', 'SMTP', 'VLAN', 'IPv4', 'IPv6', 'ID',
+    'CloudBSD', 'OCI', 'bhyve', 'noVNC', 'SSH', 'API', 'MVs', 'VMs', 'VM', 'MV', 'HA', 'Endpoint', 'SMTP', 'OS', 'MFA',
+    'Admin', 'Actions', 'Type', 'Information', 'Containers', 'Logs', 'Username', 'Password', 'Timestamp', 'Edit', 'Jail',
+    'Browser', 'Nodes', 'Cluster', 'Network', 'Dashboard', 'Uptime', 'Platform', 'Language', 'Mbps', 'System Live', 'URL', 'N/A'
+];
+
 const dictionaries = {
   bg: {
     "Save": "Запазване",
@@ -978,7 +987,6 @@ const dictionaries = {
     "Auto-refresh Data": "Actualización automática de datos",
     "Refresh Interval (ms)": "Intervalle de actualización (ms)",
     "API Endpoint": "Punto de conexión de la API",
-    "Language preference saved successfully": "Preferencia de idioma guardada con éxito",
     "Failed to update config": "Error al actualizar la configuración",
     "N/A": "N/A",
     "English": "Inglés",
@@ -993,6 +1001,16 @@ const dictionaries = {
     "Portuguese": "Portugués",
     "Turkish": "Turco",
     "Arabic": "Arabe",
+    "Swahili": "Suajili",
+    "Yoruba": "Yoruba",
+    "Esperanto": "Esperanto",
+    "Romanian": "Rumano",
+    "Hindi": "Hindi",
+    "Punjabi": "Punjabi",
+    "Castilian": "Castellano",
+    "Klingon": "Klingon",
+    "Inuktitut": "Inuktitut",
+    "Iraqi": "Iraquí",
     "Manage administrator and operator accounts": "Gestionar cuentas de administrador y operador",
     "New User": "Nuevo usuario",
     "Create New User": "Crear nuevo usuario",
@@ -1087,6 +1105,13 @@ languages.forEach(lang => {
       // If we don't have a translation, we use the English value
       // so it's at least readable and detected by the audit script.
       flat[key] = enVal;
+    }
+
+    // Apply the " *" rule: if the translation is identical to English, 
+    // append an asterisk to distinguish it as an intentional choice.
+    // We exclude technical terms, short strings, and placeholders.
+    if (!isFictional && flat[key] === enVal && enVal.trim() !== '' && !technicalTerms.includes(enVal)) {
+      flat[key] = enVal + ' *';
     }
   }
 

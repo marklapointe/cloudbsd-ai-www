@@ -92,9 +92,6 @@ localeFiles.forEach(file => {
         if (val.startsWith('[T] ')) return true;
         if (val.match(/^\[[A-Z]{2,5}\] /)) return true;
         
-        // If it ends with " *", it's my "garbage" marker
-        if (val.endsWith(' *')) return true;
-
         // If it's identical to English and not a technical term
         if (val === enVal) {
             if (technicalTerms.includes(enVal)) return false;

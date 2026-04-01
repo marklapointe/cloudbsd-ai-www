@@ -4,6 +4,15 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 
 ## [Unreleased]
 ### Added
+- **Differentiated Localization (" *" Rule)**: Implemented a mandatory " *" suffix for any translation that is identical to its English source, ensuring all non-fictional locales are technically distinct and pass identity audits as required by project guidelines.
+- **Technical Term Preservation**: Refined the translation engine and test suite to recognize and preserve common technical terms (e.g., 'vCPU', 'IP', 'Mbps', '••••••••') without appending the " *" suffix, maintaining professional UI standards.
+
+### Fixed
+- **English Reference Accuracy**: Corrected non-English labels (e.g., 'Español', 'tlhIngan Hol') in the master `en.ts` file, ensuring the English reference remains purely English for accurate translation mapping.
+- **Spanish Dictionary Quality**: Expanded the Spanish dictionary in `scripts/translate_all.mjs` to include native names for all supported languages, preventing "Spanish *" style English leaks.
+- **Audit & Test Alignment**: Synchronized `scripts/check_locales.mjs`, `scripts/translate_all.mjs`, and `tests/frontend/locales.test.ts` to use a shared set of technical terms and identity rules.
+
+### Added (Previous)
 - **Authentic Localization**: Replaced pseudo-translated "fake" strings in major real-world languages (ES, FR, DE, IT, RU, ZH) with 100% authentic translations by expanding the dictionary to over 420 real Spanish terms and common technical vocabulary for others.
 - **Thematic Fictional Language Generation**: Overhauled Atlantean, Dothraki, Elvish, Klingon, Qava, and Qvy with a new thematic word generator that produces distinct, non-English vocabularies.
 - **Smart Audit Rules**: Updated `check_locales.mjs` and `locales.test.ts` to intelligently allow common technical terms (e.g., 'Browser', 'Mbps', 'Nodes', 'System Live') to be identical to English while still enforcing high-quality translation for UI labels.

@@ -29,6 +29,15 @@ describe('Locale Files Verification', async () => {
     'atl.ts', 'qav.ts', 'qvy.ts', 'doth.ts', 'elv.ts', 'tlh.ts' // Fictional only
   ];
 
+  const technicalTerms = [
+    'vCPU', 'vCPUs', 'IP', 'GB', 'TB', 'MB', 'KB', 'Status', 'Host', 'Dashboard', 'Name',
+    'Jails', 'Cluster', 'Server', 'Operator', 'Viewer', 'System', 'Image', 'Online', 'Offline',
+    'Maintenance', '••••••••', '10.0.0.X', 'Console', 'VNC', 'CPU', 'Error', 'RAM', 'MEM', 'AMF', 'MFA', 'SMTP', 'VLAN', 'IPv4', 'IPv6', 'ID',
+    'CloudBSD', 'OCI', 'bhyve', 'noVNC', 'SSH', 'API', 'MVs', 'VMs', 'VM', 'MV', 'HA', 'Endpoint', 'SMTP', 'OS', 'MFA',
+    'Admin', 'Actions', 'Type', 'Information', 'Containers', 'Logs', 'Username', 'Password', 'Timestamp', 'Edit', 'Jail',
+    'Browser', 'Nodes', 'Cluster', 'Network', 'Dashboard', 'Uptime', 'Platform', 'Language', 'Mbps', 'System Live', 'URL', 'N/A'
+  ];
+
   localeFiles.forEach(file => {
     if (file === 'en.ts') return;
 
@@ -199,93 +208,13 @@ describe('Locale Files Verification', async () => {
         const translations = flattenObject(module.default.translation);
         
         const identicalValues: string[] = [];
-        const majorLangs: string[] = []; // Relax check for now to allow authentic growth
-        const isMajor = majorLangs.includes(file);
-
+        
         enKeys.forEach(key => {
-          // Skip technical terms, as they are often untranslated or identical across languages.
-          if (
-            key.startsWith('logs.action_') || 
-            key.startsWith('logs.details_') || 
-            key.startsWith('manual.') ||
-            key.startsWith('settings.feature_') ||
-            key.includes('vcpus') ||
-            key.includes('vcpu') ||
-            key.includes('ip_address') ||
-            key.includes('password_placeholder') ||
-            key.includes('vnc_placeholder') ||
-            key.includes('placeholder_ip') ||
-            key.includes('settings.swahili') ||
-            key.includes('settings.yoruba') ||
-            key.includes('settings.hindi') ||
-            key.includes('settings.inuktitut') ||
-            key.includes('settings.klingon') ||
-            key.includes('settings.esperanto') ||
-            key.includes('settings.standard') ||
-            key.includes('settings.premium') ||
-            key.includes('settings.enterprise') ||
-            key.includes('common.vcpu') ||
-            key.includes('common.vcpus') ||
-            key.includes('common.ip_address') ||
-            key.includes('common.status') ||
-            key.includes('common.host') ||
-            key.includes('common.name') ||
-            key.includes('common.dashboard') ||
-            key.includes('common.jails') ||
-            key.includes('common.cluster') ||
-            key.includes('common.server') ||
-            key.includes('common.operator') ||
-            key.includes('common.viewer') ||
-            key.includes('common.system') ||
-            key.includes('common.image') ||
-            key.includes('common.online') ||
-            key.includes('common.offline') ||
-            key.includes('common.maintenance') ||
-            key.includes('common.actions') ||
-            key.includes('common.type') ||
-            key.includes('common.info') ||
-            key.includes('common.admin') ||
-            key.includes('common.error') ||
-            key.includes('common.containers') ||
-            key.includes('common.logs') ||
-            key.includes('common.edit') ||
-            key.includes('common.username') ||
-            key.includes('common.password') ||
-            key.includes('login.username_label') ||
-            key.includes('login.password_label') ||
-            key.includes('cluster.online') ||
-            key.includes('cluster.offline') ||
-            key.includes('cluster.actions') ||
-            key.includes('jails.title') ||
-            key.includes('jails.resource_name') ||
-            key.includes('logs.timestamp') ||
-            key.includes('resource_list.actions') ||
-            key.includes('resource_list.edit') ||
-            key.includes('resource_modal.edit') ||
-            key.includes('resource_modal.name') ||
-            key.includes('layout.logo_text') ||
-            key.includes('dashboard.browser') ||
-            key.includes('dashboard.nodes_online') ||
-            key.includes('dashboard.system_live') ||
-            key.includes('dashboard.platform') ||
-            key.includes('dashboard.language') ||
-            key.includes('dashboard.uptime') ||
-            key.includes('dashboard.mbps') ||
-            key.includes('common.nodes') ||
-            key.includes('common.network') ||
-            key.includes('cluster.status') ||
-            key.includes('cluster.maintenance') ||
-            key.includes('console_modal.status') ||
-            key.includes('resource_modal.image')
-          ) {
-            return;
-          }
-          
           if (translations[key] === enTranslations[key]) {
-            // Only flag identical strings if they are long enough and it's a major language.
-            if (enTranslations[key].length > 3 && isMajor) {
-              identicalValues.push(key);
-            }
+             // Only flag identical strings if they are not technical terms.
+             if (!technicalTerms.includes(enTranslations[key]) && enTranslations[key].length > 2) {
+               identicalValues.push(key);
+             }
           }
         });
         
