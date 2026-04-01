@@ -12,7 +12,6 @@ import {
   ArrowUpRight,
   ArrowDownLeft,
   Info,
-  Globe
 } from 'lucide-react';
 import api from '../api/client';
 
@@ -38,26 +37,11 @@ const Dashboard: React.FC = () => {
     cores: '—'
   });
   const [hostDetail, setHostDetail] = useState<any>(null);
-  const [browserInfo, setBrowserInfo] = useState({
-    browser: '—',
-    platform: '—',
-    language: '—'
-  });
+
 
   useEffect(() => {
-    // Get browser info
-    const ua = navigator.userAgent;
-    let browser = t('common.unknown');
-    if (ua.indexOf("Firefox") > -1) browser = "Firefox";
-    else if (ua.indexOf("Chrome") > -1) browser = "Chrome";
-    else if (ua.indexOf("Safari") > -1) browser = "Safari";
-    else if (ua.indexOf("Edge") > -1) browser = "Edge";
 
-    setBrowserInfo({
-      browser: browser,
-      platform: navigator.platform,
-      language: navigator.language
-    });
+
 
         const fetchDashboardData = async () => {
       try {
@@ -321,33 +305,6 @@ const Dashboard: React.FC = () => {
                   </div>
                 </div>
               )}
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-8 rounded-3xl shadow-2xl border border-slate-800 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-              <Globe size={120} />
-            </div>
-            <h2 className="text-xl font-bold text-white mb-8 flex items-center gap-3 relative z-10">
-              <div className="p-2 bg-white/10 text-white rounded-lg backdrop-blur-md">
-                <Globe size={20} />
-              </div>
-              {t('dashboard.client_info')}
-            </h2>
-            <div className="space-y-6 relative z-10">
-              <div className="flex items-start gap-4">
-                <div className="mt-1 p-1 bg-white/5 rounded text-slate-400">
-                  <Monitor size={16} />
-                </div>
-                <div>
-                  <p className="text-sm font-black text-white">{browserInfo.browser === '—' ? t('common.loading') : browserInfo.browser}</p>
-                  <p className="text-[11px] font-bold text-slate-400 uppercase tracking-tighter">{browserInfo.platform === '—' ? t('common.loading') : browserInfo.platform}</p>
-                </div>
-              </div>
-              <div className="pt-6 border-t border-white/5 mt-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest space-y-2">
-                <p>{t('dashboard.language')}: <span className="text-slate-300 ml-1">{browserInfo.language === '—' ? t('common.loading') : browserInfo.language}</span></p>
-                <p className="truncate">{t('dashboard.url')}: <span className="text-slate-300 ml-1 font-mono">{window.location.origin}</span></p>
-              </div>
             </div>
           </div>
         </div>
