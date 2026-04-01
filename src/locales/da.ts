@@ -1,4 +1,4 @@
-const ca = {
+const da = {
   "translation": {
     "common": {
       "save": "Save",
@@ -460,4 +460,4 @@ const ca = {
   }
 };
 
-export default ca;
+export default da;

@@ -88,8 +88,9 @@ localeFiles.forEach(file => {
         const val = String(flat[k]);
         const enVal = String(enFlat[k]);
         
-        // If it starts with [T], it's marked as untranslated
+        // If it starts with [T] or [XX], it's marked as untranslated
         if (val.startsWith('[T] ')) return true;
+        if (val.match(/^\[[A-Z]{2,5}\] /)) return true;
         
         // If it ends with " *", it's my "garbage" marker
         if (val.endsWith(' *')) return true;

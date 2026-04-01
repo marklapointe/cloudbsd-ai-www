@@ -1,0 +1,27 @@
+Analyzing 46 locale files against English reference (423 keys)...
+
+--- es.ts ---
+Total keys: 423 / 423
+UNTRANSLATED KEYS (Still in English) (1):
+  - translation.settings.not_applicable ("N/A")
+
+--- fr.ts ---
+Total keys: 423 / 423
+UNTRANSLATED KEYS (Still in English) (3):
+  - translation.notifications.title ("Notifications")
+  - translation.dashboard.total_vcpus ("Total vCPUs")
+  - translation.settings.not_applicable ("N/A")
+
+--- it.ts ---
+Total keys: 423 / 423
+UNTRANSLATED KEYS (Still in English) (1):
+  - translation.cluster.core ("Core")
+
+--- ja.ts ---
+Total keys: 423 / 423
+UNTRANSLATED KEYS (Still in English) (1):
+  - translation.settings.not_applicable ("N/A")
+
+--- Summary ---
+Total missing keys across all files: 0
+Total untranslated keys across all files: 6

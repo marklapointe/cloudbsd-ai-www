@@ -1,4 +1,4 @@
-const ca = {
+const vi = {
   "translation": {
     "common": {
       "save": "Save",
@@ -460,4 +460,4 @@ const ca = {
   }
 };
 
-export default ca;
+export default vi;
