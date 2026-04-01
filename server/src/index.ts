@@ -367,14 +367,14 @@ app.post('/api/login', (req, res) => {
 
   if (user && bcrypt.compareSync(password, user.password)) {
     logAction(user.id, 'LOGIN_SUCCESS', `User ${username} logged in`, ip);
-    const token = jwt.sign({ id: user.id, username: user.username, role: user.role, language: user.language }, SECRET_KEY, { expiresIn: '8h' });
+    const token = jwt.sign({ id: user.id, username: user.username, role: user.role, language: user.language, timezone: user.timezone }, SECRET_KEY, { expiresIn: '8h' });
     
     const tokenPreview = token.length > 20 
       ? `${token.substring(0, 10)}...${token.substring(token.length - 10)}` 
       : token;
     console.log(`[Auth] Generated token for ${username} (length: ${token.length}): ${tokenPreview}`);
     
-    res.json({ token, user: { id: user.id, username: user.username, role: user.role, language: user.language } });
+    res.json({ token, user: { id: user.id, username: user.username, role: user.role, language: user.language, timezone: user.timezone } });
   } else {
     const ip = getClientIp(req);
     logAction(null, 'LOGIN_FAILURE', `Failed login attempt for user: ${username}`, ip);
@@ -395,7 +395,7 @@ app.post('/api/login', (req, res) => {
  */
 app.get('/api/users', authenticateToken, isAdmin, (_req, res) => {
   const currentDb = initDb();
-  const users = currentDb.prepare('SELECT id, username, role, language FROM users').all();
+  const users = currentDb.prepare('SELECT id, username, role, language, timezone FROM users').all();
   res.json(users);
 });
 
@@ -444,19 +444,21 @@ app.get('/api/logs', authenticateToken, isAdmin, (_req, res) => {
  *               language:
  *                 type: string
  *                 enum: [en, fr, es, "es-ES", pt, ro, ru, hi, pa, zh, ja, iu, "ar-IQ", tlh]
+ *               timezone:
+ *                 type: string
  *     responses:
  *       201:
  *         description: User created
  */
 app.post('/api/users', authenticateToken, isAdmin, (req, res) => {
-  const { username, password, role, language } = req.body;
+  const { username, password, role, language, timezone } = req.body;
   const ip = getClientIp(req);
   const hashedPassword = bcrypt.hashSync(password, 10);
   const currentDb = initDb();
   try {
-    const result = currentDb.prepare('INSERT INTO users (username, password, role, language) VALUES (?, ?, ?, ?)').run(username, hashedPassword, role || 'viewer', language || 'en');
-    logAction((req as any).user.id, 'USER_CREATE', `Created user ${username} with role ${role} and language ${language}`, ip);
-    res.status(201).json({ id: result.lastInsertRowid, username, role, language });
+    const result = currentDb.prepare('INSERT INTO users (username, password, role, language, timezone) VALUES (?, ?, ?, ?, ?)').run(username, hashedPassword, role || 'viewer', language || 'en', timezone || null);
+    logAction((req as any).user.id, 'USER_CREATE', `Created user ${username} with role ${role}, language ${language}, and timezone ${timezone || 'default'}`, ip);
+    res.status(201).json({ id: result.lastInsertRowid, username, role, language, timezone });
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }
@@ -477,21 +479,42 @@ app.post('/api/users', authenticateToken, isAdmin, (req, res) => {
  *             properties:
  *               language:
  *                 type: string
+ *               timezone:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Profile updated
  */
 app.put('/api/users/profile', authenticateToken, (req, res) => {
-  const { language } = req.body;
+  const { language, timezone } = req.body;
   const userId = (req as any).user.id;
   const ip = getClientIp(req);
   const currentDb = initDb();
 
   try {
-    if (language) {
-      currentDb.prepare('UPDATE users SET language = ? WHERE id = ?').run(language, userId);
-      logAction(userId, 'USER_UPDATE_PROFILE', `Updated user language to ${language}`, ip);
-      res.json({ message: 'Profile updated', language });
+    if (language || timezone !== undefined) {
+      const updates: string[] = [];
+      const params: any[] = [];
+      
+      if (language) {
+        updates.push('language = ?');
+        params.push(language);
+      }
+      
+      if (timezone !== undefined) {
+        updates.push('timezone = ?');
+        params.push(timezone);
+      }
+      
+      params.push(userId);
+      currentDb.prepare(`UPDATE users SET ${updates.join(', ')} WHERE id = ?`).run(...params);
+      
+      let details = 'Updated user profile: ';
+      if (language) details += `language: ${language} `;
+      if (timezone !== undefined) details += `timezone: ${timezone || 'auto'}`;
+      
+      logAction(userId, 'USER_UPDATE_PROFILE', details.trim(), ip);
+      res.json({ message: 'Profile updated', language, timezone });
     } else {
       res.status(400).json({ message: 'Nothing to update' });
     }

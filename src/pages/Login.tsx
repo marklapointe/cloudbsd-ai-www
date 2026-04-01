@@ -39,15 +39,17 @@ const Login: React.FC = () => {
       localStorage.setItem('username', response.data.user.username);
       localStorage.setItem('role', response.data.user.role);
       
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.has('debug')) {
-        console.log('Login Success Data:', response.data);
-      }
-
       // Update language if the user has a preference and save it to localStorage for the detector
       if (response.data.user.language) {
         localStorage.setItem('i18nextLng', response.data.user.language);
         i18n.changeLanguage(response.data.user.language);
+      }
+
+      // Update timezone if the user has a preference
+      if (response.data.user.timezone) {
+        localStorage.setItem('userTimezone', response.data.user.timezone);
+      } else {
+        localStorage.removeItem('userTimezone');
       }
 
       navigate('/dashboard');

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Settings as SettingsIcon, RefreshCw, Key, ShieldCheck, CreditCard, Activity, Server, Box, Hexagon, Clock, CheckCircle2, Languages } from 'lucide-react';
 import api from '../api/client';
 import { getSortedLanguages } from '../constants/languages';
+import { getDetectedTimezone, formatLocalDate } from '../utils/dateUtils';
 import { useTranslation } from 'react-i18next';
 import ConfirmationModal from '../components/ConfirmationModal';
 
@@ -14,6 +15,8 @@ const Settings: React.FC = () => {
   const [savingLicense, setSavingLicense] = useState(false);
   const [message, setMessage] = useState<{ text: string, type: 'success' | 'error' } | null>(null);
   const [savingLanguage, setSavingLanguage] = useState(false);
+  const [savingTimezone, setSavingTimezone] = useState(false);
+  const [timezone, setTimezone] = useState(localStorage.getItem('userTimezone') || '');
   const [, setSavingConfig] = useState(false);
   const [serverName, setServerName] = useState('');
   const [demoMode, setDemoMode] = useState(false);
@@ -106,6 +109,30 @@ const Settings: React.FC = () => {
     }
   };
 
+  const handleTimezoneChange = async (newTz: string) => {
+    setSavingTimezone(true);
+    setMessage(null);
+    try {
+      if (newTz === '') {
+        localStorage.removeItem('userTimezone');
+      } else {
+        localStorage.setItem('userTimezone', newTz);
+      }
+      setTimezone(newTz);
+      
+      if (!demoMode) {
+        await api.put('/users/profile', { timezone: newTz || null });
+      }
+      
+      setMessage({ text: t('settings.timezone_updated'), type: 'success' });
+    } catch (err: any) {
+      console.error('Failed to update timezone', err);
+      setMessage({ text: t('settings.timezone_update_failed'), type: 'error' });
+    } finally {
+      setSavingTimezone(false);
+    }
+  };
+
   const handleSaveConfig = async (configOverride?: any) => {
     setSavingConfig(true);
     setMessage(null);
@@ -183,6 +210,35 @@ const Settings: React.FC = () => {
                   </select>
                   <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 group-hover:text-brand-500 transition-colors">
                     <Languages size={18} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="p-1.5 bg-brand-100 text-brand-600 rounded-lg">
+                    <Clock size={16} />
+                  </div>
+                  <h3 className="text-sm font-bold text-slate-900">{t('settings.timezone_select')}</h3>
+                </div>
+                <div className="relative group">
+                  <select
+                    value={timezone}
+                    onChange={(e) => handleTimezoneChange(e.target.value)}
+                    disabled={savingTimezone}
+                    className={`w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 font-bold outline-none appearance-none focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white transition-all duration-200 cursor-pointer ${savingTimezone ? 'opacity-50 cursor-wait' : ''}`}
+                    aria-label={t('settings.timezone')}
+                    title={t('settings.timezone')}
+                  >
+                    <option value="">{t('settings.use_detected_timezone', { tz: getDetectedTimezone() })}</option>
+                    {Intl.supportedValuesOf('timeZone').map((tz) => (
+                      <option key={tz} value={tz}>
+                        {tz}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 group-hover:text-brand-500 transition-colors">
+                    <Clock size={18} />
                   </div>
                 </div>
               </div>
@@ -295,7 +351,7 @@ const Settings: React.FC = () => {
                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('settings.expires_on')}</p>
                     </div>
                     <p className="text-sm font-bold text-slate-900">
-                      {license?.expiry_date ? new Date(license.expiry_date).toLocaleDateString() : t('settings.not_applicable')}
+                      {license?.expiry_date ? formatLocalDate(license.expiry_date) : t('settings.not_applicable')}
                     </p>
                   </div>
                   <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">

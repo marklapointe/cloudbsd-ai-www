@@ -16,6 +16,7 @@ import {
   ArrowLeft
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { formatLocalDate, formatLocalDateTime } from '../utils/dateUtils';
 
 interface Notification {
   id: string;
@@ -157,7 +158,7 @@ const Notifications: React.FC = () => {
                       {t(`common.${n.type}`)}
                     </span>
                     <span className="text-[10px] text-slate-400 font-medium">
-                      {n.timestamp.toLocaleDateString()}
+                      {formatLocalDate(n.timestamp)}
                     </span>
                   </div>
                   <p className="text-sm text-slate-700 truncate">{n.message}</p>
@@ -186,7 +187,7 @@ const Notifications: React.FC = () => {
                       {t('notifications.message_type', { type: t(`common.${selectedNotification.type}`) })}
                     </h2>
                     <p className="text-xs text-slate-400 font-medium">
-                      {selectedNotification.timestamp.toLocaleString()}
+                      {formatLocalDateTime(selectedNotification.timestamp)}
                     </p>
                   </div>
                 </div>

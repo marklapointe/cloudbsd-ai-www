@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import api from '../api/client';
+import { formatLocalTime } from '../utils/dateUtils';
 import { 
   LayoutDashboard, 
   Monitor, 
@@ -400,7 +401,7 @@ ${t('manual.settings_text')}
                             <div className="flex-1 min-w-0">
                               <p className="text-sm text-slate-700 leading-snug">{notification.message}</p>
                               <p className="text-[10px] text-slate-400 mt-1 font-medium">
-                                {new Date(notification.timestamp).toLocaleTimeString()}
+                                {formatLocalTime(notification.timestamp)}
                               </p>
                             </div>
                           </div>

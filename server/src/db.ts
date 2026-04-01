@@ -33,7 +33,8 @@ export function initDb() {
       username TEXT UNIQUE NOT NULL,
       password TEXT NOT NULL,
       role TEXT NOT NULL DEFAULT 'viewer', -- 'admin', 'operator', 'viewer'
-      language TEXT NOT NULL DEFAULT 'en'
+      language TEXT NOT NULL DEFAULT 'en',
+      timezone TEXT
     );
 
     CREATE TABLE IF NOT EXISTS permissions (
@@ -144,6 +145,16 @@ export function initDb() {
       newDb.exec("ALTER TABLE logs ADD COLUMN ip_address TEXT;");
     } catch (e) {
       console.error("Migration failed (ip_address): ", e);
+    }
+  }
+
+  // Migration for timezone column in users table
+  const hasTimezone = usersInfo.some(col => col.name === 'timezone');
+  if (!hasTimezone) {
+    try {
+      newDb.exec("ALTER TABLE users ADD COLUMN timezone TEXT;");
+    } catch (e) {
+      console.error("Migration failed (timezone): ", e);
     }
   }
 

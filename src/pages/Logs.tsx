@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Search, Filter } from 'lucide-react';
 import api from '../api/client';
 import { useTranslation } from 'react-i18next';
+import { formatLocalDate, formatLocalTime } from '../utils/dateUtils';
 
 interface Log {
   id: number;
@@ -118,10 +119,10 @@ const Logs: React.FC = () => {
                   <td className="px-8 py-5 whitespace-nowrap">
                     <div className="flex flex-col">
                       <span className="text-sm font-bold text-slate-900 leading-tight">
-                        {new Date(log.timestamp).toLocaleDateString()}
+                        {formatLocalDate(log.timestamp)}
                       </span>
                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-                        {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                        {formatLocalTime(log.timestamp)}
                       </span>
                     </div>
                   </td>
