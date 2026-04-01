@@ -89,7 +89,12 @@ const Settings: React.FC = () => {
     try {
       localStorage.setItem('i18nextLng', newLang);
       await i18n.changeLanguage(newLang);
-      await api.put('/users/profile', { language: newLang });
+      
+      // In demo mode, we don't persist the language to the backend
+      // This avoids CORS issues if the user is a guest without a valid token
+      if (!demoMode) {
+        await api.put('/users/profile', { language: newLang });
+      }
       
       // Use i18n.t directly to ensure we use the new language context immediately
       setMessage({ text: i18n.t('settings.language_updated'), type: 'success' });

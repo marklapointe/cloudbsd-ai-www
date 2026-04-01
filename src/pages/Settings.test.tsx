@@ -202,6 +202,57 @@ describe('Settings Component', () => {
     await i18n.changeLanguage('en');
   });
 
+  it('does not call profile API when changing language in demo mode', async () => {
+    // mockConfig has demoMode: true
+    render(
+      <I18nextProvider i18n={i18n}>
+        <BrowserRouter>
+          <Settings />
+        </BrowserRouter>
+      </I18nextProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByLabelText(i18n.t('common.language'))).toBeDefined();
+    });
+
+    const select = screen.getByLabelText(i18n.t('common.language'));
+    fireEvent.change(select, { target: { value: 'fr' } });
+
+    await waitFor(() => {
+      expect(screen.getByText('La preferencia de idioma se ha actualizado correctamente')).toBeInTheDocument();
+    });
+
+    expect(api.put).not.toHaveBeenCalledWith('/users/profile', expect.anything());
+  });
+
+  it('calls profile API when changing language when NOT in demo mode', async () => {
+    vi.mocked(api.get).mockImplementation((url) => {
+      if (url === '/system/config') return Promise.resolve({ data: { ...mockConfig, demoMode: false } });
+      if (url === '/system/license') return Promise.resolve({ data: mockLicense });
+      return Promise.reject(new Error('Unknown URL'));
+    });
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <BrowserRouter>
+          <Settings />
+        </BrowserRouter>
+      </I18nextProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByLabelText(i18n.t('common.language'))).toBeDefined();
+    });
+
+    const select = screen.getByLabelText(i18n.t('common.language'));
+    fireEvent.change(select, { target: { value: 'fr' } });
+
+    await waitFor(() => {
+      expect(api.put).toHaveBeenCalledWith('/users/profile', { language: 'fr' });
+    });
+  });
+
   it('handles auto-saving of config toggles', async () => {
     vi.mocked(api.put).mockResolvedValue({ 
       data: { message: 'Configuration updated successfully' } 
