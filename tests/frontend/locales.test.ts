@@ -35,7 +35,11 @@ describe('Locale Files Verification', async () => {
     'Maintenance', '••••••••', '10.0.0.X', 'Console', 'VNC', 'CPU', 'Error', 'RAM', 'MEM', 'AMF', 'MFA', 'SMTP', 'VLAN', 'IPv4', 'IPv6', 'ID',
     'CloudBSD', 'OCI', 'bhyve', 'noVNC', 'SSH', 'API', 'MVs', 'VMs', 'VM', 'MV', 'HA', 'Endpoint', 'SMTP', 'OS', 'MFA',
     'Admin', 'Actions', 'Type', 'Information', 'Containers', 'Logs', 'Username', 'Password', 'Timestamp', 'Edit', 'Jail',
-    'Browser', 'Nodes', 'Cluster', 'Network', 'Dashboard', 'Uptime', 'Platform', 'Language', 'Mbps', 'System Live', 'URL', 'N/A'
+    'Browser', 'Nodes', 'Cluster', 'Network', 'Dashboard', 'Uptime', 'Platform', 'Language', 'Mbps', 'System Live', 'URL', 'N/A',
+    'Role', 'Start', 'Stop', 'Restart', 'Community', 'Professional', 'Enterprise', 'Standard', 'Premium', 'Core', 'Total RAM',
+    'Total Jails', 'Total vCPUs', 'Total Nodes', 'Total vms', 'Total VMs', 'Total OCI Containers', 'Total OCI containers', 'Edit Node',
+    'Start VM', 'Stop VM', 'Start Jail', 'Stop Jail', 'CPU Total', 'RAM Total', 'Core (Control Plane)',
+    '{{count}} Jails (Limit: {{limit}})'
   ];
 
   localeFiles.forEach(file => {

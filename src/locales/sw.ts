@@ -98,7 +98,7 @@ const sw = {
       jails_over_limit: "{{count}} Jails (Kikomo: {{limit}})",
       nodes_over_limit: "{{count}} Nodi (Kikomo: {{limit}})",
       message_from: "Kutoka",
-      system_admin: "CloudBSD System Admin",
+      system_admin: "Msimamizi wa Mfumo wa CloudBSD",
       message_id: "ID ya Ujumbe",
       message_type: "Ujumbe wa {{type}}",
       automated_notice: "Hii ni arifa ya mfumo ya kiotomatiki. Tafadhali kagua mipangilio yako ikiwa hatua inahitajika.",
