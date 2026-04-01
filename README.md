@@ -10,20 +10,20 @@ A modern, responsive web interface for managing Virtual Machines (bhyve), OCI co
 -   **Container Management**: Support for OCI-compliant containers (Docker/Podman).
 -   **Isolation**: Management of native Jails.
 -   **Multi-user Support**: SQLite-backed authentication with role-based permissions.
--   **Internationalization**: Multi-language support for common languages across North America, South America, Europe, Asia, and Africa (English, Spanish, French, Portuguese, German, Italian, Chinese, Japanese, Korean, Hindi, Arabic, Swahili, Yoruba).
+-   **Internationalization**: Multi-language support for 44 languages across North America, South America, Europe, Asia, and Africa.
 -   **Mobile Friendly**: Fully responsive design optimized for mobile devices.
 
 ## Tech Stack
 
--   **Frontend**: React, TypeScript, Vite, Tailwind CSS, Lucide Icons.
--   **Backend**: Node.js, Express, SQLite (`better-sqlite3`), JWT.
+-   **Frontend**: React 19, TypeScript, Vite, Tailwind CSS, Lucide Icons.
+-   **Backend**: Node.js 24+, Express 5, SQLite (`better-sqlite3`), JWT.
 -   **Testing**: Vitest, React Testing Library.
 
 ## Getting Started
 
 ### Prerequisites
 
--   Node.js (v18 or later)
+-   Node.js (v24 or later)
 -   npm
 
 ### Installation

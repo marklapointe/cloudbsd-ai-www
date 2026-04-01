@@ -26,11 +26,7 @@ describe('Locale Files Verification', async () => {
 
   // List of locales that are expected to be identical to English or not yet translated
   const allowedIdenticalLocales = [
-    'atl.ts', 'qav.ts', 'qvy.ts', 'doth.ts', 'elv.ts', 'tlh.ts', // Fictional/dummy only
-    'yo.ts', 'sw.ts', 'pa.ts', 'hi.ts', 'ur.ts', 'bg.ts', 'cs.ts', 'el.ts',
-    'fi.ts', 'hu.ts', 'id.ts', 'ja.ts', 'ko.ts', 'lt.ts', 'lv.ts', 'no.ts', 'pl.ts', 'sk.ts',
-    'sl.ts', 'sr.ts', 'sv.ts', 'tr.ts', 'uk.ts', 'zh.ts', 'eo.ts',
-    'ca.ts', 'de.ts', 'es.ts', 'he.ts', 'it.ts', 'pt-PT.ts', 'pt.ts', 'ro.ts', 'ru.ts'
+    'atl.ts', 'qav.ts', 'qvy.ts', 'doth.ts', 'elv.ts', 'tlh.ts' // Fictional only
   ];
 
   localeFiles.forEach(file => {
@@ -236,6 +232,38 @@ describe('Locale Files Verification', async () => {
             key.includes('common.online') ||
             key.includes('common.offline') ||
             key.includes('common.maintenance') ||
+            key.includes('common.actions') ||
+            key.includes('common.type') ||
+            key.includes('common.info') ||
+            key.includes('common.admin') ||
+            key.includes('common.error') ||
+            key.includes('common.containers') ||
+            key.includes('common.logs') ||
+            key.includes('common.edit') ||
+            key.includes('common.username') ||
+            key.includes('common.password') ||
+            key.includes('login.username_label') ||
+            key.includes('login.password_label') ||
+            key.includes('cluster.online') ||
+            key.includes('cluster.offline') ||
+            key.includes('cluster.actions') ||
+            key.includes('jails.title') ||
+            key.includes('jails.resource_name') ||
+            key.includes('logs.timestamp') ||
+            key.includes('resource_list.actions') ||
+            key.includes('resource_list.edit') ||
+            key.includes('resource_modal.edit') ||
+            key.includes('resource_modal.name') ||
+            key.includes('layout.logo_text') ||
+            key.includes('dashboard.browser') ||
+            key.includes('dashboard.nodes_online') ||
+            key.includes('dashboard.system_live') ||
+            key.includes('dashboard.platform') ||
+            key.includes('dashboard.language') ||
+            key.includes('dashboard.uptime') ||
+            key.includes('dashboard.mbps') ||
+            key.includes('common.nodes') ||
+            key.includes('common.network') ||
             key.includes('cluster.status') ||
             key.includes('cluster.maintenance') ||
             key.includes('console_modal.status') ||

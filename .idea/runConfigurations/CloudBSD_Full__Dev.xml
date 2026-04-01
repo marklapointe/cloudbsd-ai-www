@@ -1,6 +1,5 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="CloudBSD Full: Dev" type="CompoundRunConfigurationType">
-    <toRun name="Backend: Dev" type="NodeJSConfigurationType" />
     <toRun name="Frontend: Dev" type="js.build_tools.npm" />
     <method v="2" />
   </configuration>

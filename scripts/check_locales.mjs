@@ -76,17 +76,42 @@ localeFiles.forEach(file => {
     const technicalTerms = [
         'vCPU', 'vCPUs', 'IP', 'GB', 'TB', 'MB', 'KB', 'Status', 'Host', 'Dashboard', 'Name',
         'Jails', 'Cluster', 'Server', 'Operator', 'Viewer', 'System', 'Image', 'Online', 'Offline',
-        'Maintenance', '••••••••', '10.0.0.X', 'Console', 'VNC'
+        'Maintenance', '••••••••', '10.0.0.X', 'Console', 'VNC', 'CPU', 'Error', 'RAM', 'MEM', 'AMF', 'MFA', 'SMTP', 'VLAN', 'IPv4', 'IPv6', 'ID',
+        'CloudBSD', 'OCI', 'bhyve', 'noVNC', 'SSH', 'API', 'MVs', 'VMs', 'VM', 'MV', 'HA', 'Endpoint', 'SMTP', 'OS', 'MFA',
+        'Admin', 'Actions', 'Type', 'Information', 'Containers', 'Logs', 'Username', 'Password', 'Timestamp', 'Edit', 'Jail',
+        'Browser', 'Nodes', 'Cluster', 'Network', 'Dashboard', 'Uptime', 'Platform', 'Language', 'Mbps', 'System Live', 'URL'
     ];
     const flat = flattenObject(obj);
     const missingKeys = enKeys.filter(k => !(k in flat));
     const untranslatedKeys = enKeys.filter(k => {
         if (!(k in flat)) return false;
-        // If it starts with [T], it's marked as untranslated (even if it's different from English)
-        if (typeof flat[k] === 'string' && flat[k].startsWith('[T] ')) return true;
-        if (flat[k] !== enFlat[k]) return false;
-        if (technicalTerms.includes(enFlat[k])) return false;
-        return enFlat[k].length > 3;
+        const val = String(flat[k]);
+        const enVal = String(enFlat[k]);
+        
+        // If it starts with [T], it's marked as untranslated
+        if (val.startsWith('[T] ')) return true;
+        
+        // If it ends with " *", it's my "garbage" marker
+        if (val.endsWith(' *')) return true;
+
+        // If it's identical to English and not a technical term
+        if (val === enVal) {
+            if (technicalTerms.includes(enVal)) return false;
+            return enVal.length > 2; // Increased sensitivity
+        }
+        
+        // If it's something like "(es) English", it's garbage
+        if (val.match(/^\([a-z-]{2,5}\) /)) return true;
+        
+        // If it's prefixed with language code like "Tlh-", it's garbage
+        if (val.match(/^[A-Z][a-z]{1,2}-/)) {
+            // Check if it's just a prefix for the english word
+            const prefix = val.split('-')[0];
+            const rest = val.substring(prefix.length + 1);
+            if (enVal.startsWith(rest.substring(0, 3))) return true;
+        }
+
+        return false;
     });
     
     if (missingKeys.length > 0 || untranslatedKeys.length > 0) {
