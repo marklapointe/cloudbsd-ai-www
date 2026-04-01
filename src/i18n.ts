@@ -46,6 +46,9 @@ import doth from './locales/doth';
 import qvy from './locales/qvy';
 import qav from './locales/qav';
 import atl from './locales/atl';
+import da from './locales/da';
+import vi from './locales/vi';
+import th from './locales/th';
 
 i18n
   .use(LanguageDetector)
@@ -112,6 +115,9 @@ i18n
       qvy,
       qav,
       atl,
+      da,
+      vi,
+      th,
     },
   });
 

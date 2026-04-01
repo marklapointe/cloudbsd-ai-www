@@ -48,6 +48,9 @@ export const supportedLanguages: Language[] = [
   { code: 'pt', name: 'Português (Brasil)' },
   { code: 'pt-PT', name: 'Português (Portugal)' },
   { code: 'ro', name: 'Română' },
+  { code: 'da', name: 'Dansk' },
+  { code: 'vi', name: 'Tiếng Việt' },
+  { code: 'th', name: 'ไทย' },
 ];
 
 export const getSortedLanguages = (): Language[] => {
