@@ -220,7 +220,7 @@ describe('Settings Component', () => {
     fireEvent.change(select, { target: { value: 'fr' } });
 
     await waitFor(() => {
-      expect(screen.getByText('La preferencia de idioma se ha actualizado correctamente')).toBeInTheDocument();
+      expect(screen.getByText('Préférence de langue enregistrée avec succès')).toBeInTheDocument();
     });
 
     expect(api.put).not.toHaveBeenCalledWith('/users/profile', expect.anything());
