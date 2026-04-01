@@ -10,6 +10,7 @@ interface Log {
   username: string | null;
   action: string;
   details: string | null;
+  ip_address: string | null;
 }
 
 const Logs: React.FC = () => {
@@ -88,6 +89,7 @@ const Logs: React.FC = () => {
               <tr className="bg-slate-50/50 border-b border-slate-100">
                 <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">{t('logs.timestamp')}</th>
                 <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">{t('logs.user')}</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">{t('common.ip_address')}</th>
                 <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">{t('logs.action')}</th>
                 <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('logs.details')}</th>
               </tr>
@@ -95,7 +97,7 @@ const Logs: React.FC = () => {
             <tbody className="divide-y divide-slate-50">
               {loading ? (
                 <tr>
-                  <td colSpan={4} className="px-8 py-20 text-center">
+                  <td colSpan={5} className="px-8 py-20 text-center">
                     <div className="flex flex-col items-center gap-3">
                       <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-brand-500"></div>
                       <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">{t('logs.loading')}</span>
@@ -104,7 +106,7 @@ const Logs: React.FC = () => {
                 </tr>
               ) : filteredLogs.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-8 py-20 text-center">
+                  <td colSpan={5} className="px-8 py-20 text-center">
                     <div className="flex flex-col items-center gap-2 text-slate-300">
                       <Search size={48} className="opacity-20" />
                       <span className="text-sm font-bold uppercase tracking-widest">{t('logs.no_logs')}</span>
@@ -132,6 +134,9 @@ const Logs: React.FC = () => {
                         {log.username || t('common.server')}
                       </span>
                     </div>
+                  </td>
+                  <td className="px-8 py-5 whitespace-nowrap font-mono text-xs text-slate-500">
+                    {log.ip_address || '—'}
                   </td>
                   <td className="px-8 py-5 whitespace-nowrap">
                     <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${getActionColor(log.action)}`}>

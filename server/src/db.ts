@@ -50,6 +50,7 @@ export function initDb() {
       user_id INTEGER,
       action TEXT NOT NULL,
       details TEXT,
+      ip_address TEXT,
       FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL
     );
 
@@ -132,6 +133,17 @@ export function initDb() {
       newDb.exec("ALTER TABLE users ADD COLUMN language TEXT NOT NULL DEFAULT 'en';");
     } catch (e) {
       console.error("Migration failed (language): ", e);
+    }
+  }
+
+  // Migration for ip_address column in logs table
+  const logsInfo = newDb.prepare("PRAGMA table_info(logs)").all() as any[];
+  const hasIpAddress = logsInfo.some(col => col.name === 'ip_address');
+  if (!hasIpAddress) {
+    try {
+      newDb.exec("ALTER TABLE logs ADD COLUMN ip_address TEXT;");
+    } catch (e) {
+      console.error("Migration failed (ip_address): ", e);
     }
   }
 
@@ -249,9 +261,9 @@ export function initDb() {
   return db;
 }
 
-export function logAction(userId: number | null, action: string, details?: string) {
+export function logAction(userId: number | null, action: string, details?: string, ipAddress?: string) {
   if (!db) initDb();
-  db.prepare('INSERT INTO logs (user_id, action, details) VALUES (?, ?, ?)').run(userId, action, details || null);
+  db.prepare('INSERT INTO logs (user_id, action, details, ip_address) VALUES (?, ?, ?, ?)').run(userId, action, details || null, ipAddress || null);
 }
 
 export { db };

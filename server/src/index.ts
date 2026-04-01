@@ -17,6 +17,14 @@ import { initDb, logAction } from './db.ts';
 import config, { reloadConfig, saveConfig } from './config.ts';
 import { ensureCertificates } from './ssl.ts';
 
+const getClientIp = (req: any) => {
+  const forwardedFor = req.headers['x-forwarded-for'];
+  if (forwardedFor) {
+    return (Array.isArray(forwardedFor) ? forwardedFor[0] : forwardedFor.split(',')[0]).trim();
+  }
+  return req.headers['x-real-ip'] || req.ip || req.socket.remoteAddress;
+};
+
 initDb();
 
 // const __filename = fileURLToPath(import.meta.url);
@@ -206,7 +214,8 @@ app.use((req: any, res: any, next: any) => {
   res.on('finish', () => {
     const duration = Date.now() - start;
     const userStr = req.user ? ` (User: ${req.user.username} [${req.user.role}])` : '';
-    const msg = `${req.method} ${req.originalUrl} - ${res.statusCode} - ${duration}ms${userStr} from ${req.ip}`;
+    const ip = getClientIp(req);
+    const msg = `${req.method} ${req.originalUrl} - ${res.statusCode} - ${duration}ms${userStr} from ${ip}`;
     
     if (res.statusCode >= 500) {
       console.error(`[API] ${msg}`);
@@ -238,14 +247,16 @@ export const authenticateToken = (req: any, res: any, next: any) => {
   const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
-    console.warn(`[Auth] No token provided for ${req.method} ${req.url} from ${req.ip}`);
-    logAction(null, 'AUTH_FAILURE', `No token provided for ${req.method} ${req.url} from ${req.ip}`);
+    const ip = getClientIp(req);
+    console.warn(`[Auth] No token provided for ${req.method} ${req.url} from ${ip}`);
+    logAction(null, 'AUTH_FAILURE', `No token provided for ${req.method} ${req.url} from ${ip}`, ip);
     return res.status(401).json({ message: 'Authentication required' });
   }
 
   jwt.verify(token, SECRET_KEY, (err: any, user: any) => {
+    const ip = getClientIp(req);
     if (err) {
-      const errorMsg = `JWT verification failed for ${req.method} ${req.url} from ${req.ip}: ${err.message}`;
+      const errorMsg = `JWT verification failed for ${req.method} ${req.url} from ${ip}: ${err.message}`;
       console.error(`[Auth] ${errorMsg}`);
       
       const tokenPreview = token.length > 20 
@@ -260,7 +271,7 @@ export const authenticateToken = (req: any, res: any, next: any) => {
       
       console.debug(`[Auth] Current Secret Key check (first 4): ${SECRET_KEY.substring(0, 4)}`);
       
-      logAction(null, 'AUTH_FAILURE', errorMsg);
+      logAction(null, 'AUTH_FAILURE', errorMsg, ip);
       return res.status(403).json({ message: 'Invalid or expired token', error: err.message, token_preview: tokenPreview });
     }
     req.user = user;
@@ -272,9 +283,10 @@ export const isAdmin = (req: any, res: any, next: any) => {
   if (req.user && req.user.role === 'admin') {
     next();
   } else {
-    const errorMsg = `Admin access denied for user ${req.user?.username} (${req.user?.role}) on ${req.method} ${req.url} from ${req.ip}`;
+    const ip = getClientIp(req);
+    const errorMsg = `Admin access denied for user ${req.user?.username} (${req.user?.role}) on ${req.method} ${req.url} from ${ip}`;
     console.warn(`[Auth] ${errorMsg}`);
-    logAction(req.user?.id || null, 'PERMISSION_DENIED', errorMsg);
+    logAction(req.user?.id || null, 'PERMISSION_DENIED', errorMsg, ip);
     res.status(403).json({ message: 'Admin access required', user: req.user?.username, role: req.user?.role });
   }
 };
@@ -283,9 +295,10 @@ export const isOperator = (req: any, res: any, next: any) => {
   if (req.user && (req.user.role === 'admin' || req.user.role === 'operator')) {
     next();
   } else {
-    const errorMsg = `Operator access denied for user ${req.user?.username} (${req.user?.role}) on ${req.method} ${req.url} from ${req.ip}`;
+    const ip = getClientIp(req);
+    const errorMsg = `Operator access denied for user ${req.user?.username} (${req.user?.role}) on ${req.method} ${req.url} from ${ip}`;
     console.warn(`[Auth] ${errorMsg}`);
-    logAction(req.user?.id || null, 'PERMISSION_DENIED', errorMsg);
+    logAction(req.user?.id || null, 'PERMISSION_DENIED', errorMsg, ip);
     res.status(403).json({ message: 'Operator access required', user: req.user?.username, role: req.user?.role });
   }
 };
@@ -348,11 +361,12 @@ app.get('/api/health', (_req, res) => {
  */
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
+  const ip = getClientIp(req);
   const currentDb = initDb();
   const user = currentDb.prepare('SELECT * FROM users WHERE username = ?').get(username) as any;
 
   if (user && bcrypt.compareSync(password, user.password)) {
-    logAction(user.id, 'LOGIN_SUCCESS', `User ${username} logged in`);
+    logAction(user.id, 'LOGIN_SUCCESS', `User ${username} logged in`, ip);
     const token = jwt.sign({ id: user.id, username: user.username, role: user.role, language: user.language }, SECRET_KEY, { expiresIn: '8h' });
     
     const tokenPreview = token.length > 20 
@@ -362,7 +376,8 @@ app.post('/api/login', (req, res) => {
     
     res.json({ token, user: { id: user.id, username: user.username, role: user.role, language: user.language } });
   } else {
-    logAction(null, 'LOGIN_FAILURE', `Failed login attempt for user: ${username}`);
+    const ip = getClientIp(req);
+    logAction(null, 'LOGIN_FAILURE', `Failed login attempt for user: ${username}`, ip);
     res.status(401).json({ message: 'Invalid credentials' });
   }
 });
@@ -435,11 +450,12 @@ app.get('/api/logs', authenticateToken, isAdmin, (_req, res) => {
  */
 app.post('/api/users', authenticateToken, isAdmin, (req, res) => {
   const { username, password, role, language } = req.body;
+  const ip = getClientIp(req);
   const hashedPassword = bcrypt.hashSync(password, 10);
   const currentDb = initDb();
   try {
     const result = currentDb.prepare('INSERT INTO users (username, password, role, language) VALUES (?, ?, ?, ?)').run(username, hashedPassword, role || 'viewer', language || 'en');
-    logAction((req as any).user.id, 'USER_CREATE', `Created user ${username} with role ${role} and language ${language}`);
+    logAction((req as any).user.id, 'USER_CREATE', `Created user ${username} with role ${role} and language ${language}`, ip);
     res.status(201).json({ id: result.lastInsertRowid, username, role, language });
   } catch (error: any) {
     res.status(400).json({ message: error.message });
@@ -468,12 +484,13 @@ app.post('/api/users', authenticateToken, isAdmin, (req, res) => {
 app.put('/api/users/profile', authenticateToken, (req, res) => {
   const { language } = req.body;
   const userId = (req as any).user.id;
+  const ip = getClientIp(req);
   const currentDb = initDb();
 
   try {
     if (language) {
       currentDb.prepare('UPDATE users SET language = ? WHERE id = ?').run(language, userId);
-      logAction(userId, 'USER_UPDATE_PROFILE', `Updated user language to ${language}`);
+      logAction(userId, 'USER_UPDATE_PROFILE', `Updated user language to ${language}`, ip);
       res.json({ message: 'Profile updated', language });
     } else {
       res.status(400).json({ message: 'Nothing to update' });
@@ -501,12 +518,13 @@ app.put('/api/users/profile', authenticateToken, (req, res) => {
  */
 app.delete('/api/users/:id', authenticateToken, isAdmin, (req, res) => {
   const { id } = req.params;
+  const ip = getClientIp(req);
   const currentDb = initDb();
   const user = currentDb.prepare('SELECT username FROM users WHERE id = ?').get(id) as any;
   if (!user) return res.status(404).json({ message: 'User not found' });
   
   currentDb.prepare('DELETE FROM users WHERE id = ?').run(id);
-  logAction((req as any).user.id, 'USER_DELETE', `Deleted user ${user.username}`);
+  logAction((req as any).user.id, 'USER_DELETE', `Deleted user ${user.username}`, ip);
   res.sendStatus(204);
 });
 
@@ -570,6 +588,7 @@ app.get('/api/nodes', authenticateToken, (_req: any, res: any, _next: any) => {
  */
 app.post('/api/nodes', authenticateToken, isOperator, (req, res) => {
   const { name, role, status, ip, cpu_total, cpu_used, mem_total, mem_used, disk_total, disk_used } = req.body;
+  const clientIp = getClientIp(req);
   const currentDb = initDb();
   try {
     const result = currentDb.prepare(`
@@ -587,7 +606,7 @@ app.post('/api/nodes', authenticateToken, isOperator, (req, res) => {
       disk_total || null, 
       disk_used || null
     );
-    logAction((req as any).user.id, 'NODE_CREATE', `Created node ${name} with role ${role}`);
+    logAction((req as any).user.id, 'NODE_CREATE', `Created node ${name} with role ${role}`, clientIp);
     res.status(201).json({ id: result.lastInsertRowid, ...req.body });
   } catch (error: any) {
     res.status(400).json({ message: error.message });
@@ -649,7 +668,8 @@ app.put('/api/nodes/:id', authenticateToken, isOperator, (req, res) => {
     `).run(
       name, role, status, ip, cpu_total, cpu_used, mem_total, mem_used, disk_total, disk_used, id
     );
-    logAction((req as any).user.id, 'NODE_UPDATE', `Updated node ${name} (ID: ${id})`);
+    const clientIp = getClientIp(req);
+    logAction((req as any).user.id, 'NODE_UPDATE', `Updated node ${name} (ID: ${id})`, clientIp);
     res.json({ id, ...req.body });
   } catch (error: any) {
     res.status(400).json({ message: error.message });
@@ -759,7 +779,8 @@ app.delete('/api/nodes/:id', authenticateToken, isAdmin, (req, res) => {
   currentDb.prepare('UPDATE resources SET node_id = NULL WHERE node_id = ?').run(id);
   
   currentDb.prepare('DELETE FROM nodes WHERE id = ?').run(id);
-  logAction((req as any).user.id, 'NODE_DELETE', `Deleted node ID: ${id}`);
+  const ip = getClientIp(req);
+  logAction((req as any).user.id, 'NODE_DELETE', `Deleted node ID: ${id}`, ip);
   res.sendStatus(204);
 });
 
@@ -858,7 +879,8 @@ app.post('/api/:resource', authenticateToken, isOperator, (req, res) => {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `).run(resource, name, status, image || null, ip || null, cpu || null, memory || null, req.body.node_id || null);
     
-    logAction((req as any).user.id, `RESOURCE_CREATE`, `Created ${resource} ${name}`);
+    const clientIp = getClientIp(req);
+    logAction((req as any).user.id, `RESOURCE_CREATE`, `Created ${resource} ${name}`, clientIp);
     io.emit('resource_update', { resource, timestamp: new Date() });
     
     res.status(201).json({ id: result.lastInsertRowid, name, status });
@@ -902,7 +924,8 @@ app.delete('/api/:resource/:id', authenticateToken, isOperator, (req, res) => {
     const result = currentDb.prepare('DELETE FROM resources WHERE id = ? AND type = ?').run(id, resource);
     if (result.changes === 0) return res.status(404).json({ message: 'Resource not found' });
     
-    logAction((req as any).user.id, `RESOURCE_DELETE`, `Deleted ${resource} ${id}`);
+    const ip = getClientIp(req);
+    logAction((req as any).user.id, `RESOURCE_DELETE`, `Deleted ${resource} ${id}`, ip);
     io.emit('resource_update', { resource, timestamp: new Date() });
     
     res.sendStatus(204);
@@ -969,7 +992,8 @@ app.put('/api/:resource/:id', authenticateToken, isOperator, (req, res) => {
     
     if (result.changes === 0) return res.status(404).json({ message: 'Resource not found' });
 
-    logAction((req as any).user.id, `RESOURCE_UPDATE`, `Updated ${resource} ${name} (ID: ${id})`);
+    const ip = getClientIp(req);
+    logAction((req as any).user.id, `RESOURCE_UPDATE`, `Updated ${resource} ${name} (ID: ${id})`, ip);
     io.emit('resource_update', { resource, timestamp: new Date() });
     
     res.json({ message: 'Resource updated successfully' });
@@ -1027,7 +1051,8 @@ app.post('/api/:resource/:id/:action', authenticateToken, isOperator, (req, res)
     currentDb.prepare('UPDATE resources SET status = ? WHERE id = ? AND type = ?').run(nextStatus, id, resource);
   }
 
-  logAction((req as any).user.id, `RESOURCE_${action.toUpperCase()}`, `${action}ed ${resource} ${id}`);
+  const ip = getClientIp(req);
+  logAction((req as any).user.id, `RESOURCE_${action.toUpperCase()}`, `${action}ed ${resource} ${id}`, ip);
   
   // Broadcast update to all clients
   io.emit('resource_update', { resource, timestamp: new Date() });
@@ -1200,7 +1225,8 @@ app.put('/api/system/config', authenticateToken, isAdmin, (req, res) => {
     saveConfig(update);
     reloadConfig();
     
-    logAction((req as any).user.id, 'SYSTEM_CONFIG_UPDATE', `Updated system configuration: ${JSON.stringify(update)}`);
+    const ip = getClientIp(req);
+    logAction((req as any).user.id, 'SYSTEM_CONFIG_UPDATE', `Updated system configuration: ${JSON.stringify(update)}`, ip);
     
     res.json({ 
       message: 'Configuration updated successfully. Some changes may require a restart.',
@@ -1347,7 +1373,8 @@ app.post('/api/system/license', authenticateToken, isAdmin, (req, res) => {
       expiryDate.toISOString(), support, JSON.stringify(features)
     );
 
-    logAction((req as any).user.id, 'LICENSE_UPDATE', `Updated license to ${type}`);
+    const ip = getClientIp(req);
+    logAction((req as any).user.id, 'LICENSE_UPDATE', `Updated license to ${type}`, ip);
     
     // Fetch updated license to return
     const updatedLicense = currentDb.prepare('SELECT * FROM license LIMIT 1').get() as any;
@@ -1366,7 +1393,8 @@ app.post('/api/system/license', authenticateToken, isAdmin, (req, res) => {
 
 // 404 handler for API routes
 app.use('/api', (req, res) => {
-  const msg = `API Route not found: ${req.method} ${req.originalUrl} from ${req.ip}`;
+  const ip = getClientIp(req);
+  const msg = `API Route not found: ${req.method} ${req.originalUrl} from ${ip}`;
   console.warn(`[API] ${msg}`);
   res.status(404).json({ 
     message: 'API endpoint not found',
@@ -1377,11 +1405,12 @@ app.use('/api', (req, res) => {
 
 // Error handling middleware
 app.use((err: any, req: any, res: any, _next: any) => {
+  const ip = getClientIp(req);
   const msg = `Unhandled error on ${req.method} ${req.originalUrl}: ${err.message}`;
   console.error(`[Critical] ${msg}`);
   console.error(err.stack);
   
-  logAction(req.user?.id || null, 'SYSTEM_ERROR', msg);
+  logAction(req.user?.id || null, 'SYSTEM_ERROR', msg, ip);
   
   res.status(res.statusCode === 200 ? 500 : res.statusCode).json({
     message: 'Internal Server Error',
