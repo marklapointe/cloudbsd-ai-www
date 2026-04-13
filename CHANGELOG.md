@@ -4,6 +4,19 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 
 ## [Unreleased]
 ### Added
+- **User Profile Persistence**: Implemented backend storage for user preferences, including theme settings, using a new `theme` column in the `users` table.
+- **Profile API**: Added `GET /api/users/profile` and updated `PUT /api/users/profile` to support retrieval and synchronization of user settings.
+- **Theme Synchronization**: Integrated real-time theme synchronization between the frontend `ThemeContext` and the backend database.
+- **Code Coverage Monitoring**: Integrated `@vitest/coverage-v8` to track and maintain high code coverage standards (90%+ targeted for core modules).
+- **Comprehensive Unit Testing**: Expanded test suites for `ThemeContext`, `Login` component, and core backend resource/profile management APIs.
+
+### Fixed
+- **Theme Persistence**: Resolved an issue where theme settings were not persisting across different browsers or sessions.
+- **Backend Spelling**: Corrected the spelling of "stopped" in generic resource action response messages.
+- **Test Isolation**: Improved test reliability by ensuring backend tests reset shared database state (license limits) before execution.
+- **Robust Selectors**: Added `data-testid` attributes to critical login elements to ensure reliable automated testing across different languages.
+
+### Changed
 - **UI Theme Support**: Implemented system-wide Dark and Light mode support, defaulting to Dark mode.
 - **Theme Toggle**: Added a theme switcher to the global layout for desktop and mobile views.
 - **Locale Updates**: Updated all 43+ language locale files with theme-related keys and verified with regression tests.

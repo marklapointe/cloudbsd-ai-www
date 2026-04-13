@@ -34,7 +34,8 @@ export function initDb() {
       password TEXT NOT NULL,
       role TEXT NOT NULL DEFAULT 'viewer', -- 'admin', 'operator', 'viewer'
       language TEXT NOT NULL DEFAULT 'en',
-      timezone TEXT
+      timezone TEXT,
+      theme TEXT NOT NULL DEFAULT 'dark'
     );
 
     CREATE TABLE IF NOT EXISTS permissions (
@@ -171,6 +172,16 @@ export function initDb() {
       newDb.exec("ALTER TABLE users ADD COLUMN timezone TEXT;");
     } catch (e) {
       console.error("Migration failed (timezone): ", e);
+    }
+  }
+
+  // Migration for theme column in users table
+  const hasTheme = usersInfo.some(col => col.name === 'theme');
+  if (!hasTheme) {
+    try {
+      newDb.exec("ALTER TABLE users ADD COLUMN theme TEXT NOT NULL DEFAULT 'dark';");
+    } catch (e) {
+      console.error("Migration failed (theme): ", e);
     }
   }
 

@@ -367,14 +367,14 @@ app.post('/api/login', (req, res) => {
 
   if (user && bcrypt.compareSync(password, user.password)) {
     logAction(user.id, 'LOGIN_SUCCESS', `User ${username} logged in`, ip);
-    const token = jwt.sign({ id: user.id, username: user.username, role: user.role, language: user.language, timezone: user.timezone }, SECRET_KEY, { expiresIn: '8h' });
+    const token = jwt.sign({ id: user.id, username: user.username, role: user.role, language: user.language, timezone: user.timezone, theme: user.theme }, SECRET_KEY, { expiresIn: '8h' });
     
     const tokenPreview = token.length > 20 
       ? `${token.substring(0, 10)}...${token.substring(token.length - 10)}` 
       : token;
     console.log(`[Auth] Generated token for ${username} (length: ${token.length}): ${tokenPreview}`);
     
-    res.json({ token, user: { id: user.id, username: user.username, role: user.role, language: user.language, timezone: user.timezone } });
+    res.json({ token, user: { id: user.id, username: user.username, role: user.role, language: user.language, timezone: user.timezone, theme: user.theme } });
   } else {
     const ip = getClientIp(req);
     logAction(null, 'LOGIN_FAILURE', `Failed login attempt for user: ${username}`, ip);
@@ -395,7 +395,7 @@ app.post('/api/login', (req, res) => {
  */
 app.get('/api/users', authenticateToken, isAdmin, (_req, res) => {
   const currentDb = initDb();
-  const users = currentDb.prepare('SELECT id, username, role, language, timezone FROM users').all();
+  const users = currentDb.prepare('SELECT id, username, role, language, timezone, theme FROM users').all();
   res.json(users);
 });
 
@@ -446,22 +446,43 @@ app.get('/api/logs', authenticateToken, isAdmin, (_req, res) => {
  *                 enum: [en, fr, es, "es-ES", pt, ro, ru, hi, pa, zh, ja, iu, "ar-IQ", tlh]
  *               timezone:
  *                 type: string
+ *               theme:
+ *                 type: string
+ *                 enum: [light, dark]
  *     responses:
  *       201:
  *         description: User created
  */
 app.post('/api/users', authenticateToken, isAdmin, (req, res) => {
-  const { username, password, role, language, timezone } = req.body;
+  const { username, password, role, language, timezone, theme } = req.body;
   const ip = getClientIp(req);
   const hashedPassword = bcrypt.hashSync(password, 10);
   const currentDb = initDb();
   try {
-    const result = currentDb.prepare('INSERT INTO users (username, password, role, language, timezone) VALUES (?, ?, ?, ?, ?)').run(username, hashedPassword, role || 'viewer', language || 'en', timezone || null);
-    logAction((req as any).user.id, 'USER_CREATE', `Created user ${username} with role ${role}, language ${language}, and timezone ${timezone || 'default'}`, ip);
-    res.status(201).json({ id: result.lastInsertRowid, username, role, language, timezone });
+    const result = currentDb.prepare('INSERT INTO users (username, password, role, language, timezone, theme) VALUES (?, ?, ?, ?, ?, ?)').run(username, hashedPassword, role || 'viewer', language || 'en', timezone || null, theme || 'dark');
+    logAction((req as any).user.id, 'USER_CREATE', `Created user ${username} with role ${role}, language ${language}, timezone ${timezone || 'default'}, and theme ${theme || 'dark'}`, ip);
+    res.status(201).json({ id: result.lastInsertRowid, username, role, language, timezone, theme: theme || 'dark' });
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }
+});
+
+/**
+ * @openapi
+ * /api/users/profile:
+ *   get:
+ *     summary: Fetch current user's profile settings
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: Current user profile
+ */
+app.get('/api/users/profile', authenticateToken, (req, res) => {
+  const userId = (req as any).user.id;
+  const currentDb = initDb();
+  const user = currentDb.prepare('SELECT id, username, role, language, timezone, theme FROM users WHERE id = ?').get(userId) as any;
+  if (!user) return res.status(404).json({ message: 'User not found' });
+  res.json(user);
 });
 
 /**
@@ -481,18 +502,28 @@ app.post('/api/users', authenticateToken, isAdmin, (req, res) => {
  *                 type: string
  *               timezone:
  *                 type: string
+ *               theme:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Profile updated
  */
+app.get('/api/users/profile', authenticateToken, (req, res) => {
+  const userId = (req as any).user.id;
+  const currentDb = initDb();
+  const user = currentDb.prepare('SELECT id, username, role, language, timezone, theme FROM users WHERE id = ?').get(userId) as any;
+  if (!user) return res.status(404).json({ message: 'User not found' });
+  res.json(user);
+});
+
 app.put('/api/users/profile', authenticateToken, (req, res) => {
-  const { language, timezone } = req.body;
+  const { language, timezone, theme } = req.body;
   const userId = (req as any).user.id;
   const ip = getClientIp(req);
   const currentDb = initDb();
 
   try {
-    if (language || timezone !== undefined) {
+    if (language || timezone !== undefined || theme) {
       const updates: string[] = [];
       const params: any[] = [];
       
@@ -505,16 +536,22 @@ app.put('/api/users/profile', authenticateToken, (req, res) => {
         updates.push('timezone = ?');
         params.push(timezone);
       }
+
+      if (theme) {
+        updates.push('theme = ?');
+        params.push(theme);
+      }
       
       params.push(userId);
       currentDb.prepare(`UPDATE users SET ${updates.join(', ')} WHERE id = ?`).run(...params);
       
       let details = 'Updated user profile: ';
       if (language) details += `language: ${language} `;
-      if (timezone !== undefined) details += `timezone: ${timezone || 'auto'}`;
+      if (timezone !== undefined) details += `timezone: ${timezone || 'auto'} `;
+      if (theme) details += `theme: ${theme}`;
       
       logAction(userId, 'USER_UPDATE_PROFILE', details.trim(), ip);
-      res.json({ message: 'Profile updated', language, timezone });
+      res.json({ message: 'Profile updated', language, timezone, theme });
     } else {
       res.status(400).json({ message: 'Nothing to update' });
     }
@@ -1265,7 +1302,8 @@ app.post('/api/:resource/:id/:action', authenticateToken, isOperator, (req, res)
   // Broadcast update to all clients
   io.emit('resource_update', { resource, timestamp: new Date() });
   
-  res.json({ message: `Successfully ${action}ed ${resource} ${id}` });
+  const actionPast = action === 'stop' ? 'stopped' : `${action}ed`;
+  res.json({ message: `Successfully ${actionPast} ${resource} ${id}` });
 });
 
 // System routes

@@ -8,7 +8,7 @@ import { useTheme } from '../contexts/ThemeContext';
 
 const Login: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, setTheme } = useTheme();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -56,6 +56,11 @@ const Login: React.FC = () => {
         localStorage.removeItem('userTimezone');
       }
 
+      // Update theme if the user has a preference
+      if (response.data.user.theme) {
+        setTheme(response.data.user.theme);
+      }
+
       navigate('/dashboard');
     } catch {
       setError(t('login.error_invalid') || 'Invalid username or password');
@@ -98,14 +103,14 @@ const Login: React.FC = () => {
         </div>
 
         {error && (
-          <div className="bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 p-4 rounded-2xl mb-8 text-sm font-bold border border-red-100 dark:border-red-500/20 animate-in shake duration-500">
+          <div data-testid="login-error" className="bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 p-4 rounded-2xl mb-8 text-sm font-bold border border-red-100 dark:border-red-500/20 animate-in shake duration-500">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-8">
+        <form onSubmit={handleSubmit} data-testid="login-form" className="space-y-8">
           <div className="space-y-2">
-            <label htmlFor="username" className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('login.username_label')}</label>
+            <label htmlFor="username" data-testid="username-label" className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('login.username_label')}</label>
             <input 
               id="username"
               type="text" 
@@ -117,7 +122,7 @@ const Login: React.FC = () => {
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="password" className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('login.password_label')}</label>
+            <label htmlFor="password" data-testid="password-label" className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('login.password_label')}</label>
             <input 
               id="password"
               type="password" 
@@ -130,6 +135,7 @@ const Login: React.FC = () => {
           </div>
           <button 
             type="submit"
+            data-testid="login-submit"
             className="w-full bg-slate-900 dark:bg-brand-600 hover:bg-brand-600 dark:hover:bg-brand-700 text-white font-black py-4 rounded-2xl transition-all duration-300 shadow-xl shadow-slate-900/20 dark:shadow-brand-600/20 active:scale-95 group flex items-center justify-center gap-2 border-b-4 border-slate-950 dark:border-brand-800 hover:border-b-0 hover:translate-y-[2px]"
           >
             <span className="uppercase text-xs tracking-widest">{t('login.sign_in')}</span>

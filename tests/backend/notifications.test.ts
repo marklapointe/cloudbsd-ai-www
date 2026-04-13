@@ -7,7 +7,10 @@ describe('Notifications API', () => {
   let token: string;
 
   beforeAll(async () => {
-    initDb();
+    const db = initDb();
+    // Ensure standard limits for these tests
+    db.prepare('UPDATE license SET vms_limit = 2, containers_limit = 100, jails_limit = 50').run();
+    
     // Login to get token
     const res = await request(app)
       .post('/api/login')
