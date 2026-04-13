@@ -100,6 +100,22 @@ export function initDb() {
       features TEXT, -- JSON array of features
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
+
+    CREATE TABLE IF NOT EXISTS notifications (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      type TEXT NOT NULL, -- 'info', 'warning', 'error', 'success', 'ad'
+      priority TEXT NOT NULL DEFAULT 'low', -- 'low', 'medium', 'high'
+      message TEXT NOT NULL,
+      details TEXT,
+      link TEXT,
+      is_read BOOLEAN DEFAULT 0,
+      timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS dismissed_notifications (
+      notification_id TEXT PRIMARY KEY,
+      dismissed_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
   `);
 
   // Migration for terminology if needed

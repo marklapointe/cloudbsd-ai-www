@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { 
   Search, 
@@ -13,76 +13,38 @@ import {
   ChevronRight,
   MoreVertical,
   Filter,
-  ArrowLeft
+  ArrowLeft,
+  X
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { formatLocalDate, formatLocalDateTime } from '../utils/dateUtils';
-
-interface Notification {
-  id: string;
-  type: 'info' | 'warning' | 'error' | 'success';
-  message: string;
-  timestamp: Date;
-  read: boolean;
-}
+import { useNotifications } from '../contexts/NotificationContext';
 
 const Notifications: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const { 
+    notifications, 
+    markAsRead, 
+    dismissNotification,
+    deleteNotification
+  } = useNotifications();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-
-  useEffect(() => {
-    const saved = localStorage.getItem('system_notifications');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        const mapped = parsed.map((n: any) => ({
-          ...n,
-          timestamp: new Date(n.timestamp)
-        }));
-        setNotifications(mapped);
-        if (mapped.length > 0) {
-          setSelectedId(mapped[0].id);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  }, []);
-
-  const saveNotifications = (updated: Notification[]) => {
-    setNotifications(updated);
-    localStorage.setItem('system_notifications', JSON.stringify(updated));
-  };
-
-  const markAsRead = (id: string) => {
-    const updated = notifications.map(n => 
-      n.id === id ? { ...n, read: true } : n
-    );
-    saveNotifications(updated);
-  };
-
-  const deleteNotification = (id: string) => {
-    const updated = notifications.filter(n => n.id !== id);
-    saveNotifications(updated);
-    if (selectedId === id) {
-      setSelectedId(updated.length > 0 ? updated[0].id : null);
-    }
-  };
 
   const filteredNotifications = notifications.filter(n => 
     n.message.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const selectedNotification = notifications.find(n => n.id === selectedId);
+  const currentSelectedId = selectedId || (filteredNotifications.length > 0 ? filteredNotifications[0].id : null);
+  const selectedNotification = notifications.find(n => n.id === currentSelectedId);
 
   const getTypeIcon = (type: string, size = 18) => {
     switch (type) {
       case 'warning': return <AlertTriangle size={size} className="text-amber-500" />;
       case 'error': return <AlertCircle size={size} className="text-red-500" />;
       case 'success': return <CheckCircle size={size} className="text-emerald-500" />;
+      case 'ad': return <Info size={size} className="text-purple-500" />;
       default: return <Info size={size} className="text-blue-500" />;
     }
   };
@@ -136,16 +98,16 @@ const Notifications: React.FC = () => {
                 key={n.id}
                 onClick={() => {
                   setSelectedId(n.id);
-                  if (!n.read) markAsRead(n.id);
+                  if (!n.is_read) markAsRead(n.id);
                 }}
                 className={`
                   p-4 border-b border-slate-50 cursor-pointer transition-all flex gap-4
-                  ${selectedId === n.id ? 'bg-brand-50/50 border-l-4 border-l-brand-500' : 'hover:bg-slate-50 border-l-4 border-l-transparent'}
-                  ${!n.read ? 'font-bold' : ''}
+                  ${currentSelectedId === n.id ? 'bg-brand-50/50 border-l-4 border-l-brand-500' : 'hover:bg-slate-50 border-l-4 border-l-transparent'}
+                  ${!n.is_read ? 'font-bold' : ''}
                 `}
               >
                 <div className="mt-1">
-                  {n.read ? <MailOpen size={16} className="text-slate-400" /> : <Mail size={16} className="text-brand-500" />}
+                  {n.is_read ? <MailOpen size={16} className="text-slate-400" /> : <Mail size={16} className="text-brand-500" />}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-start mb-1">
@@ -153,6 +115,7 @@ const Notifications: React.FC = () => {
                       n.type === 'warning' ? 'bg-amber-100 text-amber-700' :
                       n.type === 'error' ? 'bg-red-100 text-red-700' :
                       n.type === 'success' ? 'bg-emerald-100 text-emerald-700' :
+                      n.type === 'ad' ? 'bg-purple-100 text-purple-700' :
                       'bg-blue-100 text-blue-700'
                     }`}>
                       {t(`common.${n.type}`)}
@@ -192,6 +155,13 @@ const Notifications: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
+                  <button 
+                    onClick={() => dismissNotification(selectedNotification.id)}
+                    className="p-2 hover:bg-slate-100 hover:text-slate-600 rounded-lg text-slate-400 transition-colors"
+                    title={t('common.dismiss')}
+                  >
+                    <X size={20} />
+                  </button>
                   <button 
                     onClick={() => deleteNotification(selectedNotification.id)}
                     className="p-2 hover:bg-red-50 hover:text-red-600 rounded-lg text-slate-400 transition-colors"

@@ -65,7 +65,10 @@ const en = {
       tb: "TB",
       error: "Error",
       success: "Success",
-      warning: "Warning"
+      warning: "Warning",
+      ad: "Advertisement",
+      learn_more: "Learn More",
+      dismiss: "Dismiss"
     },
     login: {
       title: "CloudBSD Admin",

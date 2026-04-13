@@ -807,6 +807,191 @@ app.delete('/api/nodes/:id', authenticateToken, isAdmin, (req, res) => {
   res.sendStatus(204);
 });
 
+/**
+ * @openapi
+ * /api/notifications:
+ *   get:
+ *     summary: Get all system notifications
+ *     tags: [Notifications]
+ *     responses:
+ *       200:
+ *         description: List of notifications
+ */
+app.get('/api/notifications', authenticateToken, (req, res) => {
+  const currentDb = initDb();
+  
+  // Fetch dismissals
+  const dismissals = currentDb.prepare('SELECT * FROM dismissed_notifications').all() as any[];
+  const dismissalMap = new Map(dismissals.map(d => [d.notification_id, new Date(d.dismissed_at + 'Z')])); // Assume UTC from DB
+
+  // Helper to check if dismissed
+  const isDismissed = (id: string) => {
+    const dismissedAt = dismissalMap.get(id);
+    if (!dismissedAt) return false;
+    
+    // License notifications regenerated every 24 hours
+    if (id.startsWith('license-')) {
+      const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+      return dismissedAt > twentyFourHoursAgo;
+    }
+    
+    // Others stay dismissed
+    return true;
+  };
+
+  // 1. Fetch persistent notifications from DB
+  const dbNotifications = (currentDb.prepare('SELECT * FROM notifications ORDER BY timestamp DESC').all() as any[])
+    .filter(n => !isDismissed(n.id.toString()));
+  
+  // 2. Generate ephemeral notifications
+  const ephemeralNotifications: any[] = [];
+  
+  // A. License check
+  const license = currentDb.prepare('SELECT * FROM license LIMIT 1').get() as any;
+  if (license) {
+    const nodesCount = (currentDb.prepare('SELECT COUNT(*) as count FROM nodes').get() as any)?.count || 0;
+    const vmsCount = (currentDb.prepare("SELECT COUNT(*) as count FROM resources WHERE type = 'vms'").get() as any)?.count || 0;
+    const containersCount = (currentDb.prepare("SELECT COUNT(*) as count FROM resources WHERE type = 'containers'").get() as any)?.count || 0;
+    const jailsCount = (currentDb.prepare("SELECT COUNT(*) as count FROM resources WHERE type = 'jails'").get() as any)?.count || 0;
+
+    const pushLicenseNotif = (id: string, message: string) => {
+      if (!isDismissed(id)) {
+        ephemeralNotifications.push({
+          id,
+          type: 'warning',
+          priority: 'high',
+          message,
+          timestamp: new Date()
+        });
+      }
+    };
+
+    if (vmsCount > license.vms_limit) {
+      pushLicenseNotif(`license-vms-${vmsCount}`, `License limit exceeded: ${vmsCount}/${license.vms_limit} VMs in use.`);
+    }
+    if (containersCount > license.containers_limit) {
+      pushLicenseNotif(`license-containers-${containersCount}`, `License limit exceeded: ${containersCount}/${license.containers_limit} Containers in use.`);
+    }
+    if (jailsCount > license.jails_limit) {
+      pushLicenseNotif(`license-jails-${jailsCount}`, `License limit exceeded: ${jailsCount}/${license.jails_limit} Jails in use.`);
+    }
+    if (nodesCount > license.nodes_limit) {
+      pushLicenseNotif(`license-nodes-${nodesCount}`, `License limit exceeded: ${nodesCount}/${license.nodes_limit} Nodes in use.`);
+    }
+  }
+
+  // B. Resource usage check
+  const nodes = currentDb.prepare('SELECT * FROM nodes').all() as any[];
+  nodes.forEach(node => {
+    const cpuId = `node-cpu-${node.id}`;
+    if (!isDismissed(cpuId) && node.cpu_used && node.cpu_total && (node.cpu_used / node.cpu_total) > 0.9) {
+      ephemeralNotifications.push({
+        id: cpuId,
+        type: 'error',
+        priority: 'high',
+        message: `High CPU usage on node ${node.name}: ${Math.round((node.cpu_used / node.cpu_total) * 100)}%`,
+        timestamp: new Date()
+      });
+    }
+    
+    const parseMem = (mem: string | null) => {
+      if (!mem) return 0;
+      return parseInt(mem);
+    };
+    
+    const memUsed = parseMem(node.mem_used);
+    const memTotal = parseMem(node.mem_total);
+    const memId = `node-mem-${node.id}`;
+    if (!isDismissed(memId) && memUsed && memTotal && (memUsed / memTotal) > 0.9) {
+      ephemeralNotifications.push({
+        id: memId,
+        type: 'error',
+        priority: 'high',
+        message: `Memory exhaustion on node ${node.name}: ${Math.round((memUsed / memTotal) * 100)}% used`,
+        timestamp: new Date()
+      });
+    }
+  });
+
+  res.json([...ephemeralNotifications, ...dbNotifications]);
+});
+
+/**
+ * @openapi
+ * /api/notifications/read/{id}:
+ *   post:
+ *     summary: Mark a notification as read
+ *     tags: [Notifications]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Notification marked as read
+ */
+app.post('/api/notifications/read/:id', authenticateToken, (req, res) => {
+  const { id } = req.params;
+  const currentDb = initDb();
+  // Mark as read only makes sense for persistent notifications
+  if (!isNaN(Number(id))) {
+    currentDb.prepare('UPDATE notifications SET is_read = 1 WHERE id = ?').run(id);
+  }
+  res.json({ success: true });
+});
+
+/**
+ * @openapi
+ * /api/notifications/dismiss/{id}:
+ *   post:
+ *     summary: Dismiss a notification (persistent or ephemeral)
+ *     tags: [Notifications]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Notification dismissed
+ */
+app.post('/api/notifications/dismiss/:id', authenticateToken, (req, res) => {
+  const { id } = req.params;
+  const currentDb = initDb();
+  currentDb.prepare('INSERT OR REPLACE INTO dismissed_notifications (notification_id, dismissed_at) VALUES (?, CURRENT_TIMESTAMP)').run(id);
+  res.json({ success: true });
+});
+
+/**
+ * @openapi
+ * /api/notifications/{id}:
+ *   delete:
+ *     summary: Delete a notification
+ *     tags: [Notifications]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Notification deleted
+ */
+app.delete('/api/notifications/:id', authenticateToken, (req, res) => {
+  const { id } = req.params;
+  const currentDb = initDb();
+  if (!isNaN(Number(id))) {
+    currentDb.prepare('DELETE FROM notifications WHERE id = ?').run(id);
+  }
+  // Also remove from dismissals if it was there
+  currentDb.prepare('DELETE FROM dismissed_notifications WHERE notification_id = ?').run(id);
+  res.json({ success: true });
+});
+
 // Resource routes
 /**
  * @openapi
@@ -1015,8 +1200,8 @@ app.put('/api/:resource/:id', authenticateToken, isOperator, (req, res) => {
     
     if (result.changes === 0) return res.status(404).json({ message: 'Resource not found' });
 
-    const ip = getClientIp(req);
-    logAction((req as any).user.id, `RESOURCE_UPDATE`, `Updated ${resource} ${name} (ID: ${id})`, ip);
+    const clientIp = getClientIp(req);
+    logAction((req as any).user.id, `RESOURCE_UPDATE`, `Updated ${resource} ${name} (ID: ${id})`, clientIp);
     io.emit('resource_update', { resource, timestamp: new Date() });
     
     res.json({ message: 'Resource updated successfully' });

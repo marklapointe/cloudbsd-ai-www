@@ -53,3 +53,10 @@ describe('Verification Test', () => {
 - `etc/`: Local configuration files.
 - `data/`: SQLite database files.
 - `pkg/`: Packaging scripts for FreeBSD.
+
+#### 9. Testing Methodology & Verification
+- **Automated Regression**: All changes must be verified with the full regression suite (`npm test`).
+- **Backend Integrity**: Verify API behavior using `supertest` for all new or modified endpoints.
+- **Frontend Consistency**: Use Vitest and React Testing Library to ensure component behavior and state management.
+- **I18n Audit**: Use `make check-locales` to ensure 100% key parity across all 43+ languages.
+- **Non-Interactive Verification**: All tests must be able to run to completion without user input.

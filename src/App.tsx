@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import { BackendStatusProvider } from './components/BackendStatusProvider';
+import { NotificationProvider } from './contexts/NotificationContext';
 
 // Lazy load pages
 const Login = lazy(() => import('./pages/Login'));
@@ -35,112 +36,114 @@ function App() {
   return (
     <BackendStatusProvider>
       <Router>
-        <Suspense fallback={<LoadingFallback />}>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/login" element={<Login />} />
-            <Route 
-              path="/dashboard" 
-              element={
-                <PrivateRoute>
-                  <Layout>
-                    <Dashboard />
-                  </Layout>
-                </PrivateRoute>
-              } 
-            />
-            <Route 
-              path="/vms" 
-              element={
-                <PrivateRoute>
-                  <Layout>
-                    <VMs />
-                  </Layout>
-                </PrivateRoute>
-              } 
-            />
-            <Route 
-              path="/containers" 
-              element={
-                <PrivateRoute>
-                  <Layout>
-                    <OCIContainers />
-                  </Layout>
-                </PrivateRoute>
-              } 
-            />
-            <Route 
-              path="/jails" 
-              element={
-                <PrivateRoute>
-                  <Layout>
-                    <Jails />
-                  </Layout>
-                </PrivateRoute>
-              } 
-            />
-            <Route 
-              path="/cluster" 
-              element={
-                <PrivateRoute>
-                  <Layout>
-                    <Cluster />
-                  </Layout>
-                </PrivateRoute>
-              } 
-            />
-            <Route 
-              path="/network" 
-              element={
-                <PrivateRoute>
-                  <Layout>
-                    <NetworkMap />
-                  </Layout>
-                </PrivateRoute>
-              } 
-            />
-            <Route 
-              path="/users" 
-              element={
-                <PrivateRoute>
-                  <Layout>
-                    <Users />
-                  </Layout>
-                </PrivateRoute>
-              } 
-            />
-            <Route 
-              path="/logs" 
-              element={
-                <PrivateRoute>
-                  <Layout>
-                    <Logs />
-                  </Layout>
-                </PrivateRoute>
-              } 
-            />
-            <Route 
-              path="/notifications" 
-              element={
-                <PrivateRoute>
-                  <Layout>
-                    <Notifications />
-                  </Layout>
-                </PrivateRoute>
-              } 
-            />
-            <Route 
-              path="/settings" 
-              element={
-                <PrivateRoute>
-                  <Layout>
-                    <Settings />
-                  </Layout>
-                </PrivateRoute>
-              } 
-            />
-          </Routes>
-        </Suspense>
+        <NotificationProvider>
+          <Suspense fallback={<LoadingFallback />}>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/login" element={<Login />} />
+              <Route 
+                path="/dashboard" 
+                element={
+                  <PrivateRoute>
+                    <Layout>
+                      <Dashboard />
+                    </Layout>
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/vms" 
+                element={
+                  <PrivateRoute>
+                    <Layout>
+                      <VMs />
+                    </Layout>
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/containers" 
+                element={
+                  <PrivateRoute>
+                    <Layout>
+                      <OCIContainers />
+                    </Layout>
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/jails" 
+                element={
+                  <PrivateRoute>
+                    <Layout>
+                      <Jails />
+                    </Layout>
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/cluster" 
+                element={
+                  <PrivateRoute>
+                    <Layout>
+                      <Cluster />
+                    </Layout>
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/network" 
+                element={
+                  <PrivateRoute>
+                    <Layout>
+                      <NetworkMap />
+                    </Layout>
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/users" 
+                element={
+                  <PrivateRoute>
+                    <Layout>
+                      <Users />
+                    </Layout>
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/logs" 
+                element={
+                  <PrivateRoute>
+                    <Layout>
+                      <Logs />
+                    </Layout>
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/notifications" 
+                element={
+                  <PrivateRoute>
+                    <Layout>
+                      <Notifications />
+                    </Layout>
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/settings" 
+                element={
+                  <PrivateRoute>
+                    <Layout>
+                      <Settings />
+                    </Layout>
+                  </PrivateRoute>
+                } 
+              />
+            </Routes>
+          </Suspense>
+        </NotificationProvider>
       </Router>
     </BackendStatusProvider>
   );

@@ -17,7 +17,8 @@
     - [User Management](#user-management)
     - [System Logs](#system-logs)
     - [Settings](#settings)
-8. [Troubleshooting](#troubleshooting)
+8. [Notifications](#notifications)
+9. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -100,6 +101,21 @@ The **Settings** page allows you to:
 - Change your user profile information.
 - Update your language preference.
 - Toggle system settings like Demo Mode.
+
+---
+
+## Notifications
+
+CloudBSD Admin features a unified notification system that keeps you informed about system health and activities:
+- **Real-time Alerts**: Critical warnings (like license limit breaches or high resource usage) appear instantly in a high-priority banner at the top of the UI.
+- **Notification Bell**: The bell icon in the top header indicates your unread message count. Click it to view recent messages.
+- **Notification Inbox**: Access the full history of your notifications via the **Notifications** page, which features search, filtering, and delete functionality.
+- **Message Types**:
+    - **Info**: General system announcements.
+    - **Warning**: Potential issues that require attention.
+    - **Error**: Critical system failures or failed operations.
+    - **Success**: Confirmation of successful actions.
+- **Dismissing Notifications**: Click the "X" button on any notification to dismiss it. Dismissed notifications will not bug you again, with the exception of license-related warnings, which reappear every 24 hours until the underlying issue is resolved.
 
 ---
 

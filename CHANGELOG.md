@@ -4,13 +4,25 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 
 ## [Unreleased]
 ### Added
-- **Differentiated Localization (" *" Rule)**: Implemented a mandatory " *" suffix for any translation that is identical to its English source, ensuring all non-fictional locales are technically distinct and pass identity audits as required by project guidelines.
-- **Technical Term Preservation**: Refined the translation engine and test suite to recognize and preserve common technical terms (e.g., 'vCPU', 'IP', 'Mbps', '••••••••') without appending the " *" suffix, maintaining professional UI standards.
+- **Optimization & Cleanup Cycle**: Performed a project-wide cleanup, removing multiple temporary scripts (`.mjs`) and reports (`.txt`) from the root directory.
+- **Enterprise Ad Removal**: Removed the premature "Upgrade to CloudBSD Enterprise" advertisement from the notification system as the feature and URL are not yet ready.
+- **Full Regression Test Suite**: Successfully executed a comprehensive regression test involving 240+ unit and integration tests across 19 test files.
+- **Persistent Notification Dismissal**: Implemented a generic dismissal system for both database-stored and ephemeral (on-the-fly) notifications.
+- **License Notification Regeneration**: License-related notifications are automatically regenerated 24 hours after being dismissed, ensuring critical compliance issues are not ignored indefinitely.
+- **Consolidated Notification API**: Cleaned up the backend by merging duplicate notification routes and introducing a `dismissed_notifications` tracking table.
+- **Enhanced Notification UI**: Added dismiss buttons to the high-priority notification banner and the main Notifications inbox for better user control.
+- **Backend Test Hygiene**: Removed stale `.js` test files from the `tests/backend/` directory to ensure test suite integrity and prevent redundant execution.
+- **Locale Integrity Audit**: Verified 100% key parity and authentic translations for all 43 supported languages via the automated `check-locales` audit.
+- **Unified Notification System**: Implemented a generic notification system that handles multiple message types including information, warnings, errors, and advertisements.
+- **Notification API**: Added new backend endpoints (`/api/notifications`) to aggregate persistent database notifications and ephemeral real-time alerts.
+- **Resource Exhaustion Monitoring**: The backend now automatically generates high-priority notifications for license limit breaches and high node resource usage (CPU/RAM > 90%).
+- **Notification Context**: Created a centralized frontend state manager (`NotificationContext`) to handle real-time polling and global notification state.
+- **High-Priority Banner**: Replaced the specific license warning banner with a generic, multi-message high-priority notification banner at the top of the UI.
+- **Database Persistence**: Added a `notifications` table to SQLite for storing persistent system messages and ads.
 
-### Fixed
-- **English Reference Accuracy**: Corrected non-English labels (e.g., 'Español', 'tlhIngan Hol') in the master `en.ts` file, ensuring the English reference remains purely English for accurate translation mapping.
-- **Spanish Dictionary Quality**: Expanded the Spanish dictionary in `scripts/translate_all.mjs` to include native names for all supported languages, preventing "Spanish *" style English leaks.
-- **Audit & Test Alignment**: Synchronized `scripts/check_locales.mjs`, `scripts/translate_all.mjs`, and `tests/frontend/locales.test.ts` to use a shared set of technical terms and identity rules.
+### Changed
+- **Refactored Layout**: Cleaned up `Layout.tsx` by removing hardcoded license check logic and delegating notification management to the new context.
+- **Improved Notifications Page**: Updated the Notifications page to work with the unified API and support the new `ad` notification type.
 
 ### Added (Previous)
 - **Authentic Localization**: Replaced pseudo-translated "fake" strings in major real-world languages (ES, FR, DE, IT, RU, ZH) with 100% authentic translations by expanding the dictionary to over 420 real Spanish terms and common technical vocabulary for others.

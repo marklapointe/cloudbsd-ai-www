@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import api from '../api/client';
 import { formatLocalTime } from '../utils/dateUtils';
+import { useNotifications } from '../contexts/NotificationContext';
 import { 
   LayoutDashboard, 
   Monitor, 
@@ -21,109 +21,26 @@ import {
   AlertTriangle,
   Info,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  ExternalLink,
+  Megaphone
 } from 'lucide-react';
-
-interface Notification {
-  id: string;
-  type: 'info' | 'warning' | 'error' | 'success';
-  message: string;
-  timestamp: Date;
-  read: boolean;
-}
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { t, i18n } = useTranslation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [licenseWarning, setLicenseWarning] = useState<string | null>(null);
+  const { 
+    notifications, 
+    unreadCount, 
+    highPriorityNotifications, 
+    markAsRead,
+    dismissNotification
+  } = useNotifications();
   const navigate = useNavigate();
   const location = useLocation();
   const username = localStorage.getItem('username') || 'User';
   const role = localStorage.getItem('role') || 'viewer';
-
-  useEffect(() => {
-    checkLicense();
-    // Poll for license and notifications every minute
-    const interval = setInterval(checkLicense, 60000);
-    
-    // Load existing notifications from localStorage
-    const savedNotifications = localStorage.getItem('system_notifications');
-    if (savedNotifications) {
-      try {
-        const parsed = JSON.parse(savedNotifications);
-        setNotifications(parsed.map((n: any) => ({
-          ...n,
-          timestamp: new Date(n.timestamp)
-        })));
-      } catch (e) {
-        console.error('Failed to parse saved notifications', e);
-      }
-    }
-
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    // Save notifications to localStorage when they change
-    localStorage.setItem('system_notifications', JSON.stringify(notifications));
-  }, [notifications]);
-
-  const checkLicense = async () => {
-    try {
-      const res = await api.get('/system/license');
-      const license = res.data;
-      if (license && license.usage) {
-        const warnings: string[] = [];
-        if (license.usage.vms > license.vms_limit) {
-          warnings.push(t('notifications.vms_over_limit', { count: license.usage.vms, limit: license.vms_limit }));
-        }
-        if (license.usage.containers > license.containers_limit) {
-          warnings.push(t('notifications.containers_over_limit', { count: license.usage.containers, limit: license.containers_limit }));
-        }
-        if (license.usage.jails > license.jails_limit) {
-          warnings.push(t('notifications.jails_over_limit', { count: license.usage.jails, limit: license.jails_limit }));
-        }
-        if (license.usage.nodes > license.nodes_limit) {
-          warnings.push(t('notifications.nodes_over_limit', { count: license.usage.nodes, limit: license.nodes_limit }));
-        }
-
-        if (warnings.length > 0) {
-          const warningMsg = warnings.join(' | ');
-          setLicenseWarning(warningMsg);
-          
-          // Add as notification if not already present or if last warning was > 24h ago
-          setNotifications(prev => {
-            const now = new Date();
-            const lastInstance = prev.find(n => n.message === warningMsg);
-            const isTooSoon = lastInstance && (now.getTime() - new Date(lastInstance.timestamp).getTime() < 24 * 60 * 60 * 1000);
-
-            if (!lastInstance || !isTooSoon) {
-              return [{
-                id: Date.now().toString(),
-                type: 'warning',
-                message: warningMsg,
-                timestamp: now,
-                read: false
-              }, ...prev];
-            }
-            return prev;
-          });
-        } else {
-          setLicenseWarning(null);
-        }
-      }
-    } catch (err) {
-      console.error('Failed to check license status', err);
-    }
-  };
-
-  const markAllAsRead = () => {
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-  };
-
-  const unreadCount = notifications.filter(n => !n.read).length;
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -366,7 +283,7 @@ ${t('manual.settings_text')}
                       </h3>
                       {unreadCount > 0 && (
                         <button 
-                          onClick={markAllAsRead}
+                          onClick={() => notifications.forEach(n => !n.is_read && markAsRead(n.id))}
                           className="text-[10px] font-bold text-brand-600 uppercase tracking-wider hover:text-brand-700"
                         >
                           {t('notifications.mark_read')}
@@ -385,24 +302,40 @@ ${t('manual.settings_text')}
                         notifications.map(notification => (
                           <div 
                             key={notification.id} 
-                            className={`p-4 border-b border-slate-50 hover:bg-slate-50 transition-colors flex gap-3 ${!notification.read ? 'bg-brand-50/30' : ''}`}
+                            className={`p-4 border-b border-slate-50 hover:bg-slate-50 transition-colors flex gap-3 ${!notification.is_read ? 'bg-brand-50/30' : ''}`}
+                            onClick={() => !notification.is_read && markAsRead(notification.id)}
                           >
                             <div className={`mt-0.5 w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center ${
                               notification.type === 'warning' ? 'bg-amber-100 text-amber-600' :
                               notification.type === 'error' ? 'bg-red-100 text-red-600' :
                               notification.type === 'success' ? 'bg-emerald-100 text-emerald-600' :
+                              notification.type === 'ad' ? 'bg-purple-100 text-purple-600' :
                               'bg-blue-100 text-blue-600'
                             }`}>
                               {notification.type === 'warning' ? <AlertTriangle size={16} /> :
                                notification.type === 'error' ? <AlertCircle size={16} /> :
                                notification.type === 'success' ? <CheckCircle size={16} /> :
+                               notification.type === 'ad' ? <Megaphone size={16} /> :
                                <Info size={16} />}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="text-sm text-slate-700 leading-snug">{notification.message}</p>
-                              <p className="text-[10px] text-slate-400 mt-1 font-medium">
-                                {formatLocalTime(notification.timestamp)}
-                              </p>
+                              <p className="text-sm text-slate-700 leading-snug font-medium">{notification.message}</p>
+                              <div className="flex items-center justify-between mt-1">
+                                <p className="text-[10px] text-slate-400 font-medium">
+                                  {formatLocalTime(notification.timestamp)}
+                                </p>
+                                {notification.link && (
+                                  <a 
+                                    href={notification.link} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="text-[10px] text-brand-600 hover:underline flex items-center gap-0.5 font-bold"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    {t('common.learn_more')} <ExternalLink size={10} />
+                                  </a>
+                                )}
+                              </div>
                             </div>
                           </div>
                         ))
@@ -428,19 +361,36 @@ ${t('manual.settings_text')}
           </div>
         </header>
 
-        {/* License Warning Banner */}
-        {licenseWarning && (
-          <div className="bg-amber-500 text-white px-6 py-2 flex items-center justify-between gap-4 animate-in slide-in-from-top duration-500">
-            <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider">
-              <AlertTriangle size={16} />
-              <span>{t('notifications.license_warning')}: {licenseWarning}</span>
-            </div>
-            <Link 
-              to="/settings" 
-              className="bg-white/20 hover:bg-white/30 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest transition-colors whitespace-nowrap"
-            >
-              {t('notifications.upgrade_license')}
-            </Link>
+        {/* High Priority Notification Banner */}
+        {highPriorityNotifications.length > 0 && (
+          <div className="bg-red-600 text-white px-6 py-2 flex flex-col gap-2 animate-in slide-in-from-top duration-500">
+            {highPriorityNotifications.map(notification => (
+              <div key={notification.id} className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider">
+                  <AlertCircle size={16} />
+                  <span>{notification.message}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  {notification.link && (
+                    <a 
+                      href={notification.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-white/20 hover:bg-white/30 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest transition-colors whitespace-nowrap"
+                    >
+                      {t('common.learn_more')}
+                    </a>
+                  )}
+                  <button 
+                    onClick={() => dismissNotification(notification.id)}
+                    className="text-white/60 hover:text-white transition-colors"
+                    title={t('common.dismiss')}
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         )}
 
