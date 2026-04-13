@@ -82,6 +82,7 @@ const es = {
       "error_invalid": "Nombre de usuario o contraseña no válidos"
     },
     "layout": {
+      "toggle_theme": "Toggle Theme",
       "admin_panel": "Panel de administración",
       "main_menu": "Menú principal",
       "logo_text": "CloudBSD",

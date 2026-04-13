@@ -86,6 +86,7 @@ const en = {
       main_menu: "Main Menu",
       logo_text: "CloudBSD",
       toggle_menu: "Toggle Menu",
+      toggle_theme: "Toggle Theme",
       backend_offline: "Backend is offline. Some features may be unavailable. Retrying...",
       connecting: "Connecting...",
       verifying_connection: "Verifying connection to infrastructure..."

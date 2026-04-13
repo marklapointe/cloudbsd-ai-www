@@ -62,8 +62,9 @@ const Cluster: React.FC = () => {
         setError(t('cluster.fetch_failed'));
         setNodes([]);
       }
-    } catch (err: any) {
-      setError(err.response?.data?.message || t('cluster.fetch_failed'));
+    } catch (err: unknown) {
+      const errorResponse = err as { response?: { data?: { message?: string } } };
+      setError(errorResponse.response?.data?.message || t('cluster.fetch_failed'));
     } finally {
       setLoading(false);
     }
@@ -89,8 +90,9 @@ const Cluster: React.FC = () => {
       setEditingNode(null);
       setFormError('');
       fetchNodes();
-    } catch (err: any) {
-      setFormError(err.response?.data?.message || t('cluster.operation_failed'));
+    } catch (err: unknown) {
+      const errorResponse = err as { response?: { data?: { message?: string } } };
+      setFormError(errorResponse.response?.data?.message || t('cluster.operation_failed'));
     }
   };
 
@@ -104,8 +106,9 @@ const Cluster: React.FC = () => {
     try {
       await api.delete(`/nodes/${deletingId}`);
       fetchNodes();
-    } catch (err: any) {
-      setError(err.response?.data?.message || t('cluster.delete_failed'));
+    } catch (err: unknown) {
+      const errorResponse = err as { response?: { data?: { message?: string } } };
+      setError(errorResponse.response?.data?.message || t('cluster.delete_failed'));
     } finally {
       setDeletingId(null);
     }
@@ -132,8 +135,8 @@ const Cluster: React.FC = () => {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">{t('cluster.title')}</h1>
-          <p className="text-slate-500 mt-1 font-medium">{t('cluster.description')}</p>
+          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">{t('cluster.title')}</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1 font-medium">{t('cluster.description')}</p>
         </div>
         <button 
           onClick={() => {
@@ -142,7 +145,7 @@ const Cluster: React.FC = () => {
           }}
           className={`flex items-center gap-2 px-6 py-2.5 rounded-2xl font-bold transition-all duration-200 shadow-lg active:scale-95 ${
             showAddForm 
-              ? 'bg-slate-200 text-slate-600 hover:bg-slate-300' 
+              ? 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-300 dark:hover:bg-slate-700' 
               : 'bg-brand-600 hover:bg-brand-700 text-white shadow-brand-500/20'
           }`}
         >
@@ -152,20 +155,20 @@ const Cluster: React.FC = () => {
       </div>
 
       {showAddForm && (
-        <div className="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100 animate-in zoom-in-95 duration-300">
-          <h2 className="text-xl font-black text-slate-900 mb-6">{editingNode ? t('cluster.edit_node') : t('cluster.add_new_node')}</h2>
+        <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] shadow-xl border border-slate-100 dark:border-slate-800 animate-in zoom-in-95 duration-300">
+          <h2 className="text-xl font-black text-slate-900 dark:text-slate-100 mb-6">{editingNode ? t('cluster.edit_node') : t('cluster.add_new_node')}</h2>
           
           {formError && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl flex items-center justify-between animate-in fade-in slide-in-from-top-2 duration-300">
+            <div className="mb-6 p-4 bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-500/20 rounded-2xl flex items-center justify-between animate-in fade-in slide-in-from-top-2 duration-300">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-red-100 rounded-xl text-red-600">
+                <div className="p-2 bg-red-100 dark:bg-red-500/20 rounded-xl text-red-600 dark:text-red-400">
                   <X size={18} />
                 </div>
-                <span className="text-sm font-bold text-red-700">{formError}</span>
+                <span className="text-sm font-bold text-red-700 dark:text-red-400">{formError}</span>
               </div>
               <button 
                 onClick={() => setFormError('')}
-                className="p-1 text-red-400 hover:text-red-600 transition-colors"
+                className="p-1 text-red-400 hover:text-red-600 dark:hover:text-red-300 transition-colors"
               >
                 <X size={16} />
               </button>
@@ -175,43 +178,43 @@ const Cluster: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
               <div className="space-y-2">
-                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('cluster.node_name')}</label>
+                <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('cluster.node_name')}</label>
                 <input 
                   type="text" 
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white transition-all duration-200 text-slate-900 font-bold placeholder-slate-300 outline-none"
+                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200 text-slate-900 dark:text-slate-100 font-bold placeholder-slate-300 dark:placeholder-slate-600 outline-none"
                   placeholder={t('cluster.placeholder_name')}
                   required
                 />
               </div>
               <div className="space-y-2">
-                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('cluster.ip_address')}</label>
+                <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('cluster.ip_address')}</label>
                 <input 
                   type="text" 
                   value={formData.ip}
                   onChange={(e) => setFormData({...formData, ip: e.target.value})}
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white transition-all duration-200 text-slate-900 font-bold placeholder-slate-300 outline-none"
+                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200 text-slate-900 dark:text-slate-100 font-bold placeholder-slate-300 dark:placeholder-slate-600 outline-none"
                   placeholder={t('cluster.placeholder_ip')}
                 />
               </div>
               <div className="space-y-2">
-                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('cluster.role')}</label>
+                <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('cluster.role')}</label>
                 <select 
                   value={formData.role}
                   onChange={(e) => setFormData({...formData, role: e.target.value})}
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white transition-all duration-200 text-slate-900 font-bold outline-none appearance-none cursor-pointer"
+                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200 text-slate-900 dark:text-slate-100 font-bold outline-none appearance-none cursor-pointer"
                 >
                   <option value="core">{t('cluster.core_desc')}</option>
                   <option value="agent">{t('cluster.agent_desc')}</option>
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('cluster.status')}</label>
+                <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('cluster.status')}</label>
                 <select 
                   value={formData.status}
                   onChange={(e) => setFormData({...formData, status: e.target.value})}
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white transition-all duration-200 text-slate-900 font-bold outline-none appearance-none cursor-pointer"
+                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200 text-slate-900 dark:text-slate-100 font-bold outline-none appearance-none cursor-pointer"
                 >
                   <option value="online">{t('cluster.online')}</option>
                   <option value="offline">{t('cluster.offline')}</option>
@@ -223,70 +226,70 @@ const Cluster: React.FC = () => {
             {editingNode && (
               <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 animate-in fade-in duration-300">
                 <div className="space-y-2">
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('cluster.cpu_total')}</label>
+                  <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('cluster.cpu_total')}</label>
                   <input 
                     type="number" 
                     value={formData.cpu_total}
                     onChange={(e) => setFormData({...formData, cpu_total: e.target.value})}
-                    className="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:border-brand-500 text-slate-900 font-bold outline-none"
+                    className="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl focus:border-brand-500 text-slate-900 dark:text-slate-100 font-bold outline-none"
                     placeholder={t('cluster.placeholder_vcpus')}
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('cluster.cpu_used')}</label>
+                  <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('cluster.cpu_used')}</label>
                   <input 
                     type="number" 
                     value={formData.cpu_used}
                     onChange={(e) => setFormData({...formData, cpu_used: e.target.value})}
-                    className="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:border-brand-500 text-slate-900 font-bold outline-none"
+                    className="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl focus:border-brand-500 text-slate-900 dark:text-slate-100 font-bold outline-none"
                     placeholder={t('cluster.placeholder_vcpus')}
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('cluster.ram_total')}</label>
+                  <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('cluster.ram_total')}</label>
                   <input 
                     type="text" 
                     value={formData.mem_total}
                     onChange={(e) => setFormData({...formData, mem_total: e.target.value})}
-                    className="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:border-brand-500 text-slate-900 font-bold outline-none"
+                    className="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl focus:border-brand-500 text-slate-900 dark:text-slate-100 font-bold outline-none"
                     placeholder={t('cluster.placeholder_memory')}
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('cluster.ram_used')}</label>
+                  <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('cluster.ram_used')}</label>
                   <input 
                     type="text" 
                     value={formData.mem_used}
                     onChange={(e) => setFormData({...formData, mem_used: e.target.value})}
-                    className="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:border-brand-500 text-slate-900 font-bold outline-none"
+                    className="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl focus:border-brand-500 text-slate-900 dark:text-slate-100 font-bold outline-none"
                     placeholder={t('cluster.placeholder_memory')}
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('cluster.disk_total')}</label>
+                  <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('cluster.disk_total')}</label>
                   <input 
                     type="text" 
                     value={formData.disk_total}
                     onChange={(e) => setFormData({...formData, disk_total: e.target.value})}
-                    className="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:border-brand-500 text-slate-900 font-bold outline-none"
+                    className="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl focus:border-brand-500 text-slate-900 dark:text-slate-100 font-bold outline-none"
                     placeholder={t('cluster.placeholder_storage')}
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('cluster.disk_used')}</label>
+                  <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('cluster.disk_used')}</label>
                   <input 
                     type="text" 
                     value={formData.disk_used}
                     onChange={(e) => setFormData({...formData, disk_used: e.target.value})}
-                    className="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:border-brand-500 text-slate-900 font-bold outline-none"
+                    className="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl focus:border-brand-500 text-slate-900 dark:text-slate-100 font-bold outline-none"
                     placeholder={t('cluster.placeholder_storage')}
                   />
                 </div>
               </div>
             )}
             {!editingNode && (
-              <div className="bg-brand-50 p-4 rounded-2xl border border-brand-100">
-                <p className="text-sm font-bold text-brand-700 flex items-center gap-2">
+              <div className="bg-brand-50 dark:bg-brand-500/10 p-4 rounded-2xl border border-brand-100 dark:border-brand-500/20">
+                <p className="text-sm font-bold text-brand-700 dark:text-brand-400 flex items-center gap-2">
                   <Activity size={16} />
                   {t('cluster.node_discovery_info')}
                 </p>
@@ -295,7 +298,7 @@ const Cluster: React.FC = () => {
 
             <button 
               type="submit"
-              className="w-full md:w-auto px-12 bg-slate-900 hover:bg-brand-600 text-white font-black py-3.5 rounded-2xl transition-all duration-300 shadow-xl shadow-slate-900/20 active:scale-95"
+              className="w-full md:w-auto px-12 bg-slate-900 dark:bg-brand-600 hover:bg-brand-600 dark:hover:bg-brand-700 text-white font-black py-3.5 rounded-2xl transition-all duration-300 shadow-xl shadow-slate-900/20 dark:shadow-brand-600/20 active:scale-95"
             >
               {editingNode ? t('cluster.save_changes') : t('cluster.create_node')}
             </button>
@@ -316,7 +319,7 @@ const Cluster: React.FC = () => {
           {nodes.map((node) => (
             <div 
               key={node.id} 
-              className="bg-white rounded-[2rem] p-6 shadow-xl border border-slate-100 hover:shadow-2xl transition-all duration-300 group relative overflow-hidden"
+              className="bg-white dark:bg-slate-900 rounded-[2rem] p-6 shadow-xl border border-slate-100 dark:border-slate-800 hover:shadow-2xl transition-all duration-300 group relative overflow-hidden"
             >
               {/* Status Indicator */}
               <div className={`absolute top-0 right-0 w-32 h-32 -mr-16 -mt-16 rounded-full blur-3xl opacity-10 transition-colors duration-500 ${
@@ -325,16 +328,16 @@ const Cluster: React.FC = () => {
 
               <div className="flex items-center justify-between mb-6 relative z-10">
                 <div className={`p-4 rounded-2xl ${
-                  node.role === 'core' ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/30' : 'bg-slate-100 text-slate-600'
+                  node.role === 'core' ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/30' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
                 }`}>
                   <Server size={24} />
                 </div>
                 <div className="flex gap-4 items-center opacity-0 group-hover:opacity-100 transition-opacity">
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('cluster.actions')}</span>
+                    <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{t('cluster.actions')}</span>
                     <button 
                       onClick={() => startEdit(node)}
-                      className="p-2 hover:bg-slate-100 rounded-xl text-slate-400 hover:text-brand-500 transition-colors"
+                      className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition-colors"
                       aria-label={t('common.edit')}
                       title={t('common.edit')}
                     >
@@ -342,7 +345,7 @@ const Cluster: React.FC = () => {
                     </button>
                     <button 
                       onClick={() => handleDelete(node.id)}
-                      className="p-2 hover:bg-red-50 rounded-xl text-slate-400 hover:text-red-500 transition-colors"
+                      className="p-2 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 transition-colors"
                       aria-label={t('common.delete')}
                       title={t('common.delete')}
                     >
@@ -354,12 +357,12 @@ const Cluster: React.FC = () => {
 
               <div className="space-y-1 relative z-10">
                 <div className="flex items-center gap-2">
-                  <h3 className="text-xl font-black text-slate-900">{node.name}</h3>
+                  <h3 className="text-xl font-black text-slate-900 dark:text-slate-100">{node.name}</h3>
                   {node.role === 'core' && (
                     <span className="px-2 py-0.5 bg-brand-500/10 text-brand-500 text-[8px] font-black uppercase tracking-widest rounded-md">{t('cluster.core')}</span>
                   )}
                 </div>
-                <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">
+                <p className="text-slate-400 dark:text-slate-500 font-bold text-xs uppercase tracking-widest">
                   {node.ip || t('cluster.local_node')}
                 </p>
               </div>
@@ -369,10 +372,10 @@ const Cluster: React.FC = () => {
                 {node.cpu_total && (
                   <div className="space-y-1.5">
                     <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-widest">
-                      <span className="text-slate-400">{t('cluster.cpu_usage')}</span>
-                      <span className="text-slate-600">{node.cpu_used} / {node.cpu_total} {t('cluster.vcpus')}</span>
+                      <span className="text-slate-400 dark:text-slate-500">{t('cluster.cpu_usage')}</span>
+                      <span className="text-slate-600 dark:text-slate-400">{node.cpu_used} / {node.cpu_total} {t('cluster.vcpus')}</span>
                     </div>
-                    <div className="w-full h-1.5 bg-slate-50 rounded-full overflow-hidden">
+                    <div className="w-full h-1.5 bg-slate-50 dark:bg-slate-800 rounded-full overflow-hidden">
                       <div 
                         className="h-full bg-blue-500 rounded-full" 
                         style={{ width: `${(node.cpu_used! / node.cpu_total!) * 100}%` }}
@@ -385,10 +388,10 @@ const Cluster: React.FC = () => {
                 {node.mem_total && (
                   <div className="space-y-1.5">
                     <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-widest">
-                      <span className="text-slate-400">{t('cluster.memory')}</span>
-                      <span className="text-slate-600">{node.mem_used} / {node.mem_total}</span>
+                      <span className="text-slate-400 dark:text-slate-500">{t('cluster.memory')}</span>
+                      <span className="text-slate-600 dark:text-slate-400">{node.mem_used} / {node.mem_total}</span>
                     </div>
-                    <div className="w-full h-1.5 bg-slate-50 rounded-full overflow-hidden">
+                    <div className="w-full h-1.5 bg-slate-50 dark:bg-slate-800 rounded-full overflow-hidden">
                       <div 
                         className="h-full bg-purple-500 rounded-full" 
                         style={{ width: '40%' }} // Simple estimation if we don't want to parse strings here
@@ -401,10 +404,10 @@ const Cluster: React.FC = () => {
                 {node.disk_total && (
                   <div className="space-y-1.5">
                     <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-widest">
-                      <span className="text-slate-400">{t('cluster.disk_storage')}</span>
-                      <span className="text-slate-600">{node.disk_used} / {node.disk_total}</span>
+                      <span className="text-slate-400 dark:text-slate-500">{t('cluster.disk_storage')}</span>
+                      <span className="text-slate-600 dark:text-slate-400">{node.disk_used} / {node.disk_total}</span>
                     </div>
-                    <div className="w-full h-1.5 bg-slate-50 rounded-full overflow-hidden">
+                    <div className="w-full h-1.5 bg-slate-50 dark:bg-slate-800 rounded-full overflow-hidden">
                       <div 
                         className="h-full bg-emerald-500 rounded-full" 
                         style={{ width: '25%' }}
@@ -414,14 +417,14 @@ const Cluster: React.FC = () => {
                 )}
               </div>
 
-              <div className="mt-6 pt-6 border-t border-slate-50 grid grid-cols-2 gap-4 relative z-10">
+              <div className="mt-6 pt-6 border-t border-slate-50 dark:border-slate-800 grid grid-cols-2 gap-4 relative z-10">
                 <div className="flex items-center gap-2">
                   <div className={`w-2 h-2 rounded-full ${node.status === 'online' ? 'bg-emerald-500 animate-pulse' : node.status === 'maintenance' ? 'bg-amber-500' : 'bg-red-500'}`} />
-                  <span className="text-xs font-black text-slate-600 uppercase tracking-widest">{t(`cluster.${node.status}`)}</span>
+                  <span className="text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">{t(`cluster.${node.status}`)}</span>
                 </div>
                 <div className="flex items-center gap-2 justify-end">
-                  <Activity size={14} className="text-slate-300" />
-                  <span className="text-xs font-bold text-slate-400">{t('cluster.health')}: 100%</span>
+                  <Activity size={14} className="text-slate-300 dark:text-slate-600" />
+                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500">{t('cluster.health')}: 100%</span>
                 </div>
               </div>
             </div>

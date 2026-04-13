@@ -82,6 +82,7 @@ const qvy = {
       "error_invalid": "lym qvy lym lym"
     },
     "layout": {
+      "toggle_theme": "Toggle Theme",
       "admin_panel": "tex vun",
       "main_menu": "tex lym",
       "logo_text": "kyr",

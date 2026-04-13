@@ -82,6 +82,7 @@ const bg = {
       "error_invalid": "Невалидно име или парола"
     },
     "layout": {
+      "toggle_theme": "Toggle Theme",
       "admin_panel": "Административен панел",
       "main_menu": "Главно меню",
       "logo_text": "CloudBSD",

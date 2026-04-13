@@ -82,6 +82,7 @@ const qav = {
       "error_invalid": "tyr qav tyr tyr"
     },
     "layout": {
+      "toggle_theme": "Toggle Theme",
       "admin_panel": "miv zen",
       "main_menu": "miv tyr",
       "logo_text": "lor",

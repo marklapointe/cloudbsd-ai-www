@@ -31,15 +31,16 @@ body {
   background-position: center center;
   background-size: cover;
   background-attachment: fixed;
-  color: #1a1a1a;
-  background-color: #f8fafc;
 }
 
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: #020617;
-    color: #f8fafc;
-  }
+.light body {
+  background-color: #f8fafc;
+  color: #1a1a1a;
+}
+
+.dark body {
+  background-color: #020617;
+  color: #f8fafc;
 }
 
 h1 {

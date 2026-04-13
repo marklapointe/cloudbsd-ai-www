@@ -82,6 +82,7 @@ const elv = {
       "error_invalid": "mir quen elen mir"
     },
     "layout": {
+      "toggle_theme": "Toggle Theme",
       "admin_panel": "quen enya",
       "main_menu": "lina elen",
       "logo_text": "vala",

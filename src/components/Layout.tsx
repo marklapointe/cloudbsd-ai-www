@@ -23,11 +23,15 @@ import {
   CheckCircle,
   AlertCircle,
   ExternalLink,
-  Megaphone
+  Megaphone,
+  Sun,
+  Moon
 } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { t, i18n } = useTranslation();
+  const { theme, toggleTheme } = useTheme();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const { 
@@ -132,7 +136,7 @@ ${t('manual.settings_text')}
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col lg:flex-row font-sans">
+    <div className={`min-h-screen ${theme === 'dark' ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'} flex flex-col lg:flex-row font-sans transition-colors duration-300`}>
       {/* Mobile Top Bar */}
       <div className="lg:hidden sticky top-0 left-0 right-0 h-16 bg-slate-950 flex items-center justify-between px-6 z-50 border-b border-slate-800/50">
         <div className="flex items-center gap-3">
@@ -143,6 +147,16 @@ ${t('manual.settings_text')}
         </div>
         
         <div className="flex items-center gap-2">
+          {/* Theme Toggle (Mobile) */}
+          <button 
+            onClick={toggleTheme}
+            className="p-2 text-slate-100 hover:bg-slate-900 rounded-lg transition-colors"
+            aria-label={t('layout.toggle_theme')}
+            title={t('layout.toggle_theme')}
+          >
+            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+
           {/* Notification Bell (Mobile) */}
           <div className="relative">
             <button 
@@ -250,14 +264,24 @@ ${t('manual.settings_text')}
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto bg-slate-50/50 lg:h-screen relative">
+      <main className="flex-1 overflow-auto bg-slate-50/50 dark:bg-slate-900/50 lg:h-screen relative transition-colors duration-300">
         {/* Desktop Header */}
-        <header className="hidden lg:flex sticky top-0 bg-white/80 backdrop-blur-md h-16 border-b border-slate-200 z-20 items-center justify-between px-10">
-          <div className="flex items-center gap-2 text-slate-500 text-sm font-medium">
+        <header className="hidden lg:flex sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md h-16 border-b border-slate-200 dark:border-slate-800 z-20 items-center justify-between px-10 transition-colors duration-300">
+          <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm font-medium">
             <span className="capitalize">{location.pathname.substring(1).replace('/', ' > ')}</span>
           </div>
           
           <div className="flex items-center gap-4">
+            {/* Theme Toggle (Desktop) */}
+            <button 
+              onClick={toggleTheme}
+              className={`p-2.5 rounded-xl transition-all duration-200 ${theme === 'dark' ? 'text-slate-400 hover:bg-slate-800 hover:text-slate-200' : 'text-slate-400 hover:bg-slate-100 hover:text-slate-600'}`}
+              aria-label={t('layout.toggle_theme')}
+              title={t('layout.toggle_theme')}
+            >
+              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+
             {/* Notification Bell (Desktop) */}
             <div className="relative">
               <button 
@@ -275,9 +299,9 @@ ${t('manual.settings_text')}
               {isNotificationsOpen && (
                 <>
                   <div className="fixed inset-0 z-30" onClick={() => setIsNotificationsOpen(false)} />
-                  <div className="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 z-40 overflow-hidden animate-in fade-in zoom-in duration-200 origin-top-right">
-                    <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-                      <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                  <div className="absolute right-0 mt-3 w-80 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 z-40 overflow-hidden animate-in fade-in zoom-in duration-200 origin-top-right">
+                    <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50">
+                      <h3 className="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
                         <Bell size={16} className="text-brand-500" />
                         {t('notifications.title')}
                       </h3>
@@ -302,7 +326,7 @@ ${t('manual.settings_text')}
                         notifications.map(notification => (
                           <div 
                             key={notification.id} 
-                            className={`p-4 border-b border-slate-50 hover:bg-slate-50 transition-colors flex gap-3 ${!notification.is_read ? 'bg-brand-50/30' : ''}`}
+                            className={`p-4 border-b border-slate-50 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex gap-3 ${!notification.is_read ? 'bg-brand-50/30 dark:bg-brand-500/10' : ''}`}
                             onClick={() => !notification.is_read && markAsRead(notification.id)}
                           >
                             <div className={`mt-0.5 w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center ${
@@ -319,9 +343,9 @@ ${t('manual.settings_text')}
                                <Info size={16} />}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="text-sm text-slate-700 leading-snug font-medium">{notification.message}</p>
+                              <p className="text-sm text-slate-700 dark:text-slate-200 leading-snug font-medium">{notification.message}</p>
                               <div className="flex items-center justify-between mt-1">
-                                <p className="text-[10px] text-slate-400 font-medium">
+                                <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">
                                   {formatLocalTime(notification.timestamp)}
                                 </p>
                                 {notification.link && (
@@ -341,13 +365,13 @@ ${t('manual.settings_text')}
                         ))
                       )}
                     </div>
-                    <div className="p-3 bg-slate-50 border-t border-slate-100 text-center">
+                    <div className="p-3 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 text-center">
                       <button 
                         onClick={() => {
                           setIsNotificationsOpen(false);
                           navigate('/notifications');
                         }}
-                        className="text-xs font-bold text-slate-500 hover:text-brand-600 transition-colors uppercase tracking-widest"
+                        className="text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors uppercase tracking-widest"
                       >
                         {t('notifications.view_all')}
                       </button>
@@ -376,14 +400,14 @@ ${t('manual.settings_text')}
                       href={notification.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-white/20 hover:bg-white/30 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest transition-colors whitespace-nowrap"
+                      className="bg-slate-950/40 hover:bg-slate-950/60 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 whitespace-nowrap border border-white/10 shadow-sm"
                     >
                       {t('common.learn_more')}
                     </a>
                   )}
                   <button 
                     onClick={() => dismissNotification(notification.id)}
-                    className="text-white/60 hover:text-white transition-colors"
+                    className="w-7 h-7 flex items-center justify-center bg-slate-950/20 hover:bg-slate-950/40 rounded-xl text-white/70 hover:text-white transition-all hover:scale-105 active:scale-95 border border-white/5"
                     title={t('common.dismiss')}
                   >
                     <X size={14} />

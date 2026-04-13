@@ -82,6 +82,7 @@ const pa = {
       "error_invalid": "Invalid username or password *"
     },
     "layout": {
+      "toggle_theme": "Toggle Theme",
       "admin_panel": "Admin Panel *",
       "main_menu": "Main Menu *",
       "logo_text": "CloudBSD",

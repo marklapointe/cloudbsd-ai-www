@@ -17,8 +17,10 @@ const Login: React.FC = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const errorCode = urlParams.get('error');
     if (errorCode === 'session_corrupted') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setError('Your session data was corrupted. Please log in again.');
     } else if (errorCode === 'session_expired') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setError('Your session has expired or is invalid. Please log in again.');
     }
     
@@ -53,7 +55,7 @@ const Login: React.FC = () => {
       }
 
       navigate('/dashboard');
-    } catch (err: any) {
+    } catch {
       setError(t('login.error_invalid') || 'Invalid username or password');
     }
   };
@@ -69,7 +71,7 @@ const Login: React.FC = () => {
       <div className="absolute top-0 -left-20 w-96 h-96 bg-brand-600/20 rounded-full blur-[120px] animate-pulse-slow z-0" />
       <div className="absolute bottom-0 -right-20 w-96 h-96 bg-purple-600/10 rounded-full blur-[120px] animate-pulse-slow z-0" />
       
-      <div className="bg-white/95 backdrop-blur-md rounded-[2.5rem] shadow-2xl p-10 w-full max-w-md relative z-10 border border-slate-100 transition-all duration-500 hover:shadow-brand-500/10">
+      <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-[2.5rem] shadow-2xl p-10 w-full max-w-md relative z-10 border border-slate-100 dark:border-slate-800 transition-all duration-500 hover:shadow-brand-500/10">
         <div className="text-center mb-10">
           <div className="mb-6 flex items-center justify-center">
             <img 
@@ -78,44 +80,44 @@ const Login: React.FC = () => {
               className="w-24 h-24 object-contain drop-shadow-2xl transform -rotate-3 hover:rotate-0 transition-transform duration-300"
             />
           </div>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight">{t('login.title')}</h1>
-          <p className="text-slate-400 mt-2 font-bold uppercase text-[10px] tracking-[0.2em]">{t('login.subtitle')}</p>
+          <h1 className="text-3xl font-black text-slate-900 dark:text-slate-100 tracking-tight">{t('login.title')}</h1>
+          <p className="text-slate-400 dark:text-slate-500 mt-2 font-bold uppercase text-[10px] tracking-[0.2em]">{t('login.subtitle')}</p>
         </div>
 
         {error && (
-          <div className="bg-red-50 text-red-600 p-4 rounded-2xl mb-8 text-sm font-bold border border-red-100 animate-in shake duration-500">
+          <div className="bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 p-4 rounded-2xl mb-8 text-sm font-bold border border-red-100 dark:border-red-500/20 animate-in shake duration-500">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-8">
           <div className="space-y-2">
-            <label htmlFor="username" className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('login.username_label')}</label>
+            <label htmlFor="username" className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('login.username_label')}</label>
             <input 
               id="username"
               type="text" 
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white transition-all duration-200 text-slate-900 font-bold placeholder-slate-300 outline-none"
+              className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200 text-slate-900 dark:text-slate-100 font-bold placeholder-slate-300 dark:placeholder-slate-600 outline-none"
               placeholder={t('login.username_placeholder')}
               required
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="password" className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('login.password_label')}</label>
+            <label htmlFor="password" className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('login.password_label')}</label>
             <input 
               id="password"
               type="password" 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white transition-all duration-200 text-slate-900 font-bold placeholder-slate-300 outline-none"
+              className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200 text-slate-900 dark:text-slate-100 font-bold placeholder-slate-300 dark:placeholder-slate-600 outline-none"
               placeholder={t('login.password_placeholder')}
               required
             />
           </div>
           <button 
             type="submit"
-            className="w-full bg-slate-900 hover:bg-brand-600 text-white font-black py-4 rounded-2xl transition-all duration-300 shadow-xl shadow-slate-900/20 active:scale-95 group flex items-center justify-center gap-2"
+            className="w-full bg-slate-900 dark:bg-brand-600 hover:bg-brand-600 dark:hover:bg-brand-700 text-white font-black py-4 rounded-2xl transition-all duration-300 shadow-xl shadow-slate-900/20 dark:shadow-brand-600/20 active:scale-95 group flex items-center justify-center gap-2"
           >
             <span>{t('login.sign_in')}</span>
             <div className="w-5 h-5 bg-white/10 rounded-lg flex items-center justify-center group-hover:bg-white/20 transition-colors">
@@ -126,13 +128,13 @@ const Login: React.FC = () => {
           </button>
         </form>
         
-        <div className="mt-10 pt-8 border-t border-slate-50 text-center">
+        <div className="mt-10 pt-8 border-t border-slate-50 dark:border-slate-800 text-center">
           <div className="flex flex-col items-center gap-4">
             <div className="relative group w-full max-w-[200px]">
               <select
                 value={i18n.language}
                 onChange={(e) => i18n.changeLanguage(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold text-slate-600 outline-none appearance-none focus:ring-2 focus:ring-brand-500/10 focus:border-brand-500 transition-all cursor-pointer"
+                className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 outline-none appearance-none focus:ring-2 focus:ring-brand-500/10 focus:border-brand-500 transition-all cursor-pointer"
                 aria-label={t('common.language')}
               >
                 {sortedLanguages.map((lang) => (
@@ -141,16 +143,16 @@ const Login: React.FC = () => {
                   </option>
                 ))}
               </select>
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 dark:text-slate-500">
                 <Languages size={14} />
               </div>
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-300">
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-300 dark:text-slate-600">
                 <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
             </div>
-            <p className="text-xs font-bold text-slate-300 uppercase tracking-widest">{t('login.footer')}</p>
+            <p className="text-xs font-bold text-slate-300 dark:text-slate-600 uppercase tracking-widest">{t('login.footer')}</p>
           </div>
         </div>
       </div>

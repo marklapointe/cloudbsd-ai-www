@@ -82,6 +82,7 @@ const doth = {
       "error_invalid": "dothrak khaleesi hrakkar hrakkar"
     },
     "layout": {
+      "toggle_theme": "Toggle Theme",
       "admin_panel": "zhey jalan",
       "main_menu": "dothrak zhey",
       "logo_text": "hrakkar",

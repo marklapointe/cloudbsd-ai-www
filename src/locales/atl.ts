@@ -82,6 +82,7 @@ const atl = {
       "error_invalid": "van atl van van"
     },
     "layout": {
+      "toggle_theme": "Toggle Theme",
       "admin_panel": "pro dor",
       "main_menu": "pro van",
       "logo_text": "san",

@@ -82,6 +82,7 @@ const fr = {
       "error_invalid": "Nom d'utilisateur ou mot de passe invalide"
     },
     "layout": {
+      "toggle_theme": "Toggle Theme",
       "admin_panel": "Panneau d'administration",
       "main_menu": "Menu principal",
       "logo_text": "CloudBSD",

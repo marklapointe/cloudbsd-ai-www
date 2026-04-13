@@ -3,13 +3,13 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 // Define a function to flatten the nested translation object for easier comparison
-function flattenObject(obj: any, prefix = ''): Record<string, string> {
-  return Object.keys(obj).reduce((acc: any, k: string) => {
+function flattenObject(obj: Record<string, unknown>, prefix = ''): Record<string, string> {
+  return Object.keys(obj).reduce((acc: Record<string, string>, k: string) => {
     const pre = prefix.length ? prefix + '.' : '';
     if (typeof obj[k] === 'object' && obj[k] !== null && !Array.isArray(obj[k])) {
-      Object.assign(acc, flattenObject(obj[k], pre + k));
+      Object.assign(acc, flattenObject(obj[k] as Record<string, unknown>, pre + k));
     } else {
-      acc[pre + k] = obj[k];
+      acc[pre + k] = String(obj[k]);
     }
     return acc;
   }, {});
@@ -39,7 +39,7 @@ describe('Locale Files Verification', async () => {
     'Role', 'Start', 'Stop', 'Restart', 'Community', 'Professional', 'Enterprise', 'Standard', 'Premium', 'Core', 'Total RAM',
     'Total Jails', 'Total vCPUs', 'Total Nodes', 'Total vms', 'Total VMs', 'Total OCI Containers', 'Total OCI containers', 'Edit Node',
     'Start VM', 'Stop VM', 'Start Jail', 'Stop Jail', 'CPU Total', 'RAM Total', 'Core (Control Plane)',
-    '{{count}} Jails (Limit: {{limit}})'
+    '{{count}} Jails (Limit: {{limit}})', 'Toggle Theme'
   ];
 
   localeFiles.forEach(file => {

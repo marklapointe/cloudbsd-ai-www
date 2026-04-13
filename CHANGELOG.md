@@ -4,11 +4,16 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 
 ## [Unreleased]
 ### Added
+- **UI Theme Support**: Implemented system-wide Dark and Light mode support, defaulting to Dark mode.
+- **Theme Toggle**: Added a theme switcher to the global layout for desktop and mobile views.
+- **Locale Updates**: Updated all 43+ language locale files with theme-related keys and verified with regression tests.
 - **Automated Security Testing & Auditing**: Established comprehensive security auditing standards in `.junie/guidelines.md` covering SCA, SAST, DAST, and Secret Scanning.
 - **Security Check Integration**: Defined a roadmap for integrating security checks (dependency auditing, static analysis, secret scanning) into the project's development workflow.
-- **Optimization & Cleanup Cycle**: Performed a project-wide cleanup, removing multiple temporary scripts (`.mjs`) and reports (`.txt`) from the root directory.
-- **Enterprise Ad Removal**: Removed the premature "Upgrade to CloudBSD Enterprise" advertisement from the notification system as the feature and URL are not yet ready.
-- **Full Regression Test Suite**: Successfully executed a comprehensive regression test involving 240+ unit and integration tests across 19 test files.
+
+### Fixed
+- **UI Cleanup**: Removed redundant "System Actions" from the Settings page.
+- **Notification Styling**: Refined notification dismissal and action buttons for better contrast and appearance.
+- **TypeScript & ESLint**: Resolved multiple type errors and lint warnings in Dashboard, ResourceList, and Users pages.
 - **Persistent Notification Dismissal**: Implemented a generic dismissal system for both database-stored and ephemeral (on-the-fly) notifications.
 - **License Notification Regeneration**: License-related notifications are automatically regenerated 24 hours after being dismissed, ensuring critical compliance issues are not ignored indefinitely.
 - **Consolidated Notification API**: Cleaned up the backend by merging duplicate notification routes and introducing a `dismissed_notifications` tracking table.

@@ -75,26 +75,26 @@ const ConsoleModal: React.FC<ConsoleModalProps> = ({ isOpen, onClose, resource, 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-4xl overflow-hidden flex flex-col h-[600px]">
-        <div className="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+      <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl w-full max-w-4xl overflow-hidden flex flex-col h-[600px] border border-slate-200 dark:border-slate-800 transition-colors duration-300">
+        <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
           <div className="flex items-center gap-2">
-            {resourceType === 'vms' ? <Monitor className="text-blue-600" size={20} /> : <TerminalIcon className="text-blue-600" size={20} />}
-            <h2 className="text-lg font-bold text-slate-900">{t('console_modal.title')}: {resource.name}</h2>
+            {resourceType === 'vms' ? <Monitor className="text-blue-600 dark:text-blue-400" size={20} /> : <TerminalIcon className="text-blue-600 dark:text-blue-400" size={20} />}
+            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('console_modal.title')}: {resource.name}</h2>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors">
+          <button onClick={onClose} className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
             <X size={24} />
           </button>
         </div>
         
         <div className="flex-1 bg-slate-900 p-2 overflow-hidden relative">
           {resourceType === 'vms' ? (
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 space-y-4">
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 space-y-4">
               <div className="p-4 bg-slate-800 rounded-full">
                 <Monitor size={48} />
               </div>
               <div className="text-center">
-                <p className="text-lg font-medium text-white">{t('console_modal.vnc_placeholder')}</p>
-                <p className="text-sm">{t('console_modal.vnc_desc')}</p>
+                <p className="text-lg font-medium text-white dark:text-slate-100">{t('console_modal.vnc_placeholder')}</p>
+                <p className="text-sm dark:text-slate-400">{t('console_modal.vnc_desc')}</p>
                 <button 
                   className="mt-6 px-6 py-3 bg-brand-500 text-white rounded-xl hover:bg-brand-600 transition-all active:scale-95 shadow-lg shadow-brand-500/20 font-bold"
                   onClick={() => setShowVncAlert(true)}
@@ -109,15 +109,15 @@ const ConsoleModal: React.FC<ConsoleModalProps> = ({ isOpen, onClose, resource, 
         </div>
         
         {showVncAlert && (
-          <div className="absolute inset-0 z-50 flex items-center justify-center p-6">
-            <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full border border-slate-100 animate-in zoom-in-95 duration-200">
+          <div className="absolute inset-0 z-50 flex items-center justify-center p-6 bg-slate-950/20 backdrop-blur-sm">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-8 max-w-sm w-full border border-slate-100 dark:border-slate-800 animate-in zoom-in-95 duration-200">
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-brand-50 rounded-xl text-brand-600">
+                <div className="p-2 bg-brand-50 dark:bg-brand-500/10 rounded-xl text-brand-600 dark:text-brand-400">
                   <Monitor size={24} />
                 </div>
-                <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">{t('common.info')}</h3>
+                <h3 className="text-xl font-black text-slate-900 dark:text-slate-100 uppercase tracking-tight">{t('common.info')}</h3>
               </div>
-              <p className="text-slate-600 font-bold mb-6">
+              <p className="text-slate-600 dark:text-slate-400 font-bold mb-6">
                 {t('console_modal.vnc_alert')}
               </p>
               <button 
@@ -130,8 +130,8 @@ const ConsoleModal: React.FC<ConsoleModalProps> = ({ isOpen, onClose, resource, 
           </div>
         )}
         
-        <div className="px-6 py-3 border-t border-slate-200 bg-slate-50 flex justify-between items-center text-xs text-slate-500 font-bold">
-          <div>{t('console_modal.status')}: <span className="text-emerald-600 font-black uppercase tracking-widest">{t('console_modal.connected')}</span></div>
+        <div className="px-6 py-3 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 flex justify-between items-center text-xs text-slate-500 dark:text-slate-400 font-bold">
+          <div>{t('console_modal.status')}: <span className="text-emerald-600 dark:text-emerald-400 font-black uppercase tracking-widest">{t('console_modal.connected')}</span></div>
           <div>{t('console_modal.resource_id')}: {resource.id} | {t('common.type')}: {resourceType}</div>
         </div>
       </div>

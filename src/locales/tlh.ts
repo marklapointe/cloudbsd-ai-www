@@ -82,6 +82,7 @@ const tlh = {
       "error_invalid": "lI' tih lI' lI'"
     },
     "layout": {
+      "toggle_theme": "Toggle Theme",
       "admin_panel": "yab ghu'",
       "main_menu": "yab lI'",
       "logo_text": "quv",

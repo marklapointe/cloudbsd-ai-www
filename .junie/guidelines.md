@@ -59,6 +59,10 @@ describe('Verification Test', () => {
 - **Backend Integrity**: Verify API behavior using `supertest` for all new or modified endpoints.
 - **Frontend Consistency**: Use Vitest and React Testing Library to ensure component behavior and state management.
 - **I18n Audit**: Use `make check-locales` to ensure 100% key parity across all 43+ languages.
+- **Theme Verification**: 
+  - Ensure all new components use Tailwind's `dark:` utility classes for theme-specific styling.
+  - Verify that the application defaults to Dark mode on first load.
+  - Test theme transitions via the global layout switcher.
 - **Non-Interactive Verification**: All tests must be able to run to completion without user input.
 
 #### 10. Security Testing & Auditing

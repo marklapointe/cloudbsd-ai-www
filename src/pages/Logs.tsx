@@ -51,18 +51,18 @@ const Logs: React.FC = () => {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">{t('logs.title')}</h1>
-          <p className="text-slate-500 mt-1 font-medium">{t('logs.description')}</p>
+          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">{t('logs.title')}</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1 font-medium">{t('logs.description')}</p>
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-4 bg-white p-6 rounded-3xl shadow-soft border border-slate-100">
+      <div className="flex flex-col md:flex-row gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl shadow-soft border border-slate-100 dark:border-slate-800 transition-colors duration-300">
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" size={20} />
           <input 
             type="text" 
             placeholder={t('logs.search_placeholder')}
-            className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white transition-all duration-200 text-slate-900 font-bold placeholder-slate-400 outline-none"
+            className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200 text-slate-900 dark:text-slate-100 font-bold placeholder-slate-400 dark:placeholder-slate-600 outline-none"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -75,68 +75,69 @@ const Logs: React.FC = () => {
         px-6
         py-3
         border
-        border-slate-200
+        border-slate-200 dark:border-slate-700
         rounded-2xl
-        text-white hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 font-bold text-sm shadow-sm active:scale-95">
+        bg-white dark:bg-slate-800
+        text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all duration-200 font-bold text-sm shadow-sm active:scale-95">
           <Filter size={18} />
           <span>{t('logs.advanced_filter')}</span>
         </button>
       </div>
 
-      <div className="bg-white rounded-[2rem] shadow-soft border border-slate-100 overflow-hidden transition-all duration-300 hover:shadow-xl">
+      <div className="bg-white dark:bg-slate-900 rounded-[2rem] shadow-soft border border-slate-100 dark:border-slate-800 overflow-hidden transition-all duration-300 hover:shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="bg-slate-50/50 border-b border-slate-100">
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">{t('logs.timestamp')}</th>
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">{t('logs.user')}</th>
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">{t('common.ip_address')}</th>
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">{t('logs.action')}</th>
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('logs.details')}</th>
+              <tr className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
+                <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest whitespace-nowrap">{t('logs.timestamp')}</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest whitespace-nowrap">{t('logs.user')}</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest whitespace-nowrap">{t('common.ip_address')}</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest whitespace-nowrap">{t('logs.action')}</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{t('logs.details')}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-50">
+            <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
               {loading ? (
                 <tr>
                   <td colSpan={5} className="px-8 py-20 text-center">
                     <div className="flex flex-col items-center gap-3">
                       <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-brand-500"></div>
-                      <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">{t('logs.loading')}</span>
+                      <span className="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{t('logs.loading')}</span>
                     </div>
                   </td>
                 </tr>
               ) : filteredLogs.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-8 py-20 text-center">
-                    <div className="flex flex-col items-center gap-2 text-slate-300">
+                    <div className="flex flex-col items-center gap-2 text-slate-300 dark:text-slate-700">
                       <Search size={48} className="opacity-20" />
                       <span className="text-sm font-bold uppercase tracking-widest">{t('logs.no_logs')}</span>
                     </div>
                   </td>
                 </tr>
               ) : filteredLogs.map((log) => (
-                <tr key={log.id} className="group hover:bg-slate-50/50 transition-all duration-200">
+                <tr key={log.id} className="group hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-all duration-200">
                   <td className="px-8 py-5 whitespace-nowrap">
                     <div className="flex flex-col">
-                      <span className="text-sm font-bold text-slate-900 leading-tight">
+                      <span className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">
                         {formatLocalDate(log.timestamp)}
                       </span>
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                      <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">
                         {formatLocalTime(log.timestamp)}
                       </span>
                     </div>
                   </td>
                   <td className="px-8 py-5 whitespace-nowrap">
                     <div className="flex items-center gap-2">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-black text-white ${log.username ? 'bg-slate-800' : 'bg-slate-400'}`}>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-black text-white ${log.username ? 'bg-slate-800 dark:bg-slate-700' : 'bg-slate-400 dark:bg-slate-600'}`}>
                         {(log.username || 'S')[0].toUpperCase()}
                       </div>
-                      <span className="font-bold text-slate-900 group-hover:text-brand-700 transition-colors">
+                      <span className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-brand-700 dark:group-hover:text-brand-400 transition-colors">
                         {log.username || t('common.server')}
                       </span>
                     </div>
                   </td>
-                  <td className="px-8 py-5 whitespace-nowrap font-mono text-xs text-slate-500">
+                  <td className="px-8 py-5 whitespace-nowrap font-mono text-xs text-slate-500 dark:text-slate-400">
                     {log.ip_address || '—'}
                   </td>
                   <td className="px-8 py-5 whitespace-nowrap">
@@ -145,7 +146,7 @@ const Logs: React.FC = () => {
                     </span>
                   </td>
                   <td className="px-8 py-5">
-                    <p className="text-sm font-bold text-slate-600 group-hover:text-slate-900 transition-colors line-clamp-2 max-w-md">
+                    <p className="text-sm font-bold text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-200 transition-colors line-clamp-2 max-w-md">
                       {log.details ? (log.details.startsWith('ID:') || log.details.includes('logged in') ? log.details : t(`logs.details_${log.action.toLowerCase()}`, { defaultValue: log.details })) : '—'}
                     </p>
                   </td>
