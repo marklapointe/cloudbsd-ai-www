@@ -4,6 +4,7 @@ import { expect, vi, it, describe } from 'vitest';
 import Login from './Login';
 import i18n from '../i18n';
 import { I18nextProvider } from 'react-i18next';
+import { ThemeProvider } from '../contexts/ThemeContext';
 
 vi.mock('../api/client', () => ({
   default: {
@@ -17,11 +18,13 @@ vi.mock('../api/client', () => ({
 describe('Login Component', () => {
   it('renders login form', () => {
     render(
-      <I18nextProvider i18n={i18n}>
-        <BrowserRouter>
-          <Login />
-        </BrowserRouter>
-      </I18nextProvider>
+      <ThemeProvider>
+        <I18nextProvider i18n={i18n}>
+          <BrowserRouter>
+            <Login />
+          </BrowserRouter>
+        </I18nextProvider>
+      </ThemeProvider>
     );
 
     expect(screen.getByText(/CloudBSD Admin/i)).toBeInTheDocument();
@@ -31,11 +34,13 @@ describe('Login Component', () => {
 
   it('updates input values on change', () => {
     render(
-      <I18nextProvider i18n={i18n}>
-        <BrowserRouter>
-          <Login />
-        </BrowserRouter>
-      </I18nextProvider>
+      <ThemeProvider>
+        <I18nextProvider i18n={i18n}>
+          <BrowserRouter>
+            <Login />
+          </BrowserRouter>
+        </I18nextProvider>
+      </ThemeProvider>
     );
 
     const usernameInput = screen.getByLabelText(/Username/i) as HTMLInputElement;

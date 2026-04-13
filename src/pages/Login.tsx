@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Languages } from 'lucide-react';
+import { Languages, Sun, Moon } from 'lucide-react';
 import api from '../api/client';
 import { useTranslation } from 'react-i18next';
 import { getSortedLanguages } from '../constants/languages';
+import { useTheme } from '../contexts/ThemeContext';
 
 const Login: React.FC = () => {
   const { t, i18n } = useTranslation();
+  const { theme, toggleTheme } = useTheme();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -61,10 +63,21 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 p-4 relative overflow-hidden font-sans">
+    <div className={`min-h-screen flex items-center justify-center ${theme === 'dark' ? 'bg-slate-950' : 'bg-slate-50'} p-4 relative overflow-hidden font-sans transition-colors duration-500`}>
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950/80 via-slate-950/50 to-brand-900/40" />
+        <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-gradient-to-br from-slate-950/80 via-slate-950/50 to-brand-900/40' : 'bg-gradient-to-br from-slate-50/80 via-white/50 to-brand-100/40'}`} />
+      </div>
+
+      {/* Theme Toggle (Top Right) */}
+      <div className="absolute top-6 right-6 z-20">
+        <button 
+          onClick={toggleTheme}
+          className="p-3 rounded-2xl bg-white/20 dark:bg-slate-900/20 backdrop-blur-md border border-white/20 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-all hover:scale-110 active:scale-95 shadow-xl"
+          title={t('layout.toggle_theme')}
+        >
+          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+        </button>
       </div>
 
       {/* Abstract Background Elements */}
@@ -117,12 +130,12 @@ const Login: React.FC = () => {
           </div>
           <button 
             type="submit"
-            className="w-full bg-slate-900 dark:bg-brand-600 hover:bg-brand-600 dark:hover:bg-brand-700 text-white font-black py-4 rounded-2xl transition-all duration-300 shadow-xl shadow-slate-900/20 dark:shadow-brand-600/20 active:scale-95 group flex items-center justify-center gap-2"
+            className="w-full bg-slate-900 dark:bg-brand-600 hover:bg-brand-600 dark:hover:bg-brand-700 text-white font-black py-4 rounded-2xl transition-all duration-300 shadow-xl shadow-slate-900/20 dark:shadow-brand-600/20 active:scale-95 group flex items-center justify-center gap-2 border-b-4 border-slate-950 dark:border-brand-800 hover:border-b-0 hover:translate-y-[2px]"
           >
-            <span>{t('login.sign_in')}</span>
-            <div className="w-5 h-5 bg-white/10 rounded-lg flex items-center justify-center group-hover:bg-white/20 transition-colors">
-              <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+            <span className="uppercase text-xs tracking-widest">{t('login.sign_in')}</span>
+            <div className="w-6 h-6 bg-white/10 rounded-lg flex items-center justify-center group-hover:bg-white/20 transition-colors">
+              <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M9 5l7 7-7 7" />
               </svg>
             </div>
           </button>

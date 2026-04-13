@@ -471,7 +471,7 @@ const Settings: React.FC = () => {
               <button 
                 type="submit"
                 disabled={savingLicense}
-                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-slate-900 dark:bg-brand-600 text-white font-black uppercase text-xs tracking-widest rounded-2xl hover:bg-brand-600 dark:hover:bg-brand-700 transition-all duration-300 active:scale-95 shadow-lg shadow-slate-900/10 dark:shadow-brand-600/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-brand-600 text-white font-black uppercase text-xs tracking-widest rounded-2xl hover:bg-brand-700 transition-all duration-300 active:scale-95 shadow-lg shadow-brand-600/20 disabled:opacity-50 disabled:cursor-not-allowed border-b-4 border-brand-800 dark:border-brand-900 hover:border-b-0 hover:translate-y-[2px]"
               >
                 {savingLicense ? (
                   <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>

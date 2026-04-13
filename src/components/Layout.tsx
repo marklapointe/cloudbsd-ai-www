@@ -138,19 +138,19 @@ ${t('manual.settings_text')}
   return (
     <div className={`min-h-screen ${theme === 'dark' ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'} flex flex-col lg:flex-row font-sans transition-colors duration-300`}>
       {/* Mobile Top Bar */}
-      <div className="lg:hidden sticky top-0 left-0 right-0 h-16 bg-slate-950 flex items-center justify-between px-6 z-50 border-b border-slate-800/50">
+      <div className="lg:hidden sticky top-0 left-0 right-0 h-16 bg-white dark:bg-slate-950 flex items-center justify-between px-6 z-50 border-b border-slate-200 dark:border-slate-800/50 transition-colors duration-300">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 flex items-center justify-center">
             <img src="/logo.png" alt="CloudBSD" className="w-full h-full object-contain drop-shadow-brand" />
           </div>
-          <span className="text-lg font-bold text-slate-100 tracking-tight leading-none">CloudBSD</span>
+          <span className="text-lg font-bold text-slate-900 dark:text-slate-100 tracking-tight leading-none">CloudBSD</span>
         </div>
         
         <div className="flex items-center gap-2">
           {/* Theme Toggle (Mobile) */}
           <button 
             onClick={toggleTheme}
-            className="p-2 text-slate-100 hover:bg-slate-900 rounded-lg transition-colors"
+            className="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg transition-colors"
             aria-label={t('layout.toggle_theme')}
             title={t('layout.toggle_theme')}
           >
@@ -161,11 +161,11 @@ ${t('manual.settings_text')}
           <div className="relative">
             <button 
               onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-              className="p-2 text-slate-100 hover:bg-slate-900 rounded-lg transition-colors relative"
+              className="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg transition-colors relative"
             >
               <Bell size={20} />
               {unreadCount > 0 && (
-                <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-slate-950">
+                <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white dark:border-slate-950">
                   {unreadCount}
                 </span>
               )}
@@ -174,7 +174,7 @@ ${t('manual.settings_text')}
 
           <button 
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="p-2 text-slate-100 hover:bg-slate-900 rounded-lg transition-colors flex items-center justify-center"
+            className="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg transition-colors flex items-center justify-center"
             aria-label={t('layout.toggle_menu')}
             title={t('layout.toggle_menu')}
           >
@@ -193,7 +193,7 @@ ${t('manual.settings_text')}
 
       {/* Sidebar */}
       <aside className={`
-        fixed inset-y-0 left-0 z-40 w-64 bg-slate-950 text-slate-100 shadow-2xl transform transition-all duration-300 ease-in-out border-r border-slate-800/50
+        fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 shadow-2xl transform transition-all duration-300 ease-in-out border-r border-slate-200 dark:border-slate-800/50
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         lg:translate-x-0 lg:static lg:inset-0 lg:h-screen
       `}>
@@ -203,24 +203,24 @@ ${t('manual.settings_text')}
               <img src="/logo.png" alt="CloudBSD" className="w-full h-full object-contain drop-shadow-brand" />
             </div>
             <div>
-              <span className="text-xl font-bold tracking-tight block leading-none">CloudBSD</span>
-              <span className="text-[10px] text-brand-400 font-bold uppercase tracking-widest">{t('layout.admin_panel')}</span>
+              <span className="text-xl font-bold tracking-tight block leading-none text-slate-900 dark:text-slate-100">CloudBSD</span>
+              <span className="text-[10px] text-brand-600 dark:text-brand-400 font-bold uppercase tracking-widest">{t('layout.admin_panel')}</span>
             </div>
           </div>
 
           <nav className="flex-1 px-4 py-2 space-y-1">
-            <div className="bg-slate-900/50 rounded-2xl p-4 mb-6 border border-slate-800/50 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 border border-slate-700">
+            <div className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 mb-6 border border-slate-100 dark:border-slate-800/50 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                 <User size={20} />
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="text-sm font-semibold truncate text-slate-200">{username}</span>
-                <span className="text-[10px] text-brand-500 font-bold uppercase tracking-wider truncate">{t(`common.${localStorage.getItem('role') || 'viewer'}`)}</span>
+                <span className="text-sm font-semibold truncate text-slate-900 dark:text-slate-200">{username}</span>
+                <span className="text-[10px] text-brand-600 dark:text-brand-500 font-bold uppercase tracking-wider truncate">{t(`common.${localStorage.getItem('role') || 'viewer'}`)}</span>
               </div>
             </div>
 
             <div className="px-4 py-2 mb-2">
-              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('layout.main_menu')}</p>
+              <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{t('layout.main_menu')}</p>
             </div>
             {navItems.map((item) => (
               <Link
@@ -229,8 +229,8 @@ ${t('manual.settings_text')}
                 className={`
                   flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
                   ${location.pathname === item.path 
-                    ? 'bg-brand-600/10 text-brand-400 shadow-sm' 
-                    : 'text-slate-400 hover:bg-slate-900 hover:text-slate-200'}
+                    ? 'bg-brand-600/10 text-brand-600 dark:text-brand-400 shadow-sm' 
+                    : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-slate-200'}
                 `}
                 onClick={() => setIsSidebarOpen(false)}
               >
@@ -246,7 +246,7 @@ ${t('manual.settings_text')}
           <div className="p-6 mt-auto">
             <button 
               onClick={handleDownloadManual}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand-500/10 hover:bg-brand-500/20 text-brand-400 rounded-xl transition-all duration-200 text-sm font-semibold mb-4 border border-brand-500/20 hover:border-brand-500/40 group"
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand-500/10 hover:bg-brand-500/20 text-brand-600 dark:text-brand-400 rounded-xl transition-all duration-200 text-sm font-semibold mb-4 border border-brand-500/20 hover:border-brand-500/40 group"
             >
               <FileText size={18} className="group-hover:scale-110 transition-transform" />
               <span>{t('manual.user_manual')}</span>
@@ -254,7 +254,7 @@ ${t('manual.settings_text')}
 
             <button 
               onClick={handleLogout}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-slate-900/50 hover:bg-red-500/10 hover:text-red-400 text-slate-400 rounded-lg transition-all duration-200 text-sm font-medium border border-slate-800/50 hover:border-red-500/30"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-900/50 hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-400 text-slate-500 dark:text-slate-400 rounded-lg transition-all duration-200 text-sm font-medium border border-slate-200 dark:border-slate-800/50 hover:border-red-500/30"
             >
               <LogOut size={16} />
               <span>{t('common.logout')}</span>
@@ -275,7 +275,7 @@ ${t('manual.settings_text')}
             {/* Theme Toggle (Desktop) */}
             <button 
               onClick={toggleTheme}
-              className={`p-2.5 rounded-xl transition-all duration-200 ${theme === 'dark' ? 'text-slate-400 hover:bg-slate-800 hover:text-slate-200' : 'text-slate-400 hover:bg-slate-100 hover:text-slate-600'}`}
+              className="p-2.5 rounded-xl transition-all duration-200 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100 border border-transparent hover:border-slate-200 dark:hover:border-slate-700 active:scale-95 shadow-sm hover:shadow"
               aria-label={t('layout.toggle_theme')}
               title={t('layout.toggle_theme')}
             >
@@ -286,11 +286,11 @@ ${t('manual.settings_text')}
             <div className="relative">
               <button 
                 onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-                className={`p-2.5 rounded-xl transition-all duration-200 relative ${isNotificationsOpen ? 'bg-brand-50 text-brand-600' : 'text-slate-400 hover:bg-slate-100 hover:text-slate-600'}`}
+                className={`p-2.5 rounded-xl transition-all duration-200 relative border active:scale-95 shadow-sm hover:shadow ${isNotificationsOpen ? 'bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 border-brand-200 dark:border-brand-500/30' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100 border-transparent hover:border-slate-200 dark:hover:border-slate-700'}`}
               >
                 <Bell size={20} />
                 {unreadCount > 0 && (
-                  <span className="absolute top-2 right-2 w-4 h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white">
+                  <span className="absolute top-2 right-2 w-4 h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white dark:border-slate-900">
                     {unreadCount}
                   </span>
                 )}
@@ -381,36 +381,49 @@ ${t('manual.settings_text')}
               )}
             </div>
 
-            <div className="w-px h-6 bg-slate-200" />
+            <div className="w-px h-6 bg-slate-200 dark:bg-slate-800 mx-2" />
+            
+            <div className="flex items-center gap-3 pl-2">
+              <div className="flex flex-col items-end">
+                <span className="text-xs font-bold text-slate-900 dark:text-slate-100 leading-none">{username}</span>
+                <span className="text-[10px] text-brand-600 dark:text-brand-500 font-bold uppercase tracking-wider">{t(`common.${role}`)}</span>
+              </div>
+              <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-400 shadow-inner">
+                <User size={20} />
+              </div>
+            </div>
           </div>
         </header>
 
         {/* High Priority Notification Banner */}
         {highPriorityNotifications.length > 0 && (
-          <div className="bg-red-600 text-white px-6 py-2 flex flex-col gap-2 animate-in slide-in-from-top duration-500">
+          <div className="bg-red-600 dark:bg-red-700 text-white px-6 py-3 flex flex-col gap-2 animate-in slide-in-from-top duration-500 shadow-lg relative z-10">
             {highPriorityNotifications.map(notification => (
-              <div key={notification.id} className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider">
-                  <AlertCircle size={16} />
+              <div key={notification.id} className="flex items-center justify-between gap-4 max-w-7xl mx-auto w-full">
+                <div className="flex items-center gap-3 font-bold text-xs uppercase tracking-wider">
+                  <div className="p-1.5 bg-white/20 rounded-lg">
+                    <AlertCircle size={18} />
+                  </div>
                   <span>{notification.message}</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   {notification.link && (
                     <a 
                       href={notification.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-slate-950/40 hover:bg-slate-950/60 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 whitespace-nowrap border border-white/10 shadow-sm"
+                      className="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 whitespace-nowrap border border-white/20 shadow-sm flex items-center gap-2"
                     >
                       {t('common.learn_more')}
+                      <ExternalLink size={12} />
                     </a>
                   )}
                   <button 
                     onClick={() => dismissNotification(notification.id)}
-                    className="w-7 h-7 flex items-center justify-center bg-slate-950/20 hover:bg-slate-950/40 rounded-xl text-white/70 hover:text-white transition-all hover:scale-105 active:scale-95 border border-white/5"
+                    className="w-8 h-8 flex items-center justify-center bg-black/10 hover:bg-black/20 rounded-xl text-white transition-all hover:scale-105 active:scale-95 border border-white/10"
                     title={t('common.dismiss')}
                   >
-                    <X size={14} />
+                    <X size={16} />
                   </button>
                 </div>
               </div>

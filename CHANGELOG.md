@@ -9,6 +9,9 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 - **Locale Updates**: Updated all 43+ language locale files with theme-related keys and verified with regression tests.
 - **Automated Security Testing & Auditing**: Established comprehensive security auditing standards in `.junie/guidelines.md` covering SCA, SAST, DAST, and Secret Scanning.
 - **Security Check Integration**: Defined a roadmap for integrating security checks (dependency auditing, static analysis, secret scanning) into the project's development workflow.
+- **Light Mode Rework**: Comprehensive overhaul of the Light mode interface, featuring a theme-aware sidebar, refined mobile/desktop headers, and professional shadows/borders.
+- **Modern Button Aesthetic**: Standardized all buttons across the application with a high-contrast, uppercase design and tactile `border-b-4` effects for primary actions.
+- **Enhanced Table Actions**: Replaced basic icon buttons with theme-aware, color-coded action buttons in all resource lists.
 
 ### Fixed
 - **UI Cleanup**: Removed redundant "System Actions" from the Settings page.

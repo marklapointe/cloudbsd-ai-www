@@ -194,17 +194,17 @@ const ResourceList: React.FC<ResourceListProps> = ({
           <p className="text-slate-500 dark:text-slate-400 mt-1 font-medium">{description}</p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl flex items-center shadow-inner">
+          <div className="bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl flex items-center shadow-inner border border-slate-200/50 dark:border-slate-700/50">
             <button 
               onClick={() => setViewMode('list')}
-              className={`p-2 rounded-xl transition-all duration-200 ${viewMode === 'list' ? 'bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 shadow-sm' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
+              className={`p-2 rounded-xl transition-all duration-200 border ${viewMode === 'list' ? 'bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 shadow-sm border-slate-200 dark:border-slate-600' : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 border-transparent hover:bg-slate-50 dark:hover:bg-slate-800/50'}`}
               title={t('resource_list.view_list')}
             >
               <LayoutList size={20} />
             </button>
             <button 
               onClick={() => setViewMode('grid')}
-              className={`p-2 rounded-xl transition-all duration-200 ${viewMode === 'grid' ? 'bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 shadow-sm' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
+              className={`p-2 rounded-xl transition-all duration-200 border ${viewMode === 'grid' ? 'bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 shadow-sm border-slate-200 dark:border-slate-600' : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 border-transparent hover:bg-slate-50 dark:hover:bg-slate-800/50'}`}
               title={t('resource_list.view_grid')}
             >
               <LayoutGrid size={20} />
@@ -215,10 +215,10 @@ const ResourceList: React.FC<ResourceListProps> = ({
               setEditingResource(null);
               setIsModalOpen(true);
             }}
-            className={`px-6 py-2.5 rounded-2xl font-bold transition-all duration-200 shadow-lg active:scale-95 flex items-center gap-2 ${
+            className={`px-6 py-2.5 rounded-2xl font-bold transition-all duration-200 shadow-lg active:scale-95 flex items-center gap-2 border-b-4 hover:border-b-0 hover:translate-y-[2px] ${
               isOperator 
-                ? 'bg-brand-600 hover:bg-brand-700 text-white shadow-brand-500/20' 
-                : 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'
+                ? 'bg-brand-600 hover:bg-brand-700 text-white shadow-brand-500/20 border-brand-800 dark:border-brand-900' 
+                : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed shadow-none border-slate-300 dark:border-slate-900'
             }`}
             disabled={!isOperator}
             aria-label={t(`common.add_${resourceType}`)}
@@ -386,8 +386,8 @@ const ResourceList: React.FC<ResourceListProps> = ({
                     <td className="px-8 py-5 text-right">
                       <div className="flex justify-end gap-1.5 opacity-60 group-hover:opacity-100 transition-opacity">
                         <button 
-                          className={`p-2.5 rounded-xl transition-all duration-200 active:scale-90 ${
-                            isOperator ? 'text-slate-400 dark:text-slate-500 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-500/10 hover:shadow-sm' : 'text-slate-200 dark:text-slate-800 cursor-not-allowed'
+                          className={`p-2.5 rounded-xl transition-all duration-200 active:scale-90 border border-transparent ${
+                            isOperator ? 'text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-500/10 hover:border-brand-100 dark:hover:border-brand-500/20 hover:shadow-sm' : 'text-slate-200 dark:text-slate-800 cursor-not-allowed'
                           }`}
                           title={t('resource_list.console')}
                           aria-label={t('resource_list.console')}
@@ -400,8 +400,8 @@ const ResourceList: React.FC<ResourceListProps> = ({
                           <Terminal size={18} />
                         </button>
                         <button 
-                          className={`p-2.5 rounded-xl transition-all duration-200 active:scale-90 ${
-                            isOperator ? 'text-slate-400 dark:text-slate-500 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-500/10 hover:shadow-sm' : 'text-slate-200 dark:text-slate-800 cursor-not-allowed'
+                          className={`p-2.5 rounded-xl transition-all duration-200 active:scale-90 border border-transparent ${
+                            isOperator ? 'text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-500/10 hover:border-brand-100 dark:hover:border-brand-500/20 hover:shadow-sm' : 'text-slate-200 dark:text-slate-800 cursor-not-allowed'
                           }`}
                           title={t('resource_list.edit')}
                           aria-label={t('resource_list.edit')}
@@ -415,8 +415,8 @@ const ResourceList: React.FC<ResourceListProps> = ({
                         </button>
                         <div className="w-px h-6 bg-slate-100 dark:bg-slate-800 mx-1 self-center" />
                         <button 
-                          className={`p-2.5 rounded-xl transition-all duration-200 active:scale-90 ${
-                            isOperator ? 'text-slate-400 dark:text-slate-500 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 hover:shadow-sm' : 'text-slate-200 dark:text-slate-800 cursor-not-allowed'
+                          className={`p-2.5 rounded-xl transition-all duration-200 active:scale-90 border border-transparent ${
+                            isOperator ? 'text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 hover:border-emerald-100 dark:hover:border-emerald-500/20 hover:shadow-sm' : 'text-slate-200 dark:text-slate-800 cursor-not-allowed'
                           }`}
                           title={t('resource_list.start')}
                           aria-label={t('resource_list.start')}
@@ -426,8 +426,8 @@ const ResourceList: React.FC<ResourceListProps> = ({
                           <Play size={18} />
                         </button>
                         <button 
-                          className={`p-2.5 rounded-xl transition-all duration-200 active:scale-90 ${
-                            isOperator ? 'text-slate-400 dark:text-slate-500 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-500/10 hover:shadow-sm' : 'text-slate-200 dark:text-slate-800 cursor-not-allowed'
+                          className={`p-2.5 rounded-xl transition-all duration-200 active:scale-90 border border-transparent ${
+                            isOperator ? 'text-slate-500 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-500/10 hover:border-amber-100 dark:hover:border-amber-500/20 hover:shadow-sm' : 'text-slate-200 dark:text-slate-800 cursor-not-allowed'
                           }`}
                           title={t('resource_list.restart')}
                           aria-label={t('resource_list.restart')}
@@ -437,8 +437,8 @@ const ResourceList: React.FC<ResourceListProps> = ({
                           <RotateCw size={18} />
                         </button>
                         <button 
-                          className={`p-2.5 rounded-xl transition-all duration-200 active:scale-90 ${
-                            isOperator ? 'text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 hover:shadow-sm' : 'text-slate-200 dark:text-slate-800 cursor-not-allowed'
+                          className={`p-2.5 rounded-xl transition-all duration-200 active:scale-90 border border-transparent ${
+                            isOperator ? 'text-slate-500 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 hover:border-red-100 dark:hover:border-red-500/20 hover:shadow-sm' : 'text-slate-200 dark:text-slate-800 cursor-not-allowed'
                           }`}
                           title={t('resource_list.stop')}
                           aria-label={t('resource_list.stop')}
@@ -448,8 +448,8 @@ const ResourceList: React.FC<ResourceListProps> = ({
                           <Square size={18} />
                         </button>
                         <button 
-                          className={`p-2.5 rounded-xl transition-all duration-200 active:scale-90 ${
-                            isOperator ? 'text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 hover:shadow-sm' : 'text-slate-200 dark:text-slate-800 cursor-not-allowed'
+                          className={`p-2.5 rounded-xl transition-all duration-200 active:scale-90 border border-transparent ${
+                            isOperator ? 'text-slate-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 hover:border-red-100 dark:hover:border-red-500/20 hover:shadow-sm' : 'text-slate-200 dark:text-slate-800 cursor-not-allowed'
                           }`}
                           title={t('resource_list.delete')}
                           aria-label={t('resource_list.delete')}
@@ -522,17 +522,17 @@ const ResourceList: React.FC<ResourceListProps> = ({
                       ))}
                     </div>
 
-                    <div className="flex gap-2">
+                    <div className="flex gap-3">
                       <button 
                         onClick={() => handleAction(item.id, 'start')}
-                        className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${isOperator ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 dark:hover:bg-emerald-500 hover:text-white dark:hover:text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-300 dark:text-slate-700 cursor-not-allowed'}`}
+                        className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95 border ${isOperator ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-100 dark:border-emerald-500/20 hover:bg-emerald-600 dark:hover:bg-emerald-500 hover:text-white dark:hover:text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-300 dark:text-slate-700 border-transparent cursor-not-allowed'}`}
                         disabled={!isOperator}
                       >
                         {t('resource_list.start')}
                       </button>
                       <button 
                         onClick={() => handleAction(item.id, 'stop')}
-                        className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${isOperator ? 'bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-600 dark:hover:bg-red-500 hover:text-white dark:hover:text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-300 dark:text-slate-700 cursor-not-allowed'}`}
+                        className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95 border ${isOperator ? 'bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border-red-100 dark:border-red-500/20 hover:bg-red-600 dark:hover:bg-red-500 hover:text-white dark:hover:text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-300 dark:text-slate-700 border-transparent cursor-not-allowed'}`}
                         disabled={!isOperator}
                       >
                         {t('resource_list.stop')}
@@ -542,10 +542,10 @@ const ResourceList: React.FC<ResourceListProps> = ({
                           setConsoleResource(item);
                           setIsConsoleOpen(true);
                         }}
-                        className={`p-2 rounded-xl transition-all ${isOperator ? 'bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 hover:bg-brand-600 dark:hover:bg-brand-500 hover:text-white dark:hover:text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-300 dark:text-slate-700 cursor-not-allowed'}`}
+                        className={`p-2.5 rounded-xl transition-all shadow-sm active:scale-95 border ${isOperator ? 'bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 border-brand-100 dark:border-brand-500/20 hover:bg-brand-600 dark:hover:bg-brand-500 hover:text-white dark:hover:text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-300 dark:text-slate-700 border-transparent cursor-not-allowed'}`}
                         disabled={!isOperator}
                       >
-                        <Terminal size={16} />
+                        <Terminal size={18} />
                       </button>
                     </div>
                   </div>

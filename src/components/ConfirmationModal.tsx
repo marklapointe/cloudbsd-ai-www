@@ -82,7 +82,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-6 py-4 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600 transition-all active:scale-95"
+              className="flex-1 px-6 py-4 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600 transition-all active:scale-95 shadow-sm"
             >
               {cancelLabel || t('common.cancel')}
             </button>
@@ -92,7 +92,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
                 onConfirm();
                 onClose();
               }}
-              className={`flex-1 px-6 py-4 text-white font-black uppercase tracking-widest text-xs rounded-2xl transition-all active:scale-95 shadow-lg ${styles.button}`}
+              className={`flex-1 px-6 py-4 text-white font-black uppercase tracking-widest text-xs rounded-2xl transition-all active:scale-95 shadow-lg border-b-4 hover:border-b-0 hover:translate-y-[2px] ${styles.button} ${variant === 'danger' ? 'border-red-800' : variant === 'warning' ? 'border-amber-800' : 'border-brand-800'}`}
             >
               {confirmLabel || t('common.confirm') || 'Confirm'}
             </button>

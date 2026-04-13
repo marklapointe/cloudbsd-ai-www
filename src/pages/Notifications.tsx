@@ -50,33 +50,33 @@ const Notifications: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-12rem)] bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden transition-colors duration-300">
+    <div className="flex flex-col h-[calc(100vh-12rem)] bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 overflow-hidden transition-colors duration-300">
       {/* Header / Toolbar */}
-      <div className="flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
+      <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
         <div className="flex items-center gap-4">
           <button 
             onClick={() => navigate(-1)}
-            className="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full transition-colors"
+            className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 shadow-sm"
           >
-            <ArrowLeft size={20} className="text-slate-600 dark:text-slate-300" />
+            <ArrowLeft size={20} />
           </button>
-          <h1 className="text-xl font-bold text-slate-800 dark:text-slate-100">{t('notifications.title')}</h1>
+          <h1 className="text-xl font-black text-slate-900 dark:text-slate-100 tracking-tight">{t('notifications.title')}</h1>
           <div className="relative ml-4">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
+            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
             <input 
               type="text"
               placeholder={t('common.search')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 w-64 transition-all dark:text-slate-100"
+              className="pl-12 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-sm focus:outline-none focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white dark:focus:bg-slate-700 w-72 transition-all dark:text-slate-100 font-bold"
             />
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <button className="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg text-slate-500 dark:text-slate-400 transition-colors">
+        <div className="flex items-center gap-3">
+          <button className="p-2 hover:bg-white dark:hover:bg-slate-800 rounded-xl text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-all border border-transparent hover:border-slate-200 dark:hover:border-slate-700 shadow-sm">
             <Filter size={18} />
           </button>
-          <button className="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg text-slate-500 dark:text-slate-400 transition-colors">
+          <button className="p-2 hover:bg-white dark:hover:bg-slate-800 rounded-xl text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-all border border-transparent hover:border-slate-200 dark:hover:border-slate-700 shadow-sm">
             <MoreVertical size={18} />
           </button>
         </div>
@@ -132,73 +132,73 @@ const Notifications: React.FC = () => {
         </div>
 
         {/* Message Detail */}
-        <div className="flex-1 bg-slate-50/30 dark:bg-slate-950/30 flex flex-col overflow-hidden">
+        <div className="flex-1 bg-slate-50 dark:bg-slate-950/30 flex flex-col overflow-hidden relative">
           {selectedNotification ? (
             <>
-              <div className="p-6 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
-                <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${
+              <div className="p-6 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center shadow-sm relative z-10">
+                <div className="flex items-center gap-5">
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-inner ${
                     selectedNotification.type === 'warning' ? 'bg-amber-100 dark:bg-amber-500/20' :
                     selectedNotification.type === 'error' ? 'bg-red-100 dark:bg-red-500/20' :
                     selectedNotification.type === 'success' ? 'bg-emerald-100 dark:bg-emerald-500/20' :
                     'bg-blue-100 dark:bg-blue-500/20'
                   }`}>
-                    {getTypeIcon(selectedNotification.type, 24)}
+                    {getTypeIcon(selectedNotification.type, 28)}
                   </div>
                   <div>
-                    <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
+                    <h2 className="text-xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
                       {t('notifications.message_type', { type: t(`common.${selectedNotification.type}`) })}
                     </h2>
-                    <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">
+                    <p className="text-sm text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest mt-0.5">
                       {formatLocalDateTime(selectedNotification.timestamp)}
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   <button 
                     onClick={() => dismissNotification(selectedNotification.id)}
-                    className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg text-slate-400 transition-colors"
+                    className="p-3 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100 rounded-xl text-slate-400 dark:text-slate-500 transition-all border border-transparent hover:border-slate-200 dark:hover:border-slate-700 shadow-sm active:scale-95"
                     title={t('common.dismiss')}
                   >
                     <X size={20} />
                   </button>
                   <button 
                     onClick={() => deleteNotification(selectedNotification.id)}
-                    className="p-2 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-400 rounded-lg text-slate-400 transition-colors"
+                    className="p-3 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-400 rounded-xl text-slate-400 dark:text-slate-500 transition-all border border-transparent hover:border-red-100 dark:hover:border-red-500/20 shadow-sm active:scale-95"
                     title={t('common.delete')}
                   >
                     <Trash2 size={20} />
                   </button>
                 </div>
               </div>
-              <div className="flex-1 p-8 overflow-y-auto">
-                <div className="max-w-2xl bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
-                  <div className="flex items-center gap-2 mb-6 pb-6 border-b border-slate-50 dark:border-slate-800 text-slate-400 dark:text-slate-500 text-sm">
-                    <span className="font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest text-[10px]">{t('notifications.message_from')}:</span>
-                    <span>{t('notifications.system_admin')}</span>
+              <div className="flex-1 p-10 overflow-y-auto">
+                <div className="max-w-3xl mx-auto bg-white dark:bg-slate-900 p-10 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl">
+                  <div className="flex items-center gap-3 mb-8 pb-8 border-b border-slate-100 dark:border-slate-800 text-slate-400 dark:text-slate-500">
+                    <span className="font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest text-xs">{t('notifications.message_from')}:</span>
+                    <span className="font-bold text-slate-800 dark:text-slate-200 px-3 py-1 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-100 dark:border-slate-700">{t('notifications.system_admin')}</span>
                   </div>
                   <div className="prose prose-slate dark:prose-invert max-w-none">
-                    <p className="text-slate-700 dark:text-slate-200 leading-relaxed whitespace-pre-wrap">
+                    <p className="text-lg text-slate-700 dark:text-slate-200 leading-relaxed whitespace-pre-wrap font-medium">
                       {selectedNotification.message}
                     </p>
                   </div>
-                  <div className="mt-12 pt-6 border-t border-slate-50 dark:border-slate-800">
-                    <p className="text-xs text-slate-400 dark:text-slate-500 italic">
+                  <div className="mt-16 pt-8 border-t border-slate-50 dark:border-slate-800">
+                    <p className="text-xs text-slate-400 dark:text-slate-500 italic font-medium">
                       {t('notifications.automated_notice')}
                     </p>
                   </div>
                 </div>
               </div>
-              <div className="p-4 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-slate-400 dark:text-slate-500 text-xs font-medium">
-                <div className="flex items-center gap-4">
-                  <button className="flex items-center gap-1 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
-                    <ChevronLeft size={16} /> {t('resource_list.previous')}
+              <div className="p-5 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center text-slate-500 dark:text-slate-400 text-sm font-bold">
+                <div className="flex items-center gap-6">
+                  <button className="flex items-center gap-2 hover:text-brand-600 dark:hover:text-brand-400 transition-colors uppercase tracking-widest text-[10px]">
+                    <ChevronLeft size={18} /> {t('resource_list.previous')}
                   </button>
-                  <button className="flex items-center gap-1 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
-                    {t('resource_list.next')} <ChevronRight size={16} />
+                  <button className="flex items-center gap-2 hover:text-brand-600 dark:hover:text-brand-400 transition-colors uppercase tracking-widest text-[10px]">
+                    {t('resource_list.next')} <ChevronRight size={18} />
                   </button>
                 </div>
-                <span>{t('notifications.message_id')}: {selectedNotification.id}</span>
+                <span className="bg-slate-50 dark:bg-slate-800 px-3 py-1 rounded-lg border border-slate-100 dark:border-slate-700 text-[10px] tracking-widest uppercase">{t('notifications.message_id')}: {selectedNotification.id}</span>
               </div>
             </>
           ) : (
