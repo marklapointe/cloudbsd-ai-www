@@ -4,6 +4,8 @@ All notable changes to the CloudBSD Admin Web UI project will be documented in t
 
 ## [Unreleased]
 ### Added
+- **Automated Security Testing & Auditing**: Established comprehensive security auditing standards in `.junie/guidelines.md` covering SCA, SAST, DAST, and Secret Scanning.
+- **Security Check Integration**: Defined a roadmap for integrating security checks (dependency auditing, static analysis, secret scanning) into the project's development workflow.
 - **Optimization & Cleanup Cycle**: Performed a project-wide cleanup, removing multiple temporary scripts (`.mjs`) and reports (`.txt`) from the root directory.
 - **Enterprise Ad Removal**: Removed the premature "Upgrade to CloudBSD Enterprise" advertisement from the notification system as the feature and URL are not yet ready.
 - **Full Regression Test Suite**: Successfully executed a comprehensive regression test involving 240+ unit and integration tests across 19 test files.

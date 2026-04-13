@@ -60,3 +60,21 @@ describe('Verification Test', () => {
 - **Frontend Consistency**: Use Vitest and React Testing Library to ensure component behavior and state management.
 - **I18n Audit**: Use `make check-locales` to ensure 100% key parity across all 43+ languages.
 - **Non-Interactive Verification**: All tests must be able to run to completion without user input.
+
+#### 10. Security Testing & Auditing
+- **SCA (Software Composition Analysis)**:
+  - Run `npm audit` on every build to identify vulnerable dependencies.
+  - Fail the build if any `critical` or `high` vulnerabilities are found in production dependencies.
+- **SAST (Static Application Security Testing)**:
+  - Use `eslint-plugin-security` to detect insecure coding patterns (e.g., `eval`, `innerHTML`).
+  - Regularly run `npm run lint` and address all security warnings.
+- **DAST (Dynamic Application Security Testing)**:
+  - Perform security-focused integration tests using `supertest`.
+  - Verify that the application is resilient to common attacks such as XSS, SQL injection, and CSRF.
+  - Ensure all sensitive endpoints require valid JWT authentication and proper role-based access control (RBAC).
+- **Secret Scanning**:
+  - Prevent accidental leakage of secrets (API keys, JWT secrets, database credentials) using tools like `gitleaks` or `trufflehog`.
+  - No secrets should ever be committed to the repository. Use environment variables or local configuration files for sensitive information.
+- **Security Audits**:
+  - Periodically perform manual security audits of the codebase and infrastructure configuration.
+  - Document all findings and remediation steps in the project history.

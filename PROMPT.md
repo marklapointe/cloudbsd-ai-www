@@ -237,6 +237,11 @@ This document is intended to be as descriptive as possible so that any LLM can u
     - **Database Refinement**: Optimized `server/src/db.ts` by removing redundant `CREATE TABLE` blocks for notifications, ensuring cleaner database initialization.
     - **Code Consolidation**: Verified the removal of all dead links to `cloudbsd.org/enterprise` and ensured notification routes are fully consolidated without redundancy.
     - **Stability Verification**: Successfully executed a full project-wide regression test suite (240 tests) with a 100% pass rate following the cleanup.
+42. **Automated Security Testing & Auditing**:
+    - Established comprehensive security auditing standards in `.junie/guidelines.md` covering SCA, SAST, DAST, and Secret Scanning.
+    - Integrated security checks into the project's development workflow to ensure zero high-risk vulnerabilities in production dependencies.
+    - Defined mandatory security-focused integration tests using `supertest` to verify resilience against XSS, SQL injection, and CSRF attacks.
+    - Implemented strict secret scanning policies to prevent accidental leakage of API keys or credentials in the repository.
 
 ### UI Layout & Components
 

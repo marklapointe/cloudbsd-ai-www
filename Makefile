@@ -35,8 +35,13 @@ install: build
 	service cloudbsd-admin enable
 	service cloudbsd-admin start
 
-build:
+build: security-check
 	npm run build
+
+security-check:
+	@echo "Running Security Checks..."
+	@echo "1. Software Composition Analysis (SCA)..."
+	npm audit --omit=dev --audit-level=high
 
 dev:
 	npm run dev

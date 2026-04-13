@@ -9,6 +9,7 @@
     "build": "tsc -b && vite build",
     "start": "node --experimental-strip-types server/src/index.ts",
     "lint": "eslint .",
+    "security-audit": "npm audit --omit=dev --audit-level=high",
     "test": "npm run build && vitest"
   },
   "dependencies": {
