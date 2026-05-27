@@ -311,11 +311,31 @@ Each wave should commit:
 - [ ] Nexus 3 publishing (PENDING - user's task)
 - [ ] Consuming projects updated to use packages (PENDING - requires Nexus)
 
-### Remaining Work (Requires Nexus)
-1. User sets up Nexus 3 private registry
-2. Publish packages to Nexus: `npm publish --registry=<nexus-url>`
-3. Update consuming projects to `npm install @cloudbsd/ui --registry=<nexus-url>`
-4. Migrate components to use package imports instead of local files
+### Nexus Publishing Configuration
+
+**Nexus URL:** `https://nexus.cloudbsd.org/repository/npm-private/`
+
+**Publishing credentials:** PENDING - user to create service account for automation
+
+**Setup steps when ready:**
+```bash
+# Add to ~/.npmrc for each package directory:
+echo "@cloudbsd:registry=https://nexus.cloudbsd.org/repository/npm-private/" >> ~/.npmrc
+
+# Publish (once credentials available):
+npm publish --registry=https://nexus.cloudbsd.org/repository/npm-private/
+```
+
+**Package scopes:**
+- `@cloudbsd/ui` - Shared UI components
+- `@cloudbsd/hooks` - Shared React hooks
+- `@cloudbsd/ui-admin` - Admin-specific components
+
+### Remaining Work
+1. User creates automation service account in Nexus
+2. User provides credentials (or uses token auth)
+3. Publish packages to Nexus: `npm publish --registry=<nexus-url>`
+4. Update consuming projects to install from Nexus
 
 ### Package Locations
 - `@cloudbsd/ui`: `/home/mlapointe/secure/git/cloudbsd-ai-www/packages/ui/`
