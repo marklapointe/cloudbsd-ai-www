@@ -35,12 +35,14 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { t, i18n } = useTranslation();
   const { theme, toggleTheme } = useTheme();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  // Refs for resize to avoid stale closures
+  const resizeStartXRef = React.useRef(0);
+  const resizeStartWidthRef = React.useRef(256);
+  const sidebarWidthRef = React.useRef(256);
+  const isResizingRef = React.useRef(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   const [sidebarWidth, setSidebarWidth] = useState(256);
   const [isResizing, setIsResizing] = useState(false);
-  const [resizeStartX, setResizeStartX] = useState(0);
-  const [resizeStartWidth, setResizeStartWidth] = useState(256);
 
   React.useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 1024);
@@ -61,6 +63,19 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const username = localStorage.getItem('username') || 'User';
   const role = localStorage.getItem('role') || 'viewer';
 
+  // Theme helpers
+  const isDark = theme === 'dark';
+
+  const getNotificationStyles = (type: string) => {
+    const styles: Record<string, { bg: string; text: string; icon: React.FC<{size: number}> }> = {
+      warning: { bg: 'bg-amber-100', text: 'text-amber-600', icon: AlertTriangle },
+      error: { bg: 'bg-red-100', text: 'text-red-600', icon: AlertCircle },
+      success: { bg: 'bg-emerald-100', text: 'text-emerald-600', icon: CheckCircle },
+      ad: { bg: 'bg-purple-100', text: 'text-purple-600', icon: Megaphone },
+    };
+    return styles[type] || { bg: 'bg-blue-100', text: 'text-blue-600', icon: Info };
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
@@ -71,41 +86,41 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const startResize = (e: React.MouseEvent) => {
     if (isMobile) return;
     e.preventDefault();
+    isResizingRef.current = true;
     setIsResizing(true);
-    setResizeStartX(e.clientX);
-    setResizeStartWidth(sidebarWidth);
+    resizeStartXRef.current = e.clientX;
+    resizeStartWidthRef.current = sidebarWidthRef.current;
   };
 
   const handleResize = (e: React.MouseEvent) => {
-    if (!isResizing || isMobile) return;
-    const deltaX = e.clientX - resizeStartX;
-    const newWidth = Math.max(0, Math.min(320, resizeStartWidth + deltaX));
+    if (!isResizingRef.current || isMobile) return;
+    const deltaX = e.clientX - resizeStartXRef.current;
+    const newWidth = Math.max(0, Math.min(320, resizeStartWidthRef.current + deltaX));
+    sidebarWidthRef.current = newWidth;
     setSidebarWidth(newWidth);
   };
 
   const stopResize = () => {
-    if (!isResizing) return;
-    const wasResizing = isResizing;
+    if (!isResizingRef.current) return;
+    isResizingRef.current = false;
     setIsResizing(false);
-    if (wasResizing) {
-      const finalWidth = sidebarWidth < 80 ? 0 : 256;
-      setSidebarWidth(finalWidth);
-      setIsSidebarCollapsed(finalWidth === 0);
-    }
+    const finalWidth = sidebarWidthRef.current < 80 ? 0 : 256;
+    sidebarWidthRef.current = finalWidth;
+    setSidebarWidth(finalWidth);
   };
 
   const expandSidebar = () => {
+    sidebarWidthRef.current = 256;
     setSidebarWidth(256);
-    setIsSidebarCollapsed(false);
   };
 
   const toggleSidebar = () => {
-    if (sidebarWidth === 0) {
+    if (sidebarWidthRef.current === 0) {
+      sidebarWidthRef.current = 256;
       setSidebarWidth(256);
-      setIsSidebarCollapsed(false);
     } else {
+      sidebarWidthRef.current = 0;
       setSidebarWidth(0);
-      setIsSidebarCollapsed(true);
     }
   };
 
@@ -127,7 +142,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
     };
-  }, [isResizing, handleResize, stopResize, sidebarWidth]);
+  }, [isResizing, sidebarWidth]);
 
   const handleDownloadManual = () => {
     const manualContent = `# ${t('manual.title')}
@@ -212,7 +227,7 @@ ${t('manual.settings_text')}
   }
 
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'} flex flex-col lg:flex-row font-sans transition-colors duration-300`}>
+    <div className={`min-h-screen ${isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'} flex flex-col lg:flex-row font-sans transition-colors duration-300`}>
       {/* Mobile Top Bar */}
       <div className="lg:hidden sticky top-0 left-0 right-0 h-16 bg-white dark:bg-slate-950 flex items-center justify-between px-6 z-50 border-b border-slate-200 dark:border-slate-800/50 transition-colors duration-300">
         <div className="flex items-center gap-3">
@@ -230,7 +245,7 @@ ${t('manual.settings_text')}
             aria-label={t('layout.toggle_theme')}
             title={t('layout.toggle_theme')}
           >
-            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            {isDark ? <Sun size={20} /> : <Moon size={20} />}
           </button>
 
           {/* Notification Bell (Mobile) */}
@@ -273,7 +288,7 @@ ${t('manual.settings_text')}
         animate={
           isMobile
             ? { x: isSidebarOpen ? 0 : -256 }
-            : isSidebarCollapsed
+            : sidebarWidth === 0
               ? { x: -sidebarWidth }
               : { x: 0 }
         }
@@ -281,7 +296,7 @@ ${t('manual.settings_text')}
         style={{ width: isMobile ? 256 : sidebarWidth }}
         className={`
           fixed inset-y-0 left-0 z-40 shadow-2xl overflow-hidden
-          ${theme === 'dark'
+          ${isDark
             ? 'bg-slate-900/95 backdrop-blur-md border-r border-white/10 text-slate-100'
             : 'bg-white/80 backdrop-blur-md border-r border-slate-200/50 text-slate-900'}
           lg:translate-x-0 lg:static lg:inset-0 lg:h-screen
@@ -327,7 +342,7 @@ ${t('manual.settings_text')}
 
           <nav className="flex-1 px-4 py-2 space-y-1">
             <div className={`rounded-2xl p-4 mb-6 flex items-center gap-3 ${
-              theme === 'dark' 
+              isDark 
                 ? 'bg-white/5 border border-white/10' 
                 : 'bg-slate-900/5 border border-slate-200/50'
             }`}>
@@ -418,7 +433,7 @@ ${t('manual.settings_text')}
               aria-label={t('layout.toggle_theme')}
               title={t('layout.toggle_theme')}
             >
-              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              {isDark ? <Sun size={20} /> : <Moon size={20} />}
             </button>
 
             {/* Notification Bell (Desktop) */}
@@ -444,7 +459,7 @@ ${t('manual.settings_text')}
                     exit={{ opacity: 0, scale: 0.95, y: -10 }}
                     transition={{ duration: 0.15 }}
                     className={`absolute right-0 mt-3 w-80 rounded-2xl shadow-2xl z-40 overflow-hidden ${
-                      theme === 'dark' 
+                      isDark 
                         ? 'bg-slate-900/90 backdrop-blur-md border border-white/10' 
                         : 'bg-white/90 backdrop-blur-md border border-slate-200/50'
                     }`}
@@ -478,18 +493,8 @@ ${t('manual.settings_text')}
                             className={`p-4 border-b border-slate-50 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex gap-3 ${!notification.is_read ? 'bg-brand-50/30 dark:bg-brand-500/10' : ''}`}
                             onClick={() => !notification.is_read && markAsRead(notification.id)}
                           >
-                            <div className={`mt-0.5 w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center ${
-                              notification.type === 'warning' ? 'bg-amber-100 text-amber-600' :
-                              notification.type === 'error' ? 'bg-red-100 text-red-600' :
-                              notification.type === 'success' ? 'bg-emerald-100 text-emerald-600' :
-                              notification.type === 'ad' ? 'bg-purple-100 text-purple-600' :
-                              'bg-blue-100 text-blue-600'
-                            }`}>
-                              {notification.type === 'warning' ? <AlertTriangle size={16} /> :
-                               notification.type === 'error' ? <AlertCircle size={16} /> :
-                               notification.type === 'success' ? <CheckCircle size={16} /> :
-                               notification.type === 'ad' ? <Megaphone size={16} /> :
-                               <Info size={16} />}
+                            <div className={`mt-0.5 w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center ${getNotificationStyles(notification.type).bg} ${getNotificationStyles(notification.type).text}`}>
+                              {React.createElement(getNotificationStyles(notification.type).icon, { size: 16 })}
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="text-sm text-slate-700 dark:text-slate-200 leading-snug font-medium">{notification.message}</p>
