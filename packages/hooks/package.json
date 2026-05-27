@@ -1,0 +1,34 @@
+{
+  "name": "@cloudbsd/hooks",
+  "version": "0.1.0",
+  "description": "Shared React hooks for CloudBSD and RevyTech projects",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./useTheme": "./dist/useTheme/index.js",
+    "./useLanguage": "./dist/useLanguage/index.js",
+    "./useAuth": "./dist/useAuth/index.js",
+    "./useNotifications": "./dist/useNotifications/index.js"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "typescript": "^5.4.0",
+    "tsup": "^8.0.0"
+  },
+  "keywords": ["cloudbsd", "hooks", "react", "custom-hooks"]
+}

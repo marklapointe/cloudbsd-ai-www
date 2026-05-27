@@ -1,0 +1,42 @@
+{
+  "name": "@cloudbsd/ui",
+  "version": "0.1.0",
+  "description": "Shared UI primitives for CloudBSD and RevyTech projects",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./LanguageSelector": "./dist/components/LanguageSelector/index.js",
+    "./ThemeToggle": "./dist/components/ThemeToggle/index.js",
+    "./Button": "./dist/components/Button/index.js",
+    "./Badge": "./dist/components/Badge/index.js",
+    "./Card": "./dist/components/Card/index.js",
+    "./GlassCard": "./dist/components/GlassCard/index.js"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "@cloudbsd/hooks": ">=0.1.0",
+    "react": ">=18.0.0",
+    "react-i18next": ">=14.0.0",
+    "i18next": ">=23.0.0",
+    "tailwindcss": ">=3.4.0",
+    "lucide-react": ">=0.400.0",
+    "framer-motion": ">=11.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "typescript": "^5.4.0",
+    "tsup": "^8.0.0"
+  },
+  "keywords": ["cloudbsd", "ui", "components", "react", "tailwind"]
+}
