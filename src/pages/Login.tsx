@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Languages, Sun, Moon } from 'lucide-react';
+import { motion } from 'framer-motion';
 import api from '../api/client';
 import { useTranslation } from 'react-i18next';
 import { getSortedLanguages } from '../constants/languages';
@@ -68,10 +69,16 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen flex items-center justify-center ${theme === 'dark' ? 'bg-slate-950' : 'bg-slate-50'} p-4 relative overflow-hidden font-sans transition-colors duration-500`}>
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0 z-0">
-        <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-gradient-to-br from-slate-950/80 via-slate-950/50 to-brand-900/40' : 'bg-gradient-to-br from-slate-50/80 via-white/50 to-brand-100/40'}`} />
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden font-sans">
+      {/* Background Image with Overlay - hero-bg pattern */}
+      <div className="absolute inset-0 z-0 hero-bg dark">
+        {/* Dark mode gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950/60 via-slate-950/40 to-brand-900/30" />
+      </div>
+
+      {/* Firefox fallback for background image */}
+      <div data-browser="firefox" className="absolute inset-0 z-0 hero-bg">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950/60 via-slate-950/40 to-brand-900/30" />
       </div>
 
       {/* Theme Toggle (Top Right) */}
@@ -86,14 +93,19 @@ const Login: React.FC = () => {
       </div>
 
       {/* Abstract Background Elements */}
-      <div className="absolute top-0 -left-20 w-96 h-96 bg-brand-600/20 rounded-full blur-[120px] animate-pulse-slow z-0" />
-      <div className="absolute bottom-0 -right-20 w-96 h-96 bg-purple-600/10 rounded-full blur-[120px] animate-pulse-slow z-0" />
+      <div className="absolute top-0 -left-20 w-96 h-96 bg-cloudbsd-blue/20 rounded-full blur-[120px] animate-pulse-slow z-0" />
+      <div className="absolute bottom-0 -right-20 w-96 h-96 bg-cloudbsd-red/10 rounded-full blur-[120px] animate-pulse-slow z-0" />
       
-      <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-[2.5rem] shadow-2xl p-10 w-full max-w-md relative z-10 border border-slate-100 dark:border-slate-800 transition-all duration-500 hover:shadow-brand-500/10">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="bg-slate-900/80 backdrop-blur-xl rounded-2xl shadow-2xl p-10 w-full max-w-md relative z-10 border border-white/10 transition-all duration-500 hover:shadow-cloudbsd-blue/10"
+      >
         <div className="text-center mb-10">
           <div className="mb-6 flex items-center justify-center">
             <img 
-              src="/logo.png" 
+              src="/logo-head-only.png" 
               alt="CloudBSD Logo" 
               className="w-24 h-24 object-contain drop-shadow-2xl transform -rotate-3 hover:rotate-0 transition-transform duration-300"
             />
@@ -136,7 +148,7 @@ const Login: React.FC = () => {
           <button 
             type="submit"
             data-testid="login-submit"
-            className="w-full bg-slate-900 dark:bg-brand-600 hover:bg-brand-600 dark:hover:bg-brand-700 text-white font-black py-4 rounded-2xl transition-all duration-300 shadow-xl shadow-slate-900/20 dark:shadow-brand-600/20 active:scale-95 group flex items-center justify-center gap-2 border-b-4 border-slate-950 dark:border-brand-800 hover:border-b-0 hover:translate-y-[2px]"
+            className="w-full bg-cloudbsd-blue hover:bg-cloudbsd-blue/90 text-white font-black py-4 rounded-2xl transition-all duration-300 shadow-xl shadow-cloudbsd-blue/20 active:scale-95 group flex items-center justify-center gap-2 border-b-4 border-cloudbsd-blue/80 hover:border-b-0 hover:translate-y-[2px]"
           >
             <span className="uppercase text-xs tracking-widest">{t('login.sign_in')}</span>
             <div className="w-6 h-6 bg-white/10 rounded-lg flex items-center justify-center group-hover:bg-white/20 transition-colors">
@@ -174,7 +186,7 @@ const Login: React.FC = () => {
             <p className="text-xs font-bold text-slate-300 dark:text-slate-600 uppercase tracking-widest">{t('login.footer')}</p>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

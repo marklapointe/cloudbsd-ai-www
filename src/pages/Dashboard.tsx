@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
 import { 
   Monitor, 
   Container, 
@@ -15,6 +16,21 @@ import {
 } from 'lucide-react';
 import api from '../api/client';
 
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
 interface ClusterResourceCardProps {
   title: string;
   used: string;
@@ -27,7 +43,10 @@ interface ClusterResourceCardProps {
 }
 
 const ClusterResourceCard = ({ title, used, total, percentage, icon: Icon, color, utilizedLabel, ofLabel }: ClusterResourceCardProps) => (
-  <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-soft transition-colors duration-300">
+  <motion.div 
+    variants={fadeInUp}
+    className="bg-white/80 dark:bg-slate-900/50 backdrop-blur-md border border-slate-200/50 dark:border-white/10 p-5 rounded-2xl shadow-soft hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
+  >
     <div className="flex items-center justify-between mb-4">
       <div className={`p-2.5 rounded-xl bg-${color}-50 dark:bg-${color}-500/10 text-${color}-600 dark:text-${color}-400`}>
         <Icon size={20} />
@@ -38,16 +57,16 @@ const ClusterResourceCard = ({ title, used, total, percentage, icon: Icon, color
       <div className="text-2xl font-black text-slate-900 dark:text-slate-100">{used}</div>
       <div className="text-xs font-bold text-slate-400 dark:text-slate-500 mb-1">{ofLabel} {total}</div>
     </div>
-    <div className="w-full h-2 bg-slate-50 dark:bg-slate-800 rounded-full overflow-hidden">
+    <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
       <div 
-        className={`h-full bg-${color}-500 rounded-full transition-all duration-1000`} 
+        className={`h-full bg-gradient-to-r from-${color}-500 to-${color}-600 rounded-full transition-all duration-1000 shadow-lg shadow-${color}-500/20`} 
         style={{ width: `${percentage}%` }}
       />
     </div>
     <div className="mt-2 text-right">
       <span className={`text-[10px] font-black text-${color}-600 dark:text-${color}-400 tracking-tighter`}>{percentage}% {utilizedLabel}</span>
     </div>
-  </div>
+  </motion.div>
 );
 
 const Dashboard: React.FC = () => {
@@ -189,9 +208,14 @@ const Dashboard: React.FC = () => {
       )}
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <motion.div 
+        variants={staggerContainer}
+        initial="hidden"
+        animate="visible"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+      >
         {statCards.map((stat) => (
-          <Link key={stat.name} to={stat.path} className="group bg-white dark:bg-slate-900 p-6 rounded-3xl shadow-soft border border-slate-100 dark:border-slate-800 flex items-center gap-5 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 active:scale-95">
+          <Link key={stat.name} to={stat.path} className="group bg-white/80 dark:bg-slate-900/50 backdrop-blur-md border border-slate-200/50 dark:border-white/10 p-6 rounded-2xl shadow-soft flex items-center gap-5 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 active:scale-95">
             <div className={`bg-gradient-to-br ${stat.color} p-4 rounded-2xl text-white shadow-lg ${stat.shadow} transform transition-transform group-hover:rotate-6`}>
               <stat.icon size={26} />
             </div>
@@ -201,11 +225,14 @@ const Dashboard: React.FC = () => {
             </div>
           </Link>
         ))}
-      </div>
+      </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* System Health */}
-        <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-soft border border-slate-100 dark:border-slate-800 transition-colors duration-300">
+        <motion.div 
+          variants={fadeInUp}
+          className="lg:col-span-2 bg-white/80 dark:bg-slate-900/50 backdrop-blur-md border border-slate-200/50 dark:border-white/10 p-8 rounded-2xl shadow-soft transition-colors duration-300"
+        >
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">{t('dashboard.system_health')}</h2>
@@ -274,11 +301,14 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Info Column */}
         <div className="space-y-8">
-          <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-soft border border-slate-100 dark:border-slate-800 transition-all hover:shadow-xl">
+          <motion.div 
+            variants={fadeInUp}
+            className="bg-white/80 dark:bg-slate-900/50 backdrop-blur-md border border-slate-200/50 dark:border-white/10 p-8 rounded-2xl shadow-soft transition-all hover:shadow-xl hover:-translate-y-1"
+          >
             <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-8 flex items-center gap-3">
               <div className="p-2 bg-brand-100 dark:bg-brand-500/20 text-brand-600 dark:text-brand-400 rounded-lg">
                 <Server size={20} />
@@ -330,7 +360,7 @@ const Dashboard: React.FC = () => {
                 </div>
               )}
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>

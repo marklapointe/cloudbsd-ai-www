@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
 import { formatLocalTime } from '../utils/dateUtils';
 import { useNotifications } from '../contexts/NotificationContext';
 import { 
@@ -25,7 +26,8 @@ import {
   ExternalLink,
   Megaphone,
   Sun,
-  Moon
+  Moon,
+  ChevronRight
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -33,6 +35,19 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { t, i18n } = useTranslation();
   const { theme, toggleTheme } = useTheme();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+  const [sidebarWidth, setSidebarWidth] = useState(256);
+  const [isResizing, setIsResizing] = useState(false);
+  const [resizeStartX, setResizeStartX] = useState(0);
+  const [resizeStartWidth, setResizeStartWidth] = useState(256);
+
+  React.useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const { 
     notifications, 
@@ -52,6 +67,67 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     localStorage.removeItem('role');
     navigate('/login');
   };
+
+  const startResize = (e: React.MouseEvent) => {
+    if (isMobile) return;
+    e.preventDefault();
+    setIsResizing(true);
+    setResizeStartX(e.clientX);
+    setResizeStartWidth(sidebarWidth);
+  };
+
+  const handleResize = (e: React.MouseEvent) => {
+    if (!isResizing || isMobile) return;
+    const deltaX = e.clientX - resizeStartX;
+    const newWidth = Math.max(0, Math.min(320, resizeStartWidth + deltaX));
+    setSidebarWidth(newWidth);
+  };
+
+  const stopResize = () => {
+    if (!isResizing) return;
+    const wasResizing = isResizing;
+    setIsResizing(false);
+    if (wasResizing) {
+      const finalWidth = sidebarWidth < 80 ? 0 : 256;
+      setSidebarWidth(finalWidth);
+      setIsSidebarCollapsed(finalWidth === 0);
+    }
+  };
+
+  const expandSidebar = () => {
+    setSidebarWidth(256);
+    setIsSidebarCollapsed(false);
+  };
+
+  const toggleSidebar = () => {
+    if (sidebarWidth === 0) {
+      setSidebarWidth(256);
+      setIsSidebarCollapsed(false);
+    } else {
+      setSidebarWidth(0);
+      setIsSidebarCollapsed(true);
+    }
+  };
+
+  React.useEffect(() => {
+    if (isResizing) {
+      document.addEventListener('mousemove', handleResize as unknown as EventListener);
+      document.addEventListener('mouseup', stopResize);
+      document.body.style.cursor = 'ew-resize';
+      document.body.style.userSelect = 'none';
+    } else {
+      document.removeEventListener('mousemove', handleResize as unknown as EventListener);
+      document.removeEventListener('mouseup', stopResize);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    }
+    return () => {
+      document.removeEventListener('mousemove', handleResize as unknown as EventListener);
+      document.removeEventListener('mouseup', stopResize);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+  }, [isResizing, handleResize, stopResize, sidebarWidth]);
 
   const handleDownloadManual = () => {
     const manualContent = `# ${t('manual.title')}
@@ -140,8 +216,8 @@ ${t('manual.settings_text')}
       {/* Mobile Top Bar */}
       <div className="lg:hidden sticky top-0 left-0 right-0 h-16 bg-white dark:bg-slate-950 flex items-center justify-between px-6 z-50 border-b border-slate-200 dark:border-slate-800/50 transition-colors duration-300">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 flex items-center justify-center">
-            <img src="/logo.png" alt="CloudBSD" className="w-full h-full object-contain drop-shadow-brand" />
+            <div className="w-8 h-8 flex items-center justify-center">
+              <img src="/logo-head-only.png" alt="CloudBSD" className="w-full h-full object-contain drop-shadow-brand" />
           </div>
           <span className="text-lg font-bold text-slate-900 dark:text-slate-100 tracking-tight leading-none">CloudBSD</span>
         </div>
@@ -192,24 +268,69 @@ ${t('manual.settings_text')}
       )}
 
       {/* Sidebar */}
-      <aside className={`
-        fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 shadow-2xl transform transition-all duration-300 ease-in-out border-r border-slate-200 dark:border-slate-800/50
-        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        lg:translate-x-0 lg:static lg:inset-0 lg:h-screen
-      `}>
+      <motion.aside
+        initial={false}
+        animate={
+          isMobile
+            ? { x: isSidebarOpen ? 0 : -256 }
+            : isSidebarCollapsed
+              ? { x: -sidebarWidth }
+              : { x: 0 }
+        }
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        style={{ width: isMobile ? 256 : sidebarWidth }}
+        className={`
+          fixed inset-y-0 left-0 z-40 shadow-2xl overflow-hidden
+          ${theme === 'dark'
+            ? 'bg-slate-900/95 backdrop-blur-md border-r border-white/10 text-slate-100'
+            : 'bg-white/80 backdrop-blur-md border-r border-slate-200/50 text-slate-900'}
+          lg:translate-x-0 lg:static lg:inset-0 lg:h-screen
+          ${isResizing ? 'select-none' : ''}
+        `}
+      >
+        {/* Resize Handle - hidden when fully collapsed */}
+        {!isMobile && sidebarWidth > 0 && (
+          <div
+            className={`
+              absolute right-0 top-0 bottom-0 w-4 cursor-ew-resize z-50
+              flex items-center justify-center
+              group transition-colors duration-200
+              ${isResizing
+                ? 'bg-brand-500/20'
+                : 'hover:bg-brand-500/10'
+              }
+            `}
+            onMouseDown={startResize}
+            onDoubleClick={toggleSidebar}
+          >
+            <div className={`
+              w-0.5 h-12 rounded-full transition-all duration-200
+              ${isResizing
+                ? 'bg-brand-500'
+                : 'bg-slate-400/40 group-hover:bg-brand-500/60 group-hover:h-16'
+              }
+            `} />
+          </div>
+        )}
         <div className="flex flex-col h-full">
-          <div className="p-8 flex items-center gap-4">
-            <div className="w-12 h-12 flex items-center justify-center transform hover:rotate-6 transition-transform">
-              <img src="/logo.png" alt="CloudBSD" className="w-full h-full object-contain drop-shadow-brand" />
-            </div>
-            <div>
-              <span className="text-xl font-bold tracking-tight block leading-none text-slate-900 dark:text-slate-100">CloudBSD</span>
-              <span className="text-[10px] text-brand-600 dark:text-brand-400 font-bold uppercase tracking-widest">{t('layout.admin_panel')}</span>
+          <div className="p-8 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 flex items-center justify-center transform hover:rotate-6 transition-transform">
+                <img src="/logo-head-only.png" alt="CloudBSD" className="w-full h-full object-contain drop-shadow-brand" />
+              </div>
+              <div>
+                <span className="text-xl font-bold tracking-tight block leading-none text-slate-900 dark:text-slate-100">CloudBSD</span>
+                <span className="text-[10px] text-brand-600 dark:text-brand-400 font-bold uppercase tracking-widest">{t('layout.admin_panel')}</span>
+              </div>
             </div>
           </div>
 
           <nav className="flex-1 px-4 py-2 space-y-1">
-            <div className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 mb-6 border border-slate-100 dark:border-slate-800/50 flex items-center gap-3">
+            <div className={`rounded-2xl p-4 mb-6 flex items-center gap-3 ${
+              theme === 'dark' 
+                ? 'bg-white/5 border border-white/10' 
+                : 'bg-slate-900/5 border border-slate-200/50'
+            }`}>
               <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                 <User size={20} />
               </div>
@@ -228,6 +349,7 @@ ${t('manual.settings_text')}
                 to={item.path}
                 className={`
                   flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
+                  hover:-translate-y-0.5
                   ${location.pathname === item.path 
                     ? 'bg-brand-600/10 text-brand-600 dark:text-brand-400 shadow-sm' 
                     : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-slate-200'}
@@ -261,7 +383,24 @@ ${t('manual.settings_text')}
             </button>
           </div>
         </div>
-      </aside>
+      </motion.aside>
+
+      {/* Expand Tab - visible when collapsed */}
+      {!isMobile && (
+        <div
+          className={`
+            fixed left-0 top-1/2 -translate-y-1/2 z-50
+            w-8 h-16 flex items-center justify-center
+            bg-slate-800/90 backdrop-blur-md border border-white/20 rounded-l-lg
+            hover:bg-slate-700/90 hover:border-brand-500/50
+            cursor-pointer transition-all duration-200
+            ${sidebarWidth === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none'}
+          `}
+          onClick={expandSidebar}
+        >
+          <ChevronRight size={18} className="text-slate-300" />
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="flex-1 overflow-auto bg-slate-50/50 dark:bg-slate-900/50 lg:h-screen relative transition-colors duration-300">
@@ -299,7 +438,17 @@ ${t('manual.settings_text')}
               {isNotificationsOpen && (
                 <>
                   <div className="fixed inset-0 z-30" onClick={() => setIsNotificationsOpen(false)} />
-                  <div className="absolute right-0 mt-3 w-80 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 z-40 overflow-hidden animate-in fade-in zoom-in duration-200 origin-top-right">
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                    transition={{ duration: 0.15 }}
+                    className={`absolute right-0 mt-3 w-80 rounded-2xl shadow-2xl z-40 overflow-hidden ${
+                      theme === 'dark' 
+                        ? 'bg-slate-900/90 backdrop-blur-md border border-white/10' 
+                        : 'bg-white/90 backdrop-blur-md border border-slate-200/50'
+                    }`}
+                  >
                     <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50">
                       <h3 className="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
                         <Bell size={16} className="text-brand-500" />
@@ -376,7 +525,7 @@ ${t('manual.settings_text')}
                         {t('notifications.view_all')}
                       </button>
                     </div>
-                  </div>
+                  </motion.div>
                 </>
               )}
             </div>

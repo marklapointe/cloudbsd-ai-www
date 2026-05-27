@@ -6,6 +6,7 @@ import {
   ArrowUp, ArrowDown, X
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { motion, AnimatePresence } from 'framer-motion';
 import api from '../api/client';
 import socket from '../api/socket';
 import ResourceModal from './ResourceModal';
@@ -247,8 +248,8 @@ const ResourceList: React.FC<ResourceListProps> = ({
         )}
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-[2rem] shadow-soft border border-slate-100 dark:border-slate-800 overflow-hidden transition-all duration-300 hover:shadow-xl">
-        <div className="p-6 border-b border-slate-50 dark:border-slate-800 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-800 overflow-hidden transition-all duration-300 hover:shadow-xl">
+        <div className="p-6 border-b border-slate-100/50 dark:border-slate-800/50 flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-slate-50/50 dark:bg-slate-800/30 backdrop-blur-xl rounded-none">
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" size={18} />
             <input 
@@ -256,7 +257,7 @@ const ResourceList: React.FC<ResourceListProps> = ({
               placeholder={t('resource_list.search_placeholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200 outline-none font-bold text-slate-900 dark:text-slate-100"
+              className="w-full pl-12 pr-4 py-3 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border border-slate-200/50 dark:border-slate-700/50 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200 outline-none font-bold text-slate-900 dark:text-slate-100 shadow-glass"
             />
           </div>
 
@@ -309,8 +310,15 @@ const ResourceList: React.FC<ResourceListProps> = ({
           </div>
         </div>
 
-        {viewMode === 'list' ? (
-          <div className="overflow-x-auto">
+        <AnimatePresence mode="wait">
+          {viewMode === 'list' ? (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-x-auto"
+            >
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
@@ -464,8 +472,8 @@ const ResourceList: React.FC<ResourceListProps> = ({
                 ))}
               </tbody>
             </table>
-          </div>
-        ) : (
+            </motion.div>
+          ) : (
           <div className="p-8">
             {loading ? (
               <div className="flex flex-col items-center py-20 gap-3">
@@ -478,16 +486,27 @@ const ResourceList: React.FC<ResourceListProps> = ({
                 <span className="text-sm font-bold uppercase tracking-widest">{t('resource_list.no_resources', { title })}</span>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              <motion.div 
+                layout
+                className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
+              >
                 {pagedData.map((item) => (
-                  <div key={item.id} className="group bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-3xl p-6 transition-all duration-300 hover:bg-white dark:hover:bg-slate-700 hover:shadow-xl hover:scale-[1.02] border-b-4 hover:border-b-brand-500">
+                  <motion.div
+                    layout
+                    key={item.id}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                    className="group bg-white/80 backdrop-blur-md border border-slate-200/50 rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:bg-slate-900/50 dark:backdrop-blur-md dark:border-white/10 dark:rounded-2xl dark:transition-all dark:duration-300 dark:hover:-translate-y-1 dark:hover:shadow-xl"
+                  >
                     <div className="flex justify-between items-start mb-6">
                       <div className="p-4 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-2xl shadow-sm group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors group-hover:rotate-3">
                         <Icon size={24} />
                       </div>
                       <div className="flex gap-1">
                         <button 
-                          className={`p-2 rounded-xl transition-all duration-200 ${isOperator ? 'bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 hover:text-brand-600 dark:hover:text-brand-400 shadow-sm' : 'text-slate-200 dark:text-slate-800 cursor-not-allowed'}`}
+                          className={`p-2 rounded-xl transition-all duration-200 backdrop-blur-md ${isOperator ? 'bg-white/60 dark:bg-slate-800/60 text-slate-400 dark:text-slate-500 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50/60 dark:hover:bg-brand-500/20 hover:border-brand-200/50 dark:hover:border-brand-500/30 border border-transparent' : 'text-slate-200 dark:text-slate-800 cursor-not-allowed'}`}
                           disabled={!isOperator}
                           onClick={() => {
                             setEditingResource(item);
@@ -497,7 +516,7 @@ const ResourceList: React.FC<ResourceListProps> = ({
                           <Edit size={16} />
                         </button>
                         <button 
-                          className={`p-2 rounded-xl transition-all duration-200 ${isOperator ? 'bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 shadow-sm' : 'text-slate-200 dark:text-slate-800 cursor-not-allowed'}`}
+                          className={`p-2 rounded-xl transition-all duration-200 backdrop-blur-md ${isOperator ? 'bg-white/60 dark:bg-slate-800/60 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50/60 dark:hover:bg-red-500/20 hover:border-red-200/50 dark:hover:border-red-500/30 border border-transparent' : 'text-slate-200 dark:text-slate-800 cursor-not-allowed'}`}
                           disabled={!isOperator}
                           onClick={() => handleDelete(item.id)}
                         >
@@ -525,14 +544,14 @@ const ResourceList: React.FC<ResourceListProps> = ({
                     <div className="flex gap-3">
                       <button 
                         onClick={() => handleAction(item.id, 'start')}
-                        className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95 border ${isOperator ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-100 dark:border-emerald-500/20 hover:bg-emerald-600 dark:hover:bg-emerald-500 hover:text-white dark:hover:text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-300 dark:text-slate-700 border-transparent cursor-not-allowed'}`}
+                        className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all backdrop-blur-md active:scale-95 border ${isOperator ? 'bg-emerald-50/60 dark:bg-emerald-500/10 backdrop-blur-md text-emerald-600 dark:text-emerald-400 border-emerald-200/50 dark:border-emerald-500/20 hover:bg-emerald-600 dark:hover:bg-emerald-500 hover:text-white dark:hover:text-white hover:border-emerald-400 dark:hover:border-emerald-400' : 'bg-slate-100/60 dark:bg-slate-800/60 backdrop-blur-md text-slate-300 dark:text-slate-700 border-transparent cursor-not-allowed'}`}
                         disabled={!isOperator}
                       >
                         {t('resource_list.start')}
                       </button>
                       <button 
                         onClick={() => handleAction(item.id, 'stop')}
-                        className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95 border ${isOperator ? 'bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border-red-100 dark:border-red-500/20 hover:bg-red-600 dark:hover:bg-red-500 hover:text-white dark:hover:text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-300 dark:text-slate-700 border-transparent cursor-not-allowed'}`}
+                        className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all backdrop-blur-md active:scale-95 border ${isOperator ? 'bg-red-50/60 dark:bg-red-500/10 backdrop-blur-md text-red-600 dark:text-red-400 border-red-200/50 dark:border-red-500/20 hover:bg-red-600 dark:hover:bg-red-500 hover:text-white dark:hover:text-white hover:border-red-400 dark:hover:border-red-400' : 'bg-slate-100/60 dark:bg-slate-800/60 backdrop-blur-md text-slate-300 dark:text-slate-700 border-transparent cursor-not-allowed'}`}
                         disabled={!isOperator}
                       >
                         {t('resource_list.stop')}
@@ -542,18 +561,19 @@ const ResourceList: React.FC<ResourceListProps> = ({
                           setConsoleResource(item);
                           setIsConsoleOpen(true);
                         }}
-                        className={`p-2.5 rounded-xl transition-all shadow-sm active:scale-95 border ${isOperator ? 'bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 border-brand-100 dark:border-brand-500/20 hover:bg-brand-600 dark:hover:bg-brand-500 hover:text-white dark:hover:text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-300 dark:text-slate-700 border-transparent cursor-not-allowed'}`}
+                        className={`p-2.5 rounded-xl transition-all backdrop-blur-md active:scale-95 border ${isOperator ? 'bg-brand-50/60 dark:bg-brand-500/10 backdrop-blur-md text-brand-600 dark:text-brand-400 border-brand-200/50 dark:border-brand-500/20 hover:bg-brand-600 dark:hover:bg-brand-500 hover:text-white dark:hover:text-white hover:border-brand-400 dark:hover:border-brand-400' : 'bg-slate-100/60 dark:bg-slate-800/60 backdrop-blur-md text-slate-300 dark:text-slate-700 border-transparent cursor-not-allowed'}`}
                         disabled={!isOperator}
                       >
                         <Terminal size={18} />
                       </button>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
             )}
           </div>
         )}
+        </AnimatePresence>
 
         {/* Pagination Controls */}
         {pageSize !== 'all' && totalPages > 1 && (

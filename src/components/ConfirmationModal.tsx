@@ -53,28 +53,30 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   const styles = getVariantStyles();
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-      <div className="bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200 border border-slate-100 dark:border-slate-800 transition-colors duration-300">
-        <div className="px-8 py-6 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-xl">
+      <div className="relative bg-white/30 dark:bg-slate-900/40 backdrop-blur-xl rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200 border border-white/30 dark:border-slate-700/40 transition-colors duration-300">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-white/10 dark:from-slate-800/30 dark:via-transparent dark:to-slate-900/20 pointer-events-none" />
+        
+        <div className="relative px-8 py-6 border-b border-white/30 dark:border-slate-700/40 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className={`p-2 ${styles.iconBg} rounded-xl`}>
+            <div className={`p-2.5 ${styles.iconBg} rounded-xl ring-1 ring-inset ring-white/30 dark:ring-slate-700/40 backdrop-blur-xl`}>
               {styles.icon}
             </div>
             <h2 className="text-xl font-black text-slate-900 dark:text-slate-100 uppercase tracking-tight">
               {title}
             </h2>
           </div>
-          <button 
-            onClick={onClose} 
-            className="p-2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all"
+          <button
+            onClick={onClose}
+            className="p-2.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-white/60 dark:hover:bg-slate-700/60 rounded-xl transition-all backdrop-blur-xl ring-1 ring-inset ring-white/30 dark:ring-slate-700/40"
             aria-label={t('common.close')}
           >
             <X size={20} />
           </button>
         </div>
 
-        <div className="p-8 space-y-6">
-          <p className="text-slate-600 dark:text-slate-400 font-bold leading-relaxed text-lg">
+        <div className="relative p-8 space-y-6">
+          <p className="text-slate-700 dark:text-slate-300 font-bold leading-relaxed text-lg">
             {message}
           </p>
 
@@ -82,7 +84,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-6 py-4 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600 transition-all active:scale-95 shadow-sm"
+              className="flex-1 px-6 py-4 bg-white/40 dark:bg-slate-800/50 backdrop-blur-xl border border-white/40 dark:border-slate-700/50 text-slate-700 dark:text-slate-300 font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-white/60 dark:hover:bg-slate-800/70 hover:border-white/60 dark:hover:border-slate-600/60 transition-all active:scale-95 shadow-sm ring-1 ring-inset ring-white/30 dark:ring-slate-700/40"
             >
               {cancelLabel || t('common.cancel')}
             </button>
@@ -92,7 +94,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
                 onConfirm();
                 onClose();
               }}
-              className={`flex-1 px-6 py-4 text-white font-black uppercase tracking-widest text-xs rounded-2xl transition-all active:scale-95 shadow-lg border-b-4 hover:border-b-0 hover:translate-y-[2px] ${styles.button} ${variant === 'danger' ? 'border-red-800' : variant === 'warning' ? 'border-amber-800' : 'border-brand-800'}`}
+              className={`flex-1 px-6 py-4 text-white font-black uppercase tracking-widest text-xs rounded-2xl transition-all active:scale-95 shadow-lg backdrop-blur-xl ring-1 ring-inset ${styles.button} ${variant === 'danger' ? 'ring-red-400/40 bg-red-500/80 hover:bg-red-500/90' : variant === 'warning' ? 'ring-amber-400/40 bg-amber-500/80 hover:bg-amber-500/90' : 'ring-brand-400/40 bg-brand-500/80 hover:bg-brand-500/90'}`}
             >
               {confirmLabel || t('common.confirm') || 'Confirm'}
             </button>

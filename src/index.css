@@ -122,3 +122,55 @@ button:focus-visible {
 .react-flow__controls button svg {
   fill: currentColor !important;
 }
+
+/* GPU Acceleration & Glass Morphism Utilities */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+  will-change: opacity, transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+.reduce-motion,
+.reduce-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-pulse {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .blur-heavy {
+    filter: none !important;
+  }
+  .glass {
+    background: rgba(0, 42, 85, 0.95) !important;
+    backdrop-filter: none !important;
+  }
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+}

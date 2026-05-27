@@ -74,29 +74,31 @@ const ConsoleModal: React.FC<ConsoleModalProps> = ({ isOpen, onClose, resource, 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-      <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl w-full max-w-4xl overflow-hidden flex flex-col h-[600px] border border-slate-200 dark:border-slate-800 transition-colors duration-300">
-        <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-xl">
+      <div className="relative bg-white/30 dark:bg-slate-900/40 backdrop-blur-xl rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col h-[600px] border border-white/30 dark:border-slate-700/40 transition-colors duration-300">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-white/10 dark:from-slate-800/30 dark:via-transparent dark:to-slate-900/20 pointer-events-none" />
+        
+        <div className="relative px-6 py-4 border-b border-white/30 dark:border-slate-700/40 flex justify-between items-center bg-white/20 dark:bg-slate-800/30 backdrop-blur-xl">
           <div className="flex items-center gap-2">
-            {resourceType === 'vms' ? <Monitor className="text-blue-600 dark:text-blue-400" size={20} /> : <TerminalIcon className="text-blue-600 dark:text-blue-400" size={20} />}
+            {resourceType === 'vms' ? <Monitor className="text-blue-500 dark:text-blue-400" size={20} /> : <TerminalIcon className="text-blue-500 dark:text-blue-400" size={20} />}
             <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('console_modal.title')}: {resource.name}</h2>
           </div>
-          <button onClick={onClose} className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
+          <button onClick={onClose} className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors p-2 hover:bg-white/40 dark:hover:bg-slate-700/40 rounded-xl backdrop-blur-xl">
             <X size={24} />
           </button>
         </div>
         
-        <div className="flex-1 bg-slate-900 p-2 overflow-hidden relative">
+        <div className="relative flex-1 bg-slate-900 p-2 overflow-hidden">
           {resourceType === 'vms' ? (
             <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 space-y-4">
-              <div className="p-4 bg-slate-800 rounded-full">
+              <div className="p-4 bg-slate-800/80 backdrop-blur-xl rounded-2xl border border-slate-700/50">
                 <Monitor size={48} />
               </div>
               <div className="text-center">
                 <p className="text-lg font-medium text-white dark:text-slate-100">{t('console_modal.vnc_placeholder')}</p>
                 <p className="text-sm dark:text-slate-400">{t('console_modal.vnc_desc')}</p>
                 <button 
-                  className="mt-6 px-6 py-3 bg-brand-500 text-white rounded-xl hover:bg-brand-600 transition-all active:scale-95 shadow-lg shadow-brand-500/20 font-bold"
+                  className="mt-6 px-6 py-3 bg-brand-500/80 backdrop-blur-xl text-white rounded-xl hover:bg-brand-500/90 transition-all active:scale-95 shadow-lg shadow-brand-500/30 font-bold ring-1 ring-inset ring-brand-400/40"
                   onClick={() => setShowVncAlert(true)}
                 >
                   {t('console_modal.connect_vnc')}
@@ -109,20 +111,21 @@ const ConsoleModal: React.FC<ConsoleModalProps> = ({ isOpen, onClose, resource, 
         </div>
         
         {showVncAlert && (
-          <div className="absolute inset-0 z-50 flex items-center justify-center p-6 bg-slate-950/20 backdrop-blur-sm">
-            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-8 max-w-sm w-full border border-slate-100 dark:border-slate-800 animate-in zoom-in-95 duration-200">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-brand-50 dark:bg-brand-500/10 rounded-xl text-brand-600 dark:text-brand-400">
+          <div className="absolute inset-0 z-50 flex items-center justify-center p-6 bg-slate-950/40 backdrop-blur-xl">
+            <div className="relative bg-white/40 dark:bg-slate-900/60 backdrop-blur-xl rounded-2xl shadow-2xl p-8 max-w-sm w-full border border-white/40 dark:border-slate-700/40 animate-in zoom-in-95 duration-200">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-white/10 dark:from-slate-800/30 dark:via-transparent dark:to-slate-900/20 pointer-events-none rounded-2xl" />
+              <div className="relative flex items-center gap-3 mb-4">
+                <div className="p-2 bg-blue-500/20 backdrop-blur-xl rounded-xl text-blue-600 dark:text-blue-400 ring-1 ring-inset ring-blue-500/30">
                   <Monitor size={24} />
                 </div>
                 <h3 className="text-xl font-black text-slate-900 dark:text-slate-100 uppercase tracking-tight">{t('common.info')}</h3>
               </div>
-              <p className="text-slate-600 dark:text-slate-400 font-bold mb-6">
+              <p className="relative text-slate-700 dark:text-slate-300 font-bold mb-6">
                 {t('console_modal.vnc_alert')}
               </p>
               <button 
                 onClick={() => setShowVncAlert(false)}
-                className="w-full py-4 bg-brand-500 text-white font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-brand-600 transition-all active:scale-95 shadow-lg shadow-brand-500/20"
+                className="relative w-full py-4 bg-brand-500/80 backdrop-blur-xl text-white font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-brand-500/90 transition-all active:scale-95 shadow-lg shadow-brand-500/30 ring-1 ring-inset ring-brand-400/40"
               >
                 {t('common.close')}
               </button>
@@ -130,8 +133,8 @@ const ConsoleModal: React.FC<ConsoleModalProps> = ({ isOpen, onClose, resource, 
           </div>
         )}
         
-        <div className="px-6 py-3 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 flex justify-between items-center text-xs text-slate-500 dark:text-slate-400 font-bold">
-          <div>{t('console_modal.status')}: <span className="text-emerald-600 dark:text-emerald-400 font-black uppercase tracking-widest">{t('console_modal.connected')}</span></div>
+        <div className="relative px-6 py-3 border-t border-white/30 dark:border-slate-700/40 bg-white/20 dark:bg-slate-800/30 backdrop-blur-xl flex justify-between items-center text-xs text-slate-600 dark:text-slate-400 font-bold">
+          <div>{t('console_modal.status')}: <span className="text-emerald-500 dark:text-emerald-400 font-black uppercase tracking-widest">{t('console_modal.connected')}</span></div>
           <div>{t('console_modal.resource_id')}: {resource.id} | {t('common.type')}: {resourceType}</div>
         </div>
       </div>

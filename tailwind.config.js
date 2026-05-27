@@ -21,6 +21,21 @@ export default {
           900: '#0c4a6e',
           950: '#082f49',
         },
+        cloudbsd: {
+          blue: '#00529B',
+          red: '#D32F2F',
+        },
+        revy: {
+          blue: '#013a73',
+          dark: '#001a33',
+          light: '#0066cc',
+          accent: '#00d4ff',
+          surface: '#0a192f',
+        },
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Outfit', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
         'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
