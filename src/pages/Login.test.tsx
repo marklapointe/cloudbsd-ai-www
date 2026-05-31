@@ -105,6 +105,44 @@ describe('Login Component', () => {
 
     expect(localStorage.getItem('token')).toBe('fake-token');
     expect(localStorage.getItem('theme')).toBe('light');
+    expect(localStorage.getItem('i18nextLng')).toBe('en');
+  });
+
+  it('uses backend language when localStorage has no preference', async () => {
+    localStorage.removeItem('i18nextLng');
+    (api.post as any).mockResolvedValueOnce({
+      data: {
+        token: 'fake-token',
+        user: {
+          username: 'admin',
+          role: 'admin',
+          theme: 'light',
+          language: 'fr'
+        }
+      }
+    });
+
+    render(
+      <ThemeProvider>
+        <I18nextProvider i18n={i18n}>
+          <BrowserRouter>
+            <Login />
+          </BrowserRouter>
+        </I18nextProvider>
+      </ThemeProvider>
+    );
+
+    const usernameInput = screen.getByLabelText(/Username/i);
+    const passwordInput = screen.getByLabelText(/Password/i);
+    const submitBtn = screen.getByTestId('login-submit');
+
+    fireEvent.change(usernameInput, { target: { value: 'admin' } });
+    fireEvent.change(passwordInput, { target: { value: 'admin' } });
+
+    await act(async () => {
+      fireEvent.click(submitBtn);
+    });
+
     expect(localStorage.getItem('i18nextLng')).toBe('fr');
   });
 

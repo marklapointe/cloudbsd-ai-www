@@ -15,7 +15,7 @@ dist-ssr
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-#.idea
+.idea
 .DS_Store
 *.suo
 *.ntvs*
@@ -23,3 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 /data/
+
+# AI/automation artifacts
+.junie
+.playwright-mcp
+.sisyphus

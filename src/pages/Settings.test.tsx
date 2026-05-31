@@ -38,6 +38,7 @@ describe('Settings Component', () => {
   };
 
   beforeEach(() => {
+    localStorage.clear();
     vi.mocked(api.get).mockImplementation((url) => {
       if (url === '/system/config') return Promise.resolve({ data: mockConfig });
       if (url === '/system/license') return Promise.resolve({ data: mockLicense });
