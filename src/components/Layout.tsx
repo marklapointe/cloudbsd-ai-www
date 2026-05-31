@@ -215,6 +215,7 @@ ${t('manual.settings_text')}
     { name: t('common.vms'), path: '/vms', icon: Monitor },
     { name: t('common.containers'), path: '/containers', icon: Container },
     { name: t('common.jails'), path: '/jails', icon: HardDrive },
+    { name: t('common.volumes'), path: '/volumes', icon: HardDrive },
     { name: t('common.network'), path: '/network', icon: Network },
   ];
 
@@ -234,7 +235,7 @@ ${t('manual.settings_text')}
             <div className="w-8 h-8 flex items-center justify-center">
               <img src="/logo-head-only.png" alt="CloudBSD" className="w-full h-full object-contain drop-shadow-brand" />
           </div>
-          <span className="text-lg font-bold text-slate-900 dark:text-slate-100 tracking-tight leading-none">CloudBSD</span>
+          <span className="text-lg font-bold tracking-tight leading-none"><span className="text-white dark:text-white">Cloud</span><span className="text-accent dark:text-accent">BSD</span></span>
         </div>
         
         <div className="flex items-center gap-2">
@@ -334,7 +335,7 @@ ${t('manual.settings_text')}
                 <img src="/logo-head-only.png" alt="CloudBSD" className="w-full h-full object-contain drop-shadow-brand" />
               </div>
               <div>
-                <span className="text-xl font-bold tracking-tight block leading-none text-slate-900 dark:text-slate-100">CloudBSD</span>
+                <span className="text-xl font-bold tracking-tight block leading-none"><span className="text-white dark:text-white">Cloud</span><span className="text-accent dark:text-accent">BSD</span></span>
                 <span className="text-[10px] text-brand-600 dark:text-brand-400 font-bold uppercase tracking-widest">{t('layout.admin_panel')}</span>
               </div>
             </div>
@@ -406,7 +407,7 @@ ${t('manual.settings_text')}
           className={`
             fixed left-0 top-1/2 -translate-y-1/2 z-50
             w-8 h-16 flex items-center justify-center
-            bg-slate-800/90 backdrop-blur-md border border-white/20 rounded-l-lg
+            bg-slate-800/90 backdrop-blur-md border border-white/20 rounded-r-lg
             hover:bg-slate-700/90 hover:border-brand-500/50
             cursor-pointer transition-all duration-200
             ${sidebarWidth === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none'}

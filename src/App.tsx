@@ -13,6 +13,7 @@ const VMs = lazy(() => import('./pages/VMs'));
 const OCIContainers = lazy(() => import('./pages/OCIContainers'));
 const Jails = lazy(() => import('./pages/Jails'));
 const Cluster = lazy(() => import('./pages/Cluster'));
+const Volumes = lazy(() => import('./pages/Volumes'));
 const NetworkMap = lazy(() => import('./pages/NetworkMap'));
 const Users = lazy(() => import('./pages/Users'));
 const Logs = lazy(() => import('./pages/Logs'));
@@ -89,6 +90,16 @@ function App() {
                     <PrivateRoute>
                       <Layout>
                         <Cluster />
+                      </Layout>
+                    </PrivateRoute>
+                  } 
+                />
+                <Route 
+                  path="/volumes" 
+                  element={
+                    <PrivateRoute>
+                      <Layout>
+                        <Volumes />
                       </Layout>
                     </PrivateRoute>
                   } 

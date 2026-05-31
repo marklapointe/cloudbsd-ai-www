@@ -394,7 +394,7 @@ const Cluster: React.FC = () => {
                     <div className="w-full h-1.5 bg-slate-50 dark:bg-slate-800 rounded-full overflow-hidden">
                       <div 
                         className="h-full bg-purple-500 rounded-full" 
-                        style={{ width: '40%' }} // Simple estimation if we don't want to parse strings here
+                        style={{ width: `${(parseFloat(node.mem_used!) / parseFloat(node.mem_total!)) * 100}%` }}
                       />
                     </div>
                   </div>
@@ -410,7 +410,7 @@ const Cluster: React.FC = () => {
                     <div className="w-full h-1.5 bg-slate-50 dark:bg-slate-800 rounded-full overflow-hidden">
                       <div 
                         className="h-full bg-emerald-500 rounded-full" 
-                        style={{ width: '25%' }}
+                        style={{ width: `${(parseFloat(node.disk_used!) / parseFloat(node.disk_total!)) * 100}%` }}
                       />
                     </div>
                   </div>
@@ -424,7 +424,7 @@ const Cluster: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2 justify-end">
                   <Activity size={14} className="text-slate-300 dark:text-slate-600" />
-                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500">{t('cluster.health')}: 100%</span>
+                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500">{t('cluster.health')}: {node.status === 'online' ? 100 : node.status === 'maintenance' ? 50 : 0}%</span>
                 </div>
               </div>
             </div>

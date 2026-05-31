@@ -43,12 +43,12 @@ const Login: React.FC = () => {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('username', response.data.user.username);
       localStorage.setItem('role', response.data.user.role);
-      
-      // Update language if the user has a preference and save it to localStorage for the detector
-      if (response.data.user.language) {
-        localStorage.setItem('i18nextLng', response.data.user.language);
-        i18n.changeLanguage(response.data.user.language);
-      }
+
+      const savedLang = localStorage.getItem('i18nextLng');
+      const backendLang = response.data.user.language;
+      const langToUse = savedLang || backendLang || 'en';
+      localStorage.setItem('i18nextLng', langToUse);
+      i18n.changeLanguage(langToUse);
 
       // Update timezone if the user has a preference
       if (response.data.user.timezone) {
@@ -110,7 +110,7 @@ const Login: React.FC = () => {
               className="w-24 h-24 object-contain drop-shadow-2xl transform -rotate-3 hover:rotate-0 transition-transform duration-300"
             />
           </div>
-          <h1 className="text-3xl font-black text-slate-900 dark:text-slate-100 tracking-tight">{t('login.title')}</h1>
+          <h1 className="text-3xl font-black tracking-tight"><span className="text-white dark:text-white">Cloud</span><span className="text-accent dark:text-accent">BSD</span></h1>
           <p className="text-slate-400 dark:text-slate-500 mt-2 font-bold uppercase text-[10px] tracking-[0.2em]">{t('login.subtitle')}</p>
         </div>
 

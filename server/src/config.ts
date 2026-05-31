@@ -66,7 +66,7 @@ const DEFAULT_CONFIG: Config = {
   },
   demoLicense: {
     nodes_limit: 5,
-    vms_limit: 2,
+    vms_limit: 3,
     containers_limit: 100,
     jails_limit: 50,
   },

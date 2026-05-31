@@ -17,6 +17,7 @@ const en = {
       vms: "VMs",
       containers: "Containers",
       jails: "Jails",
+      volumes: "Volumes",
       network: "Network Map",
       cluster: "Cluster",
       users: "Users",
@@ -197,6 +198,17 @@ const en = {
       placeholder_vcpus: "e.g. 8",
       placeholder_memory: "e.g. 32GB",
       placeholder_storage: "e.g. 500GB"
+    },
+    volumes: {
+      title: "Volume Management",
+      description: "Manage disk volumes and storage across your infrastructure",
+      size: "Size",
+      usage: "Usage",
+      mount_point: "Mount Point",
+      utilized: "UTILIZED",
+      no_volumes: "No Volumes Found",
+      no_volumes_desc: "No disk volumes are currently configured.",
+      fetch_failed: "Failed to fetch volumes"
     },
     vms: {
       title: "Virtual Machines",

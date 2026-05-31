@@ -8,6 +8,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        accent: '#00d4ff',
         brand: {
           50: '#f0f9ff',
           100: '#e0f2fe',
