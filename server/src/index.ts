@@ -95,12 +95,12 @@ io.attach(httpServer);
 const terminalSessions = new Map<string, string>();
 
 io.on('connection', (socket) => {
-  console.log(`[Socket] User connected: ${socket.id} from ${socket.handshake.address}`);
+  console.debug(`[Socket] User connected: ${socket.id} from ${socket.handshake.address}`);
 
   socket.on('terminal_join', (data: { resourceId: string | number, resourceType: string }) => {
     const sessionId = `${socket.id}-${data.resourceId}`;
     terminalSessions.set(sessionId, '');
-    console.log(`[Socket] User joined terminal for ${data.resourceType} ${data.resourceId}`);
+    console.debug(`[Socket] User joined terminal for ${data.resourceType} ${data.resourceId}`);
     
     // In demo mode, simulate some activity or initial output
     if (config.demoMode) {
@@ -128,11 +128,11 @@ io.on('connection', (socket) => {
   socket.on('terminal_leave', (data: { resourceId: string | number }) => {
     const sessionId = `${socket.id}-${data.resourceId}`;
     terminalSessions.delete(sessionId);
-    console.log(`User left terminal for resource ${data.resourceId}`);
+    console.debug(`User left terminal for resource ${data.resourceId}`);
   });
 
   socket.on('disconnect', (reason) => {
-    console.log(`[Socket] User disconnected: ${socket.id}, reason: ${reason}`);
+    console.debug(`[Socket] User disconnected: ${socket.id}, reason: ${reason}`);
     // Cleanup sessions for this socket
     for (const [key] of terminalSessions) {
       if (key.startsWith(socket.id)) {
@@ -222,7 +222,7 @@ app.use((req: any, res: any, next: any) => {
     } else if (res.statusCode >= 400) {
       console.warn(`[API] ${msg}`);
     } else {
-      console.log(`[API] ${msg}`);
+      console.debug(`[API] ${msg}`);
     }
   });
   next();

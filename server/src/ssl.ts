@@ -14,7 +14,6 @@ export function ensureCertificates() {
   const certbotKey = `/usr/local/etc/letsencrypt/live/${config.servername}/privkey.pem`;
 
   if (fs.existsSync(certbotCert) && fs.existsSync(certbotKey)) {
-    console.log('Using Certbot certificates found at:', certbotCert);
     return {
       cert: fs.readFileSync(certbotCert),
       key: fs.readFileSync(certbotKey)
@@ -22,15 +21,12 @@ export function ensureCertificates() {
   }
 
   if (fs.existsSync(certPath) && fs.existsSync(keyPath)) {
-    console.log('Using certificates found at:', certPath);
     return {
       cert: fs.readFileSync(certPath),
       key: fs.readFileSync(keyPath)
     };
   }
 
-  console.log('Certificates not found. Generating self-signed certificates...');
-  
   const pki = forge.pki;
   const keys = pki.rsa.generateKeyPair(2048);
   const cert = pki.createCertificate();
@@ -71,7 +67,6 @@ export function ensureCertificates() {
   try {
     fs.writeFileSync(certPath, pemCert);
     fs.writeFileSync(keyPath, pemKey);
-    console.log(`Self-signed certificates generated and saved to ${certPath}`);
   } catch (e) {
     console.warn(`Could not save certificates to ${certPath}. Storing in memory only.`);
   }
