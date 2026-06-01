@@ -1,23 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Server, Plus, Trash2, Edit2, Activity, X } from 'lucide-react';
+import { Plus, X, Activity } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import api from '../api/client';
 import ConfirmationModal from '../components/ConfirmationModal';
-
-interface NodeData {
-  id: number;
-  name: string;
-  role: string;
-  status: string;
-  ip: string;
-  cpu_total: number | null;
-  cpu_used: number | null;
-  mem_total: string | null;
-  mem_used: string | null;
-  disk_total: string | null;
-  disk_used: string | null;
-  created_at: string;
-}
+import { ClusterNodeCard } from '../components/cluster/ClusterNodeCard';
+import type { NodeData } from '../components/cluster/ClusterNodeCard';
+import { ClusterStats } from '../components/cluster/ClusterStats';
 
 const Cluster: React.FC = () => {
   const { t } = useTranslation();
@@ -315,121 +303,19 @@ const Cluster: React.FC = () => {
           {error}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {nodes.map((node) => (
-            <div 
-              key={node.id} 
-              className="bg-white dark:bg-slate-900 rounded-[2rem] p-6 shadow-xl border border-slate-100 dark:border-slate-800 hover:shadow-2xl transition-all duration-300 group relative overflow-hidden"
-            >
-              {/* Status Indicator */}
-              <div className={`absolute top-0 right-0 w-32 h-32 -mr-16 -mt-16 rounded-full blur-3xl opacity-10 transition-colors duration-500 ${
-                node.status === 'online' ? 'bg-emerald-500' : 'bg-red-500'
-              }`} />
-
-              <div className="flex items-center justify-between mb-6 relative z-10">
-                <div className={`p-4 rounded-2xl ${
-                  node.role === 'core' ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/30' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-                }`}>
-                  <Server size={24} />
-                </div>
-                <div className="flex gap-4 items-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{t('cluster.actions')}</span>
-                    <button 
-                      onClick={() => startEdit(node)}
-                      className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-400 dark:text-slate-500 hover:text-brand-500 dark:hover:text-brand-400 transition-colors"
-                      aria-label={t('common.edit')}
-                      title={t('common.edit')}
-                    >
-                      <Edit2 size={18} />
-                    </button>
-                    <button 
-                      onClick={() => handleDelete(node.id)}
-                      className="p-2 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 transition-colors"
-                      aria-label={t('common.delete')}
-                      title={t('common.delete')}
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-1 relative z-10">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-xl font-black text-slate-900 dark:text-slate-100">{node.name}</h3>
-                  {node.role === 'core' && (
-                    <span className="px-2 py-0.5 bg-brand-500/10 text-brand-500 text-[8px] font-black uppercase tracking-widest rounded-md">{t('cluster.core')}</span>
-                  )}
-                </div>
-                <p className="text-slate-400 dark:text-slate-500 font-bold text-xs uppercase tracking-widest">
-                  {node.ip || t('cluster.local_node')}
-                </p>
-              </div>
-
-              <div className="mt-8 space-y-4 relative z-10">
-                {/* CPU Progress */}
-                {node.cpu_total && (
-                  <div className="space-y-1.5">
-                    <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-widest">
-                      <span className="text-slate-400 dark:text-slate-500">{t('cluster.cpu_usage')}</span>
-                      <span className="text-slate-600 dark:text-slate-400">{node.cpu_used} / {node.cpu_total} {t('cluster.vcpus')}</span>
-                    </div>
-                    <div className="w-full h-1.5 bg-slate-50 dark:bg-slate-800 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-blue-500 rounded-full" 
-                        style={{ width: `${(node.cpu_used! / node.cpu_total!) * 100}%` }}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {/* RAM Progress */}
-                {node.mem_total && (
-                  <div className="space-y-1.5">
-                    <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-widest">
-                      <span className="text-slate-400 dark:text-slate-500">{t('cluster.memory')}</span>
-                      <span className="text-slate-600 dark:text-slate-400">{node.mem_used} / {node.mem_total}</span>
-                    </div>
-                    <div className="w-full h-1.5 bg-slate-50 dark:bg-slate-800 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-purple-500 rounded-full" 
-                        style={{ width: `${(parseFloat(node.mem_used!) / parseFloat(node.mem_total!)) * 100}%` }}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {/* Disk Progress */}
-                {node.disk_total && (
-                  <div className="space-y-1.5">
-                    <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-widest">
-                      <span className="text-slate-400 dark:text-slate-500">{t('cluster.disk_storage')}</span>
-                      <span className="text-slate-600 dark:text-slate-400">{node.disk_used} / {node.disk_total}</span>
-                    </div>
-                    <div className="w-full h-1.5 bg-slate-50 dark:bg-slate-800 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-emerald-500 rounded-full" 
-                        style={{ width: `${(parseFloat(node.disk_used!) / parseFloat(node.disk_total!)) * 100}%` }}
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="mt-6 pt-6 border-t border-slate-50 dark:border-slate-800 grid grid-cols-2 gap-4 relative z-10">
-                <div className="flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${node.status === 'online' ? 'bg-emerald-500 animate-pulse' : node.status === 'maintenance' ? 'bg-amber-500' : 'bg-red-500'}`} />
-                  <span className="text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">{t(`cluster.${node.status}`)}</span>
-                </div>
-                <div className="flex items-center gap-2 justify-end">
-                  <Activity size={14} className="text-slate-300 dark:text-slate-600" />
-                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500">{t('cluster.health')}: {node.status === 'online' ? 100 : node.status === 'maintenance' ? 50 : 0}%</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <>
+          <ClusterStats nodes={nodes} />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {nodes.map((node) => (
+              <ClusterNodeCard
+                key={node.id}
+                node={node}
+                onEdit={startEdit}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+        </>
       )}
 
       <ConfirmationModal

@@ -1,20 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { 
-  Monitor, 
-  Container, 
-  HardDrive, 
-  Activity,
-  Server,
-  Cpu,
-  Clock,
-  ArrowUpRight,
-  ArrowDownLeft,
-  Info,
-} from 'lucide-react';
+import { Monitor, Container, HardDrive, Activity, Server, Cpu, Clock, Info } from 'lucide-react';
 import api from '../api/client';
+import { StatCard } from '../components/ui/StatCard';
+import { ClusterResourceCard } from '../components/ui/ClusterResourceCard';
+import { SystemHealthCard } from '../components/ui/SystemHealthCard';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -30,45 +21,6 @@ const staggerContainer = {
     }
   }
 };
-
-interface ClusterResourceCardProps {
-  title: string;
-  used: string;
-  total: string;
-  percentage: number;
-  icon: React.ElementType;
-  color: string;
-  utilizedLabel: string;
-  ofLabel: string;
-}
-
-const ClusterResourceCard = ({ title, used, total, percentage, icon: Icon, color, utilizedLabel, ofLabel }: ClusterResourceCardProps) => (
-  <motion.div 
-    variants={fadeInUp}
-    className="bg-white/80 dark:bg-slate-900/50 backdrop-blur-md border
-    border-slate-200/50 dark:border-white/10 p-5 rounded-2xl shadow-soft hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
-  >
-    <div className="flex items-center justify-between mb-4">
-      <div className={`p-2.5 rounded-xl bg-${color}-50 dark:bg-${color}-500/10 text-${color}-600 dark:text-${color}-400`}>
-        <Icon size={20} />
-      </div>
-      <span className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{title}</span>
-    </div>
-    <div className="flex items-end justify-between mb-2">
-      <div className="text-2xl font-black text-slate-900 dark:text-slate-100">{used}</div>
-      <div className="text-xs font-bold text-slate-400 dark:text-slate-500 mb-1">{ofLabel} {total}</div>
-    </div>
-    <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-      <div 
-        className={`h-full bg-gradient-to-r from-${color}-500 to-${color}-600 rounded-full transition-all duration-1000 shadow-lg shadow-${color}-500/20`} 
-        style={{ width: `${percentage}%` }}
-      />
-    </div>
-    <div className="mt-2 text-right">
-      <span className={`text-[10px] font-black text-${color}-600 dark:text-${color}-400 tracking-tighter`}>{percentage}% {utilizedLabel}</span>
-    </div>
-  </motion.div>
-);
 
 const Dashboard: React.FC = () => {
   const { t } = useTranslation();
@@ -216,93 +168,31 @@ const Dashboard: React.FC = () => {
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
       >
         {statCards.map((stat) => (
-          <Link key={stat.name} to={stat.path} className="group bg-white/80 dark:bg-slate-900/50 backdrop-blur-md border border-slate-200/50 dark:border-white/10 p-6 rounded-2xl shadow-soft flex items-center gap-5 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 active:scale-95">
-            <div className={`bg-gradient-to-br ${stat.color} p-4 rounded-2xl text-white shadow-lg ${stat.shadow} transform transition-transform group-hover:rotate-6`}>
-              <stat.icon size={26} />
-            </div>
-            <div>
-              <p className="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{stat.name}</p>
-              <p className="text-3xl font-black text-slate-900 dark:text-slate-100 mt-1">{stat.count}</p>
-            </div>
-          </Link>
+          <StatCard
+            key={stat.name}
+            name={stat.name}
+            count={stat.count}
+            icon={stat.icon}
+            color={stat.color}
+            shadow={stat.shadow}
+            path={stat.path}
+          />
         ))}
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* System Health */}
-        <motion.div 
-          variants={fadeInUp}
-          className="lg:col-span-2 bg-white/80 dark:bg-slate-900/50 backdrop-blur-md border border-slate-200/50 dark:border-white/10 p-8 rounded-2xl shadow-soft transition-colors duration-300"
-        >
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">{t('dashboard.system_health')}</h2>
-              <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">{t('dashboard.live_metrics')}</p>
-            </div>
-            <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-400 dark:text-slate-500 transition-colors duration-300">
-              <Activity size={24} />
-            </div>
-          </div>
-          <div className="space-y-8">
-            <div className="group">
-              <div className="flex justify-between mb-3 items-end">
-                <span className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">{t('dashboard.cpu_usage')}</span>
-                <span className="text-lg font-black text-blue-600 dark:text-blue-400">{systemHealth.cpu}%</span>
-              </div>
-              <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-3 overflow-hidden">
-                <div 
-                  className="bg-gradient-to-r from-blue-500 to-blue-600 h-full rounded-full transition-all duration-1000 ease-out shadow-lg shadow-blue-500/20" 
-                  style={{ width: `${systemHealth.cpu}%` }}
-                ></div>
-              </div>
-            </div>
-            <div className="group">
-              <div className="flex justify-between mb-3 items-end">
-                <span className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">{t('dashboard.memory_usage')}</span>
-                <span className="text-lg font-black text-emerald-600 dark:text-emerald-400">{systemHealth.memory}%</span>
-              </div>
-              <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-3 overflow-hidden">
-                <div 
-                  className="bg-gradient-to-r from-emerald-500 to-emerald-600 h-full rounded-full transition-all duration-1000 ease-out shadow-lg shadow-emerald-500/20" 
-                  style={{ width: `${systemHealth.memory}%` }}
-                ></div>
-              </div>
-            </div>
-            <div className="group">
-              <div className="flex justify-between mb-3 items-end">
-                <span className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">{t('dashboard.disk_usage')}</span>
-                <span className="text-lg font-black text-amber-600 dark:text-amber-400">{systemHealth.disk}%</span>
-              </div>
-              <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-3 overflow-hidden">
-                <div 
-                  className="bg-gradient-to-r from-amber-500 to-amber-600 h-full rounded-full transition-all duration-1000 ease-out shadow-lg shadow-amber-500/20" 
-                  style={{ width: `${systemHealth.disk}%` }}
-                ></div>
-              </div>
-            </div>
-
-            <div className="pt-8 grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-slate-50 dark:border-slate-800">
-              <div className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50/50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800">
-                <div className="p-3 bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 rounded-xl shadow-sm">
-                  <ArrowDownLeft size={20} />
-                </div>
-                <div>
-                  <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest">{t('dashboard.network_in')}</p>
-                  <p className="text-lg font-black text-slate-900 dark:text-slate-100 leading-tight">{systemHealth.network?.in ?? 0} <span className="text-xs font-bold text-slate-500 dark:text-slate-400">{t('dashboard.mbps')}</span></p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50/50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800">
-                <div className="p-3 bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 rounded-xl shadow-sm">
-                  <ArrowUpRight size={20} />
-                </div>
-                <div>
-                  <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest">{t('dashboard.network_out')}</p>
-                  <p className="text-lg font-black text-slate-900 dark:text-slate-100 leading-tight">{systemHealth.network?.out ?? 0} <span className="text-xs font-bold text-slate-500 dark:text-slate-400">{t('dashboard.mbps')}</span></p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+        <SystemHealthCard
+          systemHealth={systemHealth}
+          cpuLabel={t('dashboard.cpu_usage')}
+          memoryLabel={t('dashboard.memory_usage')}
+          diskLabel={t('dashboard.disk_usage')}
+          networkInLabel={t('dashboard.network_in')}
+          networkOutLabel={t('dashboard.network_out')}
+          mbpsLabel={t('dashboard.mbps')}
+          liveMetricsLabel={t('dashboard.live_metrics')}
+          systemHealthLabel={t('dashboard.system_health')}
+        />
 
         {/* Info Column */}
         <div className="space-y-8">

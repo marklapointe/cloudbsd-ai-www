@@ -5,6 +5,11 @@ import api from '../api/client';
 import { getSortedLanguages } from '../constants/languages';
 import { getDetectedTimezone, formatLocalDate } from '../utils/dateUtils';
 import { useTranslation } from 'react-i18next';
+import { ToggleSwitch } from '../components/ui/ToggleSwitch';
+import { UsageBar } from '../components/ui/UsageBar';
+import { SettingsCard } from '../components/ui/SettingsCard';
+import { SelectField } from '../components/ui/SelectField';
+import { AlertBanner } from '../components/ui/AlertBanner';
 
 const Settings: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -165,298 +170,206 @@ const Settings: React.FC = () => {
       </div>
 
       {message && (
-        <div className={`p-4 rounded-2xl flex items-center gap-3 animate-in slide-in-from-top-2 duration-300 ${
-          message.type === 'success' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20' : 'bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400 border border-red-100 dark:border-red-500/20'
-        }`}>
-          {message.type === 'success' ? <CheckCircle2 size={18} /> : <Activity size={18} />}
-          <p className="text-sm font-bold">{message.text}</p>
-        </div>
+        <AlertBanner type={message.type} message={message.text} />
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
         <div className="space-y-10">
-          <div className="bg-white dark:bg-slate-900 rounded-[2rem] shadow-soft border border-slate-100 dark:border-slate-800 overflow-hidden transition-all duration-300 hover:shadow-xl">
-            <div className="px-8 py-6 border-b border-slate-50 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
-              <div className="p-2 bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl">
-                <SettingsIcon size={20} />
-              </div>
-              <h2 className="text-lg font-black text-slate-900 dark:text-slate-100 uppercase tracking-tight">{t('settings.server_config')}</h2>
-            </div>
-            
-            <div className="p-8 space-y-8">
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="p-1.5 bg-brand-100 dark:bg-brand-500/20 text-brand-600 dark:text-brand-400 rounded-lg">
-                    <Languages size={16} />
-                  </div>
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">{t('settings.language_select')}</h3>
-                </div>
-                <div className="relative group">
-                  <select
-                    value={i18n.language}
-                    onChange={(e) => handleLanguageChange(e.target.value)}
-                    disabled={savingLanguage}
-                    className={`w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-slate-100 font-bold outline-none appearance-none focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200 cursor-pointer ${savingLanguage ? 'opacity-50 cursor-wait' : ''}`}
-                    aria-label={t('common.language')}
-                    title={t('common.language')}
-                  >
-                    {sortedLanguages.map((lang) => (
-                      <option key={lang.code} value={lang.code}>
-                        {lang.name}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 dark:text-slate-500 group-hover:text-brand-500 transition-colors">
-                    <Languages size={18} />
-                  </div>
-                </div>
-              </div>
+          <SettingsCard title={t('settings.server_config')} icon={SettingsIcon}>
+            <SelectField
+              label={t('settings.language_select')}
+              icon={Languages}
+              value={i18n.language}
+              onChange={handleLanguageChange}
+              options={sortedLanguages.map((lang) => ({ value: lang.code, label: lang.name }))}
+              disabled={savingLanguage}
+            />
 
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="p-1.5 bg-brand-100 dark:bg-brand-500/20 text-brand-600 dark:text-brand-400 rounded-lg">
-                    <Clock size={16} />
-                  </div>
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">{t('settings.timezone_select')}</h3>
-                </div>
-                <div className="relative group">
-                  <select
-                    value={timezone}
-                    onChange={(e) => handleTimezoneChange(e.target.value)}
-                    disabled={savingTimezone}
-                    className={`w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-slate-100 font-bold outline-none appearance-none focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200 cursor-pointer ${savingTimezone ? 'opacity-50 cursor-wait' : ''}`}
-                    aria-label={t('settings.timezone')}
-                    title={t('settings.timezone')}
-                  >
-                    <option value="">{t('settings.use_detected_timezone', { tz: getDetectedTimezone() })}</option>
-                    {Intl.supportedValuesOf('timeZone').map((tz) => (
-                      <option key={tz} value={tz}>
-                        {tz}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 dark:text-slate-500 group-hover:text-brand-500 transition-colors">
-                    <Clock size={18} />
-                  </div>
-                </div>
-              </div>
+            <SelectField
+              label={t('settings.timezone_select')}
+              icon={Clock}
+              value={timezone}
+              onChange={handleTimezoneChange}
+              options={[
+                { value: '', label: t('settings.use_detected_timezone', { tz: getDetectedTimezone() }) },
+                ...Intl.supportedValuesOf('timeZone').map((tz) => ({ value: tz, label: tz })),
+              ]}
+              disabled={savingTimezone}
+            />
 
-              <div 
-                className="flex items-center gap-5 p-6 bg-blue-50 dark:bg-blue-500/10 rounded-2xl border border-blue-100/50 dark:border-blue-500/20 transition-colors hover:bg-blue-50/80 dark:hover:bg-blue-500/20 cursor-pointer"
-                onClick={() => {
-                  const newValue = !demoMode;
+            <div
+              className="flex items-center gap-5 p-6 bg-blue-50 dark:bg-blue-500/10 rounded-2xl border border-blue-100/50 dark:border-blue-500/20 transition-colors hover:bg-blue-50/80 dark:hover:bg-blue-500/20 cursor-pointer"
+              onClick={() => {
+                const newValue = !demoMode;
+                setDemoMode(newValue);
+                handleSaveConfig({ demoMode: newValue });
+              }}
+            >
+              <div className="flex-1">
+                <p className="text-sm font-black text-blue-900 dark:text-blue-300 uppercase tracking-wider">{t('settings.demo_mode')}</p>
+                <p className="text-xs text-blue-700/70 dark:text-blue-400/70 font-bold mt-0.5">{t('settings.demo_mode_desc')}</p>
+              </div>
+              <ToggleSwitch
+                checked={demoMode}
+                onChange={(newValue) => {
                   setDemoMode(newValue);
                   handleSaveConfig({ demoMode: newValue });
                 }}
-              >
-                <div className="flex-1">
-                  <p className="text-sm font-black text-blue-900 dark:text-blue-300 uppercase tracking-wider">{t('settings.demo_mode')}</p>
-                  <p className="text-xs text-blue-700/70 dark:text-blue-400/70 font-bold mt-0.5">{t('settings.demo_mode_desc')}</p>
-                </div>
-                <div className={`w-14 h-7 rounded-full transition-all duration-300 relative shadow-inner ${demoMode ? 'bg-blue-600 shadow-blue-900/20' : 'bg-slate-300 dark:bg-slate-700'}`}>
-                  <div className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-all duration-300 shadow-md ${demoMode ? 'left-8' : 'left-1'}`}></div>
-                </div>
-              </div>
+                color="blue"
+              />
+            </div>
 
-              <div 
-                className="flex items-center gap-5 p-6 bg-emerald-50 dark:bg-emerald-500/10 rounded-2xl border border-emerald-100/50 dark:border-emerald-500/20 transition-colors hover:bg-emerald-50/80 dark:hover:bg-emerald-500/20 cursor-pointer"
-                onClick={() => {
-                  const newValue = !sslEnabled;
+            <div
+              className="flex items-center gap-5 p-6 bg-emerald-50 dark:bg-emerald-500/10 rounded-2xl border border-emerald-100/50 dark:border-emerald-500/20 transition-colors hover:bg-emerald-50/80 dark:hover:bg-emerald-500/20 cursor-pointer"
+              onClick={() => {
+                const newValue = !sslEnabled;
+                setSslEnabled(newValue);
+                handleSaveConfig({ ssl: { enabled: newValue } });
+              }}
+            >
+              <div className="flex-1">
+                <p className="text-sm font-black text-emerald-900 dark:text-emerald-300 uppercase tracking-wider">{t('settings.ssl_security')}</p>
+                <p className="text-xs text-emerald-700/70 dark:text-emerald-400/70 font-bold mt-0.5">{t('settings.ssl_security_desc')}</p>
+              </div>
+              <ToggleSwitch
+                checked={sslEnabled}
+                onChange={(newValue) => {
                   setSslEnabled(newValue);
                   handleSaveConfig({ ssl: { enabled: newValue } });
                 }}
-              >
-                <div className="flex-1">
-                  <p className="text-sm font-black text-emerald-900 dark:text-emerald-300 uppercase tracking-wider">{t('settings.ssl_security')}</p>
-                  <p className="text-xs text-emerald-700/70 dark:text-emerald-400/70 font-bold mt-0.5">{t('settings.ssl_security_desc')}</p>
-                </div>
-                <div className={`w-14 h-7 rounded-full transition-all duration-300 relative shadow-inner ${sslEnabled ? 'bg-emerald-600 shadow-emerald-900/20' : 'bg-slate-300 dark:bg-slate-700'}`}>
-                  <div className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-all duration-300 shadow-md ${sslEnabled ? 'left-8' : 'left-1'}`}></div>
-                </div>
-              </div>
+                color="emerald"
+              />
+            </div>
 
-              <div 
-                className="flex items-center gap-5 p-6 bg-amber-50 dark:bg-amber-500/10 rounded-2xl border border-amber-100/50 dark:border-amber-500/20 transition-colors hover:bg-amber-50/80 dark:hover:bg-amber-500/20 cursor-pointer"
-                onClick={() => {
-                  const newValue = !corsEnabled;
+            <div
+              className="flex items-center gap-5 p-6 bg-amber-50 dark:bg-amber-500/10 rounded-2xl border border-amber-100/50 dark:border-amber-500/20 transition-colors hover:bg-amber-50/80 dark:hover:bg-amber-500/20 cursor-pointer"
+              onClick={() => {
+                const newValue = !corsEnabled;
+                setCorsEnabled(newValue);
+                handleSaveConfig({ corsEnabled: newValue });
+              }}
+            >
+              <div className="flex-1">
+                <p className="text-sm font-black text-amber-900 dark:text-amber-300 uppercase tracking-wider">{t('settings.cors_config')}</p>
+                <p className="text-xs text-amber-700/70 dark:text-amber-400/70 font-bold mt-0.5">{t('settings.cors_config_desc')}</p>
+              </div>
+              <ToggleSwitch
+                checked={corsEnabled}
+                onChange={(newValue) => {
                   setCorsEnabled(newValue);
                   handleSaveConfig({ corsEnabled: newValue });
                 }}
-              >
-                <div className="flex-1">
-                  <p className="text-sm font-black text-amber-900 dark:text-amber-300 uppercase tracking-wider">{t('settings.cors_config')}</p>
-                  <p className="text-xs text-amber-700/70 dark:text-amber-400/70 font-bold mt-0.5">{t('settings.cors_config_desc')}</p>
-                </div>
-                <div className={`w-14 h-7 rounded-full transition-all duration-300 relative shadow-inner ${corsEnabled ? 'bg-amber-600 shadow-amber-900/20' : 'bg-slate-300 dark:bg-slate-700'}`}>
-                  <div className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-all duration-300 shadow-md ${corsEnabled ? 'left-8' : 'left-1'}`}></div>
-                </div>
-              </div>
+                color="amber"
+              />
             </div>
-          </div>
+          </SettingsCard>
         </div>
 
         <div className="space-y-10">
-          <div className="bg-white dark:bg-slate-900 rounded-[2rem] shadow-soft border border-slate-100 dark:border-slate-800 overflow-hidden transition-all duration-300 hover:shadow-xl">
-            <div className="px-8 py-6 border-b border-slate-50 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-brand-100 dark:bg-brand-500/20 text-brand-600 dark:text-brand-400 rounded-xl">
-                  <ShieldCheck size={20} />
+          <SettingsCard
+            title={t('settings.license_status')}
+            icon={ShieldCheck}
+            badge={license?.status === 'active' ? t('settings.active') : undefined}
+          >
+            <div className="flex flex-col gap-6">
+              <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700">
+                <div className="flex items-center gap-3">
+                  <CreditCard className="text-slate-400 dark:text-slate-500" size={20} />
+                  <div>
+                    <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{t('settings.license_type')}</p>
+                    <p className="text-sm font-bold text-slate-900 dark:text-slate-100 capitalize">{license?.license_type ? t(`settings.${license.license_type.toLowerCase()}`) : t('settings.none')}</p>
+                  </div>
                 </div>
-                <h2 className="text-lg font-black text-slate-900 dark:text-slate-100 uppercase tracking-tight">{t('settings.license_status')}</h2>
+                <div className="text-right">
+                  <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{t('settings.registered_to')}</p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{license?.registered_to || t('settings.unregistered')}</p>
+                </div>
               </div>
-              {license?.status === 'active' && (
-                <span className="px-3 py-1 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase tracking-widest rounded-lg">{t('settings.active')}</span>
-              )}
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Clock className="text-slate-400 dark:text-slate-500" size={16} />
+                    <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{t('settings.expires_on')}</p>
+                  </div>
+                  <p className="text-sm font-bold text-slate-900 dark:text-slate-100">
+                    {license?.expiry_date ? formatLocalDate(license.expiry_date) : t('settings.not_applicable')}
+                  </p>
+                </div>
+                <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Activity className="text-slate-400 dark:text-slate-500" size={16} />
+                    <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{t('settings.support_tier')}</p>
+                  </div>
+                  <p className="text-sm font-bold text-slate-900 dark:text-slate-100 capitalize">{license?.support_tier ? t(`settings.${license.support_tier.toLowerCase()}`) : t('settings.none')}</p>
+                </div>
+              </div>
             </div>
-            
-            <div className="p-8 space-y-8">
-              <div className="flex flex-col gap-6">
-                <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700">
-                  <div className="flex items-center gap-3">
-                    <CreditCard className="text-slate-400 dark:text-slate-500" size={20} />
-                    <div>
-                      <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{t('settings.license_type')}</p>
-                      <p className="text-sm font-bold text-slate-900 dark:text-slate-100 capitalize">{license?.license_type ? t(`settings.${license.license_type.toLowerCase()}`) : t('settings.none')}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{t('settings.registered_to')}</p>
-                    <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{license?.registered_to || t('settings.unregistered')}</p>
-                  </div>
-                </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Clock className="text-slate-400 dark:text-slate-500" size={16} />
-                      <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{t('settings.expires_on')}</p>
-                    </div>
-                    <p className="text-sm font-bold text-slate-900 dark:text-slate-100">
-                      {license?.expiry_date ? formatLocalDate(license.expiry_date) : t('settings.not_applicable')}
-                    </p>
-                  </div>
-                  <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Activity className="text-slate-400 dark:text-slate-500" size={16} />
-                      <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{t('settings.support_tier')}</p>
-                    </div>
-                    <p className="text-sm font-bold text-slate-900 dark:text-slate-100 capitalize">{license?.support_tier ? t(`settings.${license.support_tier.toLowerCase()}`) : t('settings.none')}</p>
-                  </div>
-                </div>
+            <div className="space-y-4">
+              <h3 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('settings.allowed_resources')}</h3>
+              <div className="grid grid-cols-2 gap-y-6 gap-x-8">
+                <UsageBar
+                  icon={Server}
+                  label={t('common.cluster')}
+                  used={license?.usage?.nodes || 0}
+                  limit={license?.nodes_limit || 1}
+                  color="bg-brand-500"
+                  getLimitLabel={getLimitLabel}
+                  getUsagePercent={getUsagePercent}
+                />
+                <UsageBar
+                  icon={Hexagon}
+                  label={t('common.vms')}
+                  used={license?.usage?.vms || 0}
+                  limit={license?.vms_limit || 1}
+                  color="bg-purple-500"
+                  getLimitLabel={getLimitLabel}
+                  getUsagePercent={getUsagePercent}
+                />
+                <UsageBar
+                  icon={Box}
+                  label={t('common.containers')}
+                  used={license?.usage?.containers || 0}
+                  limit={license?.containers_limit || 1}
+                  color="bg-blue-500"
+                  getLimitLabel={getLimitLabel}
+                  getUsagePercent={getUsagePercent}
+                />
+                <UsageBar
+                  icon={Activity}
+                  label={t('common.jails')}
+                  used={license?.usage?.jails || 0}
+                  limit={license?.jails_limit || 1}
+                  color="bg-emerald-500"
+                  getLimitLabel={getLimitLabel}
+                  getUsagePercent={getUsagePercent}
+                />
               </div>
+            </div>
 
+            {license?.features && license.features.length > 0 && (
               <div className="space-y-4">
-                <h3 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('settings.allowed_resources')}</h3>
-                <div className="grid grid-cols-2 gap-y-6 gap-x-8">
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center gap-2">
-                        <Server size={14} className="text-brand-500" />
-                        <span className="text-xs font-bold text-slate-600 dark:text-slate-400">{t('common.cluster')}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-black text-slate-900 dark:text-slate-100">{license?.usage?.nodes || 0}</span>
-                        <span className="text-[10px] font-black text-slate-300 dark:text-slate-700">/</span>
-                        <span className="text-xs font-black text-slate-400 dark:text-slate-500">{getLimitLabel(license?.nodes_limit)}</span>
-                      </div>
-                    </div>
-                    <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-brand-500 transition-all duration-1000" 
-                        style={{ width: `${getUsagePercent(license?.usage?.nodes || 0, license?.nodes_limit || 1)}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center gap-2">
-                        <Hexagon size={14} className="text-purple-500" />
-                        <span className="text-xs font-bold text-slate-600 dark:text-slate-400">{t('common.vms')}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-black text-slate-900 dark:text-slate-100">{license?.usage?.vms || 0}</span>
-                        <span className="text-[10px] font-black text-slate-300 dark:text-slate-700">/</span>
-                        <span className="text-xs font-black text-slate-400 dark:text-slate-500">{getLimitLabel(license?.vms_limit)}</span>
-                      </div>
-                    </div>
-                    <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-purple-500 transition-all duration-1000" 
-                        style={{ width: `${getUsagePercent(license?.usage?.vms || 0, license?.vms_limit || 1)}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center gap-2">
-                        <Box size={14} className="text-blue-500" />
-                        <span className="text-xs font-bold text-slate-600 dark:text-slate-400">{t('common.containers')}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-black text-slate-900 dark:text-slate-100">{license?.usage?.containers || 0}</span>
-                        <span className="text-[10px] font-black text-slate-300 dark:text-slate-700">/</span>
-                        <span className="text-xs font-black text-slate-400 dark:text-slate-500">{getLimitLabel(license?.containers_limit)}</span>
-                      </div>
-                    </div>
-                    <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-blue-500 transition-all duration-1000" 
-                        style={{ width: `${getUsagePercent(license?.usage?.containers || 0, license?.containers_limit || 1)}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center gap-2">
-                        <Activity size={14} className="text-emerald-500" />
-                        <span className="text-xs font-bold text-slate-600 dark:text-slate-400">{t('common.jails')}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-black text-slate-900 dark:text-slate-100">{license?.usage?.jails || 0}</span>
-                        <span className="text-[10px] font-black text-slate-300 dark:text-slate-700">/</span>
-                        <span className="text-xs font-black text-slate-400 dark:text-slate-500">{getLimitLabel(license?.jails_limit)}</span>
-                      </div>
-                    </div>
-                    <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-emerald-500 transition-all duration-1000" 
-                        style={{ width: `${getUsagePercent(license?.usage?.jails || 0, license?.jails_limit || 1)}%` }}
-                      ></div>
-                    </div>
-                  </div>
+                <h3 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('settings.included_features')}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {license.features.map((feature: string) => (
+                    <span key={feature} className="px-3 py-1.5 bg-brand-50 dark:bg-brand-500/10 text-brand-700 dark:text-brand-400 text-[10px] font-bold rounded-xl border border-brand-100 dark:border-brand-500/20 flex items-center gap-1.5">
+                      <CheckCircle2 size={12} className="text-brand-500" />
+                      {t(`settings.feature_${feature.toLowerCase().replace(/ /g, '_')}`, { defaultValue: feature })}
+                    </span>
+                  ))}
                 </div>
               </div>
+            )}
+          </SettingsCard>
 
-              {license?.features && license.features.length > 0 && (
-                <div className="space-y-4">
-                  <h3 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('settings.included_features')}</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {license.features.map((feature: string) => (
-                      <span key={feature} className="px-3 py-1.5 bg-brand-50 dark:bg-brand-500/10 text-brand-700 dark:text-brand-400 text-[10px] font-bold rounded-xl border border-brand-100 dark:border-brand-500/20 flex items-center gap-1.5">
-                        <CheckCircle2 size={12} className="text-brand-500" />
-                        {t(`settings.feature_${feature.toLowerCase().replace(/ /g, '_')}`, { defaultValue: feature })}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="bg-white dark:bg-slate-900 rounded-[2rem] shadow-soft border border-slate-100 dark:border-slate-800 overflow-hidden transition-all duration-300 hover:shadow-xl">
-            <div className="px-8 py-6 border-b border-slate-50 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
-              <div className="p-2 bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl">
-                <Key size={20} />
-              </div>
-              <h2 className="text-lg font-black text-slate-900 dark:text-slate-100 uppercase tracking-tight">{t('settings.license_reg')}</h2>
-            </div>
-            
-            <form onSubmit={handleRegisterLicense} className="p-8 space-y-6">
+          <SettingsCard title={t('settings.license_reg')} icon={Key}>
+            <form onSubmit={handleRegisterLicense} className="space-y-6">
               <div className="space-y-2">
                 <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('settings.reg_new_key')}</label>
                 <div className="relative">
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     value={licenseKey}
                     onChange={(e) => setLicenseKey(e.target.value)}
                     placeholder={t('settings.reg_key_placeholder')}
@@ -468,7 +381,7 @@ const Settings: React.FC = () => {
                 <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium ml-1">{t('settings.example')}: CBSD-STD-FREE-2026 or CBSD-ENT-PRO-2026</p>
               </div>
 
-              <button 
+              <button
                 type="submit"
                 disabled={savingLicense}
                 className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-brand-600 text-white font-black uppercase text-xs tracking-widest rounded-2xl hover:bg-brand-700 transition-all duration-300 active:scale-95 shadow-lg shadow-brand-600/20 disabled:opacity-50 disabled:cursor-not-allowed border-b-4 border-brand-800 dark:border-brand-900 hover:border-b-0 hover:translate-y-[2px]"
@@ -483,7 +396,7 @@ const Settings: React.FC = () => {
                 )}
               </button>
             </form>
-          </div>
+          </SettingsCard>
         </div>
       </div>
     </div>

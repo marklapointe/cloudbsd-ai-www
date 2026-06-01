@@ -1,117 +1,63 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  ReactFlow, 
-  Background, 
-  Controls, 
-  Panel, 
-  useNodesState, 
+import {
+  ReactFlow,
+  Background,
+  Controls,
+  Panel,
+  useNodesState,
   useEdgesState,
   MarkerType,
-  Handle,
-  Position
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { 
-  Monitor, 
-  Container, 
-  HardDrive, 
-  Server, 
-  Search, 
-  MoreVertical,
-  Play,
-  Square,
-  Settings as SettingsIcon,
-  ChevronRight,
-  ChevronDown
+import {
+  Monitor,
+  Container,
+  HardDrive,
 } from 'lucide-react';
-import api from '../api/client';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import api from '../api/client';
+import ContextMenu from '../components/network/ContextMenu';
+import type { ContextMenuState, ResourceItem } from '../components/network/ContextMenu';
+import Legend from '../components/network/Legend';
+import MapHeader from '../components/network/MapHeader';
+import { nodeTypes } from '../components/network/NetworkNodes';
 
-// Custom Node Components
-const HostNode = ({ data }: any) => {
-  return (
-    <div className={`px-4 py-3 rounded-2xl border-2 shadow-xl min-w-[200px] transition-all duration-300 ${data.isExpanded ? 'bg-slate-900 border-brand-500 text-white' : 'bg-white border-slate-200 text-slate-900'}`}>
-      <Handle type="target" position={Position.Top} className="w-3 h-3 bg-brand-500 border-2 border-white" />
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <div className={`p-2 rounded-xl ${data.isExpanded ? 'bg-brand-500/20 text-brand-400' : 'bg-slate-100 text-slate-600'}`}>
-            <Server size={20} />
-          </div>
-          <div>
-            <div className="text-xs font-bold uppercase tracking-widest opacity-60">{data.t('common.host_system')}</div>
-            <div className="font-black text-sm">{data.label}</div>
-          </div>
-        </div>
-        <button 
-          onClick={(e) => {
-            e.stopPropagation();
-            data.onToggleExpand();
-          }}
-          className={`p-1 rounded-lg transition-colors flex items-center justify-center min-w-0 min-h-0 border-none bg-transparent shadow-none ${data.isExpanded ? 'hover:bg-white/10 text-white' : 'hover:bg-slate-100 text-slate-600'}`}
-        >
-          {data.isExpanded ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
-        </button>
-      </div>
-      <Handle type="source" position={Position.Bottom} className="w-3 h-3 bg-brand-500 border-2 border-white" />
-    </div>
-  );
-};
+interface ClusterNode {
+  id: number;
+  name: string;
+  role: string;
+  status?: string;
+  ip?: string;
+  cpu_total?: number | null;
+  cpu_used?: number | null;
+  mem_total?: string | null;
+  mem_used?: string | null;
+  disk_total?: string | null;
+  disk_used?: string | null;
+  created_at?: string;
+}
 
-const ResourceNode = ({ data }: any) => {
-  const Icon = data.icon;
-  const statusColors: any = {
-    running: 'bg-emerald-500',
-    up: 'bg-emerald-500',
-    active: 'bg-emerald-500',
-    stopped: 'bg-slate-400',
-    exited: 'bg-red-500',
-    error: 'bg-red-500'
-  };
+interface Resource {
+  id: number;
+  name: string;
+  type: 'vms' | 'containers' | 'jails';
+  status: string;
+  node_id?: number | null;
+  icon: typeof Monitor;
+}
 
-  const statusColor = statusColors[data.status] || 'bg-slate-400';
-
-  return (
-    <div 
-      className="px-4 py-3 rounded-2xl bg-white border border-slate-200 shadow-lg min-w-[180px] hover:border-brand-500 transition-all group"
-      onContextMenu={(e) => data.onContextMenu(e, data.resource)}
-    >
-      <Handle type="target" position={Position.Top} className="w-2 h-2 bg-slate-300" />
-      <div className="flex items-center gap-3">
-        <div className={`p-2 rounded-xl bg-slate-50 text-slate-600 group-hover:text-brand-500 transition-colors`}>
-          <Icon size={18} />
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-1.5">
-            <div className={`w-1.5 h-1.5 rounded-full ${statusColor}`} />
-            <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{data.t(`${data.type}.resource_name`)}</div>
-          </div>
-          <div className="font-bold text-sm truncate text-slate-900">{data.label}</div>
-        </div>
-        <div className="text-slate-300 group-hover:text-slate-400 p-1 flex items-center justify-center">
-          <MoreVertical size={14} />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const nodeTypes = {
-  host: HostNode,
-  resource: ResourceNode,
-};
+type NodePosition = { x: number; y: number };
 
 const NetworkMap: React.FC = () => {
   const { t } = useTranslation();
   const [nodes, setNodes, onNodesChange] = useNodesState<any>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<any>([]);
-  const [resources, setResources] = useState<any[]>([]);
-  const [clusterNodes, setClusterNodes] = useState<any[]>([]);
+  const [resources, setResources] = useState<Resource[]>([]);
+  const [clusterNodes, setClusterNodes] = useState<ClusterNode[]>([]);
   const [expandedNodes, setExpandedNodes] = useState<Record<string, boolean>>({ 'host-core': true });
   const [searchTerm, setSearchTerm] = useState('');
-  const [contextMenu, setContextMenu] = useState<{ x: number, y: number, resource: any } | null>(null);
+  const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
-  const navigate = useNavigate();
 
   const fetchData = useCallback(async () => {
     try {
@@ -122,18 +68,18 @@ const NetworkMap: React.FC = () => {
         api.get('/nodes')
       ]);
 
-      const allResources = [
-        ...vms.data.map((r: any) => ({ ...r, type: 'vms', icon: Monitor })),
-        ...containers.data.map((r: any) => ({ ...r, type: 'containers', icon: Container })),
-        ...jails.data.map((r: any) => ({ ...r, type: 'jails', icon: HardDrive }))
+      const allResources: Resource[] = [
+        ...vms.data.map((r: any) => ({ ...r, type: 'vms' as const, icon: Monitor })),
+        ...containers.data.map((r: any) => ({ ...r, type: 'containers' as const, icon: Container })),
+        ...jails.data.map((r: any) => ({ ...r, type: 'jails' as const, icon: HardDrive }))
       ];
       setResources(allResources);
       setClusterNodes(nodesRes.data);
-      
+
       // Initialize expanded state for new nodes if not present
       setExpandedNodes(prev => {
         const next = { ...prev };
-        nodesRes.data.forEach((n: any) => {
+        nodesRes.data.forEach((n: ClusterNode) => {
           const key = `node-${n.id}`;
           if (next[key] === undefined) next[key] = true;
         });
@@ -157,7 +103,7 @@ const NetworkMap: React.FC = () => {
     }));
   };
 
-  const handleContextMenu = useCallback((event: React.MouseEvent, resource: any) => {
+  const handleContextMenu = useCallback((event: React.MouseEvent, resource: ResourceItem) => {
     event.preventDefault();
     setContextMenu({
       x: event.clientX,
@@ -179,7 +125,7 @@ const NetworkMap: React.FC = () => {
   };
 
   const createGraph = useCallback(() => {
-    const filteredResources = resources.filter(r => 
+    const filteredResources = resources.filter(r =>
       r.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       r.type.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -188,7 +134,7 @@ const NetworkMap: React.FC = () => {
     const newEdges: any[] = [];
 
     // Capture current node positions to preserve them
-    const currentPositions: Record<string, { x: number, y: number }> = {};
+    const currentPositions: Record<string, NodePosition> = {};
     nodes.forEach((node: any) => {
       currentPositions[node.id] = node.position;
     });
@@ -196,13 +142,13 @@ const NetworkMap: React.FC = () => {
     // Core system (Host) node usually represents the management plane
     const coreNodeData = clusterNodes.find(n => n.role === 'core');
     const coreNodeId = coreNodeData ? `node-${coreNodeData.id}` : 'host-core';
-    
+
     newNodes.push({
       id: coreNodeId,
       type: 'host',
       position: currentPositions[coreNodeId] || { x: 400, y: 50 },
-      data: { 
-        label: coreNodeData?.name || 'CloudBSD Core', 
+      data: {
+        label: coreNodeData?.name || 'CloudBSD Core',
         isExpanded: expandedNodes[coreNodeId],
         onToggleExpand: () => toggleNodeExpand(coreNodeId),
         t
@@ -213,14 +159,14 @@ const NetworkMap: React.FC = () => {
     const otherNodes = clusterNodes.filter(n => n.role !== 'core');
     otherNodes.forEach((node, idx) => {
       const nodeId = `node-${node.id}`;
-      const xOffset = (idx - (otherNodes.length - 1) / 2) * 500; // Increased spacing between host nodes
-      
+      const xOffset = (idx - (otherNodes.length - 1) / 2) * 500;
+
       newNodes.push({
         id: nodeId,
         type: 'host',
-        position: currentPositions[nodeId] || { x: 400 + xOffset, y: 350 }, // Increased y-offset
-        data: { 
-          label: node.name, 
+        position: currentPositions[nodeId] || { x: 400 + xOffset, y: 350 },
+        data: {
+          label: node.name,
           isExpanded: expandedNodes[nodeId],
           onToggleExpand: () => toggleNodeExpand(nodeId),
           t
@@ -240,25 +186,25 @@ const NetworkMap: React.FC = () => {
 
     // Add resources under their respective nodes
     const allNodesInGraph = clusterNodes.length > 0 ? clusterNodes : [{ id: null, role: 'core' }];
-    
+
     allNodesInGraph.forEach((node) => {
       const nodeId = node.id ? `node-${node.id}` : 'host-core';
       if (!expandedNodes[nodeId]) return;
 
       const nodeResources = filteredResources.filter(r => r.node_id === node.id || (node.role === 'core' && !r.node_id));
-      
+
       nodeResources.forEach((res, resIdx) => {
         const resNodeId = `${res.type}-${res.id}`;
-        
+
         // If node already exists, use its current position
         if (currentPositions[resNodeId]) {
           newNodes.push({
             id: resNodeId,
             type: 'resource',
             position: currentPositions[resNodeId],
-            data: { 
-              label: res.name, 
-              status: res.status, 
+            data: {
+              label: res.name,
+              status: res.status,
               type: res.type,
               icon: res.icon,
               resource: res,
@@ -270,20 +216,19 @@ const NetworkMap: React.FC = () => {
           // Calculate new position only for new nodes
           const hostNode = newNodes.find(n => n.id === nodeId);
           const nodePos = hostNode?.position || { x: 400, y: 0 };
-          
-          // Layout resources in a wider semi-circle below the node
+
           const angle = ((resIdx + 1) / (nodeResources.length + 1)) * Math.PI;
-          const radius = 350; // Increased radius to prevent grouping
+          const radius = 350;
           const x = nodePos.x + radius * Math.cos(angle + Math.PI);
-          const y = nodePos.y + radius * Math.sin(angle) + 150; // Increased vertical distance
+          const y = nodePos.y + radius * Math.sin(angle) + 150;
 
           newNodes.push({
             id: resNodeId,
             type: 'resource',
             position: { x, y },
-            data: { 
-              label: res.name, 
-              status: res.status, 
+            data: {
+              label: res.name,
+              status: res.status,
               type: res.type,
               icon: res.icon,
               resource: res,
@@ -306,7 +251,7 @@ const NetworkMap: React.FC = () => {
 
     setNodes(newNodes);
     setEdges(newEdges);
-  }, [resources, clusterNodes, expandedNodes, searchTerm, handleContextMenu, setNodes, setEdges, t]);
+  }, [resources, clusterNodes, expandedNodes, searchTerm, handleContextMenu, setNodes, setEdges, t, nodes]);
 
   useEffect(() => {
     if (resources.length > 0 || clusterNodes.length > 0) {
@@ -317,24 +262,7 @@ const NetworkMap: React.FC = () => {
 
   return (
     <div className="h-screen w-full flex flex-col relative overflow-hidden">
-      {/* Absolute Search and Header for full-screen map */}
-      <div className="absolute top-6 left-6 right-6 z-50 pointer-events-none flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="pointer-events-auto bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-slate-100 shadow-xl">
-          <h1 className="text-xl font-extrabold text-slate-900 tracking-tight leading-tight">{t('network.title')}</h1>
-          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{t('network.visual_overview')}</p>
-        </div>
-        
-        <div className="relative pointer-events-auto">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-          <input 
-            type="text"
-            placeholder={t('network.search_nodes')}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-12 pr-6 py-2.5 bg-white border border-slate-100 rounded-2xl shadow-xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 outline-none w-full md:w-64 transition-all text-slate-900 font-bold"
-          />
-        </div>
-      </div>
+      <MapHeader searchTerm={searchTerm} onSearchChange={setSearchTerm} />
 
       <div className="flex-1 w-full h-full">
         <ReactFlow
@@ -350,57 +278,15 @@ const NetworkMap: React.FC = () => {
           <Background color="#f1f5f9" gap={20} />
           <Controls />
           <Panel position="bottom-right" className="bg-white/80 backdrop-blur-md p-2 rounded-xl border border-slate-100 shadow-lg m-4">
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2 px-2 py-1">
-                <div className="w-3 h-3 rounded-full bg-emerald-500" />
-                <span className="text-[10px] font-bold uppercase text-slate-500">{t('network.running')}</span>
-              </div>
-              <div className="flex items-center gap-2 px-2 py-1">
-                <div className="w-3 h-3 rounded-full bg-slate-400" />
-                <span className="text-[10px] font-bold uppercase text-slate-500">{t('network.stopped')}</span>
-              </div>
-            </div>
+            <Legend />
           </Panel>
         </ReactFlow>
 
-        {contextMenu && (
-          <div 
-            className="fixed z-[100] bg-white rounded-2xl shadow-2xl border border-slate-100 p-2 min-w-[160px] animate-in fade-in zoom-in duration-200"
-            style={{ left: contextMenu.x, top: contextMenu.y }}
-          >
-            <div className="px-3 py-2 border-b border-slate-50 mb-1">
-              <div className="text-[10px] font-bold uppercase text-slate-400 tracking-widest">{t(`${contextMenu.resource.type}.resource_name`)}</div>
-              <div className="font-bold text-slate-900">{contextMenu.resource.name}</div>
-            </div>
-            
-            <button 
-              onClick={() => handleAction('start')}
-              className="w-full flex items-center gap-3 px-3 py-2 bg-transparent hover:bg-emerald-50 border-none text-slate-700 hover:text-emerald-600 rounded-xl transition-colors text-sm font-semibold text-left shadow-none"
-            >
-              <Play size={16} />
-              <span>{t('resource_list.start')}</span>
-            </button>
-            
-            <button 
-              onClick={() => handleAction('stop')}
-              className="w-full flex items-center gap-3 px-3 py-2 bg-transparent hover:bg-red-50 border-none text-slate-700 hover:text-red-600 rounded-xl transition-colors text-sm font-semibold text-left shadow-none"
-            >
-              <Square size={16} />
-              <span>{t('resource_list.stop')}</span>
-            </button>
-            
-            <button 
-              onClick={() => {
-                navigate(`/${contextMenu.resource.type}`);
-                setContextMenu(null);
-              }}
-              className="w-full flex items-center gap-3 px-3 py-2 bg-transparent hover:bg-slate-50 border-none text-slate-700 hover:text-brand-600 rounded-xl transition-colors text-sm font-semibold text-left border-t border-slate-50 mt-1 pt-2 shadow-none"
-            >
-              <SettingsIcon size={16} />
-              <span>{t('common.settings')}</span>
-            </button>
-          </div>
-        )}
+        <ContextMenu
+          contextMenu={contextMenu}
+          onAction={handleAction}
+          onClose={() => setContextMenu(null)}
+        />
       </div>
     </div>
   );
