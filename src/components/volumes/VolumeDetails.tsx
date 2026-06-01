@@ -1,7 +1,7 @@
 import React from 'react';
 import { Database, Activity, HardDrive, Trash2, Edit2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { VolumeData, DiskData } from '../../pages/Volumes';
+import type { VolumeData, DiskData } from '../../pages/Volumes';
 
 export interface VolumeDetailsProps {
   volume: VolumeData;

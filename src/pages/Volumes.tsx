@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  HardDrive, Plus, Trash2, Edit2, ChevronDown, ChevronRight,
+  HardDrive, ChevronDown, ChevronRight,
   X, Server, Activity, Database, Cpu, MemoryStick,
   Circle
 } from 'lucide-react';
@@ -13,7 +13,7 @@ import { DiskDetails } from '../components/disks/DiskDetails';
 import { VolumeDetails } from '../components/volumes/VolumeDetails';
 import { StorageEmptyState } from '../components/storage/StorageEmptyState';
 
-interface NodeData {
+export interface NodeData {
   id: number;
   name: string;
   role: string;
@@ -23,7 +23,7 @@ interface NodeData {
   memory?: string;
 }
 
-interface VolumeData {
+export interface VolumeData {
   id: number;
   disk_id: number;
   name: string;
@@ -37,7 +37,7 @@ interface VolumeData {
   status: string;
 }
 
-interface DiskData {
+export interface DiskData {
   id: number;
   node_id: number;
   name: string;
@@ -54,8 +54,8 @@ interface DiskData {
   volumes?: VolumeData[];
 }
 
-type SelectionType = 'node' | 'disk' | 'volume' | null;
-interface Selection {
+export type SelectionType = 'node' | 'disk' | 'volume' | null;
+export interface Selection {
   type: SelectionType;
   nodeId?: number;
   diskId?: number;
