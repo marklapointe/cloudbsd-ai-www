@@ -233,7 +233,7 @@ ${t('manual.settings_text')}
       <div className="lg:hidden sticky top-0 left-0 right-0 h-16 bg-white dark:bg-slate-950 flex items-center justify-between px-6 z-50 border-b border-slate-200 dark:border-slate-800/50 transition-colors duration-300">
         <div className="flex items-center gap-3">
             <div className="w-8 h-8 flex items-center justify-center">
-              <img src="/logo-head-only.png" alt="CloudBSD" className="w-full h-full object-contain drop-shadow-brand" />
+              <img src="/logo-head-only-zoom-2.png" alt="CloudBSD" className="w-full h-full object-contain drop-shadow-brand" />
           </div>
           <span className="text-lg font-bold tracking-tight leading-none"><span className="text-white dark:text-white">Cloud</span><span className="text-accent dark:text-accent">BSD</span></span>
         </div>
@@ -332,7 +332,7 @@ ${t('manual.settings_text')}
           <div className="p-8 flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 flex items-center justify-center transform hover:rotate-6 transition-transform">
-                <img src="/logo-head-only.png" alt="CloudBSD" className="w-full h-full object-contain drop-shadow-brand" />
+                <img src="/logo-head-only-zoom-2.png" alt="CloudBSD" className="w-full h-full object-contain drop-shadow-brand" />
               </div>
               <div>
                 <span className="text-xl font-bold tracking-tight block leading-none"><span className="text-white dark:text-white">Cloud</span><span className="text-accent dark:text-accent">BSD</span></span>

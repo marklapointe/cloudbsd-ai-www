@@ -105,9 +105,9 @@ const Login: React.FC = () => {
         <div className="text-center mb-10">
           <div className="mb-6 flex items-center justify-center">
             <img 
-              src="/logo-head-only.png" 
+              src="/logo-head-only-zoom-2.png"
               alt="CloudBSD Logo" 
-              className="w-24 h-24 object-contain drop-shadow-2xl transform -rotate-3 hover:rotate-0 transition-transform duration-300"
+              className="w-64 h-64 object-contain drop-shadow-2xl transform -rotate-3 hover:rotate-0 transition-transform duration-300"
             />
           </div>
           <h1 className="text-3xl font-black tracking-tight"><span className="text-white dark:text-white">Cloud</span><span className="text-accent dark:text-accent">BSD</span></h1>

@@ -45,7 +45,8 @@ interface ClusterResourceCardProps {
 const ClusterResourceCard = ({ title, used, total, percentage, icon: Icon, color, utilizedLabel, ofLabel }: ClusterResourceCardProps) => (
   <motion.div 
     variants={fadeInUp}
-    className="bg-white/80 dark:bg-slate-900/50 backdrop-blur-md border border-slate-200/50 dark:border-white/10 p-5 rounded-2xl shadow-soft hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
+    className="bg-white/80 dark:bg-slate-900/50 backdrop-blur-md border
+    border-slate-200/50 dark:border-white/10 p-5 rounded-2xl shadow-soft hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
   >
     <div className="flex items-center justify-between mb-4">
       <div className={`p-2.5 rounded-xl bg-${color}-50 dark:bg-${color}-500/10 text-${color}-600 dark:text-${color}-400`}>
