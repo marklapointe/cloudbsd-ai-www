@@ -8,6 +8,10 @@ import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../api/client';
 import ConfirmationModal from '../components/ConfirmationModal';
+import { TreeItem } from '../components/ui/TreeItem';
+import { DiskDetails } from '../components/disks/DiskDetails';
+import { VolumeDetails } from '../components/volumes/VolumeDetails';
+import { StorageEmptyState } from '../components/storage/StorageEmptyState';
 
 interface NodeData {
   id: number;
@@ -392,49 +396,6 @@ const Volumes: React.FC = () => {
     }
   };
 
-  const TreeItem = ({ item, level = 0, children, onClick, isSelected, icon: Icon, badge, actions }: {
-    item: string;
-    level?: number;
-    children?: React.ReactNode;
-    onClick?: () => void;
-    isSelected?: boolean;
-    icon?: React.ComponentType<{ size?: number; className?: string }>;
-    badge?: string | number;
-    actions?: React.ReactNode;
-  }) => (
-    <div>
-      <button
-        onClick={onClick}
-        className={`w-full flex items-center gap-2 px-3 py-2.5 text-left transition-all duration-150 rounded-xl group ${
-          isSelected
-            ? 'bg-brand-500/10 text-brand-600 dark:text-brand-400'
-            : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50'
-        }`}
-        style={{ paddingLeft: `${12 + level * 20}px` }}
-      >
-        {children && (
-          <span className="w-4 h-4 flex items-center justify-center text-slate-400">
-            {children}
-          </span>
-        )}
-        {Icon && <Icon size={16} className={isSelected ? 'text-brand-500' : 'text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300'} />}
-        <span className={`flex-1 text-sm font-bold truncate ${isSelected ? 'text-brand-600 dark:text-brand-400' : ''}`}>
-          {item}
-        </span>
-        {badge !== undefined && (
-          <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md">
-            {badge}
-          </span>
-        )}
-        {actions && (
-          <span className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
-            {actions}
-          </span>
-        )}
-      </button>
-    </div>
-  );
-
   const NodeDetails = ({ node }: { node: NodeData }) => (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
@@ -498,260 +459,6 @@ const Volumes: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
-
-  const DiskDetails = ({ disk }: { disk: DiskData }) => {
-    const volumes = getVolumesForDisk(disk.id);
-    return (
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="p-4 bg-slate-100 dark:bg-slate-800 rounded-2xl">
-              <HardDrive size={32} className="text-slate-600 dark:text-slate-400" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-2xl font-black text-slate-900 dark:text-slate-100">{disk.name}</h2>
-                <span className={`px-2 py-0.5 text-[10px] font-black uppercase tracking-widest rounded-md ${getDiskTypeColor(disk.disk_type)}`}>
-                  {disk.disk_type}
-                </span>
-              </div>
-              <div className="flex items-center gap-2 mt-1">
-                <span className={`w-2 h-2 rounded-full ${getStatusColor(disk.status)}`} />
-                <span className="text-sm font-bold text-slate-500">{disk.status}</span>
-                <span className="text-slate-300">•</span>
-                <span className="text-sm font-bold text-slate-500">{disk.size}</span>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => openDiskModal(disk)}
-              className="p-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-400 hover:text-brand-500 transition-colors"
-              title={t('volumes.edit_disk')}
-            >
-              <Edit2 size={18} />
-            </button>
-            <button
-              onClick={() => handleDeleteDisk(disk)}
-              className="p-2.5 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl text-slate-400 hover:text-red-500 transition-colors"
-              title={t('common.delete')}
-            >
-              <Trash2 size={18} />
-            </button>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3">
-          {disk.device_path && (
-            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3">
-              <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">Device Path</span>
-              <span className="font-bold text-slate-700 dark:text-slate-300 text-sm">{disk.device_path}</span>
-            </div>
-          )}
-          {disk.serial && (
-            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3">
-              <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">Serial</span>
-              <span className="font-bold text-slate-700 dark:text-slate-300 text-sm">{disk.serial}</span>
-            </div>
-          )}
-          {disk.pci_path && (
-            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3">
-              <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">PCI Path</span>
-              <span className="font-bold text-slate-700 dark:text-slate-300 text-sm">{disk.pci_path}</span>
-            </div>
-          )}
-          {disk.model && (
-            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3">
-              <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">Model</span>
-              <span className="font-bold text-slate-700 dark:text-slate-300 text-sm">{disk.model}</span>
-            </div>
-          )}
-          {disk.vendor && (
-            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3">
-              <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">Vendor</span>
-              <span className="font-bold text-slate-700 dark:text-slate-300 text-sm">{disk.vendor}</span>
-            </div>
-          )}
-          {disk.wwn && (
-            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3">
-              <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">WWN</span>
-              <span className="font-bold text-slate-700 dark:text-slate-300 text-sm">{disk.wwn}</span>
-            </div>
-          )}
-          {disk.sector_size && (
-            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3">
-              <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">Sector Size</span>
-              <span className="font-bold text-slate-700 dark:text-slate-300 text-sm">{disk.sector_size}</span>
-            </div>
-          )}
-        </div>
-
-        <div className="border-t border-slate-100 dark:border-slate-800 pt-4">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">Volumes ({volumes.length})</h3>
-            <button
-              onClick={() => openVolumeModal(disk)}
-              className="px-3 py-1.5 bg-brand-50 dark:bg-brand-500/10 rounded-xl text-brand-600 dark:text-brand-400 text-xs font-bold hover:bg-brand-100 dark:hover:bg-brand-500/20 transition-colors flex items-center gap-1"
-            >
-              <Plus size={14} />
-              Add Volume
-            </button>
-          </div>
-          <div className="space-y-2">
-            {volumes.length === 0 ? (
-              <div className="text-center py-6 text-slate-400 text-sm font-medium">No volumes on this disk</div>
-            ) : (
-              volumes.map(volume => (
-                <button
-                  key={volume.id}
-                  onClick={() => handleSelect('volume', { volumeId: volume.id, diskId: disk.id })}
-                  className={`w-full flex items-center gap-3 p-3 rounded-xl transition-colors ${
-                    selection.volumeId === volume.id
-                      ? 'bg-brand-500/10 border border-brand-500/20'
-                      : 'bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800'
-                  }`}
-                >
-                  <Database size={16} className="text-slate-400" />
-                  <div className="flex-1 text-left">
-                    <span className="font-bold text-slate-900 dark:text-slate-100 text-sm">{volume.name}</span>
-                    <span className={`ml-2 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest rounded-md ${getVolumeTypeColor(volume.volume_type)}`}>
-                      {volume.volume_type}
-                    </span>
-                  </div>
-                  <span className="text-xs text-slate-400 font-bold">{volume.size}</span>
-                </button>
-              ))
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const VolumeDetails = ({ volume, disk }: { volume: VolumeData; disk: DiskData }) => (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="p-4 bg-emerald-500/10 rounded-2xl">
-            <Database size={32} className="text-emerald-500" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-2xl font-black text-slate-900 dark:text-slate-100">{volume.name}</h2>
-              <span className={`px-2 py-0.5 text-[10px] font-black uppercase tracking-widest rounded-md ${getVolumeTypeColor(volume.volume_type)}`}>
-                {volume.volume_type}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 mt-1">
-              <span className={`w-2 h-2 rounded-full ${getStatusColor(volume.status)}`} />
-              <span className="text-sm font-bold text-slate-500">{volume.status}</span>
-            </div>
-          </div>
-        </div>
-        <div className="flex items-center gap-1">
-          <button
-            onClick={() => openVolumeModal(disk, volume)}
-            className="p-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-400 hover:text-brand-500 transition-colors"
-            title={t('volumes.edit_volume')}
-          >
-            <Edit2 size={18} />
-          </button>
-          <button
-            onClick={() => handleDeleteVolume(volume)}
-            className="p-2.5 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl text-slate-400 hover:text-red-500 transition-colors"
-            title={t('common.delete')}
-          >
-            <Trash2 size={18} />
-          </button>
-        </div>
-      </div>
-
-      {volume.mount_point && (
-        <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 flex items-center gap-3">
-          <Activity size={16} className="text-slate-400" />
-          <div>
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Mount Point</span>
-            <span className="font-bold text-slate-900 dark:text-slate-100">{volume.mount_point}</span>
-          </div>
-        </div>
-      )}
-
-      <div className="grid grid-cols-3 gap-3">
-        <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 text-center">
-          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Size</span>
-          <span className="font-bold text-slate-900 dark:text-slate-100">{volume.size}</span>
-        </div>
-        <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 text-center">
-          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Used</span>
-          <span className="font-bold text-slate-900 dark:text-slate-100">{volume.used}</span>
-        </div>
-        <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 text-center">
-          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Available</span>
-          <span className="font-bold text-slate-900 dark:text-slate-100">{volume.available}</span>
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <div className="flex justify-between text-xs font-black uppercase tracking-widest">
-          <span className="text-slate-400">Usage</span>
-          <span className={getUsagePercent(volume.used, volume.available) > 80 ? 'text-red-500' : 'text-emerald-500'}>
-            {getUsagePercent(volume.used, volume.available)}%
-          </span>
-        </div>
-        <div className="w-full h-3 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-          <div
-            className={`h-full rounded-full transition-all ${getUsagePercent(volume.used, volume.available) > 80 ? 'bg-red-500' : 'bg-emerald-500'}`}
-            style={{ width: `${getUsagePercent(volume.used, volume.available)}%` }}
-          />
-        </div>
-      </div>
-
-      {(volume.volume_type === 'ZFS' || volume.volume_type === 'zfs') && (
-        <div className="flex gap-4 pt-2">
-          <div className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest ${
-            volume.compression === 'on' || volume.compression === '1'
-              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
-              : 'bg-slate-100 dark:bg-slate-800 text-slate-400'
-          }`}>
-            Compression: {volume.compression === 'on' || volume.compression === '1' ? 'ON' : 'OFF'}
-          </div>
-          <div className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest ${
-            volume.deduplication === 'on' || volume.deduplication === '1'
-              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
-              : 'bg-slate-100 dark:bg-slate-800 text-slate-400'
-          }`}>
-            Deduplication: {volume.deduplication === 'on' || volume.deduplication === '1' ? 'ON' : 'OFF'}
-          </div>
-        </div>
-      )}
-
-      <div className="border-t border-slate-100 dark:border-slate-800 pt-4">
-        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Parent Disk</span>
-        <button
-          onClick={() => handleSelect('disk', { diskId: disk.id })}
-          className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors w-full"
-        >
-          <HardDrive size={16} className="text-slate-400" />
-          <span className="font-bold text-slate-900 dark:text-slate-100">{disk.name}</span>
-          <span className={`px-2 py-0.5 text-[9px] font-black uppercase tracking-widest rounded-md ${getDiskTypeColor(disk.disk_type)}`}>
-            {disk.disk_type}
-          </span>
-        </button>
-      </div>
-    </div>
-  );
-
-  const EmptyDetails = () => (
-    <div className="flex flex-col items-center justify-center h-full text-center py-20">
-      <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
-        <HardDrive size={40} className="text-slate-300 dark:text-slate-600" />
-      </div>
-      <h3 className="text-lg font-black text-slate-900 dark:text-slate-100 mb-2">Select an item</h3>
-      <p className="text-sm text-slate-400 font-medium max-w-xs">
-        Choose a node, disk, or volume from the tree to view its details
-      </p>
     </div>
   );
 
@@ -894,11 +601,31 @@ const Volumes: React.FC = () => {
             ) : selection.type === 'node' && selection.nodeId ? (
               <NodeDetails node={getSelectedNode()!} />
             ) : selection.type === 'disk' && selection.diskId ? (
-              <DiskDetails disk={getSelectedDisk()!} />
+              <DiskDetails
+                disk={getSelectedDisk()!}
+                getVolumesForDisk={getVolumesForDisk}
+                getDiskTypeColor={getDiskTypeColor}
+                getStatusColor={getStatusColor}
+                selection={selection}
+                onEdit={openDiskModal}
+                onDelete={handleDeleteDisk}
+                onSelect={handleSelect}
+                onAddVolume={openVolumeModal}
+              />
             ) : selection.type === 'volume' && selection.volumeId ? (
-              <VolumeDetails volume={getSelectedVolume()!} disk={getSelectedDisk()!} />
+              <VolumeDetails
+                volume={getSelectedVolume()!}
+                disk={getSelectedDisk()!}
+                onEdit={openVolumeModal}
+                onDelete={handleDeleteVolume}
+                onSelectDisk={(diskId) => handleSelect('disk', { diskId })}
+                getUsagePercent={getUsagePercent}
+                getVolumeTypeColor={getVolumeTypeColor}
+                getStatusColor={getStatusColor}
+                getDiskTypeColor={getDiskTypeColor}
+              />
             ) : (
-              <EmptyDetails />
+              <StorageEmptyState />
             )}
           </div>
         </div>
