@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {
   HardDrive, Plus, Trash2, Edit2, ChevronDown, ChevronRight,
-  X, Server, Activity, Box
+  X, Server, Activity, Database, Cpu, MemoryStick,
+  Circle
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -14,6 +15,8 @@ interface NodeData {
   role: string;
   status: string;
   ip: string;
+  cpu?: number | string;
+  memory?: string;
 }
 
 interface VolumeData {
@@ -47,16 +50,26 @@ interface DiskData {
   volumes?: VolumeData[];
 }
 
+type SelectionType = 'node' | 'disk' | 'volume' | null;
+interface Selection {
+  type: SelectionType;
+  nodeId?: number;
+  diskId?: number;
+  volumeId?: number;
+}
+
 const Volumes: React.FC = () => {
   const { t } = useTranslation();
   const [nodes, setNodes] = useState<NodeData[]>([]);
-  const [selectedNodeId, setSelectedNodeId] = useState<number | null>(null);
   const [disks, setDisks] = useState<DiskData[]>([]);
+  const [allVolumes, setAllVolumes] = useState<VolumeData[]>([]);
   const [loading, setLoading] = useState(true);
   const [nodesLoading, setNodesLoading] = useState(true);
   const [error, setError] = useState('');
-  const [expandedDisks, setExpandedDisks] = useState<Set<number>>(new Set());
 
+  const [expandedNodes, setExpandedNodes] = useState<Set<number>>(new Set());
+  const [expandedDisks, setExpandedDisks] = useState<Set<number>>(new Set());
+  const [selection, setSelection] = useState<Selection>({ type: null });
   const [isDiskModalOpen, setIsDiskModalOpen] = useState(false);
   const [isVolumeModalOpen, setIsVolumeModalOpen] = useState(false);
   const [editingDisk, setEditingDisk] = useState<DiskData | null>(null);
@@ -66,7 +79,6 @@ const Volumes: React.FC = () => {
   const [deletingDisk, setDeletingDisk] = useState<DiskData | null>(null);
   const [deletingVolume, setDeletingVolume] = useState<VolumeData | null>(null);
   const [formError, setFormError] = useState('');
-
   const [diskForm, setDiskForm] = useState({
     name: '',
     device_path: '',
@@ -108,19 +120,29 @@ const Volumes: React.FC = () => {
     }
   };
 
-  const fetchDisks = async (nodeId: number) => {
+  const fetchAllDisksAndVolumes = async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/disks?node_id=${nodeId}`);
-      if (Array.isArray(response.data)) {
-        setDisks(response.data);
+      const diskResponse = await api.get('/disks');
+      if (Array.isArray(diskResponse.data)) {
+        const disksWithVolumes = diskResponse.data as DiskData[];
+        setDisks(disksWithVolumes);
+        const volumes: VolumeData[] = [];
+        disksWithVolumes.forEach(disk => {
+          if (disk.volumes) {
+            volumes.push(...disk.volumes);
+          }
+        });
+        setAllVolumes(volumes);
       } else {
         setDisks([]);
+        setAllVolumes([]);
       }
     } catch (err: unknown) {
       const errorResponse = err as { response?: { data?: { message?: string } } };
       setError(errorResponse.response?.data?.message || t('volumes.fetch_failed'));
       setDisks([]);
+      setAllVolumes([]);
     } finally {
       setLoading(false);
     }
@@ -128,15 +150,18 @@ const Volumes: React.FC = () => {
 
   useEffect(() => {
     fetchNodes();
+    fetchAllDisksAndVolumes();
   }, []);
 
-  useEffect(() => {
-    if (selectedNodeId) {
-      fetchDisks(selectedNodeId);
+  const toggleNodeExpand = (nodeId: number) => {
+    const newExpanded = new Set(expandedNodes);
+    if (newExpanded.has(nodeId)) {
+      newExpanded.delete(nodeId);
     } else {
-      setDisks([]);
+      newExpanded.add(nodeId);
     }
-  }, [selectedNodeId]);
+    setExpandedNodes(newExpanded);
+  };
 
   const toggleDiskExpand = (diskId: number) => {
     const newExpanded = new Set(expandedDisks);
@@ -147,6 +172,22 @@ const Volumes: React.FC = () => {
     }
     setExpandedDisks(newExpanded);
   };
+
+  const getDisksForNode = (nodeId: number) => disks.filter(d => d.node_id === nodeId);
+  const getVolumesForDisk = (diskId: number) => disks.find(d => d.id === diskId)?.volumes || [];
+
+  const handleSelect = (type: SelectionType, data: { nodeId?: number; diskId?: number; volumeId?: number }) => {
+    setSelection({
+      type,
+      nodeId: data.nodeId,
+      diskId: data.diskId,
+      volumeId: data.volumeId
+    });
+  };
+
+  const getSelectedNode = () => nodes.find(n => n.id === selection.nodeId);
+  const getSelectedDisk = () => disks.find(d => d.id === selection.diskId);
+  const getSelectedVolume = () => allVolumes.find(v => v.id === selection.volumeId);
 
   const getDiskTypeColor = (type: string): string => {
     switch (type.toUpperCase()) {
@@ -197,6 +238,11 @@ const Volumes: React.FC = () => {
     const total = usedNum + availNum;
     if (total === 0) return 0;
     return Math.round((usedNum / total) * 100);
+  };
+
+  const getNodeDiskCount = (nodeId: number) => getDisksForNode(nodeId).length;
+  const getNodeVolumeCount = (nodeId: number) => {
+    return getDisksForNode(nodeId).reduce((acc, disk) => acc + (disk.volumes?.length || 0), 0);
   };
 
   const openDiskModal = (disk?: DiskData) => {
@@ -275,11 +321,11 @@ const Volumes: React.FC = () => {
     try {
       if (editingDisk) {
         await api.put(`/disks/${editingDisk.id}`, diskForm);
-      } else {
-        await api.post('/disks', { ...diskForm, node_id: selectedNodeId });
+      } else if (selection.nodeId) {
+        await api.post('/disks', { ...diskForm, node_id: selection.nodeId });
       }
       setIsDiskModalOpen(false);
-      if (selectedNodeId) fetchDisks(selectedNodeId);
+      fetchAllDisksAndVolumes();
     } catch (err: unknown) {
       const errorResponse = err as { response?: { data?: { message?: string } } };
       setFormError(errorResponse.response?.data?.message || t('volumes.operation_failed'));
@@ -297,7 +343,7 @@ const Volumes: React.FC = () => {
         await api.post('/volumes', { ...volumeForm, disk_id: selectedDiskForVolume.id });
       }
       setIsVolumeModalOpen(false);
-      if (selectedNodeId) fetchDisks(selectedNodeId);
+      fetchAllDisksAndVolumes();
     } catch (err: unknown) {
       const errorResponse = err as { response?: { data?: { message?: string } } };
       setFormError(errorResponse.response?.data?.message || t('volumes.operation_failed'));
@@ -313,7 +359,10 @@ const Volumes: React.FC = () => {
     if (!deletingDisk) return;
     try {
       await api.delete(`/disks/${deletingDisk.id}`);
-      if (selectedNodeId) fetchDisks(selectedNodeId);
+      fetchAllDisksAndVolumes();
+      if (selection.diskId === deletingDisk.id) {
+        setSelection({ type: null });
+      }
     } catch (err: unknown) {
       const errorResponse = err as { response?: { data?: { message?: string } } };
       setError(errorResponse.response?.data?.message || t('volumes.delete_failed'));
@@ -331,7 +380,10 @@ const Volumes: React.FC = () => {
     if (!deletingVolume) return;
     try {
       await api.delete(`/volumes/${deletingVolume.id}`);
-      if (selectedNodeId) fetchDisks(selectedNodeId);
+      fetchAllDisksAndVolumes();
+      if (selection.volumeId === deletingVolume.id) {
+        setSelection({ type: null });
+      }
     } catch (err: unknown) {
       const errorResponse = err as { response?: { data?: { message?: string } } };
       setError(errorResponse.response?.data?.message || t('volumes.delete_failed'));
@@ -340,9 +392,371 @@ const Volumes: React.FC = () => {
     }
   };
 
+  const TreeItem = ({ item, level = 0, children, onClick, isSelected, icon: Icon, badge, actions }: {
+    item: string;
+    level?: number;
+    children?: React.ReactNode;
+    onClick?: () => void;
+    isSelected?: boolean;
+    icon?: React.ComponentType<{ size?: number; className?: string }>;
+    badge?: string | number;
+    actions?: React.ReactNode;
+  }) => (
+    <div>
+      <button
+        onClick={onClick}
+        className={`w-full flex items-center gap-2 px-3 py-2.5 text-left transition-all duration-150 rounded-xl group ${
+          isSelected
+            ? 'bg-brand-500/10 text-brand-600 dark:text-brand-400'
+            : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50'
+        }`}
+        style={{ paddingLeft: `${12 + level * 20}px` }}
+      >
+        {children && (
+          <span className="w-4 h-4 flex items-center justify-center text-slate-400">
+            {children}
+          </span>
+        )}
+        {Icon && <Icon size={16} className={isSelected ? 'text-brand-500' : 'text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300'} />}
+        <span className={`flex-1 text-sm font-bold truncate ${isSelected ? 'text-brand-600 dark:text-brand-400' : ''}`}>
+          {item}
+        </span>
+        {badge !== undefined && (
+          <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md">
+            {badge}
+          </span>
+        )}
+        {actions && (
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+            {actions}
+          </span>
+        )}
+      </button>
+    </div>
+  );
+
+  const NodeDetails = ({ node }: { node: NodeData }) => (
+    <div className="space-y-6">
+      <div className="flex items-center gap-4">
+        <div className="p-4 bg-brand-500/10 rounded-2xl">
+          <Server size={32} className="text-brand-500" />
+        </div>
+        <div>
+          <h2 className="text-2xl font-black text-slate-900 dark:text-slate-100">{node.name}</h2>
+          <div className="flex items-center gap-2 mt-1">
+            <span className={`w-2 h-2 rounded-full ${getStatusColor(node.status)}`} />
+            <span className="text-sm font-bold text-slate-500">{node.status}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4">
+          <div className="flex items-center gap-2 text-slate-400 mb-2">
+            <Activity size={14} />
+            <span className="text-[10px] font-black uppercase tracking-widest">IP Address</span>
+          </div>
+          <span className="font-bold text-slate-900 dark:text-slate-100">{node.ip || '—'}</span>
+        </div>
+        <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4">
+          <div className="flex items-center gap-2 text-slate-400 mb-2">
+            <Circle size={14} />
+            <span className="text-[10px] font-black uppercase tracking-widest">Role</span>
+          </div>
+          <span className="font-bold text-slate-900 dark:text-slate-100 uppercase">{node.role}</span>
+        </div>
+        {node.cpu && (
+          <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4">
+            <div className="flex items-center gap-2 text-slate-400 mb-2">
+              <Cpu size={14} />
+              <span className="text-[10px] font-black uppercase tracking-widest">CPU</span>
+            </div>
+            <span className="font-bold text-slate-900 dark:text-slate-100">{node.cpu}</span>
+          </div>
+        )}
+        {node.memory && (
+          <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4">
+            <div className="flex items-center gap-2 text-slate-400 mb-2">
+              <MemoryStick size={14} />
+              <span className="text-[10px] font-black uppercase tracking-widest">Memory</span>
+            </div>
+            <span className="font-bold text-slate-900 dark:text-slate-100">{node.memory}</span>
+          </div>
+        )}
+      </div>
+
+      <div className="border-t border-slate-100 dark:border-slate-800 pt-4">
+        <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Storage Summary</h3>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 text-center">
+            <div className="text-3xl font-black text-brand-600 dark:text-brand-400">{getNodeDiskCount(node.id)}</div>
+            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Disks</div>
+          </div>
+          <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 text-center">
+            <div className="text-3xl font-black text-emerald-600 dark:text-emerald-400">{getNodeVolumeCount(node.id)}</div>
+            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Volumes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const DiskDetails = ({ disk }: { disk: DiskData }) => {
+    const volumes = getVolumesForDisk(disk.id);
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="p-4 bg-slate-100 dark:bg-slate-800 rounded-2xl">
+              <HardDrive size={32} className="text-slate-600 dark:text-slate-400" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-2xl font-black text-slate-900 dark:text-slate-100">{disk.name}</h2>
+                <span className={`px-2 py-0.5 text-[10px] font-black uppercase tracking-widest rounded-md ${getDiskTypeColor(disk.disk_type)}`}>
+                  {disk.disk_type}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 mt-1">
+                <span className={`w-2 h-2 rounded-full ${getStatusColor(disk.status)}`} />
+                <span className="text-sm font-bold text-slate-500">{disk.status}</span>
+                <span className="text-slate-300">•</span>
+                <span className="text-sm font-bold text-slate-500">{disk.size}</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => openDiskModal(disk)}
+              className="p-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-400 hover:text-brand-500 transition-colors"
+              title={t('volumes.edit_disk')}
+            >
+              <Edit2 size={18} />
+            </button>
+            <button
+              onClick={() => handleDeleteDisk(disk)}
+              className="p-2.5 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl text-slate-400 hover:text-red-500 transition-colors"
+              title={t('common.delete')}
+            >
+              <Trash2 size={18} />
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          {disk.device_path && (
+            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3">
+              <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">Device Path</span>
+              <span className="font-bold text-slate-700 dark:text-slate-300 text-sm">{disk.device_path}</span>
+            </div>
+          )}
+          {disk.serial && (
+            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3">
+              <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">Serial</span>
+              <span className="font-bold text-slate-700 dark:text-slate-300 text-sm">{disk.serial}</span>
+            </div>
+          )}
+          {disk.pci_path && (
+            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3">
+              <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">PCI Path</span>
+              <span className="font-bold text-slate-700 dark:text-slate-300 text-sm">{disk.pci_path}</span>
+            </div>
+          )}
+          {disk.model && (
+            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3">
+              <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">Model</span>
+              <span className="font-bold text-slate-700 dark:text-slate-300 text-sm">{disk.model}</span>
+            </div>
+          )}
+          {disk.vendor && (
+            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3">
+              <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">Vendor</span>
+              <span className="font-bold text-slate-700 dark:text-slate-300 text-sm">{disk.vendor}</span>
+            </div>
+          )}
+          {disk.wwn && (
+            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3">
+              <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">WWN</span>
+              <span className="font-bold text-slate-700 dark:text-slate-300 text-sm">{disk.wwn}</span>
+            </div>
+          )}
+          {disk.sector_size && (
+            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3">
+              <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">Sector Size</span>
+              <span className="font-bold text-slate-700 dark:text-slate-300 text-sm">{disk.sector_size}</span>
+            </div>
+          )}
+        </div>
+
+        <div className="border-t border-slate-100 dark:border-slate-800 pt-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">Volumes ({volumes.length})</h3>
+            <button
+              onClick={() => openVolumeModal(disk)}
+              className="px-3 py-1.5 bg-brand-50 dark:bg-brand-500/10 rounded-xl text-brand-600 dark:text-brand-400 text-xs font-bold hover:bg-brand-100 dark:hover:bg-brand-500/20 transition-colors flex items-center gap-1"
+            >
+              <Plus size={14} />
+              Add Volume
+            </button>
+          </div>
+          <div className="space-y-2">
+            {volumes.length === 0 ? (
+              <div className="text-center py-6 text-slate-400 text-sm font-medium">No volumes on this disk</div>
+            ) : (
+              volumes.map(volume => (
+                <button
+                  key={volume.id}
+                  onClick={() => handleSelect('volume', { volumeId: volume.id, diskId: disk.id })}
+                  className={`w-full flex items-center gap-3 p-3 rounded-xl transition-colors ${
+                    selection.volumeId === volume.id
+                      ? 'bg-brand-500/10 border border-brand-500/20'
+                      : 'bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800'
+                  }`}
+                >
+                  <Database size={16} className="text-slate-400" />
+                  <div className="flex-1 text-left">
+                    <span className="font-bold text-slate-900 dark:text-slate-100 text-sm">{volume.name}</span>
+                    <span className={`ml-2 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest rounded-md ${getVolumeTypeColor(volume.volume_type)}`}>
+                      {volume.volume_type}
+                    </span>
+                  </div>
+                  <span className="text-xs text-slate-400 font-bold">{volume.size}</span>
+                </button>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const VolumeDetails = ({ volume, disk }: { volume: VolumeData; disk: DiskData }) => (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="p-4 bg-emerald-500/10 rounded-2xl">
+            <Database size={32} className="text-emerald-500" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-2xl font-black text-slate-900 dark:text-slate-100">{volume.name}</h2>
+              <span className={`px-2 py-0.5 text-[10px] font-black uppercase tracking-widest rounded-md ${getVolumeTypeColor(volume.volume_type)}`}>
+                {volume.volume_type}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 mt-1">
+              <span className={`w-2 h-2 rounded-full ${getStatusColor(volume.status)}`} />
+              <span className="text-sm font-bold text-slate-500">{volume.status}</span>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => openVolumeModal(disk, volume)}
+            className="p-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-400 hover:text-brand-500 transition-colors"
+            title={t('volumes.edit_volume')}
+          >
+            <Edit2 size={18} />
+          </button>
+          <button
+            onClick={() => handleDeleteVolume(volume)}
+            className="p-2.5 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl text-slate-400 hover:text-red-500 transition-colors"
+            title={t('common.delete')}
+          >
+            <Trash2 size={18} />
+          </button>
+        </div>
+      </div>
+
+      {volume.mount_point && (
+        <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 flex items-center gap-3">
+          <Activity size={16} className="text-slate-400" />
+          <div>
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Mount Point</span>
+            <span className="font-bold text-slate-900 dark:text-slate-100">{volume.mount_point}</span>
+          </div>
+        </div>
+      )}
+
+      <div className="grid grid-cols-3 gap-3">
+        <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 text-center">
+          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Size</span>
+          <span className="font-bold text-slate-900 dark:text-slate-100">{volume.size}</span>
+        </div>
+        <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 text-center">
+          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Used</span>
+          <span className="font-bold text-slate-900 dark:text-slate-100">{volume.used}</span>
+        </div>
+        <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 text-center">
+          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Available</span>
+          <span className="font-bold text-slate-900 dark:text-slate-100">{volume.available}</span>
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <div className="flex justify-between text-xs font-black uppercase tracking-widest">
+          <span className="text-slate-400">Usage</span>
+          <span className={getUsagePercent(volume.used, volume.available) > 80 ? 'text-red-500' : 'text-emerald-500'}>
+            {getUsagePercent(volume.used, volume.available)}%
+          </span>
+        </div>
+        <div className="w-full h-3 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+          <div
+            className={`h-full rounded-full transition-all ${getUsagePercent(volume.used, volume.available) > 80 ? 'bg-red-500' : 'bg-emerald-500'}`}
+            style={{ width: `${getUsagePercent(volume.used, volume.available)}%` }}
+          />
+        </div>
+      </div>
+
+      {(volume.volume_type === 'ZFS' || volume.volume_type === 'zfs') && (
+        <div className="flex gap-4 pt-2">
+          <div className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest ${
+            volume.compression === 'on' || volume.compression === '1'
+              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+              : 'bg-slate-100 dark:bg-slate-800 text-slate-400'
+          }`}>
+            Compression: {volume.compression === 'on' || volume.compression === '1' ? 'ON' : 'OFF'}
+          </div>
+          <div className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest ${
+            volume.deduplication === 'on' || volume.deduplication === '1'
+              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+              : 'bg-slate-100 dark:bg-slate-800 text-slate-400'
+          }`}>
+            Deduplication: {volume.deduplication === 'on' || volume.deduplication === '1' ? 'ON' : 'OFF'}
+          </div>
+        </div>
+      )}
+
+      <div className="border-t border-slate-100 dark:border-slate-800 pt-4">
+        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Parent Disk</span>
+        <button
+          onClick={() => handleSelect('disk', { diskId: disk.id })}
+          className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors w-full"
+        >
+          <HardDrive size={16} className="text-slate-400" />
+          <span className="font-bold text-slate-900 dark:text-slate-100">{disk.name}</span>
+          <span className={`px-2 py-0.5 text-[9px] font-black uppercase tracking-widest rounded-md ${getDiskTypeColor(disk.disk_type)}`}>
+            {disk.disk_type}
+          </span>
+        </button>
+      </div>
+    </div>
+  );
+
+  const EmptyDetails = () => (
+    <div className="flex flex-col items-center justify-center h-full text-center py-20">
+      <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
+        <HardDrive size={40} className="text-slate-300 dark:text-slate-600" />
+      </div>
+      <h3 className="text-lg font-black text-slate-900 dark:text-slate-100 mb-2">Select an item</h3>
+      <p className="text-sm text-slate-400 font-medium max-w-xs">
+        Choose a node, disk, or volume from the tree to view its details
+      </p>
+    </div>
+  );
+
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">{t('volumes.title')}</h1>
@@ -350,265 +764,145 @@ const Volumes: React.FC = () => {
         </div>
       </div>
 
-      {/* Node Selector */}
-      <div className="bg-white dark:bg-slate-900 p-6 rounded-[2rem] shadow-xl border border-slate-100 dark:border-slate-800">
-        <div className="flex flex-col md:flex-row md:items-center gap-4">
-          <div className="flex-1">
-            <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 ml-1">
-              {t('volumes.select_node')}
-            </label>
-            <div className="relative">
-              <Server size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
-              <select
-                value={selectedNodeId || ''}
-                onChange={(e) => setSelectedNodeId(e.target.value ? parseInt(e.target.value) : null)}
-                className="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200 text-slate-900 dark:text-slate-100 font-bold outline-none appearance-none cursor-pointer"
-              >
-                <option value="">{t('volumes.select_node')}</option>
-                {nodes.map((node) => (
-                  <option key={node.id} value={node.id}>
-                    {node.name} ({node.ip || node.status})
-                  </option>
-                ))}
-              </select>
+      <div className="bg-white dark:bg-slate-900 rounded-[2rem] shadow-xl border border-slate-100 dark:border-slate-800 overflow-hidden">
+        <div className="flex" style={{ minHeight: '600px' }}>
+          <div className="w-60 flex-shrink-0 border-r border-slate-100 dark:border-slate-800 flex flex-col">
+            <div className="p-4 border-b border-slate-100 dark:border-slate-800">
+              <h2 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                Storage Explorer
+              </h2>
+            </div>
+            <div className="flex-1 overflow-y-auto p-2">
+              {nodesLoading ? (
+                <div className="flex items-center justify-center p-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500" />
+                </div>
+              ) : nodes.length === 0 ? (
+                <div className="text-center py-8 text-slate-400 text-sm">
+                  No nodes available
+                </div>
+              ) : (
+                nodes.map(node => {
+                  const nodeDisks = getDisksForNode(node.id);
+                  const isNodeExpanded = expandedNodes.has(node.id);
+                  const isNodeSelected = selection.type === 'node' && selection.nodeId === node.id;
+
+                  return (
+                    <div key={node.id} className="mb-1">
+                      <TreeItem
+                        item={node.name}
+                        icon={Server}
+                        isSelected={isNodeSelected}
+                        badge={nodeDisks.length}
+                        onClick={() => handleSelect('node', { nodeId: node.id })}
+                        actions={
+                          nodeDisks.length > 0 && (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); toggleNodeExpand(node.id); }}
+                              className="p-1 hover:bg-slate-200 dark:hover:bg-slate-700 rounded"
+                            >
+                              {isNodeExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                            </button>
+                          )
+                        }
+                      >
+                        {nodeDisks.length > 0 && (isNodeExpanded ? <ChevronDown size={14} className="text-slate-400" /> : <ChevronRight size={14} className="text-slate-400" />)}
+                      </TreeItem>
+
+                          <AnimatePresence>
+                        {isNodeExpanded && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.15 }}
+                            className="overflow-hidden"
+                          >
+                            {nodeDisks.map(disk => {
+                              const diskVolumes = disk.volumes || [];
+                              const isDiskExpanded = expandedDisks.has(disk.id);
+                              const isDiskSelected = selection.type === 'disk' && selection.diskId === disk.id;
+
+                              return (
+                                <div key={disk.id} className="mb-1">
+                                  <TreeItem
+                                    item={disk.name}
+                                    level={1}
+                                    icon={HardDrive}
+                                    isSelected={isDiskSelected}
+                                    badge={diskVolumes.length}
+                                    onClick={() => handleSelect('disk', { nodeId: node.id, diskId: disk.id })}
+                                    actions={
+                                      <button
+                                        onClick={(e) => { e.stopPropagation(); toggleDiskExpand(disk.id); }}
+                                        className="p-1 hover:bg-slate-200 dark:hover:bg-slate-700 rounded"
+                                      >
+                                        {isDiskExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                                      </button>
+                                    }
+                                  >
+                                    {diskVolumes.length > 0 && (isDiskExpanded ? <ChevronDown size={14} className="text-slate-400" /> : <ChevronRight size={14} className="text-slate-400" />)}
+                                  </TreeItem>
+
+                                  <AnimatePresence>
+                                    {isDiskExpanded && (
+                                      <motion.div
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: 'auto', opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        transition={{ duration: 0.1 }}
+                                        className="overflow-hidden"
+                                      >
+                                        {diskVolumes.map(volume => {
+                                          const isVolumeSelected = selection.type === 'volume' && selection.volumeId === volume.id;
+                                          return (
+                                            <TreeItem
+                                              key={volume.id}
+                                              item={volume.name}
+                                              level={2}
+                                              icon={Database}
+                                              isSelected={isVolumeSelected}
+                                              onClick={() => handleSelect('volume', { nodeId: node.id, diskId: disk.id, volumeId: volume.id })}
+                                            />
+                                          );
+                                        })}
+                                      </motion.div>
+                                    )}
+                                  </AnimatePresence>
+                                </div>
+                              );
+                            })}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                })
+              )}
             </div>
           </div>
-          {selectedNodeId && (
-            <button
-              onClick={() => openDiskModal()}
-              className="px-6 py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-2xl transition-all duration-200 shadow-lg shadow-brand-500/20 active:scale-95 flex items-center gap-2"
-            >
-              <Plus size={20} />
-              {t('volumes.add_disk')}
-            </button>
-          )}
+
+          <div className="flex-1 p-6 overflow-y-auto">
+            {loading ? (
+              <div className="flex items-center justify-center h-full">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-500" />
+              </div>
+            ) : error ? (
+              <div className="bg-red-50 text-red-600 p-6 rounded-3xl border border-red-100 font-bold dark:bg-red-500/10 dark:border-red-500/20 dark:text-red-400">
+                {error}
+              </div>
+            ) : selection.type === 'node' && selection.nodeId ? (
+              <NodeDetails node={getSelectedNode()!} />
+            ) : selection.type === 'disk' && selection.diskId ? (
+              <DiskDetails disk={getSelectedDisk()!} />
+            ) : selection.type === 'volume' && selection.volumeId ? (
+              <VolumeDetails volume={getSelectedVolume()!} disk={getSelectedDisk()!} />
+            ) : (
+              <EmptyDetails />
+            )}
+          </div>
         </div>
       </div>
-
-      {/* Loading State */}
-      {nodesLoading ? (
-        <div className="flex items-center justify-center p-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-500"></div>
-        </div>
-      ) : !selectedNodeId ? (
-        <div className="bg-white dark:bg-slate-900 p-12 rounded-[2.5rem] shadow-xl border border-slate-100 dark:border-slate-800 text-center">
-          <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Server size={32} className="text-slate-400" />
-          </div>
-          <h3 className="text-xl font-black text-slate-900 dark:text-slate-100 mb-2">{t('volumes.no_node_selected')}</h3>
-          <p className="text-slate-500 dark:text-slate-400 font-medium">{t('volumes.no_node_selected_desc')}</p>
-        </div>
-      ) : loading ? (
-        <div className="flex items-center justify-center p-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-500"></div>
-        </div>
-      ) : error ? (
-        <div className="bg-red-50 text-red-600 p-6 rounded-3xl border border-red-100 font-bold dark:bg-red-500/10 dark:border-red-500/20 dark:text-red-400">
-          {error}
-        </div>
-      ) : disks.length === 0 ? (
-        <div className="bg-white dark:bg-slate-900 p-12 rounded-[2.5rem] shadow-xl border border-slate-100 dark:border-slate-800 text-center">
-          <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
-            <HardDrive size={32} className="text-slate-400" />
-          </div>
-          <h3 className="text-xl font-black text-slate-900 dark:text-slate-100 mb-2">{t('volumes.no_disks')}</h3>
-          <p className="text-slate-500 dark:text-slate-400 font-medium">{t('volumes.no_disks_desc')}</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {disks.map((disk) => (
-            <div
-              key={disk.id}
-              className="bg-white dark:bg-slate-900 rounded-[2rem] shadow-xl border border-slate-100 dark:border-slate-800 overflow-hidden"
-              >
-                <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-4">
-                    <div className="p-4 bg-slate-100 dark:bg-slate-800 rounded-2xl">
-                      <HardDrive size={24} className="text-slate-600 dark:text-slate-400" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-xl font-black text-slate-900 dark:text-slate-100">{disk.name}</h3>
-                        <span className={`px-2 py-0.5 text-[10px] font-black uppercase tracking-widest rounded-md ${getDiskTypeColor(disk.disk_type)}`}>
-                          {disk.disk_type}
-                        </span>
-                      </div>
-                      <p className="text-xs text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest flex items-center gap-2 mt-1">
-                        <span className={`w-2 h-2 rounded-full ${getStatusColor(disk.status)}`} />
-                        {disk.status} • {disk.size}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <button
-                      onClick={() => openDiskModal(disk)}
-                      className="p-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-400 hover:text-brand-500 dark:hover:text-brand-400 transition-colors"
-                      title={t('volumes.edit_disk')}
-                    >
-                      <Edit2 size={18} />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteDisk(disk)}
-                      className="p-2.5 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl text-slate-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
-                      title={t('common.delete')}
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Disk Details */}
-                <div className="grid grid-cols-2 gap-3 text-xs">
-                  {disk.device_path && (
-                    <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3">
-                      <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">{t('volumes.device_path')}</span>
-                      <span className="font-bold text-slate-700 dark:text-slate-300">{disk.device_path}</span>
-                    </div>
-                  )}
-                  {disk.pci_path && (
-                    <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3">
-                      <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">{t('volumes.pci_path')}</span>
-                      <span className="font-bold text-slate-700 dark:text-slate-300">{disk.pci_path}</span>
-                    </div>
-                  )}
-                  {disk.model && (
-                    <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3">
-                      <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">{t('volumes.model')}</span>
-                      <span className="font-bold text-slate-700 dark:text-slate-300">{disk.model}</span>
-                    </div>
-                  )}
-                  {disk.vendor && (
-                    <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3">
-                      <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">{t('volumes.vendor')}</span>
-                      <span className="font-bold text-slate-700 dark:text-slate-300">{disk.vendor}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="border-t border-slate-100 dark:border-slate-800">
-                <button
-                  onClick={() => toggleDiskExpand(disk.id)}
-                  className="w-full px-6 py-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
-                >
-                  <span className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-                    {t('volumes.volumes_count', { count: disk.volumes?.length || 0 })}
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openVolumeModal(disk);
-                      }}
-                      className="p-2 bg-brand-50 dark:bg-brand-500/10 rounded-xl text-brand-600 dark:text-brand-400 hover:bg-brand-100 dark:hover:bg-brand-500/20 transition-colors"
-                      title={t('volumes.add_volume')}
-                    >
-                      <Plus size={16} />
-                    </button>
-                    {expandedDisks.has(disk.id) ? (
-                      <ChevronDown size={18} className="text-slate-400" />
-                    ) : (
-                      <ChevronRight size={18} className="text-slate-400" />
-                    )}
-                  </div>
-                </button>
-
-                <AnimatePresence>
-                  {expandedDisks.has(disk.id) && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="px-6 pb-6 space-y-3">
-                        {(!disk.volumes || disk.volumes.length === 0) ? (
-                          <div className="text-center py-8 text-slate-400 dark:text-slate-500 text-sm font-medium">
-                            {t('volumes.no_volumes_on_disk')}
-                          </div>
-                        ) : (
-                          disk.volumes.map((volume) => (
-                            <div
-                              key={volume.id}
-                              className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4"
-                            >
-                              <div className="flex items-center justify-between mb-3">
-                                <div className="flex items-center gap-3">
-                                  <div className="p-2 bg-white dark:bg-slate-900 rounded-xl">
-                                    <Box size={16} className="text-slate-500" />
-                                  </div>
-                                  <div>
-                                    <span className="font-black text-slate-900 dark:text-slate-100">{volume.name}</span>
-                                    <span className={`ml-2 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest rounded-md ${getVolumeTypeColor(volume.volume_type)}`}>
-                                      {volume.volume_type}
-                                    </span>
-                                  </div>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  <button
-                                    onClick={() => openVolumeModal(disk, volume)}
-                                    className="p-1.5 hover:bg-white dark:hover:bg-slate-900 rounded-lg text-slate-400 hover:text-brand-500 dark:hover:text-brand-400 transition-colors"
-                                  >
-                                    <Edit2 size={14} />
-                                  </button>
-                                  <button
-                                    onClick={() => handleDeleteVolume(volume)}
-                                    className="p-1.5 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg text-slate-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
-                                  >
-                                    <Trash2 size={14} />
-                                  </button>
-                                </div>
-                              </div>
-
-                              <div className="space-y-2 text-xs">
-                                {volume.mount_point && (
-                                  <div className="flex items-center gap-2">
-                                    <Activity size={12} className="text-slate-400" />
-                                    <span className="text-slate-500 dark:text-slate-400">{volume.mount_point}</span>
-                                  </div>
-                                )}
-                                <div className="flex items-center gap-2">
-                                  <span className="text-slate-400">{volume.size}</span>
-                                </div>
-                                <div className="space-y-1">
-                                  <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
-                                    <span className="text-slate-400">{t('volumes.utilized')}</span>
-                                    <span className="text-slate-600 dark:text-slate-400">
-                                      {getUsagePercent(volume.used, volume.available)}%
-                                    </span>
-                                  </div>
-                                  <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                                    <div
-                                      className={`h-full rounded-full ${getUsagePercent(volume.used, volume.available) > 80 ? 'bg-red-500' : 'bg-emerald-500'}`}
-                                      style={{ width: `${getUsagePercent(volume.used, volume.available)}%` }}
-                                    />
-                                  </div>
-                                </div>
-                                {(volume.volume_type === 'ZFS' || volume.volume_type === 'zfs') && (
-                                  <div className="flex gap-3 pt-1">
-                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                                      {t('volumes.compression')}: {volume.compression === 'on' || volume.compression === '1' ? 'ON' : 'OFF'}
-                                    </span>
-                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                                      {t('volumes.deduplication')}: {volume.deduplication === 'on' || volume.deduplication === '1' ? 'ON' : 'OFF'}
-                                    </span>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          ))
-                        )}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
 
       <AnimatePresence>
         {isDiskModalOpen && (
