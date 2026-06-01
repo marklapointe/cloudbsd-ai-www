@@ -844,6 +844,519 @@ app.delete('/api/nodes/:id', authenticateToken, isAdmin, (req, res) => {
   res.sendStatus(204);
 });
 
+// Volume management routes
+/**
+ * @openapi
+ * /api/volumes:
+ *   get:
+ *     summary: List all volumes
+ *     tags: [Volumes]
+ *     parameters:
+ *       - in: query
+ *         name: disk_id
+ *         schema:
+ *           type: integer
+ *         description: Filter by disk ID
+ *       - in: query
+ *         name: node_id
+ *         schema:
+ *           type: integer
+ *         description: Filter by node ID (joins through disks table)
+ *     responses:
+ *       200:
+ *         description: List of volumes
+ */
+app.get('/api/volumes', authenticateToken, (req: any, res: any) => {
+  const currentDb = initDb();
+  const { disk_id, node_id } = req.query;
+  
+  try {
+    let query = `
+      SELECT volumes.*, disks.name as disk_name, disks.node_id, nodes.name as node_name
+      FROM volumes
+      LEFT JOIN disks ON volumes.disk_id = disks.id
+      LEFT JOIN nodes ON disks.node_id = nodes.id
+      WHERE 1=1
+    `;
+    const params: any[] = [];
+    
+    if (disk_id) {
+      query += ' AND volumes.disk_id = ?';
+      params.push(disk_id);
+    }
+    
+    if (node_id) {
+      query += ' AND disks.node_id = ?';
+      params.push(node_id);
+    }
+    
+    query += ' ORDER BY volumes.name ASC';
+    
+    const volumes = currentDb.prepare(query).all(...params);
+    res.json(Array.isArray(volumes) ? volumes : []);
+  } catch (error) {
+    res.status(500).json({ message: (error as any).message });
+  }
+});
+
+/**
+ * @openapi
+ * /api/volumes/{id}:
+ *   get:
+ *     summary: Get single volume with disk info
+ *     tags: [Volumes]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Volume details
+ *       404:
+ *         description: Volume not found
+ */
+app.get('/api/volumes/:id', authenticateToken, (req: any, res: any) => {
+  const { id } = req.params;
+  const currentDb = initDb();
+  
+  try {
+    const volume = currentDb.prepare(`
+      SELECT volumes.*, disks.name as disk_name, disks.node_id, nodes.name as node_name
+      FROM volumes
+      LEFT JOIN disks ON volumes.disk_id = disks.id
+      LEFT JOIN nodes ON disks.node_id = nodes.id
+      WHERE volumes.id = ?
+    `).get(id) as any;
+    
+    if (!volume) {
+      return res.status(404).json({ message: 'Volume not found' });
+    }
+    
+    res.json(volume);
+  } catch (error) {
+    res.status(500).json({ message: (error as any).message });
+  }
+});
+
+/**
+ * @openapi
+ * /api/volumes:
+ *   post:
+ *     summary: Create new volume (Admin/Operator only)
+ *     tags: [Volumes]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               disk_id:
+ *                 type: integer
+ *               name:
+ *                 type: string
+ *               volume_type:
+ *                 type: string
+ *               mount_point:
+ *                 type: string
+ *               size:
+ *                 type: integer
+ *               used:
+ *                 type: integer
+ *               available:
+ *                 type: integer
+ *               compression:
+ *                 type: string
+ *               deduplication:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Volume created
+ */
+app.post('/api/volumes', authenticateToken, isOperator, (req: any, res: any) => {
+  const { disk_id, name, volume_type, mount_point, size, used, available, compression, deduplication, status } = req.body;
+  const clientIp = getClientIp(req);
+  const currentDb = initDb();
+  
+  try {
+    const result = currentDb.prepare(`
+      INSERT INTO volumes (disk_id, name, volume_type, mount_point, size, used, available, compression, deduplication, status)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      disk_id || null,
+      name,
+      volume_type || null,
+      mount_point || null,
+      size || null,
+      used || null,
+      available || null,
+      compression || null,
+      deduplication || null,
+      status || 'active'
+    );
+    
+    logAction((req as any).user.id, 'VOLUME_CREATE', `Created volume ${name}`, clientIp);
+    res.status(201).json({ id: result.lastInsertRowid, ...req.body });
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+/**
+ * @openapi
+ * /api/volumes/{id}:
+ *   put:
+ *     summary: Update volume (Admin/Operator only)
+ *     tags: [Volumes]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               disk_id:
+ *                 type: integer
+ *               name:
+ *                 type: string
+ *               volume_type:
+ *                 type: string
+ *               mount_point:
+ *                 type: string
+ *               size:
+ *                 type: integer
+ *               used:
+ *                 type: integer
+ *               available:
+ *                 type: integer
+ *               compression:
+ *                 type: string
+ *               deduplication:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Volume updated
+ */
+app.put('/api/volumes/:id', authenticateToken, isOperator, (req: any, res: any) => {
+  const { id } = req.params;
+  const { disk_id, name, volume_type, mount_point, size, used, available, compression, deduplication, status } = req.body;
+  const currentDb = initDb();
+  
+  try {
+    const existing = currentDb.prepare('SELECT * FROM volumes WHERE id = ?').get(id);
+    if (!existing) {
+      return res.status(404).json({ message: 'Volume not found' });
+    }
+    
+    currentDb.prepare(`
+      UPDATE volumes 
+      SET disk_id = ?, name = ?, volume_type = ?, mount_point = ?, size = ?, used = ?, available = ?, compression = ?, deduplication = ?, status = ?
+      WHERE id = ?
+    `).run(
+      disk_id ?? (existing as any).disk_id,
+      name ?? (existing as any).name,
+      volume_type ?? (existing as any).volume_type,
+      mount_point ?? (existing as any).mount_point,
+      size ?? (existing as any).size,
+      used ?? (existing as any).used,
+      available ?? (existing as any).available,
+      compression ?? (existing as any).compression,
+      deduplication ?? (existing as any).deduplication,
+      status ?? (existing as any).status,
+      id
+    );
+    
+    const clientIp = getClientIp(req);
+    logAction((req as any).user.id, 'VOLUME_UPDATE', `Updated volume ${name || id} (ID: ${id})`, clientIp);
+    res.json({ id, ...req.body });
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+/**
+ * @openapi
+ * /api/volumes/{id}:
+ *   delete:
+ *     summary: Delete volume (Admin only)
+ *     tags: [Volumes]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       204:
+ *         description: Volume deleted
+ */
+app.delete('/api/volumes/:id', authenticateToken, isAdmin, (req: any, res: any) => {
+  const { id } = req.params;
+  const currentDb = initDb();
+  
+  const volume = currentDb.prepare('SELECT name FROM volumes WHERE id = ?').get(id) as any;
+  if (!volume) {
+    return res.status(404).json({ message: 'Volume not found' });
+  }
+  
+  currentDb.prepare('DELETE FROM volumes WHERE id = ?').run(id);
+  const ip = getClientIp(req);
+  logAction((req as any).user.id, 'VOLUME_DELETE', `Deleted volume ${volume.name} (ID: ${id})`, ip);
+  res.sendStatus(204);
+});
+
+// Disk management routes
+/**
+ * @openapi
+ * /api/disks:
+ *   get:
+ *     summary: List all disks
+ *     tags: [Cluster]
+ *     parameters:
+ *       - in: query
+ *         name: node_id
+ *         schema:
+ *           type: integer
+ *         description: Filter by node ID
+ *     responses:
+ *       200:
+ *         description: List of disks with volumes
+ */
+app.get('/api/disks', authenticateToken, (req, res, _next) => {
+  const currentDb = initDb();
+  try {
+    const { node_id } = req.query;
+    let query = 'SELECT * FROM disks';
+    let params: any[] = [];
+    if (node_id) {
+      query += ' WHERE node_id = ?';
+      params.push(node_id);
+    }
+    query += ' ORDER BY name ASC';
+    const disks = currentDb.prepare(query).all(...params);
+
+    // Fetch volumes for each disk
+    const volumesStmt = currentDb.prepare('SELECT * FROM volumes WHERE disk_id = ? ORDER BY name ASC');
+    const disksWithVolumes = (Array.isArray(disks) ? disks : []).map((disk: any) => {
+      const volumes = currentDb.prepare('SELECT * FROM volumes WHERE disk_id = ? ORDER BY name ASC').all(disk.id);
+      return { ...disk, volumes: volumes };
+    });
+
+    res.json(disksWithVolumes);
+  } catch (error) {
+    _next(error);
+  }
+});
+
+/**
+ * @openapi
+ * /api/disks/{id}:
+ *   get:
+ *     summary: Get a single disk with its volumes
+ *     tags: [Cluster]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Disk details with volumes
+ */
+app.get('/api/disks/:id', authenticateToken, (req, res, _next) => {
+  const { id } = req.params;
+  const currentDb = initDb();
+  try {
+    const disk = currentDb.prepare('SELECT * FROM disks WHERE id = ?').get(id);
+    if (!disk) {
+      res.status(404).json({ message: 'Disk not found' });
+      return;
+    }
+    const volumes = currentDb.prepare('SELECT * FROM volumes WHERE disk_id = ? ORDER BY name ASC').all(id);
+    res.json({ ...disk, volumes });
+  } catch (error) {
+    _next(error);
+  }
+});
+
+/**
+ * @openapi
+ * /api/disks:
+ *   post:
+ *     summary: Create a new disk (Admin/Operator only)
+ *     tags: [Cluster]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               node_id:
+ *                 type: integer
+ *               name:
+ *                 type: string
+ *               device_path:
+ *                 type: string
+ *               disk_type:
+ *                 type: string
+ *               pci_path:
+ *                 type: string
+ *               wwn:
+ *                 type: string
+ *               serial:
+ *                 type: string
+ *               model:
+ *                 type: string
+ *               vendor:
+ *                 type: string
+ *               size:
+ *                 type: string
+ *               sector_size:
+ *                 type: integer
+ *               status:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Disk created
+ */
+app.post('/api/disks', authenticateToken, isOperator, (req, res) => {
+  const { node_id, name, device_path, disk_type, pci_path, wwn, serial, model, vendor, size, sector_size, status } = req.body;
+  const clientIp = getClientIp(req);
+  const currentDb = initDb();
+  try {
+    const result = currentDb.prepare(`
+      INSERT INTO disks (node_id, name, device_path, disk_type, pci_path, wwn, serial, model, vendor, size, sector_size, status)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      node_id || null,
+      name,
+      device_path || '',
+      disk_type || 'unknown',
+      pci_path || '',
+      wwn || '',
+      serial || '',
+      model || '',
+      vendor || '',
+      size || '0',
+      sector_size || null,
+      status || 'online'
+    );
+    logAction((req as any).user.id, 'DISK_CREATE', `Created disk ${name}`, clientIp);
+    res.status(201).json({ id: result.lastInsertRowid, ...req.body });
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+/**
+ * @openapi
+ * /api/disks/{id}:
+ *   put:
+ *     summary: Update a disk (Admin/Operator only)
+ *     tags: [Cluster]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               node_id:
+ *                 type: integer
+ *               name:
+ *                 type: string
+ *               device_path:
+ *                 type: string
+ *               disk_type:
+ *                 type: string
+ *               pci_path:
+ *                 type: string
+ *               wwn:
+ *                 type: string
+ *               serial:
+ *                 type: string
+ *               model:
+ *                 type: string
+ *               vendor:
+ *                 type: string
+ *               size:
+ *                 type: string
+ *               sector_size:
+ *                 type: integer
+ *               status:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Disk updated
+ */
+app.put('/api/disks/:id', authenticateToken, isOperator, (req, res) => {
+  const { id } = req.params;
+  const { node_id, name, device_path, disk_type, pci_path, wwn, serial, model, vendor, size, sector_size, status } = req.body;
+  const currentDb = initDb();
+  try {
+    currentDb.prepare(`
+      UPDATE disks
+      SET node_id = ?, name = ?, device_path = ?, disk_type = ?, pci_path = ?, wwn = ?, serial = ?, model = ?, vendor = ?, size = ?, sector_size = ?, status = ?
+      WHERE id = ?
+    `).run(
+      node_id, name, device_path, disk_type, pci_path, wwn, serial, model, vendor, size, sector_size, status, id
+    );
+    const clientIp = getClientIp(req);
+    logAction((req as any).user.id, 'DISK_UPDATE', `Updated disk ${name} (ID: ${id})`, clientIp);
+    res.json({ id, ...req.body });
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+/**
+ * @openapi
+ * /api/disks/{id}:
+ *   delete:
+ *     summary: Delete a disk and cascade delete volumes (Admin only)
+ *     tags: [Cluster]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       204:
+ *         description: Disk deleted
+ */
+app.delete('/api/disks/:id', authenticateToken, isAdmin, (req, res) => {
+  const { id } = req.params;
+  const currentDb = initDb();
+
+  // Cascade delete volumes (handled by FK constraint but explicit delete for logging)
+  currentDb.prepare('DELETE FROM volumes WHERE disk_id = ?').run(id);
+  currentDb.prepare('DELETE FROM disks WHERE id = ?').run(id);
+  const ip = getClientIp(req);
+  logAction((req as any).user.id, 'DISK_DELETE', `Deleted disk ID: ${id}`, ip);
+  res.sendStatus(204);
+});
+
 /**
  * @openapi
  * /api/notifications:

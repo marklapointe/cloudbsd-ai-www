@@ -117,6 +117,42 @@ export function initDb() {
       notification_id TEXT PRIMARY KEY,
       dismissed_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
+
+    CREATE TABLE IF NOT EXISTS disks (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      node_id INTEGER REFERENCES nodes(id) ON DELETE CASCADE,
+      name TEXT NOT NULL,
+      device_path TEXT,
+      disk_type TEXT NOT NULL,
+      pci_path TEXT,
+      wwn TEXT,
+      serial TEXT,
+      model TEXT,
+      vendor TEXT,
+      size TEXT NOT NULL,
+      sector_size INTEGER,
+      status TEXT DEFAULT 'online',
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(node_id, name)
+    );
+
+    CREATE TABLE IF NOT EXISTS volumes (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      disk_id INTEGER REFERENCES disks(id) ON DELETE CASCADE,
+      name TEXT NOT NULL,
+      volume_type TEXT NOT NULL,
+      mount_point TEXT,
+      size TEXT NOT NULL,
+      used TEXT,
+      available TEXT,
+      compression TEXT,
+      deduplication TEXT,
+      status TEXT DEFAULT 'online',
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(disk_id, name)
+    );
   `);
 
   // Migration for terminology if needed
@@ -227,7 +263,68 @@ export function initDb() {
       ];
       const stmt = newDb.prepare('INSERT INTO nodes (name, role, status, ip, cpu_total, cpu_used, mem_total, mem_used, disk_total, disk_used) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
       for (const a of agents) {
-        stmt.run(a.name, a.role, a.status, a.ip, a.cpu_total, a.cpu_used, a.mem_total, a.mem_used, a.disk_total, a.disk_used);
+        stmt.run(a.name, a.role, a.status, a.ip, a.cpu_total, a.cpu_used, a.mem_total, a.mem_used, a.disk_total, a.mem_used);
+      }
+    }
+
+    // Seed disks and volumes for agent nodes
+    const diskCount = newDb.prepare("SELECT COUNT(*) as count FROM disks").get() as any;
+    if (diskCount.count === 0) {
+      const agent1 = newDb.prepare("SELECT id FROM nodes WHERE name = 'bsd-agent-01'").get() as any;
+      const agent2 = newDb.prepare("SELECT id FROM nodes WHERE name = 'bsd-agent-02'").get() as any;
+      const agent3 = newDb.prepare("SELECT id FROM nodes WHERE name = 'bsd-agent-03'").get() as any;
+
+      // Seed disks for bsd-agent-01: nvd0 (nVME, 1TB)
+      if (agent1) {
+        const disk1Result = newDb.prepare(`
+          INSERT INTO disks (node_id, name, device_path, disk_type, serial, model, vendor, size, status)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).run(agent1.id, 'nvd0', '/dev/nvd0', 'nVME', 'Samsung_980_Pro_1TB', 'Samsung 980 PRO', 'Samsung', '1TB', 'online');
+
+        const disk1Id = disk1Result.lastInsertRowid;
+
+        // Volumes for bsd-agent-01 disk: zroot (ZFS) and data (ZFS)
+        newDb.prepare(`
+          INSERT INTO volumes (disk_id, name, volume_type, mount_point, size, used, available, compression, deduplication, status)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).run(disk1Id, 'zroot', 'ZFS', '/', '500GB', '150GB', '350GB', 'lz4', 'off', 'online');
+
+        newDb.prepare(`
+          INSERT INTO volumes (disk_id, name, volume_type, mount_point, size, used, available, compression, deduplication, status)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).run(disk1Id, 'data', 'ZFS', '/data', '300GB', '50GB', '250GB', 'lz4', 'off', 'online');
+      }
+
+      // Seed disks for bsd-agent-02: da0 (SCSI, 250GB)
+      if (agent2) {
+        const disk2Result = newDb.prepare(`
+          INSERT INTO disks (node_id, name, device_path, disk_type, size, status)
+          VALUES (?, ?, ?, ?, ?, ?)
+        `).run(agent2.id, 'da0', '/dev/da0', 'SCSI', '250GB', 'online');
+
+        const disk2Id = disk2Result.lastInsertRowid;
+
+        // Volume for bsd-agent-02 disk: backup (UFS)
+        newDb.prepare(`
+          INSERT INTO volumes (disk_id, name, volume_type, mount_point, size, used, available, status)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        `).run(disk2Id, 'backup', 'UFS', '/backup', '100GB', '30GB', '70GB', 'online');
+      }
+
+      // Seed disks for bsd-agent-03: nvd0 (nVME, 500GB, offline)
+      if (agent3) {
+        const disk3Result = newDb.prepare(`
+          INSERT INTO disks (node_id, name, device_path, disk_type, size, status)
+          VALUES (?, ?, ?, ?, ?, ?)
+        `).run(agent3.id, 'nvd0', '/dev/nvd0', 'nVME', '500GB', 'offline');
+
+        const disk3Id = disk3Result.lastInsertRowid;
+
+        // Volume for bsd-agent-03 disk (offline)
+        newDb.prepare(`
+          INSERT INTO volumes (disk_id, name, volume_type, size, status)
+          VALUES (?, ?, ?, ?, ?)
+        `).run(disk3Id, 'offline_vol', 'ZFS', '500GB', 'offline');
       }
     }
   }
@@ -302,6 +399,12 @@ export function initDb() {
 export function logAction(userId: number | null, action: string, details?: string, ipAddress?: string) {
   if (!db) initDb();
   db.prepare('INSERT INTO logs (user_id, action, details, ip_address) VALUES (?, ?, ?, ?)').run(userId, action, details || null, ipAddress || null);
+}
+
+export function getNodeIdByName(name: string): number | null {
+  if (!db) initDb();
+  const row = db.prepare('SELECT id FROM nodes WHERE name = ?').get(name) as { id: number } | undefined;
+  return row?.id ?? null;
 }
 
 export { db };

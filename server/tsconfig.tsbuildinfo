@@ -1,0 +1,12 @@
+{
+  "root": [
+    "./src/config.ts",
+    "./src/db.schema.test.ts",
+    "./src/db.test.ts",
+    "./src/db.ts",
+    "./src/index.ts",
+    "./src/ssl.ts"
+  ],
+  "errors": true,
+  "version": "5.9.3"
+}
