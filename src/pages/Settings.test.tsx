@@ -12,6 +12,7 @@ vi.mock('../api/client', () => ({
     post: vi.fn(),
     put: vi.fn(),
   },
+  ensureCsrfToken: vi.fn().mockResolvedValue(undefined),
 }));
 
 describe('Settings Component', () => {

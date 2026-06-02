@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   ReactFlow,
   Background,
@@ -52,6 +52,8 @@ const NetworkMap: React.FC = () => {
   const { t } = useTranslation();
   const [nodes, setNodes, onNodesChange] = useNodesState<any>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<any>([]);
+  const nodesRef = useRef<any[]>([]);
+  useEffect(() => { nodesRef.current = nodes; }, [nodes]);
   const [resources, setResources] = useState<Resource[]>([]);
   const [clusterNodes, setClusterNodes] = useState<ClusterNode[]>([]);
   const [expandedNodes, setExpandedNodes] = useState<Record<string, boolean>>({ 'host-core': true });
@@ -133,9 +135,11 @@ const NetworkMap: React.FC = () => {
     const newNodes: any[] = [];
     const newEdges: any[] = [];
 
-    // Capture current node positions to preserve them
+    // Capture current node positions to preserve them. Read from a ref so
+    // the `nodes` state isn't a dependency (which would cause a render loop
+    // because setNodes inside this callback also updates `nodes`).
     const currentPositions: Record<string, NodePosition> = {};
-    nodes.forEach((node: any) => {
+    nodesRef.current.forEach((node: any) => {
       currentPositions[node.id] = node.position;
     });
 
@@ -251,7 +255,7 @@ const NetworkMap: React.FC = () => {
 
     setNodes(newNodes);
     setEdges(newEdges);
-  }, [resources, clusterNodes, expandedNodes, searchTerm, handleContextMenu, setNodes, setEdges, t, nodes]);
+  }, [resources, clusterNodes, expandedNodes, searchTerm, handleContextMenu, setNodes, setEdges, t]);
 
   useEffect(() => {
     if (resources.length > 0 || clusterNodes.length > 0) {

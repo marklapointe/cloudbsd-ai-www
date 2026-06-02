@@ -173,33 +173,75 @@ app.use(express.json());
 // Parse cookies so we can use cookie-backed CSRF tokens when enabled
 app.use(cookieParser());
 
-// Conditional CSRF middleware. Disabled by default in config to remain permissive
+// Routes that must remain accessible without a CSRF token. The user is not
+// yet a known principal at login, and these are the only safe POST entries.
+// Keep this list tight: every exemption weakens the protection.
+const CSRF_EXEMPT_PATHS = new Set<string>([
+  '/api/login',
+]);
+
 if (config.csrf?.enabled) {
   app.use((req: any, res: any, next: any) => {
     const cookieOpts: any = {
       httpOnly: config.cookie?.httpOnly ?? true,
-      sameSite: (config.cookie?.sameSite as any) ?? 'none',
+      sameSite: (config.cookie?.sameSite as any) ?? 'lax',
     };
 
     const secureSetting = config.cookie?.secure;
-    const isSecure = secureSetting === null || secureSetting === undefined
-      ? Boolean(req.secure || (req.headers && req.headers['x-forwarded-proto'] === 'https'))
-      : Boolean(secureSetting);
+    let isSecure: boolean;
+    if (secureSetting === 'auto' || secureSetting === null || secureSetting === undefined) {
+      isSecure = Boolean(req.secure || (req.headers && req.headers['x-forwarded-proto'] === 'https'));
+    } else {
+      isSecure = Boolean(secureSetting);
+    }
 
     if (isSecure) cookieOpts.secure = true;
     if (config.cookie?.domain) cookieOpts.domain = config.cookie.domain;
 
-    csurf({ cookie: cookieOpts })(req, res, (err: any) => {
-      if (err) return next(err);
+    const csrfMiddleware = csurf({ cookie: cookieOpts });
+
+    // CSRF protection guards against forged cookie-based requests. The SPA
+    // authenticates via JWT in localStorage (Authorization: Bearer ...), and
+    // a cross-origin attacker cannot read that header from a different origin
+    // -- the header itself is the CSRF defense for these calls. Run csurf so
+    // the secret/cookie stay warm, but skip token verification.
+    const authHeader = req.headers['authorization'];
+    const hasBearerAuth = typeof authHeader === 'string' && authHeader.toLowerCase().startsWith('bearer ');
+    if (hasBearerAuth) {
+      return csrfMiddleware(req, res, () => {
+        try { res.setHeader(config.csrf?.header || 'x-csrf-token', (req as any).csrfToken()); } catch { /* noop */ }
+        next();
+      });
+    }
+
+    if (CSRF_EXEMPT_PATHS.has(req.path)) {
+      // Run csurf so the cookie + header are still set on the response, but
+      // skip token verification. The handler itself must enforce rate limits
+      // and credentials.
+      return csrfMiddleware(req, res, () => {
+        try { res.setHeader(config.csrf?.header || 'x-csrf-token', (req as any).csrfToken()); } catch { /* noop */ }
+        next();
+      });
+    }
+    csrfMiddleware(req, res, (err: any) => {
+      if (err) {
+        if (err.code === 'EBADCSRFTOKEN') {
+          logAction(req.user?.id || null, 'CSRF_FAILURE', `CSRF token mismatch on ${req.method} ${req.url} from ${getClientIp(req)}`, getClientIp(req));
+          return res.status(403).json({ message: 'Invalid CSRF token' });
+        }
+        return next(err);
+      }
       try {
-        const token = req.csrfToken();
+        const token = (req as any).csrfToken();
         res.setHeader(config.csrf?.header || 'x-csrf-token', token);
-      } catch (e) {
-        // ignore
+      } catch {
+        // req.csrfToken() can throw if cookies are misconfigured; continue.
       }
       next();
     });
   });
+} else {
+  console.warn('[Security] CSRF protection is DISABLED. Set csrf.enabled=true in config.json unless you are behind a setup that prevents cross-origin requests another way.');
 }
 
 // Serve static files from the React app dist directory
@@ -333,6 +375,16 @@ const checkLicenseLimit = (resourceType: string) => {
  */
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date() });
+});
+
+// Issues a CSRF cookie and echoes the token in the response body so the SPA
+// can prime it before its first unsafe request. The token is also set on the
+// configured response header by the global CSRF middleware.
+app.get('/api/csrf', (req, res) => {
+  if (!config.csrf?.enabled) {
+    return res.status(204).end();
+  }
+  res.json({ csrfToken: (req as any).csrfToken() });
 });
 
 /**

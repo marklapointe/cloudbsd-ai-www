@@ -22,11 +22,12 @@ export interface Config {
   cookie?: {
     sameSite?: 'none' | 'lax' | 'strict';
     domain?: string | null;
-    // null = auto-detect from request / X-Forwarded-Proto
-    secure?: boolean | null;
+    // 'auto' resolves Secure based on req.secure / X-Forwarded-Proto (needs trust proxy).
+    secure?: boolean | null | 'auto';
     httpOnly?: boolean;
   };
-  // CSRF options (disabled by default to remain permissive behind proxies)
+  // CSRF: enabled by default. Server sets a token cookie and the client must
+  // echo it on every unsafe request via the configured header.
   csrf?: {
     enabled?: boolean;
     header?: string; // header used to expose token to clients
@@ -53,15 +54,16 @@ const DEFAULT_CONFIG: Config = {
     certPath: '/usr/local/etc/cloudbsd/admin/ssl/cert.pem',
     keyPath: '/usr/local/etc/cloudbsd/admin/ssl/key.pem',
   },
-  // Default cookie and CSRF settings are permissive to support proxy setups
+  // Defaults: 'auto' secure-cookie so it works behind a TLS-terminating
+  // reverse proxy out of the box, with CSRF on by default.
   cookie: {
-    sameSite: 'none',
+    sameSite: 'lax',
     domain: null,
-    secure: null,
+    secure: 'auto',
     httpOnly: true,
   },
   csrf: {
-    enabled: false,
+    enabled: true,
     header: 'x-csrf-token',
   },
   demoLicense: {

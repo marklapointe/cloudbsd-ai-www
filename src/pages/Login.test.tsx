@@ -16,6 +16,7 @@ vi.mock('../api/client', () => ({
       response: { use: vi.fn(), eject: vi.fn() },
     },
   },
+  ensureCsrfToken: vi.fn().mockResolvedValue(undefined),
 }));
 
 describe('Login Component', () => {

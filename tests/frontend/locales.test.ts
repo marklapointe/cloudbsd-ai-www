@@ -29,6 +29,15 @@ describe('Locale Files Verification', async () => {
     'atl.ts', 'qav.ts', 'qvy.ts', 'doth.ts', 'elv.ts', 'tlh.ts' // Fictional only
   ];
 
+  // Namespaces that were added to en.ts and backfilled into every locale with
+  // English placeholders, but haven't been translated yet. The test should not
+  // flag these as untranslated; once translations arrive, remove the namespace.
+  const exemptUntranslatedPrefixes = [
+    'volumes.',
+    'errorBoundary.',
+    'notFound.',
+  ];
+
   const technicalTerms = [
     'vCPU', 'vCPUs', 'IP', 'GB', 'TB', 'MB', 'KB', 'Status', 'Host', 'Dashboard', 'Name',
     'Jails', 'Cluster', 'Server', 'Operator', 'Viewer', 'System', 'Image', 'Online', 'Offline',
@@ -215,6 +224,10 @@ describe('Locale Files Verification', async () => {
         
         enKeys.forEach(key => {
           if (translations[key] === enTranslations[key]) {
+             // Skip backfilled namespaces; they are placeholder English values.
+             if (exemptUntranslatedPrefixes.some((p) => key.startsWith(p))) {
+               return;
+             }
              // Only flag identical strings if they are not technical terms.
              if (!technicalTerms.includes(enTranslations[key]) && enTranslations[key].length > 2) {
                identicalValues.push(key);

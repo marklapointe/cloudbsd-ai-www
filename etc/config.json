@@ -3,12 +3,12 @@
   "demoMode": true,
   "corsEnabled": false,
   "cookie": {
-    "sameSite": "none",
-    "secure": true,
+    "sameSite": "lax",
+    "secure": "auto",
     "domain": "demo.cloudbsd.org",
     "httpOnly": true
   },
   "csrf": {
-    "enabled": false
+    "enabled": true
   }
 }

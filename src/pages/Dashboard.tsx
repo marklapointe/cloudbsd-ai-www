@@ -6,6 +6,7 @@ import api from '../api/client';
 import { StatCard } from '../components/ui/StatCard';
 import { ClusterResourceCard } from '../components/ui/ClusterResourceCard';
 import { SystemHealthCard } from '../components/ui/SystemHealthCard';
+import { formatBytesWithUnit } from '../utils/sizeFormat';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -136,23 +137,23 @@ const Dashboard: React.FC = () => {
               utilizedLabel={t('dashboard.utilized')}
               ofLabel={t('dashboard.of')}
             />
-            <ClusterResourceCard 
-              title={t('common.memory')} 
-              used={`${clusterStats.memory?.used ?? '0GB'}`.replace('GB', t('common.gb')).replace('TB', t('common.tb'))} 
-              total={`${clusterStats.memory?.total ?? '0GB'}`.replace('GB', t('common.gb')).replace('TB', t('common.tb'))} 
-              percentage={clusterStats.memory?.percentage ?? 0} 
-              icon={Activity} 
-              color="purple" 
+            <ClusterResourceCard
+              title={t('common.memory')}
+              used={formatBytesWithUnit(clusterStats.memory?.used, t('common.gb'))}
+              total={formatBytesWithUnit(clusterStats.memory?.total, t('common.gb'))}
+              percentage={clusterStats.memory?.percentage ?? 0}
+              icon={Activity}
+              color="purple"
               utilizedLabel={t('dashboard.utilized')}
               ofLabel={t('dashboard.of')}
             />
-            <ClusterResourceCard 
-              title={t('common.storage')} 
-              used={`${clusterStats.disk?.used ?? '0GB'}`.replace('GB', t('common.gb')).replace('TB', t('common.tb'))} 
-              total={`${clusterStats.disk?.total ?? '0GB'}`.replace('GB', t('common.gb')).replace('TB', t('common.tb'))} 
-              percentage={clusterStats.disk?.percentage ?? 0} 
-              icon={HardDrive} 
-              color="emerald" 
+            <ClusterResourceCard
+              title={t('common.storage')}
+              used={formatBytesWithUnit(clusterStats.disk?.used, t('common.gb'))}
+              total={formatBytesWithUnit(clusterStats.disk?.total, t('common.gb'))}
+              percentage={clusterStats.disk?.percentage ?? 0}
+              icon={HardDrive}
+              color="emerald"
               utilizedLabel={t('dashboard.utilized')}
               ofLabel={t('dashboard.of')}
             />

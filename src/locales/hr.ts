@@ -68,6 +68,7 @@ const hr = {
       "warning": "Warning *",
       "ad": "Advertisement *",
       "learn_more": "Learn More *",
+      volumes: "Volumes",
       "dismiss": "Dismiss *"
     },
     "login": {
@@ -89,6 +90,8 @@ const hr = {
       "toggle_menu": "Toggle Menu *",
       "backend_offline": "Backend is offline. Some features may be unavailable. Retrying... *",
       "connecting": "Connecting... *",
+      collapse_sidebar: "Collapse Sidebar",
+      expand_sidebar: "Expand Sidebar",
       "verifying_connection": "Verifying connection to infrastructure... *"
     },
     "notifications": {
@@ -467,7 +470,70 @@ const hr = {
       "status": "Status",
       "connected": "Connected *",
       "resource_id": "Resource ID *"
-    }
+    },
+
+    volumes: {
+      title: "Volume Management",
+      description: "Manage disk volumes and storage across your infrastructure",
+      size: "Size",
+      usage: "Usage",
+      mount_point: "Mount Point",
+      utilized: "UTILIZED",
+      no_volumes: "No Volumes Found",
+      no_volumes_desc: "No disk volumes are currently configured.",
+      fetch_failed: "Failed to fetch volumes",
+      select_node: "Select a worker node",
+      no_node_selected: "No Node Selected",
+      no_node_selected_desc: "Select a worker node from the dropdown above to view its disks and volumes.",
+      no_disks: "No Disks Found",
+      no_disks_desc: "No disks are configured for this node.",
+      no_volumes_on_disk: "No volumes on this disk",
+      add_disk: "Add Disk",
+      add_volume: "Add Volume",
+      edit_disk: "Edit Disk",
+      edit_volume: "Edit Volume",
+      disk_name: "Disk Name",
+      disk_type: "Disk Type",
+      device_path: "Device Path",
+      pci_path: "PCI Path",
+      serial: "Serial",
+      model: "Model",
+      vendor: "Vendor",
+      sector_size: "Sector Size",
+      status: "Status",
+      volumes_count: "{{count}} volumes",
+      available: "Available",
+      compression: "Compression",
+      deduplication: "Deduplication",
+      volume_type: "Volume Type",
+      delete_disk_confirm: "Are you sure you want to delete this disk? All volumes on this disk will be lost.",
+      delete_volume_confirm: "Are you sure you want to delete this volume?",
+      operation_failed: "Operation failed",
+      create_failed: "Failed to create",
+      update_failed: "Failed to update",
+      delete_failed: "Failed to delete",
+      nvme: "NVME",
+      scsi: "SCSI",
+      sata: "SATA",
+      zfs: "ZFS",
+      ufs: "UFS",
+      geom: "GEOM",
+      disk_details: "Disk Details",
+      volume_details: "Volume Details"
+    },
+
+    errorBoundary: {
+      description: "Something went wrong while rendering this page. You can try again, or reload the app if the problem persists.",
+      try_again: "Try again"
+    },
+
+    notFound: {
+      eyebrow: "Page not found",
+      title: "We can't find that page",
+      description: "The link may be broken, or the page may have been moved. Check the URL or head back home.",
+      go_back: "Go back",
+      home: "Home"
+    },
   }
 };
 

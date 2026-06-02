@@ -519,6 +519,17 @@ const en = {
       status: "Status",
       connected: "Connected",
       resource_id: "Resource ID"
+    },
+    errorBoundary: {
+      description: "Something went wrong while rendering this page. You can try again, or reload the app if the problem persists.",
+      try_again: "Try again"
+    },
+    notFound: {
+      eyebrow: "Page not found",
+      title: "We can't find that page",
+      description: "The link may be broken, or the page may have been moved. Check the URL or head back home.",
+      go_back: "Go back",
+      home: "Home"
     }
   }
 };

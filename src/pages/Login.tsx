@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Languages, Sun, Moon } from 'lucide-react';
 import { motion } from 'framer-motion';
-import api from '../api/client';
+import api, { ensureCsrfToken } from '../api/client';
 import { useTranslation } from 'react-i18next';
 import { getSortedLanguages } from '../constants/languages';
 import { useTheme } from '../contexts/ThemeContext';
@@ -43,6 +43,10 @@ const Login: React.FC = () => {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('username', response.data.user.username);
       localStorage.setItem('role', response.data.user.role);
+
+      // Prime the CSRF token/cookie before navigating; subsequent unsafe
+      // requests rely on it being present.
+      await ensureCsrfToken();
 
       const savedLang = localStorage.getItem('i18nextLng');
       const backendLang = response.data.user.language;
@@ -123,25 +127,27 @@ const Login: React.FC = () => {
         <form onSubmit={handleSubmit} data-testid="login-form" className="space-y-8">
           <div className="space-y-2">
             <label htmlFor="username" data-testid="username-label" className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('login.username_label')}</label>
-            <input 
+            <input
               id="username"
-              type="text" 
+              type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200 text-slate-900 dark:text-slate-100 font-bold placeholder-slate-300 dark:placeholder-slate-600 outline-none"
               placeholder={t('login.username_placeholder')}
+              autoComplete="username"
               required
             />
           </div>
           <div className="space-y-2">
             <label htmlFor="password" data-testid="password-label" className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">{t('login.password_label')}</label>
-            <input 
+            <input
               id="password"
-              type="password" 
+              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200 text-slate-900 dark:text-slate-100 font-bold placeholder-slate-300 dark:placeholder-slate-600 outline-none"
               placeholder={t('login.password_placeholder')}
+              autoComplete="current-password"
               required
             />
           </div>
