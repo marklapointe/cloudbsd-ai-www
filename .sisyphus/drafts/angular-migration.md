@@ -98,6 +98,188 @@
 - **MODULAR/SWAPPABLE LOGGING (NEW)**: Logger is an interface, not a singleton. Implementations can be swapped without changing call sites. Default = JSONL stdout. Pluggable: file, remote (Loki/Datadog/etc.), null (for tests), multi (combine).
 - **FRONTEND LOGGING (NEW)**: Same structured logger module in Angular. Frontend logs go to backend `/api/logs.ingest` endpoint with custom MIME.
 
+## COMPREHENSIVE THEME CUSTOMIZATION + BRANDING (NEW)
+
+### User Requirements
+- Users can customize themes (colors, fonts, etc.)
+- Users can brand themes (custom logo, name)
+- Import/export themes (share, backup)
+- Theme editor (visual editor for creating themes)
+- Menu systems for theme management
+
+### Theme Customization
+
+Users can edit ANY theme token and save as a custom variant.
+
+**Editable token categories:**
+- Colors: primary, secondary, accent, all bg/text/border tokens
+- Typography: font family, sizes
+- Effects: shadows, border-radius, glass blur
+- Signature elements: scanlines on/off, pixel borders on/off, etc.
+
+**Custom theme storage:**
+- User's custom themes stored per-user in `user_themes` table.
+- Schema: `{id, user_id, base_theme_id, name, description, tokens, branding, created_at, updated_at}`.
+- Frontend reads from `GET /api/users/me/themes`.
+- Max 50 custom themes per user (configurable).
+
+### Theme Branding
+
+Each custom theme can have:
+- **Name** (e.g., "Acme Corp Admin Theme")
+- **Description** (e.g., "For Acme internal use")
+- **Logo** (uploaded SVG/PNG, max 200KB)
+- **Author info** (optional): author name, contact email, website
+- **License** (default: BSD-3-Clause)
+- **Tags** (free-form: ["corporate", "high-contrast", "minimal"])
+- **Visibility** (private / shared-with-team / public)
+
+### Theme Import/Export
+
+**Export format** (`.cbsd-theme.json`):
+```json
+{
+  "$schema": "https://cloudbsd.org/schemas/theme/v1.json",
+  "format_version": "1.0.0",
+  "id": "uuid",
+  "name": "My Custom Theme",
+  "description": "...",
+  "author": {
+    "name": "...",
+    "email": "...",
+    "website": "..."
+  },
+  "license": "BSD-3-Clause",
+  "tags": ["custom", "corporate"],
+  "based_on": "cloudsbsd-revytech",
+  "tokens": {
+    "primary": "#ff5500",
+    "primaryHover": "#ff7733",
+    "bgBase": "#1a1a1a",
+    "textPrimary": "#ffffff",
+    "fontSans": "Inter",
+    "borderRadius": "8px",
+    "scanlines": false,
+    "glass": true
+    // ... all theme tokens
+  },
+  "branding": {
+    "logo_data_url": "data:image/svg+xml;base64,...",
+    "logo_alt_text": "Acme Corp"
+  },
+  "signature": "sha256:..."  // hash for integrity verification
+}
+```
+
+**Import flow:**
+1. User uploads `.cbsd-theme.json` file OR pastes JSON.
+2. Frontend validates against schema (Zod or JSON Schema).
+3. Compute signature, verify integrity.
+4. Show preview with theme applied.
+5. User confirms: Save as new / Replace existing / Cancel.
+6. POST to `/api/users/me/themes`.
+
+**Validation rules:**
+- All required token fields present.
+- Color values valid hex.
+- Font names from allowed list (or Google Fonts subset).
+- Logo size ≤ 200KB.
+- Signature valid (if present).
+- No executable code in JSON (rejects `__proto__`, `constructor`, etc.).
+
+### Theme Editor
+
+**Visual editor (no code required):**
+- **Color picker** for each token (swatches + hex input + alpha slider).
+- **Font selector** with live preview (dropdown of allowed fonts).
+- **Slider inputs** for border-radius, shadow blur.
+- **Toggle switches** for signature elements (scanlines, pixel borders, etc.).
+- **Live preview** panel showing current state of selected page (e.g., Dashboard).
+- **Side-by-side** compare with base theme.
+
+**Editor tabs:**
+1. **Colors** — primary, secondary, accent, bg, text, borders, semantic.
+2. **Typography** — fonts, sizes.
+3. **Effects** — shadows, radius, blur.
+4. **Branding** — name, description, logo upload.
+5. **Preview** — live view of dashboard in current edit state.
+6. **Metadata** — tags, author, license.
+
+**Save options:**
+- "Save as new" — creates new custom theme.
+- "Update existing" — overwrites (with confirmation).
+- "Export" — download as `.cbsd-theme.json`.
+- "Reset" — revert to base theme tokens.
+
+### Menu System
+
+**Settings → Themes menu structure:**
+```
+Settings
+└── Appearance
+    ├── Theme
+    │   ├── Gallery (browse all 15 built-in + user's custom)
+    │   ├── Editor (create/edit custom theme)
+    │   ├── My Themes (user's custom themes)
+    │   ├── Import
+    │   └── Export
+    └── ...
+```
+
+### Mock-ups Required
+
+- `diagrams/screens/theme-editor.svg` — Full theme editor with all tabs.
+- `diagrams/screens/theme-editor-colors.svg` — Colors tab detail.
+- `diagrams/screens/theme-editor-branding.svg` — Branding tab with logo upload.
+- `diagrams/screens/theme-import.svg` — Import dialog with preview.
+- `diagrams/screens/theme-export.svg` — Export dialog with JSON preview.
+- `diagrams/screens/theme-gallery.svg` — Theme gallery (grid of all themes).
+- `diagrams/modals/theme-conflict.svg` — "Theme already exists, replace?" modal.
+- `diagrams/modals/theme-validation-error.svg` — "Invalid theme file" modal.
+
+### Backend Support
+
+- `GET /api/users/me/themes` — list user's custom themes.
+- `POST /api/users/me/themes` — create new custom theme.
+- `PUT /api/users/me/themes/:id` — update existing.
+- `DELETE /api/users/me/themes/:id` — delete custom theme.
+- `GET /api/users/me/themes/:id/export` — download as `.cbsd-theme.json`.
+- `POST /api/users/me/themes/import` — upload/import (multipart or JSON body).
+
+All endpoints use custom MIME types per CloudBSD convention.
+
+### Schema URL
+
+Theme schema hosted at: `https://cloudbsd.org/schemas/theme/v1.json`
+Stored as `diagrams/theme-schema.json` (also) so it works offline.
+
+### Logging
+
+```json
+{"timestamp":"...","level":"info","module":"themes","message":"Custom theme created","user_id":1,"theme_id":"...","based_on":"miami-vice"}
+{"timestamp":"...","level":"info","module":"themes","message":"Theme imported","user_id":1,"theme_name":"Acme Corp","theme_id":"..."}
+{"timestamp":"...","level":"warn","module":"themes","message":"Theme validation failed","user_id":1,"error":"invalid_color","field":"primary"}
+```
+
+### Tasks to Add
+
+**Wave 0 (Documentation):**
+- **T3m**: Theme customizer mock-ups (8 SVG files)
+- **T3n**: Theme JSON schema (`diagrams/theme-schema.json`)
+
+**Wave 1 (Backend):**
+- **T14b**: Custom theme CRUD endpoints (`/api/users/me/themes/*`)
+- **T14c**: Theme import validation (Zod schema + sandboxed eval protection)
+
+**Wave 2 (Frontend):**
+- **T16b**: Theme customizer service (token editor, save/load)
+- **T16c**: Theme import/export service (JSON parsing, validation, signature verification)
+
+**Wave 3 (Settings page):**
+- **T22b**: Theme editor UI (full editor with tabs)
+- **T22c**: Theme gallery UI (browse all themes)
+- **T22d**: Theme import/export UI
+
 ## COMPREHENSIVE THEME SYSTEM (NEW)
 
 ### Theme Catalog (15 themes)

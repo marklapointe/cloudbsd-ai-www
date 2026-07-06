@@ -904,6 +904,71 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
+- [ ] 3m. **Theme customizer mock-ups (8 SVG files)**
+
+  **What to do**:
+  - Create `diagrams/screens/theme-editor.svg` — Full theme editor with tab navigation.
+  - Create `diagrams/screens/theme-editor-colors.svg` — Colors tab with color pickers.
+  - Create `diagrams/screens/theme-editor-branding.svg` — Branding tab with logo upload area.
+  - Create `diagrams/screens/theme-import.svg` — Import dialog (file upload + JSON paste + preview).
+  - Create `diagrams/screens/theme-export.svg` — Export dialog showing JSON preview.
+  - Create `diagrams/screens/theme-gallery.svg` — Theme gallery (grid of all 15+ themes).
+  - Create `diagrams/modals/theme-conflict.svg` — "Replace existing theme?" modal.
+  - Create `diagrams/modals/theme-validation-error.svg` — "Invalid theme" error modal with field-level errors.
+
+  **Recommended Agent Profile**:
+  - **Category**: `artistry`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 0
+  - **Blocked By**: T01, T3k
+
+  **Acceptance Criteria**:
+  - [ ] 8 SVG files exist.
+  - [ ] All parse as valid XML.
+  - [ ] Editor shows tabs: Colors, Typography, Effects, Branding, Preview, Metadata.
+  - [ ] Import dialog shows: file upload area, JSON paste area, preview area, Save button.
+  - [ ] Export dialog shows: JSON preview, Download button.
+
+  **Commit**: YES
+  - Message: `docs(themes): add theme customizer mock-ups (8 files)`
+  - Files: `diagrams/screens/theme-editor*.svg`, `diagrams/screens/theme-import.svg`, `diagrams/screens/theme-export.svg`, `diagrams/screens/theme-gallery.svg`, `diagrams/modals/theme-*.svg`
+
+---
+
+- [ ] 3n. **Theme JSON schema (`diagrams/theme-schema.json`)**
+
+  **What to do**:
+  - Create `diagrams/theme-schema.json` — JSON Schema (draft 2020-12) for theme files.
+  - Defines: required fields, optional fields, types, enums, patterns.
+  - Validates color values (hex pattern).
+  - Validates font names (enum of allowed fonts).
+  - Validates logo data URL format.
+  - Validates signature format (`sha256:...`).
+  - Rejects `__proto__`, `constructor`, `prototype` keys.
+
+  **Recommended Agent Profile**:
+  - **Category**: `writing`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 0
+  - **Blocked By**: T01
+
+  **Acceptance Criteria**:
+  - [ ] `diagrams/theme-schema.json` exists and parses as valid JSON Schema.
+  - [ ] All theme token fields documented with types.
+  - [ ] Validation rejects malformed files.
+
+  **Commit**: YES
+  - Message: `docs(themes): add theme JSON schema`
+  - Files: `diagrams/theme-schema.json`
+
+---
+
 - [ ] 4. **OpenAPI 3.1 spec for new PAM-auth backend**
 
   **What to do**:
@@ -2394,6 +2459,116 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
+- [ ] 16b. **Theme customizer service (token editor)**
+
+  **What to do**:
+  - `web-new/src/app/themes/customizer/`:
+    - `customizer.service.ts`:
+      - `currentEdit = signal<PartialThemeTokens>({})` — edit buffer.
+      - `applyEdit(token, value)` — updates buffer + live preview.
+      - `reset()` — clear buffer.
+      - `loadTheme(themeId)` — load for editing.
+      - `saveAs(name)` — POST new theme.
+      - `update(themeId)` — PUT update.
+    - `customizer.types.ts` — `PartialThemeTokens`, `ThemeBranding` types.
+  - All edits trigger `ThemeService.preview()` for live update.
+  - Tests: edit token, save, load, update flows.
+
+  **Must NOT do**:
+  - Do NOT allow saving without at least 1 token changed.
+  - Do NOT save without theme name.
+
+  **Recommended Agent Profile**:
+  - **Category**: `unspecified-high`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 2
+  - **Blocked By**: T16a, T13a
+
+  **Acceptance Criteria**:
+  - [ ] Edit token triggers live preview.
+  - [ ] Save creates new theme via POST.
+  - [ ] Update modifies existing theme via PUT.
+  - [ ] Reset reverts buffer.
+
+  **QA Scenarios**:
+  ```
+  Scenario: Edit token + save
+    Tool: Playwright
+    Steps:
+      1. Open theme editor.
+      2. Change primary color to red.
+      3. Assert dashboard live preview shows red primary.
+      4. Enter name "Test Theme".
+      5. Click Save.
+      6. Assert new theme appears in gallery.
+    Expected Result: Edit + save works.
+    Evidence: .sisyphus/evidence/task-16b-edit-save.txt
+  ```
+
+  **Commit**: YES
+  - Message: `feat(themes): add theme customizer service for token editing`
+  - Files: `web-new/src/app/themes/customizer/`
+
+---
+
+- [ ] 16c. **Theme import/export service**
+
+  **What to do**:
+  - `web-new/src/app/themes/import-export/`:
+    - `export.ts`: builds `.cbsd-theme.json` from current theme + signs.
+    - `import.ts`: parses JSON, validates against schema, verifies signature.
+    - `sign.ts`: sha256 of canonical JSON.
+  - Uses `Ajv` or `zod` for JSON Schema validation.
+  - File upload via `<input type="file">` with `.cbsd-theme.json` accept.
+  - Drag-and-drop file zone.
+  - Tests: round-trip export → import → identical result.
+
+  **Must NOT do**:
+  - Do NOT eval() any field of imported JSON.
+  - Do NOT trust file extension (validate content).
+  - Do NOT import themes larger than 1MB.
+
+  **Recommended Agent Profile**:
+  - **Category**: `deep`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 2
+  - **Blocked By**: T16a, T13b, T3n
+
+  **Acceptance Criteria**:
+  - [ ] Export produces valid `.cbsd-theme.json`.
+  - [ ] Import validates against schema.
+  - [ ] Invalid files rejected with clear error.
+  - [ ] Round-trip produces identical theme.
+  - [ ] Signature verified.
+
+  **QA Scenarios**:
+  ```
+  Scenario: Export + import round-trip
+    Tool: Playwright
+    Steps:
+      1. Select custom theme.
+      2. Click Export.
+      3. File downloads.
+      4. Click Import, upload file.
+      5. Assert preview matches original.
+      6. Click Save.
+      7. Assert new theme exists.
+    Expected Result: Round-trip works.
+    Evidence: .sisyphus/evidence/task-16c-roundtrip.png
+  ```
+
+  **Commit**: YES
+  - Message: `feat(themes): add theme import/export service`
+  - Files: `web-new/src/app/themes/import-export/`
+
+---
+
 - [ ] 17. **`$localize` + Karma+Jasmine setup**
 
   **What to do**:
@@ -2743,6 +2918,130 @@ Max Concurrent: 7 (Waves 1, 4, 5)
   **Commit**: YES
   - Message: `feat(settings): add theme selector UI with 15 themes`
   - Files: `web-new/src/app/pages/settings/theme-selector.component.ts`
+
+---
+
+- [ ] 22b. **Theme editor UI (full editor with tabs)**
+
+  **What to do**:
+  - `web-new/src/app/pages/settings/theme-editor.component.ts`:
+    - Tabbed interface (Colors / Typography / Effects / Branding / Preview / Metadata).
+    - **Colors tab**: Color picker per token (15+ tokens), grouped by category.
+    - **Typography tab**: Font family dropdown, size inputs.
+    - **Effects tab**: Shadow blur slider, border-radius slider, glass blur slider.
+    - **Branding tab**: Name input, description textarea, logo upload (SVG/PNG), logo alt text.
+    - **Preview tab**: Live render of Dashboard with current edits.
+    - **Metadata tab**: Tags input, author info, license selector.
+    - Save buttons: "Save as New", "Update Existing", "Export", "Reset".
+    - Uses `CustomizerService` for state management.
+  - Per mock-ups: `diagrams/screens/theme-editor*.svg`.
+  - Tests: each tab renders, color picker works, save flow works.
+
+  **Must NOT do**:
+  - Do NOT allow empty theme name on save.
+  - Do NOT lose edits on tab switch.
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 3
+  - **Blocked By**: T22, T16b, T3m (mock-ups)
+
+  **Acceptance Criteria**:
+  - [ ] All 6 tabs render.
+  - [ ] Color picker updates live preview.
+  - [ ] Logo upload works.
+  - [ ] Save creates new theme.
+  - [ ] Update modifies existing.
+
+  **QA Scenarios**:
+  ```
+  Scenario: Theme editor flow
+    Tool: Playwright
+    Steps:
+      1. Navigate to /settings/themes/editor.
+      2. Click Colors tab.
+      3. Change primary to #ff5500.
+      4. Switch to Branding tab.
+      5. Enter name "My Theme".
+      6. Click Save as New.
+      7. Assert theme appears in gallery.
+    Expected Result: Editor works.
+    Evidence: .sisyphus/evidence/task-22b-editor.png
+  ```
+
+  **Commit**: YES
+  - Message: `feat(settings): add theme editor UI with 6 tabs`
+  - Files: `web-new/src/app/pages/settings/theme-editor.component.ts`
+
+---
+
+- [ ] 22c. **Theme gallery UI (browse all themes)**
+
+  **What to do**:
+  - `web-new/src/app/pages/settings/theme-gallery.component.ts`:
+    - Grid view of all themes (15 built-in + user's custom).
+    - Each tile: theme name, color preview, signature element thumbnail.
+    - Tabs: "Built-in" / "My Themes".
+    - Search/filter by name.
+    - Click tile → apply theme immediately (or open preview).
+    - For custom themes: Edit / Export / Delete actions.
+    - Mock-up reference: `diagrams/screens/theme-gallery.svg`.
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 3
+  - **Blocked By**: T22, T16a, T13a
+
+  **Acceptance Criteria**:
+  - [ ] Gallery shows 15 built-in themes.
+  - [ ] User's custom themes appear in "My Themes" tab.
+  - [ ] Click applies theme.
+  - [ ] Search filters themes.
+
+  **Commit**: YES
+  - Message: `feat(settings): add theme gallery UI`
+  - Files: `web-new/src/app/pages/settings/theme-gallery.component.ts`
+
+---
+
+- [ ] 22d. **Theme import/export UI**
+
+  **What to do**:
+  - `web-new/src/app/pages/settings/theme-import-export.component.ts`:
+    - **Import view**: File upload zone (drag-and-drop), JSON paste textarea, preview panel.
+    - **Export view**: Theme selector dropdown, JSON preview, Download button.
+    - Conflict modal: "Theme already exists. Replace?" (per mock-up).
+    - Validation error modal: shows field-level errors (per mock-up).
+    - Uses `ImportExportService`.
+    - Mock-up references: `theme-import.svg`, `theme-export.svg`, `theme-conflict.svg`, `theme-validation-error.svg`.
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 3
+  - **Blocked By**: T22, T16c, T3m
+
+  **Acceptance Criteria**:
+  - [ ] File upload accepts `.cbsd-theme.json`.
+  - [ ] JSON paste works.
+  - [ ] Preview shows theme applied.
+  - [ ] Conflict modal handles duplicates.
+  - [ ] Validation errors shown clearly.
+
+  **Commit**: YES
+  - Message: `feat(settings): add theme import/export UI`
+  - Files: `web-new/src/app/pages/settings/theme-import-export.component.ts`
 
 ---
 
@@ -3353,6 +3652,129 @@ Max Concurrent: 7 (Waves 1, 4, 5)
   **Commit**: YES
   - Message: `feat(plugins): add plugin template renderer with 7 built-in components`
   - Files: `web-new/src/app/plugins/`
+
+---
+
+- [ ] 13a. **Custom theme CRUD endpoints (`/api/users/me/themes/*`)**
+
+  **What to do**:
+  - `GET /api/users/me/themes` — list user's custom themes.
+  - `POST /api/users/me/themes` — create new custom theme.
+  - `PUT /api/users/me/themes/:id` — update existing.
+  - `DELETE /api/users/me/themes/:id` — delete custom theme.
+  - `GET /api/users/me/themes/:id/export` — download as `.cbsd-theme.json` (sets Content-Disposition).
+  - All endpoints authenticated via session cookie.
+  - Validate tokens against theme schema.
+  - Max 50 custom themes per user (configurable).
+  - All responses use `application/vnd.cloudbsd+<action>` MIME.
+
+  **Must NOT do**:
+  - Do NOT allow theme name collisions (return 409 on conflict).
+  - Do NOT include other users' themes in any response.
+  - Do NOT persist unvalidated tokens.
+
+  **Recommended Agent Profile**:
+  - **Category**: `unspecified-high`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 1
+  - **Blocked By**: T09 (auth)
+
+  **Acceptance Criteria**:
+  - [ ] All 5 endpoints work end-to-end.
+  - [ ] Authenticated requests only.
+  - [ ] Theme validation rejects malformed tokens.
+  - [ ] User-scoped (no cross-user access).
+  - [ ] Export produces valid `.cbsd-theme.json` file.
+
+  **QA Scenarios**:
+  ```
+  Scenario: Create + export round-trip
+    Tool: Bash + curl
+    Steps:
+      1. Login to get cookie.
+      2. POST /api/users/me/themes with valid theme body.
+      3. Verify 201 + theme_id.
+      4. GET /api/users/me/themes/:id/export -i
+      5. Verify Content-Disposition: attachment; filename="*.cbsd-theme.json".
+      6. Verify JSON body matches what was POSTed.
+    Expected Result: Round-trip works.
+    Evidence: .sisyphus/evidence/task-13a-roundtrip.txt
+
+  Scenario: 50-theme limit
+    Tool: Bash
+    Steps:
+      1. POST 51 themes in sequence.
+      2. Verify 51st returns 429 (too many themes).
+    Expected Result: Limit enforced.
+    Evidence: .sisyphus/evidence/task-13a-limit.txt
+  ```
+
+  **Commit**: YES
+  - Message: `feat(api): add custom theme CRUD endpoints`
+  - Files: `server-new/src/api/themes.ts`
+
+---
+
+- [ ] 13b. **Theme import endpoint with validation**
+
+  **What to do**:
+  - `POST /api/users/me/themes/import` — accepts JSON body of imported theme.
+  - Validates against `diagrams/theme-schema.json` (loaded at startup).
+  - Verifies signature if present (sha256 of canonical JSON).
+  - Sanitizes all string fields (strips HTML/scripts).
+  - Rejects `__proto__`, `constructor`, `prototype` keys (prototype pollution).
+  - Returns 201 + new theme_id on success.
+  - Returns 400 with field-level errors on validation failure.
+  - Response MIME: `application/vnd.cloudbsd+themes.import`.
+
+  **Must NOT do**:
+  - Do NOT eval() or execute any code from imported JSON.
+  - Do NOT trust client-provided IDs (generate fresh UUIDs).
+  - Do NOT allow logo data URLs > 200KB.
+
+  **Recommended Agent Profile**:
+  - **Category**: `deep`
+  - **Skills**: `[]`
+  - **Reason**: Security-critical (untrusted input parsing).
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 1
+  - **Blocked By**: T13a, T3n (schema)
+
+  **Acceptance Criteria**:
+  - [ ] Valid theme imports successfully.
+  - [ ] Invalid colors rejected with field error.
+  - [ ] Oversized logo rejected.
+  - [ ] Prototype pollution attempt rejected.
+  - [ ] Signature verified when present.
+
+  **QA Scenarios**:
+  ```
+  Scenario: Prototype pollution blocked
+    Tool: Bash
+    Steps:
+      1. POST theme with body: {"__proto__": {"isAdmin": true}, "name": "test", "tokens": {...}}
+      2. Verify 400 + error message about __proto__.
+      3. Verify backend state unchanged.
+    Expected Result: Attack blocked.
+    Evidence: .sisyphus/evidence/task-13b-proto-pollution.txt
+
+  Scenario: Invalid color rejected
+    Tool: Bash
+    Steps:
+      1. POST theme with tokens.primary = "not-a-color".
+      2. Verify 400 + error: {field: "tokens.primary", message: "must match pattern ^#[0-9a-fA-F]{6}$"}.
+    Expected Result: Validation error.
+    Evidence: .sisyphus/evidence/task-13b-invalid-color.txt
+  ```
+
+  **Commit**: YES
+  - Message: `feat(api): add theme import endpoint with validation + sandboxing`
+  - Files: `server-new/src/api/themes-import.ts`
 
 ---
 
