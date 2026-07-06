@@ -360,6 +360,29 @@ Max Concurrent: 7 (Waves 1, 4, 5)
     ```
   - 14 screens: `login.svg`, `index.svg`, `dashboard.svg`, `vms.svg`, `containers.svg`, `jails.svg`, `cluster.svg`, `volumes.svg`, `network.svg`, `users.svg`, `logs.svg`, `notifications.svg`, `settings.svg`, `notfound.svg`.
 
+  **What to do**:
+  - Examine each React page in `src/pages/*.tsx` (14 pages).
+  - For each page, identify oddities (per Metis review: Index is 598 bytes tiny, Jails/VMs/OCIContainers are placeholder stubs, CustomPageSizeModal is standalone, redundant tree items).
+  - Design an adjusted version per screen.
+  - Create `diagrams/screens/<screen-name>.svg` with SVG `<foreignObject>` containing styled HTML mockup.
+  - Populate `diagrams/ADJUSTMENTS.md` table with one row per screen change.
+  - SVG structural template (per Honcho convention):
+    ```xml
+    <?xml version="1.0" encoding="UTF-8"?>
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+         viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet">
+      <foreignObject x="0" y="0" width="1280" height="800">
+        <div xmlns="http://www.w3.org/1999/xhtml"
+             style="position: relative; width: 1280px; height: 800px;
+                    font-family: Inter, system-ui, sans-serif; color: #0f172a;
+                    background: #f8fafc; box-sizing: border-box; padding: 16px;">
+          <!-- Screen content here, all inline styles -->
+        </div>
+      </foreignObject>
+    </svg>
+    ```
+  - 14 screens: `login.svg`, `index.svg`, `dashboard.svg`, `vms.svg`, `containers.svg`, `jails.svg`, `cluster.svg`, `volumes.svg`, `network.svg`, `users.svg`, `logs.svg`, `notifications.svg`, `settings.svg`, `notfound.svg`.
+
   **Must NOT do**:
   - Do NOT use raw HTML in markdown (per Honcho convention).
   - Do NOT use Mermaid inside SVG files.
@@ -420,6 +443,393 @@ Max Concurrent: 7 (Waves 1, 4, 5)
   - Message: `docs(diagrams): add 14 screen SVG mockups + adjustments table`
   - Files: `diagrams/screens/*.svg`, `diagrams/ADJUSTMENTS.md`
   - Pre-commit: `xmllint --noout diagrams/screens/*.svg`
+
+  **QA Scenarios**:
+  ```
+  Scenario: 14 SVG files exist and parse
+    Tool: Bash + xmllint
+    Steps:
+      1. ls diagrams/screens/*.svg | wc -l  → expect: 14
+      2. for f in diagrams/screens/*.svg; do xmllint --noout "$f" || echo "INVALID: $f"; done
+      3. for f in diagrams/screens/*.svg; do grep -q "<foreignObject" "$f" || echo "MISSING foreignObject: $f"; done
+    Expected Result: 14 files, all valid XML, all use foreignObject.
+    Failure Indicators: count != 14; any "INVALID" line; any "MISSING foreignObject" line.
+    Evidence: .sisyphus/evidence/task-2-svg-validation.txt
+
+  Scenario: ADJUSTMENTS.md is complete
+    Tool: Bash
+    Steps:
+      1. cat diagrams/ADJUSTMENTS.md | wc -l  → expect: ≥ 20 (header + 14 rows + footer)
+      2. grep -c "^|" diagrams/ADJUSTMENTS.md  → expect: ≥ 16 (header separator + 14 rows + footer)
+    Expected Result: Table has 14 rows.
+    Evidence: .sisyphus/evidence/task-2-adjustments-table.txt
+
+  Scenario: SVG renders in browser (Playwright snapshot)
+    Tool: Playwright
+    Steps:
+      1. npx playwright test --grep "screens render"
+      2. For each SVG, load via file:// URL, screenshot, assert non-zero content area.
+    Expected Result: All 14 SVGs render to a non-empty screenshot.
+    Evidence: .sisyphus/evidence/task-2-svg-screenshots/*.png
+  ```
+
+  **Commit**: YES
+  - Message: `docs(diagrams): add 14 screen SVG mockups + adjustments table`
+  - Files: `diagrams/screens/*.svg`, `diagrams/ADJUSTMENTS.md`
+  - Pre-commit: `xmllint --noout diagrams/screens/*.svg`
+
+---
+
+- [ ] 3a. **SVG error presentation mock-ups (12 error states)**
+
+  **What to do**:
+  - Create `diagrams/errors/` directory with 12 SVG mock-ups covering all error states:
+    1. `backend-unavailable.svg` — Red banner top, main area with "Backend Unavailable" + Retry button + status details + support link.
+    2. `backend-degraded.svg` — Yellow banner top, partial data showing, "Some features unavailable" warning.
+    3. `session-expired.svg` — Frost-out modal, "Session Expired" message, OK button.
+    4. `session-revoked.svg` — Frost-out modal, "Session Revoked by Administrator" message.
+    5. `permission-denied.svg` — Inline error card, "Permission Denied" with explanation, contact admin.
+    6. `network-timeout.svg` — Toast notification bottom-right, "Request timed out", retry button.
+    7. `server-error.svg` — Inline error card, "Server Error (500)", with error ID, "Report this" link.
+    8. `validation-error.svg` — Form field with red border + error text below.
+    9. `empty-state.svg` — Centered illustration + "No VMs found" + "Create one" disabled button (view-only).
+    10. `connection-lost.svg` — Yellow banner top, "Connection lost - reconnecting..." with spinner.
+    11. `plugin-error.svg` — Inline error in plugin area, "Plugin failed to load", retry/disable buttons.
+    12. `csrf-failure.svg` — Toast notification, "Session security check failed", re-authenticate prompt.
+  - Each SVG uses the same `<foreignObject>` template as screen mockups.
+  - All show actual text content (localized placeholder, English).
+  - For each, document in the SVG file's visible header: error name, severity (info/warn/error/critical), trigger condition.
+  - Add `diagrams/errors/README.md` explaining each error state and when it triggers.
+
+  **Must NOT do**:
+  - Do NOT use raw HTML (per Honcho convention).
+  - Do NOT use external CSS.
+  - Do NOT skip any of the 12 error states.
+  - Do NOT include real user data or PII in mockups.
+
+  **Recommended Agent Profile**:
+  - **Category**: `artistry`
+  - **Skills**: `[]`
+  - **Reason**: Visual design for error states.
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 0 (with T01-T07)
+  - **Blocks**: T15e (frontend error components)
+  - **Blocked By**: T01
+
+  **Acceptance Criteria**:
+  - [ ] 12 SVG files exist at `diagrams/errors/*.svg`.
+  - [ ] All SVGs parse as valid XML.
+  - [ ] `diagrams/errors/README.md` documents each error state.
+  - [ ] Each SVG shows: error name, severity, trigger, message, action buttons.
+
+  **QA Scenarios**:
+  ```
+  Scenario: 12 error SVGs render
+    Tool: Playwright
+    Steps:
+      1. ls diagrams/errors/*.svg | wc -l  → expect: 12
+      2. xmllint --noout diagrams/errors/*.svg
+      3. Playwright opens each, screenshots.
+    Expected Result: 12 valid SVGs, all render.
+    Evidence: .sisyphus/evidence/task-3a-error-screenshots/*.png
+  ```
+
+  **Commit**: YES
+  - Message: `docs(diagrams): add 12 error presentation SVG mock-ups`
+  - Files: `diagrams/errors/*.svg`, `diagrams/errors/README.md`
+
+---
+
+- [ ] 3b. **Admin Settings → Error Display section SVG mock-up**
+
+  **What to do**:
+  - Create `diagrams/screens/settings-error-display.svg` (or add to settings screen mock-up).
+  - Show the "Error Display" settings section:
+    - Section title "Error Display"
+    - Description "How much detail to show when errors occur"
+    - Radio button group:
+      - ⦿ Minimal — "Show only error type. Best for general users."
+      - ◯ Standard — "Show error details and IDs for support. Recommended."
+      - ⦿ Detailed — "Show technical details, request IDs, stack traces. Recommended for admins." (selected for admin)
+      - ◯ Debug — "Show full debug info including headers. Use only when troubleshooting."
+    - For non-admin view: hide Detailed and Debug options
+    - Save button (instant apply or explicit save based on UX choice)
+
+  **Recommended Agent Profile**:
+  - **Category**: `artistry`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 0
+  - **Blocked By**: T01
+
+  **Acceptance Criteria**:
+  - [ ] SVG shows admin view with all 4 radio options.
+  - [ ] SVG shows non-admin view with only Minimal and Standard.
+  - [ ] Save button visible.
+  - [ ] SVG renders correctly in Playwright.
+
+  **QA Scenarios**:
+  ```
+  Scenario: Settings mock-up renders
+    Tool: Playwright
+    Steps:
+      1. Playwright opens the SVG.
+      2. Asserts all 4 radio options visible.
+    Expected Result: SVG renders.
+    Evidence: .sisyphus/evidence/task-3b-settings-mockup.png
+  ```
+
+  **Commit**: YES
+  - Message: `docs(diagrams): add Error Display settings section mock-up`
+  - Files: `diagrams/screens/settings-error-display.svg`
+
+---
+
+- [ ] 3c. **SVG notification mock-ups (5 types)**
+
+  **What to do**:
+  - Create `diagrams/notifications/` directory.
+  - 5 SVG files (using `<foreignObject>` template):
+    1. `info-toast.svg` — Blue accent, info icon, "VM metadata refreshed", auto-dismiss 5s indicator.
+    2. `success-toast.svg` — Green accent, check icon, "Preferences saved", auto-dismiss 5s indicator.
+    3. `warning-toast.svg` — Yellow accent, warning icon, "Backend slow response", auto-dismiss 8s.
+    4. `error-toast.svg` — Red accent, error icon, "Failed to refresh", manual dismiss × button.
+    5. `system-notification.svg` — Persistent system notification (top banner), "VM started by admin", dismissible.
+
+  **Recommended Agent Profile**:
+  - **Category**: `artistry`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 0
+  - **Blocked By**: T01
+
+  **Acceptance Criteria**:
+  - [ ] 5 SVG files exist at `diagrams/notifications/*.svg`.
+  - [ ] All parse as valid XML.
+  - [ ] Each shows: icon, message, dismiss control, position (bottom-right for toast, top for banner).
+  - [ ] Color coded by severity.
+
+  **QA Scenarios**: Standard Playwright snapshot validation.
+
+  **Commit**: YES
+  - Message: `docs(diagrams): add 5 notification SVG mock-ups`
+  - Files: `diagrams/notifications/*.svg`
+
+---
+
+- [ ] 3d. **SVG modal mock-ups (6 modal types)**
+
+  **What to do**:
+  - Create `diagrams/modals/` directory.
+  - 6 SVG files:
+    1. `error-modal.svg` — Reusable error modal with 4 detail-level variants (MINIMAL/STANDARD/DETAILED/DEBUG) shown side-by-side or in 2x2 grid.
+    2. `frost-out-modal.svg` — Session expired, full-page frost overlay.
+    3. `confirmation-modal.svg` — Generic confirmation with OK/Cancel.
+    4. `resource-details-modal.svg` — View-only VM/container details.
+    5. `about-modal.svg` — App info (version, license, links).
+    6. `logout-confirmation.svg` — Confirm logout before session ends.
+
+  **Recommended Agent Profile**:
+  - **Category**: `artistry`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 0
+  - **Blocked By**: T01
+
+  **Acceptance Criteria**:
+  - [ ] 6 SVG files exist.
+  - [ ] All parse as valid XML.
+  - [ ] Error modal shows all 4 detail levels clearly distinguished.
+  - [ ] Frost-out modal shows page obscured behind it.
+
+  **Commit**: YES
+  - Message: `docs(diagrams): add 6 modal SVG mock-ups`
+  - Files: `diagrams/modals/*.svg`
+
+---
+
+- [ ] 3e. **SVG core UI component mock-ups (15 components)**
+
+  **What to do**:
+  - Create `diagrams/components/` directory.
+  - 15 SVG files (each component shown in isolation, in default state, optionally with hover/focus/disabled variants):
+    1. `sidebar-expanded.svg` — Full sidebar with menu items, active state, badges.
+    2. `sidebar-collapsed.svg` — Icons-only collapsed state.
+    3. `mobile-sidebar.svg` — Mobile drawer overlay.
+    4. `header.svg` — Top header with user menu, theme toggle, locale switcher.
+    5. `mobile-topbar.svg` — Mobile compact header.
+    6. `stat-card.svg` — Stat with value/label/trend.
+    7. `chart-card.svg` — Card with embedded chart.
+    8. `data-table.svg` — Table with sort/pagination/search.
+    9. `data-table-empty.svg` — Empty table.
+    10. `badge.svg` — All badge variants in one SVG.
+    11. `form-input.svg` — Input states (default/focus/error/disabled).
+    12. `form-select.svg` — Select closed and open.
+    13. `form-toggle.svg` — Toggle on/off/disabled.
+    14. `button-variants.svg` — All button styles.
+    15. `tree-item.svg` — Tree node with children.
+
+  **Recommended Agent Profile**:
+  - **Category**: `artistry`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 0
+  - **Blocked By**: T01
+
+  **Acceptance Criteria**:
+  - [ ] 15 SVG files exist.
+  - [ ] All parse as valid XML.
+  - [ ] Components match Tailwind utility classes used in actual implementation.
+
+  **Commit**: YES
+  - Message: `docs(diagrams): add 15 core UI component SVG mock-ups`
+  - Files: `diagrams/components/*.svg`
+
+---
+
+- [ ] 3f. **SVG theme variants (light/dark/high-contrast)**
+
+  **What to do**:
+  - Create `diagrams/themes/` directory.
+  - 3 SVG files:
+    1. `login-light.svg` — Login screen in light mode.
+    2. `login-dark.svg` — Same login in dark mode.
+    3. `dashboard-high-contrast.svg` — Dashboard in WCAG AAA high contrast (black/white only, large text).
+
+  **Recommended Agent Profile**:
+  - **Category**: `artistry`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 0
+  - **Blocked By**: T01
+
+  **Acceptance Criteria**:
+  - [ ] 3 SVG files exist.
+  - [ ] Color tokens match Tailwind config (per T16).
+  - [ ] High contrast passes WCAG AAA (≥7:1 contrast).
+
+  **Commit**: YES
+  - Message: `docs(diagrams): add 3 theme variant SVG mock-ups`
+  - Files: `diagrams/themes/*.svg`
+
+---
+
+- [ ] 3g. **SVG mobile variants (3 key screens at 375×812)**
+
+  **What to do**:
+  - Create `diagrams/mobile/` directory.
+  - 3 SVG files:
+    1. `mobile-dashboard.svg` — Dashboard at 375×812.
+    2. `mobile-vms-list.svg` — VM list view on mobile.
+    3. `mobile-vm-detail.svg` — VM detail on mobile.
+
+  **Recommended Agent Profile**:
+  - **Category**: `artistry`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 0
+  - **Blocked By**: T01
+
+  **Acceptance Criteria**:
+  - [ ] 3 SVG files exist.
+  - [ ] viewBox is 0 0 375 812.
+  - [ ] Touch targets ≥ 44×44px (WCAG 2.5.5).
+  - [ ] Text scales appropriately.
+
+  **Commit**: YES
+  - Message: `docs(diagrams): add 3 mobile variant SVG mock-ups`
+  - Files: `diagrams/mobile/*.svg`
+
+---
+
+- [ ] 3h. **SVG loading/state variant mock-ups (4 states)**
+
+  **What to do**:
+  - Create `diagrams/states/` directory.
+  - 4 SVG files:
+    1. `loading-skeleton.svg` — Skeleton placeholder for a list/table.
+    2. `loading-spinner.svg` — Centered spinner with optional message.
+    3. `progress-bar.svg` — Linear progress bar (for long ops).
+    4. `empty-state-illustration.svg` — Generic empty state with illustration.
+
+  **Recommended Agent Profile**:
+  - **Category**: `artistry`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 0
+  - **Blocked By**: T01
+
+  **Commit**: YES
+  - Message: `docs(diagrams): add 4 loading/state SVG mock-ups`
+  - Files: `diagrams/states/*.svg`
+
+---
+
+- [ ] 3i. **SVG plugin manifest mock-ups (3 dynamic UI surfaces)**
+
+  **What to do**:
+  - Create `diagrams/plugins/` directory.
+  - 3 SVG files:
+    1. `new-menu-item-toast.svg` — Toast notification when new plugin menu item appears in sidebar.
+    2. `plugin-page-rendered.svg` — Dynamic plugin page rendered from manifest template.
+    3. `plugin-modal-rendered.svg` — Dynamic modal triggered by plugin event.
+
+  **Recommended Agent Profile**:
+  - **Category**: `artistry`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 0
+  - **Blocked By**: T01
+
+  **Commit**: YES
+  - Message: `docs(diagrams): add 3 plugin manifest SVG mock-ups`
+  - Files: `diagrams/plugins/*.svg`
+
+---
+
+- [ ] 3j. **UI coverage matrix document**
+
+  **What to do**:
+  - Create `diagrams/ui-coverage-matrix.md`.
+  - Markdown table with 71 rows mapping every UI surface to its mock-up file.
+  - Columns: `UI Surface | Type | Mock-up File | Status`.
+  - Status initially `Pending`, updated to `Done` after each task completes.
+
+  **Recommended Agent Profile**:
+  - **Category**: `writing`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 0
+  - **Blocked By**: T01
+
+  **Acceptance Criteria**:
+  - [ ] `diagrams/ui-coverage-matrix.md` exists.
+  - [ ] Table has 71 rows.
+  - [ ] All rows have mock-up file paths.
+
+  **Commit**: YES
+  - Message: `docs(diagrams): add UI coverage matrix`
+  - Files: `diagrams/ui-coverage-matrix.md`
 
 ---
 
@@ -600,6 +1010,190 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 ---
 
 ### Wave 1: Backend Foundation
+
+- [ ] 7a. **Backend state broadcaster (Socket.IO streaming events)**
+
+  **What to do**:
+  - Create `server-new/src/state/` directory.
+  - `broadcaster.ts`: `StateBroadcaster` class wrapping Socket.IO.
+    - `publishUpsert(topic, resource_id, data)` → emits `state:upsert` to topic room.
+    - `publishDelete(topic, resource_id)` → emits `state:delete`.
+    - `publishClear(topic)` → emits `state:clear`.
+    - `publishSnapshot(socket, topic, data)` → emits `state:snapshot` to one socket.
+  - `subscription-manager.ts`: tracks `Map<topic, Set<socketId>>`.
+    - `subscribe(socket, topics)` → joins socket to topic rooms, sends snapshot.
+    - `unsubscribe(socket, topics)` → leaves rooms.
+    - `handleRefresh(socket, topic)` → re-sends snapshot for topic.
+  - `events.ts`: Socket.IO event handlers for `state:subscribe`, `state:unsubscribe`, `state:refresh`.
+  - All publishes logged via JSONL logger with `{module: 'state', topic, action, subscriber_count}`.
+  - Tests: publish to N subscribers, unsubscribe removes from room, refresh re-sends snapshot.
+
+  **Must NOT do**:
+  - Do NOT broadcast without first checking authorization.
+  - Do NOT send sensitive data (passwords, tokens) via state updates.
+  - Do NOT use Socket.IO rooms for authorization (use middleware).
+
+  **Recommended Agent Profile**:
+  - **Category**: `deep`
+  - **Skills**: `[]`
+  - **Reason**: Real-time pub/sub architecture; needs careful design.
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 1 (with T08-T14, T58a-c)
+  - **Blocks**: T40-T44 (discoverers integrate with broadcaster)
+  - **Blocked By**: T08 (backend scaffold), T08a (logger)
+
+  **Acceptance Criteria**:
+  - [ ] `StateBroadcaster.publishUpsert('vms', 'vm-1', {...})` emits to all subscribers in `state:vms` room.
+  - [ ] `SubscriptionManager.subscribe(socket, ['vms', 'containers'])` joins both rooms and sends snapshot.
+  - [ ] `state:refresh {topic: 'vms'}` triggers snapshot re-send.
+  - [ ] All broadcasts logged via JSONL logger.
+  - [ ] Socket.IO middleware validates session cookie before allowing subscription.
+
+  **QA Scenarios**:
+  ```
+  Scenario: Publish to subscribers
+    Tool: Bash + node script
+    Steps:
+      1. Create Socket.IO client + server in test.
+      2. Client subscribes to 'vms'.
+      3. Server calls broadcaster.publishUpsert('vms', 'vm-1', {name: 'test'}).
+      4. Assert client receives state:upsert with correct payload.
+    Expected Result: Client receives update.
+    Evidence: .sisyphus/evidence/task-7a-publish.txt
+
+  Scenario: Unauthenticated connection rejected
+    Tool: Bash
+    Steps:
+      1. Socket.IO connect without session cookie.
+      2. Attempt state:subscribe.
+      3. Assert connection rejected (401 or disconnect).
+    Expected Result: No subscription allowed.
+    Evidence: .sisyphus/evidence/task-7a-auth.txt
+  ```
+
+  **Commit**: YES
+  - Message: `feat(state): add backend state broadcaster with Socket.IO streaming events`
+  - Files: `server-new/src/state/`
+
+---
+
+- [ ] 7b. **Backend initial state snapshot (per-topic)**
+
+  **What to do**:
+  - `snapshot.ts`: builds initial state for each topic.
+    - `buildVMSnapshot()`: queries current VMs via `BhyveVMDiscoverer`.
+    - `buildContainersSnapshot()`: queries via `PodmanDiscoverer`.
+    - `buildJailsSnapshot()`: queries via `JailDiscoverer`.
+    - `buildSystemSnapshot()`: queries FreeBSD stats.
+    - `buildNotificationsSnapshot()`: queries notification discoverer.
+    - `buildClusterSnapshot()`: aggregates all above.
+    - `buildUsersSnapshot()`: lists users (admin-only).
+  - Returns `{topic, data, timestamp}` per topic.
+  - Called on `state:subscribe` to seed the topic.
+  - Cached for 5s to prevent redundant queries on rapid re-subscribes.
+
+  **Must NOT do**:
+  - Do NOT include passwords or sensitive fields in snapshots.
+  - Do NOT include other users' session IDs.
+
+  **Recommended Agent Profile**:
+  - **Category**: `unspecified-high`
+  - **Skills**: `[]`
+
+  - **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 1
+  - **Blocked By**: T7a, T40-T44 (discoverers)
+
+  **Acceptance Criteria**:
+  - [ ] Each topic has a snapshot builder.
+  - [ ] Snapshots are JSON-serializable.
+  - [ ] Cache returns same data within 5s window.
+  - [ ] Cache invalidated on `state:upsert` events for the topic.
+
+  **QA Scenarios**:
+  ```
+  Scenario: Snapshot contains all topics
+    Tool: Bash
+    Steps:
+      1. Login, connect Socket.IO.
+      2. Subscribe to all topics.
+      3. Assert state:snapshot received for each.
+      4. Verify shape: {vms: [...], containers: [...], jails: [...], volumes: [...], disks: [...], notifications: [...], cluster: {...}, system: {...}, users: [...]}.
+    Expected Result: All topics populated.
+    Evidence: .sisyphus/evidence/task-7b-snapshot.json
+
+  Scenario: Snapshot cache
+    Tool: Bash
+    Steps:
+      1. Subscribe → snapshot.
+      2. Within 5s, subscribe again → returns cached snapshot.
+      3. After 5s, subscribe → fresh query.
+    Expected Result: Cache works.
+    Evidence: .sisyphus/evidence/task-7b-cache.txt
+  ```
+
+  **Commit**: YES
+  - Message: `feat(state): add initial state snapshot builders per topic`
+  - Files: `server-new/src/state/snapshot.ts`
+
+---
+
+- [ ] 7c. **Backend Socket.IO middleware + session-cookie auth**
+
+  **What to do**:
+  - Socket.IO middleware reads `cbsd_session` cookie from handshake headers.
+  - Validates session against DB (or JWT verification if applicable).
+  - On success: attach `socket.data.user`, `socket.data.session_id`.
+  - On failure: reject connection with disconnect reason.
+  - This middleware runs BEFORE any subscription is allowed.
+  - Reuses `authenticateSession` from T09.
+
+  **Must NOT do**:
+  - Do NOT skip validation even for "internal" topics.
+  - Do NOT log session tokens.
+
+  **Recommended Agent Profile**:
+  - **Category**: `quick`
+  - **Skills**: `[]`
+
+  - **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 1
+  - **Blocked By**: T09, T7a
+
+  **Acceptance Criteria**:
+  - [ ] Socket.IO connection without `cbsd_session` cookie is rejected.
+  - [ ] Connection with valid cookie attaches `socket.data.user`.
+  - [ ] Connection with expired session is rejected.
+  - [ ] Logout invalidates socket connection.
+
+  **QA Scenarios**:
+  ```
+  Scenario: Unauthenticated socket rejected
+    Tool: Bash + node script
+    Steps:
+      1. io() without cookie → expect: connect_error
+    Expected Result: Connection rejected.
+    Evidence: .sisyphus/evidence/task-7c-no-auth.txt
+
+  Scenario: Authenticated socket connects
+    Tool: Bash
+    Steps:
+      1. Login to get cookie.
+      2. io(url, {extraHeaders: {Cookie: 'cbsd_session=...'}}) → connect.
+      3. socket.data.user populated.
+    Expected Result: Connection succeeds.
+    Evidence: .sisyphus/evidence/task-7c-auth.txt
+  ```
+
+  **Commit**: YES
+  - Message: `feat(state): add Socket.IO session-cookie authentication middleware`
+  - Files: `server-new/src/state/socket-auth.ts`
+
+---
 
 - [ ] 8a. **Backend structured logger module (interface + JSONL impl)**
 
@@ -1222,6 +1816,297 @@ Max Concurrent: 7 (Waves 1, 4, 5)
   **Commit**: YES
   - Message: `feat(web): add structured JSONL logger module with remote sink`
   - Files: `web-new/src/app/logging/`
+
+---
+
+- [ ] 15c. **Pre-flight check service (L1/L2/L3)**
+
+  **What to do**:
+  - `web-new/src/app/preflight/preflight.service.ts`:
+    - `run()`: 3-level progressive check.
+    - **L1**: `GET /api/health` with 5s timeout. Returns `{status: 'ok', version, uptime, services: {db: bool, pam: bool, plugins: bool}}`.
+    - **L2**: Parse response, check services map. Degraded = some services down.
+    - **L3**: `POST /api/session.validate` if cookie present. Routes to /login or /dashboard.
+  - State machine: `pending → checking-L1 → checking-L2 → checking-L3 → ready | unreachable | degraded`.
+  - Auto-retry on unreachable: 30s, 60s, 120s, 240s, 300s (capped).
+  - Manual retry via UI button.
+  - Expose signal `state = signal<PreFlightState>({status: 'pending'})`.
+  - All state transitions logged via JSONL logger.
+
+  **Must NOT do**:
+  - Do NOT block UI for more than 5s on L1.
+  - Do NOT retry faster than every 30s.
+  - Do NOT log cookies in pre-flight logs.
+
+  **Recommended Agent Profile**:
+  - **Category**: `unspecified-high`
+  - **Skills**: `[]`
+
+  - **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 2
+  - **Blocked By**: T15, T14 (health endpoint)
+
+  **Acceptance Criteria**:
+  - [ ] `run()` completes L1 within 5s when backend healthy.
+  - [ ] On L1 fail: state = `unreachable`, retry scheduled.
+  - [ ] On L2 partial: state = `degraded`.
+  - [ ] L3 routes correctly based on session validity.
+  - [ ] Manual retry button works.
+
+  **QA Scenarios**:
+  ```
+  Scenario: Healthy backend passes all levels
+    Tool: Playwright
+    Steps:
+      1. Start backend.
+      2. App boots, runs pre-flight.
+      3. Assert state transitions to 'ready'.
+      4. Verify route is /dashboard (if logged in) or /login.
+    Expected Result: App loads normally.
+    Evidence: .sisyphus/evidence/task-15c-healthy.txt
+
+  Scenario: Unreachable backend shows degraded UI
+    Tool: Playwright
+      Steps:
+        1. Stop backend.
+        2. App boots, runs pre-flight.
+        3. After 5s timeout, state = 'unreachable'.
+        4. Assert degraded UI banner visible.
+    Expected Result: Degraded UI shown.
+    Evidence: .sisyphus/evidence/task-15c-unreachable.png
+  ```
+
+  **Commit**: YES
+  - Message: `feat(preflight): add 3-level pre-flight check service`
+  - Files: `web-new/src/app/preflight/`
+
+---
+
+- [ ] 15d. **Backend unavailable UI (banner + degraded shell)**
+
+  **What to do**:
+  - `web-new/src/app/ui/backend-unavailable/`:
+    - `banner.component.ts`: top banner with red strip, "Backend Unavailable" message, "Retry Now" button, "Last attempt: ..." timestamp.
+    - `shell.component.ts`: degraded app shell — sidebar visible but disabled, pages show skeleton placeholders.
+    - `retry.service.ts`: manual retry handler.
+  - Auto-retry: schedule next attempt via `setTimeout` with backoff.
+  - On successful retry: hide banner, refresh app state.
+  - Accessibility: banner has `role="status"`, `aria-live="polite"` (not assertive since it's persistent).
+  - Tests: banner appears on unreachable, hides on recovery, retry button works.
+
+  **Must NOT do**:
+  - Do NOT prevent user from navigating (sidebar still visible, links work).
+  - Do NOT show modals (banner is correct pattern for persistent degradation).
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  - **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 2
+  - **Blocked By**: T15c
+
+  **Acceptance Criteria**:
+  - [ ] Banner visible when pre-flight state = `unreachable`.
+  - [ ] Banner hidden when state = `ready`.
+  - [ ] Manual retry button triggers pre-flight re-run.
+  - [ ] Sidebar shows but is disabled with tooltips "Backend offline".
+  - [ ] Auto-retry happens on backoff schedule.
+
+  **QA Scenarios**:
+  ```
+  Scenario: Banner shows on unreachable
+    Tool: Playwright
+    Steps:
+      1. Backend down.
+      2. App boots.
+      3. Assert banner with "Backend Unavailable" visible.
+      4. Click "Retry Now".
+      5. Backend comes up.
+      6. Assert banner disappears.
+    Expected Result: Banner shows/hides correctly.
+    Evidence: .sisyphus/evidence/task-15d-banner.png
+  ```
+
+  **Commit**: YES
+  - Message: `feat(ui): add backend unavailable banner + degraded shell`
+  - Files: `web-new/src/app/ui/backend-unavailable/`
+
+---
+
+- [ ] 15e. **Error presentation components (12 error states)**
+
+  **What to do**:
+  - `web-new/src/app/ui/errors/`:
+    - One component per error state (matching T3a mock-ups):
+      - `BackendUnavailableError`, `BackendDegradedError`, `SessionExpiredError`, `SessionRevokedError`, `PermissionDeniedError`, `NetworkTimeoutError`, `ServerError`, `ValidationError`, `EmptyState`, `ConnectionLostError`, `PluginError`, `CsrfFailureError`.
+    - Each component renders the appropriate presentation (modal for CRITICAL/ERROR, banner for WARN, toast for INFO).
+    - Uses shared `ErrorModalComponent` (T15f) for modal presentations.
+    - Tests: each component renders correctly per mock-up.
+
+  **Must NOT do**:
+  - Do NOT show modals for INFO/WARN severity.
+  - Do NOT show banners for CRITICAL/ERROR (use modal).
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  - **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 2
+  - **Blocked By**: T15f (modal), T15g (admin settings)
+
+  **Acceptance Criteria**:
+  - [ ] All 12 error components exist.
+  - [ ] Each renders per its mock-up (verified by Playwright snapshot).
+  - [ ] Severity determines presentation (modal/banner/toast).
+  - [ ] Tests cover each component.
+
+  **QA Scenarios**:
+  ```
+  Scenario: Each error renders correctly
+    Tool: Playwright
+    Steps:
+      1. For each of 12 error components, render in isolation.
+      2. Playwright snapshot.
+      3. Compare against mock-up SVG.
+    Expected Result: All match.
+    Evidence: .sisyphus/evidence/task-15e-error-snapshots/*.png
+  ```
+
+  **Commit**: YES
+  - Message: `feat(ui): add 12 error presentation components`
+  - Files: `web-new/src/app/ui/errors/`
+
+---
+
+- [ ] 15f. **Reusable Error Modal component (with detail levels)**
+
+  **What to do**:
+  - `web-new/src/app/ui/error-modal/error-modal.component.ts`:
+    - Props: `error: ErrorPayload` (severity, code, message, errorId, requestId, stack, etc.)
+    - Reads user's `errorDetailLevel` from `AuthStore`.
+    - Renders:
+      - Header: icon (severity-based color), title, severity badge.
+      - Message: human-readable description.
+      - Detail section: conditional based on detail level.
+        - MINIMAL: nothing extra.
+        - STANDARD: error ID + timestamp.
+        - DETAILED: + request ID + endpoint + status code + truncated stack.
+        - DEBUG: + full stack + headers + state snapshot.
+      - Actions: primary (OK/Retry/Login), secondary (Copy Error ID), tertiary (Dismiss if allowed).
+    - Backdrop click: dismisses if `canDismiss=true`, else does nothing.
+    - Focus trap, Esc key handling.
+    - Logs every presentation via JSONL logger.
+  - Service: `ErrorModalService.show(error)` queues and displays modal.
+
+  **Must NOT do**:
+  - Do NOT show stack traces for MINIMAL level.
+  - Do NOT allow dismissal of CRITICAL errors.
+  - Do NOT log full error payloads at INFO level.
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  - **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 2
+  - **Blocks**: T15e
+  - **Blocked By**: T15, T18 (AuthStore)
+
+  **Acceptance Criteria**:
+  - [ ] Modal renders at all 4 detail levels correctly.
+  - [ ] Admin sees DETAILED by default; regular user sees MINIMAL.
+  - [ ] CRITICAL errors block dismissal.
+  - [ ] Copy Error ID button works.
+  - [ ] Focus trap functional.
+
+  **QA Scenarios**:
+  ```
+  Scenario: Detail level affects visible content
+    Tool: Playwright
+    Steps:
+      1. Login as admin (detail level = DETAILED).
+      2. Trigger server error.
+      3. Assert modal shows stack trace.
+      4. Logout, login as viewer (detail level = MINIMAL).
+      5. Trigger same error.
+      6. Assert modal shows only error message.
+    Expected Result: Detail level respected.
+    Evidence: .sisyphus/evidence/task-15f-detail-level.png
+  ```
+
+  **Commit**: YES
+  - Message: `feat(ui): add reusable Error Modal with role-based detail levels`
+  - Files: `web-new/src/app/ui/error-modal/`
+
+---
+
+- [ ] 15g. **Admin Settings → Error Display section**
+
+  **What to do**:
+  - `web-new/src/app/pages/settings/error-display.component.ts`:
+    - Settings section in Settings page.
+    - Section title: "Error Display".
+    - Description: "How much detail to show when errors occur".
+    - Radio button group with available options per role:
+      - Admin: Minimal / Standard / Detailed / Debug.
+      - Operator: Minimal / Standard / Detailed.
+      - Viewer: Minimal / Standard.
+    - Save button (or instant apply).
+    - On change: `PUT /api/users/profile` with `{error_detail_level: <value>}`.
+    - On success: update `AuthStore.user.errorDetailLevel`.
+    - Mock-up: matches `diagrams/screens/settings-error-display.svg`.
+
+  **Must NOT do**:
+  - Do NOT show options the current user can't select.
+  - Do NOT save without showing success/error feedback.
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  - **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 2
+  - **Blocked By**: T22 (Settings page), T18 (AuthStore)
+
+  **Acceptance Criteria**:
+  - [ ] Section renders per mock-up.
+  - [ ] Options filtered by user role.
+  - [ ] Save updates profile and AuthStore.
+  - [ ] Error modal respects new detail level immediately.
+
+  **QA Scenarios**:
+  ```
+  Scenario: Admin sees all options, viewer sees 2
+    Tool: Playwright
+    Steps:
+      1. Login as admin, navigate to /settings.
+      2. Assert 4 radio options visible in Error Display section.
+      3. Logout, login as viewer.
+      4. Assert only 2 options (Minimal, Standard).
+    Expected Result: Role-filtered options.
+    Evidence: .sisyphus/evidence/task-15g-role-filtered.png
+
+  Scenario: Changing level updates modal behavior
+    Tool: Playwright
+    Steps:
+      1. Login as admin.
+      2. Change Error Display from DETAILED to MINIMAL.
+      3. Trigger server error.
+      4. Assert modal shows MINIMAL detail (no stack trace).
+    Expected Result: Live update works.
+    Evidence: .sisyphus/evidence/task-15g-live-update.png
+  ```
+
+  **Commit**: YES
+  - Message: `feat(settings): add Error Display section with role-based options`
+  - Files: `web-new/src/app/pages/settings/error-display.component.ts`
 
 ---
 

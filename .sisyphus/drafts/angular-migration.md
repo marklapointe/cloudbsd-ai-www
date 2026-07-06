@@ -98,6 +98,708 @@
 - **MODULAR/SWAPPABLE LOGGING (NEW)**: Logger is an interface, not a singleton. Implementations can be swapped without changing call sites. Default = JSONL stdout. Pluggable: file, remote (Loki/Datadog/etc.), null (for tests), multi (combine).
 - **FRONTEND LOGGING (NEW)**: Same structured logger module in Angular. Frontend logs go to backend `/api/logs.ingest` endpoint with custom MIME.
 
+## COMPREHENSIVE UI MOCK-UP SCOPE (NEW - prevents later rework)
+
+Per user requirement: "SVG for every UI item in the plan. See what errors, notifications, etc. look like. Clear this up now."
+
+### Mock-up Categories
+
+#### 1. Screens (14 files) — `diagrams/screens/*.svg`
+Already covered in T02.
+
+#### 2. Error States (12 files) — `diagrams/errors/*.svg`
+Already covered in T3a.
+Each with detail-level variants (4 levels) inline as collapsible section.
+
+#### 3. Notifications (5 files) — `diagrams/notifications/*.svg`
+NEW — T3c.
+- `info-toast.svg` — Blue accent, info icon, "VM metadata refreshed", auto-dismiss 5s.
+- `success-toast.svg` — Green accent, check icon, "Preferences saved", auto-dismiss 5s.
+- `warning-toast.svg` — Yellow accent, warning icon, "Backend slow response", auto-dismiss 8s.
+- `error-toast.svg` — Red accent, error icon, "Failed to refresh", manual dismiss.
+- `system-notification.svg` — System notifications from backend (e.g., "VM started by admin"), persistent until read.
+
+#### 4. Modals (6 files) — `diagrams/modals/*.svg`
+NEW — T3d.
+- `error-modal.svg` — Reusable error modal (with 4 detail-level variants shown side-by-side).
+- `frost-out-modal.svg` — Session expired modal (full-page overlay).
+- `confirmation-modal.svg` — Generic confirmation ("Are you sure?", OK/Cancel).
+- `resource-details-modal.svg` — View-only resource details (VM/container info).
+- `about-modal.svg` — App info modal (version, license, links).
+- `logout-confirmation.svg` — Confirm logout modal.
+
+#### 5. Core UI Components (15 files) — `diagrams/components/*.svg`
+NEW — T3e.
+- `sidebar-expanded.svg` — Full sidebar with all menu items, active state, badges.
+- `sidebar-collapsed.svg` — Collapsed sidebar (icons only).
+- `mobile-sidebar.svg` — Mobile drawer overlay with hamburger trigger.
+- `header.svg` — Top header with user menu, theme toggle, locale switcher.
+- `mobile-topbar.svg` — Mobile header (compact, hamburger).
+- `stat-card.svg` — Stat card with value, label, trend indicator.
+- `chart-card.svg` — Card with embedded chart (line/bar/donut).
+- `data-table.svg` — Data table with sortable columns, pagination, search.
+- `data-table-empty.svg` — Empty table state.
+- `badge.svg` — Badge variants (default, success, warning, error, info).
+- `form-input.svg` — Text input (default, focus, error, disabled).
+- `form-select.svg` — Dropdown select (closed, open with options).
+- `form-toggle.svg` — Toggle switch (on, off, disabled).
+- `button-variants.svg` — All button styles (primary, secondary, tertiary, danger, ghost, icon).
+- `tree-item.svg` — Collapsible tree node with children.
+
+#### 6. Theme Variants (3 files) — `diagrams/themes/*.svg`
+NEW — T3f.
+- `login-light.svg` — Login screen in light mode.
+- `login-dark.svg` — Login screen in dark mode.
+- `dashboard-high-contrast.svg` — Dashboard in WCAG AAA high contrast mode.
+
+#### 7. Mobile Variants (3 files) — `diagrams/mobile/*.svg`
+NEW — T3g.
+- `mobile-dashboard.svg` — Dashboard at 375×812 (iPhone).
+- `mobile-vms-list.svg` — VM list view on mobile.
+- `mobile-vm-detail.svg` — VM detail view on mobile.
+
+#### 8. Loading/State Variants (4 files) — `diagrams/states/*.svg`
+NEW — T3h.
+- `loading-skeleton.svg` — Skeleton placeholder while data loads.
+- `loading-spinner.svg` — Centered spinner with optional message.
+- `progress-bar.svg` — Linear progress bar (for long ops like file upload).
+- `empty-state-illustration.svg` — Generic empty state with illustration.
+
+#### 9. Plugin Manifest Items (3 files) — `diagrams/plugins/*.svg`
+NEW — T3i.
+- `new-menu-item-toast.svg` — Toast notification when new plugin menu item appears.
+- `plugin-page-rendered.svg` — Dynamic plugin page rendered from manifest.
+- `plugin-modal-rendered.svg` — Dynamic modal triggered by plugin event.
+
+#### 10. Interaction Flows (5 files) — `diagrams/flows/*.svg`
+Already covered in T03.
+
+### Total Mock-up Count
+
+| Category | Count | Task |
+|---|---|---|
+| Screens | 14 | T02 |
+| Errors (with detail variants) | 12 | T3a |
+| Settings → Error Display | 1 | T3b |
+| Notifications | 5 | T3c (NEW) |
+| Modals | 6 | T3d (NEW) |
+| Core UI Components | 15 | T3e (NEW) |
+| Theme Variants | 3 | T3f (NEW) |
+| Mobile Variants | 3 | T3g (NEW) |
+| Loading/State Variants | 4 | T3h (NEW) |
+| Plugin Manifest Items | 3 | T3i (NEW) |
+| Interaction Flows | 5 | T03 |
+| **TOTAL** | **71 SVG files** | |
+
+### `diagrams/ui-coverage-matrix.md`
+
+A single document listing every UI surface in the plan and its corresponding mock-up file. Used by reviewer to confirm nothing was missed.
+
+```markdown
+| UI Surface | Severity/Type | Mock-up File | Status |
+|---|---|---|---|
+| Login page | screen | diagrams/screens/login.svg | ✓ |
+| Dashboard | screen | diagrams/screens/dashboard.svg | ✓ |
+| VMs list | screen | diagrams/screens/vms.svg | ✓ |
+| ... (71 rows total) | | | |
+```
+
+### Why This Scope
+
+User quote: "I want to clear this up now because I've had to fight in the past with what is where and a bunch of heavy lifting later to correct the problems."
+
+By producing 71 mock-ups upfront:
+1. **No "where is this thing" debates** during implementation.
+2. **Visual reference for every component** — dev doesn't guess.
+3. **Review checkpoint** — user can spot issues in mockups, fix in mockups, not in code.
+4. **Test reference** — Playwright tests use mockups as ground truth for visual assertions.
+5. **Onboarding artifact** — new devs see the full UI surface area immediately.
+
+### Tasks to Add (Wave 0)
+
+- **T3c**: Notifications mock-ups (5 SVG files)
+- **T3d**: Modals mock-ups (6 SVG files)
+- **T3e**: Core UI components (15 SVG files)
+- **T3f**: Theme variants (3 SVG files)
+- **T3g**: Mobile variants (3 SVG files)
+- **T3h**: Loading/state variants (4 SVG files)
+- **T3i**: Plugin manifest items (3 SVG files)
+- **T3j**: UI coverage matrix (1 markdown file)
+
+Total new SVG artifacts: 41 files.
+
+## PRE-FLIGHT CHECK + ERROR PRESENTATIONS (NEW)
+
+### Pre-Flight Check Concept
+On app startup, the frontend runs a **pre-flight check** to detect backend availability BEFORE rendering the main UI. The app can still start (so the user sees SOMETHING), but displays a clear "backend unavailable" state.
+
+### Pre-Flight Check Sequence
+
+```
+[App Boot]
+   ↓
+[PreFlightService.run()]
+   ↓ GET /api/health (no auth required, lightweight)
+[Backend responds]
+   ↓ 200 OK + body {status, version, uptime, services: {...}}
+[App marks backend healthy]
+   ↓
+[Continue to auth check]
+   ↓ GET /api/session.validate (with cookie if present)
+[Backend responds]
+   ↓ 200 (authenticated) or 401 (not authenticated)
+[App routes to /login or /dashboard accordingly]
+   ↓
+[Connect Socket.IO + global state store subscription]
+```
+
+### Pre-Flight Check Levels
+
+Three progressive levels, each more detailed than the last:
+
+1. **L1 - Basic reachability** (`GET /api/health`)
+   - Is the server reachable at all?
+   - Response time < 5s?
+   - 200 OK + valid JSON?
+
+2. **L2 - Service health** (`GET /api/health` with detail)
+   - All backend subsystems OK?
+   - Database reachable?
+   - PAM service available?
+   - Plugin registry initialized?
+
+3. **L3 - Auth health** (`POST /api/session.validate`)
+   - If cookie present, is session valid?
+   - Routes to login or dashboard based on result.
+
+### Backend Unavailable UI
+
+When pre-flight fails, the app renders a **degraded shell**:
+- Top banner: red strip with "Backend Unavailable" + retry button
+- Main content area: explainer with retry button, status details, support link
+- Sidebar nav: visible but disabled (greyed out, with "Backend offline" tooltips)
+- Pages: show skeleton/placeholder with "Waiting for backend..." text
+- Frost-out modal: suppressed (no point, session can't be validated)
+- Auto-retry: every 30s with exponential backoff
+- Manual retry: user-initiated via button
+
+### Pre-Flight Service (Angular)
+
+```typescript
+@Injectable({providedIn: 'root'})
+class PreFlightService {
+  readonly state = signal<PreFlightState>({status: 'pending'});
+  
+  async run(): Promise<void> {
+    // L1: basic reachability
+    try {
+      const res = await fetch('/api/health', {signal: AbortSignal.timeout(5000)});
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const body = await res.json();
+      this.state.update(s => ({...s, status: 'reachable', version: body.version}));
+    } catch (err) {
+      this.state.set({status: 'unreachable', error: err.message, lastAttempt: new Date().toISOString()});
+      this.scheduleRetry();
+      return;
+    }
+    
+    // L2: service health (skipped if L1 failed)
+    // ...
+    
+    // L3: auth check
+    // ...
+  }
+  
+  private scheduleRetry(): void {
+    // Exponential backoff: 30s, 60s, 120s, capped at 5min
+  }
+}
+```
+
+### Error Presentation Mock-ups (SVG)
+
+Visual designs for all error states. Each as SVG `<foreignObject>` file in `diagrams/errors/`.
+
+| File | Error State | Trigger | Severity |
+|---|---|---|---|
+| `backend-unavailable.svg` | Backend down | Pre-flight L1 fail | CRITICAL |
+| `backend-degraded.svg` | Backend partial | Some subsystems OK, some failed | WARN |
+| `session-expired.svg` | Session timeout | 401 from any endpoint | CRITICAL |
+| `session-revoked.svg` | Session killed by admin | Backend returns `session_revoked` | CRITICAL |
+| `permission-denied.svg` | 403 from backend | User lacks permission for resource | ERROR |
+| `network-timeout.svg` | Request timeout | Fetch takes > 30s | ERROR |
+| `server-error.svg` | 500 from backend | Unhandled exception | ERROR |
+| `validation-error.svg` | Form validation | Invalid input on form | INFO |
+| `empty-state.svg` | No data | Search returns 0 results | INFO |
+| `connection-lost.svg` | WebSocket disconnect | Socket.IO drops | WARN |
+| `plugin-error.svg` | Plugin manifest error | Backend plugin registry fails | ERROR |
+| `csrf-failure.svg` | CSRF validation failed | 403 with csrf in error | ERROR |
+
+### Error Severity → Presentation Mapping
+
+| Severity | Presentation | Notes |
+|---|---|---|
+| **CRITICAL** | Full-screen modal (blocks everything) | Frost-out style, "OK" or "Login Again" button |
+| **ERROR** | Centered modal (blocks page but not app) | Dismissable, with detail toggle |
+| **WARN** | Top banner (persistent until resolved) | Sidebar still accessible, pages show degraded |
+| **INFO** | Toast (auto-dismiss after 5s) | Non-blocking notification |
+
+**Big errors → MODAL** (per user requirement). Backend unavailable, session expired, server errors, permission denied → all modals.
+
+### Detail Level Settings (Per-User)
+
+User setting controls how much error detail is shown. Located in **Admin Settings → Error Display** section.
+
+#### Detail Levels
+
+**1. MINIMAL** (regular users default)
+- Error type only ("Network Error", "Server Error", "Permission Denied")
+- Generic actionable message ("Please try again", "Contact your administrator")
+- Single primary button ("OK", "Retry")
+- No technical details visible
+- No error IDs shown
+
+**2. STANDARD** (regular users opt-in)
+- Error type + human-readable description
+- Actionable suggestion ("Check your network connection", "Try again in a moment")
+- Error ID shown (for support reference)
+- Primary button + "Copy Error ID" secondary button
+
+**3. DETAILED** (admin default)
+- Everything in STANDARD
+- Stack trace (truncated to 1KB)
+- Request ID for log correlation
+- Endpoint that failed
+- HTTP status code
+- Timestamp
+- "Copy Full Details" button (copies JSON to clipboard)
+
+**4. DEBUG** (admin opt-in, dev only)
+- Everything in DETAILED
+- Full untruncated stack trace
+- Request headers (sanitized — no auth headers)
+- Response headers
+- Internal state snapshot
+- "Download Debug Bundle" button (JSON file)
+
+#### Detail Level Selection Rules
+
+| User Role | Available Options | Default |
+|---|---|---|
+| **Admin** | Minimal / Standard / Detailed / Debug | Detailed |
+| **Operator** | Minimal / Standard / Detailed | Standard |
+| **Viewer** | Minimal / Standard | Minimal |
+
+#### Setting Storage
+- Per-user setting stored in user profile (PUT `/api/users/profile`)
+- Sent in JWT/session payload as `error_detail_level`
+- Frontend reads from `AuthStore.user.errorDetailLevel`
+- Default for new users = role-based default
+
+### Modal Error Component (Angular)
+
+```typescript
+@Component({
+  selector: 'app-error-modal',
+  template: `
+    @if (visible()) {
+      <div class="error-modal-backdrop" (click)="onBackdropClick()">
+        <div class="error-modal" role="alertdialog" aria-modal="true">
+          <header>
+            <icon [name]="iconFor(error().severity)" />
+            <h2>{{ error().title }}</h2>
+            <span class="severity-badge">{{ error().severity }}</span>
+          </header>
+          
+          <section class="error-message">
+            {{ error().message }}
+          </section>
+          
+          @if (shouldShowDetail()) {
+            <details class="error-detail">
+              <summary>Technical Details</summary>
+              <pre>{{ formatDetail(error()) }}</pre>
+            </details>
+          }
+          
+          <footer>
+            @if (error().errorId) {
+              <button class="secondary" (click)="copyErrorId()">
+                Copy Error ID
+              </button>
+            }
+            <button class="primary" (click)="onPrimaryAction()">
+              {{ error().primaryAction }}
+            </button>
+            @if (canDismiss()) {
+              <button class="tertiary" (click)="onDismiss()">Dismiss</button>
+            }
+          </footer>
+        </div>
+      </div>
+    }
+  `
+})
+class ErrorModalComponent {
+  visible = signal(false);
+  error = signal<ErrorPayload | null>(null);
+  detailLevel = inject(AuthStore).user().errorDetailLevel;
+  
+  shouldShowDetail = computed(() => {
+    const level = this.detailLevel;
+    const severity = this.error()?.severity;
+    if (severity === 'CRITICAL') return level !== 'MINIMAL';  // CRITICAL always shows some detail
+    return level === 'DETAILED' || level === 'DEBUG';
+  });
+  
+  formatDetail(error: ErrorPayload): string {
+    if (this.detailLevel === 'DEBUG') {
+      return JSON.stringify({
+        error_id: error.errorId,
+        request_id: error.requestId,
+        endpoint: error.endpoint,
+        status_code: error.statusCode,
+        timestamp: error.timestamp,
+        stack: error.stack,
+        headers: error.headers,
+      }, null, 2);
+    }
+    return JSON.stringify({
+      error_id: error.errorId,
+      request_id: error.requestId,
+      timestamp: error.timestamp,
+    }, null, 2);
+  }
+}
+```
+
+### Admin Settings → Error Display
+
+Settings page section:
+- **Title**: "Error Display"
+- **Description**: "How much detail to show when errors occur"
+- **Options** (radio buttons):
+  - `MINIMAL`: "Show only error type. Best for general users."
+  - `STANDARD`: "Show error details and IDs for support. Recommended."
+  - `DETAILED`: "Show technical details, request IDs, stack traces. Recommended for admins."
+  - `DEBUG`: "Show full debug info including headers. Use only when troubleshooting."
+- **Admin only**: All 4 options visible.
+- **Non-admin**: Only MINIMAL and STANDARD.
+- **Save**: PUT `/api/users/profile` with `{error_detail_level: <value>}`.
+
+### Error Payload Schema (Backend → Frontend)
+
+```typescript
+interface ErrorPayload {
+  // Always present
+  severity: 'CRITICAL' | 'ERROR' | 'WARN' | 'INFO';
+  code: string;              // machine-readable: 'BACKEND_UNAVAILABLE', 'SESSION_EXPIRED'
+  message: string;           // human-readable
+  
+  // Conditional
+  errorId?: string;          // server-generated ID for support
+  requestId?: string;        // correlation ID
+  endpoint?: string;         // which API was called
+  statusCode?: number;       // HTTP status
+  timestamp?: string;        // when error occurred
+  
+  // Debug only
+  stack?: string;
+  headers?: Record<string, string>;
+  metadata?: Record<string, unknown>;
+  
+  // Actions
+  primaryAction: 'OK' | 'Retry' | 'Login Again' | 'Reload' | 'Contact Support';
+  canDismiss: boolean;       // false for CRITICAL
+}
+```
+
+### Tasks to Add (additional refinement)
+
+**Wave 0 (Documentation):**
+- Update T3a (already added) — error mock-ups now include detail-level variants (4 versions each = 48 SVGs OR 12 SVGs with collapsible detail section showing all 4 levels)
+- New T3b: Admin Settings → Error Display mock-up (1 SVG)
+
+**Wave 2 (Frontend):**
+- Update T15e: Error components now role-aware + detail-level aware
+- New T15f: Error Modal component (reusable)
+- New T15g: Admin Settings → Error Display section
+
+**Wave 3 (Settings page):**
+- T22 (Settings) updated to include Error Display section
+
+### Logging Integration
+
+User detail-level changes logged:
+```json
+{"timestamp":"...","level":"info","module":"settings","message":"User updated error detail level","user_id":1,"old_level":"STANDARD","new_level":"DETAILED"}
+```
+
+Error presentations logged:
+```json
+{"timestamp":"...","level":"warn","module":"ui","message":"Error presented to user","error_type":"backend_unavailable","error_id":"err_abc123","severity":"CRITICAL","user_detail_level":"MINIMAL","presentation":"modal"}
+```
+
+### Tasks to Add
+
+**Wave 0 (Documentation):**
+- **T02a**: SVG error mock-ups (12 files: `diagrams/errors/*.svg`)
+
+**Wave 1 (Backend):**
+- **T14a**: Enhanced `/api/health` endpoint with deep checks (L2 detail)
+- **T58a-c**: State broadcaster (already added in previous turn)
+
+**Wave 2 (Frontend):**
+- **T15c**: Pre-flight check service (L1/L2/L3 sequence)
+- **T15d**: Backend unavailable UI components (banner + shell)
+- **T15e**: Error presentation components (12 components matching mock-ups)
+
+### Logging Integration
+
+Pre-flight failures logged via JSONL:
+```json
+{"timestamp":"...","level":"error","module":"preflight","message":"Backend unreachable","error":{"name":"TimeoutError","message":"..."},"attempt":3,"next_retry_at":"..."}
+```
+
+Each error presentation (frost-out, banner) also emits a log:
+```json
+{"timestamp":"...","level":"warn","module":"ui","message":"Error presented","error_type":"backend_unavailable","error_id":"err_abc123"}
+```
+
+## GLOBAL STATE STORE WITH STREAMING UPDATES (NEW)
+
+### Core Concept
+Instead of each page polling its own endpoint, all data lives in a **single global state store** on the frontend. The backend **streams updates** to this store via Socket.IO. Pages **read from the store**, never fetch directly. Updates happen:
+- On app boot (initial snapshot)
+- When backend pushes changes (state upsert/delete)
+- On explicit user refresh (manual request)
+
+### Why This Architecture
+1. **No polling overhead** — backend pushes only when something changes.
+2. **Consistent state across pages** — navigating between pages shows fresh data instantly.
+3. **Real-time updates** — VM starts, container stops, jail boots → UI updates without reload.
+4. **Reduced network chatter** — 1 persistent WebSocket vs N HTTP polls.
+5. **Better UX** — no loading spinners per page; data is already there.
+
+### State Update Schema (Server → Client via Socket.IO)
+
+```typescript
+interface StateUpdate {
+  topic: 'vms' | 'containers' | 'jails' | 'volumes' | 'disks' | 'notifications' | 'cluster' | 'system' | 'users' | 'services' | 'plugins';
+  action: 'snapshot' | 'upsert' | 'delete' | 'clear';
+  resource_id?: string;       // for upsert/delete
+  data?: unknown;              // resource payload (snapshot/upsert)
+  timestamp: string;           // ISO 8601 UTC
+  request_id?: string;         // correlation ID
+}
+```
+
+### Socket.IO Events
+
+**Server → Client:**
+- `state:snapshot` — full state for subscribed topics on connect
+- `state:upsert` — `{topic, resource_id, data}` — new or updated resource
+- `state:delete` — `{topic, resource_id}` — resource removed
+- `state:clear` — `{topic}` — clear entire topic (rare, e.g., on reset)
+
+**Client → Server:**
+- `state:subscribe` — `{topics: string[]}` — subscribe to topics
+- `state:unsubscribe` — `{topics: string[]}` — unsubscribe
+- `state:refresh` — `{topic}` — request fresh snapshot for a topic
+
+### Frontend Global State Store (NgRx SignalStore)
+
+```typescript
+interface GlobalState {
+  // Resource collections (keyed by ID for O(1) lookup)
+  vms: Map<string, VM>;
+  containers: Map<string, Container>;
+  jails: Map<string, Jail>;
+  volumes: Map<string, Volume>;
+  disks: Map<string, Disk>;
+  notifications: Notification[];
+  cluster: ClusterState;
+  system: SystemStats;
+  users: Map<string, User>;
+  services: Service[];           // discovered services from plugins
+  plugins: PluginManifest[];
+  
+  // Connection state
+  connection: {
+    status: 'connected' | 'disconnected' | 'reconnecting';
+    lastSync: string;            // ISO timestamp of last snapshot received
+    subscribedTopics: Set<string>;
+  };
+  
+  // Per-topic last-update timestamps (for "stale" detection)
+  lastUpdate: Map<string, string>;
+}
+```
+
+### Selector Examples (for pages)
+
+```typescript
+// In Dashboard component
+const vms = inject(GlobalStateStore).vms;        // Map<string, VM>
+const runningVms = computed(() => 
+  [...vms()].filter(([_, vm]) => vm.status === 'running').length
+);
+
+// In Volumes page
+const volumes = inject(GlobalStateStore).volumes;
+const sortedVolumes = computed(() => 
+  [...volumes()].sort((a, b) => a.name.localeCompare(b.name))
+);
+
+// In NetworkMap
+const nodes = computed(() => {
+  const all = [...globalState.vms(), ...globalState.containers(), ...globalState.jails()];
+  return all.map(r => ({id: r.id, label: r.name, type: r.type}));
+});
+```
+
+### Subscription Lifecycle
+
+```
+[App Boot]
+   ↓
+[GlobalStateStore.connect()]
+   ↓ Socket.IO auth with session cookie
+[Server validates session, sends snapshot]
+   ↓ state:snapshot {vms: [...], containers: [...], ...}
+[Store hydrates Maps from snapshot]
+   ↓
+[App renders, pages read from store]
+   ↓
+[User navigates to /vms]
+[VMs page reads globalState.vms() — no HTTP call]
+   ↓
+[Backend detects VM state change (e.g., user starts VM via PAM CLI)]
+[Server emits state:upsert {topic: 'vms', resource_id: 'vm-123', data: {...}}]
+[Store updates Map entry]
+[VMs page re-renders via computed signal]
+   ↓
+[User clicks "Refresh" button]
+[VMs page emits state:refresh {topic: 'vms'} via Socket.IO]
+[Server re-sends snapshot for vms topic]
+[Store replaces vms Map]
+[Page re-renders]
+```
+
+### Backend State Broadcaster
+
+```typescript
+// server-new/src/state/broadcaster.ts
+class StateBroadcaster {
+  private io: Server;
+  private subscribers: Map<string, Set<SocketId>>;  // topic → subscribers
+  
+  // Called by discoverers / state sources
+  publishUpsert(topic: string, resourceId: string, data: unknown): void {
+    // Log via structured logger
+    logger.debug({module: 'state', topic, action: 'upsert', resource_id: resourceId}, 'State update');
+    
+    // Emit to subscribers
+    this.io.to(`state:${topic}`).emit('state:upsert', {
+      topic,
+      action: 'upsert',
+      resource_id: resourceId,
+      data,
+      timestamp: new Date().toISOString(),
+    });
+  }
+  
+  publishDelete(topic: string, resourceId: string): void { /* ... */ }
+  publishSnapshot(socket: Socket, topic: string): void { /* ... */ }
+}
+```
+
+### Backend Integration with Discoverers
+
+Each discoverer (T40-T44) becomes both:
+1. **Poller** — periodically queries the source (e.g., `bhyve vm list`)
+2. **Broadcaster** — emits state updates via `StateBroadcaster`
+
+```typescript
+// BhyveVMDiscoverer
+class BhyveVMDiscoverer {
+  async discover(): Promise<void> {
+    const currentVMs = await queryBhyveVMs();
+    const knownVMs = this.stateStore.getVms();
+    
+    // Compute delta
+    const added = currentVMs.filter(vm => !knownVMs.has(vm.id));
+    const removed = [...knownVMs.keys()].filter(id => !currentVMs.has(id));
+    const updated = currentVMs.filter(vm => 
+      knownVMs.has(vm.id) && !isEqual(knownVMs.get(vm.id), vm)
+    );
+    
+    // Emit updates
+    added.forEach(vm => this.broadcaster.publishUpsert('vms', vm.id, vm));
+    updated.forEach(vm => this.broadcaster.publishUpsert('vms', vm.id, vm));
+    removed.forEach(id => this.broadcaster.publishDelete('vms', id));
+  }
+}
+```
+
+### Refresh Strategy (User-Initiated)
+
+When user clicks "Refresh" button on any page:
+1. Page emits `state:refresh {topic}` via Socket.IO
+2. Server re-queries source for that topic
+3. Server emits `state:snapshot` for that topic (full replacement)
+4. Store replaces the topic's Map
+5. Computed signals re-derive, page re-renders
+
+### Auth + Connection State
+
+- Socket.IO connection **requires session cookie** (validated on connect)
+- If session expires → connection closes → `connection.status = 'disconnected'` → frost-out modal triggers
+- Auto-reconnect with exponential backoff (socket.io-client default)
+- On reconnect: re-subscribe to all topics, request snapshot
+
+### What STAYS as HTTP
+
+Not everything moves to streaming. HTTP remains for:
+- **Login/logout** (one-shot, no state involved)
+- **Session validation** (`POST /api/session.validate`)
+- **Plugin manifest** (changes infrequently, polling acceptable)
+- **Logs ingestion** (`POST /api/logs.ingest`)
+- **Health checks** (operational)
+- **Initial bootstrap** (if WebSocket fails, fallback to HTTP)
+
+### Migration Impact on Plan
+
+- **T19 (HttpClient interceptors)**: Still needed, but scope narrows to non-data calls.
+- **T22-T25 (vertical slice)**: Settings page still uses HTTP (settings aren't streamable).
+- **T26-T39 (page migration)**: Pages switch from HTTP fetch → store read.
+- **T40-T44 (discoverers)**: Now also act as broadcasters, not just data sources.
+- **OpenAPI spec**: HTTP read endpoints documented as fallback, but primary path is Socket.IO streaming.
+
+### Tasks to Add
+
+**Wave 1 (Backend):**
+- **T58a**: Backend state broadcaster module (Socket.IO state events)
+- **T58b**: Backend snapshot endpoint logic (initial state on connect)
+- **T58c**: Backend subscription manager (per-topic subscription tracking)
+
+**Wave 2 (Frontend):**
+- **T58d**: Frontend global state store (NgRx SignalStore with Maps)
+- **T58e**: Frontend Socket.IO state consumer (subscribe + apply deltas)
+- **T58f**: Frontend state selectors (computed signals per page concern)
+
+**Wave 5 (Page Migration) updates:**
+- Each page task (T26-T39) updated to read from store, not fetch.
+
+### Logging Integration
+
+Every state update gets logged via JSONL:
+```json
+{"timestamp":"...","level":"debug","module":"state","message":"State update pushed","topic":"vms","action":"upsert","resource_id":"vm-123","subscriber_count":3}
+```
+
+This makes state changes fully auditable in JSONL logs.
+
 ## LOGGING ARCHITECTURE (NEW)
 
 ### Log Entry Schema (strict)
