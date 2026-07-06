@@ -94,6 +94,144 @@
 - **CUSTOM MIME TYPES (NEW)**: No more generic `application/json`. Use specific types like `cloudbsd/login`, `cloudbsd/createvm`. Required headers: `who`, `what`, `why`, `where`.
 - **PLAYWRIGHT VISUAL INSPECTIONS (NEW)**: Visual regression with Playwright for all 14 pages.
 - **OPENAPI SPEC (NEW)**: Generate OpenAPI 3.1 spec as the contract for the new PAM-auth backend.
+- **STRUCTURED JSONL LOGGING (NEW)**: Current `console.log/warn/error` (40+ in server/index.ts) is unstructured plaintext. Replace with JSONL (newline-delimited JSON) output. Each log entry follows a strict data structure.
+- **MODULAR/SWAPPABLE LOGGING (NEW)**: Logger is an interface, not a singleton. Implementations can be swapped without changing call sites. Default = JSONL stdout. Pluggable: file, remote (Loki/Datadog/etc.), null (for tests), multi (combine).
+- **FRONTEND LOGGING (NEW)**: Same structured logger module in Angular. Frontend logs go to backend `/api/logs.ingest` endpoint with custom MIME.
+
+## LOGGING ARCHITECTURE (NEW)
+
+### Log Entry Schema (strict)
+```typescript
+interface LogEntry {
+  // Required (always present)
+  timestamp: string;        // ISO 8601 UTC, e.g. "2026-07-05T22:00:00.000Z"
+  level: 'debug' | 'info' | 'warn' | 'error' | 'fatal';
+  service: 'cloudbsd-admin' | 'cloudbsd-frontend' | string;
+  version: string;          // semver
+  message: string;          // human-readable message
+  
+  // Context (extensible, all optional)
+  module?: string;          // subsystem, e.g. 'auth', 'api', 'pam', 'plugins', 'http'
+  request_id?: string;      // correlation ID for tracing
+  session_id?: string;
+  user_id?: number | string;
+  ip?: string;
+  user_agent?: string;
+  duration_ms?: number;     // for timing logs
+  status_code?: number;     // for HTTP logs
+  method?: string;          // for HTTP logs
+  path?: string;            // for HTTP logs
+  
+  // Error context
+  error?: {
+    name: string;
+    message: string;
+    stack?: string;
+    code?: string;
+  };
+  
+  // Free-form metadata
+  metadata?: Record<string, unknown>;
+}
+```
+
+### JSONL Output Format
+- Each line = one complete JSON object
+- Newline-delimited (NDJSON / JSON Lines)
+- Streamable, grep-able, parseable
+- No pretty-printing (single line per entry)
+
+Example:
+```
+{"timestamp":"2026-07-05T22:00:00.000Z","level":"info","service":"cloudbsd-admin","version":"2.0.0","module":"auth","message":"User logged in","user_id":1,"ip":"127.0.0.1","request_id":"req_abc123"}
+{"timestamp":"2026-07-05T22:00:01.234Z","level":"warn","service":"cloudbsd-admin","version":"2.0.0","module":"csrf","message":"Missing CSRF token on POST /api/users","ip":"127.0.0.1","method":"POST","path":"/api/users","status_code":403,"request_id":"req_def456"}
+```
+
+### Logger Interface (modular/swappable)
+```typescript
+interface Logger {
+  debug(entry: LogEntry | string, context?: Partial<LogEntry>): void;
+  info(entry: LogEntry | string, context?: Partial<LogEntry>): void;
+  warn(entry: LogEntry | string, context?: Partial<LogEntry>): void;
+  error(entry: LogEntry | string, context?: Partial<LogEntry>): void;
+  fatal(entry: LogEntry | string, context?: Partial<LogEntry>): void;
+  
+  // Module-scoped logger (auto-attaches `module` field)
+  child(module: string): Logger;
+  
+  // With persistent context (e.g., request_id, user_id)
+  withContext(context: Partial<LogEntry>): Logger;
+}
+```
+
+### Pluggable Implementations
+- `ConsoleJsonlLogger` (default) — writes JSONL to stdout
+- `FileJsonlLogger` — writes JSONL to rotating files (`/var/log/cloudbsd/admin.log`)
+- `RemoteLogger` — POSTs to remote endpoint (Loki/Datadog/Elastic)
+- `NullLogger` — no-op (for tests)
+- `MultiLogger` — combines multiple loggers (e.g., stdout + remote)
+
+### Configuration-Driven Selection
+```json
+{
+  "logging": {
+    "implementation": "multi",
+    "level": "info",
+    "loggers": [
+      { "type": "console-jsonl" },
+      { "type": "file-jsonl", "path": "/var/log/cloudbsd/admin.log", "rotate": "daily" },
+      { "type": "remote", "endpoint": "https://logs.example.com/ingest", "auth": "..." }
+    ]
+  }
+}
+```
+
+### Module Structure
+```
+server-new/src/logging/
+├── types.ts              # LogLevel, LogEntry, Logger interface
+├── console-jsonl.ts      # default stdout JSONL impl
+├── file-jsonl.ts         # rotating file JSONL impl
+├── remote.ts             # remote endpoint impl
+├── null.ts               # no-op impl (tests)
+├── multi.ts              # composite impl
+├── factory.ts            # config-driven factory
+├── context.ts            # request-scoped context (request_id, user_id, etc.)
+└── index.ts              # default exported logger
+
+web-new/src/app/logging/
+├── types.ts              # shared types (same as backend)
+├── console-jsonl.ts      # browser console JSONL impl (dev)
+├── remote.ts             # POSTs to /api/logs.ingest
+├── null.ts
+├── multi.ts
+├── factory.ts
+├── context.ts            # route/component-scoped context
+└── index.ts
+```
+
+### Backend `/api/logs.ingest` Endpoint
+- Accepts JSONL batches from frontend (newline-delimited)
+- Each line parsed and re-logged with frontend context
+- Authenticated (requires session cookie)
+- Rate-limited per session
+
+### Replacement Targets (Mechanical)
+**Backend (`server-new/src/`):**
+- 40+ `console.log/warn/error/debug` in `server/src/index.ts` → `logger.info/warn/error/debug`
+- `logAction()` SQLite function → `logger.info({module: 'audit', action, ...}, "...")`
+- `console.error` in `db.ts` migrations → `logger.error({module: 'db', error: {...}}, "Migration failed")`
+
+**Frontend (`web-new/src/`):**
+- 6 `console.error` in `src/api/client.ts` → `logger.error({module: 'auth', ...}, "...")`
+- 1 `console.warn` for CSRF prime failure → `logger.warn(...)`
+
+### Tests
+- Unit: each logger implementation
+- Contract: any impl satisfies `Logger` interface (parameterized test)
+- Factory: picks correct impl from config
+- Format: output is valid JSONL (parseable line-by-line)
+- Context propagation: child loggers inherit module, withContext preserves
 
 ## PLUGIN SYSTEM ARCHITECTURE (derived from user description)
 - **Backend side**: Plugin/service registry. Backend picks up new services, exposes them via API.

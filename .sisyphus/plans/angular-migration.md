@@ -601,6 +601,237 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ### Wave 1: Backend Foundation
 
+- [ ] 8a. **Backend structured logger module (interface + JSONL impl)**
+
+  **What to do**:
+  - Create `server-new/src/logging/` directory structure.
+  - `types.ts`: `LogLevel` enum, `LogEntry` interface (per draft schema), `Logger` interface (5 methods + child + withContext).
+  - `console-jsonl.ts`: `ConsoleJsonlLogger` class implementing `Logger`. Each entry serialized as single-line JSON, written to stdout via `process.stdout.write`.
+  - `null.ts`: `NullLogger` (no-op, for tests).
+  - `factory.ts`: `createLogger(config)` returns `Logger` based on config. Default = `console-jsonl`.
+  - `index.ts`: exports default `logger` instance + `createLogger` factory.
+  - Tests: `types.test.ts`, `console-jsonl.test.ts`, `factory.test.ts`.
+  - Verify output is valid JSONL (one JSON object per line).
+
+  **Must NOT do**:
+  - Do NOT use `console.log` directly (defeats the purpose).
+  - Do NOT pretty-print JSON (single line only).
+  - Do NOT use libraries other than the native `JSON.stringify`.
+  - Do NOT log passwords, secrets, or session tokens (even at debug level).
+
+  **Recommended Agent Profile**:
+  - **Category**: `deep`
+  - **Skills**: `[]`
+  - **Reason**: Foundational module; needs solid interface design.
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 1 (with T08-T14)
+  - **Blocks**: T08b (replace console calls), T08c (more logger impls)
+  - **Blocked By**: T01
+
+  **Acceptance Criteria**:
+  - [ ] `src/logging/types.ts` exports `Logger` interface with all 5 methods + child + withContext.
+  - [ ] `ConsoleJsonlLogger` produces valid JSONL output (one line per call).
+  - [ ] `NullLogger` is no-op.
+  - [ ] `createLogger({implementation: 'console-jsonl'})` returns `ConsoleJsonlLogger` instance.
+  - [ ] Tests cover: each method, JSONL validity, child loggers inherit module, withContext persists.
+
+  **QA Scenarios**:
+  ```
+  Scenario: JSONL output format
+    Tool: Bash + node script
+    Steps:
+      1. const logger = createLogger({implementation: 'console-jsonl'});
+      2. logger.info('test message', {module: 'auth', user_id: 1});
+      3. Capture stdout.
+      4. Parse each line as JSON; assert valid.
+      5. Verify .level === 'info', .message === 'test message', .module === 'auth', .user_id === 1.
+    Expected Result: One JSON line, all fields present.
+    Evidence: .sisyphus/evidence/task-8a-jsonl-output.txt
+
+  Scenario: Logger interface contract
+    Tool: Bash + vitest
+    Steps:
+      1. npm test -- src/logging/types.test.ts
+      2. Parameterized test runs all 5 logger impls (ConsoleJsonl, Null, plus stubs for File, Remote, Multi).
+      3. Each must satisfy the interface contract.
+    Expected Result: All impls pass contract tests.
+    Evidence: .sisyphus/evidence/task-8a-contract-tests.txt
+  ```
+
+  **Commit**: YES
+  - Message: `feat(backend): add structured JSONL logger module with swappable interface`
+  - Files: `server-new/src/logging/`
+
+---
+
+- [ ] 8b. **Replace console.* calls in backend with structured logger**
+
+  **What to do**:
+  - Audit all `console.log/warn/error/debug` in `server-new/src/` (target: 0 after this task).
+  - Replace each with `logger.info/warn/error/debug` call, preserving context.
+  - Map old console calls to new logger calls:
+    - `console.log('[Auth] Generated token...')` → `logger.info({module: 'auth', user_id, token_length}, 'Generated token')`
+    - `console.warn('[Auth] Token expired...')` → `logger.warn({module: 'auth', error: {name: 'TokenExpired'}}, 'Token expired')`
+    - `console.error('[API] ...')` → `logger.error({module: 'api', method, path, status_code}, '...')`
+  - `logAction()` SQLite function: keep for audit trail (DB record) BUT also call `logger.info({module: 'audit', action, user_id}, '...')`.
+  - Tests: verify no `console.*` calls remain (grep + lint rule).
+
+  **Must NOT do**:
+  - Do NOT log JWT tokens or password hashes (sanitize before logging).
+  - Do NOT log session cookies.
+  - Do NOT change the SQLite `logs` table schema (keep `logAction()` for audit compatibility).
+
+  **Recommended Agent Profile**:
+  - **Category**: `unspecified-high`
+  - **Skills**: `[]`
+
+  - **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 1
+  - **Blocks**: T08c, all subsequent tasks that need logging
+  - **Blocked By**: T08a
+
+  **Acceptance Criteria**:
+  - [ ] `grep -r "console\." server-new/src/ --include="*.ts" | grep -v "\.test\.ts" | wc -l` returns 0.
+  - [ ] ESLint rule added: `no-console: 'error'` for `server-new/src/`.
+  - [ ] Each replacement preserves or adds structured context (module, request_id, etc.).
+  - [ ] `logAction()` still writes to SQLite `logs` table.
+  - [ ] Tests verify logger is called with correct context.
+
+  **QA Scenarios**:
+  ```
+  Scenario: No console.* calls in production code
+    Tool: Bash
+    Steps:
+      1. grep -rn "console\." server-new/src/ --include="*.ts" | grep -v "\.test\.ts"
+      2. Expect empty output.
+    Expected Result: 0 console calls.
+    Evidence: .sisyphus/evidence/task-8b-no-console.txt
+
+  Scenario: Log entries preserve context
+    Tool: Bash + curl
+    Steps:
+      1. Start server with console-jsonl logger.
+      2. curl -X POST http://localhost:3001/api/login with bad creds.
+      3. Verify log line emitted: level=error, module=auth, message contains "Invalid credentials", user_id present.
+    Expected Result: Structured log with all context.
+    Evidence: .sisyphus/evidence/task-8b-context-preserved.jsonl
+  ```
+
+  **Commit**: YES
+  - Message: `refactor(backend): replace console.* calls with structured JSONL logger`
+  - Files: all `server-new/src/**/*.ts`
+
+---
+
+- [ ] 8c. **Additional logger implementations (File, Remote, Multi, Null)**
+
+  **What to do**:
+  - `file-jsonl.ts`: `FileJsonlLogger` with rotating files (`/var/log/cloudbsd/admin.log`, `admin.log.1`, etc.). Rotation by size or time.
+  - `remote.ts`: `RemoteLogger` that POSTs JSONL batches to remote endpoint (Loki/Datadog compatible).
+  - `multi.ts`: `MultiLogger` that delegates to N other loggers.
+  - Update `factory.ts` to support new impls.
+  - Tests for each.
+  - Update config schema in `config.ts` to allow logger array.
+
+  **Must NOT do**:
+  - Do NOT use sync filesystem writes (use streams).
+  - Do NOT buffer logs indefinitely (drop oldest if buffer full).
+  - Do NOT log to `/tmp` (use configured path).
+
+  **Recommended Agent Profile**:
+  - **Category**: `unspecified-high`
+  - **Skills**: `[]`
+
+  - **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 1
+  - **Blocked By**: T08a
+
+  **Acceptance Criteria**:
+  - [ ] Each impl satisfies `Logger` interface.
+  - [ ] `FileJsonlLogger` rotates files (test with small max size).
+  - [ ] `RemoteLogger` batches entries (configurable batch size).
+  - [ ] `MultiLogger` delegates to all children.
+  - [ ] Config: `logger: {implementation: 'multi', loggers: [{type: 'console-jsonl'}, {type: 'file-jsonl', path: '...'}]}` works.
+
+  **QA Scenarios**:
+  ```
+  Scenario: File rotation
+    Tool: Bash
+    Steps:
+      1. Configure FileJsonlLogger with maxSize: 1MB.
+      2. Log 1000 large entries.
+      3. Verify admin.log rotated to admin.log.1.
+    Expected Result: Rotation occurred.
+    Evidence: .sisyphus/evidence/task-8c-file-rotation.txt
+
+  Scenario: Multi logger fans out
+    Tool: Bash
+    Steps:
+      1. Create MultiLogger with ConsoleJsonl + Null.
+      2. Log entry.
+      3. Verify console output captured; null doesn't throw.
+    Expected Result: All children called.
+    Evidence: .sisyphus/evidence/task-8c-multi-fanout.txt
+  ```
+
+  **Commit**: YES
+  - Message: `feat(backend): add File, Remote, Multi, Null logger implementations`
+  - Files: `server-new/src/logging/file-jsonl.ts`, `remote.ts`, `multi.ts`
+
+---
+
+- [ ] 8d. **`/api/logs.ingest` endpoint (frontend log sink)**
+
+  **What to do**:
+  - Accept newline-delimited JSON (JSONL) batches in request body.
+  - Each line parsed as `LogEntry`, re-logged via backend logger with added context (`source: 'frontend'`).
+  - Authenticated (session cookie required).
+  - Rate-limited: 100 entries per minute per session.
+  - Response MIME: `application/vnd.cloudbsd+logs.ingest`.
+
+  **Must NOT do**:
+  - Do NOT accept logs from unauthenticated sessions.
+  - Do NOT log frontend entries without re-validating schema (reject malformed).
+  - Do NOT trust client-provided `user_id`/`session_id` (use server-side from session).
+
+  **Recommended Agent Profile**:
+  - **Category**: `quick`
+  - **Skills**: `[]`
+
+  - **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 1
+  - **Blocked By**: T08a, T08b
+
+  **Acceptance Criteria**:
+  - [ ] `POST /api/logs.ingest` accepts JSONL body.
+  - [ ] Each entry re-logged with backend logger.
+  - [ ] Unauthenticated requests get 401.
+  - [ ] Malformed entries are rejected (skipped, error logged).
+  - [ ] Rate limit enforced.
+
+  **QA Scenarios**:
+  ```
+  Scenario: Ingest accepts valid JSONL
+    Tool: Bash + curl
+    Steps:
+      1. Login to get session.
+      2. curl -X POST http://localhost:3001/api/logs.ingest -H "Cookie: cbsd_session=..." -H "Content-Type: application/vnd.cloudbsd+logs.ingest" -d '{"timestamp":"2026-07-05T22:00:00Z","level":"info","service":"cloudbsd-frontend","version":"2.0.0","message":"test"}\n{...}'
+      3. Verify backend log output contains both entries with source: 'frontend'.
+    Expected Result: Logs re-emitted with backend context.
+    Evidence: .sisyphus/evidence/task-8d-ingest.txt
+  ```
+
+  **Commit**: YES
+  - Message: `feat(api): add /api/logs.ingest endpoint for frontend logs`
+  - Files: `server-new/src/api/logs.ts`
+
+---
+
 - [ ] 8. **Scaffold new PAM-auth backend at `server-new/`**
 
   **What to do**:
@@ -928,6 +1159,128 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 ---
 
 ### Wave 2: Frontend Foundation
+
+- [ ] 15a. **Frontend structured logger module (interface + impls)**
+
+  **What to do**:
+  - Create `web-new/src/app/logging/` directory structure.
+  - `types.ts`: mirror of backend `LogEntry` + `Logger` interface (shared schema).
+  - `console-jsonl.ts`: writes JSONL to browser `console` (dev mode, formatted).
+  - `remote.ts`: buffers entries, POSTs to backend `/api/logs.ingest` (production).
+  - `null.ts`: no-op (for tests).
+  - `multi.ts`: composite.
+  - `factory.ts`: config-driven (default = console in dev, remote in prod).
+  - `context.ts`: route/component-scoped context (auto-detect from Angular Router).
+  - `index.ts`: default exported logger.
+  - Tests for each impl + factory.
+
+  **Must NOT do**:
+  - Do NOT log PII (passwords, tokens, user data).
+  - Do NOT log full stack traces in production (truncate to 1KB).
+  - Do NOT block UI on log sends (always async + buffered).
+
+  **Recommended Agent Profile**:
+  - **Category**: `deep`
+  - **Skills**: `[]`
+
+  - **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 2 (with T15-T21)
+  - **Blocks**: T15b, T15c
+  - **Blocked By**: T15
+
+  **Acceptance Criteria**:
+  - [ ] `src/app/logging/types.ts` matches backend schema.
+  - [ ] `ConsoleJsonlLogger` writes valid JSONL to browser console.
+  - [ ] `RemoteLogger` batches entries and POSTs to `/api/logs.ingest`.
+  - [ ] `createLogger({implementation: 'remote'})` returns `RemoteLogger`.
+  - [ ] `logger.child('MyComponent')` returns child logger that auto-attaches module.
+  - [ ] Tests cover all impls + contract.
+
+  **QA Scenarios**:
+  ```
+  Scenario: Frontend console JSONL
+    Tool: Playwright
+    Steps:
+      1. Open app in dev mode.
+      2. Call logger.info('test', {module: 'test'}).
+      3. Capture browser console output.
+      4. Assert line is valid JSON with .level, .message, .module.
+    Expected Result: Valid JSONL in console.
+    Evidence: .sisyphus/evidence/task-15a-console-jsonl.txt
+
+  Scenario: Remote logger batches
+    Tool: Playwright
+    Steps:
+      1. Configure logger as remote.
+      2. Call logger.info() 10 times.
+      3. Verify single POST to /api/logs.ingest with 10-line JSONL body.
+    Expected Result: Batched POST.
+    Evidence: .sisyphus/evidence/task-15a-remote-batch.txt
+  ```
+
+  **Commit**: YES
+  - Message: `feat(web): add structured JSONL logger module with remote sink`
+  - Files: `web-new/src/app/logging/`
+
+---
+
+- [ ] 15b. **Replace console.* in frontend with structured logger**
+
+  **What to do**:
+  - Audit all `console.log/warn/error/debug` in `web-new/src/`.
+  - Replace each with `logger.info/warn/error/debug` call.
+  - Critical replacements:
+    - `console.error('[Auth] Invalid token detected...')` in `client.ts` → `logger.error({module: 'auth', reason, token_length}, 'Invalid token detected')`
+    - `console.warn('[CSRF] Failed to prime...')` → `logger.warn({module: 'csrf', error: {...}}, 'Failed to prime CSRF token')`
+    - `console.log('[API Request] Token found...')` → `logger.debug({module: 'api', token_length}, 'Token found in localStorage')`
+  - ESLint rule: `no-console: 'error'` for `web-new/src/`.
+  - Add automatic capture of Angular `ErrorHandler` → logger.error.
+
+  **Must NOT do**:
+  - Do NOT log JWT tokens or password values.
+  - Do NOT log full request bodies (only safe metadata).
+
+  **Recommended Agent Profile**:
+  - **Category**: `unspecified-high`
+  - **Skills**: `[]`
+
+  - **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 2
+  - **Blocked By**: T15a
+
+  **Acceptance Criteria**:
+  - [ ] `grep -r "console\." web-new/src/ --include="*.ts" | grep -v "\.spec\.ts" | wc -l` returns 0.
+  - [ ] ESLint rule enforced.
+  - [ ] Each replacement preserves structured context.
+  - [ ] Angular `ErrorHandler` captures and logs all unhandled errors.
+  - [ ] Tests verify logger called with correct context.
+
+  **QA Scenarios**:
+  ```
+  Scenario: No console.* in production
+    Tool: Bash
+    Steps:
+      1. grep -rn "console\." web-new/src/ --include="*.ts" | grep -v "\.spec\.ts"
+      2. Expect empty output.
+    Expected Result: 0 console calls.
+    Evidence: .sisyphus/evidence/task-15b-no-console.txt
+
+  Scenario: ErrorHandler captures errors
+    Tool: Playwright
+    Steps:
+      1. Trigger an unhandled error in app (e.g., throw in component).
+      2. Assert logger.error called with error details.
+    Expected Result: Errors logged as JSONL.
+    Evidence: .sisyphus/evidence/task-15b-error-handler.txt
+  ```
+
+  **Commit**: YES
+  - Message: `refactor(web): replace console.* with structured JSONL logger`
+  - Files: all `web-new/src/**/*.ts`
+
+---
 
 - [ ] 15. **Scaffold Angular 20 workspace at `web-new/`**
 
