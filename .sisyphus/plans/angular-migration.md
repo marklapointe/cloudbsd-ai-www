@@ -1090,6 +1090,138 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
+- [ ] 3s. **In-app documentation browser**
+
+  **What to do**:
+  - `web-new/src/app/docs/`:
+    - `docs-browser.component.ts`: `/docs` route, sidebar + main content.
+    - `docs.service.ts`: Loads and parses markdown docs.
+    - `docs-search.component.ts`: Full-text search across all docs.
+    - `docs-toc.component.ts`: Per-page table of contents.
+  - Renders all 12 repo docs (README, INSTALL, etc.) in-app.
+  - Sidebar grouped by category (Getting Started, Admin, Developer, Reference).
+  - Markdown rendered with `ngx-markdown` (or similar).
+  - Syntax highlighting via Prism/highlight.js.
+  - Print-friendly CSS.
+  - "Edit on GitHub" link per page.
+  - URL routing: `/docs/install`, `/docs/admin/users`, etc.
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 1
+  - **Blocked By**: T01, T3q
+
+  **Acceptance Criteria**:
+  - [ ] All 12 docs browsable.
+  - [ ] Search returns results.
+  - [ ] Markdown renders with code highlighting.
+  - [ ] Print view works.
+
+  **Commit**: YES
+  - Message: `feat(docs): add in-app documentation browser`
+  - Files: `web-new/src/app/docs/`
+
+---
+
+- [ ] 3t. **In-app API documentation (Swagger UI)**
+
+  **What to do**:
+  - `web-new/src/app/api-docs/`:
+    - `swagger-ui.component.ts`: `/api-docs` route, embeds Swagger UI.
+    - Uses `swagger-ui-dist` package.
+    - Loads OpenAPI spec from backend (`/api/openapi.json`).
+    - Try-it-out enabled (requires session).
+    - Schema browser in sidebar.
+    - Server selection if multiple backends.
+    - Auth header persists across requests.
+  - Cache OpenAPI spec on app load.
+  - Refresh button for spec updates.
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 1
+  - **Blocked By**: T4 (OpenAPI spec)
+
+  **Acceptance Criteria**:
+  - [ ] Swagger UI loads at `/api-docs`.
+  - [ ] All endpoints listed.
+  - [ ] Try-it-out works.
+  - [ ] Auth header set.
+
+  **Commit**: YES
+  - Message: `feat(api-docs): embed Swagger UI for REST API reference`
+  - Files: `web-new/src/app/api-docs/`
+
+---
+
+- [ ] 3u. **Help analytics service (opt-in)**
+
+  **What to do**:
+  - `web-new/src/app/help/analytics/`:
+    - `help-analytics.service.ts`: Tracks article views, search queries, bounce.
+    - Posts aggregated events to `/api/help/analytics`.
+    - Admin setting to disable (`help_analytics_enabled` in settings).
+  - Privacy: No PII, only aggregated counts.
+  - Stored in backend JSONL logs.
+
+  **Recommended Agent Profile**:
+  - **Category**: `unspecified-low`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 1
+  - **Blocked By**: T15m (help modal)
+
+  **Acceptance Criteria**:
+  - [ ] Article views tracked.
+  - [ ] Settings toggle works.
+  - [ ] No PII collected.
+
+  **Commit**: YES
+  - Message: `feat(help): add opt-in help analytics`
+  - Files: `web-new/src/app/help/analytics/`
+
+---
+
+- [ ] 3v. **Release notes page**
+
+  **What to do**:
+  - `web-new/src/app/release-notes/`:
+    - `release-notes.component.ts`: `/release-notes` route.
+    - Loads `CHANGELOG.md` and renders.
+    - Filter by version (dropdown).
+    - Highlight breaking changes section.
+    - Markdown rendered.
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 1
+  - **Blocked By**: T3q (CHANGELOG.md)
+
+  **Acceptance Criteria**:
+  - [ ] Changelog renders.
+  - [ ] Version filter works.
+  - [ ] Breaking changes highlighted.
+
+  **Commit**: YES
+  - Message: `feat(pages): add release notes viewer`
+  - Files: `web-new/src/app/release-notes/`
+
+---
+
 - [ ] 4. **OpenAPI 3.1 spec for new PAM-auth backend**
 
   **What to do**:
@@ -2781,6 +2913,74 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
+- [ ] 15p. **Empty-state component**
+
+  **What to do**:
+  - `web-new/src/app/ui/empty-state/`:
+    - `empty-state.component.ts`: Reusable empty state with icon, message, action button.
+    - Used by every list page (VMs, Containers, Jails, Volumes, Logs, Plugins, Themes, Users).
+  - Variants per context:
+    - "No data" (default)
+    - "Loading error" (with retry button)
+    - "Permission denied" (with admin help link)
+    - "Backend unavailable" (with status link)
+  - Each variant has contextual help article link.
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 2
+  - **Blocked By**: T15
+
+  **Acceptance Criteria**:
+  - [ ] Empty state appears on every list page.
+  - [ ] Each variant renders correctly.
+  - [ ] Help links work.
+
+  **Commit**: YES
+  - Message: `feat(ui): add empty-state component`
+  - Files: `web-new/src/app/ui/empty-state/`
+
+---
+
+- [ ] 15q. **Friendly error pages (404/403/500/503)**
+
+  **What to do**:
+  - `web-new/src/app/pages/errors/`:
+    - `not-found.component.ts`: `/404` — "Page not found" + search + nav links.
+    - `forbidden.component.ts`: `/403` — "Access denied" + admin help link.
+    - `server-error.component.ts`: `/500` — "Internal error" + reference code.
+    - `service-unavailable.component.ts`: `/503` — "Backend unavailable" + status link.
+  - Each page has:
+    - Friendly illustration (SVG)
+    - Plain-language explanation
+    - Action buttons (go home, search, contact support)
+    - Reference code for support requests
+    - Help article link
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 2
+  - **Blocked By**: T15
+
+  **Acceptance Criteria**:
+  - [ ] All 4 error pages render.
+  - [ ] Each has working action buttons.
+  - [ ] Reference codes generated.
+
+  **Commit**: YES
+  - Message: `feat(pages): add friendly error pages (404/403/500/503)`
+  - Files: `web-new/src/app/pages/errors/`
+
+---
+
 - [ ] 17. **`$localize` + Karma+Jasmine setup**
 
   **What to do**:
@@ -3318,6 +3518,109 @@ Max Concurrent: 7 (Waves 1, 4, 5)
   **Commit**: YES
   - Message: `feat(pages): add About page`
   - Files: `web-new/src/app/pages/about/`
+
+---
+
+- [ ] 22g. **Status page**
+
+  **What to do**:
+  - `web-new/src/app/pages/status/`:
+    - `status.component.ts`: `/status` route.
+    - Backend health: status (up/down), latency (ms), last check time.
+    - Plugin health: loaded count, errors.
+    - Frontend build: version, commit SHA, build date.
+    - Backend build: version, commit SHA, uptime.
+    - Log file locations (clickable paths).
+    - Database status (if applicable).
+  - Auto-refresh every 30s.
+  - Manual "Refresh" button.
+  - Public (no auth required) — useful for ops.
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 3
+  - **Blocked By**: T22
+
+  **Acceptance Criteria**:
+  - [ ] Backend health shown.
+  - [ ] Plugin health shown.
+  - [ ] Build info shown.
+  - [ ] Auto-refresh works.
+
+  **Commit**: YES
+  - Message: `feat(pages): add status/health page`
+  - Files: `web-new/src/app/pages/status/`
+
+---
+
+- [ ] 22h. **Admin-only help topics (role-gated)**
+
+  **What to do**:
+  - `web-new/src/app/help/admin-topics/`:
+    - Admin-only articles:
+      - "Adding users via PAM"
+      - "Configuring system services"
+      - "Reading security audit logs"
+      - "Plugin permission management"
+      - "Custom MIME type registry"
+      - "Log retention policy"
+      - "Backup procedures"
+      - "PAM configuration"
+      - "Reverse proxy setup"
+  - Hidden from non-admin users in help modal Topics tab.
+  - Visible only after admin login.
+
+  **Recommended Agent Profile**:
+  - **Category**: `writing`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 3
+  - **Blocked By**: T15m, T22
+
+  **Acceptance Criteria**:
+  - [ ] Topics hidden for non-admins.
+  - [ ] Topics visible for admins.
+  - [ ] All admin topics written.
+
+  **Commit**: YES
+  - Message: `feat(help): add admin-only help topics`
+  - Files: `web-new/src/app/help/admin-topics/`
+
+---
+
+- [ ] 22i. **Plugin documentation viewer**
+
+  **What to do**:
+  - `web-new/src/app/plugins/plugin-docs/`:
+    - `plugin-docs.component.ts`: `/plugins/<name>/docs` route.
+    - Loads plugin's `docs/` directory markdown files.
+    - Sidebar with plugin's doc structure.
+    - Same markdown renderer as in-app docs browser.
+  - Each plugin can ship docs in its manifest's `docs` field (array of paths).
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 3
+  - **Blocked By**: T3s (docs browser), T6 (plugin system)
+
+  **Acceptance Criteria**:
+  - [ ] Plugin docs render.
+  - [ ] Sidebar shows structure.
+  - [ ] Markdown renders.
+
+  **Commit**: YES
+  - Message: `feat(plugins): add per-plugin documentation viewer`
+  - Files: `web-new/src/app/plugins/plugin-docs/`
 
 ---
 

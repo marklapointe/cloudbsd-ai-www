@@ -438,7 +438,130 @@ PLIST_FILES+=  share/man/man5/cloudbsd-admin.conf.5 \
 - Opens contextual help for that page
 - URL: `/help?topic=vms` etc.
 
-### Help Documentation Tasks
+### Additional Documentation + Help Surfaces (Adding per user reinforcement)
+
+**7. In-App Documentation Browser** (`/docs` route)
+- Browse all 12 repo docs inside the app
+- Sidebar with sections (Install, Upgrade, Admin, Developer, etc.)
+- Markdown rendered with syntax highlighting
+- Search across all docs
+- Print-friendly view
+- "Edit on GitHub" link per page
+
+**8. In-App API Documentation (Swagger UI)** (`/api-docs`)
+- Embedded Swagger UI from OpenAPI spec
+- Try-it-out functionality (requires auth)
+- Schema browser
+- Server selection (if multiple backends)
+- Persistent auth header
+
+**9. Field-Level Help Text**
+- Every form field has `?` icon next to label
+- Reveals detailed help on hover/focus
+- Examples for non-obvious fields
+- Validation rules documented inline
+
+**10. Empty States with Help**
+- Each list/page shows helpful empty state when no data:
+  - VMs: "No VMs running. [Create one via backend →]"
+  - Logs: "No logs yet. Backend activity will appear here."
+  - Plugins: "No plugins installed. [Browse plugin registry →]"
+  - Themes: "Showing built-in themes. [Import custom →]"
+- Each empty state links to relevant help article
+
+**11. Login Page Help Links**
+- "Forgot password?" link → help article on PAM password reset
+- "Why PAM?" link → help article on authentication
+- "First time?" link → INSTALL.md#first-time-setup
+
+**12. Friendly Error Pages** (404, 403, 500, 503)
+- `/404` — Page not found, with search + nav back to dashboard
+- `/403` — Access denied (admin-only area)
+- `/500` — Internal error, with reference code for support
+- `/503` — Backend unavailable (degraded shell)
+
+**13. Admin-Only Help Topics**
+- Restricted to admin role:
+  - Adding users via PAM
+  - Configuring system services
+  - Reading security audit logs
+  - Plugin permission management
+  - Custom MIME type registry
+  - Log retention policy
+
+**14. Plugin Documentation Viewer**
+- Each plugin can ship its own docs (markdown in plugin dir)
+- Viewable via `/plugins/<name>/docs`
+- Renders with same styling as app docs
+
+**15. Release Notes Page** (`/release-notes`)
+- In-app changelog viewer
+- Filter by version
+- Highlight breaking changes
+- Markdown rendered with same styling as docs
+
+**16. Status / Health Page** (`/status`)
+- Backend health (up/down, last check, latency)
+- Plugin health (loaded, errors)
+- Build version, commit SHA, uptime
+- Log file locations
+- Database (if any) status
+
+**17. Context-Sensitive Keyboard Shortcuts**
+- Different shortcuts per page context
+- E.g., on VMs page: `n` = new VM (when allowed), `j/k` = next/prev
+- Show context-specific shortcuts when `?` pressed
+- Listed in shortcut overlay with current context highlighted
+
+**18. Multi-Language Help Content**
+- Help articles available in all 47 locales
+- Translations sourced from same translation pipeline as UI strings
+- English is canonical source
+
+**19. Help Content Versioning**
+- Each help article has version metadata
+- Older versions retained for `?version=` parameter
+- Allows rollback if bad translation shipped
+
+**20. Help Analytics (Opt-In)**
+- Tracks which help articles are most viewed
+- Identifies articles with high bounce (user opens help, doesn't return to action)
+- Aggregated and anonymized
+- Admin can disable in Settings
+
+### Refined Documentation + Help Task List
+
+**Wave 0 (Documentation + Man Pages):**
+- T3p: 5 man pages (mdoc(7))
+- T3q: 12 repo docs
+- T3r: In-app help articles
+
+**Wave 1 (Help Backend Infrastructure):**
+- T3s: In-app docs browser (`/docs` route + sidebar + search)
+- T3t: Swagger UI embed (`/api-docs`)
+- T3u: Help analytics service (opt-in)
+- T3v: Release notes page
+
+**Wave 2 (UI Components):**
+- T15m: Help modal
+- T15n: Contextual tooltips (covers field-level help)
+- T15o: Keyboard shortcut overlay (context-sensitive)
+- T15p: Empty-state component (used by every list page)
+- T15q: Friendly error pages (404/403/500/503)
+
+**Wave 3 (Pages):**
+- T22e: Onboarding tour
+- T22f: About page
+- T22g: Status page (`/status`)
+- T22h: Admin-only help topics (gated by role)
+- T22i: Plugin documentation viewer
+
+**Wave 7 (Integration + Verification):**
+- T49f: Doc link verification
+- T49g: Man page rendering verification
+- T49h: All help pages render in Playwright visual inspection
+
+### Help Documentation Tasks (Original)
 
 **Wave 0 (Documentation):**
 - **T3p**: Write 5 man pages (mdoc(7) format)
