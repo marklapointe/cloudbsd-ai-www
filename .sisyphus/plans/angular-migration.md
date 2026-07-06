@@ -969,6 +969,127 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
+- [ ] 3p. **Man pages (5 sections, mdoc(7) format)**
+
+  **What to do**:
+  - Write 5 man pages in mdoc(7) format (FreeBSD standard):
+    1. `man/man8/cloudbsd-admin.8` — System administration command
+    2. `man/man5/cloudbsd-admin.conf.5` — Config file format
+    3. `man/man5/cloudbsd-admin-theme.5` — Theme file format
+    4. `man/man5/cloudbsd-admin-plugin.5` — Plugin manifest format
+    5. `man/man5/cloudbsd-admin-logs.5` — JSONL log format
+  - Each follows standard sections: NAME, SYNOPSIS, DESCRIPTION, OPTIONS/FORMAT, FILES, EXAMPLES, DIAGNOSTICS, SEE ALSO, HISTORY, AUTHORS.
+  - Verified rendering via `man -w <page>` and `man <page>` in FreeBSD VM.
+  - English only (primary language per Honcho guidelines).
+
+  **Must NOT do**:
+  - Do NOT use non-FreeBSD-standard formats.
+  - Do NOT include trademarked names.
+
+  **Recommended Agent Profile**:
+  - **Category**: `writing`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 0
+  - **Blocked By**: T01
+
+  **Acceptance Criteria**:
+  - [ ] 5 man pages written.
+  - [ ] All render with `man cloudbsd-admin` etc.
+  - [ ] Each has all required sections.
+  - [ ] Cross-references (`SEE ALSO`) point to real pages.
+
+  **Commit**: YES
+  - Message: `docs(manpages): add 5 man pages in mdoc(7) format`
+  - Files: `docs/man/man8/cloudbsd-admin.8`, `docs/man/man5/*.5`
+
+---
+
+- [ ] 3q. **Documentation files (12 docs)**
+
+  **What to do**:
+  - Write 12 documentation files at repo root:
+    1. `README.md` — Updated project overview
+    2. `INSTALL.md` — FreeBSD install guide
+    3. `UPGRADE.md` — Upgrade procedures
+    4. `ADMIN_GUIDE.md` — Day-to-day administration
+    5. `DEVELOPER_GUIDE.md` — Plugin/theme development
+    6. `THEME_REFERENCE.md` — Theme token reference
+    7. `PLUGIN_REFERENCE.md` — Plugin manifest reference
+    8. `API_REFERENCE.md` — REST API reference (generated from OpenAPI)
+    9. `SECURITY.md` — Security architecture
+    10. `CHANGELOG.md` — Version history (Keep-a-Changelog format)
+    11. `TROUBLESHOOTING.md` — Common issues
+    12. `FAQ.md` — Frequently asked questions
+  - English only.
+  - Link to relevant code locations.
+  - Include examples for non-trivial concepts.
+
+  **Recommended Agent Profile**:
+  - **Category**: `writing`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 0
+  - **Blocked By**: T01
+
+  **Acceptance Criteria**:
+  - [ ] 12 docs exist.
+  - [ ] All internal links resolve.
+  - [ ] Examples are runnable.
+
+  **Commit**: YES
+  - Message: `docs: add 12 documentation files (README, INSTALL, etc.)`
+  - Files: `README.md`, `INSTALL.md`, `UPGRADE.md`, etc.
+
+---
+
+- [ ] 3r. **In-app help content (searchable articles)**
+
+  **What to do**:
+  - Write help articles for the in-app help system.
+  - Stored as JSON: `web-new/src/app/help/articles.json` or markdown files.
+  - One article per topic (e.g., "vms", "themes", "plugins", "logging", "security").
+  - Topics:
+    - Getting started
+    - Navigation
+    - VM management (view-only)
+    - Container management
+    - Jails
+    - Volumes
+    - Network map
+    - Cluster
+    - Themes (built-in + custom)
+    - Plugins
+    - Logs (JSONL format)
+    - Settings (language, theme, error display)
+    - Keyboard shortcuts
+    - Troubleshooting
+  - Each article: title, category, body (markdown), related topics.
+
+  **Recommended Agent Profile**:
+  - **Category**: `writing`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 0
+  - **Blocked By**: T01
+
+  **Acceptance Criteria**:
+  - [ ] Articles cover all major features.
+  - [ ] Search works (full-text).
+  - [ ] Cross-references between articles.
+
+  **Commit**: YES
+  - Message: `docs(help): add in-app help article content`
+  - Files: `web-new/src/app/help/articles/`
+
+---
+
 - [ ] 4. **OpenAPI 3.1 spec for new PAM-auth backend**
 
   **What to do**:
@@ -2569,6 +2690,97 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
+- [ ] 15m. **Help modal component + search**
+
+  **What to do**:
+  - `web-new/src/app/help/`:
+    - `help-modal.component.ts`: Modal with 3 tabs (Search, Topics, Shortcuts).
+    - `help.service.ts`: Loads articles, full-text search, caches results.
+    - `shortcuts.service.ts`: Centralized keyboard shortcut registry.
+  - Opens via `?` keyboard shortcut or "?" icon in header.
+  - Search: fuse.js or similar for fuzzy search.
+  - Closes on Esc or backdrop click.
+  - Loads articles from `articles/` directory (T3r content).
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 2
+  - **Blocked By**: T15, T3r (articles)
+
+  **Acceptance Criteria**:
+  - [ ] `?` opens help modal.
+  - [ ] Search returns relevant articles.
+  - [ ] Topics browsable.
+  - [ ] Shortcuts reference shown.
+
+  **Commit**: YES
+  - Message: `feat(help): add help modal with search/topics/shortcuts`
+  - Files: `web-new/src/app/help/`
+
+---
+
+- [ ] 15n. **Contextual tooltip system**
+
+  **What to do**:
+  - `web-new/src/app/ui/tooltip/`:
+    - `tooltip.directive.ts`: Attribute directive for `appTooltip="..."`.
+    - `tooltip.component.ts`: Uses CDK Overlay for positioning.
+    - "Don't show again" per-tooltip state in localStorage.
+  - Apply to key UI elements (settings options, theme switcher, error level dropdown).
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 2
+  - **Blocked By**: T15
+
+  **Acceptance Criteria**:
+  - [ ] Tooltips appear on hover/focus.
+  - [ ] Position correctly (no overflow).
+  - [ ] "Don't show again" persists.
+
+  **Commit**: YES
+  - Message: `feat(ui): add contextual tooltip system`
+  - Files: `web-new/src/app/ui/tooltip/`
+
+---
+
+- [ ] 15o. **Keyboard shortcut overlay**
+
+  **What to do**:
+  - `web-new/src/app/help/shortcuts-overlay.component.ts`:
+    - Shows all keyboard shortcuts grouped by category.
+    - Opens with `?` key (if no input focused).
+    - Searchable.
+    - Dismissible.
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 2
+  - **Blocked By**: T15m
+
+  **Acceptance Criteria**:
+  - [ ] Opens with `?` key.
+  - [ ] All shortcuts listed.
+  - [ ] Searchable.
+
+  **Commit**: YES
+  - Message: `feat(help): add keyboard shortcut overlay`
+  - Files: `web-new/src/app/help/shortcuts-overlay.component.ts`
+
+---
+
 - [ ] 17. **`$localize` + Karma+Jasmine setup**
 
   **What to do**:
@@ -3042,6 +3254,70 @@ Max Concurrent: 7 (Waves 1, 4, 5)
   **Commit**: YES
   - Message: `feat(settings): add theme import/export UI`
   - Files: `web-new/src/app/pages/settings/theme-import-export.component.ts`
+
+---
+
+- [ ] 22e. **Onboarding tour (first-login wizard)**
+
+  **What to do**:
+  - `web-new/src/app/help/onboarding/`:
+    - `onboarding-tour.component.ts`: Multi-step wizard.
+    - Steps: welcome, navigation overview, key features, where to find help, finish.
+    - Skippable ("Skip Tour" button).
+    - State in localStorage (`onboarding_completed: true`).
+    - Re-trigger via Settings.
+    - Spotlight highlights for each step.
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 3
+  - **Blocked By**: T22, T15m
+
+  **Acceptance Criteria**:
+  - [ ] Shown on first login only.
+  - [ ] Skippable.
+  - [ ] Step navigation works.
+  - [ ] State persists.
+
+  **Commit**: YES
+  - Message: `feat(help): add first-login onboarding tour`
+  - Files: `web-new/src/app/help/onboarding/`
+
+---
+
+- [ ] 22f. **About page**
+
+  **What to do**:
+  - `web-new/src/app/pages/about/about.component.ts`:
+    - Version info (from package.json).
+    - License info (BSD 3-Clause).
+    - Links to documentation (README, INSTALL, ADMIN_GUIDE, etc.).
+    - Links to support/community.
+    - Open source notices / attributions.
+    - Build info (commit SHA, build date).
+  - Accessible via header link or `/about` route.
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 3
+  - **Blocked By**: T22
+
+  **Acceptance Criteria**:
+  - [ ] Page renders.
+  - [ ] Links work.
+  - [ ] Version shown.
+
+  **Commit**: YES
+  - Message: `feat(pages): add About page`
+  - Files: `web-new/src/app/pages/about/`
 
 ---
 

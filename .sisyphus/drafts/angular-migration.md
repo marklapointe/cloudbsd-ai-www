@@ -98,6 +98,1063 @@
 - **MODULAR/SWAPPABLE LOGGING (NEW)**: Logger is an interface, not a singleton. Implementations can be swapped without changing call sites. Default = JSONL stdout. Pluggable: file, remote (Loki/Datadog/etc.), null (for tests), multi (combine).
 - **FRONTEND LOGGING (NEW)**: Same structured logger module in Angular. Frontend logs go to backend `/api/logs.ingest` endpoint with custom MIME.
 
+## SECURITY (FIRST-CLASS, NOT AFTERTHOUGHT)
+
+Per Honcho MCP WebUI/Configuration guidelines + user requirement: "Security is paramount. Should have been present already."
+
+**Honcho MCP source material:**
+- WebUI Guidelines: "WCAG 2.1 Level AA mandatory", "WAI-ARIA labels/roles only when semantic HTML insufficient", "Robust protection against CSRF and XSS", "HTTPS only for production traffic", "Strict Content Security Policy"
+- Configuration: "Config files with secrets must have 0600 permissions", "Consider encrypting sensitive configs at rest with AES-256 and secure key management", "Audit logging"
+- User profile: "Web UI standards require React + Tailwind CSS + TypeScript, WCAG 2.1 Level AA compliance, HTTPS-only, strict CSP, and XSS/CSRF protection"
+- User profile: "absolutely no secrets be included in any Docker image"
+
+### Threat Model
+
+| Threat | Likelihood | Impact | Mitigation |
+|---|---|---|---|
+| XSS via template renderer | High | Critical | DOMPurify sanitization, CSP, no innerHTML |
+| CSRF on state-changing endpoints | High | High | Double-submit cookie pattern + SameSite cookies |
+| Session hijacking via XSS | Medium | Critical | HttpOnly cookies + CSP |
+| Brute force login | High | High | Rate limiting + account lockout |
+| Privilege escalation | Medium | Critical | Role-based access control (admin/operator/viewer) |
+| PAM injection | Medium | High | Strict input validation, escape shell args |
+| Prototype pollution via theme import | High | Critical | Schema validation + reject `__proto__`/`constructor` |
+| Secrets in Docker image | Medium | High | Build-time env var injection, .dockerignore |
+| Container escape | Low | Critical | Non-root user, read-only FS, no capabilities |
+| Plugin XSS | High | Critical | Sandboxed iframe OR strict sanitization |
+| WebSocket hijacking | Medium | High | WSS only + origin check + auth on connect |
+| Log injection | Medium | Medium | JSONL escaping, structured log validation |
+| Replay attacks | Low | Medium | Session rotation, nonce on CSRF |
+| Backup theft | Low | Critical | Encrypted backups, separate from prod |
+
+### Defense-in-Depth Layers
+
+**Layer 1 - Network**
+- TLS 1.3 only (no TLS 1.0/1.1/SSLv3).
+- Modern cipher suites only (no RC4, no 3DES, no MD5).
+- HSTS with `max-age=63072000; includeSubDomains; preload`.
+- Certificate pinning (optional, advanced).
+- `X-Frame-Options: DENY`.
+- `X-Content-Type-Options: nosniff`.
+- `Referrer-Policy: strict-origin-when-cross-origin`.
+
+**Layer 2 - HTTP Headers / CSP**
+```
+Content-Security-Policy:
+  default-src 'self';
+  script-src 'self' 'nonce-{random}' 'strict-dynamic';
+  style-src 'self' 'nonce-{random}';
+  img-src 'self' data: https:;
+  font-src 'self' data:;
+  connect-src 'self' wss:;
+  frame-ancestors 'none';
+  form-action 'self';
+  base-uri 'self';
+  object-src 'none';
+  upgrade-insecure-requests;
+```
+- Nonce-based script execution (no `'unsafe-inline'`).
+- `'strict-dynamic'` for Angular.
+- CSP report-uri for violation monitoring.
+
+**Layer 3 - Authentication**
+- PAM via `node-pam2` (or `pamtester` for testing).
+- Account lockout: 5 failed attempts → 15 min lockout.
+- Session rotation on login (new session ID).
+- Session timeout: 8h absolute, 30 min idle (configurable).
+- Secure cookies: `HttpOnly; Secure; SameSite=Strict`.
+- Password complexity enforced by PAM (not application).
+- No password storage in application DB.
+
+**Layer 4 - Authorization**
+- Role-based access control (RBAC): admin / operator / viewer.
+- Per-endpoint permission checks (middleware).
+- UI hides controls user can't access.
+- Backend rejects even if UI is bypassed (defense in depth).
+- Role field in session payload.
+
+**Layer 5 - Input Validation**
+- Zod schemas for all API request bodies.
+- Type validation (string, number, boolean, enum).
+- Length limits (e.g., username max 64 chars).
+- Pattern validation (e.g., hostname regex).
+- SQL injection prevention: parameterized queries (already in better-sqlite3).
+- Path traversal prevention: no string concat in file paths.
+- Reject `__proto__`, `constructor`, `prototype` keys (prototype pollution).
+- Max request body size: 1MB default.
+
+**Layer 6 - Output Encoding**
+- Angular auto-escapes template bindings.
+- No `[innerHTML]` usage (or DOMPurify-sanitized only).
+- No `eval()`, `Function()`, `setTimeout(string)`.
+- No `dangerouslySetInnerHTML` equivalent.
+- Plugin template renderer: DOMPurify-sanitized HTML, no script execution.
+
+**Layer 7 - Secrets Management**
+- All secrets via env vars (never in code or config files committed to git).
+- Config files 0600 permissions.
+- Production secrets never logged (logger sanitizes).
+- `.env` in `.gitignore` and `.dockerignore`.
+- PAM password hashes never leave PAM subsystem.
+- JWT signing keys generated at runtime, persisted to `/etc/cloudbsd/admin/` with 0600.
+
+**Layer 8 - Audit Logging**
+- All authentication events (login, logout, fail).
+- All authorization decisions (granted, denied).
+- All state-changing operations.
+- All admin actions.
+- All session validations.
+- JSONL format with structured fields.
+- Logs to file (0600 permissions, owned by app user).
+- No PII in logs (usernames OK, passwords NEVER).
+
+**Layer 9 - Runtime**
+- Non-root user for Node.js process.
+- App user: `cloudbsd-admin` (UID 2000+).
+- Read-only root filesystem (where possible).
+- No unnecessary capabilities (`--cap-drop=ALL`).
+- seccomp profile (default Docker).
+- AppArmor or SELinux profile (optional).
+- Drop privileges after binding privileged port (root → cloudbsd-admin).
+
+**Layer 10 - Dependencies**
+- `npm audit --audit-level=high` in CI.
+- Dependabot or Renovate for updates.
+- License check (BSD-3-Clause compatible only).
+- No dependencies without Angular 20 + Signals compatibility.
+- Subresource integrity for CDN assets (if any).
+
+### Concrete Security Tasks
+
+**Wave 0 (Documentation):**
+- **T3o**: SECURITY.md - threat model, controls, mitigations, security testing checklist.
+
+**Wave 1 (Backend):**
+- **T8e**: HTTPS/TLS enforcement + HSTS headers
+- **T8f**: Security headers middleware (CSP, X-Frame-Options, etc.)
+- **T8g**: Input validation with Zod schemas (all endpoints)
+- **T8h**: Rate limiting middleware (login, API, session validation)
+- **T8i**: Privileged user drop (root → cloudbsd-admin after port bind)
+- **T9a**: PAM session hardening (rotation, secure cookies, lockout)
+- **T9b**: Secrets management (env vars, .env loading, no logging)
+- **T9c**: Audit logging middleware (auth, authz, state changes)
+
+**Wave 2 (Frontend):**
+- **T15h**: CSP-compatible Angular build (no unsafe-inline, nonces)
+- **T15i**: DOMPurify integration for plugin template renderer
+- **T15j**: XSS prevention review (no innerHTML, no eval, safe bindings)
+- **T15k**: Secure cookie handling (HttpOnly checked, Secure flag in prod)
+- **T15l**: HTTP interceptor sanitizes headers (no Authorization in logs)
+
+**Wave 7 (Integration):**
+- **T49a**: Security audit (npm audit, OWASP ZAP baseline scan)
+- **T49b**: Penetration testing checklist (manual + automated)
+- **T49c**: CSP report collection + violation analysis
+
+## DOCUMENTATION + MAN PAGES + HELP SYSTEM (NEW)
+
+Per user: "Man pages need to be made up. Documentation and help pages."
+
+Per Honcho MCP / docs guideline: "Primary language is English for all technical documentation, code comments, and primary software."
+
+### Man Pages (Section 5 + 8 in FreeBSD convention)
+
+**1. `cloudbsd-admin(8)`** — System administration command
+- Sections: NAME, SYNOPSIS, DESCRIPTION, OPTIONS, FILES, EXAMPLES, DIAGNOSTICS, SEE ALSO, HISTORY, AUTHORS
+- Format: mdoc(7) (FreeBSD standard)
+- Covers: `service cloudbsd-admin start|stop|restart|status|reload|enable|disable`
+- rc.conf variables documented
+- Default paths documented
+
+**2. `cloudbsd-admin.conf(5)`** — Configuration file format
+- Sections: NAME, SYNOPSIS, DESCRIPTION, OPTIONS (per-key), FILES, EXAMPLES, SEE ALSO
+- Documents every key in `config.json`
+- Default values for each key
+- Example minimal config, example full config
+
+**3. `cloudbsd-admin-theme(5)`** — Theme file format
+- Sections: NAME, SYNOPSIS, DESCRIPTION, TOKENS (per-token), BRANDING, FILES, EXAMPLES, SEE ALSO
+- Documents every theme token
+- Color value format
+- Font name restrictions
+- Logo data URL format
+- Example minimal theme, example with branding
+
+**4. `cloudbsd-admin-plugin(5)`** — Plugin manifest format
+- Sections: NAME, SYNOPSIS, DESCRIPTION, MANIFEST SCHEMA, TEMPLATE SCHEMA, COMPONENTS, DATA BINDING, PERMISSIONS, EXAMPLES, SEE ALSO
+- Documents plugin manifest JSON
+- Template component types
+- Data binding syntax
+- Permission model
+- Worked example: "Add a new VM metrics page"
+
+**5. `cloudbsd-admin-logs(5)`** — JSONL log format
+- Sections: NAME, SYNOPSIS, DESCRIPTION, LOG ENTRY SCHEMA, LEVELS, EXAMPLES, SEE ALSO
+- Documents every field in LogEntry
+- Level definitions (debug/info/warn/error/fatal)
+- Module conventions
+- Example log lines per level
+- Note: not human-readable, use jq for parsing
+
+### Man Page Format
+
+All man pages in mdoc(7) format (FreeBSD standard), installed by port Makefile:
+```
+MAN8PREFIX=  ${PREFIX}/share/man
+MAN5PREFIX=  ${PREFIX}/share/man
+MAN_COMPRESSED=  no
+
+PLIST_FILES+=  share/man/man5/cloudbsd-admin.conf.5 \
+               share/man/man5/cloudbsd-admin-theme.5 \
+               share/man/man5/cloudbsd-admin-plugin.5 \
+               share/man/man5/cloudbsd-admin-logs.5 \
+               share/man/man8/cloudbsd-admin.8
+```
+
+### Documentation Files (Repo)
+
+**1. README.md** — Project overview (already exists, needs update post-migration)
+- What it is, features, screenshots, quick start, links to detailed docs
+
+**2. INSTALL.md** — FreeBSD install guide
+- Prerequisites (Node.js 24, OpenPAM, ports tree)
+- Build from port: `cd /usr/ports/www/cloudbsd-admin && make install clean`
+- Or pkg: `pkg install cloudbsd-admin`
+- Post-install setup: PAM config, first admin user
+- Enable: `sysrc cloudbsd-admin_enable=YES && service cloudbsd-admin start`
+- Reverse proxy: nginx config example with TLS
+- Firewall: open port 3001
+
+**3. UPGRADE.md** — Upgrade procedures
+- From v1.x: `pkg upgrade cloudbsd-admin` (data loss acknowledged)
+- Manual upgrade from source
+- Breaking changes per version
+- Rollback procedure (ZFS snapshot, port downgrade)
+- Config migration
+
+**4. ADMIN_GUIDE.md** — Day-to-day administration
+- User management (add/remove/disable users via PAM)
+- Theme management (browse, switch, customize)
+- Plugin management (install, enable, disable)
+- Log viewing (JSONL → human-readable)
+- Backup procedures
+- Performance tuning
+- Troubleshooting
+
+**5. DEVELOPER_GUIDE.md** — Plugin/theme development
+- Plugin authoring walkthrough
+- Theme token reference
+- Component library reference
+- Test framework
+- Submission process
+
+**6. THEME_REFERENCE.md** — Theme token reference
+- All tokens documented
+- Color palette examples
+- Typography options
+- Signature elements
+- WCAG AA contrast verification
+- Examples per theme
+
+**7. PLUGIN_REFERENCE.md** — Plugin manifest reference
+- Manifest schema
+- Component types
+- Data binding patterns
+- Permission system
+- Discovery mechanism
+- Examples: minimal, full, complex
+
+**8. API_REFERENCE.md** — REST API reference (generated from OpenAPI)
+- Endpoint listing
+- Request/response schemas
+- Custom MIME types (`application/vnd.cloudbsd+*`)
+- Required headers (`X-CloudBSD-Who/What/Why/Where`)
+- Authentication
+- Error responses
+
+**9. SECURITY.md** — Security architecture
+- Threat model (from T3o)
+- Defense-in-depth layers
+- Security headers
+- Authentication/authorization model
+- Reporting vulnerabilities (mark@cloudbsd.org)
+
+**10. CHANGELOG.md** — Version history
+- Keep-a-Changelog format
+- Sections: Added, Changed, Deprecated, Removed, Fixed, Security
+
+**11. TROUBLESHOOTING.md** — Common issues + solutions
+- "Service won't start"
+- "Permission denied on config"
+- "PAM authentication failed"
+- "Theme not loading"
+- "Plugin manifest error"
+- "Port already in use"
+- "Out of disk space"
+- "High memory usage"
+
+**12. FAQ.md** — Frequently asked questions
+- "Can I use LDAP instead of PAM?"
+- "Can I host themes in a public registry?"
+- "How do I add a new language?"
+- "Why are logs in JSONL not plain text?"
+- "Can I use a different database?"
+
+### In-App Help System
+
+**1. Help Modal Component** (`web-new/src/app/help/`)
+- Accessible via `?` keyboard shortcut or "?" icon in header
+- Three tabs: **Search**, **Topics**, **Shortcuts**
+- Search: full-text search across all help topics
+- Topics: categorized list of articles
+- Shortcuts: keyboard shortcut reference
+- Closes on Esc or backdrop click
+
+**2. Contextual Tooltips**
+- `?` icon next to labels reveals tooltip with help text
+- Implemented via CDK Overlay
+- Dismissible per-session via "Don't show again"
+
+**3. Keyboard Shortcut Overlay**
+- `?` opens shortcut reference
+- Shows all keyboard shortcuts
+- Searchable
+
+**4. Onboarding Tour (First Login)**
+- Multi-step wizard for first-time users
+- Skippable
+- Covers: navigation, key features, where to find help
+- Stored in localStorage so only shown once
+
+**5. About Page** (`/about`)
+- Version info
+- License info
+- Links to documentation
+- Links to community/support
+- Open source notices
+
+**6. Per-Page Help Link**
+- Each page has "Help" link in header
+- Opens contextual help for that page
+- URL: `/help?topic=vms` etc.
+
+### Help Documentation Tasks
+
+**Wave 0 (Documentation):**
+- **T3p**: Write 5 man pages (mdoc(7) format)
+- **T3q**: Write 12 documentation files (README, INSTALL, UPGRADE, ADMIN_GUIDE, DEVELOPER_GUIDE, THEME_REFERENCE, PLUGIN_REFERENCE, API_REFERENCE, SECURITY, CHANGELOG, TROUBLESHOOTING, FAQ)
+- **T3r**: Write in-app help content (searchable help articles per topic)
+
+**Wave 2 (Frontend):**
+- **T15m**: Help modal component
+- **T15n**: Contextual tooltip system
+- **T15o**: Keyboard shortcut overlay
+
+**Wave 3 (Settings + Pages):**
+- **T22e**: Onboarding tour (first-login wizard)
+- **T22f**: About page component
+
+**Wave 7 (Integration):**
+- **T49f**: Doc link verification (every "see also" in docs links to real page)
+- **T49g**: Man page rendering verification (`man cloudbsd-admin` works)
+
+## FREEBSD TESTING INFRASTRUCTURE (NEW)
+
+Per user: "I will also provide a FreeBSD VM for you to test on. RC scripts thoroughly tested. Upgrade tests done."
+
+### FreeBSD VM Provisioning
+
+User provides a FreeBSD VM for testing. Per Honcho MCP testing guidelines:
+- Use bhyve for VM isolation (testing must never run on dev host)
+- ZFS golden snapshot for instant clone
+- Test infrastructure runs in VM, not on dev workstation
+- Reproducible environment as code
+
+**VM Setup Script** (`scripts/setup-test-vm.sh`):
+```bash
+#!/bin/sh
+# Provision FreeBSD test VM via bhyve
+# - Based on ZFS golden snapshot
+# - Headless (no GUI)
+# - Network bridge for SSH access
+# - Auto-boot test environment
+# - Snapshot after each test run
+```
+
+**Test environment inside VM:**
+- FreeBSD 14+ RELEASE
+- Node.js 24 (via port `lang/node24`)
+- PAM service running
+- Test runner installed
+- SSH access for executor
+- Snapshot-able filesystem
+
+### RC Script Thorough Test Suite
+
+The `cloudbsd-admin` rc.d script needs comprehensive test coverage. Tests run in the FreeBSD VM.
+
+**Test categories:**
+
+1. **Lifecycle Tests**
+   - `service cloudbsd-admin start` → daemon running
+   - `service cloudbsd-admin stop` → daemon stopped cleanly
+   - `service cloudbsd-admin restart` → daemon restarted
+   - `service cloudbsd-admin status` → returns correct status
+   - `service cloudbsd-admin rcvar` → shows rc.conf variables
+
+2. **Configuration Tests**
+   - `service cloudbsd-admin enable` → adds to rc.conf
+   - `service cloudbsd-admin disable` → removes from rc.conf
+   - Missing config file → service refuses to start (with clear error)
+   - Invalid config JSON → service refuses to start (with line/column)
+   - Missing PAM config → service refuses to start
+
+3. **Permission Tests**
+   - Config file owned by root:0600 → service starts
+   - Config file owned by other user → service refuses to start
+   - Config file world-readable → service refuses to start
+   - Log directory not writable → service refuses to start
+   - State directory not writable → service refuses to start
+
+4. **Recovery Tests**
+   - Process killed with `kill -9` → service detects, cleans up PID file
+   - OOM kill → service detects, cleans up
+   - Crash → service can restart without manual intervention
+   - Hung process → timeout in rc.d handles it
+
+5. **Reload Tests**
+   - `service cloudbsd-admin reload` → sends SIGHUP, process re-reads config
+   - Logger re-reads log config
+   - Themes reloaded
+   - Sessions preserved
+
+6. **Boot Order Tests**
+   - PAM dependency → waits for `pam` service
+   - Network dependency → waits for `network`
+   - DNS dependency → waits for `named` if configured
+   - Boot with PAM down → service waits, retries
+
+7. **Concurrency Tests**
+   - Two simultaneous `start` calls → only one succeeds (PID file lock)
+   - `start` while already running → reports already running
+   - `stop` while not running → idempotent (no error)
+
+8. **Environment Tests**
+   - `cloudbsd-admin_env=dev service cloudbsd-admin start` → uses dev config
+   - `cloudbsd-admin_ssl=YES service cloudbsd-admin start` → enables TLS
+   - `cloudbsd-admin_port=8888 service cloudbsd-admin start` → custom port
+   - Missing env vars → falls back to config defaults
+
+9. **Logging Tests**
+   - stdout/stderr captured to `/var/log/cloudbsd-admin/daemon.log`
+   - JSONL format preserved
+   - Log rotation (newsyslog-compatible)
+   - Log permissions 0600
+
+10. **Signal Handling**
+    - SIGTERM → graceful shutdown (finish requests, close connections)
+    - SIGINT → graceful shutdown
+    - SIGHUP → reload config
+    - SIGUSR1 → reopen log files (for log rotation)
+
+### Upgrade Test Suite
+
+Tests for upgrading from previous version to current version.
+
+**Upgrade scenarios:**
+
+1. **Port Upgrade (in-place)**
+   ```
+   pkg install cloudbsd-admin-1.0.0  # initial install
+   ... use for a while ...
+   pkg upgrade cloudbsd-admin        # upgrade to 2.0.0
+   ```
+   - Service auto-stops before upgrade
+   - Service auto-starts after upgrade
+   - User data preserved (or acknowledged as lost - user said OK to lose)
+   - New config file generated if schema changed
+   - Old config backed up to `config.json.v1.bak`
+
+2. **Major Version Upgrade (breaking changes)**
+   - Database schema migration (if applicable)
+   - Locale file format migration
+   - Theme file format migration
+   - Plugin manifest format migration
+   - Session format migration
+   - Old format deprecated but readable for grace period
+
+3. **Rollback on Failed Upgrade**
+   - Pre-upgrade snapshot of VM
+   - If post-upgrade smoke test fails → automatic rollback to snapshot
+   - Report failure to operator
+
+4. **Config Migration**
+   - Detect old config format
+   - Migrate to new format with backup
+   - Log migration actions
+
+5. **Dependency Upgrade**
+   - Node.js major version bump
+   - PAM config changes
+   - Port library updates
+
+### Test Runner Architecture
+
+```
+tests/
+├── e2e/                    # Playwright tests (existing)
+├── integration/            # Backend integration tests
+│   ├── rc-script.test.sh   # RC script lifecycle tests
+│   ├── upgrade.test.sh     # Upgrade path tests
+│   ├── permissions.test.sh # File ownership tests
+│   └── crash-recovery.test.sh
+├── freebsd/
+│   ├── provision-vm.sh     # Create FreeBSD test VM
+│   ├── install-port.sh     # Install cloudbsd-admin from port
+│   ├── upgrade-port.sh     # Upgrade port in place
+│   ├── smoke-test.sh       # Run after every install/upgrade
+│   └── cleanup.sh          # Tear down VM
+└── security/
+    ├── csp-test.sh         # Verify CSP headers
+    ├── tls-test.sh         # TLS version + cipher check
+    └── owasp-zap.sh        # OWASP baseline scan
+```
+
+### Test Execution Flow
+
+```
+1. Provision FreeBSD VM (from ZFS golden snapshot)
+2. Install cloudbsd-admin port
+3. Run RC script tests
+4. Run security tests
+5. Run smoke tests
+6. Test upgrade path
+7. Run smoke tests again
+8. Test rollback
+9. Tear down VM
+```
+
+### Smoke Tests (post-install/upgrade)
+
+- Service starts within 5s
+- `/api/health` returns 200
+- `/api/login` accepts PAM credentials
+- Session cookie set with HttpOnly, Secure flags
+- Logs written to /var/log/cloudbsd-admin/
+- Config file at /usr/local/etc/cloudbsd-admin/config.json
+- Process runs as cloudbsd-admin user
+
+### VM Snapshot Management
+
+- `zfs snapshot zroot/vm/test@golden` - clean state before tests
+- `zfs snapshot zroot/vm/test@before-upgrade` - before upgrade
+- `zfs rollback zroot/vm/test@golden` - reset for next test
+
+### CI Integration (later)
+
+Per user: "we will figure out CI/CD later" - so this is for local/manual execution, not automated CI yet. Documented for future.
+
+### Logging Integration
+
+Test results logged via JSONL:
+```json
+{"timestamp":"...","level":"info","module":"test","message":"RC script test passed","test_name":"start","vm":"test-vm-01","duration_ms":1234}
+{"timestamp":"...","level":"error","module":"test","message":"Upgrade failed","from_version":"1.0.0","to_version":"2.0.0","reason":"config_migration_failed"}
+```
+
+### Tasks to Add
+
+**Wave 1 (Backend):**
+- **T8n**: FreeBSD VM provisioning script (`scripts/setup-test-vm.sh`)
+- **T8o**: RC script test suite (lifecycle, config, permissions, recovery)
+- **T8p**: Upgrade test suite (in-place, major version, rollback)
+- **T8q**: Smoke test script (post-install/upgrade)
+- **T8r**: Crash recovery tests
+- **T8s**: Signal handling tests
+- **T8t**: Boot order tests
+
+**Wave 7 (Integration):**
+- **T49d**: Full FreeBSD VM integration suite
+- **T49e**: Pre-release validation (run all tests against current build)
+
+## FREEBSD PORT ENTRY (NEW)
+
+Per user requirement: "FreeBSD ports entry, the ports collection is in /home/mlapointe/git/cloudbsd-ports (git repo: git@github.com:cloudbsdorg/cloudbsd-ports.git), this should be in www/cloudbsd-admin, we will not be pushing this to freebsd, but i still want a proper port entry."
+
+### Port Structure
+
+```
+/home/mlapointe/git/cloudbsd-ports/www/cloudbsd-admin/
+├── Makefile          # required
+├── distinfo          # required - checksums
+├── pkg-descr         # required - description
+├── pkg-plist         # required - list of installed files
+└── files/
+    ├── cloudbsd-admin.in     # rc.d script template
+    ├── config.json.sample  # sample config (0600)
+    └── patch-nginx.conf   # nginx config snippet
+```
+
+### Port Identity (Refined from Nexus3 pattern)
+
+- **PORTNAME**: `cloudbsd-admin`
+- **CATEGORIES**: `www`
+- **DISTVERSION**: aligned with `package.json` version
+- **MAINTAINER**: `mark@cloudbsd.org` (per Honcho MCP user profile)
+- **COMMENT**: "CloudBSD Admin Web UI (Angular frontend + Node.js backend)"
+- **WWW**: `https://cloudbsd.org/`
+- **LICENSE**: `BSD3CLAUSE`
+- **LICENSE_FILE**: `${WRKSRC}/LICENSE`
+
+### Port Structure (Nexus3-style)
+
+```
+www/cloudbsd-admin/
+├── Makefile           # build + install + integration test
+├── distinfo           # source tarball checksums
+├── pkg-descr          # package description
+├── pkg-plist          # installed files
+└── files/
+    ├── cloudbsd-admin.in       # rc.d script (templated)
+    ├── config.json.sample      # sample config (0600 perms)
+    ├── pkg-message.in          # install/upgrade/remove messages (UCB)
+    ├── pkg-install.in          # post-install: restore config, restart
+    ├── pkg-deinstall.in        # pre-remove: stop service
+    └── nginx.conf.in           # nginx config snippet
+```
+
+### Port Variables (SUB_LIST / PLIST_SUB)
+
+```makefile
+CBSD_USER=    cloudbsd-admin
+CBSD_GROUP=   cloudbsd-admin
+CBSD_HOME=    ${PREFIX}/cloudbsd-admin
+CBSD_ETCDIR=  ${PREFIX}/etc/cloudbsd-admin
+CBSD_LOGDIR=  /var/log/cloudbsd-admin
+CBSD_RUNDIR=  /var/run/cloudbsd-admin
+CBSD_VARDIR=  /var/db/cloudbsd-admin
+
+SUB_LIST=     USER=${CBSD_USER} \
+              GROUP=${CBSD_GROUP} \
+              HOME=${CBSD_HOME} \
+              ETCDIR=${CBSD_ETCDIR} \
+              LOGDIR=${CBSD_LOGDIR} \
+              RUNDIR=${CBSD_RUNDIR} \
+              VARDIR=${CBSD_VARDIR} \
+              PREFIX=${PREFIX} \
+              NODE=${LOCALBASE}/bin/node24
+
+PLIST_SUB=    USER=${CBSD_USER} \
+              GROUP=${CBSD_GROUP} \
+              HOME=${CBSD_HOME}
+```
+
+### Dependencies
+
+```makefile
+RUN_DEPENDS=  ${LOCALBASE}/bin/node:lang/node24 \
+              libpam.so:security/openpam
+BUILD_DEPENDS= ${LOCALBASE}/bin/node:lang/node24
+
+USES=         nodejs:24,24
+USE_RC_SUBR=  cloudbsd-admin
+```
+
+### USERS / GROUPS
+
+```makefile
+USERS=  cloudbsd-admin
+GROUPS= cloudbsd-admin
+
+# In do-install:
+@${PW} groupadd ${CBSD_GROUP} || true
+@${PW} useradd ${CBSD_USER} -g ${CBSD_GROUP} -d ${CBSD_HOME} -s /usr/sbin/nologin -c "CloudBSD Admin" || true
+```
+
+### Improved rc.d Script (Nexus3 Pattern)
+
+The current `pkg/cloudbsd-admin.rc.in` is BASIC. Needs full rewrite modeled on nexus3.in:
+
+**Required improvements:**
+1. `start_cmd`/`stop_cmd`/`status_cmd` separated (not just `command_args`)
+2. `setup_dirs()` function — creates runtime dirs, sets ownership
+3. `check_process()` helper — handles stale PID files
+4. Graceful kill (SIGTERM) → wait → force kill (SIGKILL) with 30s timeout
+5. `pkill -f` for child processes (Node.js spawns workers)
+6. Signal handling for `daemon -r` (auto-restart on crash)
+7. `REQUIRE: LOGIN FILESYSTEMS NETWORKING pam` (proper boot ordering)
+8. `KEYWORD: shutdown` (clean shutdown)
+9. Better defaults via `: ${var:="DEFAULT"}` pattern
+10. `${name}_env` for runtime environment overrides
+11. `${name}_ssl` flag for TLS enablement
+12. `${name}_port` for custom port
+13. `${name}_debug` for debug mode
+14. `${name}_logfile` for custom log path
+15. Post-install message with all paths
+
+**Example improved rc.d script (in `files/cloudbsd-admin.in`):**
+
+```sh
+#!/bin/sh
+#
+# PROVIDE: cloudbsd-admin
+# REQUIRE: LOGIN FILESYSTEMS NETWORKING pam
+# KEYWORD: shutdown
+#
+# Add to /etc/rc.conf:
+#   cloudbsd-admin_enable="YES"
+#
+# Optional:
+#   cloudbsd-admin_user="cloudbsd-admin"
+#   cloudbsd-admin_port="3001"
+#   cloudbsd-admin_ssl="YES"
+#   cloudbsd-admin_env="production"
+#   cloudbsd-admin_logfile="/var/log/cloudbsd-admin/daemon.log"
+#   cloudbsd-admin_debug="NO"
+
+. /etc/rc.subr
+
+name=cloudbsd-admin
+desc="CloudBSD Admin Web UI"
+rcvar=${name}_enable
+
+load_rc_config ${name}
+
+: ${cloudbsd-admin_enable:="NO"}
+: ${cloudbsd-admin_user:="cloudbsd-admin"}
+: ${cloudbsd-admin_group:="cloudbsd-admin"}
+: ${cloudbsd-admin_home:="%%PREFIX%%/cloudbsd-admin"}
+: ${cloudbsd-admin_config:="%%PREFIX%%/etc/cloudbsd-admin/config.json"}
+: ${cloudbsd-admin_port:="3001"}
+: ${cloudbsd-admin_ssl:="NO"}
+: ${cloudbsd-admin_env:="production"}
+: ${cloudbsd-admin_logfile:="%%LOGDIR%%/daemon.log"}
+: ${cloudbsd-admin_pidfile:="%%RUNDIR%%/cloudbsd-admin.pid"}
+: ${cloudbsd-admin_node:="%%NODE%%"}
+
+pidfile="${cloudbsd-admin_pidfile}"
+command="/usr/sbin/daemon"
+command_args="-r -p ${pidfile} -o ${cloudbsd-admin_logfile} -u ${cloudbsd-admin_user}"
+
+start_cmd=cloudbsd_admin_start
+stop_cmd=cloudbsd_admin_stop
+status_cmd=cloudbsd_admin_status
+reload_cmd=cloudbsd_admin_reload
+
+cloudbsd_admin_setup_dirs() {
+    # Ensure runtime directories exist with correct ownership
+    for dir in %%RUNDIR%% %%LOGDIR%% %%VARDIR%%; do
+        if [ ! -d "$dir" ]; then
+            mkdir -p "$dir"
+            chown ${cloudbsd-admin_user}:${cloudbsd-admin_group} "$dir"
+            chmod 755 "$dir"
+        fi
+    done
+    
+    # Ensure config directory exists with sample
+    if [ ! -d "%%ETCDIR%%" ]; then
+        mkdir -p "%%ETCDIR%%"
+    fi
+    
+    # If no config, copy from sample
+    if [ ! -f "${cloudbsd-admin_config}" ]; then
+        if [ -f "%%ETCDIR%%/config.json.sample" ]; then
+            cp "%%ETCDIR%%/config.json.sample" "${cloudbsd-admin_config}"
+            chown ${cloudbsd-admin_user}:${cloudbsd-admin_group} "${cloudbsd-admin_config}"
+            chmod 600 "${cloudbsd-admin_config}"
+        fi
+    fi
+    
+    # Validate config is 0600
+    if [ -f "${cloudbsd-admin_config}" ]; then
+        current_perms=$(stat -f %Lp "${cloudbsd-admin_config}")
+        if [ "$current_perms" != "600" ]; then
+            warn "Config ${cloudbsd-admin_config} has permissions $current_perms, fixing to 0600"
+            chmod 600 "${cloudbsd-admin_config}"
+            chown ${cloudbsd-admin_user}:${cloudbsd-admin_group} "${cloudbsd-admin_config}"
+        fi
+    fi
+}
+
+cloudbsd_admin_check_process() {
+    if [ -f "${pidfile}" ]; then
+        _pid=$(cat "${pidfile}" 2>/dev/null)
+        if [ -n "${_pid}" ] && [ "${_pid}" -gt 0 ] && kill -0 "${_pid}" 2>/dev/null; then
+            return 0
+        fi
+        # Stale PID file
+        rm -f "${pidfile}"
+    fi
+    return 1
+}
+
+cloudbsd_admin_start() {
+    cloudbsd_admin_setup_dirs
+    if cloudbsd_admin_check_process; then
+        echo "${name} is already running (pid $(cat ${pidfile}))."
+        return 0
+    fi
+    
+    # Validate config exists
+    if [ ! -f "${cloudbsd-admin_config}" ]; then
+        err "Config file ${cloudbsd-admin_config} not found. Run 'make config' first or copy from sample."
+        return 1
+    fi
+    
+    echo "Starting ${name}."
+    cd ${cloudbsd-admin_home}
+    
+    # Export runtime environment
+    export NODE_ENV="${cloudbsd-admin_env}"
+    export CBSD_ADMIN_PORT="${cloudbsd-admin_port}"
+    export CBSD_ADMIN_SSL="${cloudbsd-admin_ssl}"
+    export CBSD_ADMIN_CONFIG="${cloudbsd-admin_config}"
+    
+    # Start via daemon(8) with -r (auto-restart on crash)
+    /usr/sbin/daemon -r -p "${pidfile}" -o "${cloudbsd-admin_logfile}" \
+        -u ${cloudbsd-admin_user} \
+        ${cloudbsd-admin_node} \
+        --experimental-strip-types \
+        ${cloudbsd-admin_home}/server/src/index.ts
+    
+    # Verify it actually started
+    sleep 2
+    if ! cloudbsd_admin_check_process; then
+        echo "${name} failed to start. Check ${cloudbsd-admin_logfile}."
+        return 1
+    fi
+}
+
+cloudbsd_admin_stop() {
+    if ! cloudbsd_admin_check_process; then
+        echo "${name} is not running."
+        return 0
+    fi
+    
+    echo "Stopping ${name}."
+    _pid=$(cat "${pidfile}")
+    
+    # Graceful shutdown
+    if [ -n "${_pid}" ] && [ "${_pid}" -gt 0 ]; then
+        kill -TERM "${_pid}" 2>/dev/null
+    fi
+    
+    # Wait up to 30 seconds for graceful shutdown
+    for i in $(seq 1 30); do
+        if ! kill -0 "${_pid}" 2>/dev/null; then
+            rm -f "${pidfile}"
+            return 0
+        fi
+        sleep 1
+    done
+    
+    # Force kill
+    echo "Force killing ${name}."
+    kill -KILL "${_pid}" 2>/dev/null
+    pkill -KILL -f "cloudbsd-admin.*server/src/index.ts" 2>/dev/null
+    rm -f "${pidfile}"
+}
+
+cloudbsd_admin_status() {
+    if cloudbsd_admin_check_process; then
+        echo "${name} is running as pid $(cat ${pidfile})."
+        return 0
+    else
+        echo "${name} is not running."
+        return 1
+    fi
+}
+
+cloudbsd_admin_reload() {
+    if ! cloudbsd_admin_check_process; then
+        echo "${name} is not running."
+        return 1
+    fi
+    echo "Reloading ${name} configuration."
+    _pid=$(cat "${pidfile}")
+    kill -HUP "${_pid}"
+}
+
+run_rc_command "$1"
+```
+
+### pkg-install (Nexus3 Pattern)
+
+`files/pkg-install.in`:
+```sh
+#!/bin/sh
+#
+# POST-INSTALL: Restore default config if missing, restart service
+#
+
+if [ "$2" = "POST-INSTALL" ]; then
+    # Restore default config if deleted
+    if [ ! -f %%ETCDIR%%/config.json ]; then
+        echo "Restoring default cloudbsd-admin configuration..."
+        mkdir -p %%ETCDIR%%
+        cp %%PREFIX%%/share/examples/cloudbsd-admin/config.json.sample \
+           %%ETCDIR%%/config.json
+        chown %%USER%%:%%GROUP%% %%ETCDIR%%/config.json
+        chmod 600 %%ETCDIR%%/config.json
+    fi
+    
+    # Check if service was enabled before upgrade
+    if sysrc -n cloudbsd-admin_enable 2>/dev/null | grep -q "YES"; then
+        echo "Restarting cloudbsd-admin after upgrade..."
+        service cloudbsd-admin restart 2>/dev/null
+    fi
+fi
+```
+
+### pkg-deinstall (Nexus3 Pattern)
+
+`files/pkg-deinstall.in`:
+```sh
+#!/bin/sh
+#
+# DEINSTALL/POST-DEINSTALL: Stop service during removal/upgrade
+#
+
+if [ "$2" = "DEINSTALL" ] || [ "$2" = "POST-DEINSTALL" ]; then
+    if service cloudbsd-admin status >/dev/null 2>&1; then
+        echo "Stopping cloudbsd-admin service..."
+        service cloudbsd-admin stop 2>/dev/null
+        
+        # Wait for processes to terminate
+        for i in $(seq 1 30); do
+            if ! pgrep -f "cloudbsd-admin.*server/src/index.ts" > /dev/null 2>&1; then
+                break
+            fi
+            sleep 1
+        done
+        
+        # Force kill if still running
+        if pgrep -f "cloudbsd-admin.*server/src/index.ts" > /dev/null 2>&1; then
+            echo "Force killing cloudbsd-admin processes..."
+            pkill -9 -f "cloudbsd-admin.*server/src/index.ts" 2>/dev/null
+        fi
+    fi
+fi
+```
+
+### pkg-message (UCB format)
+
+`files/pkg-message.in`:
+```
+[
+{ type: install
+  message: <<EOM
+CloudBSD Admin %%VERSION%% has been installed!
+
+To enable on boot:
+  sysrc cloudbsd-admin_enable=YES
+  
+To start:
+  service cloudbsd-admin start
+  
+Config: %%ETCDIR%%/config.json (mode 0600)
+Data:   %%VARDIR%%
+Logs:   %%LOGDIR%%
+PID:    %%RUNDIR%%/cloudbsd-admin.pid
+
+Initial admin password: see %%ETCDIR%%/config.json after first start.
+EOM
+},
+{ type: upgrade
+  message: <<EOM
+CloudBSD Admin has been upgraded to %%VERSION%%!
+
+If enabled, service was auto-restarted.
+Check %%LOGDIR%%/daemon.log for any issues.
+EOM
+},
+{ type: remove
+  message: <<EOM
+CloudBSD Admin has been removed.
+
+To clean up data manually:
+  rm -rf %%VARDIR%% %%LOGDIR%%
+  rm -rf %%ETCDIR%%
+  
+To remove user/group:
+  pw userdel cloudbsd-admin
+  pw groupdel cloudbsd-admin
+EOM
+}
+]
+```
+
+### Integration Test Target (Nexus3 Pattern)
+
+```makefile
+.if defined(INTEGRATION_TEST)
+integration-test:
+    @set -e; \
+    failures=0; \
+    echo "=== cloudbsd-admin Integration Tests ==="; \
+    \
+    echo "--- Test 1: Pre-install status ---"; \
+    service cloudbsd-admin status || true; \
+    \
+    echo "--- Test 2: Enable and start ---"; \
+    sysrc cloudbsd-admin_enable=YES; \
+    service cloudbsd-admin start || { echo "FAIL: start"; failures=$$((failures+1)); }; \
+    sleep 5; \
+    \
+    echo "--- Test 3: Process running ---"; \
+    service cloudbsd-admin status || { echo "FAIL: not running"; failures=$$((failures+1)); }; \
+    \
+    echo "--- Test 4: Health endpoint ---"; \
+    curl -sf http://localhost:3001/api/health || { echo "FAIL: health"; failures=$$((failures+1)); }; \
+    \
+    echo "--- Test 5: PID file exists ---"; \
+    test -f /var/run/cloudbsd-admin.pid || { echo "FAIL: no PID"; failures=$$((failures+1)); }; \
+    \
+    echo "--- Test 6: Config file permissions ---"; \
+    test "$(stat -f %Lp /usr/local/etc/cloudbsd-admin/config.json)" = "600" || \
+        { echo "FAIL: config not 0600"; failures=$$((failures+1)); }; \
+    \
+    echo "--- Test 7: Stop service ---"; \
+    service cloudbsd-admin stop; \
+    sleep 2; \
+    \
+    echo "--- Test 8: Data preservation ---"; \
+    echo "CBSD_ADMIN_UPGRADE_TEST" > /var/db/cloudbsd-admin/.test_marker; \
+    chown cloudbsd-admin:cloudbsd-admin /var/db/cloudbsd-admin/.test_marker; \
+    # Simulate upgrade (in reality, pkg upgrade) \
+    test -f /var/db/cloudbsd-admin/.test_marker && echo "Data preserved: OK" || \
+        { echo "FAIL: data lost"; failures=$$((failures+1)); }; \
+    \
+    if [ $$failures -eq 0 ]; then \
+        echo "RESULT: ALL PASSED"; \
+    else \
+        echo "RESULT: $$failures FAILED"; \
+    fi
+.endif
+```
+
+### Multi-Release Test Target
+
+Uses poudriere to test on multiple FreeBSD releases (host, host-1, host-2).
+
+### Tasks to Add
+
+**Wave 1 (Backend):**
+- **T8j**: Complete FreeBSD port (Makefile, distinfo, pkg-descr, pkg-plist) — Nexus3-style
+- **T8k**: Improved rc.d script (Nexus3-pattern with all features)
+- **T8l**: pkg-install / pkg-deinstall / pkg-message scripts
+- **T8m**: INTEGRATION_TEST=1 + MULTI_RELEASE_TEST=1 Makefile targets
+- **T8n**: FreeBSD VM provisioning script
+- **T8o**: RC script thorough test suite (lifecycle, config, permissions, recovery)
+- **T8p**: Upgrade test suite (in-place, major version, rollback)
+- **T8q**: Smoke test script (post-install/upgrade)
+- **T8r**: Crash recovery + signal handling tests
+- **T8s**: Boot order + dependency tests
+
+**Wave 7 (Integration):**
+- **T49d**: Full FreeBSD VM integration suite
+- **T49e**: Pre-release validation (run all tests against current build)
+
 ## COMPREHENSIVE THEME CUSTOMIZATION + BRANDING (NEW)
 
 ### User Requirements
