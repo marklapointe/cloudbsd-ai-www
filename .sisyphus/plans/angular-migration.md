@@ -833,6 +833,77 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
+- [ ] 3k. **Theme catalog design document (15 themes)**
+
+  **What to do**:
+  - Create `diagrams/themes/README.md`.
+  - Document all 15 themes with:
+    - Theme name + era + inspiration (generic, no trademark).
+    - Full color palette (primary, secondary, accent, bg, text, borders, semantic).
+    - Typography (font family, sizes).
+    - Signature visual element (scanlines, pixel borders, bevel, pinstripes, glass).
+    - WCAG 2.1 AA contrast check.
+  - Include table mapping theme → file path in `diagrams/themes/`.
+  - Include token schema reference.
+
+  **Recommended Agent Profile**:
+  - **Category**: `writing`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 0
+  - **Blocked By**: T01
+
+  **Acceptance Criteria**:
+  - [ ] `diagrams/themes/README.md` exists.
+  - [ ] All 15 themes documented.
+  - [ ] Color palettes use hex values.
+  - [ ] Typography specified per theme.
+  - [ ] Contrast ratios verified for AA.
+
+  **Commit**: YES
+  - Message: `docs(themes): add 15-theme catalog design document`
+  - Files: `diagrams/themes/README.md`
+
+---
+
+- [ ] 3l. **15 theme mock-up SVGs + comparison grid**
+
+  **What to do**:
+  - Create `diagrams/themes/<theme-slug>.svg` × 15.
+  - Each shows the Dashboard view rendered in that theme:
+    - Header with theme accent color.
+    - Sidebar with theme styling.
+    - 1 stat card.
+    - 1 chart card.
+    - 1 table row.
+    - Typography sample.
+    - One signature element (scanlines, pixel borders, bevel, pinstripes, glass blur).
+  - Additionally: `diagrams/themes/comparison-grid.svg` — all 15 themes at thumbnail (200×150) in a 5×3 grid.
+
+  **Recommended Agent Profile**:
+  - **Category**: `artistry`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 0
+  - **Blocked By**: T01, T3k (catalog)
+
+  **Acceptance Criteria**:
+  - [ ] 16 SVG files exist (15 themes + 1 comparison grid).
+  - [ ] All parse as valid XML.
+  - [ ] Each theme mock-up shows dashboard with signature element.
+  - [ ] Comparison grid has 15 thumbnails.
+  - [ ] No trademark terms in SVG visible text.
+
+  **Commit**: YES
+  - Message: `docs(themes): add 15 theme SVG mock-ups + comparison grid`
+  - Files: `diagrams/themes/*.svg`
+
+---
+
 - [ ] 4. **OpenAPI 3.1 spec for new PAM-auth backend**
 
   **What to do**:
@@ -2267,6 +2338,62 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
+- [ ] 16a. **Theme system implementation (15 themes + CSS variables + service)**
+
+  **What to do**:
+  - `web-new/src/app/themes/`:
+    - `tokens/<theme-slug>.ts` × 15 — each exports a `ThemeTokens` object.
+    - `theme.types.ts` — `ThemeTokens` interface.
+    - `theme.service.ts`:
+      - `currentTheme = signal<ThemeTokens>(cloudsbsdRevytech)` (default).
+      - `applyTheme(themeId: string)` — sets CSS variables on `document.documentElement`.
+      - `setTheme(themeId)` — updates signal + applies.
+      - On init: reads from `AuthStore.user.themeId` or localStorage.
+    - `theme-preview.component.ts` — small preview tile for settings page.
+  - CSS variables in `:root[data-theme="<theme-id>"]` selector (one per theme).
+  - Tailwind config reads from CSS variables for theme-aware utilities.
+  - Fonts loaded per theme (Google Fonts subset for non-default fonts).
+  - Tests: each theme token validates, theme.service applies correctly.
+
+  **Must NOT do**:
+  - Do NOT include any trademarked name in theme IDs (use slug like `miami-vice`, not `cyberpunk-2077`).
+  - Do NOT use copyrighted fonts (use Google Fonts / OFL fonts only).
+  - Do NOT break WCAG 2.1 AA contrast.
+
+  **Recommended Agent Profile**:
+  - **Category**: `unspecified-high`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 2 (with T15-T21)
+  - **Blocked By**: T15, T3k (catalog), T3l (mock-ups)
+
+  **Acceptance Criteria**:
+  - [ ] 15 theme token files exist.
+  - [ ] ThemeService can apply any of 15 themes via CSS variables.
+  - [ ] Switching theme doesn't require page reload.
+  - [ ] Each theme passes WCAG AA contrast check.
+  - [ ] Default theme = CloudBSD/REVYTECH.
+
+  **QA Scenarios**:
+  ```
+  Scenario: Each theme applies correctly
+    Tool: Playwright
+    Steps:
+      1. For each of 15 themes, set via ThemeService, screenshot dashboard.
+      2. Verify CSS variables applied (e.g., --color-primary changes).
+      3. Compare against mock-up SVG (pixel match within 5%).
+    Expected Result: All 15 themes render correctly.
+    Evidence: .sisyphus/evidence/task-16a-theme-snapshots/*.png
+  ```
+
+  **Commit**: YES
+  - Message: `feat(themes): add 15-theme system with CSS variables and ThemeService`
+  - Files: `web-new/src/app/themes/`
+
+---
+
 - [ ] 17. **`$localize` + Karma+Jasmine setup**
 
   **What to do**:
@@ -2555,6 +2682,67 @@ Max Concurrent: 7 (Waves 1, 4, 5)
   **Commit**: YES
   - Message: `feat(settings): add instant theme + locale switcher (view-only)`
   - Files: `web-new/src/app/pages/settings/`
+
+---
+
+- [ ] 22a. **Theme selector UI in Settings**
+
+  **What to do**:
+  - Add "Theme" section to Settings page.
+  - Grid of 15 theme preview tiles (using `ThemePreviewComponent`).
+  - Each tile shows: theme name, color sample, signature element.
+  - Click → live preview applies theme.
+  - Selected theme highlighted.
+  - "Apply" button (or instant apply on click).
+  - Search/filter themes by name.
+  - Persists to user profile via `PUT /api/users/profile`.
+  - Mock-up reference: `diagrams/screens/settings-themes.svg` (NEW — to be added to T02 supplement if not already).
+
+  **Must NOT do**:
+  - Do NOT allow theme change to break current page state.
+  - Do NOT lose unsaved settings on theme switch.
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 3
+  - **Blocked By**: T22, T16a
+
+  **Acceptance Criteria**:
+  - [ ] Settings page has Theme section.
+  - [ ] 15 theme tiles rendered.
+  - [ ] Click applies theme live.
+  - [ ] Selection persists to backend.
+  - [ ] Search filters themes.
+
+  **QA Scenarios**:
+  ```
+  Scenario: Theme switcher works
+    Tool: Playwright
+    Steps:
+      1. Navigate to /settings.
+      2. Click Miami Vice tile.
+      3. Assert page renders in Miami Vice theme (background color changed).
+      4. Reload page.
+      5. Assert theme persists.
+    Expected Result: Theme applies and persists.
+    Evidence: .sisyphus/evidence/task-22a-theme-switcher.png
+
+  Scenario: Search filters themes
+    Tool: Bash
+    Steps:
+      1. Type "retro" in search.
+      2. Assert only Pixel Pop, Phosphor CRT, Retro CRT variants shown.
+    Expected Result: Search works.
+    Evidence: .sisyphus/evidence/task-22a-search.txt
+  ```
+
+  **Commit**: YES
+  - Message: `feat(settings): add theme selector UI with 15 themes`
+  - Files: `web-new/src/app/pages/settings/theme-selector.component.ts`
 
 ---
 

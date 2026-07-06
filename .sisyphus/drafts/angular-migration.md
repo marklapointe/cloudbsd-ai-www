@@ -98,6 +98,176 @@
 - **MODULAR/SWAPPABLE LOGGING (NEW)**: Logger is an interface, not a singleton. Implementations can be swapped without changing call sites. Default = JSONL stdout. Pluggable: file, remote (Loki/Datadog/etc.), null (for tests), multi (combine).
 - **FRONTEND LOGGING (NEW)**: Same structured logger module in Angular. Frontend logs go to backend `/api/logs.ingest` endpoint with custom MIME.
 
+## COMPREHENSIVE THEME SYSTEM (NEW)
+
+### Theme Catalog (15 themes)
+
+Per user requirement: "CloudBSD/REVYTECH, Miami Cyberpunk, Retro Gamer, [Beige Box era], [Pearl Luna era], CDE, Solaris-inspired, Mac OSX-inspired, RetroCRT, Modern Glass bright, Modern Glass dark, plus a few OS-inspired themes — avoid copyright/trademark terms."
+
+All names are generic/descriptive to avoid trademark issues.
+
+| # | Theme Name | Inspired By | Era | Color Palette | Typography |
+|---|---|---|---|---|---|
+| 1 | **CloudBSD/REVYTECH** | Current brand | 2024+ | Sky blue (#0ea5e9), white, dark slate | Inter + Outfit |
+| 2 | **Miami Vice** | 80s Miami Cyberpunk | 80s | Hot pink (#ff1493), cyan (#00ffff), black, sun yellow | Orbitron + Audiowide |
+| 3 | **Pixel Pop** | Retro 8-bit gaming | 80s-90s | Bright primary (red, blue, yellow, green), black borders | "Press Start 2P" / monospace pixel font |
+| 4 | **Beige Box** | Mid-90s PC era | 1995-2000 | Beige (#c0c0c0), gray (#808080), 3D bevel effects | Tahoma / MS Sans Serif equivalent |
+| 5 | **Pearl Luna** | Early-2000s Bliss era | 2001-2007 | Sky blue gradient, green grass, white, soft shadows | Tahoma / Verdana |
+| 6 | **CDE Motif** | Common Desktop Environment | 1990s Unix | Muted blue/gray, low contrast, textured backgrounds | Lucida / fixed-width |
+| 7 | **SunOS Sunburst** | Sun Microsystems era | 1990s-2000s | Warm orange/sun yellow, beige, deep blue | Lucida Sans |
+| 8 | **Aqua Pinstripe** | Early Mac OS X | 2001-2010 | Aqua blue gradient, brushed metal, pinstripe | Lucida Grande |
+| 9 | **Phosphor CRT** | Retro terminal | 1970s-80s | Monochrome green (#00ff00) or amber (#ffaa00), scanlines, CRT glow | VT323 / monospace |
+| 10 | **Glass Light** | Modern glassmorphism (bright) | 2020s | Frosted white, soft pastels, blurred backdrops | Inter + SF Pro |
+| 11 | **Glass Dark** | Modern glassmorphism (dark) | 2020s | Frosted dark, neon accents, blurred backdrops | Inter + SF Pro |
+| 12 | **Workbench** | Amiga Workbench | 1985-1995 | Cyan-blue (#0055aa), orange highlights, gray | Topaz / proportional |
+| 13 | **Haiku** | BeOS-inspired | 1995-2000 | Warm gray, tab accent colors (yellow/cyan/magenta) | Primate / sans-serif |
+| 14 | **Cube** | NeXT-inspired | 1988-1997 | Graphite gray, brushed metal, subtle gradients | Helvetica / Univers |
+| 15 | **Warp** | OS/2-inspired | 1987-2000 | Deep blue (#000080), yellow accent, system fonts | Helvetica / WarpSans |
+
+### Theme Token Schema
+
+Each theme defines a complete token set:
+
+```typescript
+interface ThemeTokens {
+  // Brand colors
+  primary: string;
+  primaryHover: string;
+  primaryActive: string;
+  secondary: string;
+  accent: string;
+  
+  // Backgrounds
+  bgBase: string;        // page background
+  bgSurface: string;     // cards, panels
+  bgElevated: string;    // modals, dropdowns
+  bgOverlay: string;     // modal backdrop
+  
+  // Text
+  textPrimary: string;
+  textSecondary: string;
+  textMuted: string;
+  textOnPrimary: string;
+  textInverse: string;
+  
+  // Borders
+  borderSubtle: string;
+  borderDefault: string;
+  borderStrong: string;
+  
+  // Semantic
+  success: string;
+  warning: string;
+  error: string;
+  info: string;
+  
+  // Effects
+  shadowSm: string;
+  shadowMd: string;
+  shadowLg: string;
+  borderRadius: string;  // 0px for sharp, 4-8px for modern, 16px+ for glass
+  glassBlur: string;    // 'blur(12px)' for glass, 'none' for solid
+  
+  // Typography
+  fontSans: string;
+  fontDisplay: string;
+  fontMono: string;
+  fontSize: { base, sm, lg, xl, '2xl', '3xl' };
+  
+  // Theme-specific
+  scanlines?: boolean;     // Phosphor CRT
+  pixelated?: boolean;     // Pixel Pop
+  textured?: boolean;      // CDE
+  pinstripes?: boolean;    // Aqua Pinstripe
+  glass?: boolean;         // Glass themes
+  bevel?: boolean;         // Beige Box (3D button effects)
+}
+```
+
+### Theme Persistence
+
+- User preference stored in `AuthStore.user.themeId`.
+- Default theme per user: CloudBSD/REVYTECH.
+- Theme switcher in Settings page.
+- Real-time apply (no page reload).
+- All themes inherit WCAG 2.1 AA contrast for text/bg combinations.
+
+### Theme Mock-ups
+
+For each of the 15 themes, create a mock-up SVG showing:
+- **Dashboard view** in that theme
+- Color tokens visible (header bar, sidebar, stat card, chart card, table row)
+- Typography sample
+- One signature element unique to theme (e.g., scanlines for CRT, pixel borders for Pixel Pop)
+
+**File:** `diagrams/themes/<theme-slug>.svg` × 15.
+
+Plus a comparison grid SVG showing all 15 themes side-by-side at thumbnail scale.
+
+### Theme Implementation (Frontend)
+
+```typescript
+// web-new/src/app/themes/
+├── tokens/
+│   ├── cloudsbsd-revytech.ts
+│   ├── miami-vice.ts
+│   ├── pixel-pop.ts
+│   ├── beige-box.ts
+│   ├── pearl-luna.ts
+│   ├── cde-motif.ts
+│   ├── sunos-sunburst.ts
+│   ├── aqua-pinstripe.ts
+│   ├── phosphor-crt.ts
+│   ├── glass-light.ts
+│   ├── glass-dark.ts
+│   ├── workbench.ts
+│   ├── haiku.ts
+│   ├── cube.ts
+│   └── warp.ts
+├── theme.service.ts        // applies theme via CSS variables
+├── theme.types.ts          // ThemeTokens interface
+└── theme-preview.component.ts  // for settings page
+```
+
+CSS variables approach:
+```css
+:root[data-theme="miami-vice"] {
+  --color-primary: #ff1493;
+  --color-bg-base: #0a0a14;
+  --color-text-primary: #00ffff;
+  /* ... */
+}
+```
+
+Theme switch: set `document.documentElement.dataset.theme = themeId`.
+
+### Theme Selector (Settings Page)
+
+- Grid of theme previews (15 thumbnails).
+- Click → live preview applies theme.
+- Selected theme highlighted with border.
+- "Apply" button or instant-apply.
+- Search/filter themes by name.
+
+### Logging Integration
+
+Theme changes logged:
+```json
+{"timestamp":"...","level":"info","module":"settings","message":"User changed theme","user_id":1,"old_theme":"cloudsbsd-revytech","new_theme":"miami-vice"}
+```
+
+### Tasks to Add
+
+**Wave 0 (Documentation):**
+- **T3k**: Theme catalog design doc (15 themes with token specs) — `diagrams/themes/README.md`
+- **T3l**: 15 theme mock-up SVGs (one per theme) + 1 comparison grid SVG
+
+**Wave 2 (Frontend Foundation):**
+- **T16a**: Theme system implementation (tokens, CSS variables, theme service)
+
+**Wave 3 (Settings page):**
+- **T22a**: Theme selector UI in Settings
+
 ## COMPREHENSIVE UI MOCK-UP SCOPE (NEW - prevents later rework)
 
 Per user requirement: "SVG for every UI item in the plan. See what errors, notifications, etc. look like. Clear this up now."
