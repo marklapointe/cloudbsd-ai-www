@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="system-ui, sans-serif">
   <title>CloudBSD Admin — Logs</title>
-  <desc>Admin-only JSONL log viewer with severity filter, follow toggle, and stream selector.</desc>
   <foreignObject x="0" y="0" width="1280" height="800">
     <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900">
       <g id="header" class="contents">
@@ -12,91 +11,153 @@
             <span class="ml-2 px-2 py-0.5 text-xs rounded bg-slate-100 text-slate-600">freenas-mock.local</span>
           </div>
           <div class="ml-auto flex items-center gap-4">
-            <span class="text-sm text-slate-500">Theme: CloudBSD</span>
-            <button class="text-sm text-slate-600 hover:text-slate-900">Refresh</button>
+            <span class="text-sm text-slate-500 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>backend OK · 18ms</span>
+            <button class="text-sm text-slate-600">Refresh</button>
             <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">M</div>
           </div>
         </div>
       </g>
-      <div class="flex" style="height: calc(100% - 56px);">
+      <div class="flex" style="height: calc(800px - 56px)">
         <g id="sidebar" class="contents">
           <aside class="w-56 bg-white border-r border-slate-200 p-3 overflow-y-auto">
             <nav class="space-y-1 text-sm">
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Dashboard</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Virtual Machines</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Containers</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Jails</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Volumes</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Network Map</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Cluster</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Dashboard</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Virtual Machines</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Containers</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Jails</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Volumes</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Network Map</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Cluster</a>
               <div class="pt-3 pb-1 text-xs uppercase tracking-wide text-slate-400 px-3">Admin</div>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Users</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Users</a>
               <a class="block px-3 py-2 rounded bg-blue-50 text-blue-700 font-medium">Logs</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Notifications</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Settings</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Status</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">About</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Notifications</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Settings</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Status</a>
+              <a class="block px-3 py-2 rounded text-slate-700">About</a>
             </nav>
           </aside>
         </g>
-        <main class="flex-1 p-6 overflow-hidden flex flex-col">
-          <g id="content" class="contents">
+        <g id="content" class="contents">
+          <main class="flex-1 p-6 overflow-auto">
             <div class="flex items-center justify-between mb-4">
               <div>
                 <h1 class="text-2xl font-bold">Logs</h1>
-                <p class="text-sm text-slate-500">Admin-only JSONL stream · read-only inspection</p>
+                <p class="text-sm text-slate-500">JSONL structured logs · Admin-only · Read-only</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-1 rounded text-xs bg-rose-50 text-rose-700 border border-rose-200">Admin-only</span>
+                <span class="px-2 py-1 rounded text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>Tail ON</span>
+                <button class="px-3 py-1.5 text-sm border rounded bg-white">Pause</button>
+                <button class="px-3 py-1.5 text-sm border rounded bg-white">Clear</button>
+                <button class="px-3 py-1.5 text-sm border rounded bg-white">Export</button>
               </div>
             </div>
-            <div class="bg-white border border-slate-200 rounded-lg p-3 mb-3 flex flex-wrap items-center gap-3 text-sm">
-              <div class="flex items-center gap-1">
-                <span class="text-slate-500">Stream:</span>
-                <select class="border border-slate-300 rounded px-2 py-1">
-                  <option>middleware</option>
-                  <option>system</option>
-                  <option>audit</option>
-                </select>
+            <div class="bg-white rounded-lg border shadow-sm mb-4">
+              <div class="flex items-center gap-2 px-4 py-2.5 border-b bg-slate-50/50 flex-wrap">
+                <div class="flex items-center gap-1 text-xs">
+                  <button class="px-2.5 py-1 rounded bg-blue-600 text-white">All</button>
+                  <button class="px-2.5 py-1 rounded bg-white border">Error <span class="ml-1 text-rose-600">4</span></button>
+                  <button class="px-2.5 py-1 rounded bg-white border">Warn <span class="ml-1 text-amber-600">12</span></button>
+                  <button class="px-2.5 py-1 rounded bg-white border">Info <span class="ml-1 text-emerald-600">118</span></button>
+                  <button class="px-2.5 py-1 rounded bg-white border">Debug <span class="ml-1 text-slate-500">42</span></button>
+                </div>
+                <select class="ml-2 text-xs border rounded px-2 py-1 bg-white"><option>Module: All</option></select>
+                <select class="text-xs border rounded px-2 py-1 bg-white"><option>Last 1h</option></select>
+                <input type="text" placeholder="Search..." class="w-40 text-xs border rounded px-3 py-1 ml-auto" />
               </div>
-              <div class="flex items-center gap-1">
-                <span class="text-slate-500">Severity:</span>
-                <span class="px-2 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200 text-xs">CRIT</span>
-                <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 text-xs">WARN</span>
-                <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 text-xs">INFO</span>
-                <span class="px-2 py-0.5 rounded bg-slate-50 text-slate-700 border border-slate-200 text-xs">DEBUG</span>
+              <div class="p-3 border-b">
+                <div class="text-[10px] text-slate-500 uppercase mb-1">Severity histogram (60 buckets, 1m each)</div>
+                <svg viewBox="0 0 600 30" class="w-full h-8">
+                  <rect x="0" y="20" width="9" height="8" fill="#10b981" />
+                  <rect x="9" y="8" width="9" height="22" fill="#10b981" />
+                  <rect x="19" y="25" width="9" height="5" fill="#10b981" />
+                  <rect x="29" y="28" width="9" height="2" fill="#10b981" />
+                  <rect x="39" y="5" width="9" height="25" fill="#10b981" />
+                  <rect x="49" y="20" width="9" height="10" fill="#10b981" />
+                  <rect x="59" y="21" width="9" height="9" fill="#10b981" />
+                  <rect x="69" y="21" width="9" height="9" fill="#10b981" />
+                  <rect x="79" y="24" width="9" height="6" fill="#ef4444" />
+                  <rect x="89" y="5" width="9" height="25" fill="#10b981" />
+                  <rect x="99" y="25" width="9" height="5" fill="#10b981" />
+                  <rect x="109" y="7" width="9" height="23" fill="#10b981" />
+                  <rect x="119" y="5" width="9" height="25" fill="#10b981" />
+                  <rect x="129" y="11" width="9" height="19" fill="#10b981" />
+                  <rect x="139" y="26" width="9" height="4" fill="#10b981" />
+                  <rect x="149" y="10" width="9" height="20" fill="#10b981" />
+                  <rect x="159" y="15" width="9" height="15" fill="#10b981" />
+                  <rect x="169" y="27" width="9" height="3" fill="#10b981" />
+                  <rect x="179" y="28" width="9" height="2" fill="#10b981" />
+                  <rect x="189" y="26" width="9" height="4" fill="#10b981" />
+                  <rect x="199" y="22" width="9" height="8" fill="#ef4444" />
+                  <rect x="209" y="21" width="9" height="9" fill="#10b981" />
+                  <rect x="219" y="12" width="9" height="18" fill="#10b981" />
+                  <rect x="229" y="9" width="9" height="21" fill="#10b981" />
+                  <rect x="239" y="28" width="9" height="2" fill="#10b981" />
+                  <rect x="249" y="11" width="9" height="19" fill="#10b981" />
+                  <rect x="259" y="22" width="9" height="8" fill="#10b981" />
+                  <rect x="269" y="6" width="9" height="24" fill="#10b981" />
+                  <rect x="279" y="8" width="9" height="22" fill="#10b981" />
+                  <rect x="289" y="6" width="9" height="24" fill="#10b981" />
+                  <rect x="299" y="11" width="9" height="19" fill="#10b981" />
+                  <rect x="309" y="15" width="9" height="15" fill="#10b981" />
+                  <rect x="319" y="21" width="9" height="9" fill="#ef4444" />
+                  <rect x="329" y="14" width="9" height="16" fill="#10b981" />
+                  <rect x="339" y="10" width="9" height="20" fill="#10b981" />
+                  <rect x="349" y="20" width="9" height="10" fill="#10b981" />
+                  <rect x="359" y="3" width="9" height="27" fill="#10b981" />
+                  <rect x="369" y="28" width="9" height="2" fill="#10b981" />
+                  <rect x="379" y="4" width="9" height="26" fill="#10b981" />
+                  <rect x="389" y="3" width="9" height="27" fill="#10b981" />
+                  <rect x="399" y="23" width="9" height="7" fill="#10b981" />
+                  <rect x="409" y="6" width="9" height="24" fill="#10b981" />
+                  <rect x="419" y="15" width="9" height="15" fill="#10b981" />
+                  <rect x="429" y="18" width="9" height="12" fill="#10b981" />
+                  <rect x="439" y="20" width="9" height="10" fill="#ef4444" />
+                  <rect x="449" y="24" width="9" height="6" fill="#10b981" />
+                  <rect x="459" y="22" width="9" height="8" fill="#10b981" />
+                  <rect x="469" y="4" width="9" height="26" fill="#10b981" />
+                  <rect x="479" y="18" width="9" height="12" fill="#10b981" />
+                  <rect x="489" y="25" width="9" height="5" fill="#10b981" />
+                  <rect x="499" y="26" width="9" height="4" fill="#10b981" />
+                  <rect x="509" y="16" width="9" height="14" fill="#10b981" />
+                  <rect x="519" y="25" width="9" height="5" fill="#10b981" />
+                  <rect x="529" y="17" width="9" height="13" fill="#10b981" />
+                  <rect x="539" y="17" width="9" height="13" fill="#10b981" />
+                  <rect x="549" y="9" width="9" height="21" fill="#10b981" />
+                  <rect x="559" y="20" width="9" height="10" fill="#ef4444" />
+                  <rect x="569" y="3" width="9" height="27" fill="#10b981" />
+                  <rect x="579" y="27" width="9" height="3" fill="#10b981" />
+                  <rect x="589" y="5" width="9" height="25" fill="#10b981" />
+                  <rect x="599" y="14" width="9" height="16" fill="#10b981" />
+                </svg>
               </div>
-              <div class="flex items-center gap-1">
-                <span class="text-slate-500">Contains:</span>
-                <input type="text" placeholder="regex…" class="border border-slate-300 rounded px-2 py-1 w-44 font-mono text-xs"/>
-              </div>
-              <div class="ml-auto flex items-center gap-3">
-                <label class="inline-flex items-center gap-1.5 text-slate-700">
-                  <input type="checkbox" class="rounded text-blue-600" checked="checked" />
-                  <span>Follow</span>
-                </label>
-                <label class="inline-flex items-center gap-1.5 text-slate-700">
-                  <input type="checkbox" class="rounded text-blue-600" />
-                  <span>Wrap</span>
-                </label>
-                <span class="text-xs text-slate-500">cursor: 2026-07-06T12:42:11Z</span>
-              </div>
+              <table class="w-full text-xs">
+                <thead class="bg-slate-50 text-slate-600 text-[10px] uppercase"><tr class="border-b"><th class="text-left px-2 py-1.5 font-medium">Time</th><th class="text-left px-2 py-1.5 font-medium">Level</th><th class="text-left px-2 py-1.5 font-medium">Module</th><th class="text-left px-2 py-1.5 font-medium">Source</th><th class="text-left px-2 py-1.5 font-medium">Message</th></tr></thead>
+                <tbody class="divide-y divide-slate-100 font-mono text-[11px]">
+                  <tr class="hover:bg-slate-50"><td class="px-2 py-1 text-slate-500">12:42:01.218</td><td class="px-2 py-1"><span class="px-1 rounded text-[10px] bg-emerald-50 text-emerald-700">INFO</span></td><td class="px-2 py-1 text-blue-700">zfs</td><td class="px-2 py-1 text-slate-600">vdev.zpool.daily</td><td class="px-2 py-1">snapshot daily@auto-2026-07-06_03-00 created on tank/data (2.1 GB)</td></tr>
+                  <tr class="hover:bg-slate-50"><td class="px-2 py-1 text-slate-500">12:41:48.014</td><td class="px-2 py-1"><span class="px-1 rounded text-[10px] bg-emerald-50 text-emerald-700">INFO</span></td><td class="px-2 py-1 text-blue-700">bhyve</td><td class="px-2 py-1 text-slate-600">vm.bhyve.nextcloud</td><td class="px-2 py-1">guest-agent heartbeat OK (3s drift)</td></tr>
+                  <tr class="hover:bg-slate-50"><td class="px-2 py-1 text-slate-500">12:41:12.008</td><td class="px-2 py-1"><span class="px-1 rounded text-[10px] bg-amber-50 text-amber-700">WARN</span></td><td class="px-2 py-1 text-blue-700">jail</td><td class="px-2 py-1 text-slate-600">jail.transmission</td><td class="px-2 py-1">io pressure 88% (zpool tank/media, slow queue)</td></tr>
+                  <tr class="hover:bg-slate-50"><td class="px-2 py-1 text-slate-500">12:40:55.412</td><td class="px-2 py-1"><span class="px-1 rounded text-[10px] bg-emerald-50 text-emerald-700">INFO</span></td><td class="px-2 py-1 text-blue-700">nginx</td><td class="px-2 py-1 text-slate-600">proxy.nginx</td><td class="px-2 py-1">200 GET /cloud/remote.php/dav (12.4 KB) 23ms client=10.0.10.42</td></tr>
+                  <tr class="hover:bg-slate-50"><td class="px-2 py-1 text-slate-500">12:40:18.220</td><td class="px-2 py-1"><span class="px-1 rounded text-[10px] bg-rose-50 text-rose-700">ERROR</span></td><td class="px-2 py-1 text-blue-700">bhyve</td><td class="px-2 py-1 text-slate-600">vm.bhyve.win11-sandbox</td><td class="px-2 py-1">vmm: failed to inject interrupt (rc=-1)</td></tr>
+                  <tr class="hover:bg-slate-50"><td class="px-2 py-1 text-slate-500">12:39:42.001</td><td class="px-2 py-1"><span class="px-1 rounded text-[10px] bg-emerald-50 text-emerald-700">INFO</span></td><td class="px-2 py-1 text-blue-700">sshd</td><td class="px-2 py-1 text-slate-600">auth.sshd</td><td class="px-2 py-1">Accepted publickey for mlapointe from 10.0.10.42 port 51824 ssh2: RSA SHA256:abc...</td></tr>
+                  <tr class="hover:bg-slate-50"><td class="px-2 py-1 text-slate-500">12:38:11.087</td><td class="px-2 py-1"><span class="px-1 rounded text-[10px] bg-emerald-50 text-emerald-700">INFO</span></td><td class="px-2 py-1 text-blue-700">smb</td><td class="px-2 py-1 text-slate-600">smb.nextcloud</td><td class="px-2 py-1">closed session uid=1000 (mlapointe) cn=1 files=1242</td></tr>
+                  <tr class="hover:bg-slate-50"><td class="px-2 py-1 text-slate-500">12:37:55.441</td><td class="px-2 py-1"><span class="px-1 rounded text-[10px] bg-emerald-50 text-emerald-700">INFO</span></td><td class="px-2 py-1 text-blue-700">cron</td><td class="px-2 py-1 text-slate-600">cron.daily</td><td class="px-2 py-1">daily snapshot script completed (rc=0) duration=11m 4s</td></tr>
+                  <tr class="hover:bg-slate-50"><td class="px-2 py-1 text-slate-500">12:36:32.018</td><td class="px-2 py-1"><span class="px-1 rounded text-[10px] bg-amber-50 text-amber-700">WARN</span></td><td class="px-2 py-1 text-blue-700">smart</td><td class="px-2 py-1 text-slate-600">disk.da2</td><td class="px-2 py-1">SMART attr Reallocated_Sector_Ct = 4 (threshold 36) — within tolerance</td></tr>
+                  <tr class="hover:bg-slate-50"><td class="px-2 py-1 text-slate-500">12:35:14.005</td><td class="px-2 py-1"><span class="px-1 rounded text-[10px] bg-emerald-50 text-emerald-700">INFO</span></td><td class="px-2 py-1 text-blue-700">caddy</td><td class="px-2 py-1 text-slate-600">proxy.caddy</td><td class="px-2 py-1">200 GET https://gitea.lan/api/v1/user (1.1 KB) 18ms</td></tr>
+                  <tr class="hover:bg-slate-50"><td class="px-2 py-1 text-slate-500">12:34:02.220</td><td class="px-2 py-1"><span class="px-1 rounded text-[10px] bg-emerald-50 text-emerald-700">INFO</span></td><td class="px-2 py-1 text-blue-700">jail</td><td class="px-2 py-1 text-slate-600">jail.syncthing</td><td class="px-2 py-1">STATE: STARTED (pid 12421)</td></tr>
+                  <tr class="hover:bg-slate-50"><td class="px-2 py-1 text-slate-500">12:33:48.001</td><td class="px-2 py-1"><span class="px-1 rounded text-[10px] bg-slate-50 text-slate-700">DEBUG</span></td><td class="px-2 py-1 text-blue-700">zfs</td><td class="px-2 py-1 text-slate-600">txg.commit</td><td class="px-2 py-1">transaction group 8421174 committed in 84ms</td></tr>
+                  <tr class="hover:bg-slate-50"><td class="px-2 py-1 text-slate-500">12:32:18.450</td><td class="px-2 py-1"><span class="px-1 rounded text-[10px] bg-emerald-50 text-emerald-700">INFO</span></td><td class="px-2 py-1 text-blue-700">alertd</td><td class="px-2 py-1 text-slate-600">alert.disk</td><td class="px-2 py-1">resolved: tank/vms &lt; 80% (was 81% for 12m)</td></tr>
+                  <tr class="hover:bg-slate-50"><td class="px-2 py-1 text-slate-500">12:31:55.012</td><td class="px-2 py-1"><span class="px-1 rounded text-[10px] bg-amber-50 text-amber-700">WARN</span></td><td class="px-2 py-1 text-blue-700">net</td><td class="px-2 py-1 text-slate-600">iface.igc0</td><td class="px-2 py-1">link flap: 3 transitions in 60s</td></tr>
+                  <tr class="hover:bg-slate-50"><td class="px-2 py-1 text-slate-500">12:31:18.220</td><td class="px-2 py-1"><span class="px-1 rounded text-[10px] bg-emerald-50 text-emerald-700">INFO</span></td><td class="px-2 py-1 text-blue-700">jail</td><td class="px-2 py-1 text-slate-600">jail.transmission</td><td class="px-2 py-1">STATE: STARTED</td></tr>
+                  <tr class="hover:bg-slate-50"><td class="px-2 py-1 text-slate-500">12:30:42.014</td><td class="px-2 py-1"><span class="px-1 rounded text-[10px] bg-rose-50 text-rose-700">ERROR</span></td><td class="px-2 py-1 text-blue-700">auth</td><td class="px-2 py-1 text-slate-600">auth.pam</td><td class="px-2 py-1">pam_unix(sshd:auth): authentication failure; ruser= rhost=203.0.113.45 user=root</td></tr>
+                  <tr class="hover:bg-slate-50"><td class="px-2 py-1 text-slate-500">12:29:11.001</td><td class="px-2 py-1"><span class="px-1 rounded text-[10px] bg-emerald-50 text-emerald-700">INFO</span></td><td class="px-2 py-1 text-blue-700">ctdb</td><td class="px-2 py-1 text-slate-600">ctdb.lb</td><td class="px-2 py-1">node 2 took over IP 10.0.10.50</td></tr>
+                  <tr class="hover:bg-slate-50"><td class="px-2 py-1 text-slate-500">12:28:42.014</td><td class="px-2 py-1"><span class="px-1 rounded text-[10px] bg-emerald-50 text-emerald-700">INFO</span></td><td class="px-2 py-1 text-blue-700">bhyve</td><td class="px-2 py-1 text-slate-600">vm.bhyve.jellyfin</td><td class="px-2 py-1">VNC session 0 attached from 10.0.10.12:51234</td></tr>
+                </tbody>
+              </table>
             </div>
-            <div class="bg-slate-900 rounded-lg border border-slate-800 flex-1 overflow-hidden flex flex-col">
-              <div class="flex items-center justify-between px-3 py-1.5 border-b border-slate-700 text-xs text-slate-400 font-mono">
-                <span>middleware.jsonl · 6 lines shown</span>
-                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> live</span>
-              </div>
-              <pre class="flex-1 overflow-auto p-3 text-xs font-mono leading-relaxed text-slate-100 whitespace-pre"><span><span class="text-slate-500">2026-07-06T12:42:11.018Z</span> <span class="text-rose-400">[CRIT]</span> <span class="text-blue-300">middleware.zfs.scrub</span> {"{"}"pool":"tank/data","event":"resilver_stalled","chassis":"node-04","checkpoints":2{"}"}</span>
-<span><span class="text-slate-500">2026-07-06T12:41:48.312Z</span> <span class="text-amber-300">[WARN]</span> <span class="text-blue-300">middleware.disk.smart</span> {"{"}"device":"da3","attr":197,"raw":42,"threshold":0,"status":"warn"{"}"}</span>
-<span><span class="text-slate-500">2026-07-06T12:40:02.901Z</span> <span class="text-blue-300">[INFO]</span> <span class="text-blue-300">middleware.vm.lifecycle</span> {"{"}"vm":"nextcloud","event":"heartbeat","drift_ms":3124{"}"}</span>
-<span><span class="text-slate-500">2026-07-06T12:38:21.555Z</span> <span class="text-blue-300">[INFO]</span> <span class="text-blue-300">middleware.auth.pam</span> {"{"}"user":"mlapointe","service":"sshd","mfa":"totp","result":"ok"{"}"}</span>
-<span><span class="text-slate-500">2026-07-06T12:35:09.114Z</span> <span class="text-amber-300">[WARN]</span> <span class="text-blue-300">middleware.network.link</span> {"{"}"iface":"ix0","event":"crc_errors","delta":128{"}"}</span>
-<span><span class="text-slate-500">2026-07-06T12:31:18.880Z</span> <span class="text-blue-300">[INFO]</span> <span class="text-blue-300">middleware.jail.lifecycle</span> {"{"}"jail":"transmission","event":"state","to":"STARTED"{"}"}</span></pre>
-            </div>
-            <div class="mt-3 text-xs text-slate-500 flex items-center justify-between">
-              <div>Logs are streamed from <span class="font-mono">/var/log/cloudbsd/middleware.jsonl</span> via the journal socket.</div>
-              <div>Tail mode honors a server-side 200ms debounce.</div>
-            </div>
-          </g>
-        </main>
+          </main>
+        </g>
       </div>
     </div>
   </foreignObject>
