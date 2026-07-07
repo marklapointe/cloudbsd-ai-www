@@ -1070,8 +1070,764 @@ post-install:
 4. All MIME types follow `application/vnd.cloudbsd+<noun>.<action>` convention
 5. Mock handlers in `web-new/src/app/mocks/` implement all 30+ actions
 6. Switching from mock to real backend requires only changing `environment.apiBaseUrl`
-7. Go backend MUST validate `who`, `what`, `why`, `where` against allowlist
+ 7. Go backend MUST validate `who`, `what`, `why`, `where` against allowlist
 8. Go backend MUST reject requests missing any required header with `400 BAD_REQUEST` + `PROBLEM_TYPE` `https://errors.cloudbsd.org/protocol/missing-header`
+
+---
+
+## Configuration File Validation (100% tested)
+
+> Per CloudBSD application_guidelines `Configuration Guidelines`: "Applications should support `--check-config` or `--dry-run` flag for validation without starting. Reject invalid configs with clear errors and non-zero exit. Safe defaults allow out-of-the-box operation. Provide commented example config or `appname init` command."
+
+### Files that MUST be validated
+
+| File | Format | Validated by |
+|------|--------|--------------|
+| `backend-new/config.json` (or `etc/cloudbsd-admin/config.json`) | JSON Schema | Backend `ConfigLoader` + `--check-config` flag |
+| `web-new/src/environments/environment.ts` | TypeScript | Angular build (compile error) |
+| `web-new/angular.json` | JSON Schema (Angular) | Angular CLI build |
+| `web-new/tsconfig.json` | JSON Schema (TS) | `tsc --noEmit` |
+| `backend-new/go.mod` | Go module file | `go mod verify` + `go mod tidy --check` |
+| `backend-new/.golangci.yml` | YAML | `golangci-lint config verify` |
+| `web-new/.eslintrc.json` | JSON | `eslint --print-config` |
+| `web-new/karma.conf.js` | JS | `karma start --validate-config` |
+| `web-new/src/assets/themes/*.json` | JSON Schema (theme) | `ThemeValidator` + `cloudbsd-theme-tools validate` |
+| `web-new/src/app/plugins/*/plugin.json` | JSON Schema (plugin) | `PluginManifestValidator` |
+| `web-new/src/assets/locales/*.json` | ICU MessageFormat | `i18n-validate` |
+| FreeBSD port: `ports/www/cloudbsd-admin/Makefile` | bmake | `bmake -C ports/www/cloudbsd-admin -n` |
+| FreeBSD port: `ports/www/cloudbsd-admin/files/pkg-plist` | bmake | `bmake plist` |
+| CI: `.github/workflows/ci.yml` | GitHub Actions schema | `act -l` (lint) |
+| TLS certs (`*.pem`) | X.509 | `openssl x509 -in cert.pem -noout -text` |
+
+### Config loader architecture (Go)
+
+```go
+// internal/config/loader.go
+package config
+
+import (
+    "embed"
+    "fmt"
+    "os"
+    "sync"
+
+    "github.com/santhosh-tekuri/jsonschema/v5"
+)
+
+//go:embed schemas/config.v1.json
+var configSchemaJSON []byte
+
+type Config struct {
+    Port            int            `json:"port"`
+    Bind            string         `json:"bind"`
+    TLS             TLSConfig      `json:"tls"`
+    Database        DatabaseConfig `json:"database"`
+    Logging         LoggingConfig  `json:"logging"`
+    Auth            AuthConfig     `json:"auth"`
+    Plugins         PluginsConfig  `json:"plugins"`
+    Themes          ThemesConfig   `json:"themes"`
+    RateLimits      RateLimits     `json:"rateLimits"`
+    TrustedProxies  []string       `json:"trustedProxies"`
+    Cache           CacheConfig    `json:"cache"`
+    Metrics         MetricsConfig  `json:"metrics"`
+}
+
+type Loader struct {
+    schema *jsonschema.Schema
+    mu     sync.RWMutex
+}
+
+func NewLoader() (*Loader, error) {
+    compiler := jsonschema.NewCompiler()
+    if err := compiler.AddResource("config.v1.json", configSchemaJSON); err != nil {
+        return nil, fmt.Errorf("load config schema: %w", err)
+    }
+    sch, err := compiler.Compile("config.v1.json")
+    if err != nil {
+        return nil, fmt.Errorf("compile config schema: %w", err)
+    }
+    return &Loader{schema: sch}, nil
+}
+
+// Load reads a config file, validates it, applies defaults, returns *Config.
+// On any error: returns nil, error with line/path info and remediation hint.
+func (l *Loader) Load(path string) (*Config, error) {
+    data, err := os.ReadFile(path)
+    if err != nil {
+        return nil, fmt.Errorf("read config %s: %w", path, err)
+    }
+    // Parse
+    var raw interface{}
+    if err := json.Unmarshal(data, &raw); err != nil {
+        return nil, &ParseError{Path: path, Err: err, Hint: "check JSON syntax (trailing comma, unquoted key)"}
+    }
+    // Validate against JSON Schema
+    if err := l.schema.Validate(raw); err != nil {
+        return nil, &ValidationError{Path: path, Err: err, Hint: "see config.v1.json for schema"}
+    }
+    // Apply defaults + parse into typed struct
+    cfg, err := applyDefaults(raw)
+    if err != nil {
+        return nil, err
+    }
+    // Sanity checks (cross-field validation not expressible in JSON Schema)
+    if err := cfg.sanityCheck(); err != nil {
+        return nil, &SanityError{Path: path, Err: err}
+    }
+    return cfg, nil
+}
+
+// CheckConfig is the --check-config CLI entry point.
+// Loads + validates + prints summary, exits 0 (ok) or 1 (error).
+func (l *Loader) CheckConfig(path string) error {
+    cfg, err := l.Load(path)
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "❌ Config invalid: %s\n\n", err)
+        return err
+    }
+    fmt.Printf("✅ Config valid: %s\n", path)
+    fmt.Printf("   Port: %d\n", cfg.Port)
+    fmt.Printf("   Bind: %s\n", cfg.Bind)
+    fmt.Printf("   Database: %s (%s)\n", cfg.Database.Driver, cfg.Database.Path)
+    fmt.Printf("   Auth: PAM=%v, MFA=%v\n", cfg.Auth.PAMEnabled, cfg.Auth.MFARequired)
+    fmt.Printf("   Plugins: %d enabled\n", len(cfg.Plugins.Enabled))
+    fmt.Printf("   Themes: %d built-in\n", len(cfg.Themes.BuiltIn))
+    return nil
+}
+
+func (c *Config) sanityCheck() error {
+    if c.Port < 1 || c.Port > 65535 {
+        return fmt.Errorf("port %d out of range [1, 65535]", c.Port)
+    }
+    if c.TLS.Enabled && c.TLS.CertFile == "" {
+        return fmt.Errorf("TLS enabled but certFile is empty")
+    }
+    if c.Database.Driver == "sqlite" && c.Database.Path == "" {
+        return fmt.Errorf("sqlite driver requires non-empty path")
+    }
+    if c.Auth.MFARequired && !c.Auth.PAMEnabled {
+        return fmt.Errorf("MFA required but PAM not enabled")
+    }
+    for _, proxy := range c.TrustedProxies {
+        if !isValidCIDR(proxy) {
+            return fmt.Errorf("trustedProxies entry %q is not valid CIDR", proxy)
+        }
+    }
+    if c.RateLimits.LoginPerWindow < 1 {
+        return fmt.Errorf("rateLimits.loginPerWindow must be >= 1")
+    }
+    return nil
+}
+```
+
+### Config JSON Schema (`config.v1.json`)
+
+```jsonc
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cloudbsd.org/schemas/config.v1.json",
+  "$version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["port", "bind", "database", "auth"],
+  "properties": {
+    "port":            { "type": "integer", "minimum": 1, "maximum": 65535, "default": 3001 },
+    "bind":            { "type": "string", "format": "ipv4", "default": "127.0.0.1" },
+    "tls":             { "$ref": "#/$defs/tlsConfig" },
+    "database":        { "$ref": "#/$defs/databaseConfig" },
+    "logging":         { "$ref": "#/$defs/loggingConfig" },
+    "auth":            { "$ref": "#/$defs/authConfig" },
+    "plugins":         { "$ref": "#/$defs/pluginsConfig" },
+    "themes":          { "$ref": "#/$defs/themesConfig" },
+    "rateLimits":      { "$ref": "#/$defs/rateLimits" },
+    "trustedProxies":  { "type": "array", "items": { "type": "string", "format": "ipv4" }, "maxItems": 32 },
+    "cache":           { "$ref": "#/$defs/cacheConfig" },
+    "metrics":         { "$ref": "#/$defs/metricsConfig" }
+  },
+  "$defs": {
+    "tlsConfig": {
+      "type": "object",
+      "required": ["enabled"],
+      "properties": {
+        "enabled":   { "type": "boolean", "default": false },
+        "certFile":  { "type": "string", "maxLength": 4096 },
+        "keyFile":   { "type": "string", "maxLength": 4096 },
+        "minVersion": { "enum": ["1.2", "1.3"], "default": "1.3" },
+        "ciphers":   { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "databaseConfig": {
+      "type": "object",
+      "required": ["driver", "path"],
+      "properties": {
+        "driver":        { "enum": ["sqlite", "postgres"], "default": "sqlite" },
+        "path":          { "type": "string", "maxLength": 4096 },
+        "maxOpenConns":  { "type": "integer", "minimum": 1, "maximum": 1000, "default": 10 },
+        "maxIdleConns":  { "type": "integer", "minimum": 0, "maximum": 100, "default": 5 },
+        "connLifetime":  { "type": "string", "pattern": "^[0-9]+(s|m|h)$", "default": "1h" }
+      }
+    },
+    "authConfig": {
+      "type": "object",
+      "required": ["pamEnabled"],
+      "properties": {
+        "pamEnabled":   { "type": "boolean", "default": true },
+        "sessionTTL":   { "type": "string", "pattern": "^[0-9]+(s|m|h)$", "default": "30m" },
+        "idleTimeout":  { "type": "string", "pattern": "^[0-9]+(s|m|h)$", "default": "30m" },
+        "mfaRequired":  { "type": "boolean", "default": true },
+        "mfaMethods":   { "type": "array", "items": { "enum": ["totp", "webauthn", "sms", "email"] }, "minItems": 1 },
+        "lockoutAfter": { "type": "integer", "minimum": 1, "maximum": 100, "default": 5 },
+        "lockoutFor":   { "type": "string", "pattern": "^[0-9]+(s|m|h)$", "default": "15m" }
+      }
+    },
+    "loggingConfig": {
+      "type": "object",
+      "properties": {
+        "level":      { "enum": ["debug", "info", "warn", "error"], "default": "info" },
+        "format":     { "enum": ["json", "text"], "default": "json" },
+        "output":     { "enum": ["stdout", "file", "syslog"], "default": "file" },
+        "file":       { "type": "string", "maxLength": 4096 },
+        "rotateMB":   { "type": "integer", "minimum": 1, "maximum": 10000, "default": 100 },
+        "rotateKeep": { "type": "integer", "minimum": 1, "maximum": 1000, "default": 10 },
+        "redact":     { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "pluginsConfig": {
+      "type": "object",
+      "properties": {
+        "dir":        { "type": "string", "maxLength": 4096, "default": "/usr/local/libexec/cloudbsd-admin/plugins" },
+        "enabled":    { "type": "array", "items": { "type": "string" } },
+        "disabled":   { "type": "array", "items": { "type": "string" } },
+        "verifySignature": { "type": "boolean", "default": true }
+      }
+    },
+    "themesConfig": {
+      "type": "object",
+      "properties": {
+        "builtIn":    { "type": "array", "items": { "type": "string" } },
+        "customDir":  { "type": "string", "maxLength": 4096 },
+        "activeDefault": { "type": "string", "default": "cloudbsd-revytech" }
+      }
+    },
+    "rateLimits": {
+      "type": "object",
+      "properties": {
+        "loginPerWindow":         { "type": "integer", "minimum": 1, "maximum": 100, "default": 5 },
+        "loginWindow":            { "type": "string", "default": "15m" },
+        "sessionValidatePerMin":  { "type": "integer", "minimum": 1, "default": 120 },
+        "listEndpointsPerMin":    { "type": "integer", "minimum": 1, "default": 600 },
+        "wsEventsPerMin":         { "type": "integer", "minimum": 1, "default": 3000 },
+        "wsConnsPerIP":           { "type": "integer", "minimum": 1, "default": 100 }
+      }
+    },
+    "cacheConfig": {
+      "type": "object",
+      "properties": {
+        "backend":  { "enum": ["memory", "redis"], "default": "memory" },
+        "redisURL": { "type": "string", "format": "uri", "maxLength": 4096 },
+        "ttl":      { "type": "string", "pattern": "^[0-9]+(s|m|h)$", "default": "5m" }
+      }
+    },
+    "metricsConfig": {
+      "type": "object",
+      "properties": {
+        "enabled":   { "type": "boolean", "default": true },
+        "path":      { "type": "string", "default": "/metrics" },
+        "namespace": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "default": "cloudbsd_admin" }
+      }
+    }
+  }
+}
+```
+
+### CLI: `--check-config` flag
+
+```
+$ cloudbsd-admin-backend --check-config /usr/local/etc/cloudbsd-admin/config.json
+✅ Config valid: /usr/local/etc/cloudbsd-admin/config.json
+   Port: 3001
+   Bind: 127.0.0.1
+   Database: sqlite (/var/db/cloudbsd-admin/data.db)
+   Auth: PAM=true, MFA=true
+   Plugins: 5 enabled
+   Themes: 15 built-in
+```
+
+On error:
+```
+$ cloudbsd-admin-backend --check-config /tmp/bad-config.json
+❌ Config invalid: /tmp/bad-config.json
+   Field: /rateLimits/loginPerWindow
+   Keyword: maximum
+   Message: -1 is greater than 100
+   Instance: /rateLimits/loginPerWindow
+   Hint: see config.v1.json for schema, or https://cloudbsd.org/docs/config
+
+   Line 47 in /tmp/bad-config.json:
+   "rateLimits": {
+     "loginPerWindow": -1   ← INVALID (must be 1..100)
+   }
+
+Exit code: 1
+```
+
+### Config tests (Go, 100% coverage)
+
+```go
+// internal/config/loader_test.go
+package config
+
+import (
+    "os"
+    "path/filepath"
+    "testing"
+)
+
+func newValidConfig() map[string]interface{} {
+    return map[string]interface{}{
+        "port": 3001,
+        "bind": "127.0.0.1",
+        "database": map[string]interface{}{
+            "driver": "sqlite",
+            "path":   "/var/db/cloudbsd-admin/data.db",
+        },
+        "auth": map[string]interface{}{
+            "pamEnabled": true,
+            "mfaRequired": true,
+        },
+    }
+}
+
+func TestLoader_Valid(t *testing.T) {
+    cfg := writeConfig(t, newValidConfig())
+    l, _ := NewLoader()
+    _, err := l.Load(cfg)
+    if err != nil { t.Fatalf("unexpected: %v", err) }
+}
+
+func TestLoader_MissingPort(t *testing.T) {
+    bad := newValidConfig(); delete(bad, "port")
+    cfg := writeConfig(t, bad)
+    l, _ := NewLoader()
+    _, err := l.Load(cfg)
+    if err == nil { t.Fatal("expected error for missing port") }
+    if !strings.Contains(err.Error(), "port") { t.Fatal("error should mention port") }
+}
+
+func TestLoader_PortOutOfRange(t *testing.T) {
+    bad := newValidConfig(); bad["port"] = 99999
+    cfg := writeConfig(t, bad)
+    l, _ := NewLoader()
+    _, err := l.Load(cfg)
+    if err == nil { t.Fatal("expected error for port > 65535") }
+}
+
+func TestLoader_PortNegative(t *testing.T) {
+    bad := newValidConfig(); bad["port"] = -1
+    cfg := writeConfig(t, bad)
+    l, _ := NewLoader()
+    _, err := l.Load(cfg)
+    if err == nil { t.Fatal("expected error for port < 1") }
+}
+
+func TestLoader_PortZero(t *testing.T) {
+    bad := newValidConfig(); bad["port"] = 0
+    cfg := writeConfig(t, bad)
+    l, _ := NewLoader()
+    _, err := l.Load(cfg)
+    if err == nil { t.Fatal("expected error for port == 0") }
+}
+
+func TestLoader_BadBind(t *testing.T) {
+    bad := newValidConfig(); bad["bind"] = "not-an-ip"
+    cfg := writeConfig(t, bad)
+    l, _ := NewLoader()
+    _, err := l.Load(cfg)
+    if err == nil { t.Fatal("expected error for non-IP bind") }
+}
+
+func TestLoader_TLSEnabledNoCert(t *testing.T) {
+    bad := newValidConfig()
+    bad["tls"] = map[string]interface{}{"enabled": true}
+    cfg := writeConfig(t, bad)
+    l, _ := NewLoader()
+    _, err := l.Load(cfg)
+    if err == nil { t.Fatal("expected error for TLS enabled but no cert") }
+    if !strings.Contains(err.Error(), "certFile") { t.Fatal("error should mention certFile") }
+}
+
+func TestLoader_MFARequiredNoPAM(t *testing.T) {
+    bad := newValidConfig()
+    bad["auth"] = map[string]interface{}{"pamEnabled": false, "mfaRequired": true}
+    cfg := writeConfig(t, bad)
+    l, _ := NewLoader()
+    _, err := l.Load(cfg)
+    if err == nil { t.Fatal("expected error for MFA required but PAM disabled") }
+}
+
+func TestLoader_SQLiteNoPath(t *testing.T) {
+    bad := newValidConfig()
+    bad["database"] = map[string]interface{}{"driver": "sqlite"}
+    cfg := writeConfig(t, bad)
+    l, _ := NewLoader()
+    _, err := l.Load(cfg)
+    if err == nil { t.Fatal("expected error for sqlite without path") }
+}
+
+func TestLoader_BadTrustedProxy(t *testing.T) {
+    bad := newValidConfig()
+    bad["trustedProxies"] = []interface{}{"not-a-cidr"}
+    cfg := writeConfig(t, bad)
+    l, _ := NewLoader()
+    _, err := l.Load(cfg)
+    if err == nil { t.Fatal("expected error for bad CIDR") }
+}
+
+func TestLoader_RateLimitLoginZero(t *testing.T) {
+    bad := newValidConfig()
+    bad["rateLimits"] = map[string]interface{}{"loginPerWindow": 0}
+    cfg := writeConfig(t, bad)
+    l, _ := NewLoader()
+    _, err := l.Load(cfg)
+    if err == nil { t.Fatal("expected error for rateLimit 0") }
+}
+
+func TestLoader_UnknownField(t *testing.T) {
+    bad := newValidConfig(); bad["unknownField"] = "x"
+    cfg := writeConfig(t, bad)
+    l, _ := NewLoader()
+    _, err := l.Load(cfg)
+    if err == nil { t.Fatal("expected error for unknown field") }
+    if !strings.Contains(err.Error(), "unknown") { t.Fatal("error should mention unknown field") }
+}
+
+func TestLoader_TooManyTrustedProxies(t *testing.T) {
+    bad := newValidConfig()
+    proxies := make([]interface{}, 33)
+    for i := range proxies { proxies[i] = "10.0.0.1/32" }
+    bad["trustedProxies"] = proxies
+    cfg := writeConfig(t, bad)
+    l, _ := NewLoader()
+    _, err := l.Load(cfg)
+    if err == nil { t.Fatal("expected error for >32 proxies") }
+}
+
+func TestLoader_DefaultsApplied(t *testing.T) {
+    bad := newValidConfig()
+    delete(bad, "logging")  // optional, should default
+    cfg := writeConfig(t, bad)
+    l, _ := NewLoader()
+    c, err := l.Load(cfg)
+    if err != nil { t.Fatalf("unexpected: %v", err) }
+    if c.Logging.Level != "info" { t.Fatal("expected default log level 'info'") }
+    if c.Logging.Format != "json" { t.Fatal("expected default format 'json'") }
+}
+
+func TestLoader_BadJSON(t *testing.T) {
+    tmp := filepath.Join(t.TempDir(), "bad.json")
+    os.WriteFile(tmp, []byte("{not valid json"), 0600)
+    l, _ := NewLoader()
+    _, err := l.Load(tmp)
+    if err == nil { t.Fatal("expected error for bad JSON") }
+}
+
+func TestLoader_FileNotFound(t *testing.T) {
+    l, _ := NewLoader()
+    _, err := l.Load("/nonexistent/config.json")
+    if err == nil { t.Fatal("expected error for missing file") }
+}
+
+func TestLoader_PrototypePollution(t *testing.T) {
+    bad := newValidConfig()
+    bad["__proto__"] = map[string]interface{}{"isAdmin": true}
+    cfg := writeConfig(t, bad)
+    l, _ := NewLoader()
+    _, err := l.Load(cfg)
+    if err == nil { t.Fatal("expected error for __proto__") }
+}
+
+func TestCheckConfig_ExitsZeroOnValid(t *testing.T) {
+    cfg := writeConfig(t, newValidConfig())
+    l, _ := NewLoader()
+    if err := l.CheckConfig(cfg); err != nil { t.Fatal("CheckConfig should return nil for valid") }
+}
+
+func TestCheckConfig_ExitsNonZeroOnInvalid(t *testing.T) {
+    bad := newValidConfig(); bad["port"] = -1
+    cfg := writeConfig(t, bad)
+    l, _ := NewLoader()
+    if err := l.CheckConfig(cfg); err == nil { t.Fatal("CheckConfig should return error for invalid") }
+}
+
+func writeConfig(t *testing.T, content interface{}) string {
+    data, _ := json.Marshal(content)
+    tmp := filepath.Join(t.TempDir(), "config.json")
+    os.WriteFile(tmp, data, 0600)
+    return tmp
+}
+```
+
+### Frontend config tests (TypeScript)
+
+```typescript
+// web-new/src/environments/environment.spec.ts
+import { environment } from './environment';
+import { environmentProd } from './environment.prod';
+
+describe('environment configuration', () => {
+  it('dev environment has mock backend URL', () => {
+    expect(environment.apiBaseUrl).toMatch(/localhost/);
+    expect(environment.useMocks).toBe(true);
+  });
+  it('prod environment has real backend URL', () => {
+    expect(environmentProd.apiBaseUrl).toMatch(/^https:/);
+    expect(environmentProd.useMocks).toBe(false);
+  });
+  it('all envs have required keys', () => {
+    for (const e of [environment, environmentProd]) {
+      expect(e.apiBaseUrl).toBeTruthy();
+      expect(e.wsBaseUrl).toBeTruthy();
+      expect(e.buildVersion).toMatch(/^v\d+\.\d+\.\d+/);
+    }
+  });
+  it('no secrets in environment', () => {
+    for (const e of [environment, environmentProd]) {
+      const serialized = JSON.stringify(e);
+      expect(serialized).not.toMatch(/api[_-]?key/i);
+      expect(serialized).not.toMatch(/secret/i);
+      expect(serialized).not.toMatch(/password/i);
+    }
+  });
+  it('build version matches package.json', () => {
+    const pkg = require('../../package.json');
+    expect(environment.buildVersion).toBe(`v${pkg.version}`);
+  });
+  it('envelope version is set', () => {
+    expect(environment.envelopeVersion).toBe(1);
+  });
+  it('supported schema versions are monotonic', () => {
+    expect(environment.supportedSchemaVersions).toEqual([1]);
+  });
+});
+```
+
+### Theme config tests (JSON)
+
+```typescript
+// web-new/src/app/themes/theme-config.spec.ts
+import { ThemeStore } from './theme.store';
+import cloudbsdRevytech from './themes/cloudbsd-revytech.json';
+import phosphorCrt from './themes/phosphor-crt.json';
+
+describe('theme JSON configs', () => {
+  const themeStore = new ThemeStore();
+  themeStore.registerSchema();  // load theme.v1.json
+
+  it('all built-in themes validate against schema', () => {
+    for (const theme of [cloudbsdRevytech, phosphorCrt]) {
+      expect(themeStore.validate(theme)).toBe(true);
+    }
+  });
+
+  it('rejects theme with missing required field', () => {
+    const bad = { ...cloudbsdRevytech };
+    delete bad.id;
+    expect(themeStore.validate(bad)).toBe(false);
+  });
+
+  it('rejects theme with bad color format', () => {
+    const bad = { ...cloudbsdRevytech, tokens: { ...cloudbsdRevytech.tokens, 'bg-primary': 'not-a-color' } };
+    expect(themeStore.validate(bad)).toBe(false);
+  });
+
+  it('rejects theme with unknown token', () => {
+    const bad = { ...cloudbsdRevytech, tokens: { ...cloudbsdRevytech.tokens, 'evil-token': '#000' } };
+    expect(themeStore.validate(bad)).toBe(false);
+  });
+
+  it('theme name is unique', () => {
+    const names = [cloudbsdRevytech, phosphorCrt].map(t => t.name);
+    expect(new Set(names).size).toBe(names.length);
+  });
+
+  it('theme id is unique and matches name pattern', () => {
+    for (const t of [cloudbsdRevytech, phosphorCrt]) {
+      expect(t.id).toMatch(/^[a-z][a-z0-9_-]*$/);
+    }
+  });
+});
+```
+
+### Plugin manifest config tests (JSON)
+
+```typescript
+// web-new/src/app/plugins/plugin-manifest.spec.ts
+import { PluginRegistry } from './plugin-registry';
+import bhyveMetrics from './fixtures/bhyve-metrics.plugin.json';
+
+describe('plugin manifest configs', () => {
+  const reg = new PluginRegistry();
+  reg.registerSchema();
+
+  it('valid manifest validates', () => {
+    expect(reg.validateManifest(bhyveMetrics)).toBe(true);
+  });
+
+  it('manifest requires semver version', () => {
+    const bad = { ...bhyveMetrics, version: '1.0' };  // no semver
+    expect(reg.validateManifest(bad)).toBe(false);
+  });
+
+  it('manifest requires capabilities array', () => {
+    const bad = { ...bhyveMetrics, capabilities: 'vms.read' };  // string not array
+    expect(reg.validateManifest(bad)).toBe(false);
+  });
+
+  it('manifest capabilities must be from allowlist', () => {
+    const bad = { ...bhyveMetrics, capabilities: ['vms.read', 'kernel.module.load'] };
+    expect(reg.validateManifest(bad)).toBe(false);
+  });
+
+  it('manifest signature must be valid ed25519', () => {
+    const bad = { ...bhyveMetrics, signature: 'not-a-signature' };
+    expect(reg.validateManifest(bad)).toBe(false);
+  });
+
+  it('manifest sha256 must be valid hex', () => {
+    const bad = { ...bhyveMetrics, sha256: 'not-hex' };
+    expect(reg.validateManifest(bad)).toBe(false);
+  });
+
+  it('manifest template must not have eval', () => {
+    const bad = { ...bhyveMetrics, template: 'eval(userInput)' };
+    expect(reg.validateManifest(bad)).toBe(false);
+  });
+});
+```
+
+### Locale config tests (JSON)
+
+```typescript
+// web-new/src/assets/locales/locale-validator.spec.ts
+import enUS from './en-US.json';
+import esES from './es-ES.json';
+
+describe('locale files', () => {
+  for (const [name, locale] of Object.entries({ enUS, esES })) {
+    it(`${name} has required keys`, () => {
+      expect(locale['app.title']).toBeTruthy();
+      expect(locale['nav.dashboard']).toBeTruthy();
+      expect(locale['error.network']).toBeTruthy();
+    });
+
+    it(`${name} has no empty strings`, () => {
+      const walk = (obj: any, path = '') => {
+        for (const [k, v] of Object.entries(obj)) {
+          if (typeof v === 'string') {
+            expect(v.length, `${path}.${k}`).toBeGreaterThan(0);
+          } else if (typeof v === 'object') {
+            walk(v, `${path}.${k}`);
+          }
+        }
+      };
+      walk(locale);
+    });
+
+    it(`${name} has matching keys to en-US (no missing translations)`, () => {
+      const flat = (obj: any, prefix = ''): string[] => {
+        return Object.entries(obj).flatMap(([k, v]) =>
+          typeof v === 'object' ? flat(v, `${prefix}${k}.`) : [`${prefix}${k}`]);
+      };
+      const enKeys = new Set(flat(enUS));
+      const lKeys = new Set(flat(locale));
+      for (const k of enKeys) {
+        expect(lKeys.has(k), `missing key in ${name}: ${k}`).toBe(true);
+      }
+    });
+
+    it(`${name} has no untranslated placeholders (no \`{TODO}\`, no \`xxxx\`)`, () => {
+      const walk = (obj: any) => {
+        for (const v of Object.values(obj)) {
+          if (typeof v === 'string') {
+            expect(v, 'placeholder leak').not.toMatch(/TODO|xxxx|\[.*?\]/);
+          } else if (typeof v === 'object') {
+            walk(v);
+          }
+        }
+      };
+      walk(locale);
+    });
+  }
+});
+```
+
+### FreeBSD port config tests (Makefile)
+
+```make
+# ports/www/cloudbsd-admin/Makefile tests run in CI:
+test:
+    # 1. Port builds cleanly
+    make clean && make
+    # 2. Plist matches installed files
+    make plist | diff - pkg-plist
+    # 3. INSTALL/DEINSTALL scripts parse
+    sh -n pkg-install
+    sh -n pkg-deinstall
+    # 4. config.json.sample validates
+    @${SETENV} HOME=/tmp cloudbsd-admin-backend --check-config ${WRKSRC}/config.json.sample
+    # 5. rc.d script syntax
+    sh -n files/cloudbsd-admin.sh.in
+    # 6. man pages lint
+    mandoc -Tlint files/cloudbsd-admin.8
+    mandoc -Tlint files/cloudbsd-admin.conf.5
+```
+
+### Implementation tasks (new)
+
+| Task | Description |
+|------|-------------|
+| **T171** | `config.v1.json` JSON Schema (envelope, DB, auth, logging, plugins, themes, rate limits, cache, metrics) |
+| **T172** | `internal/config/loader.go` (ConfigLoader with --check-config, --dry-run, sanity checks) |
+| **T173** | `config/loader_test.go` (100% coverage, 20+ test cases) |
+| **T174** | `cloudbsd-admin-backend --check-config <path>` CLI flag |
+| **T175** | `cloudbsd-admin-backend --init-config` (write config.json.sample to stdout) |
+| **T176** | `cloudbsd-admin-backend --print-config-defaults` |
+| **T177** | `environment.spec.ts` (TS env validation) |
+| **T178** | `theme-config.spec.ts` (all 15 built-in themes validate) |
+| **T179** | `plugin-manifest.spec.ts` (plugin JSON validation) |
+| **T180** | `locale-validator.spec.ts` (all 47 locales have matching keys) |
+| **T181** | CI: FreeBSD port `make test` target (build + plist + scripts + config validate) |
+| **T182** | CI: every JSON file in repo validated by `ajv-cli` against its schema |
+| **T183** | CI: every .ts file passes `tsc --noEmit` |
+| **T184** | CI: every .go file passes `go vet` + `gofmt -l` (empty) + `go test ./...` |
+| **T185** | CI: every .md file passes `markdownlint` + `test_md.sh` (5 checks) |
+| **T186** | CI: every shell script passes `shellcheck` |
+| **T187** | CI: every YAML file passes `yamllint` |
+| **T188** | CI: every TOML file passes `taplo check` |
+| **T189** | CI: every Docker/Containerfile passes `hadolint` |
+| **T190** | CI: GitHub Actions workflow passes `act --validate` |
+| **T191** | `bin/check-all-configs.sh` — runs ALL config validators + exits 0 only if all pass |
+| **T192** | Pre-commit hook: `pre-commit run --all-files` (runs check-all-configs.sh + lint + test) |
+
+### Acceptance criteria for config testing
+
+1. **`--check-config` flag** works on backend, exits 0/1, prints clear summary
+2. **Every config field** validated against `config.v1.json` JSON Schema
+3. **Sanity checks** (cross-field validation) implemented in `sanityCheck()`
+4. **100% test coverage** of `ConfigLoader` (all branches: missing field, bad type, out of range, unknown field, prototype pollution, bad JSON, missing file, defaults)
+5. **Every JSON file** in repo (config.json, package.json, angular.json, tsconfig.json, theme JSON, plugin JSON, locale JSON) validated by CI
+6. **Every TS file** passes `tsc --noEmit`
+7. **Every Go file** passes `go vet` + `gofmt` + `go test`
+8. **Every shell script** passes `shellcheck`
+9. **Every Makefile** passes `bmake -n` (parse)
+10. **Every Markdown file** passes `test_md.sh` (5 checks) + `markdownlint`
+11. **FreeBSD port** has `make test` target that builds + validates
+12. **Pre-commit hook** runs all config validators + lint + tests
+13. **No secrets** in any environment file (CI scans for API keys, secrets, passwords)
+14. **Schema versioning** for `config.v1.json` (config.v2.json when breaking)
+15. **No empty strings** in any locale file
+16. **All 47 locales** have matching keys to en-US
+17. **No untranslated placeholders** (no `TODO`, no `xxxx`, no `[...]`)
 
 ---
 
