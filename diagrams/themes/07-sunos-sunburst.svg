@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="Lucida Sans, Helvetica, sans-serif">
-  <title>Theme Mock-Up — SunOS Sunburst — Dashboard at 1280x800</title>
-  <desc>Sunset orange and yellow palette evoking classic Solaris OpenWindows aesthetic. Topbar features a stylized sunrise burst. Warm beige content area with deep amber accents. WCAG AA contrast.</desc>
+  <title>Theme Mock-Up — Sunburst Orange (07) — Dashboard at 1280x800</title>
+  <desc>Sunset orange and yellow palette evoking classic late-80s/early-90s Unix workstation aesthetic. Topbar features a stylized sunrise burst. Warm beige content area with deep amber accents. WCAG AA contrast.</desc>
   <foreignObject x="0" y="0" width="1280" height="800">
     <div xmlns="http://www.w3.org/1999/xhtml" class="h-full" style="background: #f8efde; font-family: Lucida Sans, Helvetica, sans-serif;">
       <g id="theme-header" class="contents">
@@ -20,7 +20,7 @@
           <div class="flex items-center gap-2 relative z-10">
             <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold" style="background: radial-gradient(circle at 30% 30%, #fde047 0%, #f59e0b 50%, #7c2d12 100%); color: #2a1a0a; box-shadow: 0 0 8px #fbbf24;">C</div>
             <span class="font-bold text-base tracking-wide" style="color: #fff7d6; text-shadow: 1px 1px 2px #4a2a0a;">CloudBSD Admin</span>
-            <span class="ml-2 px-2 py-0.5 text-xs font-bold" style="background: #2a1a0a; color: #fde047; border: 1px solid #fde047;">sunos-sunburst</span>
+            <span class="ml-2 px-2 py-0.5 text-xs font-bold" style="background: #2a1a0a; color: #fde047; border: 1px solid #fde047;">sunburst-orange</span>
           </div>
           <div class="ml-auto flex items-center gap-4 relative z-10">
             <span class="text-sm font-bold" style="color: #fff7d6;">freenas-mock.local</span>

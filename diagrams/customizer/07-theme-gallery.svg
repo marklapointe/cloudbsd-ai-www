@@ -215,7 +215,7 @@
                 <div class="p-3">
                   <div class="flex items-center justify-between">
                     <div>
-                      <div class="text-sm font-semibold text-slate-900">CDE Motif</div>
+                      <div class="text-sm font-semibold text-slate-900">Beveled Desktop</div>
                       <div class="text-xs text-slate-500">vintage · dark</div>
                     </div>
                     <button class="text-xs font-medium px-2 py-0.5 rounded border border-slate-300 text-slate-700 hover:bg-slate-50">Apply</button>
@@ -244,7 +244,7 @@
                 <div class="p-3">
                   <div class="flex items-center justify-between">
                     <div>
-                      <div class="text-sm font-semibold text-slate-900">SunOS Sunburst</div>
+                      <div class="text-sm font-semibold text-slate-900">Sunburst Orange</div>
                       <div class="text-xs text-slate-500">vintage · light</div>
                     </div>
                     <button class="text-xs font-medium px-2 py-0.5 rounded border border-slate-300 text-slate-700 hover:bg-slate-50">Apply</button>
@@ -273,7 +273,7 @@
                 <div class="p-3">
                   <div class="flex items-center justify-between">
                     <div>
-                      <div class="text-sm font-semibold text-slate-900">Aqua Pinstripe</div>
+                      <div class="text-sm font-semibold text-slate-900">Brushed Pinstripe</div>
                       <div class="text-xs text-slate-500">vintage · light</div>
                     </div>
                     <button class="text-xs font-medium px-2 py-0.5 rounded border border-slate-300 text-slate-700 hover:bg-slate-50">Apply</button>
@@ -389,7 +389,7 @@
                 <div class="p-3">
                   <div class="flex items-center justify-between">
                     <div>
-                      <div class="text-sm font-semibold text-slate-900">Workbench</div>
+                      <div class="text-sm font-semibold text-slate-900">Workshop Orange</div>
                       <div class="text-xs text-slate-500">vintage · light</div>
                     </div>
                     <button class="text-xs font-medium px-2 py-0.5 rounded border border-slate-300 text-slate-700 hover:bg-slate-50">Apply</button>
@@ -418,7 +418,7 @@
                 <div class="p-3">
                   <div class="flex items-center justify-between">
                     <div>
-                      <div class="text-sm font-semibold text-slate-900">Haiku</div>
+                      <div class="text-sm font-semibold text-slate-900">Minimal Clean</div>
                       <div class="text-xs text-slate-500">modern · light</div>
                     </div>
                     <button class="text-xs font-medium px-2 py-0.5 rounded border border-slate-300 text-slate-700 hover:bg-slate-50">Apply</button>
@@ -476,7 +476,7 @@
                 <div class="p-3">
                   <div class="flex items-center justify-between">
                     <div>
-                      <div class="text-sm font-semibold text-slate-900">Warp Flat</div>
+                      <div class="text-sm font-semibold text-slate-900">Flat Steel</div>
                       <div class="text-xs text-slate-500">vintage · light</div>
                     </div>
                     <button class="text-xs font-medium px-2 py-0.5 rounded border border-slate-300 text-slate-700 hover:bg-slate-50">Apply</button>

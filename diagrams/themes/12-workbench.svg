@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="Helvetica, sans-serif">
-  <title>Theme Mock-Up — Workbench — Dashboard at 1280x800</title>
-  <desc>Classic desktop OS workbench aesthetic. Bright orange and red topbar with traffic light window controls, neutral gray body, raised bevel buttons. WCAG AA contrast throughout.</desc>
+  <title>Theme Mock-Up — Workshop Orange (12) — Dashboard at 1280x800</title>
+  <desc>Classic desktop workshop aesthetic. Bright orange and red topbar with classic window controls, neutral gray body, raised bevel buttons. WCAG AA contrast throughout.</desc>
   <foreignObject x="0" y="0" width="1280" height="800">
     <div xmlns="http://www.w3.org/1999/xhtml" class="h-full" style="background: #b0b0b8; font-family: Helvetica, sans-serif;">
       <g id="theme-header" class="contents">
@@ -14,7 +14,7 @@
           <div class="flex items-center gap-3">
             <div class="w-8 h-8 flex items-center justify-center font-bold" style="background: linear-gradient(180deg, #ffffff 0%, #ffd9b8 100%); color: #8a2c0a; border: 2px solid #8a2c0a; box-shadow: 1px 1px 0 0 #8a2c0a;">C</div>
             <span class="font-bold text-base" style="color: #ffffff; text-shadow: 1px 1px 0 #8a2c0a;">CloudBSD Admin</span>
-            <span class="ml-2 px-2 py-0.5 text-xs font-bold" style="background: #ffffff; color: #c84515; border: 2px solid #8a2c0a; box-shadow: 1px 1px 0 0 #8a2c0a;">workbench</span>
+            <span class="ml-2 px-2 py-0.5 text-xs font-bold" style="background: #ffffff; color: #c84515; border: 2px solid #8a2c0a; box-shadow: 1px 1px 0 0 #8a2c0a;">workshop-orange</span>
           </div>
           <div class="ml-auto flex items-center gap-3">
             <span class="text-sm font-bold" style="color: #ffffff; text-shadow: 1px 1px 0 #8a2c0a;">freenas-mock.local</span>

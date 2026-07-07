@@ -3,7 +3,7 @@
   <title>Theme Customizer — Import/Export Tab — Customizer Panel at 1280x800</title>
   <desc>Import and export theme configurations as .cbsd-theme.json files. Includes JSON editor preview, export options, and import drop zone. WCAG AA contrast.</desc>
   <foreignObject x="0" y="0" width="1280" height="800">
-    <div xmlns="http://www.w3.org/1990/xhtml" class="h-full bg-slate-50 text-slate-900" style="font-family: Inter, system-ui, sans-serif;">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900" style="font-family: Inter, system-ui, sans-serif;">
       <g id="customizer-header" class="contents">
         <div class="h-14 bg-white border-b border-slate-200 flex items-center px-4 shadow-sm">
           <div class="flex items-center gap-2">

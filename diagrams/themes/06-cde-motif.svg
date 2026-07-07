@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="Helvetica, Arial, sans-serif">
-  <title>Theme Mock-Up — CDE Motif — Dashboard at 1280x800</title>
-  <desc>Motif-style widget toolkit aesthetic with hard 3D beveled borders, pastel gray surfaces, and busy diagonal-stripe backgrounds. Title bars with classic dotted resize grip. WCAG AA contrast on all text.</desc>
+  <title>Theme Mock-Up — Beveled Desktop (06) — Dashboard at 1280x800</title>
+  <desc>Classic 90s beveled-widget desktop aesthetic with hard 3D beveled borders, pastel gray surfaces, and busy diagonal-stripe backgrounds. Title bars with classic dotted resize grip. WCAG AA contrast on all text.</desc>
   <foreignObject x="0" y="0" width="1280" height="800">
     <div xmlns="http://www.w3.org/1999/xhtml" class="h-full" style="background-color: #7b7b8a; background-image: repeating-linear-gradient(45deg, transparent 0, transparent 2px, rgba(255,255,255,0.06) 2px, rgba(255,255,255,0.06) 4px); font-family: Helvetica, Arial, sans-serif;">
       <g id="theme-header" class="contents">
@@ -9,7 +9,7 @@
           <div class="flex items-center gap-2">
             <div class="w-7 h-7 flex items-center justify-center font-bold text-white" style="background: #4a6b9c; border: 2px solid #fff; box-shadow: 0 0 0 1px #2a3a5c, inset 1px 1px 0 0 #6a8bbc, inset -1px -1px 0 0 #2a3a5c;">C</div>
             <span class="font-bold text-sm tracking-wide" style="color: #1a1a24;">CloudBSD Admin</span>
-            <span class="ml-2 px-2 py-0.5 text-xs font-bold" style="background: #c0c0c8; color: #1a1a24; border: 2px solid #fff; box-shadow: 0 0 0 1px #555560, inset 1px 1px 0 0 #fff, inset -1px -1px 0 0 #555560;">cde-motif</span>
+            <span class="ml-2 px-2 py-0.5 text-xs font-bold" style="background: #c0c0c8; color: #1a1a24; border: 2px solid #fff; box-shadow: 0 0 0 1px #555560, inset 1px 1px 0 0 #fff, inset -1px -1px 0 0 #555560;">beveled-desktop</span>
           </div>
           <div class="ml-auto flex items-center gap-2">
             <span class="text-xs" style="color: #1a1a24;">freenas-mock.local</span>

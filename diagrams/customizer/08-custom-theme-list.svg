@@ -3,7 +3,7 @@
   <title>Theme Customizer — My Themes — Customizer Panel at 1280x800</title>
   <desc>User's saved custom themes as a list with edit, duplicate, export, and delete actions. Each row shows thumbnail, name, modification date, and badges. WCAG AA contrast.</desc>
   <foreignObject x="0" y="0" width="1280" height="800">
-    <div xmlns="http://www.w3.org/1995/xhtml" class="h-full bg-slate-50 text-slate-900" style="font-family: Inter, system-ui, sans-serif;">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900" style="font-family: Inter, system-ui, sans-serif;">
       <g id="customizer-header" class="contents">
         <div class="h-14 bg-white border-b border-slate-200 flex items-center px-4 shadow-sm">
           <div class="flex items-center gap-2">
@@ -157,7 +157,7 @@
                       <div class="font-medium text-slate-900">Brand Orange</div>
                       <div class="text-xs text-slate-500">Custom branded version for marketing site</div>
                     </td>
-                    <td class="px-4 py-3 text-slate-600">Workbench</td>
+                    <td class="px-4 py-3 text-slate-600">Workshop Orange</td>
                     <td class="px-4 py-3 text-slate-600">2026-06-02 16:33</td>
                     <td class="px-4 py-3"><span class="text-xs font-medium px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">Team</span></td>
                     <td class="px-4 py-3">

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="Lucida Grande, Helvetica, sans-serif">
-  <title>Theme Mock-Up — Aqua Pinstripe — Dashboard at 1280x800</title>
-  <desc>Translucent blue and brushed steel aesthetic. Pinstripe background, frosted glass topbar, soft aqua accents. Cool, polished, depth-layered look. WCAG AA contrast throughout.</desc>
+  <title>Theme Mock-Up — Brushed Pinstripe (08) — Dashboard at 1280x800</title>
+  <desc>Translucent blue and brushed steel aesthetic. Pinstripe background, frosted glass topbar, soft cool-blue accents. Cool, polished, depth-layered look. WCAG AA contrast throughout.</desc>
   <defs>
     <linearGradient id="brushedMetal" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#e6ecf2"/>
       <stop offset="50%" stop-color="#c8d2dc"/>
       <stop offset="100%" stop-color="#9aa7b4"/>
     </linearGradient>
-    <linearGradient id="aquaTopbar" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="brushedTopbar" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#a8c8e0" stop-opacity="0.9"/>
       <stop offset="50%" stop-color="#6b9bbf" stop-opacity="0.85"/>
       <stop offset="100%" stop-color="#3a6a8f" stop-opacity="0.9"/>
@@ -33,7 +33,7 @@
           <div class="flex items-center gap-3 relative z-10">
             <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold" style="background: radial-gradient(circle at 35% 30%, #ffffff 0%, #b8d4e8 50%, #1e3a5f 100%); color: #1e3a5f; box-shadow: 0 1px 3px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.6);">C</div>
             <span class="font-bold text-base" style="color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.4);">CloudBSD Admin</span>
-            <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded" style="background: rgba(255,255,255,0.25); color: #1e3a5f; border: 1px solid rgba(255,255,255,0.5); backdrop-filter: blur(4px);">aqua-pinstripe</span>
+            <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded" style="background: rgba(255,255,255,0.25); color: #1e3a5f; border: 1px solid rgba(255,255,255,0.5); backdrop-filter: blur(4px);">brushed-pinstripe</span>
           </div>
           <div class="ml-auto flex items-center gap-4 relative z-10">
             <span class="text-sm" style="color: #1e3a5f;">freenas-mock.local</span>

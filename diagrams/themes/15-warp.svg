@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="Helvetica, Arial, sans-serif">
-  <title>Theme Mock-Up — Warp Flat — Dashboard at 1280x800</title>
+  <title>Theme Mock-Up — Flat Steel (15) — Dashboard at 1280x800</title>
   <desc>Flat design with neutral gray body and deep blue accents. Sharp corners, hard borders, dense info layout. Business productivity aesthetic. WCAG AA contrast throughout.</desc>
   <foreignObject x="0" y="0" width="1280" height="800">
     <div xmlns="http://www.w3.org/1999/xhtml" class="h-full" style="background: #d4d4d4; font-family: Helvetica, Arial, sans-serif;">
@@ -9,7 +9,7 @@
           <div class="flex items-center gap-3">
             <div class="w-7 h-7 flex items-center justify-center font-bold" style="background: #ffffff; color: #1e4a8a;">C</div>
             <span class="font-bold text-sm tracking-wide" style="color: #ffffff;">CloudBSD Admin</span>
-            <span class="ml-2 px-2 py-0.5 text-xs font-bold" style="background: #0a2247; color: #7ab0e8; border: 1px solid #1e4a8a;">warp</span>
+            <span class="ml-2 px-2 py-0.5 text-xs font-bold" style="background: #0a2247; color: #7ab0e8; border: 1px solid #1e4a8a;">flat-steel</span>
           </div>
           <div class="ml-auto flex items-center gap-3">
             <span class="text-xs font-bold uppercase tracking-wider" style="color: #b0c8e0;">System: freenas-mock.local</span>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="Noto Sans, Inter, system-ui, sans-serif">
-  <title>Theme Mock-Up — Haiku Inspired — Dashboard at 1280x800</title>
+  <title>Theme Mock-Up — Minimal Clean (13) — Dashboard at 1280x800</title>
   <desc>Clean minimal aesthetic on warm white with soft beige accents. Generous whitespace, subtle shadows, restrained color palette. Modern flat design with light beige primary tones. WCAG AA contrast.</desc>
   <foreignObject x="0" y="0" width="1280" height="800">
     <div xmlns="http://www.w3.org/1999/xhtml" class="h-full" style="background: #fafaf6; font-family: Noto Sans, Inter, system-ui, sans-serif;">
@@ -9,7 +9,7 @@
           <div class="flex items-center gap-3">
             <div class="w-7 h-7 rounded flex items-center justify-center font-bold text-base" style="background: #d4a857; color: #ffffff;">C</div>
             <span class="font-semibold text-base" style="color: #2a2620;">CloudBSD Admin</span>
-            <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded" style="background: #f0ebd9; color: #6a5f3f; border: 1px solid #e0d8b8;">haiku</span>
+            <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded" style="background: #f0ebd9; color: #6a5f3f; border: 1px solid #e0d8b8;">minimal-clean</span>
           </div>
           <div class="ml-auto flex items-center gap-4">
             <span class="text-sm" style="color: #6a6358;">freenas-mock.local</span>
