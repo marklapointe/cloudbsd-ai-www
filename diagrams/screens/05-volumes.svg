@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="system-ui, sans-serif">
+  <title>CloudBSD Admin — Volumes</title>
+  <desc>Paginated volume table with per-row usage chart.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900">
+      <g id="header" class="contents">
+        <div class="h-14 bg-white border-b border-slate-200 flex items-center px-4">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded bg-blue-600 text-white flex items-center justify-center font-bold">C</div>
+            <span class="font-bold text-lg">CloudBSD Admin</span>
+            <span class="ml-2 px-2 py-0.5 text-xs rounded bg-slate-100 text-slate-600">freenas-mock.local</span>
+          </div>
+          <div class="ml-auto flex items-center gap-4">
+            <span class="text-sm text-slate-500">Theme: CloudBSD</span>
+            <button class="text-sm text-slate-600 hover:text-slate-900">Refresh</button>
+            <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">M</div>
+          </div>
+        </div>
+      </g>
+      <div class="flex" style="height: calc(100% - 56px);">
+        <g id="sidebar" class="contents">
+          <aside class="w-56 bg-white border-r border-slate-200 p-3 overflow-y-auto">
+            <nav class="space-y-1 text-sm">
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Dashboard</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Virtual Machines</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Containers</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Jails</a>
+              <a class="block px-3 py-2 rounded bg-blue-50 text-blue-700 font-medium">Volumes</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Network Map</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Cluster</a>
+              <div class="pt-3 pb-1 text-xs uppercase tracking-wide text-slate-400 px-3">Admin</div>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Users</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Logs</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Notifications</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Settings</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Status</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">About</a>
+            </nav>
+          </aside>
+        </g>
+        <main class="flex-1 p-6 overflow-auto">
+          <g id="content" class="contents">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h1 class="text-2xl font-bold">Volumes</h1>
+                <p class="text-sm text-slate-500">ZFS datasets and Zvols · pagination 25/page</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="text" placeholder="Filter by name or mountpoint…" class="text-sm border border-slate-300 rounded px-3 py-1.5 w-72 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <select class="text-sm border border-slate-300 rounded px-2 py-1.5">
+                  <option>All pools</option>
+                  <option>tank</option>
+                  <option>ssd</option>
+                </select>
+              </div>
+            </div>
+            <div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 text-slate-600">
+                  <tr>
+                    <th class="text-left font-medium px-4 py-2">Name</th>
+                    <th class="text-left font-medium px-4 py-2">Type</th>
+                    <th class="text-left font-medium px-4 py-2">Size</th>
+                    <th class="text-left font-medium px-4 py-2">Used</th>
+                    <th class="text-left font-medium px-4 py-2">Usage</th>
+                    <th class="text-left font-medium px-4 py-2">Mountpoint</th>
+                    <th class="text-left font-medium px-4 py-2">Compression</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2 font-medium">tank/data</td>
+                    <td class="px-4 py-2 text-slate-700">dataset</td>
+                    <td class="px-4 py-2 text-slate-700">500 GB</td>
+                    <td class="px-4 py-2 text-slate-700">412 GB</td>
+                    <td class="px-4 py-2 w-64">
+                      <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-blue-600" style="width: 82%;"></div>
+                      </div>
+                      <div class="text-xs text-slate-500 mt-1">82% used</div>
+                    </td>
+                    <td class="px-4 py-2 font-mono text-xs">/mnt/tank/data</td>
+                    <td class="px-4 py-2 text-slate-700">zstd-3</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2 font-medium">tank/media</td>
+                    <td class="px-4 py-2 text-slate-700">dataset</td>
+                    <td class="px-4 py-2 text-slate-700">1.2 TB</td>
+                    <td class="px-4 py-2 text-slate-700">860 GB</td>
+                    <td class="px-4 py-2 w-64">
+                      <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-amber-500" style="width: 71%;"></div>
+                      </div>
+                      <div class="text-xs text-slate-500 mt-1">71% used</div>
+                    </td>
+                    <td class="px-4 py-2 font-mono text-xs">/mnt/tank/media</td>
+                    <td class="px-4 py-2 text-slate-700">zstd-5</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2 font-medium">tank/backups</td>
+                    <td class="px-4 py-2 text-slate-700">dataset</td>
+                    <td class="px-4 py-2 text-slate-700">2.0 TB</td>
+                    <td class="px-4 py-2 text-slate-700">240 GB</td>
+                    <td class="px-4 py-2 w-64">
+                      <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-blue-600" style="width: 12%;"></div>
+                      </div>
+                      <div class="text-xs text-slate-500 mt-1">12% used</div>
+                    </td>
+                    <td class="px-4 py-2 font-mono text-xs">/mnt/tank/backups</td>
+                    <td class="px-4 py-2 text-slate-700">zstd-9</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2 font-medium">tank/vm-disk-0</td>
+                    <td class="px-4 py-2 text-slate-700">zvol</td>
+                    <td class="px-4 py-2 text-slate-700">120 GB</td>
+                    <td class="px-4 py-2 text-slate-700">88 GB</td>
+                    <td class="px-4 py-2 w-64">
+                      <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-blue-600" style="width: 73%;"></div>
+                      </div>
+                      <div class="text-xs text-slate-500 mt-1">73% used</div>
+                    </td>
+                    <td class="px-4 py-2 font-mono text-xs">/dev/zvol/tank/vm-disk-0</td>
+                    <td class="px-4 py-2 text-slate-700">lz4</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2 font-medium">ssd/apps</td>
+                    <td class="px-4 py-2 text-slate-700">dataset</td>
+                    <td class="px-4 py-2 text-slate-700">200 GB</td>
+                    <td class="px-4 py-2 text-slate-700">102 GB</td>
+                    <td class="px-4 py-2 w-64">
+                      <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-blue-600" style="width: 51%;"></div>
+                      </div>
+                      <div class="text-xs text-slate-500 mt-1">51% used</div>
+                    </td>
+                    <td class="px-4 py-2 font-mono text-xs">/mnt/ssd/apps</td>
+                    <td class="px-4 py-2 text-slate-700">zstd-3</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="flex items-center justify-between px-4 py-2 text-sm text-slate-500 border-t border-slate-100">
+                <div>Showing 1–5 of 47 datasets</div>
+                <div class="flex items-center gap-1">
+                  <button class="px-2 py-1 rounded border border-slate-300 text-slate-700 disabled:opacity-50" disabled="disabled">«</button>
+                  <button class="px-2 py-1 rounded border border-slate-300 text-slate-700 disabled:opacity-50" disabled="disabled">‹</button>
+                  <button class="px-2 py-1 rounded bg-blue-600 text-white">1</button>
+                  <button class="px-2 py-1 rounded border border-slate-300 text-slate-700">2</button>
+                  <button class="px-2 py-1 rounded border border-slate-300 text-slate-700">3</button>
+                  <span class="px-2 py-1 text-slate-500">…</span>
+                  <button class="px-2 py-1 rounded border border-slate-300 text-slate-700">10</button>
+                  <button class="px-2 py-1 rounded border border-slate-300 text-slate-700">›</button>
+                  <button class="px-2 py-1 rounded border border-slate-300 text-slate-700">»</button>
+                </div>
+              </div>
+            </div>
+          </g>
+        </main>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

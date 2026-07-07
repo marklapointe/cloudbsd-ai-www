@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" font-family="system-ui, sans-serif">
+  <title>CloudBSD Admin — Button (variants)</title>
+  <desc>Primary, secondary, ghost, and danger button variants in light theme.</desc>
+  <foreignObject x="0" y="0" width="600" height="400">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900 p-8">
+      <g id="header" class="contents">
+        <div class="mb-6">
+          <h2 class="text-lg font-semibold">Button</h2>
+          <p class="text-sm text-slate-500">Four variants · WCAG AA contrast</p>
+        </div>
+      </g>
+      <g id="variants" class="contents">
+        <div class="grid grid-cols-2 gap-4 max-w-xl">
+          <div class="bg-white p-5 rounded-lg border border-slate-200">
+            <div class="text-xs uppercase tracking-wide text-slate-500 mb-3">Primary</div>
+            <button class="px-4 py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Save changes</button>
+            <div class="mt-2 text-xs text-slate-500">bg-blue-600 / text-white</div>
+          </div>
+          <div class="bg-white p-5 rounded-lg border border-slate-200">
+            <div class="text-xs uppercase tracking-wide text-slate-500 mb-3">Secondary</div>
+            <button class="px-4 py-2 rounded-md bg-white text-slate-700 font-medium border border-slate-300 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2">Cancel</button>
+            <div class="mt-2 text-xs text-slate-500">bg-white / border-slate-300</div>
+          </div>
+          <div class="bg-white p-5 rounded-lg border border-slate-200">
+            <div class="text-xs uppercase tracking-wide text-slate-500 mb-3">Ghost</div>
+            <button class="px-4 py-2 rounded-md text-blue-700 font-medium hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2">Learn more</button>
+            <div class="mt-2 text-xs text-slate-500">text-blue-700 / hover:bg-blue-50</div>
+          </div>
+          <div class="bg-white p-5 rounded-lg border border-slate-200">
+            <div class="text-xs uppercase tracking-wide text-slate-500 mb-3">Danger</div>
+            <button class="px-4 py-2 rounded-md bg-rose-600 text-white font-medium hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2">Delete VM</button>
+            <div class="mt-2 text-xs text-slate-500">bg-rose-600 / text-white</div>
+          </div>
+        </div>
+      </g>
+      <g id="states" class="contents">
+        <div class="mt-6 flex items-center gap-3">
+          <button class="px-4 py-2 rounded-md bg-blue-600 text-white font-medium opacity-50 cursor-not-allowed" disabled="true">Disabled</button>
+          <button class="px-3 py-1.5 rounded-md bg-white text-slate-700 text-sm font-medium border border-slate-300">
+            <span class="inline-flex items-center gap-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 0a8 8 0 100 16A8 8 0 008 0zm.75 4.75a.75.75 0 00-1.5 0v3.5l-2.22 2.22a.75.75 0 101.06 1.06l2.44-2.44a.75.75 0 00.22-.53V4.75z"/></svg>
+              With icon
+            </span>
+          </button>
+        </div>
+      </g>
+    </div>
+  </foreignObject>
+</svg>

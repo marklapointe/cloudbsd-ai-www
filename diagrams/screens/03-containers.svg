@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="system-ui, sans-serif">
+  <title>CloudBSD Admin — Containers</title>
+  <desc>View-only container inventory with image and exposed port details.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900">
+      <g id="header" class="contents">
+        <div class="h-14 bg-white border-b border-slate-200 flex items-center px-4">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded bg-blue-600 text-white flex items-center justify-center font-bold">C</div>
+            <span class="font-bold text-lg">CloudBSD Admin</span>
+            <span class="ml-2 px-2 py-0.5 text-xs rounded bg-slate-100 text-slate-600">freenas-mock.local</span>
+          </div>
+          <div class="ml-auto flex items-center gap-4">
+            <span class="text-sm text-slate-500">Theme: CloudBSD</span>
+            <button class="text-sm text-slate-600 hover:text-slate-900">Refresh</button>
+            <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">M</div>
+          </div>
+        </div>
+      </g>
+      <div class="flex" style="height: calc(100% - 56px);">
+        <g id="sidebar" class="contents">
+          <aside class="w-56 bg-white border-r border-slate-200 p-3 overflow-y-auto">
+            <nav class="space-y-1 text-sm">
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Dashboard</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Virtual Machines</a>
+              <a class="block px-3 py-2 rounded bg-blue-50 text-blue-700 font-medium">Containers</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Jails</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Volumes</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Network Map</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Cluster</a>
+              <div class="pt-3 pb-1 text-xs uppercase tracking-wide text-slate-400 px-3">Admin</div>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Users</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Logs</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Notifications</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Settings</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Status</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">About</a>
+            </nav>
+          </aside>
+        </g>
+        <main class="flex-1 p-6 overflow-auto">
+          <g id="content" class="contents">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h1 class="text-2xl font-bold">Containers</h1>
+                <p class="text-sm text-slate-500">OCI container inventory · lifecycle actions disabled in this milestone</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="text" placeholder="Filter containers…" class="text-sm border border-slate-300 rounded px-3 py-1.5 w-56 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <select class="text-sm border border-slate-300 rounded px-2 py-1.5">
+                  <option>All states</option>
+                  <option>Running</option>
+                  <option>Exited</option>
+                </select>
+              </div>
+            </div>
+            <div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 text-slate-600">
+                  <tr>
+                    <th class="text-left font-medium px-4 py-2">Name</th>
+                    <th class="text-left font-medium px-4 py-2">Image</th>
+                    <th class="text-left font-medium px-4 py-2">State</th>
+                    <th class="text-left font-medium px-4 py-2">CPU %</th>
+                    <th class="text-left font-medium px-4 py-2">Memory</th>
+                    <th class="text-left font-medium px-4 py-2">Published Ports</th>
+                    <th class="text-left font-medium px-4 py-2">Network</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2 font-medium">nginx-proxy</td>
+                    <td class="px-4 py-2 text-slate-700">nginx:1.27-alpine</td>
+                    <td class="px-4 py-2"><span class="px-2 py-0.5 rounded-full text-xs bg-emerald-50 text-emerald-700">RUNNING</span></td>
+                    <td class="px-4 py-2 text-slate-700">1.2</td>
+                    <td class="px-4 py-2 text-slate-700">42 MB</td>
+                    <td class="px-4 py-2 text-slate-700 font-mono text-xs">80:80, 443:443</td>
+                    <td class="px-4 py-2 text-slate-700">br0</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2 font-medium">pi-hole</td>
+                    <td class="px-4 py-2 text-slate-700">pihole/pihole:2026.04</td>
+                    <td class="px-4 py-2"><span class="px-2 py-0.5 rounded-full text-xs bg-emerald-50 text-emerald-700">RUNNING</span></td>
+                    <td class="px-4 py-2 text-slate-700">0.4</td>
+                    <td class="px-4 py-2 text-slate-700">128 MB</td>
+                    <td class="px-4 py-2 text-slate-700 font-mono text-xs">53:53/tcp, 8081:80</td>
+                    <td class="px-4 py-2 text-slate-700">br0</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2 font-medium">postgres-16</td>
+                    <td class="px-4 py-2 text-slate-700">postgres:16-alpine</td>
+                    <td class="px-4 py-2"><span class="px-2 py-0.5 rounded-full text-xs bg-emerald-50 text-emerald-700">RUNNING</span></td>
+                    <td class="px-4 py-2 text-slate-700">3.8</td>
+                    <td class="px-4 py-2 text-slate-700">512 MB</td>
+                    <td class="px-4 py-2 text-slate-700 font-mono text-xs">5432:5432</td>
+                    <td class="px-4 py-2 text-slate-700">internal</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2 font-medium">redis-cache</td>
+                    <td class="px-4 py-2 text-slate-700">redis:7.4-alpine</td>
+                    <td class="px-4 py-2"><span class="px-2 py-0.5 rounded-full text-xs bg-emerald-50 text-emerald-700">RUNNING</span></td>
+                    <td class="px-4 py-2 text-slate-700">0.8</td>
+                    <td class="px-4 py-2 text-slate-700">96 MB</td>
+                    <td class="px-4 py-2 text-slate-700 font-mono text-xs">6379:6379</td>
+                    <td class="px-4 py-2 text-slate-700">internal</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2 font-medium">minio</td>
+                    <td class="px-4 py-2 text-slate-700">minio/minio:RELEASE.2026-05-01</td>
+                    <td class="px-4 py-2"><span class="px-2 py-0.5 rounded-full text-xs bg-rose-50 text-rose-700">EXITED</span></td>
+                    <td class="px-4 py-2 text-slate-700">—</td>
+                    <td class="px-4 py-2 text-slate-700">—</td>
+                    <td class="px-4 py-2 text-slate-700 font-mono text-xs">9000:9000, 9001:9001</td>
+                    <td class="px-4 py-2 text-slate-700">br0</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="flex items-center justify-between px-4 py-2 text-sm text-slate-500 border-t border-slate-100">
+                <div>5 containers · 4 running, 1 exited</div>
+                <div class="flex items-center gap-2">
+                  <span>Read-only mode</span>
+                  <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-xs">No actions</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4 bg-white rounded-lg p-4 border border-slate-200 text-sm text-slate-600">
+              <div class="font-medium text-slate-900 mb-1">Notes</div>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>Container management will be re-enabled in milestone 2 (post-migration).</li>
+                <li>Network namespace <span class="font-mono text-xs">internal</span> is host-internal only.</li>
+                <li>Image updates are reconciled nightly by <span class="font-mono text-xs">containerd</span>.</li>
+              </ul>
+            </div>
+          </g>
+        </main>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="system-ui, sans-serif">
+  <title>CloudBSD Admin — PAM Account Locked</title>
+  <desc>Account has been locked due to too many failed PAM attempts. The login form is disabled and only an unlock / contact-admin path is offered.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-gradient-to-br from-slate-50 to-slate-100 text-slate-900 flex flex-col">
+      <g id="top-bar" class="contents">
+        <div class="h-12 bg-white/70 backdrop-blur border-b border-slate-200 flex items-center px-6">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded bg-blue-600 text-white flex items-center justify-center font-bold text-sm">C</div>
+            <span class="font-bold">CloudBSD Admin</span>
+            <span class="text-xs text-slate-500 ml-2">freenas-mock.local</span>
+          </div>
+          <div class="ml-auto text-xs text-slate-500">Theme: CloudBSD · en-US · v2.4.1</div>
+        </div>
+      </g>
+      <div class="flex-1 flex items-center justify-center p-6">
+        <g id="locked-card" class="contents">
+          <div class="bg-white rounded-xl shadow-xl border border-slate-200 w-full max-w-md p-8">
+            <div class="flex items-center gap-3 mb-1">
+              <div class="w-10 h-10 rounded-lg bg-slate-300 text-slate-700 flex items-center justify-center text-lg" aria-hidden="true">🔒</div>
+              <div>
+                <h1 class="text-xl font-bold">Account locked</h1>
+                <p class="text-xs text-slate-500">Sign-in temporarily disabled</p>
+              </div>
+            </div>
+            <div role="alert" class="mt-5 bg-rose-50 border border-rose-200 rounded p-4 flex items-start gap-3">
+              <div class="w-9 h-9 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center flex-shrink-0 text-lg">⛔</div>
+              <div class="flex-1 text-sm text-rose-900">
+                <div class="font-semibold">PAM account locked</div>
+                <div class="text-rose-800 mt-0.5">
+                  Too many failed sign-in attempts. The account
+                  <code class="px-1 py-0.5 bg-rose-100 rounded text-xs">admin</code>
+                  has been locked by <code class="px-1 py-0.5 bg-rose-100 rounded text-xs">pam_tally2</code>.
+                </div>
+                <div class="mt-3 grid grid-cols-2 gap-2 text-xs">
+                  <div class="bg-white/60 rounded p-2">
+                    <div class="text-rose-700">Locked at</div>
+                    <div class="font-medium">14:21:55 UTC</div>
+                  </div>
+                  <div class="bg-white/60 rounded p-2">
+                    <div class="text-rose-700">Unlocks at</div>
+                    <div class="font-medium">14:51:55 UTC</div>
+                  </div>
+                </div>
+                <div class="mt-3 text-xs text-rose-800">
+                  Failed attempts: <strong>5 of 5</strong> · lockout duration: <strong>30 minutes</strong>
+                </div>
+              </div>
+            </div>
+            <div class="mt-5 space-y-3 opacity-60 pointer-events-none select-none">
+              <div>
+                <label class="text-xs font-medium text-slate-700 block mb-1">Username</label>
+                <input type="text" value="admin" disabled="disabled"  class="w-full px-3 py-2 text-sm border border-slate-300 rounded bg-slate-100 text-slate-500" />
+              </div>
+              <div>
+                <label class="text-xs font-medium text-slate-700 block mb-1">Password</label>
+                <input type="password" placeholder="••••••••" disabled="disabled"  class="w-full px-3 py-2 text-sm border border-slate-300 rounded bg-slate-100" />
+              </div>
+              <button disabled="disabled"  class="w-full py-2 bg-slate-300 text-slate-600 rounded font-medium cursor-not-allowed">Sign in (locked)</button>
+            </div>
+            <div class="mt-5 grid grid-cols-2 gap-2">
+              <button class="px-3 py-2 text-sm border border-slate-300 bg-white text-slate-700 rounded hover:bg-slate-50">Reset password</button>
+              <button class="px-3 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">Contact admin</button>
+            </div>
+            <div class="mt-5 pt-4 border-t border-slate-200 text-[11px] text-slate-500 leading-snug">
+              This lock is enforced by PAM. To unlock early, an administrator can run
+              <code class="px-1 py-0.5 bg-slate-100 rounded">pam_tally2 --user=admin --reset</code> on the host.
+              Unlocks are audit-logged.
+            </div>
+          </div>
+        </g>
+      </div>
+      <g id="detail-levels" class="contents">
+        <div class="absolute bottom-6 left-6 right-6">
+          <div class="bg-white rounded-lg border border-slate-200 shadow-sm">
+            <div class="px-4 py-2 border-b border-slate-200 flex items-center justify-between">
+              <h2 class="font-medium text-sm">Error detail levels — PAM account locked</h2>
+              <span class="text-xs text-slate-500">pam_tally2 · 5/5 strikes</span>
+            </div>
+            <div class="p-4 grid grid-cols-4 gap-3 text-xs">
+              <div class="border border-slate-200 rounded p-3">
+                <div class="flex items-center gap-1.5 mb-2">
+                  <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                  <span class="font-semibold uppercase tracking-wide text-slate-600">Minimal</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-sm">🔒</span>
+                  <span>Account locked</span>
+                </div>
+              </div>
+              <div class="border border-blue-300 bg-blue-50 rounded p-3 ring-1 ring-blue-300">
+                <div class="flex items-center gap-1.5 mb-2">
+                  <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                  <span class="font-semibold uppercase tracking-wide text-blue-700">Standard</span>
+                </div>
+                <div class="font-medium mb-1">Account locked</div>
+                <div class="text-slate-600 mb-2">Try again in 28 min, or contact an admin.</div>
+                <button class="px-2 py-1 bg-blue-600 text-white rounded text-xs">Contact admin</button>
+              </div>
+              <div class="border border-slate-200 rounded p-3">
+                <div class="flex items-center gap-1.5 mb-2">
+                  <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                  <span class="font-semibold uppercase tracking-wide text-slate-600">Detailed</span>
+                </div>
+                <div class="text-slate-600 mb-1">PAM trace (admin):</div>
+                <pre class="text-[10px] font-mono text-slate-700 bg-slate-50 rounded p-1.5 overflow-hidden leading-tight">pam_tally2(cbsd:auth):
+  user admin (5/5)
+  deny=5 even=5
+  locked until 14:51:55 UTC</pre>
+              </div>
+              <div class="border border-slate-200 rounded p-3">
+                <div class="flex items-center gap-1.5 mb-2">
+                  <span class="w-2 h-2 rounded-full bg-violet-500"></span>
+                  <span class="font-semibold uppercase tracking-wide text-slate-600">Debug</span>
+                </div>
+                <div class="space-y-1 text-slate-700">
+                  <div>req&#160;id:&#160;<code class="text-[10px]">req_99a0c2b8</code></div>
+                  <div>env:&#160;<code class="text-[10px]">production</code></div>
+                  <div>build:&#160;<code class="text-[10px]">v2.4.1#fb12a8</code></div>
+                  <div>pam&#160;rcode:&#160;<code class="text-[10px]">PAM_ACCT_EXPIRED</code></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </g>
+    </div>
+  </foreignObject>
+</svg>

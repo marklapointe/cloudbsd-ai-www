@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" font-family="system-ui, sans-serif">
+  <title>CloudBSD Admin — Data table</title>
+  <desc>Sortable table with header, body rows, status badges, and pagination controls.</desc>
+  <foreignObject x="0" y="0" width="600" height="400">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900 p-8">
+      <g id="header" class="contents">
+        <div class="mb-4">
+          <h2 class="text-lg font-semibold">Table</h2>
+          <p class="text-sm text-slate-500">Sortable · striped · pagination footer</p>
+        </div>
+      </g>
+      <g id="table" class="contents">
+        <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+          <div class="px-4 py-3 border-b border-slate-200 flex items-center justify-between">
+            <div class="text-sm font-medium">Virtual Machines</div>
+            <div class="text-xs text-slate-500">5 of 24 shown</div>
+          </div>
+          <table class="w-full text-sm">
+            <thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+              <tr>
+                <th class="text-left px-4 py-2 font-medium">Name</th>
+                <th class="text-left px-4 py-2 font-medium">Status</th>
+                <th class="text-left px-4 py-2 font-medium">CPU</th>
+                <th class="text-left px-4 py-2 font-medium">Mem</th>
+                <th class="text-right px-4 py-2 font-medium">Uptime</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-t border-slate-100 hover:bg-slate-50">
+                <td class="px-4 py-2 font-medium">web-server-01</td>
+                <td class="px-4 py-2"><span class="text-xs px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700">running</span></td>
+                <td class="px-4 py-2 text-slate-600">37%</td>
+                <td class="px-4 py-2 text-slate-600">2.1 GB</td>
+                <td class="px-4 py-2 text-right text-slate-600">14d 6h</td>
+              </tr>
+              <tr class="border-t border-slate-100 hover:bg-slate-50">
+                <td class="px-4 py-2 font-medium">db-postgres</td>
+                <td class="px-4 py-2"><span class="text-xs px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700">running</span></td>
+                <td class="px-4 py-2 text-slate-600">62%</td>
+                <td class="px-4 py-2 text-slate-600">6.4 GB</td>
+                <td class="px-4 py-2 text-right text-slate-600">41d 22h</td>
+              </tr>
+              <tr class="border-t border-slate-100 hover:bg-slate-50">
+                <td class="px-4 py-2 font-medium">cache-redis</td>
+                <td class="px-4 py-2"><span class="text-xs px-1.5 py-0.5 rounded bg-amber-50 text-amber-700">paused</span></td>
+                <td class="px-4 py-2 text-slate-600">2%</td>
+                <td class="px-4 py-2 text-slate-600">512 MB</td>
+                <td class="px-4 py-2 text-right text-slate-600">3d 11h</td>
+              </tr>
+              <tr class="border-t border-slate-100 hover:bg-slate-50">
+                <td class="px-4 py-2 font-medium">worker-pool</td>
+                <td class="px-4 py-2"><span class="text-xs px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700">running</span></td>
+                <td class="px-4 py-2 text-slate-600">81%</td>
+                <td class="px-4 py-2 text-slate-600">3.8 GB</td>
+                <td class="px-4 py-2 text-right text-slate-600">8d 2h</td>
+              </tr>
+              <tr class="border-t border-slate-100 hover:bg-slate-50">
+                <td class="px-4 py-2 font-medium">monitoring</td>
+                <td class="px-4 py-2"><span class="text-xs px-1.5 py-0.5 rounded bg-rose-50 text-rose-700">stopped</span></td>
+                <td class="px-4 py-2 text-slate-400">—</td>
+                <td class="px-4 py-2 text-slate-400">—</td>
+                <td class="px-4 py-2 text-right text-slate-400">—</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="px-4 py-3 border-t border-slate-200 flex items-center justify-between text-xs">
+            <div class="text-slate-500">Page 1 of 5</div>
+            <div class="flex items-center gap-1">
+              <button class="px-2 py-1 rounded border border-slate-300 text-slate-400 cursor-not-allowed" disabled="true">Prev</button>
+              <button class="px-2.5 py-1 rounded bg-blue-600 text-white">1</button>
+              <button class="px-2.5 py-1 rounded border border-slate-300 text-slate-700 hover:bg-slate-50">2</button>
+              <button class="px-2.5 py-1 rounded border border-slate-300 text-slate-700 hover:bg-slate-50">3</button>
+              <button class="px-2 py-1 rounded border border-slate-300 text-slate-700 hover:bg-slate-50">Next</button>
+            </div>
+          </div>
+        </div>
+      </g>
+    </div>
+  </foreignObject>
+</svg>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="system-ui, sans-serif">
+  <title>CloudBSD Admin — Backend Unavailable (Pre-Flight, Degraded Shell)</title>
+  <desc>Pre-flight check detected the middleware backend is unreachable. Application shell is rendered in degraded/read-only mode with an error banner.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900">
+      <g id="header" class="contents">
+        <div class="h-14 bg-white border-b border-slate-200 flex items-center px-4">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded bg-blue-600 text-white flex items-center justify-center font-bold">C</div>
+            <span class="font-bold text-lg">CloudBSD Admin</span>
+            <span class="ml-2 px-2 py-0.5 text-xs rounded bg-slate-100 text-slate-600">freenas-mock.local</span>
+            <span class="ml-2 px-2 py-0.5 text-xs rounded bg-rose-50 text-rose-700 border border-rose-200 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+              Backend offline
+            </span>
+          </div>
+          <div class="ml-auto flex items-center gap-3">
+            <span class="text-xs text-slate-500">Theme: CloudBSD · en-US</span>
+            <button class="text-sm px-2 py-1 rounded text-slate-700 hover:bg-slate-100">Retry connection</button>
+            <div class="w-8 h-8 rounded-full bg-slate-300 text-slate-600 flex items-center justify-center text-sm font-medium" title="Signed out">?</div>
+          </div>
+        </div>
+      </g>
+      <div class="flex" style="height: calc(100% - 56px);">
+        <g id="sidebar" class="contents">
+          <aside class="w-56 bg-white border-r border-slate-200 p-3 opacity-60 pointer-events-none select-none">
+            <nav class="space-y-1 text-sm">
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Dashboard</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Virtual Machines</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Containers</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Jails</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Volumes</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Network Map</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Cluster</a>
+              <div class="pt-3 pb-1 text-xs uppercase tracking-wide text-slate-400 px-3">Admin</div>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Users</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Logs</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Notifications</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Settings</a>
+            </nav>
+          </aside>
+        </g>
+        <main class="flex-1 overflow-auto">
+          <g id="error-banner" class="contents">
+            <div class="bg-rose-50 border-b border-rose-200 px-6 py-3 flex items-start gap-3">
+              <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center flex-shrink-0 text-lg">!</div>
+              <div class="flex-1 min-w-0">
+                <div class="font-semibold text-rose-900">Backend service unavailable</div>
+                <div class="text-sm text-rose-800 mt-0.5">
+                  Pre-flight health check to <code class="px-1 py-0.5 bg-rose-100 rounded text-xs">http://localhost:3001/api/v1.0/system/info</code> failed (timeout after 5.0s).
+                  The UI shell is rendered in read-only, cached mode. Live data is unavailable.
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <button class="text-sm px-3 py-1.5 rounded bg-white border border-rose-300 text-rose-700 hover:bg-rose-100">Retry</button>
+                <button class="text-sm px-3 py-1.5 rounded text-slate-700 hover:bg-rose-100" title="Dismiss">×</button>
+              </div>
+            </div>
+          </g>
+          <div class="p-6">
+            <g id="empty-state" class="contents">
+              <div class="bg-white rounded-lg border border-slate-200 shadow-sm mb-6">
+                <div class="px-6 py-10 text-center">
+                  <div class="mx-auto w-16 h-16 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-3xl mb-4" aria-hidden="true">⚠</div>
+                  <h1 class="text-xl font-semibold text-slate-900">Cannot reach middleware</h1>
+                  <p class="text-sm text-slate-600 mt-2 max-w-md mx-auto">
+                    The CloudBSD middleware service did not respond on
+                    <code class="px-1 py-0.5 bg-slate-100 rounded text-xs">127.0.0.1:3001</code>.
+                    Page content below is from the last successful snapshot (12&#160;minutes&#160;ago).
+                  </p>
+                  <div class="mt-5 flex items-center justify-center gap-2">
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">Retry connection</button>
+                    <button class="px-4 py-2 bg-white border border-slate-300 text-slate-700 rounded text-sm hover:bg-slate-50">View system status</button>
+                    <button class="px-4 py-2 text-slate-600 text-sm hover:underline">Work offline</button>
+                  </div>
+                </div>
+              </div>
+            </g>
+            <g id="skeleton-grid" class="contents">
+              <div class="grid grid-cols-3 gap-4 opacity-50">
+                <div class="bg-white rounded-lg border border-slate-200 p-4">
+                  <div class="h-3 w-20 bg-slate-200 rounded mb-3"></div>
+                  <div class="h-7 w-32 bg-slate-100 rounded mb-2"></div>
+                  <div class="h-3 w-24 bg-slate-100 rounded"></div>
+                </div>
+                <div class="bg-white rounded-lg border border-slate-200 p-4">
+                  <div class="h-3 w-24 bg-slate-200 rounded mb-3"></div>
+                  <div class="h-7 w-28 bg-slate-100 rounded mb-2"></div>
+                  <div class="h-3 w-20 bg-slate-100 rounded"></div>
+                </div>
+                <div class="bg-white rounded-lg border border-slate-200 p-4">
+                  <div class="h-3 w-16 bg-slate-200 rounded mb-3"></div>
+                  <div class="h-7 w-24 bg-slate-100 rounded mb-2"></div>
+                  <div class="h-3 w-28 bg-slate-100 rounded"></div>
+                </div>
+              </div>
+            </g>
+            <g id="detail-levels" class="contents">
+              <div class="bg-white rounded-lg border border-slate-200 shadow-sm mt-6">
+                <div class="px-4 py-2 border-b border-slate-200 flex items-center justify-between">
+                  <h2 class="font-medium text-sm">Error detail levels</h2>
+                  <span class="text-xs text-slate-500">toggleable via ?detail=minimal|standard|detailed|debug</span>
+                </div>
+                <div class="p-4 grid grid-cols-4 gap-3 text-xs">
+                  <div class="border border-slate-200 rounded p-3">
+                    <div class="flex items-center gap-1.5 mb-2">
+                      <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                      <span class="font-semibold uppercase tracking-wide text-slate-600">Minimal</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class="w-6 h-6 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center">!</span>
+                      <span>Backend offline</span>
+                    </div>
+                  </div>
+                  <div class="border border-blue-300 bg-blue-50 rounded p-3 ring-1 ring-blue-300">
+                    <div class="flex items-center gap-1.5 mb-2">
+                      <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                      <span class="font-semibold uppercase tracking-wide text-blue-700">Standard</span>
+                    </div>
+                    <div class="font-medium mb-1">Cannot reach middleware</div>
+                    <div class="text-slate-600 mb-2">Service did not respond on 127.0.0.1:3001.</div>
+                    <button class="px-2 py-1 bg-blue-600 text-white rounded text-xs">Retry</button>
+                  </div>
+                  <div class="border border-slate-200 rounded p-3">
+                    <div class="flex items-center gap-1.5 mb-2">
+                      <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                      <span class="font-semibold uppercase tracking-wide text-slate-600">Detailed</span>
+                    </div>
+                    <div class="text-slate-600 mb-1">Stack trace (admin only):</div>
+                    <pre class="text-[10px] font-mono text-slate-700 bg-slate-50 rounded p-1.5 overflow-hidden leading-tight">Error: connect ECONNREFUSED
+  at TcpConnectWrap.afterConnect
+  at HealthCheckService.ping (/srv/mw/health.js:142)
+  at runMicrotasks</pre>
+                  </div>
+                  <div class="border border-slate-200 rounded p-3">
+                    <div class="flex items-center gap-1.5 mb-2">
+                      <span class="w-2 h-2 rounded-full bg-violet-500"></span>
+                      <span class="font-semibold uppercase tracking-wide text-slate-600">Debug</span>
+                    </div>
+                    <div class="space-y-1 text-slate-700">
+                      <div>req&#160;id:&#160;<code class="text-[10px]">req_a8f3e2c1</code></div>
+                      <div>env:&#160;<code class="text-[10px]">production</code></div>
+                      <div>build:&#160;<code class="text-[10px]">v2.4.1#fb12a8</code></div>
+                      <div>node:&#160;<code class="text-[10px]">v24.2.0</code></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </g>
+          </div>
+        </main>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="system-ui, sans-serif">
+  <title>CloudBSD Admin — 404 Not Found</title>
+  <desc>Friendly 404 page showing the broken URL, a global search box, quick navigation back to known areas, and helpful troubleshooting hints.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900">
+      <g id="header" class="contents">
+        <div class="h-14 bg-white border-b border-slate-200 flex items-center px-4">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded bg-blue-600 text-white flex items-center justify-center font-bold">C</div>
+            <span class="font-bold text-lg">CloudBSD Admin</span>
+            <span class="ml-2 px-2 py-0.5 text-xs rounded bg-slate-100 text-slate-600">freenas-mock.local</span>
+          </div>
+          <div class="ml-auto flex items-center gap-4">
+            <span class="text-sm text-slate-500">Theme: CloudBSD</span>
+            <button class="text-sm text-slate-600 hover:text-slate-900">Refresh</button>
+            <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">M</div>
+          </div>
+        </div>
+      </g>
+      <div class="flex" style="height: calc(100% - 56px);">
+        <g id="sidebar" class="contents">
+          <aside class="w-56 bg-white border-r border-slate-200 p-3 overflow-y-auto">
+            <nav class="space-y-1 text-sm">
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Dashboard</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Virtual Machines</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Containers</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Jails</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Volumes</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Network Map</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Cluster</a>
+              <div class="pt-3 pb-1 text-xs uppercase tracking-wide text-slate-400 px-3">Admin</div>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Users</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Logs</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Notifications</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Settings</a>
+            </nav>
+          </aside>
+        </g>
+        <main class="flex-1 overflow-auto">
+          <div class="p-6">
+            <g id="not-found" class="contents">
+              <div class="bg-white rounded-xl border border-slate-200 shadow-sm max-w-4xl mx-auto">
+                <div class="grid md:grid-cols-5">
+                  <div class="md:col-span-3 px-8 py-10">
+                    <div class="text-7xl font-extrabold tracking-tight bg-gradient-to-br from-blue-600 to-violet-600 bg-clip-text text-transparent">404</div>
+                    <h1 class="mt-2 text-2xl font-bold">We can't find that page</h1>
+                    <p class="mt-2 text-sm text-slate-600">
+                      The URL you requested isn't part of CloudBSD Admin. It may have been moved, deleted, or the link may be incorrect.
+                    </p>
+                    <div class="mt-4 bg-slate-50 border border-slate-200 rounded p-3 text-xs font-mono text-slate-700 break-all">
+                      GET&#160;&#160;<span class="text-rose-700">https://freenas-mock.local/admin/jails/node-04/snapshots/old-name</span>
+                      <div class="mt-1 text-slate-500">→ <span class="text-amber-700">404 Not Found</span> · api/v1.0 · 7 ms</div>
+                    </div>
+                    <div class="mt-5 flex flex-wrap items-center gap-2">
+                      <button class="px-4 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">← Go to Dashboard</button>
+                      <button class="px-4 py-2 bg-white border border-slate-300 text-slate-700 rounded text-sm hover:bg-slate-50">Back</button>
+                      <button class="px-4 py-2 text-slate-600 text-sm hover:underline">Report broken link</button>
+                    </div>
+                  </div>
+                  <div class="md:col-span-2 px-6 py-10 border-t md:border-t-0 md:border-l border-slate-200 bg-slate-50/50">
+                    <h2 class="text-sm font-semibold text-slate-700">Search CloudBSD</h2>
+                    <div class="mt-2 flex items-stretch gap-1">
+                      <input type="text" placeholder="jails, snapshots, volumes…" class="flex-1 px-3 py-2 text-sm border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      <button class="px-3 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">Search</button>
+                    </div>
+                    <h3 class="mt-5 text-xs uppercase tracking-wider text-slate-500 font-semibold">Popular destinations</h3>
+                    <ul class="mt-2 space-y-1.5 text-sm">
+                      <li><a class="text-blue-700 hover:underline">/dashboard</a></li>
+                      <li><a class="text-blue-700 hover:underline">/virtual-machines</a></li>
+                      <li><a class="text-blue-700 hover:underline">/jails</a></li>
+                      <li><a class="text-blue-700 hover:underline">/volumes</a></li>
+                      <li><a class="text-blue-700 hover:underline">/cluster/nodes</a></li>
+                      <li><a class="text-blue-700 hover:underline">/admin/users</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </g>
+
+            <g id="detail-levels" class="contents">
+              <div class="bg-white rounded-lg border border-slate-200 shadow-sm mt-6">
+                <div class="px-4 py-2 border-b border-slate-200 flex items-center justify-between">
+                  <h2 class="font-medium text-sm">Error detail levels — HTTP 404</h2>
+                  <span class="text-xs text-slate-500">Suggestive matching enabled</span>
+                </div>
+                <div class="p-4 grid grid-cols-4 gap-3 text-xs">
+                  <div class="border border-slate-200 rounded p-3">
+                    <div class="flex items-center gap-1.5 mb-2">
+                      <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                      <span class="font-semibold uppercase tracking-wide text-slate-600">Minimal</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold">?</span>
+                      <span>Not found</span>
+                    </div>
+                  </div>
+                  <div class="border border-blue-300 bg-blue-50 rounded p-3 ring-1 ring-blue-300">
+                    <div class="flex items-center gap-1.5 mb-2">
+                      <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                      <span class="font-semibold uppercase tracking-wide text-blue-700">Standard</span>
+                    </div>
+                    <div class="font-medium mb-1">We can't find that page</div>
+                    <div class="text-slate-600 mb-2">The URL isn't part of CloudBSD Admin.</div>
+                    <button class="px-2 py-1 bg-blue-600 text-white rounded text-xs">Dashboard</button>
+                  </div>
+                  <div class="border border-slate-200 rounded p-3">
+                    <div class="flex items-center gap-1.5 mb-2">
+                      <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                      <span class="font-semibold uppercase tracking-wide text-slate-600">Detailed</span>
+                    </div>
+                    <div class="text-slate-600 mb-1">Route trace:</div>
+                    <pre class="text-[10px] font-mono text-slate-700 bg-slate-50 rounded p-1.5 overflow-hidden leading-tight">NotFoundError: no route
+  Router.config (/admin/jails/:id/:...)
+  Did you mean? /admin/jails/123/snapshots</pre>
+                  </div>
+                  <div class="border border-slate-200 rounded p-3">
+                    <div class="flex items-center gap-1.5 mb-2">
+                      <span class="w-2 h-2 rounded-full bg-violet-500"></span>
+                      <span class="font-semibold uppercase tracking-wide text-slate-600">Debug</span>
+                    </div>
+                    <div class="space-y-1 text-slate-700">
+                      <div>req&#160;id:&#160;<code class="text-[10px]">req_d98a0f11</code></div>
+                      <div>env:&#160;<code class="text-[10px]">production</code></div>
+                      <div>build:&#160;<code class="text-[10px]">v2.4.1#fb12a8</code></div>
+                      <div>method:&#160;<code class="text-[10px]">GET</code></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </g>
+          </div>
+        </main>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

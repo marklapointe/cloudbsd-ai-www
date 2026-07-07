@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="Helvetica, Arial, sans-serif">
+  <title>Theme Mock-Up — Warp Flat — Dashboard at 1280x800</title>
+  <desc>Flat design with neutral gray body and deep blue accents. Sharp corners, hard borders, dense info layout. Business productivity aesthetic. WCAG AA contrast throughout.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full" style="background: #d4d4d4; font-family: Helvetica, Arial, sans-serif;">
+      <g id="theme-header" class="contents">
+        <div class="h-14 flex items-center px-3" style="background: linear-gradient(180deg, #1e4a8a 0%, #15386b 100%); border-bottom: 2px solid #0a2247; box-shadow: 0 2px 0 0 #ffffff, 0 4px 4px rgba(0,0,0,0.15);">
+          <div class="flex items-center gap-3">
+            <div class="w-7 h-7 flex items-center justify-center font-bold" style="background: #ffffff; color: #1e4a8a;">C</div>
+            <span class="font-bold text-sm tracking-wide" style="color: #ffffff;">CloudBSD Admin</span>
+            <span class="ml-2 px-2 py-0.5 text-xs font-bold" style="background: #0a2247; color: #7ab0e8; border: 1px solid #1e4a8a;">warp</span>
+          </div>
+          <div class="ml-auto flex items-center gap-3">
+            <span class="text-xs font-bold uppercase tracking-wider" style="color: #b0c8e0;">System: freenas-mock.local</span>
+            <button class="text-xs font-bold uppercase tracking-wider px-3 py-1.5" style="background: #ffffff; color: #1e4a8a; border: 1px solid #0a2247;">Refresh</button>
+            <div class="w-7 h-7 flex items-center justify-center text-sm font-bold" style="background: #ffffff; color: #1e4a8a;">M</div>
+          </div>
+        </div>
+      </g>
+      <div class="flex" style="height: calc(100% - 56px);">
+        <g id="theme-sidebar" class="contents">
+          <aside class="w-56 p-2 overflow-y-auto" style="background: #c0c0c0; border-right: 2px solid #808080; box-shadow: inset -2px 0 0 #ffffff;">
+            <nav class="space-y-px text-sm">
+              <a class="block px-3 py-2 font-bold" style="background: #1e4a8a; color: #ffffff; border: 1px solid #0a2247; box-shadow: inset 1px 1px 0 0 #2a5aa0, 1px 1px 0 0 #0a2247;">Dashboard</a>
+              <a class="block px-3 py-2 font-bold" style="background: #d4d4d4; color: #1e4a8a; border: 1px solid #808080;">Virtual Machines</a>
+              <a class="block px-3 py-2 font-bold" style="background: #d4d4d4; color: #1e4a8a; border: 1px solid #808080;">Containers</a>
+              <a class="block px-3 py-2 font-bold" style="background: #d4d4d4; color: #1e4a8a; border: 1px solid #808080;">Jails</a>
+              <a class="block px-3 py-2 font-bold" style="background: #d4d4d4; color: #1e4a8a; border: 1px solid #808080;">Volumes</a>
+              <a class="block px-3 py-2 font-bold" style="background: #d4d4d4; color: #1e4a8a; border: 1px solid #808080;">Network Map</a>
+              <a class="block px-3 py-2 font-bold" style="background: #d4d4d4; color: #1e4a8a; border: 1px solid #808080;">Cluster</a>
+              <div class="pt-3 pb-1 text-xs font-bold uppercase tracking-wider px-3" style="color: #1e4a8a; border-top: 1px solid #808080; margin-top: 8px;">Admin</div>
+              <a class="block px-3 py-2 font-bold" style="background: #d4d4d4; color: #1e4a8a; border: 1px solid #808080;">Users</a>
+              <a class="block px-3 py-2 font-bold" style="background: #d4d4d4; color: #1e4a8a; border: 1px solid #808080;">Logs</a>
+              <a class="block px-3 py-2 font-bold" style="background: #d4d4d4; color: #1e4a8a; border: 1px solid #808080;">Notifications</a>
+              <a class="block px-3 py-2 font-bold" style="background: #d4d4d4; color: #1e4a8a; border: 1px solid #808080;">Settings</a>
+            </nav>
+          </aside>
+        </g>
+        <main class="flex-1 p-3 overflow-auto">
+          <g id="theme-content" class="contents">
+            <div class="flex items-center justify-between mb-3 pb-2" style="background: #e8e8e8; border: 1px solid #808080; box-shadow: inset 1px 1px 0 0 #ffffff; padding: 8px 12px;">
+              <div>
+                <h1 class="text-lg font-bold" style="color: #0a2247;">Dashboard</h1>
+                <p class="text-xs" style="color: #4a4a4a;">Host: freenas-mock.local · middleware connected</p>
+              </div>
+              <div class="text-xs" style="color: #4a4a4a;">Last refresh: 12s ago</div>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <div class="p-3" style="background: #e8e8e8; border: 1px solid #808080; box-shadow: inset 1px 1px 0 0 #ffffff, 1px 1px 0 0 #808080;">
+                <div class="flex items-center justify-between">
+                  <div class="text-xs font-bold uppercase tracking-wider" style="color: #0a2247;">CPU Usage</div>
+                  <div class="text-xs font-bold uppercase px-2 py-0.5" style="background: #1a7a3a; color: #ffffff; border: 1px solid #0a4a25;">healthy</div>
+                </div>
+                <div class="text-2xl font-bold mt-1" style="color: #0a2247;">42%</div>
+                <div class="mt-2 h-2" style="background: #b0b0b0; border: 1px solid #808080;">
+                  <div class="h-full" style="width: 42%; background: #1e4a8a;"></div>
+                </div>
+                <div class="mt-1 text-xs" style="color: #4a4a4a;">8 cores · load 1.42</div>
+              </div>
+              <div class="p-3" style="background: #e8e8e8; border: 1px solid #808080; box-shadow: inset 1px 1px 0 0 #ffffff, 1px 1px 0 0 #808080;">
+                <div class="flex items-center justify-between">
+                  <div class="text-xs font-bold uppercase tracking-wider" style="color: #0a2247;">Memory</div>
+                  <div class="text-xs font-bold uppercase px-2 py-0.5" style="background: #c08a1a; color: #ffffff; border: 1px solid #7a5505;">watch</div>
+                </div>
+                <div class="text-2xl font-bold mt-1" style="color: #0a2247;">8.2/16 GB</div>
+                <div class="mt-2 h-2" style="background: #b0b0b0; border: 1px solid #808080;">
+                  <div class="h-full" style="width: 51%; background: #c08a1a;"></div>
+                </div>
+                <div class="mt-1 text-xs" style="color: #4a4a4a;">ARC 2.4 GB · swap 64 MB</div>
+              </div>
+              <div class="p-3" style="background: #e8e8e8; border: 1px solid #808080; box-shadow: inset 1px 1px 0 0 #ffffff, 1px 1px 0 0 #808080;">
+                <div class="flex items-center justify-between">
+                  <div class="text-xs font-bold uppercase tracking-wider" style="color: #0a2247;">Disk</div>
+                  <div class="text-xs font-bold uppercase px-2 py-0.5" style="background: #1a7a3a; color: #ffffff; border: 1px solid #0a4a25;">healthy</div>
+                </div>
+                <div class="text-2xl font-bold mt-1" style="color: #0a2247;">245/920 GB</div>
+                <div class="mt-2 h-2" style="background: #b0b0b0; border: 1px solid #808080;">
+                  <div class="h-full" style="width: 27%; background: #1e4a8a;"></div>
+                </div>
+                <div class="mt-1 text-xs" style="color: #4a4a4a;">zpool tank · scrub Sun 03:00</div>
+              </div>
+              <div class="p-3" style="background: #e8e8e8; border: 1px solid #808080; box-shadow: inset 1px 1px 0 0 #ffffff, 1px 1px 0 0 #808080;">
+                <div class="flex items-center justify-between">
+                  <div class="text-xs font-bold uppercase tracking-wider" style="color: #0a2247;">Network</div>
+                  <div class="text-xs font-bold uppercase px-2 py-0.5" style="background: #1a7a3a; color: #ffffff; border: 1px solid #0a4a25;">healthy</div>
+                </div>
+                <div class="text-2xl font-bold mt-1" style="color: #0a2247;">↑ 12.4 MB/s</div>
+                <div class="mt-2 h-2" style="background: #b0b0b0; border: 1px solid #808080;">
+                  <div class="h-full" style="width: 18%; background: #1e4a8a;"></div>
+                </div>
+                <div class="mt-1 text-xs" style="color: #4a4a4a;">↓ 86.1 MB/s · 3 ifaces</div>
+              </div>
+              <div class="p-3" style="background: #e8e8e8; border: 1px solid #808080; box-shadow: inset 1px 1px 0 0 #ffffff, 1px 1px 0 0 #808080;">
+                <div class="flex items-center justify-between">
+                  <div class="text-xs font-bold uppercase tracking-wider" style="color: #0a2247;">Notifications</div>
+                  <div class="text-xs font-bold uppercase px-2 py-0.5" style="background: #b8334a; color: #ffffff; border: 1px solid #7a1a25;">3 critical</div>
+                </div>
+                <div class="text-2xl font-bold mt-1" style="color: #0a2247;">17</div>
+                <div class="mt-2 grid grid-cols-3 gap-1 text-xs">
+                  <div class="px-1 py-0.5 text-center font-bold" style="background: #b8334a; color: #ffffff; border: 1px solid #7a1a25;">3 crit</div>
+                  <div class="px-1 py-0.5 text-center font-bold" style="background: #c08a1a; color: #ffffff; border: 1px solid #7a5505;">6 warn</div>
+                  <div class="px-1 py-0.5 text-center font-bold" style="background: #4a6b9c; color: #ffffff; border: 1px solid #2a4b7c;">8 info</div>
+                </div>
+                <div class="mt-1 text-xs" style="color: #4a4a4a;">scrub delayed on tank/data</div>
+              </div>
+              <div class="p-3" style="background: #e8e8e8; border: 1px solid #808080; box-shadow: inset 1px 1px 0 0 #ffffff, 1px 1px 0 0 #808080;">
+                <div class="flex items-center justify-between">
+                  <div class="text-xs font-bold uppercase tracking-wider" style="color: #0a2247;">Workloads</div>
+                  <div class="text-xs font-bold uppercase px-2 py-0.5" style="background: #b0b0b0; color: #4a4a4a; border: 1px solid #808080;">R/O</div>
+                </div>
+                <div class="text-2xl font-bold mt-1" style="color: #0a2247;">12</div>
+                <div class="mt-2 grid grid-cols-3 gap-1 text-xs text-center">
+                  <div class="px-1 py-0.5 font-bold" style="background: #c8d4e8; color: #0a2247; border: 1px solid #808080;">5 VMs</div>
+                  <div class="px-1 py-0.5 font-bold" style="background: #c8d4e8; color: #0a2247; border: 1px solid #808080;">4 CT</div>
+                  <div class="px-1 py-0.5 font-bold" style="background: #c8d4e8; color: #0a2247; border: 1px solid #808080;">3 JL</div>
+                </div>
+                <div class="mt-1 text-xs" style="color: #4a4a4a;">7 datasets · 2 snaps</div>
+              </div>
+            </div>
+            <div class="mt-3 p-3" style="background: #e8e8e8; border: 1px solid #808080; box-shadow: inset 1px 1px 0 0 #ffffff, 1px 1px 0 0 #808080;">
+              <div class="flex items-center justify-between mb-2 pb-2" style="border-bottom: 1px solid #808080;">
+                <div class="font-bold uppercase tracking-wide" style="color: #0a2247;">Recent Activity</div>
+                <div class="text-xs" style="color: #4a4a4a;">view-only log</div>
+              </div>
+              <ul class="text-sm">
+                <li class="py-1.5 flex" style="border-bottom: 1px solid #c0c0c0;"><span class="w-32 font-bold" style="color: #4a4a4a;">12:42:01</span><span class="ml-2" style="color: #0a2247;">snapshot daily@auto-2026-07-06_03-00 created on tank/data</span></li>
+                <li class="py-1.5 flex" style="border-bottom: 1px solid #c0c0c0;"><span class="w-32 font-bold" style="color: #4a4a4a;">12:31:18</span><span class="ml-2" style="color: #0a2247;">jail `transmission` entered STATE: STARTED</span></li>
+                <li class="py-1.5 flex" style="border-bottom: 1px solid #c0c0c0;"><span class="w-32 font-bold" style="color: #4a4a4a;">12:18:44</span><span class="ml-2" style="color: #0a2247;">vm `nextcloud` reported guest-agent heartbeat (3s drift)</span></li>
+                <li class="py-1.5 flex"><span class="w-32 font-bold" style="color: #4a4a4a;">11:55:09</span><span class="ml-2" style="color: #0a2247;">scrub of tank completed with 0 errors</span></li>
+              </ul>
+            </div>
+          </g>
+        </main>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

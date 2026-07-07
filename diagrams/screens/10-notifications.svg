@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="system-ui, sans-serif">
+  <title>CloudBSD Admin — Notifications</title>
+  <desc>Notifications grouped by severity with timestamps and source tags.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900">
+      <g id="header" class="contents">
+        <div class="h-14 bg-white border-b border-slate-200 flex items-center px-4">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded bg-blue-600 text-white flex items-center justify-center font-bold">C</div>
+            <span class="font-bold text-lg">CloudBSD Admin</span>
+            <span class="ml-2 px-2 py-0.5 text-xs rounded bg-slate-100 text-slate-600">freenas-mock.local</span>
+          </div>
+          <div class="ml-auto flex items-center gap-4">
+            <span class="text-sm text-slate-500">Theme: CloudBSD</span>
+            <button class="text-sm text-slate-600 hover:text-slate-900">Refresh</button>
+            <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">M</div>
+          </div>
+        </div>
+      </g>
+      <div class="flex" style="height: calc(100% - 56px);">
+        <g id="sidebar" class="contents">
+          <aside class="w-56 bg-white border-r border-slate-200 p-3 overflow-y-auto">
+            <nav class="space-y-1 text-sm">
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Dashboard</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Virtual Machines</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Containers</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Jails</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Volumes</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Network Map</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Cluster</a>
+              <div class="pt-3 pb-1 text-xs uppercase tracking-wide text-slate-400 px-3">Admin</div>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Users</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Logs</a>
+              <a class="block px-3 py-2 rounded bg-blue-50 text-blue-700 font-medium">Notifications</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Settings</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Status</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">About</a>
+            </nav>
+          </aside>
+        </g>
+        <main class="flex-1 p-6 overflow-auto">
+          <g id="content" class="contents">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h1 class="text-2xl font-bold">Notifications</h1>
+                <p class="text-sm text-slate-500">17 active alerts grouped by severity</p>
+              </div>
+              <div class="flex items-center gap-3 text-xs text-slate-500">
+                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-rose-500"></span>3 critical</span>
+                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-500"></span>6 warning</span>
+                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-500"></span>8 info</span>
+              </div>
+            </div>
+            <div class="space-y-4">
+              <section>
+                <div class="flex items-center justify-between mb-2">
+                  <h2 class="text-sm font-semibold text-rose-700 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                    Critical (3)
+                  </h2>
+                  <span class="text-xs text-slate-500">requires operator attention</span>
+                </div>
+                <div class="space-y-2">
+                  <div class="bg-rose-50 border-l-4 border-rose-500 rounded-r-md p-3">
+                    <div class="flex items-start justify-between">
+                      <div>
+                        <div class="font-medium text-rose-900">Resilver stalled on tank/data</div>
+                        <div class="text-sm text-rose-800 mt-0.5">node-04 has not progressed past checkpoint 2 in 18 minutes. Two replicas may be at risk.</div>
+                      </div>
+                      <div class="text-xs text-rose-700 font-mono whitespace-nowrap ml-3">12:42:11</div>
+                    </div>
+                    <div class="mt-1.5 text-xs text-rose-700"><span class="font-mono">middleware.zfs.scrub</span> · node-04</div>
+                  </div>
+                  <div class="bg-rose-50 border-l-4 border-rose-500 rounded-r-md p-3">
+                    <div class="flex items-start justify-between">
+                      <div>
+                        <div class="font-medium text-rose-900">Container minio exited with code 137</div>
+                        <div class="text-sm text-rose-800 mt-0.5">OOM killer signal received; pod was over its 512MB limit during backup window.</div>
+                      </div>
+                      <div class="text-xs text-rose-700 font-mono whitespace-nowrap ml-3">12:18:02</div>
+                    </div>
+                    <div class="mt-1.5 text-xs text-rose-700"><span class="font-mono">middleware.ctr.lifecycle</span> · node-01</div>
+                  </div>
+                  <div class="bg-rose-50 border-l-4 border-rose-500 rounded-r-md p-3">
+                    <div class="flex items-start justify-between">
+                      <div>
+                        <div class="font-medium text-rose-900">Quorum at risk if node-02 fails</div>
+                        <div class="text-sm text-rose-800 mt-0.5">With node-04 degraded, cluster would lose quorum on next node-02 outage.</div>
+                      </div>
+                      <div class="text-xs text-rose-700 font-mono whitespace-nowrap ml-3">11:55:48</div>
+                    </div>
+                    <div class="mt-1.5 text-xs text-rose-700"><span class="font-mono">middleware.cluster.quorum</span> · cluster-a</div>
+                  </div>
+                </div>
+              </section>
+              <section>
+                <div class="flex items-center justify-between mb-2">
+                  <h2 class="text-sm font-semibold text-amber-700 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                    Warning (6)
+                  </h2>
+                  <span class="text-xs text-slate-500">monitor</span>
+                </div>
+                <div class="space-y-2">
+                  <div class="bg-amber-50 border-l-4 border-amber-500 rounded-r-md p-3">
+                    <div class="flex items-start justify-between">
+                      <div>
+                        <div class="font-medium text-amber-900">SMART attribute 197 raised on da3</div>
+                        <div class="text-sm text-amber-800 mt-0.5">Pending sector count is 42 on node-04; recommend replacement within 14 days.</div>
+                      </div>
+                      <div class="text-xs text-amber-700 font-mono whitespace-nowrap ml-3">12:41:48</div>
+                    </div>
+                    <div class="mt-1.5 text-xs text-amber-700"><span class="font-mono">middleware.disk.smart</span> · node-04</div>
+                  </div>
+                  <div class="bg-amber-50 border-l-4 border-amber-500 rounded-r-md p-3">
+                    <div class="flex items-start justify-between">
+                      <div>
+                        <div class="font-medium text-amber-900">Memory headroom under 20%</div>
+                        <div class="text-sm text-amber-800 mt-0.5">Host reached 82% utilization; ARC reclaim aggressive for 6 minutes.</div>
+                      </div>
+                      <div class="text-xs text-amber-700 font-mono whitespace-nowrap ml-3">12:30:10</div>
+                    </div>
+                    <div class="mt-1.5 text-xs text-amber-700"><span class="font-mono">middleware.memory.pressure</span> · node-01</div>
+                  </div>
+                  <div class="bg-amber-50 border-l-4 border-amber-500 rounded-r-md p-3">
+                    <div class="flex items-start justify-between">
+                      <div>
+                        <div class="font-medium text-amber-900">ix0 CRC error rate elevated</div>
+                        <div class="text-sm text-amber-800 mt-0.5">128 errors in last 5 minutes; check SFP+ seating.</div>
+                      </div>
+                      <div class="text-xs text-amber-700 font-mono whitespace-nowrap ml-3">12:35:09</div>
+                    </div>
+                    <div class="mt-1.5 text-xs text-amber-700"><span class="font-mono">middleware.network.link</span> · node-03</div>
+                  </div>
+                </div>
+              </section>
+              <section>
+                <div class="flex items-center justify-between mb-2">
+                  <h2 class="text-sm font-semibold text-blue-700 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                    Info (8)
+                  </h2>
+                  <span class="text-xs text-slate-500">informational</span>
+                </div>
+                <div class="space-y-2">
+                  <div class="bg-blue-50 border-l-4 border-blue-500 rounded-r-md p-3">
+                    <div class="flex items-start justify-between">
+                      <div>
+                        <div class="font-medium text-blue-900">Snapshot daily@auto-2026-07-06 created</div>
+                        <div class="text-sm text-blue-800 mt-0.5">Successful snapshot on tank/data, retention 14 days.</div>
+                      </div>
+                      <div class="text-xs text-blue-700 font-mono whitespace-nowrap ml-3">12:42:01</div>
+                    </div>
+                    <div class="mt-1.5 text-xs text-blue-700"><span class="font-mono">middleware.zfs.snapshot</span></div>
+                  </div>
+                  <div class="bg-blue-50 border-l-4 border-blue-500 rounded-r-md p-3">
+                    <div class="flex items-start justify-between">
+                      <div>
+                        <div class="font-medium text-blue-900">Login: mlapointe via SSH (totp)</div>
+                        <div class="text-sm text-blue-800 mt-0.5">Successful MFA login from 10.0.5.42.</div>
+                      </div>
+                      <div class="text-xs text-blue-700 font-mono whitespace-nowrap ml-3">12:38:21</div>
+                    </div>
+                    <div class="mt-1.5 text-xs text-blue-700"><span class="font-mono">middleware.auth.pam</span></div>
+                  </div>
+                  <div class="bg-blue-50 border-l-4 border-blue-500 rounded-r-md p-3">
+                    <div class="flex items-start justify-between">
+                      <div>
+                        <div class="font-medium text-blue-900">Jail transmission started</div>
+                        <div class="text-sm text-blue-800 mt-0.5">Started by autostart hook at boot.</div>
+                      </div>
+                      <div class="text-xs text-blue-700 font-mono whitespace-nowrap ml-3">12:31:18</div>
+                    </div>
+                    <div class="mt-1.5 text-xs text-blue-700"><span class="font-mono">middleware.jail.lifecycle</span></div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </g>
+        </main>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

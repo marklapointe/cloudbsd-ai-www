@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="Lucida Grande, Helvetica, sans-serif">
+  <title>Theme Mock-Up — Aqua Pinstripe — Dashboard at 1280x800</title>
+  <desc>Translucent blue and brushed steel aesthetic. Pinstripe background, frosted glass topbar, soft aqua accents. Cool, polished, depth-layered look. WCAG AA contrast throughout.</desc>
+  <defs>
+    <linearGradient id="brushedMetal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e6ecf2"/>
+      <stop offset="50%" stop-color="#c8d2dc"/>
+      <stop offset="100%" stop-color="#9aa7b4"/>
+    </linearGradient>
+    <linearGradient id="aquaTopbar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a8c8e0" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#6b9bbf" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#3a6a8f" stop-opacity="0.9"/>
+    </linearGradient>
+    <pattern id="pinstripes" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="6" height="6" fill="#dceaf3"/>
+      <line x1="0" y1="0" x2="0" y2="6" stroke="#b3cce0" stroke-width="0.5"/>
+    </pattern>
+    <pattern id="finePinstripes" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="4" height="4" fill="#eaf3f8"/>
+      <line x1="0" y1="0" x2="0" y2="4" stroke="#c5d8e4" stroke-width="0.3"/>
+    </pattern>
+  </defs>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full" style="background: repeating-linear-gradient(45deg, #dceaf3 0px, #dceaf3 5px, #c8dde9 5px, #c8dde9 6px); font-family: Lucida Grande, Helvetica, sans-serif;">
+      <g id="theme-header" class="contents">
+        <div class="h-14 flex items-center px-4 relative" style="background: linear-gradient(180deg, #b8d4e8 0%, #6b9bbf 50%, #3a6a8f 100%); border-bottom: 1px solid #1e3a5f; box-shadow: 0 2px 8px rgba(30,58,95,0.3), inset 0 -1px 0 rgba(255,255,255,0.4);">
+          <svg class="absolute inset-0 w-full h-full opacity-30" preserveAspectRatio="none" viewBox="0 0 1280 56">
+            <defs><pattern id="brushedTop" width="3" height="56" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="56" stroke="#ffffff" stroke-width="0.3"/></pattern></defs>
+            <rect width="1280" height="56" fill="url(#brushedTop)"/>
+          </svg>
+          <div class="flex items-center gap-3 relative z-10">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold" style="background: radial-gradient(circle at 35% 30%, #ffffff 0%, #b8d4e8 50%, #1e3a5f 100%); color: #1e3a5f; box-shadow: 0 1px 3px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.6);">C</div>
+            <span class="font-bold text-base" style="color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.4);">CloudBSD Admin</span>
+            <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded" style="background: rgba(255,255,255,0.25); color: #1e3a5f; border: 1px solid rgba(255,255,255,0.5); backdrop-filter: blur(4px);">aqua-pinstripe</span>
+          </div>
+          <div class="ml-auto flex items-center gap-4 relative z-10">
+            <span class="text-sm" style="color: #1e3a5f;">freenas-mock.local</span>
+            <button class="text-sm px-3 py-1 rounded font-medium" style="background: linear-gradient(180deg, #ffffff 0%, #d4e4f0 100%); color: #1e3a5f; border: 1px solid #1e3a5f; box-shadow: 0 1px 0 rgba(255,255,255,0.5) inset, 0 1px 2px rgba(0,0,0,0.2);">Refresh</button>
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" style="background: radial-gradient(circle at 35% 30%, #ffffff 0%, #b8d4e8 50%, #1e3a5f 100%); color: #1e3a5f; box-shadow: 0 1px 3px rgba(0,0,0,0.3);">M</div>
+          </div>
+        </div>
+      </g>
+      <div class="flex" style="height: calc(100% - 56px);">
+        <g id="theme-sidebar" class="contents">
+          <aside class="w-56 p-3 overflow-y-auto" style="background: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(220,234,243,0.7) 100%); border-right: 1px solid #6b9bbf; backdrop-filter: blur(8px);">
+            <nav class="space-y-1 text-sm">
+              <a class="block px-3 py-2 rounded font-medium" style="background: linear-gradient(180deg, #5a9bcf 0%, #1e3a5f 100%); color: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);">Dashboard</a>
+              <a class="block px-3 py-2 rounded" style="color: #1e3a5f;">Virtual Machines</a>
+              <a class="block px-3 py-2 rounded" style="color: #1e3a5f;">Containers</a>
+              <a class="block px-3 py-2 rounded" style="color: #1e3a5f;">Jails</a>
+              <a class="block px-3 py-2 rounded" style="color: #1e3a5f;">Volumes</a>
+              <a class="block px-3 py-2 rounded" style="color: #1e3a5f;">Network Map</a>
+              <a class="block px-3 py-2 rounded" style="color: #1e3a5f;">Cluster</a>
+              <div class="pt-3 pb-1 text-xs uppercase tracking-wide px-3" style="color: #6b9bbf; font-weight: 700;">Admin</div>
+              <a class="block px-3 py-2 rounded" style="color: #1e3a5f;">Users</a>
+              <a class="block px-3 py-2 rounded" style="color: #1e3a5f;">Logs</a>
+              <a class="block px-3 py-2 rounded" style="color: #1e3a5f;">Notifications</a>
+              <a class="block px-3 py-2 rounded" style="color: #1e3a5f;">Settings</a>
+            </nav>
+          </aside>
+        </g>
+        <main class="flex-1 p-6 overflow-auto">
+          <g id="theme-content" class="contents">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h1 class="text-2xl font-bold" style="color: #1e3a5f;">Dashboard</h1>
+                <p class="text-sm" style="color: #3a6a8f;">Host: freenas-mock.local · middleware connected</p>
+              </div>
+              <div class="text-sm" style="color: #3a6a8f;">Last refresh: 12s ago</div>
+            </div>
+            <div class="grid grid-cols-3 gap-4">
+              <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.85); border: 1px solid #b3cce0; box-shadow: 0 2px 8px rgba(30,58,95,0.15), inset 0 1px 0 rgba(255,255,255,0.8); backdrop-filter: blur(4px);">
+                <div class="flex items-center justify-between">
+                  <div class="text-sm font-medium" style="color: #3a6a8f;">CPU Usage</div>
+                  <div class="text-xs px-2 py-0.5 rounded font-medium" style="background: #1e7e3a; color: #ffffff;">healthy</div>
+                </div>
+                <div class="text-3xl font-bold mt-2" style="color: #1e3a5f;">42%</div>
+                <div class="mt-3 h-2 rounded-full overflow-hidden" style="background: #dceaf3; border: 1px solid #b3cce0;">
+                  <div class="h-full rounded-full" style="width: 42%; background: linear-gradient(180deg, #6b9bbf 0%, #1e3a5f 100%);"></div>
+                </div>
+                <div class="mt-2 text-xs" style="color: #3a6a8f;">8 cores · load avg 1.42</div>
+              </div>
+              <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.85); border: 1px solid #b3cce0; box-shadow: 0 2px 8px rgba(30,58,95,0.15), inset 0 1px 0 rgba(255,255,255,0.8); backdrop-filter: blur(4px);">
+                <div class="flex items-center justify-between">
+                  <div class="text-sm font-medium" style="color: #3a6a8f;">Memory</div>
+                  <div class="text-xs px-2 py-0.5 rounded font-medium" style="background: #c08a1a; color: #ffffff;">watch</div>
+                </div>
+                <div class="text-3xl font-bold mt-2" style="color: #1e3a5f;">8.2 / 16 GB</div>
+                <div class="mt-3 h-2 rounded-full overflow-hidden" style="background: #dceaf3; border: 1px solid #b3cce0;">
+                  <div class="h-full rounded-full" style="width: 51%; background: linear-gradient(180deg, #d4a847 0%, #c08a1a 100%);"></div>
+                </div>
+                <div class="mt-2 text-xs" style="color: #3a6a8f;">ARC 2.4 GB · swap 64 MB</div>
+              </div>
+              <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.85); border: 1px solid #b3cce0; box-shadow: 0 2px 8px rgba(30,58,95,0.15), inset 0 1px 0 rgba(255,255,255,0.8); backdrop-filter: blur(4px);">
+                <div class="flex items-center justify-between">
+                  <div class="text-sm font-medium" style="color: #3a6a8f;">Disk</div>
+                  <div class="text-xs px-2 py-0.5 rounded font-medium" style="background: #1e7e3a; color: #ffffff;">healthy</div>
+                </div>
+                <div class="text-3xl font-bold mt-2" style="color: #1e3a5f;">245 / 920 GB</div>
+                <div class="mt-3 h-2 rounded-full overflow-hidden" style="background: #dceaf3; border: 1px solid #b3cce0;">
+                  <div class="h-full rounded-full" style="width: 27%; background: linear-gradient(180deg, #6b9bbf 0%, #1e3a5f 100%);"></div>
+                </div>
+                <div class="mt-2 text-xs" style="color: #3a6a8f;">zpool tank · scrub Sun 03:00</div>
+              </div>
+              <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.85); border: 1px solid #b3cce0; box-shadow: 0 2px 8px rgba(30,58,95,0.15), inset 0 1px 0 rgba(255,255,255,0.8); backdrop-filter: blur(4px);">
+                <div class="flex items-center justify-between">
+                  <div class="text-sm font-medium" style="color: #3a6a8f;">Network</div>
+                  <div class="text-xs px-2 py-0.5 rounded font-medium" style="background: #1e7e3a; color: #ffffff;">healthy</div>
+                </div>
+                <div class="text-3xl font-bold mt-2" style="color: #1e3a5f;">↑ 12.4 MB/s</div>
+                <div class="mt-3 h-2 rounded-full overflow-hidden" style="background: #dceaf3; border: 1px solid #b3cce0;">
+                  <div class="h-full rounded-full" style="width: 18%; background: linear-gradient(180deg, #6b9bbf 0%, #1e3a5f 100%);"></div>
+                </div>
+                <div class="mt-2 text-xs" style="color: #3a6a8f;">↓ 86.1 MB/s · 3 ifaces</div>
+              </div>
+              <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.85); border: 1px solid #b3cce0; box-shadow: 0 2px 8px rgba(30,58,95,0.15), inset 0 1px 0 rgba(255,255,255,0.8); backdrop-filter: blur(4px);">
+                <div class="flex items-center justify-between">
+                  <div class="text-sm font-medium" style="color: #3a6a8f;">Notifications</div>
+                  <div class="text-xs px-2 py-0.5 rounded font-medium" style="background: #b8334a; color: #ffffff;">3 critical</div>
+                </div>
+                <div class="text-3xl font-bold mt-2" style="color: #1e3a5f;">17</div>
+                <div class="mt-3 grid grid-cols-3 gap-2 text-xs">
+                  <div class="px-2 py-1 text-center rounded font-medium" style="background: #b8334a; color: #ffffff;">3 crit</div>
+                  <div class="px-2 py-1 text-center rounded font-medium" style="background: #c08a1a; color: #ffffff;">6 warn</div>
+                  <div class="px-2 py-1 text-center rounded font-medium" style="background: #3a6a8f; color: #ffffff;">8 info</div>
+                </div>
+                <div class="mt-2 text-xs" style="color: #3a6a8f;">scrub delayed on tank/data</div>
+              </div>
+              <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.85); border: 1px solid #b3cce0; box-shadow: 0 2px 8px rgba(30,58,95,0.15), inset 0 1px 0 rgba(255,255,255,0.8); backdrop-filter: blur(4px);">
+                <div class="flex items-center justify-between">
+                  <div class="text-sm font-medium" style="color: #3a6a8f;">Workloads</div>
+                  <div class="text-xs px-2 py-0.5 rounded" style="background: #dceaf3; color: #3a6a8f; border: 1px solid #b3cce0;">R/O</div>
+                </div>
+                <div class="text-3xl font-bold mt-2" style="color: #1e3a5f;">12</div>
+                <div class="mt-3 grid grid-cols-3 gap-2 text-xs text-center">
+                  <div class="px-2 py-1 rounded" style="background: #dceaf3; color: #1e3a5f;">5 VMs</div>
+                  <div class="px-2 py-1 rounded" style="background: #dceaf3; color: #1e3a5f;">4 CT</div>
+                  <div class="px-2 py-1 rounded" style="background: #dceaf3; color: #1e3a5f;">3 Jails</div>
+                </div>
+                <div class="mt-2 text-xs" style="color: #3a6a8f;">7 datasets · 2 snaps today</div>
+              </div>
+            </div>
+            <div class="mt-6 p-4 rounded-lg" style="background: rgba(255,255,255,0.85); border: 1px solid #b3cce0; box-shadow: 0 2px 8px rgba(30,58,95,0.15), inset 0 1px 0 rgba(255,255,255,0.8); backdrop-filter: blur(4px);">
+              <div class="flex items-center justify-between mb-3">
+                <div class="font-medium" style="color: #1e3a5f;">Recent Activity</div>
+                <div class="text-xs" style="color: #3a6a8f;">view-only log</div>
+              </div>
+              <ul class="text-sm" style="border-top: 1px solid #dceaf3;">
+                <li class="py-2 flex" style="border-bottom: 1px solid #dceaf3;"><span class="w-32" style="color: #3a6a8f;">12:42:01</span><span class="ml-2" style="color: #1e3a5f;">snapshot daily@auto-2026-07-06_03-00 created on tank/data</span></li>
+                <li class="py-2 flex" style="border-bottom: 1px solid #dceaf3;"><span class="w-32" style="color: #3a6a8f;">12:31:18</span><span class="ml-2" style="color: #1e3a5f;">jail `transmission` entered STATE: STARTED</span></li>
+                <li class="py-2 flex" style="border-bottom: 1px solid #dceaf3;"><span class="w-32" style="color: #3a6a8f;">12:18:44</span><span class="ml-2" style="color: #1e3a5f;">vm `nextcloud` reported guest-agent heartbeat (3s drift)</span></li>
+                <li class="py-2 flex"><span class="w-32" style="color: #3a6a8f;">11:55:09</span><span class="ml-2" style="color: #1e3a5f;">scrub of tank completed with 0 errors</span></li>
+              </ul>
+            </div>
+          </g>
+        </main>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

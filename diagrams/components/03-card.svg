@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" font-family="system-ui, sans-serif">
+  <title>CloudBSD Admin — Card (with header, body, footer)</title>
+  <desc>Generic card layout used for grouping related content with optional title and actions.</desc>
+  <foreignObject x="0" y="0" width="600" height="400">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900 p-8">
+      <g id="header" class="contents">
+        <div class="mb-6">
+          <h2 class="text-lg font-semibold">Card</h2>
+          <p class="text-sm text-slate-500">Header / body / footer slots · white bg, slate-200 border, sm shadow</p>
+        </div>
+      </g>
+      <g id="card" class="contents">
+        <div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+          <div class="px-5 py-3 border-b border-slate-200 flex items-center justify-between">
+            <div>
+              <div class="text-sm font-semibold">VM: web-server-01</div>
+              <div class="text-xs text-slate-500">bhyve · Debian 12 · 2 vCPU · 4 GB</div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">running</span>
+              <button class="text-xs text-slate-500 hover:text-slate-900">⋯</button>
+            </div>
+          </div>
+          <div class="p-5">
+            <div class="grid grid-cols-3 gap-4 text-sm">
+              <div>
+                <div class="text-slate-500 text-xs">CPU</div>
+                <div class="font-semibold">37%</div>
+              </div>
+              <div>
+                <div class="text-slate-500 text-xs">Memory</div>
+                <div class="font-semibold">2.1 / 4 GB</div>
+              </div>
+              <div>
+                <div class="text-slate-500 text-xs">Disk I/O</div>
+                <div class="font-semibold">12 MB/s</div>
+              </div>
+            </div>
+            <div class="mt-4 text-xs text-slate-500">Uptime 14d 6h · Last snapshot 2 days ago</div>
+          </div>
+          <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-end gap-2">
+            <button class="px-3 py-1.5 text-sm rounded-md text-slate-700 hover:bg-slate-100">Console</button>
+            <button class="px-3 py-1.5 text-sm rounded-md text-slate-700 hover:bg-slate-100">Restart</button>
+            <button class="px-3 py-1.5 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700">Open</button>
+          </div>
+        </div>
+      </g>
+      <g id="empty" class="contents">
+        <div class="mt-6 bg-white rounded-lg border border-dashed border-slate-300 p-6 text-center">
+          <div class="text-sm text-slate-500">Empty card state · used when no data is available</div>
+        </div>
+      </g>
+    </div>
+  </foreignObject>
+</svg>

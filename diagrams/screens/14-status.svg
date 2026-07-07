@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="system-ui, sans-serif">
+  <title>CloudBSD Admin — Status / Health</title>
+  <desc>System health dashboard showing uptime, load, services, and dependency checks.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900">
+      <g id="header" class="contents">
+        <div class="h-14 bg-white border-b border-slate-200 flex items-center px-4">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded bg-blue-600 text-white flex items-center justify-center font-bold">C</div>
+            <span class="font-bold text-lg">CloudBSD Admin</span>
+            <span class="ml-2 px-2 py-0.5 text-xs rounded bg-slate-100 text-slate-600">freenas-mock.local</span>
+          </div>
+          <div class="ml-auto flex items-center gap-4">
+            <span class="text-sm text-slate-500">Theme: CloudBSD</span>
+            <button class="text-sm text-slate-600 hover:text-slate-900">Refresh</button>
+            <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">M</div>
+          </div>
+        </div>
+      </g>
+      <div class="flex" style="height: calc(100% - 56px);">
+        <g id="sidebar" class="contents">
+          <aside class="w-56 bg-white border-r border-slate-200 p-3 overflow-y-auto">
+            <nav class="space-y-1 text-sm">
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Dashboard</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Virtual Machines</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Containers</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Jails</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Volumes</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Network Map</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Cluster</a>
+              <div class="pt-3 pb-1 text-xs uppercase tracking-wide text-slate-400 px-3">Admin</div>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Users</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Logs</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Notifications</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Settings</a>
+              <a class="block px-3 py-2 rounded bg-blue-50 text-blue-700 font-medium">Status</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">About</a>
+            </nav>
+          </aside>
+        </g>
+        <main class="flex-1 p-6 overflow-auto">
+          <g id="content" class="contents">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h1 class="text-2xl font-bold">System Status</h1>
+                <p class="text-sm text-slate-500">Real-time health of hosts, services, and dependencies · refreshes every 15s</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="px-3 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-sm font-medium flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                  Degraded
+                </span>
+                <span class="text-sm text-slate-500">last check 12:42:11Z</span>
+              </div>
+            </div>
+            <div class="grid grid-cols-4 gap-4 mb-6">
+              <div class="bg-white rounded-lg border border-slate-200 p-4">
+                <div class="text-sm text-slate-500">Uptime</div>
+                <div class="text-2xl font-bold mt-1">42d 11:08</div>
+              </div>
+              <div class="bg-white rounded-lg border border-slate-200 p-4">
+                <div class="text-sm text-slate-500">Load avg</div>
+                <div class="text-2xl font-bold mt-1">1.42 / 1.38 / 1.21</div>
+              </div>
+              <div class="bg-white rounded-lg border border-slate-200 p-4">
+                <div class="text-sm text-slate-500">Processes</div>
+                <div class="text-2xl font-bold mt-1">412</div>
+              </div>
+              <div class="bg-white rounded-lg border border-slate-200 p-4">
+                <div class="text-sm text-slate-500">Active alerts</div>
+                <div class="text-2xl font-bold mt-1 text-amber-700">9</div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4 mb-6">
+              <div class="bg-white rounded-lg border border-slate-200 shadow-sm">
+                <div class="px-4 py-2 border-b border-slate-200 flex items-center justify-between">
+                  <h2 class="font-medium">Core services</h2>
+                  <span class="text-xs text-slate-500">5 of 6 healthy</span>
+                </div>
+                <ul class="divide-y divide-slate-100 text-sm">
+                  <li class="px-4 py-2 flex items-center justify-between">
+                    <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>cloudbsd-mw</span>
+                    <span class="text-slate-500">PID 1842 · 1d 02:11</span>
+                  </li>
+                  <li class="px-4 py-2 flex items-center justify-between">
+                    <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>cloudbsd-collectd</span>
+                    <span class="text-slate-500">PID 1923 · 14d 22:01</span>
+                  </li>
+                  <li class="px-4 py-2 flex items-center justify-between">
+                    <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>cloudbsd-syslog</span>
+                    <span class="text-slate-500">PID 1801 · 14d 22:01</span>
+                  </li>
+                  <li class="px-4 py-2 flex items-center justify-between">
+                    <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>sshd</span>
+                    <span class="text-slate-500">PID 1100 · 14d 22:01</span>
+                  </li>
+                  <li class="px-4 py-2 flex items-center justify-between">
+                    <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>containerd</span>
+                    <span class="text-slate-500">PID 2104 · 8d 04:00</span>
+                  </li>
+                  <li class="px-4 py-2 flex items-center justify-between">
+                    <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-amber-500"></span>zfs-scrub@node-04</span>
+                    <span class="text-amber-700">stalled at checkpoint 2</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="bg-white rounded-lg border border-slate-200 shadow-sm">
+                <div class="px-4 py-2 border-b border-slate-200 flex items-center justify-between">
+                  <h2 class="font-medium">Dependency checks</h2>
+                  <span class="text-xs text-slate-500">6 of 7 healthy</span>
+                </div>
+                <ul class="divide-y divide-slate-100 text-sm">
+                  <li class="px-4 py-2 flex items-center justify-between">
+                    <span>DNS resolver (1.1.1.1)</span>
+                    <span class="flex items-center gap-1 text-emerald-700"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>9 ms</span>
+                  </li>
+                  <li class="px-4 py-2 flex items-center justify-between">
+                    <span>NTP sync</span>
+                    <span class="flex items-center gap-1 text-emerald-700"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>±12 ms</span>
+                  </li>
+                  <li class="px-4 py-2 flex items-center justify-between">
+                    <span>Corosync ring</span>
+                    <span class="flex items-center gap-1 text-emerald-700"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>5 nodes</span>
+                  </li>
+                  <li class="px-4 py-2 flex items-center justify-between">
+                    <span>ZFS pool tank</span>
+                    <span class="flex items-center gap-1 text-emerald-700"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>ONLINE</span>
+                  </li>
+                  <li class="px-4 py-2 flex items-center justify-between">
+                    <span>ZFS pool ssd</span>
+                    <span class="flex items-center gap-1 text-emerald-700"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>ONLINE</span>
+                  </li>
+                  <li class="px-4 py-2 flex items-center justify-between">
+                    <span>S.M.A.R.T. monitor</span>
+                    <span class="flex items-center gap-1 text-amber-700"><span class="w-2 h-2 rounded-full bg-amber-500"></span>1 warning</span>
+                  </li>
+                  <li class="px-4 py-2 flex items-center justify-between">
+                    <span>Cluster quorum</span>
+                    <span class="flex items-center gap-1 text-amber-700"><span class="w-2 h-2 rounded-full bg-amber-500"></span>at risk</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="bg-white rounded-lg border border-slate-200 shadow-sm">
+              <div class="px-4 py-2 border-b border-slate-200 flex items-center justify-between">
+                <h2 class="font-medium">Cluster nodes</h2>
+                <span class="text-xs text-slate-500">read-only</span>
+              </div>
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 text-slate-600">
+                  <tr>
+                    <th class="text-left font-medium px-4 py-2">Node</th>
+                    <th class="text-left font-medium px-4 py-2">Role</th>
+                    <th class="text-left font-medium px-4 py-2">Health</th>
+                    <th class="text-left font-medium px-4 py-2">Load</th>
+                    <th class="text-left font-medium px-4 py-2">Memory</th>
+                    <th class="text-left font-medium px-4 py-2">Uptime</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2 font-medium">node-01</td>
+                    <td class="px-4 py-2">leader</td>
+                    <td class="px-4 py-2"><span class="px-2 py-0.5 rounded-full text-xs bg-emerald-50 text-emerald-700">HEALTHY</span></td>
+                    <td class="px-4 py-2 text-slate-700">1.42</td>
+                    <td class="px-4 py-2 text-slate-700">51%</td>
+                    <td class="px-4 py-2 text-slate-700">42d 11:08</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2 font-medium">node-02</td>
+                    <td class="px-4 py-2">worker</td>
+                    <td class="px-4 py-2"><span class="px-2 py-0.5 rounded-full text-xs bg-emerald-50 text-emerald-700">HEALTHY</span></td>
+                    <td class="px-4 py-2 text-slate-700">0.81</td>
+                    <td class="px-4 py-2 text-slate-700">38%</td>
+                    <td class="px-4 py-2 text-slate-700">22d 04:00</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2 font-medium">node-03</td>
+                    <td class="px-4 py-2">worker</td>
+                    <td class="px-4 py-2"><span class="px-2 py-0.5 rounded-full text-xs bg-emerald-50 text-emerald-700">HEALTHY</span></td>
+                    <td class="px-4 py-2 text-slate-700">0.64</td>
+                    <td class="px-4 py-2 text-slate-700">42%</td>
+                    <td class="px-4 py-2 text-slate-700">22d 04:00</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2 font-medium">node-04</td>
+                    <td class="px-4 py-2">worker</td>
+                    <td class="px-4 py-2"><span class="px-2 py-0.5 rounded-full text-xs bg-amber-50 text-amber-700">DEGRADED</span></td>
+                    <td class="px-4 py-2 text-slate-700">1.97</td>
+                    <td class="px-4 py-2 text-slate-700">61%</td>
+                    <td class="px-4 py-2 text-slate-700">22d 03:58</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2 font-medium">node-w1</td>
+                    <td class="px-4 py-2">witness</td>
+                    <td class="px-4 py-2"><span class="px-2 py-0.5 rounded-full text-xs bg-emerald-50 text-emerald-700">HEALTHY</span></td>
+                    <td class="px-4 py-2 text-slate-700">0.02</td>
+                    <td class="px-4 py-2 text-slate-700">12%</td>
+                    <td class="px-4 py-2 text-slate-700">60d 00:00</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </g>
+        </main>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="Inter, system-ui, sans-serif">
+  <title>Theme Mock-Up — Glass Light — Dashboard at 1280x800</title>
+  <desc>Modern frosted glass aesthetic on bright white. Translucent panels with backdrop blur, soft pastel accents, vibrant blue and pink highlights. WCAG AA contrast on text.</desc>
+  <defs>
+    <linearGradient id="bgGradientLight" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f0f4ff"/>
+      <stop offset="50%" stop-color="#fdf2f8"/>
+      <stop offset="100%" stop-color="#eff6ff"/>
+    </linearGradient>
+    <radialGradient id="orb1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="orb2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f472b6" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#f472b6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="orb3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="glassPanel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.7)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.4)"/>
+    </linearGradient>
+  </defs>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full relative" style="background: linear-gradient(135deg, #f0f4ff 0%, #fdf2f8 50%, #eff6ff 100%); font-family: Inter, system-ui, sans-serif; overflow: hidden;">
+      <svg class="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none" viewBox="0 0 1280 800">
+        <circle cx="180" cy="160" r="240" fill="url(#orb1)"/>
+        <circle cx="1100" cy="220" r="280" fill="url(#orb2)"/>
+        <circle cx="640" cy="700" r="320" fill="url(#orb3)"/>
+        <circle cx="100" cy="600" r="180" fill="url(#orb1)" opacity="0.6"/>
+        <circle cx="1200" cy="650" r="200" fill="url(#orb3)" opacity="0.5"/>
+      </svg>
+      <div class="relative z-10 h-full">
+        <g id="theme-header" class="contents">
+          <div class="h-14 flex items-center px-4" style="background: rgba(255,255,255,0.55); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.6); box-shadow: 0 4px 24px rgba(99,102,241,0.08);">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl flex items-center justify-center font-bold text-white" style="background: linear-gradient(135deg, #818cf8 0%, #f472b6 100%); box-shadow: 0 4px 12px rgba(129,140,248,0.4);">C</div>
+              <span class="font-bold text-base" style="color: #1e1b4b;">CloudBSD Admin</span>
+              <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full" style="background: rgba(99,102,241,0.12); color: #4338ca; border: 1px solid rgba(99,102,241,0.25);">glass-light</span>
+            </div>
+            <div class="ml-auto flex items-center gap-4">
+              <span class="text-sm" style="color: #475569;">freenas-mock.local</span>
+              <button class="text-sm px-4 py-1.5 rounded-full font-medium text-white" style="background: linear-gradient(135deg, #818cf8 0%, #f472b6 100%); box-shadow: 0 4px 12px rgba(129,140,248,0.35);">Refresh</button>
+              <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white" style="background: linear-gradient(135deg, #60a5fa 0%, #818cf8 100%); box-shadow: 0 2px 8px rgba(96,165,250,0.4);">M</div>
+            </div>
+          </div>
+        </g>
+        <div class="flex" style="height: calc(100% - 56px);">
+          <g id="theme-sidebar" class="contents">
+            <aside class="w-56 p-3 overflow-y-auto" style="background: rgba(255,255,255,0.5); backdrop-filter: blur(20px); border-right: 1px solid rgba(255,255,255,0.6);">
+              <nav class="space-y-1 text-sm">
+                <a class="block px-3 py-2 rounded-xl font-semibold" style="background: linear-gradient(135deg, rgba(129,140,248,0.25) 0%, rgba(244,114,182,0.25) 100%); color: #4338ca; box-shadow: 0 2px 8px rgba(99,102,241,0.15);">Dashboard</a>
+                <a class="block px-3 py-2 rounded-xl" style="color: #334155;">Virtual Machines</a>
+                <a class="block px-3 py-2 rounded-xl" style="color: #334155;">Containers</a>
+                <a class="block px-3 py-2 rounded-xl" style="color: #334155;">Jails</a>
+                <a class="block px-3 py-2 rounded-xl" style="color: #334155;">Volumes</a>
+                <a class="block px-3 py-2 rounded-xl" style="color: #334155;">Network Map</a>
+                <a class="block px-3 py-2 rounded-xl" style="color: #334155;">Cluster</a>
+                <div class="pt-3 pb-1 text-xs uppercase tracking-wide px-3" style="color: #6366f1; font-weight: 700;">Admin</div>
+                <a class="block px-3 py-2 rounded-xl" style="color: #334155;">Users</a>
+                <a class="block px-3 py-2 rounded-xl" style="color: #334155;">Logs</a>
+                <a class="block px-3 py-2 rounded-xl" style="color: #334155;">Notifications</a>
+                <a class="block px-3 py-2 rounded-xl" style="color: #334155;">Settings</a>
+              </nav>
+            </aside>
+          </g>
+          <main class="flex-1 p-6 overflow-auto">
+            <g id="theme-content" class="contents">
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <h1 class="text-3xl font-bold" style="color: #1e1b4b; letter-spacing: -0.02em;">Dashboard</h1>
+                  <p class="text-sm" style="color: #64748b;">Host: freenas-mock.local · middleware connected</p>
+                </div>
+                <div class="text-sm" style="color: #64748b;">Last refresh: 12s ago</div>
+              </div>
+              <div class="grid grid-cols-3 gap-4">
+                <div class="p-4 rounded-2xl" style="background: rgba(255,255,255,0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.7); box-shadow: 0 8px 24px rgba(99,102,241,0.08);">
+                  <div class="flex items-center justify-between">
+                    <div class="text-sm font-medium" style="color: #64748b;">CPU Usage</div>
+                    <div class="text-xs px-2 py-0.5 rounded-full font-medium" style="background: rgba(34,197,94,0.15); color: #15803d;">healthy</div>
+                  </div>
+                  <div class="text-3xl font-bold mt-2" style="color: #1e1b4b;">42%</div>
+                  <div class="mt-3 h-2 rounded-full overflow-hidden" style="background: rgba(99,102,241,0.1);">
+                    <div class="h-full rounded-full" style="width: 42%; background: linear-gradient(90deg, #818cf8 0%, #f472b6 100%);"></div>
+                  </div>
+                  <div class="mt-2 text-xs" style="color: #64748b;">8 cores · load avg 1.42</div>
+                </div>
+                <div class="p-4 rounded-2xl" style="background: rgba(255,255,255,0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.7); box-shadow: 0 8px 24px rgba(99,102,241,0.08);">
+                  <div class="flex items-center justify-between">
+                    <div class="text-sm font-medium" style="color: #64748b;">Memory</div>
+                    <div class="text-xs px-2 py-0.5 rounded-full font-medium" style="background: rgba(234,179,8,0.18); color: #a16207;">watch</div>
+                  </div>
+                  <div class="text-3xl font-bold mt-2" style="color: #1e1b4b;">8.2 / 16 GB</div>
+                  <div class="mt-3 h-2 rounded-full overflow-hidden" style="background: rgba(99,102,241,0.1);">
+                    <div class="h-full rounded-full" style="width: 51%; background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%);"></div>
+                  </div>
+                  <div class="mt-2 text-xs" style="color: #64748b;">ARC 2.4 GB · swap 64 MB</div>
+                </div>
+                <div class="p-4 rounded-2xl" style="background: rgba(255,255,255,0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.7); box-shadow: 0 8px 24px rgba(99,102,241,0.08);">
+                  <div class="flex items-center justify-between">
+                    <div class="text-sm font-medium" style="color: #64748b;">Disk</div>
+                    <div class="text-xs px-2 py-0.5 rounded-full font-medium" style="background: rgba(34,197,94,0.15); color: #15803d;">healthy</div>
+                  </div>
+                  <div class="text-3xl font-bold mt-2" style="color: #1e1b4b;">245 / 920 GB</div>
+                  <div class="mt-3 h-2 rounded-full overflow-hidden" style="background: rgba(99,102,241,0.1);">
+                    <div class="h-full rounded-full" style="width: 27%; background: linear-gradient(90deg, #818cf8 0%, #f472b6 100%);"></div>
+                  </div>
+                  <div class="mt-2 text-xs" style="color: #64748b;">zpool tank · scrub Sun 03:00</div>
+                </div>
+                <div class="p-4 rounded-2xl" style="background: rgba(255,255,255,0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.7); box-shadow: 0 8px 24px rgba(99,102,241,0.08);">
+                  <div class="flex items-center justify-between">
+                    <div class="text-sm font-medium" style="color: #64748b;">Network</div>
+                    <div class="text-xs px-2 py-0.5 rounded-full font-medium" style="background: rgba(34,197,94,0.15); color: #15803d;">healthy</div>
+                  </div>
+                  <div class="text-3xl font-bold mt-2" style="color: #1e1b4b;">↑ 12.4 MB/s</div>
+                  <div class="mt-3 h-2 rounded-full overflow-hidden" style="background: rgba(99,102,241,0.1);">
+                    <div class="h-full rounded-full" style="width: 18%; background: linear-gradient(90deg, #818cf8 0%, #f472b6 100%);"></div>
+                  </div>
+                  <div class="mt-2 text-xs" style="color: #64748b;">↓ 86.1 MB/s · 3 ifaces</div>
+                </div>
+                <div class="p-4 rounded-2xl" style="background: rgba(255,255,255,0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.7); box-shadow: 0 8px 24px rgba(99,102,241,0.08);">
+                  <div class="flex items-center justify-between">
+                    <div class="text-sm font-medium" style="color: #64748b;">Notifications</div>
+                    <div class="text-xs px-2 py-0.5 rounded-full font-medium" style="background: rgba(244,63,94,0.15); color: #be123c;">3 critical</div>
+                  </div>
+                  <div class="text-3xl font-bold mt-2" style="color: #1e1b4b;">17</div>
+                  <div class="mt-3 grid grid-cols-3 gap-2 text-xs">
+                    <div class="px-2 py-1 text-center rounded-full font-medium" style="background: rgba(244,63,94,0.18); color: #be123c;">3 crit</div>
+                    <div class="px-2 py-1 text-center rounded-full font-medium" style="background: rgba(234,179,8,0.18); color: #a16207;">6 warn</div>
+                    <div class="px-2 py-1 text-center rounded-full font-medium" style="background: rgba(99,102,241,0.18); color: #4338ca;">8 info</div>
+                  </div>
+                  <div class="mt-2 text-xs" style="color: #64748b;">scrub delayed on tank/data</div>
+                </div>
+                <div class="p-4 rounded-2xl" style="background: rgba(255,255,255,0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.7); box-shadow: 0 8px 24px rgba(99,102,241,0.08);">
+                  <div class="flex items-center justify-between">
+                    <div class="text-sm font-medium" style="color: #64748b;">Workloads</div>
+                    <div class="text-xs px-2 py-0.5 rounded-full font-medium" style="background: rgba(148,163,184,0.2); color: #475569;">R/O</div>
+                  </div>
+                  <div class="text-3xl font-bold mt-2" style="color: #1e1b4b;">12</div>
+                  <div class="mt-3 grid grid-cols-3 gap-2 text-xs text-center">
+                    <div class="px-2 py-1 rounded-full font-medium" style="background: rgba(99,102,241,0.12); color: #4338ca;">5 VMs</div>
+                    <div class="px-2 py-1 rounded-full font-medium" style="background: rgba(244,114,182,0.12); color: #be185d;">4 CT</div>
+                    <div class="px-2 py-1 rounded-full font-medium" style="background: rgba(96,165,250,0.12); color: #1d4ed8;">3 Jails</div>
+                  </div>
+                  <div class="mt-2 text-xs" style="color: #64748b;">7 datasets · 2 snaps today</div>
+                </div>
+              </div>
+              <div class="mt-6 p-4 rounded-2xl" style="background: rgba(255,255,255,0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.7); box-shadow: 0 8px 24px rgba(99,102,241,0.08);">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="font-semibold" style="color: #1e1b4b;">Recent Activity</div>
+                  <div class="text-xs" style="color: #64748b;">view-only log</div>
+                </div>
+                <ul class="text-sm" style="border-top: 1px solid rgba(99,102,241,0.1);">
+                  <li class="py-2 flex" style="border-bottom: 1px solid rgba(99,102,241,0.08);"><span class="w-32" style="color: #64748b;">12:42:01</span><span class="ml-2" style="color: #334155;">snapshot daily@auto-2026-07-06_03-00 created on tank/data</span></li>
+                  <li class="py-2 flex" style="border-bottom: 1px solid rgba(99,102,241,0.08);"><span class="w-32" style="color: #64748b;">12:31:18</span><span class="ml-2" style="color: #334155;">jail `transmission` entered STATE: STARTED</span></li>
+                  <li class="py-2 flex" style="border-bottom: 1px solid rgba(99,102,241,0.08);"><span class="w-32" style="color: #64748b;">12:18:44</span><span class="ml-2" style="color: #334155;">vm `nextcloud` reported guest-agent heartbeat (3s drift)</span></li>
+                  <li class="py-2 flex"><span class="w-32" style="color: #64748b;">11:55:09</span><span class="ml-2" style="color: #334155;">scrub of tank completed with 0 errors</span></li>
+                </ul>
+              </div>
+            </g>
+          </main>
+        </div>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

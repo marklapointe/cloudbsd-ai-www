@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="system-ui, sans-serif">
+  <title>CloudBSD Admin — Cluster Topology</title>
+  <desc>Hierarchical cluster view with leader, workers, and shared storage.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900 relative">
+      <g id="header" class="contents">
+        <div class="h-14 bg-white border-b border-slate-200 flex items-center px-4 relative z-20">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded bg-blue-600 text-white flex items-center justify-center font-bold">C</div>
+            <span class="font-bold text-lg">CloudBSD Admin</span>
+            <span class="ml-2 px-2 py-0.5 text-xs rounded bg-slate-100 text-slate-600">freenas-mock.local</span>
+          </div>
+          <div class="ml-auto flex items-center gap-4">
+            <span class="text-sm text-slate-500">Theme: CloudBSD</span>
+            <button class="text-sm text-slate-600 hover:text-slate-900">Refresh</button>
+            <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">M</div>
+          </div>
+        </div>
+      </g>
+      <div class="flex relative" style="height: calc(100% - 56px);">
+        <g id="sidebar" class="contents">
+          <aside class="w-56 bg-white border-r border-slate-200 p-3 overflow-y-auto relative z-10">
+            <nav class="space-y-1 text-sm">
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Dashboard</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Virtual Machines</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Containers</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Jails</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Volumes</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Network Map</a>
+              <a class="block px-3 py-2 rounded bg-blue-50 text-blue-700 font-medium">Cluster</a>
+              <div class="pt-3 pb-1 text-xs uppercase tracking-wide text-slate-400 px-3">Admin</div>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Users</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Logs</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Notifications</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Settings</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Status</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">About</a>
+            </nav>
+          </aside>
+        </g>
+        <main class="flex-1 p-6 overflow-hidden">
+          <g id="content" class="contents">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h1 class="text-2xl font-bold">Cluster Topology</h1>
+                <p class="text-sm text-slate-500">5 nodes · 1 leader, 3 workers, 1 witness · corosync + glusterfs</p>
+              </div>
+              <div class="flex items-center gap-3 text-sm">
+                <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>Healthy</span></div>
+                <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-500"></span><span>Degraded</span></div>
+                <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-rose-500"></span><span>Offline</span></div>
+              </div>
+            </div>
+            <div class="relative bg-white rounded-lg border border-slate-200 shadow-sm" style="height: 660px;">
+              <svg class="absolute inset-0 pointer-events-none" width="100%" height="100%" viewBox="0 0 1056 660" preserveAspectRatio="none">
+                <line x1="528" y1="90" x2="240" y2="280" stroke="#3b82f6" stroke-width="2"/>
+                <line x1="528" y1="90" x2="528" y2="280" stroke="#3b82f6" stroke-width="2"/>
+                <line x1="528" y1="90" x2="816" y2="280" stroke="#3b82f6" stroke-width="2"/>
+                <line x1="240" y1="320" x2="528" y2="500" stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                <line x1="528" y1="320" x2="528" y2="500" stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                <line x1="816" y1="320" x2="528" y2="500" stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                <line x1="240" y1="320" x2="816" y2="320" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4,3"/>
+                <line x1="528" y1="540" x2="528" y2="600" stroke="#64748b" stroke-width="2"/>
+                <line x1="280" y1="600" x2="776" y2="600" stroke="#64748b" stroke-width="2"/>
+                <line x1="280" y1="600" x2="280" y2="640" stroke="#64748b" stroke-width="2"/>
+                <line x1="528" y1="600" x2="528" y2="640" stroke="#64748b" stroke-width="2"/>
+                <line x1="776" y1="600" x2="776" y2="640" stroke="#64748b" stroke-width="2"/>
+              </svg>
+              <div class="absolute rounded-lg border-2 border-blue-700 bg-blue-600 text-white px-4 py-3 shadow-md" style="left: 420px; top: 30px; width: 220px;">
+                <div class="text-xs uppercase tracking-wide opacity-80">Leader</div>
+                <div class="text-base font-bold">node-01</div>
+                <div class="text-xs opacity-90">10.0.20.11 · quorum</div>
+              </div>
+              <div class="absolute rounded-lg border-2 border-emerald-600 bg-white text-emerald-900 px-4 py-3 shadow-sm" style="left: 120px; top: 230px; width: 240px;">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="text-xs uppercase tracking-wide text-slate-500">Worker</div>
+                    <div class="text-base font-bold">node-02</div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full text-xs bg-emerald-50 text-emerald-700">HEALTHY</span>
+                </div>
+                <div class="text-xs text-slate-700 mt-1">10.0.20.12 · 32 GB</div>
+                <div class="mt-2 text-xs text-slate-500">vms: 2 · ct: 3</div>
+              </div>
+              <div class="absolute rounded-lg border-2 border-emerald-600 bg-white text-emerald-900 px-4 py-3 shadow-sm" style="left: 408px; top: 230px; width: 240px;">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="text-xs uppercase tracking-wide text-slate-500">Worker</div>
+                    <div class="text-base font-bold">node-03</div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full text-xs bg-emerald-50 text-emerald-700">HEALTHY</span>
+                </div>
+                <div class="text-xs text-slate-700 mt-1">10.0.20.13 · 64 GB</div>
+                <div class="mt-2 text-xs text-slate-500">vms: 3 · ct: 1</div>
+              </div>
+              <div class="absolute rounded-lg border-2 border-amber-500 bg-white text-amber-900 px-4 py-3 shadow-sm" style="left: 696px; top: 230px; width: 240px;">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="text-xs uppercase tracking-wide text-slate-500">Worker</div>
+                    <div class="text-base font-bold">node-04</div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full text-xs bg-amber-50 text-amber-700">DEGRADED</span>
+                </div>
+                <div class="text-xs text-slate-700 mt-1">10.0.20.14 · 64 GB</div>
+                <div class="mt-2 text-xs text-amber-700">scrub paused · 1 disk SMART warn</div>
+              </div>
+              <div class="absolute rounded-lg border-2 border-slate-500 bg-white text-slate-900 px-4 py-3 shadow-sm" style="left: 408px; top: 460px; width: 240px;">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="text-xs uppercase tracking-wide text-slate-500">Witness</div>
+                    <div class="text-base font-bold">node-w1</div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full text-xs bg-emerald-50 text-emerald-700">HEALTHY</span>
+                </div>
+                <div class="text-xs text-slate-700 mt-1">10.0.20.99 · tiebreaker</div>
+              </div>
+              <div class="absolute bg-slate-700 text-white px-3 py-2 rounded text-xs shadow-sm" style="left: 220px; top: 600px;">
+                <div class="font-semibold">zpool: tank</div>
+                <div class="opacity-80">RAIDZ2 · 6× 2 TB</div>
+              </div>
+              <div class="absolute bg-slate-700 text-white px-3 py-2 rounded text-xs shadow-sm" style="left: 460px; top: 600px;">
+                <div class="font-semibold">zpool: tank</div>
+                <div class="opacity-80">RAIDZ2 · 6× 2 TB</div>
+              </div>
+              <div class="absolute bg-slate-700 text-white px-3 py-2 rounded text-xs shadow-sm" style="left: 710px; top: 600px;">
+                <div class="font-semibold">zpool: tank</div>
+                <div class="opacity-80">RAIDZ2 · 6× 2 TB</div>
+              </div>
+            </div>
+          </g>
+        </main>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

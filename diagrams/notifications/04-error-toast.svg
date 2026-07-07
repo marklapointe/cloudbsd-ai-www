@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="system-ui, sans-serif">
+  <title>CloudBSD Admin — Error Toast Notification</title>
+  <desc>Sticky error toast with red accent and X icon. Persists until acknowledged, includes detailed error context and retry action.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900">
+      <g id="header" class="contents">
+        <div class="h-14 bg-white border-b border-slate-200 flex items-center px-4">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded bg-blue-600 text-white flex items-center justify-center font-bold">C</div>
+            <span class="font-bold text-lg">CloudBSD Admin</span>
+            <span class="ml-2 px-2 py-0.5 text-xs rounded bg-slate-100 text-slate-600">freenas-mock.local</span>
+          </div>
+          <div class="ml-auto flex items-center gap-4">
+            <span class="text-sm text-slate-500">Theme: CloudBSD</span>
+            <button class="text-sm text-slate-600 hover:text-slate-900">Refresh</button>
+            <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">M</div>
+          </div>
+        </div>
+      </g>
+      <div class="flex" style="height: calc(100% - 56px);">
+        <g id="sidebar" class="contents">
+          <aside class="w-56 bg-white border-r border-slate-200 p-3 overflow-y-auto">
+            <nav class="space-y-1 text-sm">
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Dashboard</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Virtual Machines</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Containers</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Jails</a>
+              <a class="block px-3 py-2 rounded bg-blue-50 text-blue-700 font-medium">Volumes</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Network Map</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Cluster</a>
+              <div class="pt-3 pb-1 text-xs uppercase tracking-wide text-slate-400 px-3">Admin</div>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Users</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Logs</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Notifications</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Settings</a>
+            </nav>
+          </aside>
+        </g>
+        <main class="flex-1 p-6 overflow-auto relative">
+          <g id="content" class="contents">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h1 class="text-2xl font-bold">Volumes</h1>
+                <p class="text-sm text-slate-500">Error toast — sticky until acknowledged by user.</p>
+              </div>
+              <button class="px-3 py-1.5 text-sm rounded bg-blue-600 text-white">+ Import Volume</button>
+            </div>
+            <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 text-slate-600 text-left">
+                  <tr>
+                    <th class="px-4 py-2 font-medium">Name</th>
+                    <th class="px-4 py-2 font-medium">Pool</th>
+                    <th class="px-4 py-2 font-medium">Size</th>
+                    <th class="px-4 py-2 font-medium">Used</th>
+                    <th class="px-4 py-2 font-medium">Status</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr>
+                    <td class="px-4 py-2 font-mono">tank/data</td>
+                    <td class="px-4 py-2 text-slate-600">tank</td>
+                    <td class="px-4 py-2 text-slate-600">2.1 TB</td>
+                    <td class="px-4 py-2 text-slate-600">68%</td>
+                    <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">online</span></td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-2 font-mono">tank/backups</td>
+                    <td class="px-4 py-2 text-slate-600">tank</td>
+                    <td class="px-4 py-2 text-slate-600">4.0 TB</td>
+                    <td class="px-4 py-2 text-slate-600">42%</td>
+                    <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">online</span></td>
+                  </tr>
+                  <tr class="bg-rose-50">
+                    <td class="px-4 py-2 font-mono font-semibold text-rose-900">stripe/legacy</td>
+                    <td class="px-4 py-2 text-slate-600">stripe</td>
+                    <td class="px-4 py-2 text-slate-600">512 GB</td>
+                    <td class="px-4 py-2 text-slate-600">—</td>
+                    <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-medium">unavailable</span></td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-2 font-mono">ssd/cache</td>
+                    <td class="px-4 py-2 text-slate-600">ssd</td>
+                    <td class="px-4 py-2 text-slate-600">256 GB</td>
+                    <td class="px-4 py-2 text-slate-600">12%</td>
+                    <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">online</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </g>
+        </main>
+      </div>
+      <g id="toast-error" class="contents">
+        <div class="absolute top-20 right-6 w-[28rem] bg-white rounded-lg shadow-2xl border-l-4 border-rose-500 overflow-hidden">
+          <div class="p-4">
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center flex-shrink-0">
+                <span class="text-rose-600 font-bold text-xl leading-none">✕</span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between">
+                  <div class="font-semibold text-rose-900">Failed to Import Volume</div>
+                  <button class="text-slate-400 hover:text-slate-700 text-lg leading-none -mt-1">×</button>
+                </div>
+                <div class="text-sm text-slate-700 mt-1">
+                  Could not import <span class="font-mono font-semibold">stripe/legacy</span>. Pool has corrupted metadata at block 0x1a3f00.
+                </div>
+                <div class="mt-3 p-2.5 bg-rose-50 border border-rose-200 rounded text-xs font-mono text-rose-900">
+                  <div>errno: EIO (5)</div>
+                  <div>syscall: zpool open</div>
+                  <div>request-id: req_8f2a1c4d</div>
+                </div>
+                <div class="mt-2 flex items-center gap-2 text-xs text-slate-500">
+                  <span class="font-mono">middleware.zfs.import</span>
+                  <span>·</span>
+                  <span>node-04</span>
+                  <span>·</span>
+                  <span>5s ago</span>
+                  <span class="ml-auto inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-rose-100 text-rose-700 font-medium">
+                    <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>sticky
+                  </span>
+                </div>
+                <div class="mt-3 flex items-center gap-2">
+                  <button class="px-3 py-1.5 text-xs rounded bg-rose-600 text-white font-medium">Retry import</button>
+                  <button class="px-3 py-1.5 text-xs rounded border border-slate-300 text-slate-700 hover:bg-slate-50">View traceback</button>
+                  <button class="ml-auto text-xs text-slate-500 hover:text-slate-700">Copy error</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="px-4 py-1.5 bg-rose-50 border-t border-rose-100 text-xs text-rose-700 flex items-center gap-2">
+            <span class="font-medium">⚠ This toast will not auto-dismiss.</span>
+            <span>It must be acknowledged to clear.</span>
+          </div>
+        </div>
+      </g>
+      <g id="toast-stack" class="contents">
+        <div class="absolute top-20 right-[34rem] w-72 bg-white rounded-lg shadow-lg border border-slate-200 p-3 opacity-90">
+          <div class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">Toast Stack (z-50)</div>
+          <div class="space-y-1.5 text-xs">
+            <div class="flex items-center gap-2 px-2 py-1.5 rounded bg-blue-50 border border-blue-200">
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+              <span class="font-medium">info</span>
+              <span class="ml-auto text-slate-500">5s auto</span>
+            </div>
+            <div class="flex items-center gap-2 px-2 py-1.5 rounded bg-emerald-50 border border-emerald-200">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span class="font-medium">success</span>
+              <span class="ml-auto text-slate-500">4s auto</span>
+            </div>
+            <div class="flex items-center gap-2 px-2 py-1.5 rounded bg-amber-50 border border-amber-200">
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+              <span class="font-medium">warning</span>
+              <span class="ml-auto text-slate-500">8s auto</span>
+            </div>
+            <div class="flex items-center gap-2 px-2 py-1.5 rounded bg-rose-50 border border-rose-200">
+              <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+              <span class="font-medium">error</span>
+              <span class="ml-auto text-slate-500">sticky</span>
+            </div>
+          </div>
+        </div>
+      </g>
+      <g id="legend" class="contents">
+        <div class="absolute bottom-6 left-6 bg-white border border-slate-200 rounded-lg p-3 shadow-sm max-w-sm">
+          <div class="text-xs font-semibold text-slate-700 mb-1">Error Toast Spec</div>
+          <ul class="text-xs text-slate-600 space-y-0.5">
+            <li>· accent: border-l-4 border-rose-500, icon bg-rose-100</li>
+            <li>· dismiss: STICKY — no auto-dismiss, requires explicit close</li>
+            <li>· contents: error code, syscall, request-id (copy-able)</li>
+            <li>· actions: Retry + View traceback + Copy error</li>
+            <li>· a11y: role="alert" aria-live="assertive" (announced)</li>
+          </ul>
+        </div>
+      </g>
+    </div>
+  </foreignObject>
+</svg>

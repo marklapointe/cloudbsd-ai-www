@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="system-ui, sans-serif">
+  <title>CloudBSD Admin — Success Toast Notification</title>
+  <desc>Success toast with green accent and checkmark icon. Shows confirmation of a completed jail creation action.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900">
+      <g id="header" class="contents">
+        <div class="h-14 bg-white border-b border-slate-200 flex items-center px-4">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded bg-blue-600 text-white flex items-center justify-center font-bold">C</div>
+            <span class="font-bold text-lg">CloudBSD Admin</span>
+            <span class="ml-2 px-2 py-0.5 text-xs rounded bg-slate-100 text-slate-600">freenas-mock.local</span>
+          </div>
+          <div class="ml-auto flex items-center gap-4">
+            <span class="text-sm text-slate-500">Theme: CloudBSD</span>
+            <button class="text-sm text-slate-600 hover:text-slate-900">Refresh</button>
+            <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">M</div>
+          </div>
+        </div>
+      </g>
+      <div class="flex" style="height: calc(100% - 56px);">
+        <g id="sidebar" class="contents">
+          <aside class="w-56 bg-white border-r border-slate-200 p-3 overflow-y-auto">
+            <nav class="space-y-1 text-sm">
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Dashboard</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Virtual Machines</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Containers</a>
+              <a class="block px-3 py-2 rounded bg-blue-50 text-blue-700 font-medium">Jails</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Volumes</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Network Map</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Cluster</a>
+              <div class="pt-3 pb-1 text-xs uppercase tracking-wide text-slate-400 px-3">Admin</div>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Users</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Logs</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Notifications</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Settings</a>
+            </nav>
+          </aside>
+        </g>
+        <main class="flex-1 p-6 overflow-auto relative">
+          <g id="content" class="contents">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h1 class="text-2xl font-bold">Jails</h1>
+                <p class="text-sm text-slate-500">Success toast — confirms completed operation with checkmark.</p>
+              </div>
+              <button class="px-3 py-1.5 text-sm rounded bg-blue-600 text-white">+ Add Jail</button>
+            </div>
+            <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 text-slate-600 text-left">
+                  <tr>
+                    <th class="px-4 py-2 font-medium">Name</th>
+                    <th class="px-4 py-2 font-medium">State</th>
+                    <th class="px-4 py-2 font-medium">IP</th>
+                    <th class="px-4 py-2 font-medium">Release</th>
+                    <th class="px-4 py-2 font-medium">Uptime</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr>
+                    <td class="px-4 py-2 font-mono">transmission</td>
+                    <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">running</span></td>
+                    <td class="px-4 py-2 font-mono text-slate-600">10.0.10.21</td>
+                    <td class="px-4 py-2 text-slate-600">14.2-RELEASE</td>
+                    <td class="px-4 py-2 text-slate-600">4d 12h</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-2 font-mono">nginx-proxy</td>
+                    <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">running</span></td>
+                    <td class="px-4 py-2 font-mono text-slate-600">10.0.10.22</td>
+                    <td class="px-4 py-2 text-slate-600">14.2-RELEASE</td>
+                    <td class="px-4 py-2 text-slate-600">4d 12h</td>
+                  </tr>
+                  <tr class="bg-emerald-50">
+                    <td class="px-4 py-2 font-mono font-semibold text-emerald-900">debian-jail-01</td>
+                    <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-medium">just created</span></td>
+                    <td class="px-4 py-2 font-mono text-slate-600">10.0.10.23</td>
+                    <td class="px-4 py-2 text-slate-600">14.2-RELEASE</td>
+                    <td class="px-4 py-2 text-slate-600">2s</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-2 font-mono">pihole</td>
+                    <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600">stopped</span></td>
+                    <td class="px-4 py-2 font-mono text-slate-600">10.0.10.24</td>
+                    <td class="px-4 py-2 text-slate-600">14.2-RELEASE</td>
+                    <td class="px-4 py-2 text-slate-600">—</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-2 font-mono">postgres-dev</td>
+                    <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">running</span></td>
+                    <td class="px-4 py-2 font-mono text-slate-600">10.0.10.25</td>
+                    <td class="px-4 py-2 text-slate-600">14.2-RELEASE</td>
+                    <td class="px-4 py-2 text-slate-600">2d 5h</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </g>
+        </main>
+      </div>
+      <g id="toast-success" class="contents">
+        <div class="absolute top-20 right-6 w-96 bg-white rounded-lg shadow-xl border-l-4 border-emerald-500 overflow-hidden">
+          <div class="p-4">
+            <div class="flex items-start gap-3">
+              <div class="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                <span class="text-emerald-600 font-bold text-lg">✓</span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between">
+                  <div class="font-semibold text-slate-900">Jail Created Successfully</div>
+                  <button class="text-slate-400 hover:text-slate-700 text-lg leading-none -mt-1">×</button>
+                </div>
+                <div class="text-sm text-slate-600 mt-1">
+                  <span class="font-mono text-slate-800">debian-jail-01</span> is now running on
+                  <span class="font-mono text-slate-800">10.0.10.23</span> · took 2.3s
+                </div>
+                <div class="mt-2 flex items-center gap-2 text-xs text-slate-500">
+                  <span class="font-mono">middleware.jail.create</span>
+                  <span>·</span>
+                  <span>just now</span>
+                </div>
+                <div class="mt-3 flex items-center gap-2">
+                  <button class="px-3 py-1 text-xs rounded bg-emerald-600 text-white font-medium">Open jail</button>
+                  <button class="px-3 py-1 text-xs rounded text-slate-600 hover:bg-slate-100">View logs</button>
+                  <button class="ml-auto text-xs text-slate-400 hover:text-slate-600">Undo</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="h-1 bg-slate-100">
+            <div class="h-full bg-emerald-500" style="width: 75%;"></div>
+          </div>
+        </div>
+      </g>
+      <g id="toast-stack" class="contents">
+        <div class="absolute top-20 right-[26rem] w-72 bg-white rounded-lg shadow-lg border border-slate-200 p-3 opacity-90">
+          <div class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">Toast Stack (z-50)</div>
+          <div class="space-y-1.5 text-xs">
+            <div class="flex items-center gap-2 px-2 py-1.5 rounded bg-blue-50 border border-blue-200">
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+              <span class="font-medium">info</span>
+              <span class="ml-auto text-slate-500">5s auto</span>
+            </div>
+            <div class="flex items-center gap-2 px-2 py-1.5 rounded bg-emerald-50 border border-emerald-200">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span class="font-medium">success</span>
+              <span class="ml-auto text-slate-500">4s auto</span>
+            </div>
+            <div class="flex items-center gap-2 px-2 py-1.5 rounded bg-amber-50 border border-amber-200">
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+              <span class="font-medium">warning</span>
+              <span class="ml-auto text-slate-500">8s auto</span>
+            </div>
+            <div class="flex items-center gap-2 px-2 py-1.5 rounded bg-rose-50 border border-rose-200">
+              <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+              <span class="font-medium">error</span>
+              <span class="ml-auto text-slate-500">sticky</span>
+            </div>
+          </div>
+        </div>
+      </g>
+      <g id="legend" class="contents">
+        <div class="absolute bottom-6 left-6 bg-white border border-slate-200 rounded-lg p-3 shadow-sm max-w-sm">
+          <div class="text-xs font-semibold text-slate-700 mb-1">Success Toast Spec</div>
+          <ul class="text-xs text-slate-600 space-y-0.5">
+            <li>· accent: border-l-4 border-emerald-500, icon bg-emerald-100</li>
+            <li>· icon: ✓ checkmark (semantic, not emoji)</li>
+            <li>· dismiss: 4s timer + close X + Undo affordance</li>
+            <li>· a11y: role="status" aria-live="polite"</li>
+            <li>· pattern: emitted from middleware RPC on 2xx response</li>
+          </ul>
+        </div>
+      </g>
+    </div>
+  </foreignObject>
+</svg>

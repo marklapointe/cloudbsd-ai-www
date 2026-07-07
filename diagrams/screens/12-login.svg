@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="system-ui, sans-serif">
+  <title>CloudBSD Admin — Login</title>
+  <desc>PAM-backed login screen with help links and MFA option.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-gradient-to-br from-slate-100 to-blue-50 text-slate-900 flex flex-col">
+      <div class="h-14 bg-white/70 backdrop-blur border-b border-slate-200 flex items-center px-6">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded bg-blue-600 text-white flex items-center justify-center font-bold">C</div>
+          <span class="font-bold text-lg">CloudBSD Admin</span>
+        </div>
+        <div class="ml-auto text-sm text-slate-500">freenas-mock.local · CloudBSD 14.2</div>
+      </div>
+      <g id="content" class="contents">
+        <div class="flex-1 flex items-center justify-center p-6">
+          <div class="w-full max-w-md">
+            <div class="bg-white rounded-xl border border-slate-200 shadow-lg p-8">
+              <div class="flex flex-col items-center text-center mb-6">
+                <div class="w-14 h-14 rounded-xl bg-blue-600 text-white flex items-center justify-center text-2xl font-bold mb-3">C</div>
+                <h1 class="text-xl font-bold">Sign in to CloudBSD Admin</h1>
+                <p class="text-sm text-slate-500 mt-1">Authentication via FreeBSD <span class="font-mono">pam_unix</span> + <span class="font-mono">pam_opie</span></p>
+              </div>
+              <form class="space-y-4" onsubmit="return false;">
+                <div class="space-y-1.5">
+                  <label class="text-sm font-medium text-slate-700">Username</label>
+                  <input type="text" autocomplete="username" placeholder="e.g. mlapointe" class="w-full text-sm border border-slate-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                </div>
+                <div class="space-y-1.5">
+                  <label class="text-sm font-medium text-slate-700 flex items-center justify-between">
+                    <span>Password</span>
+                    <a href="#help" class="text-xs text-blue-700 hover:underline">Forgot?</a>
+                  </label>
+                  <input type="password" autocomplete="current-password" placeholder="••••••••" class="w-full text-sm border border-slate-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                </div>
+                <div class="space-y-1.5">
+                  <label class="text-sm font-medium text-slate-700">One-time password (TOTP/OPIE)</label>
+                  <input type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="123 456" class="w-full text-sm border border-slate-300 rounded px-3 py-2 font-mono tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                </div>
+                <div class="flex items-center justify-between text-sm">
+                  <label class="flex items-center gap-2 text-slate-700">
+                    <input type="checkbox" class="rounded text-blue-600"/>
+                    Remember this browser
+                  </label>
+                  <span class="text-xs text-slate-500">Session: 30 min idle</span>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium rounded px-3 py-2.5">Sign in</button>
+                <div class="text-xs text-slate-500 text-center">
+                  Auth failures are rate-limited (5 / 15 min). After lockout contact an operator.
+                </div>
+              </form>
+            </div>
+            <div class="mt-4 grid grid-cols-2 gap-3 text-xs text-slate-600">
+              <a href="#docs" class="bg-white rounded border border-slate-200 px-3 py-2 hover:bg-slate-50">
+                <div class="font-medium text-slate-900">Documentation</div>
+                <div>Setup, security, MFA enrollment</div>
+              </a>
+              <a href="#support" class="bg-white rounded border border-slate-200 px-3 py-2 hover:bg-slate-50">
+                <div class="font-medium text-slate-900">Support</div>
+                <div>Open a ticket with your admin</div>
+              </a>
+              <a href="#status" class="bg-white rounded border border-slate-200 px-3 py-2 hover:bg-slate-50">
+                <div class="font-medium text-slate-900">Status page</div>
+                <div>Service availability</div>
+              </a>
+              <a href="#ssh" class="bg-white rounded border border-slate-200 px-3 py-2 hover:bg-slate-50">
+                <div class="font-medium text-slate-900">SSH access</div>
+                <div>ssh mlapointe@freenas-mock.local</div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <footer class="text-center text-xs text-slate-500 py-4">
+          CloudBSD Admin · MIT License · <a href="#about" class="hover:underline">About</a>
+        </footer>
+      </g>
+    </div>
+  </foreignObject>
+</svg>

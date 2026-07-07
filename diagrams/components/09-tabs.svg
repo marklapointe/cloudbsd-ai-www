@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" font-family="system-ui, sans-serif">
+  <title>CloudBSD Admin — Tabs</title>
+  <desc>Horizontal tabbed navigation with three tabs, middle active, content area below.</desc>
+  <foreignObject x="0" y="0" width="600" height="400">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900 p-8">
+      <g id="header" class="contents">
+        <div class="mb-4">
+          <h2 class="text-lg font-semibold">Tabs</h2>
+          <p class="text-sm text-slate-500">3 tabs · middle active · underline indicator</p>
+        </div>
+      </g>
+      <g id="tablist" class="contents">
+        <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+          <div class="flex border-b border-slate-200">
+            <button role="tab" aria-selected="false" class="px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-900 hover:bg-slate-50">
+              Overview
+            </button>
+            <button role="tab" aria-selected="true" class="px-4 py-3 text-sm font-medium text-blue-700 border-b-2 border-blue-600 -mb-px">
+              Disks <span class="ml-1 px-1.5 py-0.5 text-xs rounded bg-blue-50 text-blue-700">3</span>
+            </button>
+            <button role="tab" aria-selected="false" class="px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-900 hover:bg-slate-50">
+              Snapshots
+            </button>
+            <button role="tab" aria-selected="false" class="px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-900 hover:bg-slate-50" disabled="true" style="opacity:0.4">
+              Replication
+            </button>
+          </div>
+          <div class="p-5">
+            <div class="text-sm font-medium mb-3">Attached disks</div>
+            <table class="w-full text-sm">
+              <thead class="text-xs uppercase tracking-wide text-slate-500 border-b border-slate-200">
+                <tr>
+                  <th class="text-left py-2 font-medium">Device</th>
+                  <th class="text-left py-2 font-medium">Size</th>
+                  <th class="text-left py-2 font-medium">Pool</th>
+                  <th class="text-right py-2 font-medium">Health</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-slate-100">
+                  <td class="py-2 font-mono text-xs">/dev/vtbd0</td>
+                  <td class="py-2">40 GB</td>
+                  <td class="py-2">tank/root</td>
+                  <td class="py-2 text-right"><span class="text-xs px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700">ONLINE</span></td>
+                </tr>
+                <tr class="border-b border-slate-100">
+                  <td class="py-2 font-mono text-xs">/dev/vtbd1</td>
+                  <td class="py-2">120 GB</td>
+                  <td class="py-2">tank/data</td>
+                  <td class="py-2 text-right"><span class="text-xs px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700">ONLINE</span></td>
+                </tr>
+                <tr>
+                  <td class="py-2 font-mono text-xs">/dev/vtbd2</td>
+                  <td class="py-2">8 GB</td>
+                  <td class="py-2">tank/swap</td>
+                  <td class="py-2 text-right"><span class="text-xs px-1.5 py-0.5 rounded bg-amber-50 text-amber-700">DEGRADED</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </g>
+    </div>
+  </foreignObject>
+</svg>

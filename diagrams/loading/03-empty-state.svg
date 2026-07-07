@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="system-ui, sans-serif">
+  <title>CloudBSD Admin — Empty State</title>
+  <desc>Empty state with illustration, message, and primary action button. Used when a list has no items (no jails, no VMs, no notifications).</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900 relative">
+      <g id="header" class="contents">
+        <div class="h-14 bg-white border-b border-slate-200 flex items-center px-4">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded bg-blue-600 text-white flex items-center justify-center font-bold">C</div>
+            <span class="font-bold text-lg">CloudBSD Admin</span>
+            <span class="ml-2 px-2 py-0.5 text-xs rounded bg-slate-100 text-slate-600">freenas-mock.local</span>
+          </div>
+          <div class="ml-auto flex items-center gap-4">
+            <span class="text-sm text-slate-500">Theme: CloudBSD</span>
+            <button class="text-sm text-slate-600 hover:text-slate-900">Refresh</button>
+            <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">M</div>
+          </div>
+        </div>
+      </g>
+      <div class="flex" style="height: calc(100% - 56px);">
+        <g id="sidebar" class="contents">
+          <aside class="w-56 bg-white border-r border-slate-200 p-3 overflow-y-auto">
+            <nav class="space-y-1 text-sm">
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Dashboard</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Virtual Machines</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Containers</a>
+              <a class="block px-3 py-2 rounded bg-blue-50 text-blue-700 font-medium">Jails</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Volumes</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Network Map</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Cluster</a>
+              <div class="pt-3 pb-1 text-xs uppercase tracking-wide text-slate-400 px-3">Admin</div>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Users</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Logs</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Notifications</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Settings</a>
+            </nav>
+          </aside>
+        </g>
+        <main class="flex-1 p-6 overflow-auto">
+          <g id="content" class="contents">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h1 class="text-2xl font-bold">Jails</h1>
+                <p class="text-sm text-slate-500">Empty state — no jails exist on this host.</p>
+              </div>
+              <button class="px-3 py-1.5 text-sm rounded bg-blue-600 text-white inline-flex items-center gap-1.5">
+                <span>+</span> Create your first jail
+              </button>
+            </div>
+            <div class="bg-white rounded-lg border-2 border-dashed border-slate-200 px-6 py-20">
+              <div class="max-w-md mx-auto text-center">
+                <div class="mx-auto w-32 h-32 rounded-full bg-blue-50 flex items-center justify-center relative">
+                  <svg class="w-16 h-16 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                    <path d="M3 9h18M9 21V9"></path>
+                  </svg>
+                  <span class="absolute -top-1 -right-1 w-8 h-8 bg-amber-400 text-white rounded-full flex items-center justify-center text-xs font-bold">!</span>
+                </div>
+                <h2 class="text-xl font-semibold text-slate-900 mt-6">No jails yet</h2>
+                <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                  Jails provide lightweight, OS-level virtualization on FreeBSD. Create your first jail to deploy isolated workloads in seconds.
+                </p>
+                <div class="mt-6 flex items-center justify-center gap-2">
+                  <button class="px-4 py-2 text-sm rounded bg-blue-600 text-white hover:bg-blue-700 font-medium inline-flex items-center gap-1.5">
+                    <span>+</span> Create jail
+                  </button>
+                  <button class="px-4 py-2 text-sm rounded border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 font-medium">
+                    Import from template
+                  </button>
+                </div>
+                <div class="mt-8 pt-6 border-t border-slate-200">
+                  <div class="text-xs uppercase tracking-wide text-slate-500 font-semibold">Quick links</div>
+                  <div class="mt-3 grid grid-cols-3 gap-2 text-xs">
+                    <a class="px-3 py-2 rounded border border-slate-200 hover:bg-slate-50 text-slate-700 text-left">
+                      <div class="font-medium">Documentation</div>
+                      <div class="text-slate-500 mt-0.5">Jail setup guide</div>
+                    </a>
+                    <a class="px-3 py-2 rounded border border-slate-200 hover:bg-slate-50 text-slate-700 text-left">
+                      <div class="font-medium">Templates</div>
+                      <div class="text-slate-500 mt-0.5">Pre-built jails</div>
+                    </a>
+                    <a class="px-3 py-2 rounded border border-slate-200 hover:bg-slate-50 text-slate-700 text-left">
+                      <div class="font-medium">Video tutorial</div>
+                      <div class="text-slate-500 mt-0.5">3-min walkthrough</div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </g>
+        </main>
+      </div>
+      <g id="legend" class="contents">
+        <div class="absolute bottom-6 left-6 bg-white border border-slate-200 rounded-lg p-3 shadow-sm max-w-sm">
+          <div class="text-xs font-semibold text-slate-700 mb-1">Empty State Spec</div>
+          <ul class="text-xs text-slate-600 space-y-0.5">
+            <li>· illustration: simple SVG icon + accent color</li>
+            <li>· message: explains WHY empty + WHAT to do next</li>
+            <li>· primary action + secondary action both visible</li>
+            <li>· contextual quick-links below the fold</li>
+            <li>· uses border-dashed border-2 to signal "container for content"</li>
+          </ul>
+        </div>
+      </g>
+    </div>
+  </foreignObject>
+</svg>

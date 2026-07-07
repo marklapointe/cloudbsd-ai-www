@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="system-ui, sans-serif">
+  <title>Theme Mock-Up — CloudBSD Revytech (Default) — Dashboard at 1280x800</title>
+  <desc>Default CloudBSD theme with the blue and teal palette inherited from the current React app. Slate-50 background, white cards, blue accents. WCAG AA contrast throughout.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900">
+      <g id="theme-header" class="contents">
+        <div class="h-14 bg-white border-b border-slate-200 flex items-center px-4 shadow-sm">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded bg-blue-600 text-white flex items-center justify-center font-bold">C</div>
+            <span class="font-bold text-lg">CloudBSD Admin</span>
+            <span class="ml-2 px-2 py-0.5 text-xs rounded bg-blue-50 text-blue-700 border border-blue-200">cloudbsd-revytech</span>
+          </div>
+          <div class="ml-auto flex items-center gap-4">
+            <span class="text-sm text-slate-500">freenas-mock.local</span>
+            <button class="text-sm text-slate-600 hover:text-slate-900">Refresh</button>
+            <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">M</div>
+          </div>
+        </div>
+      </g>
+      <div class="flex" style="height: calc(100% - 56px);">
+        <g id="theme-sidebar" class="contents">
+          <aside class="w-56 bg-white border-r border-slate-200 p-3 overflow-y-auto">
+            <nav class="space-y-1 text-sm">
+              <a class="block px-3 py-2 rounded bg-blue-50 text-blue-700 font-medium">Dashboard</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Virtual Machines</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Containers</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Jails</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Volumes</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Network Map</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Cluster</a>
+              <div class="pt-3 pb-1 text-xs uppercase tracking-wide text-slate-400 px-3">Admin</div>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Users</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Logs</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Notifications</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Settings</a>
+            </nav>
+          </aside>
+        </g>
+        <main class="flex-1 p-6 overflow-auto">
+          <g id="theme-content" class="contents">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h1 class="text-2xl font-bold">Dashboard</h1>
+                <p class="text-sm text-slate-500">Host: freenas-mock.local · middleware connected</p>
+              </div>
+              <div class="text-sm text-slate-500">Last refresh: 12s ago</div>
+            </div>
+            <div class="grid grid-cols-3 gap-4">
+              <div class="bg-white rounded-lg p-4 border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between">
+                  <div class="text-sm font-medium text-slate-500">CPU Usage</div>
+                  <div class="text-xs text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">healthy</div>
+                </div>
+                <div class="text-3xl font-bold mt-2">42%</div>
+                <div class="mt-3 h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <div class="h-full bg-blue-600" style="width: 42%;"></div>
+                </div>
+                <div class="mt-2 text-xs text-slate-500">8 cores · load avg 1.42</div>
+              </div>
+              <div class="bg-white rounded-lg p-4 border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between">
+                  <div class="text-sm font-medium text-slate-500">Memory</div>
+                  <div class="text-xs text-amber-700 bg-amber-50 px-2 py-0.5 rounded">watch</div>
+                </div>
+                <div class="text-3xl font-bold mt-2">8.2 / 16 GB</div>
+                <div class="mt-3 h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <div class="h-full bg-amber-500" style="width: 51%;"></div>
+                </div>
+                <div class="mt-2 text-xs text-slate-500">ARC 2.4 GB · swap 64 MB</div>
+              </div>
+              <div class="bg-white rounded-lg p-4 border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between">
+                  <div class="text-sm font-medium text-slate-500">Disk</div>
+                  <div class="text-xs text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">healthy</div>
+                </div>
+                <div class="text-3xl font-bold mt-2">245 / 920 GB</div>
+                <div class="mt-3 h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <div class="h-full bg-blue-600" style="width: 27%;"></div>
+                </div>
+                <div class="mt-2 text-xs text-slate-500">zpool tank · scrub Sun 03:00</div>
+              </div>
+              <div class="bg-white rounded-lg p-4 border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between">
+                  <div class="text-sm font-medium text-slate-500">Network</div>
+                  <div class="text-xs text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">healthy</div>
+                </div>
+                <div class="text-3xl font-bold mt-2">↑ 12.4 MB/s</div>
+                <div class="mt-3 h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <div class="h-full bg-blue-600" style="width: 18%;"></div>
+                </div>
+                <div class="mt-2 text-xs text-slate-500">↓ 86.1 MB/s · 3 ifaces</div>
+              </div>
+              <div class="bg-white rounded-lg p-4 border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between">
+                  <div class="text-sm font-medium text-slate-500">Notifications</div>
+                  <div class="text-xs text-rose-700 bg-rose-50 px-2 py-0.5 rounded">3 critical</div>
+                </div>
+                <div class="text-3xl font-bold mt-2">17</div>
+                <div class="mt-3 grid grid-cols-3 gap-2 text-xs">
+                  <div class="rounded bg-rose-50 text-rose-700 px-2 py-1 text-center">3 crit</div>
+                  <div class="rounded bg-amber-50 text-amber-700 px-2 py-1 text-center">6 warn</div>
+                  <div class="rounded bg-blue-50 text-blue-700 px-2 py-1 text-center">8 info</div>
+                </div>
+                <div class="mt-2 text-xs text-slate-500">scrub delayed on tank/data</div>
+              </div>
+              <div class="bg-white rounded-lg p-4 border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between">
+                  <div class="text-sm font-medium text-slate-500">Workloads</div>
+                  <div class="text-xs text-slate-500">read-only</div>
+                </div>
+                <div class="text-3xl font-bold mt-2">12</div>
+                <div class="mt-3 grid grid-cols-3 gap-2 text-xs text-center">
+                  <div class="rounded bg-slate-50 px-2 py-1">5 VMs</div>
+                  <div class="rounded bg-slate-50 px-2 py-1">4 CT</div>
+                  <div class="rounded bg-slate-50 px-2 py-1">3 Jails</div>
+                </div>
+                <div class="mt-2 text-xs text-slate-500">7 datasets · 2 snaps today</div>
+              </div>
+            </div>
+            <div class="mt-6 bg-white rounded-lg p-4 border border-slate-200 shadow-sm">
+              <div class="flex items-center justify-between mb-3">
+                <div class="font-medium">Recent Activity</div>
+                <div class="text-xs text-slate-500">view-only log</div>
+              </div>
+              <ul class="divide-y divide-slate-100 text-sm">
+                <li class="py-2 flex"><span class="w-32 text-slate-500">12:42:01</span><span class="ml-2">snapshot daily@auto-2026-07-06_03-00 created on tank/data</span></li>
+                <li class="py-2 flex"><span class="w-32 text-slate-500">12:31:18</span><span class="ml-2">jail `transmission` entered STATE: STARTED</span></li>
+                <li class="py-2 flex"><span class="w-32 text-slate-500">12:18:44</span><span class="ml-2">vm `nextcloud` reported guest-agent heartbeat (3s drift)</span></li>
+                <li class="py-2 flex"><span class="w-32 text-slate-500">11:55:09</span><span class="ml-2">scrub of tank completed with 0 errors</span></li>
+              </ul>
+            </div>
+          </g>
+        </main>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

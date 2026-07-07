@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="system-ui, sans-serif">
+  <title>CloudBSD Admin — Session Expired (Frost-Out Modal)</title>
+  <desc>The user was active in the app, then their session silently expired. The entire page is frosted over and a session-expired modal is shown. The underlying data is hidden until the user signs in again.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900 relative">
+      <div class="absolute inset-0">
+        <g id="header" class="contents">
+          <div class="h-14 bg-white border-b border-slate-200 flex items-center px-4">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded bg-blue-600 text-white flex items-center justify-center font-bold">C</div>
+              <span class="font-bold text-lg">CloudBSD Admin</span>
+              <span class="ml-2 px-2 py-0.5 text-xs rounded bg-slate-100 text-slate-600">freenas-mock.local</span>
+            </div>
+            <div class="ml-auto flex items-center gap-4">
+              <span class="text-sm text-slate-500">Theme: CloudBSD</span>
+              <button class="text-sm text-slate-600 hover:text-slate-900">Refresh</button>
+              <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">M</div>
+            </div>
+          </div>
+        </g>
+        <div class="flex" style="height: calc(100% - 56px);">
+          <aside class="w-56 bg-white border-r border-slate-200 p-3">
+            <nav class="space-y-1 text-sm">
+              <a class="block px-3 py-2 rounded bg-blue-50 text-blue-700 font-medium">Dashboard</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Virtual Machines</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Containers</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Jails</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Volumes</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Network Map</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Cluster</a>
+            </nav>
+          </aside>
+          <main class="flex-1 p-6">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h1 class="text-2xl font-bold">Dashboard</h1>
+                <p class="text-sm text-slate-500">Real-time overview</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-4 gap-4 mb-6">
+              <div class="bg-white rounded-lg border border-slate-200 p-4">
+                <div class="text-sm text-slate-500">CPU</div>
+                <div class="text-2xl font-bold mt-1">42%</div>
+              </div>
+              <div class="bg-white rounded-lg border border-slate-200 p-4">
+                <div class="text-sm text-slate-500">Memory</div>
+                <div class="text-2xl font-bold mt-1">18.4 GB</div>
+              </div>
+              <div class="bg-white rounded-lg border border-slate-200 p-4">
+                <div class="text-sm text-slate-500">Storage</div>
+                <div class="text-2xl font-bold mt-1">5.2 TB</div>
+              </div>
+              <div class="bg-white rounded-lg border border-slate-200 p-4">
+                <div class="text-sm text-slate-500">VMs</div>
+                <div class="text-2xl font-bold mt-1">12</div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="bg-white rounded-lg border border-slate-200 p-4">
+                <h2 class="font-medium mb-3">Recent activity</h2>
+                <ul class="text-sm space-y-2 text-slate-700">
+                  <li>VM <code>web-prod-01</code> started · 14:11</li>
+                  <li>Snapshot <code>tank/web@auto</code> created · 14:00</li>
+                  <li>Jail <code>db-pg</code> restarted · 13:42</li>
+                </ul>
+              </div>
+              <div class="bg-white rounded-lg border border-slate-200 p-4">
+                <h2 class="font-medium mb-3">System</h2>
+                <ul class="text-sm space-y-2 text-slate-700">
+                  <li>Last backup: 12 hours ago</li>
+                  <li>Updates available: 3</li>
+                  <li>Disk SMART: all OK</li>
+                </ul>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+      <div class="absolute inset-0 bg-slate-900/55 backdrop-blur-md"></div>
+      <div class="absolute inset-0 flex items-center justify-center p-6">
+        <g id="frost-modal" class="contents">
+          <div role="alertdialog" aria-labelledby="sess-title" class="bg-white rounded-xl shadow-2xl border border-amber-200 w-full max-w-md overflow-hidden">
+            <div class="px-6 py-5 flex items-start gap-4">
+              <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0 text-2xl" aria-hidden="true">!</div>
+              <div class="flex-1 min-w-0">
+                <h2 id="sess-title" class="text-lg font-semibold">Your session has expired</h2>
+                <p class="text-sm text-slate-600 mt-1">
+                  For your security, the page has been hidden. Sign in again to continue where you left off.
+                </p>
+              </div>
+            </div>
+            <div class="px-6 pb-4">
+              <div class="bg-slate-50 border border-slate-200 rounded p-3 text-xs space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-500">Signed in as</span>
+                  <span class="font-medium">admin</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-500">Last activity</span>
+                  <span class="font-mono">14:21:08 UTC</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-500">Idle timeout</span>
+                  <span class="font-mono">15 min</span>
+                </div>
+              </div>
+              <p class="mt-3 text-xs text-slate-500">
+                No changes have been made since the session expired. Unsaved drafts on this page have been discarded.
+              </p>
+            </div>
+            <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+              <button class="px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 rounded">Use a different account</button>
+              <button class="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 font-medium">Sign in</button>
+            </div>
+          </div>
+        </g>
+      </div>
+      <g id="detail-levels" class="contents">
+        <div class="absolute bottom-6 left-6 right-6 z-10">
+          <div class="bg-white rounded-lg border border-slate-200 shadow-sm">
+            <div class="px-4 py-2 border-b border-slate-200 flex items-center justify-between">
+              <h2 class="font-medium text-sm">Error detail levels — Session expired</h2>
+              <span class="text-xs text-slate-500">Idle timeout: 15m · hard cap: 8h</span>
+            </div>
+            <div class="p-4 grid grid-cols-4 gap-3 text-xs">
+              <div class="border border-slate-200 rounded p-3">
+                <div class="flex items-center gap-1.5 mb-2">
+                  <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                  <span class="font-semibold uppercase tracking-wide text-slate-600">Minimal</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-sm">!</span>
+                  <span>Session expired</span>
+                </div>
+              </div>
+              <div class="border border-blue-300 bg-blue-50 rounded p-3 ring-1 ring-blue-300">
+                <div class="flex items-center gap-1.5 mb-2">
+                  <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                  <span class="font-semibold uppercase tracking-wide text-blue-700">Standard</span>
+                </div>
+                <div class="font-medium mb-1">Sign in again</div>
+                <div class="text-slate-600 mb-2">For your security, the page has been hidden.</div>
+                <button class="px-2 py-1 bg-blue-600 text-white rounded text-xs">Sign in</button>
+              </div>
+              <div class="border border-slate-200 rounded p-3">
+                <div class="flex items-center gap-1.5 mb-2">
+                  <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                  <span class="font-semibold uppercase tracking-wide text-slate-600">Detailed</span>
+                </div>
+                <div class="text-slate-600 mb-1">Auth trace (admin):</div>
+                <pre class="text-[10px] font-mono text-slate-700 bg-slate-50 rounded p-1.5 overflow-hidden leading-tight">IdleTimeoutError: token TTL
+  exceeded 900s
+  at SessionGuard.validate
+    (src/auth/session.guard.ts:62)
+  at AuthInterceptor</pre>
+              </div>
+              <div class="border border-slate-200 rounded p-3">
+                <div class="flex items-center gap-1.5 mb-2">
+                  <span class="w-2 h-2 rounded-full bg-violet-500"></span>
+                  <span class="font-semibold uppercase tracking-wide text-slate-600">Debug</span>
+                </div>
+                <div class="space-y-1 text-slate-700">
+                  <div>req&#160;id:&#160;<code class="text-[10px]">req_b72d44e3</code></div>
+                  <div>env:&#160;<code class="text-[10px]">production</code></div>
+                  <div>build:&#160;<code class="text-[10px]">v2.4.1#fb12a8</code></div>
+                  <div>exp&#160;at:&#160;<code class="text-[10px]">14:36:08Z</code></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </g>
+    </div>
+  </foreignObject>
+</svg>

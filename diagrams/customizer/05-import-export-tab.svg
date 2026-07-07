@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="Inter, system-ui, sans-serif">
+  <title>Theme Customizer — Import/Export Tab — Customizer Panel at 1280x800</title>
+  <desc>Import and export theme configurations as .cbsd-theme.json files. Includes JSON editor preview, export options, and import drop zone. WCAG AA contrast.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1990/xhtml" class="h-full bg-slate-50 text-slate-900" style="font-family: Inter, system-ui, sans-serif;">
+      <g id="customizer-header" class="contents">
+        <div class="h-14 bg-white border-b border-slate-200 flex items-center px-4 shadow-sm">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded bg-blue-600 text-white flex items-center justify-center font-bold">C</div>
+            <span class="font-bold text-lg">CloudBSD Admin</span>
+            <span class="ml-2 text-sm text-slate-500">/</span>
+            <span class="ml-2 text-sm text-slate-700">Theme Customizer</span>
+          </div>
+          <div class="ml-auto flex items-center gap-2">
+            <button class="text-sm px-3 py-1.5 rounded border border-slate-300 text-slate-700 hover:bg-slate-50">Reset</button>
+            <button class="text-sm px-3 py-1.5 rounded border border-slate-300 text-slate-700 hover:bg-slate-50">Save Draft</button>
+            <button class="text-sm px-3 py-1.5 rounded bg-blue-600 text-white hover:bg-blue-700">Apply Theme</button>
+          </div>
+        </div>
+      </g>
+      <div class="flex" style="height: calc(100% - 56px);">
+        <g id="customizer-sidebar" class="contents">
+          <aside class="w-56 bg-white border-r border-slate-200 p-3 overflow-y-auto">
+            <nav class="space-y-1 text-sm">
+              <a class="flex items-center gap-2 px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Colors</a>
+              <a class="flex items-center gap-2 px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Typography</a>
+              <a class="flex items-center gap-2 px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Layout</a>
+              <a class="flex items-center gap-2 px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Branding</a>
+              <a class="flex items-center gap-2 px-3 py-2 rounded font-medium bg-blue-50 text-blue-700 border-l-2 border-blue-600">Import / Export</a>
+              <a class="flex items-center gap-2 px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Preview</a>
+              <div class="pt-3 pb-1 text-xs uppercase tracking-wide text-slate-400 px-3">Library</div>
+              <a class="flex items-center gap-2 px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Theme Gallery</a>
+              <a class="flex items-center gap-2 px-3 py-2 rounded text-slate-700 hover:bg-slate-50">My Themes</a>
+            </nav>
+          </aside>
+        </g>
+        <main class="flex-1 overflow-auto p-6">
+          <g id="customizer-content" class="contents">
+            <div class="mb-6">
+              <h1 class="text-2xl font-bold text-slate-900">Import / Export</h1>
+              <p class="text-sm text-slate-500 mt-1">Share or back up your theme as a portable <span class="font-mono text-xs bg-slate-200 px-1.5 py-0.5 rounded">.cbsd-theme.json</span> file.</p>
+            </div>
+            <div class="grid grid-cols-2 gap-6">
+              <div class="bg-white rounded-lg border border-slate-200 p-5">
+                <div class="flex items-center gap-2 mb-4">
+                  <div class="w-8 h-8 rounded bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">↓</div>
+                  <div>
+                    <div class="text-base font-semibold text-slate-900">Export Theme</div>
+                    <div class="text-xs text-slate-500">Download your current configuration</div>
+                  </div>
+                </div>
+                <div class="space-y-3">
+                  <div>
+                    <label class="text-sm font-medium text-slate-700">Theme Name</label>
+                    <input type="text" value="cloudbsd-revytech" class="mt-1 w-full text-sm px-3 py-2 border border-slate-300 rounded font-mono"/>
+                  </div>
+                  <div>
+                    <label class="text-sm font-medium text-slate-700">Description (optional)</label>
+                    <input type="text" value="Default CloudBSD admin theme" class="mt-1 w-full text-sm px-3 py-2 border border-slate-300 rounded"/>
+                  </div>
+                  <div>
+                    <label class="text-sm font-medium text-slate-700">Author</label>
+                    <input type="text" value="CloudBSD Team" class="mt-1 w-full text-sm px-3 py-2 border border-slate-300 rounded"/>
+                  </div>
+                  <div class="flex items-center gap-2 pt-2">
+                    <input type="checkbox" id="include-logo" class="text-blue-600"/>
+                    <label for="include-logo" class="text-sm text-slate-700">Include custom logo as base64</label>
+                  </div>
+                </div>
+                <div class="flex gap-2 mt-5">
+                  <button class="text-sm px-4 py-2 rounded bg-emerald-600 text-white hover:bg-emerald-700 font-medium">Download .cbsd-theme.json</button>
+                  <button class="text-sm px-4 py-2 rounded border border-slate-300 text-slate-700 hover:bg-slate-50">Copy to Clipboard</button>
+                </div>
+              </div>
+              <div class="bg-white rounded-lg border border-slate-200 p-5">
+                <div class="flex items-center gap-2 mb-4">
+                  <div class="w-8 h-8 rounded bg-blue-100 text-blue-700 flex items-center justify-center font-bold">↑</div>
+                  <div>
+                    <div class="text-base font-semibold text-slate-900">Import Theme</div>
+                    <div class="text-xs text-slate-500">Load a theme from a JSON file or URL</div>
+                  </div>
+                </div>
+                <div class="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-blue-400 cursor-pointer">
+                  <div class="text-3xl text-slate-400 mb-2">⬆</div>
+                  <div class="text-sm font-medium text-slate-700">Drop .cbsd-theme.json here</div>
+                  <div class="text-xs text-slate-500 mt-1">or click to browse files</div>
+                </div>
+                <div class="mt-4">
+                  <div class="text-sm font-medium text-slate-700 mb-2">Or import from URL</div>
+                  <div class="flex gap-2">
+                    <input type="text" placeholder="https://example.com/theme.cbsd-theme.json" class="flex-1 text-sm px-3 py-2 border border-slate-300 rounded font-mono"/>
+                    <button class="text-sm px-3 py-2 rounded border border-slate-300 text-slate-700 hover:bg-slate-50">Fetch</button>
+                  </div>
+                </div>
+                <div class="mt-4 p-3 rounded bg-amber-50 border border-amber-200 text-xs text-amber-800">
+                  <strong>Note:</strong> Importing will replace unsaved changes. Save your current draft first.
+                </div>
+              </div>
+            </div>
+            <div class="mt-6 bg-white rounded-lg border border-slate-200 p-5">
+              <div class="flex items-center justify-between mb-3">
+                <div>
+                  <div class="text-base font-semibold text-slate-900">Theme JSON Preview</div>
+                  <div class="text-xs text-slate-500">Contents of the file that will be exported</div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs text-slate-500">Format:</span>
+                  <button class="text-xs px-2 py-1 bg-slate-100 border border-slate-300 rounded">JSON</button>
+                  <button class="text-xs px-2 py-1 border border-slate-300 rounded text-slate-600">YAML</button>
+                </div>
+              </div>
+              <div class="bg-slate-900 text-slate-100 rounded-lg p-4 text-xs font-mono leading-relaxed overflow-hidden">
+<div><span style="color: #7dd3fc;">{</span></div>
+<div>&#160;&#160;<span style="color: #c4b5fd;">"$schema"</span>: <span style="color: #86efac;">"https://cloudbsd.org/schemas/theme.v1.json"</span>,</div>
+<div>&#160;&#160;<span style="color: #c4b5fd;">"name"</span>: <span style="color: #86efac;">"cloudbsd-revytech"</span>,</div>
+<div>&#160;&#160;<span style="color: #c4b5fd;">"version"</span>: <span style="color: #86efac;">"1.0.0"</span>,</div>
+<div>&#160;&#160;<span style="color: #c4b5fd;">"author"</span>: <span style="color: #86efac;">"CloudBSD Team"</span>,</div>
+<div>&#160;&#160;<span style="color: #c4b5fd;">"colors"</span>: <span style="color: #7dd3fc;">{</span></div>
+<div>&#160;&#160;&#160;&#160;<span style="color: #c4b5fd;">"primary"</span>: <span style="color: #86efac;">"#2563eb"</span>,</div>
+<div>&#160;&#160;&#160;&#160;<span style="color: #c4b5fd;">"secondary"</span>: <span style="color: #86efac;">"#64748b"</span>,</div>
+<div>&#160;&#160;&#160;&#160;<span style="color: #c4b5fd;">"accent"</span>: <span style="color: #86efac;">"#f59e0b"</span>,</div>
+<div>&#160;&#160;&#160;&#160;<span style="color: #c4b5fd;">"background"</span>: <span style="color: #86efac;">"#f8fafc"</span>,</div>
+<div>&#160;&#160;&#160;&#160;<span style="color: #c4b5fd;">"foreground"</span>: <span style="color: #86efac;">"#0f172a"</span></div>
+<div>&#160;&#160;<span style="color: #7dd3fc;">}</span>,</div>
+<div>&#160;&#160;<span style="color: #c4b5fd;">"typography"</span>: <span style="color: #7dd3fc;">{</span> ... <span style="color: #7dd3fc;">}</span>,</div>
+<div>&#160;&#160;<span style="color: #c4b5fd;">"layout"</span>: <span style="color: #7dd3fc;">{</span> ... <span style="color: #7dd3fc;">}</span>,</div>
+<div>&#160;&#160;<span style="color: #c4b5fd;">"branding"</span>: <span style="color: #7dd3fc;">{</span> ... <span style="color: #7dd3fc;">}</span></div>
+<div><span style="color: #7dd3fc;">}</span></div>
+              </div>
+            </div>
+          </g>
+        </main>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

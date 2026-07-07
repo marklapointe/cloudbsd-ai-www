@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" font-family="system-ui, sans-serif">
+  <title>CloudBSD Admin — Select (dropdown)</title>
+  <desc>Dropdown select with label, helper text, and open menu showing selected option.</desc>
+  <foreignObject x="0" y="0" width="600" height="400">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900 p-8">
+      <g id="header" class="contents">
+        <div class="mb-6">
+          <h2 class="text-lg font-semibold">Select</h2>
+          <p class="text-sm text-slate-500">Single-select dropdown · keyboard navigable · ARIA listbox pattern</p>
+        </div>
+      </g>
+      <g id="closed" class="contents">
+        <div class="bg-white p-5 rounded-lg border border-slate-200">
+          <label for="os" class="block text-sm font-medium mb-1">Guest operating system</label>
+          <div class="relative">
+            <button id="os" type="button" class="w-full px-3 py-2 rounded-md border border-slate-300 bg-white text-left flex items-center justify-between focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none">
+              <span>Debian 12 (bookworm)</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>
+            </button>
+          </div>
+          <div class="mt-1 text-xs text-slate-500">Closed state · chevron-down on right</div>
+        </div>
+      </g>
+      <g id="open" class="contents">
+        <div class="mt-4 bg-white rounded-lg border border-slate-200 shadow-lg overflow-hidden">
+          <div class="px-3 py-2 text-xs uppercase tracking-wide text-slate-500 border-b border-slate-200">Choose an OS image</div>
+          <ul role="listbox" class="max-h-56 overflow-auto py-1 text-sm">
+            <li class="px-3 py-2 flex items-center justify-between hover:bg-slate-50 cursor-pointer text-slate-700">
+              <span>FreeBSD 14.1</span>
+              <span class="text-xs text-slate-400">2.1 GB</span>
+            </li>
+            <li class="px-3 py-2 flex items-center justify-between bg-blue-50 text-blue-700 cursor-pointer" aria-selected="true">
+              <span class="font-medium">Debian 12 (bookworm)</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M13.3 4.3a1 1 0 010 1.4l-7 7a1 1 0 01-1.4 0l-3-3a1 1 0 011.4-1.4L5.6 10.6l6.3-6.3a1 1 0 011.4 0z"/></svg>
+            </li>
+            <li class="px-3 py-2 flex items-center justify-between hover:bg-slate-50 cursor-pointer text-slate-700">
+              <span>Ubuntu 24.04 LTS</span>
+              <span class="text-xs text-slate-400">3.4 GB</span>
+            </li>
+            <li class="px-3 py-2 flex items-center justify-between hover:bg-slate-50 cursor-pointer text-slate-700">
+              <span>Alpine 3.20</span>
+              <span class="text-xs text-slate-400">180 MB</span>
+            </li>
+            <li class="px-3 py-2 flex items-center justify-between hover:bg-slate-50 cursor-pointer text-slate-700">
+              <span>OpenBSD 7.6</span>
+              <span class="text-xs text-slate-400">620 MB</span>
+            </li>
+            <li class="px-3 py-2 flex items-center justify-between hover:bg-slate-50 cursor-pointer text-slate-700">
+              <span>Windows Server 2022</span>
+              <span class="text-xs text-slate-400">6.8 GB</span>
+            </li>
+          </ul>
+        </div>
+      </g>
+      <g id="footer" class="contents">
+        <div class="mt-2 text-xs text-slate-500">Selected option highlighted with blue-50 background and checkmark icon</div>
+      </g>
+    </div>
+  </foreignObject>
+</svg>
