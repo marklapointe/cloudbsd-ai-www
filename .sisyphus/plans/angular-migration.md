@@ -57,6 +57,234 @@ Metis identified 17 categories of risks/gaps. The most critical ones for this mi
 
 ---
 
+## Visual Planning Artifacts (Diagrams)
+
+> **CRITICAL for implementing agent:** All UI screens, components, flows, and error states have been pre-rendered as planning artifacts. **Read these before implementing each component.** They are the source of truth for layout, content, and visual hierarchy.
+
+**Convention:** SVG with `<foreignObject>` containing inline-styled HTML (Tailwind classes are inert in SVG; only inline `style="..."` works). See `diagrams/README.md` for details.
+
+### Screen Mock-ups (14) — `diagrams/screens/`
+
+These define the visual target for every page in the new Angular app. Each SVG is 1280×800, uses CloudBSD theme by default, and is view-only (no write buttons).
+
+| File | Page | Key Contents |
+|------|------|--------------|
+| [`01-dashboard.svg`](../../diagrams/screens/01-dashboard.svg) | Dashboard | 8 widgets: CPU (42%, 8 cores, load avg, sparkline), Memory (8.2/16 GB, breakdown bars), Disk (4 volumes, 27%/80%/76%), Network (rx/tx), Temperature, Load Avg (1m/5m/15m), Top Processes (5 rows), ZFS Health. Recent Activity feed (10 events). Top Consumers bar chart (5 rows). |
+| [`02-vms.svg`](../../diagrams/screens/02-vms.svg) | Virtual Machines | 4 stat cards (47 VMs, 39 Run, 6 Stop, 1 Error). 12-row table with 13 columns (Name, Status, OS, vCPU, RAM, Disk, Uptime, Host, Tags, IP, IOPS, Net, Created). VM names: nextcloud, homeassistant, jellyfin, postgres-dev, win11-sandbox, gitlab-runner, mastodon, node-02-win, gitea, pihole-vm, immich, paperless-ngx. Row 5 (win11-sandbox) shown in hover state. Pagination. |
+| [`03-containers.svg`](../../diagrams/screens/03-containers.svg) | Containers | 15 container rows: nginx-proxy, postgres-16, redis-cache, immich-server, immich-ml, paperless, nextcloud-fpm, caddy, syncthing, gitea, postgres-backup, watchtower. Image tag pills, status pills, ports, CPU%, MEM, net sparkline, uptime, registry columns. |
+| [`04-jails.svg`](../../diagrams/screens/04-jails.svg) | Jails | 10 jail rows: transmission, syncthing, pi-hole, unifi-controller, homebridge, paperless (STOPPED), gitea-runner (FROZEN), dnscrypt, minio, vaultwarden. Status, hostname, IP, vCPUs, RAM, Disk, resource bar, uptime, JID. |
+| [`05-volumes.svg`](../../diagrams/screens/05-volumes.svg) | Volumes | 13 volume rows: tank/data, tank/media, tank/backups, tank/vms, tank/apps, fast/ssd (SLOG), vault/cold (encrypted), nfs_export, iscsi-lun0, tank/snapshots, tank/nextcloud, tank/jails, tank/photos. Type (ZFS/NFS/iSCSI), size, used, usage bar, mountpoint, compression, encryption, last scrub, health. |
+| [`06-network-map.svg`](../../diagrams/screens/06-network-map.svg) | Network Map | 18 nodes: Internet, pfsense.local, sw-core.local, NAS, 5 VMs, 4 CTs, 4 jails, 2 services, 3 cluster nodes. 3 subnets (10.0.10.0/24, 10.0.20.0/24, 10.0.30.0/24). Mini-map. Legend. Controls (Zoom, Fit, Refresh, Layout). |
+| [`07-cluster.svg`](../../diagrams/screens/07-cluster.svg) | Cluster | 6 nodes: freenas-mock (master), node-02/03/04/06 (workers), node-05 (OFFLINE rose). CPU/MEM/Disk usage bars per node. Recent cluster events list (8 events). Aggregate stats. |
+| [`08-users.svg`](../../diagrams/screens/08-users.svg) | Users | 14 user rows with avatars (mlapointe, root, www, backup, jenkins, guest, postgres, ubuntu, svc-bhyve, deploy, monitoring, audit, etc.). PAM status (active/locked/expired/disabled), last login, groups as badges, shell. Right detail panel for mlapointe (UID, email, 2FA, SSH keys, sessions, sudo, 5 recent logins). |
+| [`09-logs.svg`](../../diagrams/screens/09-logs.svg) | Logs | Admin-only JSONL viewer. Level pills (All/Error/Warn/Info/Debug), severity histogram (60 buckets, red bars for errors), Tail ON indicator. 18 log rows from zfs/bhyve/jail/nginx/sshd/smb/cron/smart/caddy/ctdb modules with realistic messages. |
+| [`10-notifications.svg`](../../diagrams/screens/10-notifications.svg) | Notifications | 14 notifications grouped by severity: ERROR (disk > 80%, auth failures, cluster heartbeat), WARN (vm paused, network flap, jail disabled), INFO (system updates, snapshots). Severity icons, source filters, Mark all read, Preferences. |
+| [`11-settings.svg`](../../diagrams/screens/11-settings.svg) | Settings (Appearance) | Settings sidebar with 15 sections (admin-only sections marked with admin icon: Theme Customizer, Error Display, Plugins, Users, Sessions, API Keys). Active "Appearance" section with theme radio cards, color pickers, typography, layout, accessibility, behavior. Read-only banner + disabled Save. |
+| [`12-login.svg`](../../diagrams/screens/12-login.svg) | Login | Full login form: branding, tagline, username/password with show/hide, Remember checkbox, Session timeout notice, Sign in button, passkey option, MFA TOTP (6 digit boxes). Help links (Forgot password, Why PAM, First time, Locked out). Right side decorative gradient panel with network topology pattern. Status pill (Backend reachable). |
+| [`13-about.svg`](../../diagrams/screens/13-about.svg) | About | Version info table (Angular 19.1.0, Node 24, Express 5, build commit f8e2a4c1, BSD 3-Clause). System info card (FreeBSD 14.2, 8 cores, 16 GB, 47 locales, 5 plugins). Links panel. 12 third-party libraries table. |
+| [`14-status.svg`](../../diagrams/screens/14-status.svg) | Status | Backend health (UP, 18ms, 14d uptime), Database (SQLite 412 MB / 142 tables), 5 Plugins (all healthy with one zfs-monitor warning). 5 plugin health cards grid. System resources with bars. 12-row configuration table. 4 log file locations. |
+
+### Component Mock-ups (15) — `diagrams/components/`
+
+Reusable UI building blocks. View at 600×400, light theme.
+
+| File | Component |
+|------|-----------|
+| `01-button.svg` | Button variants: primary, secondary, ghost, danger |
+| `02-button-loading.svg` | Button in loading state with spinner |
+| `03-card.svg` | Card with header, body, footer |
+| `04-card-stats.svg` | Stats/KPI card with label, value, trend indicator |
+| `05-input.svg` | Text input with label, helper text, validation |
+| `06-select.svg` | Dropdown select |
+| `07-checkbox.svg` | Checkbox with label |
+| `08-toggle.svg` | Toggle switch |
+| `09-tabs.svg` | Tabbed navigation (3 tabs) |
+| `10-table.svg` | Data table with header, rows, pagination |
+| `11-badge.svg` | Badge variants (success/warning/error/info) |
+| `12-breadcrumb.svg` | Breadcrumb navigation |
+| `13-pagination.svg` | Pagination controls |
+| `14-progress-bar.svg` | Progress bar (60% complete) |
+| `15-tooltip.svg` | Tooltip on hover with "Don't show again" link |
+
+### Error States (12) — `diagrams/errors/`
+
+All error surfaces in the application, with 4 detail levels (Minimal/Standard/Detailed/Debug).
+
+| File | Error |
+|------|-------|
+| `01-backend-unavailable.svg` | Pre-flight check: backend down, degraded shell |
+| `02-network-error.svg` | Network request failed with retry |
+| `03-401-unauthorized.svg` | Authentication required → login |
+| `04-403-forbidden.svg` | Admin-only area, role-gated |
+| `05-404-not-found.svg` | Friendly 404 with search + nav back |
+| `06-500-server-error.svg` | Internal error with reference code |
+| `07-503-service-unavailable.svg` | Backend down, retry countdown |
+| `08-pam-auth-failed.svg` | PAM auth failed, attempt counter |
+| `09-pam-account-locked.svg` | PAM account locked, unlock timer |
+| `10-session-expired.svg` | Frost-out modal (page frosted, info hidden) |
+| `11-plugin-load-error.svg` | Plugin manifest invalid/missing |
+| `12-themes-load-error.svg` | Theme file corrupt, restore default |
+
+### Notifications (5) — `diagrams/notifications/`
+
+| File | Type |
+|------|------|
+| `01-info-toast.svg` | Info notification (blue, auto-dismiss 5s) |
+| `02-success-toast.svg` | Success notification (green, checkmark) |
+| `03-warning-toast.svg` | Warning notification (amber, triangle) |
+| `04-error-toast.svg` | Error notification (red, X icon, sticky) |
+| `05-notification-center.svg` | Full notification center panel |
+
+### Modals (6) — `diagrams/modals/`
+
+| File | Type |
+|------|------|
+| `01-confirmation-modal.svg` | "Are you sure?" with Cancel/Confirm |
+| `02-info-modal.svg` | Information display with OK |
+| `03-form-modal.svg` | Modal containing form fields |
+| `04-wizard-modal.svg` | Multi-step wizard (step 2 of 4) |
+| `05-fullscreen-modal.svg` | Full-screen overlay (e.g., console) |
+| `06-drawer-modal.svg` | Side drawer (slides from right) |
+
+### Loading & State (4) — `diagrams/loading/`
+
+| File | State |
+|------|-------|
+| `01-loading-spinner.svg` | Spinner overlay during data fetch |
+| `02-skeleton-screen.svg` | Skeleton placeholder |
+| `03-empty-state.svg` | Empty state with icon + message + action |
+| `04-error-state.svg` | Inline error state within component |
+
+### Theme Variants (3) — `diagrams/variants/`
+
+Same dashboard rendered in different themes for comparison.
+
+| File | Theme |
+|------|-------|
+| `01-light.svg` | Light theme (CloudBSD default) |
+| `02-dark.svg` | Dark theme (Glass Dark) |
+| `03-high-contrast.svg` | High-contrast theme (WCAG AAA) |
+
+### Mobile Variants (3) — `diagrams/mobile/`
+
+375×812 mobile portrait renders.
+
+| File | Screen |
+|------|--------|
+| `01-mobile-dashboard.svg` | Mobile dashboard |
+| `02-mobile-vms.svg` | Mobile VMs list |
+| `03-mobile-settings.svg` | Mobile settings |
+
+### Plugin System (3) — `diagrams/plugin/`
+
+| File | Type |
+|------|------|
+| `01-plugin-page.svg` | Plugin-rendered page (e.g., "VM Metrics" by metrics plugin) |
+| `02-plugin-modal.svg` | Plugin-rendered modal |
+| `03-plugin-wizard.svg` | Plugin-rendered multi-step wizard |
+
+### Themes (15) — `diagrams/themes/`
+
+15 built-in themes rendered as the same dashboard.
+
+| File | Theme Name |
+|------|------------|
+| `01-cloudbsd-revytech.svg` | CloudBSD Revytech (default) |
+| `02-miami-vice.svg` | Miami Vice (neon pink + cyan) |
+| `03-pixel-pop.svg` | Pixel Pop (retro gamer) |
+| `04-beige-box.svg` | Beige Box (90s retro PC) |
+| `05-pearl-luna.svg` | Pearl Luna (rounded blue) |
+| `06-cde-motif.svg` | Beveled Desktop (CDE-style) |
+| `07-sunos-sunburst.svg` | Sunburst Orange (warm beige + gold) |
+| `08-aqua-pinstripe.svg` | Brushed Pinstripe (translucent blue) |
+| `09-phosphor-crt.svg` | Phosphor CRT (green phosphor) |
+| `10-glass-light.svg` | Glass Light (modern frosted) |
+| `11-glass-dark.svg` | Glass Dark (modern frosted dark) |
+| `12-workbench.svg` | Workshop Orange (orange/red topbar) |
+| `13-haiku.svg` | Minimal Clean (white + beige) |
+| `14-cube.svg` | Cube Lab (black/green/white) |
+| `15-warp.svg` | Flat Steel (gray + blue accents) |
+
+### Customizer (8) — `diagrams/customizer/`
+
+Theme customizer UI panels.
+
+| File | Panel |
+|------|-------|
+| `01-colors-tab.svg` | Color picker |
+| `02-typography-tab.svg` | Font family, size, weight |
+| `03-layout-tab.svg` | Spacing, border radius, shadows |
+| `04-branding-tab.svg` | Logo upload, app name, copyright |
+| `05-import-export-tab.svg` | Theme import/export (.cbsd-theme.json) |
+| `06-preview-tab.svg` | Live theme preview |
+| `07-theme-gallery.svg` | Browse all 15 built-in themes |
+| `08-custom-theme-list.svg` | User's custom themes list |
+
+### Flow & Architecture Diagrams (Mermaid) — `diagrams/flows/` and `diagrams/architecture/`
+
+These are Mermaid diagrams (NOT SVG) per CloudBSD conventions. They show system behavior, not UI.
+
+| File | Flow |
+|------|------|
+| `diagrams/flows/01-login-flow.md` | Login: app open → pre-flight → /login → PAM auth → /dashboard |
+| `diagrams/flows/02-session-expiry-flow.md` | Session expiry: 401 → frost-out modal → OK → /login |
+| `diagrams/flows/03-plugin-discovery-flow.md` | Plugin loader: scan → validate → register routes → manifest |
+| `diagrams/flows/04-theme-application-flow.md` | Theme: select → validate → CSS vars → persist |
+| `diagrams/flows/05-log-streaming-flow.md` | JSONL logger → Socket.IO → SignalStore → UI |
+| `diagrams/architecture/01-system-architecture.md` | Browser / Backend / FreeBSD layers + plugin flow + auth + streaming + security + deployment |
+
+### ADJUSTMENTS Table
+
+[`diagrams/../.sisyphus/drafts/ADJUSTMENTS.md`](../../.sisyphus/drafts/ADJUSTMENTS.md) — Documents every screen/component/route change from React → Angular with status (ADDED/REMOVED/CHANGED/VIEW-ONLY/ADMIN-ONLY).
+
+---
+
+## Design Patterns & References
+
+> **Read [`diagrams/README.md`](../../diagrams/README.md)** for full pattern references. Summary below.
+
+Per Honcho MCP peer memory (lessons-2026) and TAOCP principles:
+
+| Subsystem | Primary Pattern | TAOCP / GoF Ref |
+|-----------|------------------|------------------|
+| Plugin loader | **Template Method** (GoF) — shared `PluginLoader` with overridable `entry()` | TAOCP Vol 1 §2.6 |
+| Plugin manifest | JSON Schema with `$ref` reuse + Builder pattern | dp-builder |
+| Plugin race conditions | Atomic check-then-act + DataIntegrityViolationException catch | Honcho lessons (auth) |
+| Theme system (15) | **Strategy** (GoF) — each theme implements CSS variable interface | — |
+| Custom theme import | Validator + Builder | — |
+| Global state | **Singleton + Publish/Subscribe** | Honcho lessons |
+| JSONL log ring buffer | Circular list with O(1) push/pop | TAOCP Vol 1 §2.2.2 |
+| Socket.IO reconnect | Exponential backoff with jitter | TAOCP Vol 2 §4.6.3 |
+| Backpressure | Drop-oldest with overflow warning | TAOCP Vol 3 §6.1 |
+| PAM auth | **Chain of Responsibility** (GoF) | — |
+| Frost-out modal | **Memento** (GoF) — preserves page state during re-auth | — |
+| Permission checks | **Guard + Decorator** (GoF) | — |
+| Pluggable logger sinks | **Strategy** (GoF) — `Logger` interface, multiple impls | — |
+| Plugin path routing | Backward-compatible path substitution | Honcho V3ProviderSupport lesson |
+
+### Honcho Lessons Applied
+
+From `lessons-2026` session (verified, not fabricated):
+
+1. **Boot-time coverage validation** — `PluginRegistry.validateFullCoverage()` called at backend startup; converts first-call 500 into boot failure.
+2. **Race condition fix** — `register()` catches `DataIntegrityViolationException → PluginExistsException → 409`.
+3. **Template Method refactor** — All plugin providers delegate to `PluginProviderBase` with shared `loadManifest()`, `validate()`, `registerRoutes()` (avoids -304 line duplication).
+4. **Path substitution** — `PluginProviderBase.substitutePath()` handles `pathVars` first, falls back to ctx.workspaceId() (backward compat).
+
+### Implementation Order (Pattern Dependencies)
+
+Apply patterns in this dependency order:
+
+1. **Strategy** (themes) → enables theme switching
+2. **Template Method** (plugin loader) → enables plugin architecture
+3. **Singleton + Pub/Sub** (global state) → enables streaming
+4. **Chain of Responsibility** (PAM auth) → enables auth flow
+5. **Memento** (frost-out modal) → enables session expiry
+6. **Producer-consumer queue** (JSONL logging) → enables audit trail
+7. **Guard/Decorator** (permission checks) → enables admin-only features
+
+---
+
 ## Work Objectives
 
 ### Core Objective
