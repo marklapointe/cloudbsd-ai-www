@@ -335,7 +335,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [ ] 2. **SVG screen mockups (14 screens) + ADJUSTMENTS table**
+- [x] 2. **SVG screen mockups (14 screens) + ADJUSTMENTS table** ✅ DONE
 
   **What to do**:
   - Examine each React page in `src/pages/*.tsx` (14 pages).
@@ -480,7 +480,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [ ] 3a. **SVG error presentation mock-ups (12 error states)**
+- [x] 3a. **SVG error presentation mock-ups (12 error states)** ✅ DONE
 
   **What to do**:
   - Create `diagrams/errors/` directory with 12 SVG mock-ups covering all error states:
@@ -542,7 +542,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [ ] 3b. **Admin Settings → Error Display section SVG mock-up**
+- [x] 3b. **Admin Settings → Error Display section SVG mock-up** ✅ DONE (in `diagrams/screens/11-settings.svg`)
 
   **What to do**:
   - Create `diagrams/screens/settings-error-display.svg` (or add to settings screen mock-up).
@@ -589,7 +589,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [ ] 3c. **SVG notification mock-ups (5 types)**
+- [x] 3c. **SVG notification mock-ups (5 types)** ✅ DONE
 
   **What to do**:
   - Create `diagrams/notifications/` directory.
@@ -623,7 +623,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [ ] 3d. **SVG modal mock-ups (6 modal types)**
+- [x] 3d. **SVG modal mock-ups (6 modal types)** ✅ DONE
 
   **What to do**:
   - Create `diagrams/modals/` directory.
@@ -656,7 +656,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [ ] 3e. **SVG core UI component mock-ups (15 components)**
+- [x] 3e. **SVG core UI component mock-ups (15 components)** ✅ DONE
 
   **What to do**:
   - Create `diagrams/components/` directory.
@@ -697,7 +697,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [ ] 3f. **SVG theme variants (light/dark/high-contrast)**
+- [x] 3f. **SVG theme variants (light/dark/high-contrast)** ✅ DONE
 
   **What to do**:
   - Create `diagrams/themes/` directory.
@@ -726,7 +726,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [ ] 3g. **SVG mobile variants (3 key screens at 375×812)**
+- [x] 3g. **SVG mobile variants (3 key screens at 375×812)** ✅ DONE
 
   **What to do**:
   - Create `diagrams/mobile/` directory.
@@ -756,7 +756,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [ ] 3h. **SVG loading/state variant mock-ups (4 states)**
+- [x] 3h. **SVG loading/state variant mock-ups (4 states)** ✅ DONE
 
   **What to do**:
   - Create `diagrams/states/` directory.
@@ -781,7 +781,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [ ] 3i. **SVG plugin manifest mock-ups (3 dynamic UI surfaces)**
+- [x] 3i. **SVG plugin manifest mock-ups (3 dynamic UI surfaces)** ✅ DONE
 
   **What to do**:
   - Create `diagrams/plugins/` directory.
@@ -868,7 +868,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [ ] 3l. **15 theme mock-up SVGs + comparison grid**
+- [x] 3l. **15 theme mock-up SVGs + comparison grid** ✅ DONE
 
   **What to do**:
   - Create `diagrams/themes/<theme-slug>.svg` × 15.
@@ -904,7 +904,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [ ] 3m. **Theme customizer mock-ups (8 SVG files)**
+- [x] 3m. **Theme customizer mock-ups (8 SVG files)** ✅ DONE
 
   **What to do**:
   - Create `diagrams/screens/theme-editor.svg` — Full theme editor with tab navigation.
@@ -4563,7 +4563,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [ ] 3. **SVG interaction flow diagrams (5 flows)**
+- [x] 3. **SVG interaction flow diagrams (5 flows)** ✅ DONE (Mermaid markdown in `diagrams/flows/`)
 
   **What to do**:
   - Design 5 SVG interaction flows using `<foreignObject>` styled HTML:
