@@ -4137,28 +4137,31 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ### Wave 8: Cutover
 
-- [ ] 51. **Populate new frontend repo `cloudbsdorg/cloudbsd-admin-ui.git`**
+- [ ] 51. **Populate frontend repo `cloudbsdorg/cloudbsd-admin-ui.git` (existing)**
 
   **What to do**:
-  Per user: "once completed, we need to populate git@github.com:cloudbsdorg/cloudbsd-admin-ui.git for this. you can make a new dir in ~/git/ for the new frontend to keep things clean."
-  - Create local dir: `mkdir -p ~/git/cloudbsd-admin-ui` (verified: dir does not exist)
-  - Create GitHub repo: `gh repo create cloudbsdorg/cloudbsd-admin-ui --description "CloudBSD Admin UI - view-only Angular 20 frontend with plugin system, custom MIME types, themes, and FreeBSD port" --homepage "https://cloudbsd.org" --public`
-  - `git init` in `~/git/cloudbsd-admin-ui/`
-  - `git remote add origin git@github.com:cloudbsdorg/cloudbsd-admin-ui.git`
-  - Copy Angular app code from `/home/mlapointe/secure/git/cloudbsd-ai-www/web-new/` → `~/git/cloudbsd-admin-ui/`
-  - Copy frontend-relevant docs: `README.md`, `INSTALL.md`, `THEME_REFERENCE.md`, `PLUGIN_REFERENCE.md`, `DEVELOPER_GUIDE.md`, `TROUBLESHOOTING.md`, `FAQ.md`, `SECURITY.md`
-  - Copy SVG diagrams (UI mock-ups)
-  - Create `RELEASE_NOTES.md` (initial v1.0.0 notes)
-  - Initial commit + `git push -u origin main`
-  - Tag: `git tag -a v1.0.0 -m "Initial release" && git push origin v1.0.0`
+  Per user: "I have checked out the ui frontend and backend repos in ~/git/"
+  - **Repo state**: `~/git/cloudbsd-admin-ui/` already exists with 2 commits (LICENSE 2020, Jenkinsfile 2020), branch `master`.
+  - **No `gh repo create`** — repo already exists on GitHub.
+  - `cd ~/git/cloudbsd-admin-ui && git fetch origin && git branch -m master main`
+  - Copy Angular app code from `/home/mlapointe/secure/git/cloudbsd-ai-www/web-new/*` → `~/git/cloudbsd-admin-ui/`
+  - Copy frontend-relevant docs: README, INSTALL, THEME_REFERENCE, PLUGIN_REFERENCE, DEVELOPER_GUIDE, TROUBLESHOOTING, FAQ, SECURITY, CHANGELOG, RELEASE_NOTES
+  - Copy SVG diagrams to `docs/diagrams/`
+  - **Preserve existing**: LICENSE (BSD 3-Clause), Jenkinsfile (existing FreeBSD 12.1 pipeline scaffold — will be modernized in T54 CI/CD task)
+  - Stage + commit: `feat: add CloudBSD Admin UI Angular 20 application`
+  - `git push -u origin main`
+  - Tag: `git tag -a v1.0.0 -m "Initial release of CloudBSD Admin UI" && git push origin v1.0.0`
   - `gh release create v1.0.0 --notes-file RELEASE_NOTES.md --target main`
-  - Configure repo: branch protection on main, topics (`cloudbsd`, `angular`, `freebsd`, `plugin-system`, `admin-ui`, `bsd3`), enable Issues + Discussions, disable Wiki + Projects
+  - Update GitHub settings: default branch → `main`, branch protection on `main` (PR reviews, linear history), topics (`cloudbsd`, `angular`, `freebsd`, `plugin-system`, `admin-ui`, `bsd3`), enable Issues + Discussions, disable Wiki + Projects
   - Verify: clone fresh, `npm install`, `npm run build` succeeds
+  - Update repo description on GitHub via `gh repo edit --description "..."`
 
   **Must NOT do**:
   - Do NOT delete or modify the planning repo (`marklapointe/cloudbsd-ai-www`)
   - Do NOT include `.sisyphus/`, `node_modules/`, `.env`, secrets, build artifacts
   - Do NOT copy backend code or FreeBSD port (those go to backend repo)
+  - Do NOT rewrite existing git history (preserve 2020 LICENSE + Jenkinsfile commits)
+  - Do NOT delete existing LICENSE or Jenkinsfile
 
   **Recommended Agent Profile**:
   - **Category**: `unspecified-high`
@@ -4170,43 +4173,49 @@ Max Concurrent: 7 (Waves 1, 4, 5)
   - **Blocked By**: All implementation tasks complete, F1-F4 APPROVED, user explicit approval
 
   **Acceptance Criteria**:
-  - [ ] `~/git/cloudbsd-admin-ui/` exists with git history
-  - [ ] `git@github.com:cloudbsdorg/cloudbsd-admin-ui.git` exists on GitHub
+  - [ ] `~/git/cloudbsd-admin-ui/` has all Angular code + docs
+  - [ ] Existing LICENSE and Jenkinsfile preserved
+  - [ ] Branch renamed: `master` → `main`
   - [ ] `git push -u origin main` succeeded
   - [ ] `v1.0.0` tag pushed
   - [ ] `gh release create v1.0.0` succeeded
   - [ ] Fresh clone test: `git clone ... && npm install && npm run build` succeeds
   - [ ] Branch protection configured
   - [ ] Topics + description set
+  - [ ] Default branch on GitHub is `main`
 
-  **Commit**: NO (this task creates the new repo, not commits to existing)
+  **Commit**: YES (single commit on top of existing history)
+  - Message: `feat: add CloudBSD Admin UI Angular 20 application`
 
 ---
 
-- [ ] 52. **Populate new backend repo `cloudbsdorg/cloudbsd-admin-backend.git`**
+- [ ] 52. **Populate backend repo `cloudbsdorg/cloudbsd-admin-backend.git` (existing)**
 
   **What to do**:
-  Per user: "the backend will be git@github.com:cloudbsdorg/cloudbsd-admin-backend.git"
-  - Create local dir: `mkdir -p ~/git/cloudbsd-admin-backend` (verified: dir does not exist)
-  - Create GitHub repo: `gh repo create cloudbsdorg/cloudbsd-admin-backend --description "CloudBSD Admin Backend - PAM-auth Node.js backend with plugin registry, custom MIME types, JSONL logging, and FreeBSD port" --homepage "https://cloudbsd.org" --public`
-  - `git init` in `~/git/cloudbsd-admin-backend/`
-  - `git remote add origin git@github.com:cloudbsdorg/cloudbsd-admin-backend.git`
-  - Copy backend code from `/home/mlapointe/secure/git/cloudbsd-ai-www/backend-new/` → `~/git/cloudbsd-admin-backend/`
+  Per user: "I have checked out the ui frontend and backend repos in ~/git/"
+  - **Repo state**: `~/git/cloudbsd-admin-backend/` already exists with 1 commit (LICENSE 2026-07-06), branch `master`.
+  - **No `gh repo create`** — repo already exists on GitHub.
+  - `cd ~/git/cloudbsd-admin-backend && git fetch origin && git branch -m master main`
+  - Copy backend code from `/home/mlapointe/secure/git/cloudbsd-ai-www/backend-new/*` → `~/git/cloudbsd-admin-backend/`
   - Copy FreeBSD port: `/home/mlapointe/secure/git/cloudbsd-ai-www/ports/` → `~/git/cloudbsd-admin-backend/ports/`
-  - Copy backend-relevant docs: `README.md`, `INSTALL.md`, `ADMIN_GUIDE.md`, `UPGRADE.md`, `API_REFERENCE.md`, `SECURITY.md`, `CHANGELOG.md`
-  - Copy man pages (5 pages): `docs/man/man5/*`, `docs/man/man8/*`
+  - Copy backend-relevant docs: README, INSTALL, ADMIN_GUIDE, UPGRADE, API_REFERENCE, SECURITY, CHANGELOG, RELEASE_NOTES
+  - Copy 5 man pages: `docs/man/man5/*`, `docs/man/man8/*`
   - Copy OpenAPI spec: `openapi.yaml`
-  - Create `RELEASE_NOTES.md` (initial v1.0.0 notes)
-  - Initial commit + `git push -u origin main`
-  - Tag: `git tag -a v1.0.0 -m "Initial release" && git push origin v1.0.0`
+  - **Preserve existing**: LICENSE (BSD 3-Clause)
+  - Stage + commit: `feat: add CloudBSD Admin Backend (PAM auth + plugin registry)`
+  - `git push -u origin main`
+  - Tag: `git tag -a v1.0.0 -m "Initial release of CloudBSD Admin Backend" && git push origin v1.0.0`
   - `gh release create v1.0.0 --notes-file RELEASE_NOTES.md --target main`
-  - Configure repo: branch protection on main, topics (`cloudbsd`, `nodejs`, `freebsd`, `plugin-system`, `pam-auth`, `openpam`, `bsd3`), enable Issues + Discussions
+  - Update GitHub settings: default branch → `main`, branch protection, topics (`cloudbsd`, `nodejs`, `freebsd`, `plugin-system`, `pam-auth`, `openpam`, `bsd3`), enable Issues + Discussions
   - Verify: clone fresh, `npm install`, `npm test` succeeds, FreeBSD port syntax check (`make -n -C ports/www/cloudbsd-admin`)
+  - Update repo description via `gh repo edit --description "..."`
 
   **Must NOT do**:
   - Do NOT delete or modify the planning repo
   - Do NOT include `.sisyphus/`, `node_modules/`, `.env`, secrets, build artifacts
   - Do NOT copy frontend code (that goes to UI repo)
+  - Do NOT rewrite existing git history (preserve 2026 LICENSE commit)
+  - Do NOT delete existing LICENSE
 
   **Recommended Agent Profile**:
   - **Category**: `unspecified-high`
@@ -4218,8 +4227,9 @@ Max Concurrent: 7 (Waves 1, 4, 5)
   - **Blocked By**: All implementation tasks complete, F1-F4 APPROVED, user explicit approval
 
   **Acceptance Criteria**:
-  - [ ] `~/git/cloudbsd-admin-backend/` exists with git history
-  - [ ] `git@github.com:cloudbsdorg/cloudbsd-admin-backend.git` exists on GitHub
+  - [ ] `~/git/cloudbsd-admin-backend/` has all backend code + docs + port + man pages
+  - [ ] Existing LICENSE preserved
+  - [ ] Branch renamed: `master` → `main`
   - [ ] `git push -u origin main` succeeded
   - [ ] `v1.0.0` tag pushed
   - [ ] `gh release create v1.0.0` succeeded
@@ -4227,8 +4237,10 @@ Max Concurrent: 7 (Waves 1, 4, 5)
   - [ ] FreeBSD port syntax check passes
   - [ ] Branch protection configured
   - [ ] Topics + description set
+  - [ ] Default branch on GitHub is `main`
 
-  **Commit**: NO (this task creates the new repo, not commits to existing)
+  **Commit**: YES (single commit on top of existing history)
+  - Message: `feat: add CloudBSD Admin Backend (PAM auth + plugin registry)`
 
 ---
 

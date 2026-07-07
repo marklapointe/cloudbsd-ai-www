@@ -2559,54 +2559,73 @@ The current repo `marklapointe/cloudbsd-ai-www` is a planning workspace. The fin
 
 ### Frontend Repo: cloudbsdorg/cloudbsd-admin-ui.git
 
-**Local checkout**: `~/git/cloudbsd-admin-ui/` (NEW directory, must be created)
+**Local checkout**: `~/git/cloudbsd-admin-ui/` (EXISTS — confirmed by user)
 
-**Pre-flight checks:**
-1. Verify SSH key access to cloudbsdorg org (`ssh -T git@github.com` as user `marklapointe`)
-2. Verify repo doesn't already exist (`gh repo view cloudbsdorg/cloudbsd-admin-ui`)
-3. Verify local dir doesn't exist (`ls ~/git/cloudbsd-admin-ui`)
-4. If local dir exists but is empty/non-git: use it
-5. If local dir exists and has git history from prior attempt: ask user
+**Pre-flight checks (already done):**
+- Local dir exists at `~/git/cloudbsd-admin-ui/`
+- Remote: `git@github.com:cloudbsdorg/cloudbsd-admin-ui.git` (configured)
+- Existing commits:
+  - `fc65812` (2020-08-06): `Initial commit` — LICENSE only, by cloudbsdorg
+  - `06777ad` (2020-08-30): `Adding Jenkinsfile` — by Mark LaPointe
+- Current branch: `master` (will rename to `main`)
+- Existing files: `LICENSE`, `Jenkinsfile`
 
-**Repo creation:**
-```bash
-mkdir -p ~/git/cloudbsd-admin-ui
-gh repo create cloudbsdorg/cloudbsd-admin-ui \
-  --description "CloudBSD Admin UI - view-only Angular 20 frontend with plugin system, custom MIME types, themes, and FreeBSD port" \
-  --homepage "https://cloudbsd.org" \
-  --private=false
-```
+**Strategy: preserve existing history, add Angular content on top:**
+1. Rename `master` → `main`:
+   ```bash
+   cd ~/git/cloudbsd-admin-ui
+   git branch -m master main
+   ```
+2. Fetch and verify remote state:
+   ```bash
+   git fetch origin
+   git ls-remote origin
+   ```
+3. Copy Angular app code from migration workspace:
+   ```bash
+   cp -r /home/mlapointe/secure/git/cloudbsd-ai-www/web-new/* .
+   cp /home/mlapointe/secure/git/cloudbsd-ai-www/diagrams/*.svg docs/diagrams/ 2>/dev/null
+   ```
+4. Copy frontend-relevant docs (preserve existing LICENSE):
+   ```bash
+   cp /home/mlapointe/secure/git/cloudbsd-ai-www/README.md .
+   cp /home/mlapointe/secure/git/cloudbsd-ai-www/INSTALL.md .
+   cp /home/mlapointe/secure/git/cloudbsd-ai-www/THEME_REFERENCE.md .
+   cp /home/mlapointe/secure/git/cloudbsd-ai-www/PLUGIN_REFERENCE.md .
+   cp /home/mlapointe/secure/git/cloudbsd-ai-www/DEVELOPER_GUIDE.md .
+   cp /home/mlapointe/secure/git/cloudbsd-ai-www/TROUBLESHOOTING.md .
+   cp /home/mlapointe/secure/git/cloudbsd-ai-www/FAQ.md .
+   cp /home/mlapointe/secure/git/cloudbsd-ai-www/SECURITY.md .
+   cp /home/mlapointe/secure/git/cloudbsd-ai-www/CHANGELOG.md .
+   cp /home/mlapointe/secure/git/cloudbsd-ai-www/RELEASE_NOTES.md .
+   # Keep existing LICENSE (BSD 3-Clause already there)
+   # KEEP existing Jenkinsfile — it has FreeBSD 12.1 build pipeline scaffold
+   #   But update Jenkinsfile to use modern Angular CI (later task)
+   ```
+5. Update `Jenkinsfile` to use modern Angular pipeline (preserve as-is for now; will be replaced in CI/CD task):
+   ```bash
+   # NOTE: Jenkinsfile will be updated in T54 (CI/CD setup, separate task later)
+   # For now, leave existing Jenkinsfile untouched
+   ```
+6. Stage and commit:
+   ```bash
+   git add .
+   git -c user.name='marklapointe' -c user.email='mark@cloudbsd.org' commit -m "feat: add CloudBSD Admin UI Angular 20 application
 
-**Local init + content split:**
-```bash
-cd ~/git/cloudbsd-admin-ui
-git init
-git remote add origin git@github.com:cloudbsdorg/cloudbsd-admin-ui.git
-
-# Copy from migration workspace
-cp -r /home/mlapointe/secure/git/cloudbsd-ai-www/web-new/* .
-cp /home/mlapointe/secure/git/cloudbsd-ai-www/diagrams/*.svg docs/diagrams/ 2>/dev/null
-cp /home/mlapointe/secure/git/cloudbsd-ai-www/openapi-ui.yaml .
-
-# Frontend-specific docs
-cp /home/mlapointe/secure/git/cloudbsd-ai-www/README.md .
-cp /home/mlapointe/secure/git/cloudbsd-ai-www/INSTALL.md .
-# (UI-relevant subset)
-cp /home/mlapointe/secure/git/cloudbsd-ai-www/THEME_REFERENCE.md .
-cp /home/mlapointe/secure/git/cloudbsd-ai-www/PLUGIN_REFERENCE.md .
-cp /home/mlapointe/secure/git/cloudbsd-ai-www/DEVELOPER_GUIDE.md .
-cp /home/mlapointe/secure/git/cloudbsd-ai-www/TROUBLESHOOTING.md .
-cp /home/mlapointe/secure/git/cloudbsd-ai-www/FAQ.md .
-cp /home/mlapointe/secure/git/cloudbsd-ai-www/SECURITY.md .
-
-git add .
-git -c user.name='marklapointe' -c user.email='mark@cloudbsd.org' commit -m "feat: initial commit of CloudBSD Admin UI (Angular 20)"
-git branch -M main
-git push -u origin main
-```
+   - Angular 20 + CDK + Tailwind + NgRx SignalStore + \$localize
+   - 14 view-only pages with plugin template renderer
+   - 15 themes with customizer/import/export
+   - In-app help system + documentation browser
+   - See RELEASE_NOTES.md for details"
+   ```
+7. Push:
+   ```bash
+   git push -u origin main
+   git push origin master:main  # in case remote still has master as default
+   ```
 
 **Repository configuration:**
-1. Default branch: `main`
+1. Update default branch: `main` (Settings → Branches → Default branch)
 2. Branch protection on `main`:
    - Require PR reviews (1+ approver)
    - Require linear history
@@ -2618,58 +2637,72 @@ git push -u origin main
 
 ### Backend Repo: cloudbsdorg/cloudbsd-admin-backend.git
 
-**Local checkout**: `~/git/cloudbsd-admin-backend/` (NEW directory, must be created)
+**Local checkout**: `~/git/cloudbsd-admin-backend/` (EXISTS — confirmed by user)
 
-**Pre-flight checks:**
-1. Verify SSH key access
-2. Verify repo doesn't exist (`gh repo view cloudbsdorg/cloudbsd-admin-backend`)
-3. Verify local dir doesn't exist (`ls ~/git/cloudbsd-admin-backend`)
+**Pre-flight checks (already done):**
+- Local dir exists at `~/git/cloudbsd-admin-backend/`
+- Remote: `git@github.com:cloudbsdorg/cloudbsd-admin-backend.git` (configured)
+- Existing commits:
+  - `9ad17ac` (2026-07-06): `Initial commit` — LICENSE only, by Mark LaPointe
+- Current branch: `master` (will rename to `main`)
+- Existing files: `LICENSE` only
 
-**Repo creation:**
-```bash
-mkdir -p ~/git/cloudbsd-admin-backend
-gh repo create cloudbsdorg/cloudbsd-admin-backend \
-  --description "CloudBSD Admin Backend - PAM-auth Node.js backend with plugin registry, custom MIME types, JSONL logging, and FreeBSD port" \
-  --homepage "https://cloudbsd.org" \
-  --private=false
-```
+**Strategy: preserve existing LICENSE, add backend content:**
+1. Rename `master` → `main`:
+   ```bash
+   cd ~/git/cloudbsd-admin-backend
+   git branch -m master main
+   ```
+2. Fetch and verify remote state:
+   ```bash
+   git fetch origin
+   git ls-remote origin
+   ```
+3. Copy backend code:
+   ```bash
+   cp -r /home/mlapointe/secure/git/cloudbsd-ai-www/backend-new/* .
+   cp -r /home/mlapointe/secure/git/cloudbsd-ai-www/ports .
+   cp /home/mlapointe/secure/git/cloudbsd-ai-www/openapi.yaml .
+   ```
+4. Copy backend-relevant docs:
+   ```bash
+   cp /home/mlapointe/secure/git/cloudbsd-ai-www/README.md .
+   cp /home/mlapointe/secure/git/cloudbsd-ai-www/INSTALL.md .
+   cp /home/mlapointe/secure/git/cloudbsd-ai-www/ADMIN_GUIDE.md .
+   cp /home/mlapointe/secure/git/cloudbsd-ai-www/UPGRADE.md .
+   cp /home/mlapointe/secure/git/cloudbsd-ai-www/API_REFERENCE.md .
+   cp /home/mlapointe/secure/git/cloudbsd-ai-www/SECURITY.md .
+   cp /home/mlapointe/secure/git/cloudbsd-ai-www/CHANGELOG.md .
+   cp /home/mlapointe/secure/git/cloudbsd-ai-www/RELEASE_NOTES.md .
+   # Keep existing LICENSE (BSD 3-Clause)
+   ```
+5. Copy man pages:
+   ```bash
+   mkdir -p docs/man
+   cp -r /home/mlapointe/secure/git/cloudbsd-ai-www/docs/man/* docs/man/ 2>/dev/null
+   ```
+6. Stage and commit:
+   ```bash
+   git add .
+   git -c user.name='marklapointe' -c user.email='mark@cloudbsd.org' commit -m "feat: add CloudBSD Admin Backend (PAM auth + plugin registry)
 
-**Local init + content split:**
-```bash
-cd ~/git/cloudbsd-admin-backend
-git init
-git remote add origin git@github.com:cloudbsdorg/cloudbsd-admin-backend.git
-
-# Copy from migration workspace
-cp -r /home/mlapointe/secure/git/cloudbsd-ai-www/backend-new/* .
-cp -r /home/mlapointe/secure/git/cloudbsd-ai-www/ports .
-cp /home/mlapointe/secure/git/cloudbsd-ai-www/openapi.yaml .
-
-# Backend-specific docs
-cp /home/mlapointe/secure/git/cloudbsd-ai-www/README.md .
-cp /home/mlapointe/secure/git/cloudbsd-ai-www/INSTALL.md .
-cp /home/mlapointe/secure/git/cloudbsd-ai-www/ADMIN_GUIDE.md .
-cp /home/mlapointe/secure/git/cloudbsd-ai-www/UPGRADE.md .
-cp /home/mlapointe/secure/git/cloudbsd-ai-www/API_REFERENCE.md .
-cp /home/mlapointe/secure/git/cloudbsd-ai-www/SECURITY.md .
-cp /home/mlapointe/secure/git/cloudbsd-ai-www/CHANGELOG.md .
-
-# Man pages
-mkdir -p docs/man
-cp -r /home/mlapointe/secure/git/cloudbsd-ai-www/docs/man/* docs/man/ 2>/dev/null
-
-git add .
-git -c user.name='marklapointe' -c user.email='mark@cloudbsd.org' commit -m "feat: initial commit of CloudBSD Admin Backend (PAM auth + plugin registry)"
-git branch -M main
-git push -u origin main
-```
+   - Node.js 24+ with Express 5
+   - PAM authentication (modular, swappable)
+   - Plugin registry with discovery
+   - Custom MIME types (application/vnd.cloudbsd+*)
+   - JSONL logging with swappable backends
+   - FreeBSD port at ports/www/cloudbsd-admin/
+   - 5 man pages
+   - See RELEASE_NOTES.md for details"
+   ```
+7. Push:
+   ```bash
+   git push -u origin main
+   ```
 
 **Repository configuration:**
-1. Default branch: `main`
-2. Branch protection on `main`:
-   - Require PR reviews (1+ approver)
-   - Require linear history
-   - Include administrators
+1. Update default branch: `main`
+2. Branch protection on `main`
 3. Topics: `cloudbsd`, `nodejs`, `freebsd`, `plugin-system`, `pam-auth`, `openpam`, `bsd3`
 4. Enable Issues, Discussions
 5. Security policy: `SECURITY.md`
