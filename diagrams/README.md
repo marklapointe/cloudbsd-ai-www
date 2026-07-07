@@ -193,3 +193,8 @@ Apply these patterns in this order (dependency-respecting):
 5. **Memento** for frost-out modal → enables session expiry
 6. **Producer-consumer queue** for JSONL logging → enables audit trail
 7. **Guard/Decorator** for permission checks → enables admin-only features
+## 2026-07-07 Update: NO Geolocation
+
+User: "where are we getting that info from?" - geolocation is an info leak.
+
+NO component/page/API response may include geolocation. Use only subnet classification (rfc1918, link-local, public, loopback) computed locally.

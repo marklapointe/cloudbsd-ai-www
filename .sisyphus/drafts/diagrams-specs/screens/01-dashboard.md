@@ -10,13 +10,13 @@
 ```
 ┌──────────────────────────────────────────────────────────────────────────────────┐
 │ HEADER (h-14, white bg, slate-200 bottom border)                                 │
-│  [Logo C] CloudBSD Admin  [freenas-mock] [●connected]  [backend OK · 18ms] ...   │
+│  [Logo C] CloudBSD Admin  [cloudbsd-node-01] [●connected]  [backend OK · 18ms] ...   │
 │                                          [Search...] [Refresh] [🔔] [Avatar M]   │
 ├──────────────────────────────────────────────────────────────────────────────────┤
 │ SIDEBAR (w-56, white bg, slate-200 right border)        │ MAIN (bg-slate-50)      │
 │                                                          │                         │
 │  Dashboard (12)        [active bg-blue-50]               │  ┌─Toolbar─────────┐   │
-│  VMs              (47)                                    │  │ Host: freenas-mock│  │
+│  VMs              (47)                                    │  │ Host: cloudbsd-node-01│  │
 │  Containers       (62)                                    │  │ Range: 1h|6h|24h|7d │  │
 │  Jails            (12)                                    │  │ [Refresh][Export]  │  │
 │  Volumes          (13)                                    │  └──────────────────┘   │
@@ -218,7 +218,7 @@
         <g id="content">
           <!-- Toolbar -->
           <div class="h-14 bg-white border-b border-slate-200 px-6 flex items-center gap-4">
-            <span class="text-sm text-slate-500">Host: <b class="text-slate-900">freenas-mock</b></span>
+            <span class="text-sm text-slate-500">Host: <b class="text-slate-900">cloudbsd-node-01</b></span>
             <div class="flex border border-slate-200 rounded text-xs">
               <button class="px-2 py-1 text-slate-500">1h</button>
               <button class="px-2 py-1 bg-slate-100 font-medium">24h</button>

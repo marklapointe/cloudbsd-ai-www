@@ -410,7 +410,7 @@ Called every 60s by `SocketService` and on every page navigation.
         { "mime": "application/vnd.cloudbsd+vm", "kind": "vm", "version": "v1", "data": {
             "id": "vm-nextcloud", "name": "nextcloud", "status": "RUN", "os": "Debian 12",
             "vcpu": 4, "ramBytes": 8589934592, "diskBytes": 128849018880,
-            "uptimeSec": 1211670, "host": "freenas-mock", "ip": "10.0.10.10",
+            "uptimeSec": 1211670, "host": "cloudbsd-node-01", "ip": "10.0.10.10",
             "tags": ["prod", "files"], "iopsRead": 1200, "iopsWrite": 0,
             "netRxBytesPerSec": 13002342, "netTxBytesPerSec": 4404019,
             "createdAt": "2026-06-22T12:00:00Z", "version": "v1-a7f3"
@@ -418,7 +418,7 @@ Called every 60s by `SocketService` and on every page navigation.
         { "mime": "application/vnd.cloudbsd+vm", "kind": "vm", "version": "v1", "data": {
             "id": "vm-homeassistant", "name": "homeassistant", "status": "RUN", "os": "HAOS 12",
             "vcpu": 2, "ramBytes": 4294967296, "diskBytes": 34359738368,
-            "uptimeSec": 764520, "host": "freenas-mock", "ip": "10.0.10.12",
+            "uptimeSec": 764520, "host": "cloudbsd-node-01", "ip": "10.0.10.12",
             "tags": ["smarthome"], "iopsRead": 380, "iopsWrite": 0,
             "netRxBytesPerSec": 644245, "netTxBytesPerSec": 212341,
             "createdAt": "2026-06-27T12:00:00Z", "version": "v1-b8c4"
@@ -426,7 +426,7 @@ Called every 60s by `SocketService` and on every page navigation.
         { "mime": "application/vnd.cloudbsd+vm", "kind": "vm", "version": "v1", "data": {
             "id": "vm-jellyfin", "name": "jellyfin", "status": "RUN", "os": "Ubuntu 24.04",
             "vcpu": 6, "ramBytes": 12884901888, "diskBytes": 536870912000,
-            "uptimeSec": 1911360, "host": "freenas-mock", "ip": "10.0.10.11",
+            "uptimeSec": 1911360, "host": "cloudbsd-node-01", "ip": "10.0.10.11",
             "tags": ["media"], "iopsRead": 4800, "iopsWrite": 0,
             "netRxBytesPerSec": 90420335, "netTxBytesPerSec": 13002342,
             "createdAt": "2026-06-14T12:00:00Z", "version": "v1-c9d5"
@@ -541,7 +541,7 @@ Called every 60s by `SocketService` and on every page navigation.
     "aggregates": { "cpuAvgPercent": 22, "memAvgPercent": 37, "diskAvgPercent": 41 }
 } },
 { "mime": "application/vnd.cloudbsd+cluster.node", "kind": "cluster.node", "data": {
-    "id": "node-freenas-mock", "hostname": "freenas-mock", "role": "master", "rack": "A1",
+    "id": "node-cloudbsd-node-01", "hostname": "cloudbsd-node-01", "role": "master", "rack": "A1",
     "status": "healthy", "cpuPercent": 18, "memPercent": 51, "diskPercent": 27,
     "uptimeSec": 1211670
 } },
@@ -1171,3 +1171,25 @@ When server introduces `v2`:
 6. Switching from mock to real backend requires only changing `environment.apiBaseUrl` in `environment.ts`
 7. Go backend (when implemented) MUST validate `who`, `what`, `why`, `where` against allowlist
 8. Go backend MUST reject requests missing any required header with `400 BAD_REQUEST` and problem type `https://errors.cloudbsd.org/protocol/missing-header`
+## 2026-07-07 Update: Uniform Table Column Order
+
+User: "I was just looking at the VM, Containers, and jails page,
+make the tables more uniform. ie: you have status as the 2nd field
+on one, then the 3rd or 4th on another. lets make it so that status
+is first, name is second."
+
+STANDARD: All resource table columns MUST follow the order below.
+This is a CloudBSD project convention.
+
+| Pos | Column | VMs | Containers | Jails | Volumes | Cluster |
+|-----|--------|-----|-----------|------|---------|---------|
+| 1 | Status (icon + color) | yes | yes | yes | (Health col 10) | yes |
+| 2 | Name | yes | yes | yes | yes | hostname |
+| 3 | OS / Image / Type | OS | Image | OS | Type | role |
+| 4 | Host (or Hostname/IP) | yes | yes (node) | Hostname | Host(s) | rack |
+| 5 | Resources (vCPU/MEM) | vCPU/RAM | CPU%/MEM | vCPUs/RAM/Disk | (in row 5) | CPU/MEM/Disk |
+| 6 | Network detail (IP) | IP | Ports | IP | (in row 7) | uptime |
+| 7 | Uptime | yes | yes | yes | (in row 8) | (in 6) |
+| 8 | Other | Net | Net | Resources | Compression/Enc/Health | status |
+| 9 | Other | (Row count) | Uptime | JID | Usage | -- |
+| 10 | Other | -- | -- | -- | Actions | -- |

@@ -587,6 +587,48 @@ Retry-After: 60  // only on 429 responses
 
 Content-Type: `application/vnd.cloudbsd+error`
 
+### NO GEOLOCATION (per user feedback 2026-07-07)
+
+User: "where are we getting that info from?" — geolocation is an information leak.
+
+The `user.login` event schema (and any other user tracking) MUST NOT include
+geolocation/city/country fields. The IP address itself is sufficient for
+security audit. Showing "last login location: Montreal" was hallucinated —
+we have no source for it, and adding it would imply we geo-locate users
+via their IP, which is a privacy concern.
+
+**Changes**:
+- ❌ Removed: `location` (city, country) from user.login event schema
+- ❌ Removed: `location` field from user list view
+- ✅ Kept: `ip` address (security audit essential)
+- ✅ Kept: `timestamp` (when)
+- ✅ Replaced "Montreal" / "Toronto" with "RFC1918" / "Public" labels
+  (subnet classification only, not city)
+
+**User login event schema** (final):
+```json
+{
+  "ts": "2026-07-06T12:34:56.789Z",
+  "userId": "mlapointe",
+  "ip": "10.0.10.42",
+  "userAgent": "Mozilla/5.0...",
+  "sessionId": "sess-abc123",
+  "networkClass": "rfc1918"
+}
+```
+
+**Network class values** (derived from IP, no external service):
+- `loopback` — `127.0.0.0/8` or `::1`
+- `rfc1918` — `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`
+- `link-local` — `169.254.0.0/16` or `fe80::/10`
+- `ula` — `fc00::/7`
+- `public` — anything else
+
+**Honcho peer update** — `cloudbsd-admin-test-lessons` has new conclusion:
+"STANDARD (CloudBSD Admin privacy, 2026-07-07): NEVER store or display geolocation (city, country, lat/lon, region) of users or their IPs. Showing 'last login: Montreal' implies we have a geo-IP service, which is a privacy concern AND a cost concern (geo-IP services charge per query). Use only subnet classification (rfc1918, link-local, public, loopback) which is computed locally. Same for VM/host display: show subnet class, not city."
+
+**Validation rule** added to wire protocol: any schema field named `location`, `city`, `country`, `region`, `geo`, `lat`, `lon`, `timezone` (in user context) is REJECTED by the validator. Backend `config.json` cannot enable geolocation. UI components that imported `geolocation` libraries are forbidden (ESLint rule).
+
 ### Frontend Rate Limit Handling
 
 When a 429 response arrives:
@@ -1828,6 +1870,477 @@ test:
 15. **No empty strings** in any locale file
 16. **All 47 locales** have matching keys to en-US
 17. **No untranslated placeholders** (no `TODO`, no `xxxx`, no `[...]`)
+
+---
+
+## System Management Page (consolidated admin actions)
+
+> Per Honcho peer `cloudbsd-admin-test-lessons` (2 new conclusions). The 'view-only' tag, 'Refresh' button, and 'Export' button on per-resource pages are NOISE. Consolidate all cross-cutting admin actions into a dedicated /system page.
+
+### Page layout
+
+`/system` — admin-only, 6 tabs:
+
+```
+System Management
+  Backups | Exports | Stats | History | Audit Log | Updates
+  --------
+
+  Backups tab:
+  - Scheduled backups list (5 sample schedules shown)
+    - daily-tank-data, weekly-full-cluster, hourly-incremental,
+      monthly-archive, failed-jellyfin-vm
+  - Per-row: name, schedule, last run, size, status, retention,
+    destination, actions (Run now / Delete)
+  - [+ New schedule] button
+  - Destructive: type-to-confirm
+
+  Exports tab:
+  - Grid of 8 export buttons (2-column):
+    - Configuration (JSON)
+    - Logs (JSONL)
+    - Notifications (CSV)
+    - Activity Feed (JSON)
+    - Cluster State (JSON)
+    - Theme Library (JSON)
+    - GPU Inventory (JSON)
+    - Network Topology (JSON)
+  - Each button: icon, label, format badge, description tooltip
+
+  Stats tab:
+  - 12 stat tiles (3-column grid):
+    - 47 VMs (+3 this week)
+    - 62 Containers (+8)
+    - 12 Jails (0)
+    - 13 Volumes (+1)
+    - 6 Nodes (1 offline)
+    - 5 Plugins (0 failed)
+    - 47 Locales (0 in review)
+    - 15 Themes (3 custom)
+    - 8,192 API calls/min (p99: 45ms)
+    - 2.3 TB Data backed up (last 24h: 12 GB)
+    - 0 Security incidents (last: 47d ago)
+    - 99.97% Uptime 90d SLA (4 nines target)
+
+  History tab:
+  - Recent admin actions log (10 most recent)
+  - Columns: time (UTC), user, action, target, result
+  - Filter dropdown: All / Backups / Exports / Settings / User
+  - Each row: monospace timestamp, color-coded result (green OK,
+    amber warn, red error)
+
+  Audit Log tab:
+  - Signed tamper-evident log (HMAC chain)
+  - Filterable by user, action, date range
+  - Export option
+  - "Verify chain integrity" button
+
+  Updates tab:
+  - Agent update available (newer version)
+  - Plugin updates (per-plugin)
+  - System updates (FreeBSD patches)
+  - "Update all" / per-item "Update" buttons
+```
+
+### Pattern: per-page actions vs cross-cutting actions
+
+| Action | Lives on | Reason |
+|--------|---------|--------|
+| View VM details | VMs page | Domain-specific (VM) |
+| Start/stop/migrate VM | VMs page | Domain-specific (VM) |
+| Resize volume | Volumes page | Domain-specific (volume) |
+| View logs | Logs page | Domain-specific (logs) |
+| Acknowledge notification | Notifications page | Domain-specific (notification) |
+| **Refresh** | Page header (icon button only) | Universal |
+| **Export data** | /system > Exports | Cross-cutting |
+| **Backup data** | /system > Backups | Cross-cutting |
+| **View stats** | /system > Stats | Cross-cutting |
+| **Audit log** | /system > Audit Log | Cross-cutting |
+| **Apply update** | /system > Updates | Cross-cutting |
+
+### Per-page header (CLEAN)
+
+Each data page has:
+- Title (large)
+- Subtitle (description, count, last update time)
+- Action buttons (domain-specific only)
+- Page-specific filters
+- Small refresh icon in top-right (not full button)
+- NOT: "view-only" badge, NOT: "Refresh" button, NOT: "Export" button
+
+### Sidebar update
+
+Sidebar Admin section adds "System Mgmt" between Settings and Status:
+```
+Overview
+  Dashboard
+  Virtual Machines
+  Containers
+  Jails
+  Volumes
+  Network Map
+  Cluster
+  Nodes
+Admin
+  Users
+  Logs
+  Notifications
+  Settings
+  System Mgmt       <-- NEW
+  Status
+  About
+```
+
+### Implementation tasks (new)
+
+| Task | Description |
+|------|-------------|
+| **T233** | `/system` route + `SystemManagementPage` with 6 tabs |
+| **T234** | `BackupsTabComponent` — backup list, run-now, delete with type-to-confirm |
+| **T235** | `ExportsTabComponent` — 8 export buttons, triggers download via XHR blob |
+| **T236** | `StatsTabComponent` — 12 stat tiles, auto-refresh every 60s |
+| **T237** | `HistoryTabComponent` — admin action log, filterable, paginated |
+| **T238** | `AuditLogTabComponent` — signed tamper-evident log with verify button |
+| **T239** | `UpdatesTabComponent` — agent + plugin + system updates with diff |
+| **T240** | `BackupScheduleModalComponent` — create/edit schedule (cron-like) |
+| **T241** | Refresh icon button component (used on all data page headers) |
+| **T242** | Tests: 100% coverage of all 6 tabs + 3 modals |
+| **T243** | Remove "Refresh" / "Export" / "View-only" buttons from 14 data page SVGs (DONE) |
+| **T244** | Sidebar "System Mgmt" link (DONE in 16-system.svg + all updated data pages) |
+| **T245** | Docs: `docs/configuration/system-management.md` |
+
+### Acceptance criteria
+
+1. "View-only" badge removed from all data page headers
+2. "Refresh" button replaced by small icon button in page header
+3. "Export" button removed from data pages, lives only in /system > Exports
+4. "System Mgmt" appears in sidebar Admin section
+5. /system page has 6 tabs (Backups / Exports / Stats / History / Audit Log / Updates)
+6. Backups tab shows 5 sample schedules with status badges
+7. Exports tab has 8 export buttons (config/logs/etc) with format chips
+8. Stats tab shows 12 stat tiles
+9. History tab shows last 10 admin actions with filter
+10. Audit Log tab shows signed tamper-evident log
+11. Updates tab shows available updates
+12. Destructive actions (delete backup) require type-to-confirm
+
+---
+
+## Node Management (add/edit/remove, ZFS, GPU, network)
+
+> Per Honcho peer `cloudbsd-admin-node-management` (8 conclusions). Nodes are the building blocks of the cluster. 3 ways to add a node: manual entry, mDNS autodetection, cluster join token. Per-node management covers ZFS, GPU, network.
+
+### Node data model
+
+```typescript
+interface Node {
+  id: string;                       // 'node-abc123', uuid v4
+  hostname: string;                 // 'cloudbsd-node-01.cloudbsd.org'
+  displayLabel: string;             // user-editable, default = hostname
+  role: 'master' | 'worker' | 'observer';
+  status: 'joining' | 'syncing' | 'online' | 'draining' | 'offline' | 'removed';
+  ip: string;                       // primary management IP (v4 or v6)
+  ips: string[];                     // all management IPs (dual-stack)
+  agentVersion: string;             // '1.4.2'
+  baseSystem: 'FreeBSD 14.2-RELEASE-p1';
+  cores: number;
+  ramBytes: number;
+  uptimeSec: number;
+  rack: string;                     // 'A1' (user-set)
+  zone: string;                     // 'us-east-1a' (user-set)
+  labels: Record<string, string>;    // { zone: 'us-east-1a', rack: 'r3' }
+  tags: string[];                    // ['gpu', 'fast-disk']
+  autoUpdate: boolean;
+  maintenanceMode: boolean;
+  // Resource limits (max VMs this node can host)
+  limits: { maxVMs: number; maxRAMBytes: number; maxVCPU: number };
+  // Last heartbeat
+  lastHeartbeat: string;            // ISO timestamp
+  // GPU pool (shown when showVgpuResources flag is on)
+  gpus: GPU[];                       // see GPU section below
+  // ZFS pools (per-node)
+  zfsPools: ZFSPool[];
+  // Network interfaces (per-node)
+  interfaces: NetworkInterface[];
+  // Resource usage (live)
+  usage: { cpuPercent: number; memPercent: number; diskPercent: number; netRxBps: number; netTxBps: number };
+  // Discovery metadata
+  discoveryMethod?: 'manual' | 'mdns' | 'token';
+  joinedAt: string;                 // ISO timestamp
+}
+```
+
+### "Add Node" dialog (3 tabs)
+
+#### Tab 1: Manual
+
+```
+[ Add Node ]
+[ Manual ] [ Auto-detect ] [ Join Token ]
+
+Add node manually by entering its connection info.
+
+Hostname or IP:    [_________________________]
+                    (e.g. cloudbsd-node-04.example.com or 10.0.10.42)
+
+Port:              [4437]   (default 4437, range 1024-65535)
+
+Auth token:         [paste from /var/db/cloudbsd/admin.token on node]
+                    (one-time use, 1h expiry)
+
+Cluster endpoint:   [https://api.cloudbsd.org]
+                    (URL this node should report to)
+
+[ Cancel ]  [ Test connection ]  [ Add node ]
+```
+
+#### Tab 2: Auto-detect (mDNS / DNS-SD)
+
+```
+[ Add Node ]
+[ Manual ] [ Auto-detect ] [ Join Token ]
+
+Scan local network for cloudbsd-node-agent instances.
+
+Interface to scan:  [ br0 (10.0.10.0/24)        \u25BE ]
+Auto-approve found:  [ ] (default: off, manual review)
+
+Scanning... (timeout 120s)
+
+Found 2 nodes nearby:
+
+  [Add]  cloudbsd-node-04
+          10.0.10.44  \u00b7  v1.4.2  \u00b7  8 cores  \u00b7  32 GB RAM
+          Token: auto-verified  \u00b7  clock-skew: 0.2s (ok)
+          Free RAM: 28 GB  \u00b7  Free disk: 1.2 TB
+
+  [Add]  cloudbsd-node-05
+          10.0.10.45  \u00b7  v1.4.2  \u00b7  4 cores  \u00b7  16 GB RAM
+          Token: auto-verified  \u00b7  clock-skew: 0.1s (ok)
+          Free RAM: 12 GB  \u00b7  Free disk: 500 GB
+
+[ Cancel ]  [ Rescan ]
+```
+
+#### Tab 3: Cluster join token
+
+```
+[ Add Node ]
+[ Manual ] [ Auto-detect ] [ Join Token ]
+
+Generate a one-time cluster join token. Operator runs this on the new host:
+
+  1. SSH to new host as root
+  2. Install cloudbsd-node-agent (pkg install cloudbsd-node-agent)
+  3. Run: cloudbsd-node-agent register \
+        --cluster https://api.cloudbsd.org \
+        --token <code below> \
+        --label cloudbsd-node-04
+
+  Generated token: a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6
+  Expires in:  1:00:00  (refresh to extend)
+
+  [ Copy token ]  [ Refresh ]  [ Cancel ]
+```
+
+### Add Node state machine
+
+```
+     click "Add Node"
+          |
+          v
+     [joining]  agent sends POST /api/clusters/{id}/nodes with token
+          |
+          v  (10-30s, heartbeats established)
+     [syncing]  state replicating (1-30s)
+          |
+          v  (node responds to first health check)
+     [online]   ready to host VMs
+```
+
+Error states with remediation:
+- `unreachable` — "Check firewall on node port 4437, network connectivity"
+- `token expired` — "Generate a new token (1h TTL)"
+- `version mismatch` — "Agent X.Y.Z incompatible with cluster (need \u2265 N.M.K)"
+- `clock skew > 5s` — "Sync NTP on the node"
+
+### Node detail page layout
+
+`/nodes/{id}` — full-page view with tabs:
+
+```
+[ cloudbsd-node-01 ] [Online \u25CF] [Master] [Edit] [Drain] [Remove]
+
+  Overview | Disks (ZFS) | GPUs | Network | VMs | Logs | Settings
+  ----------
+
+  Overview tab:
+  - Hostname, IPs, role, status, agent version
+  - Resources: 8 cores, 16 GB RAM, 245/920 GB disk used
+  - Uptime: 14d 02:11
+  - Last heartbeat: 4s ago
+  - Live CPU/MEM/NET sparklines
+
+  Disks (ZFS) tab: (see ZFS management below)
+  GPUs tab: (see GPU management below, only when showVgpuResources=on)
+  Network tab: (see network management below)
+  VMs tab: list of VMs on this node, with "Migrate to..." action
+  Logs tab: per-node JSONL log stream (filtered by level/module)
+  Settings tab: edit displayLabel, role, labels, tags, auto-update, limits
+```
+
+### ZFS Management (per node)
+
+```
+Disks (ZFS)
+  tank  (zpool)  245 GB / 920 GB  [health:healthy] [scrub:2d ago]  [scrub now]
+  fast  (zpool)  12 GB / 64 GB    [health:healthy]  (SLOG)        [scrub now]
+
+  Datasets:
+  +----------------+----------+----------+------+-------+------+-----+-----+----+
+  | Name           | Type     | Size     | Used | Usage | Mnt  | Comp| Enc |Action|
+  +----------------+----------+----------+------+-------+------+-----+-----+----+
+  | tank/data      | ZFS      | 920 GB   | 245  | 27%   | /mnt |zstd3| AES | [...] |
+  | tank/media     | ZFS      | 4.0 TB   | 3.2T | 80%   | /mnt |off  | AES | [...] |
+  | ... (read-only rows for system volumes, dimmed + lock icon) ...  |
+  +----------------+----------+----------+------+-------+------+-----+-----+----+
+
+  [ + Create dataset ]   [ + Receive from peer ]   [ ZFS send to peer ]
+
+  Row action menu: [Snapshot] [Rollback to snapshot] [Set quota] [Set compression] [Edit mountpoint] [Destroy]
+  Destructive actions (Destroy, Rollback) require type-to-confirm modal.
+```
+
+### GPU Management (per node, gated by `showVgpuResources` flag)
+
+```
+GPUs
+  +--------+---------+--------+------+-------+-------+-------+--------+
+  | ID     | Model   | VRAM   | Used | Usage | Temp  | Power | Status |
+  +--------+---------+--------+------+-------+-------+-------+--------+
+  | gpu-0  | T4      | 16 GB  | 4 GB | 25%   | 47\u00b0C | 35W  | active |
+  | gpu-1  | T4      | 16 GB  | 0 GB | 0%    | 42\u00b0C | 28W  | idle   |
+  | gpu-2  | A5000   | 24 GB  | 12GB | 50%   | 56\u00b0C | 95W  | active |
+  +--------+---------+--------+------+-------+-------+-------+--------+
+
+  Allocations on gpu-0 (T4):
+  +----------+--------+---------+-----------+
+  | VM       | VRAM    | Type     | Action    |
+  +----------+--------+---------+-----------+
+  | jellyfin | 4 GB    | whole    | [release] |
+  | immich   | 2 GB    | slice 1/2| [release] |
+  +----------+--------+---------+-----------+
+
+  [ + Allocate vGPU ]   [ Release all ]
+```
+
+GPU allocation dialog:
+```
+Allocate vGPU to VM
+  VM:           [ jellyfin          \u25BE ]
+  GPU:          [ gpu-1 (T4, 16GB)  \u25BE ]
+  Type:         ( ) Whole GPU   (\u25CB) Slice: [1/2 \u25BE]
+  VRAM:         8 GB
+  Driver:       [ nvidia           \u25BE ]
+  Mode:         [ graphics         \u25BE ]
+  
+  [ Cancel ]  [ Allocate ]
+```
+
+### Network Management (per node)
+
+```
+Interfaces
+  +----------+--------+----------+----------+-----------+------------+
+  | Name     | Status | Speed    | IPs                    | MTU | Action|
+  +----------+--------+----------+-----------------------+-----+-------+
+  | igc0     | UP     | 1 Gbps   | 10.0.10.21/24        |1500 |  [...] |
+  |          |        |          | 2001:db8::15/64      |     |       |
+  |          |        |          | fe80::ff:fe21:3456/64|     |       |
+  | bge0     | UP     | 1 Gbps   | 10.0.20.21/24        |1500 |  [...] |
+  | lo0      | UP     | -        | 127.0.0.1/8          |16384|  [...] |
+  +----------+--------+----------+-----------------------+-----+-------+
+
+  Bridges:
+  +-------+-------+---------+--------------+
+  | Name  | MTU   | Members | Action        |
+  +-------+-------+---------+--------------+
+  | br0   | 1500  | igc0,em0| [edit]        |
+  +-------+-------+---------+--------------+
+
+  VLANs:
+  +-----+-------+-------+----------------+
+  | ID  | Parent| Name  | Action         |
+  +-----+-------+-------+----------------+
+  | 10  | igc0  | mgmt  | [edit][delete] |
+  | 20  | igc0  | store | [edit][delete] |
+  +-----+-------+-------+----------------+
+
+  Routes:
+  +----------------+--------+----------+----------+
+  | Destination    | Gateway | Iface    | Action  |
+  +----------------+--------+----------+----------+
+  | 0.0.0.0/0      | .1     | igc0     | [edit]  |
+  | 10.0.0.0/8     | -       | igc0     | [system]|
+  +----------------+--------+----------+----------+
+
+  Firewall rules (pf):
+  +-----+--------+----------+-----------+---------+--------+
+  | Dir | Action | Proto    | From      | To      | Port  |
+  +-----+--------+----------+-----------+---------+--------+
+  | in  | pass   | tcp      | any       | any     | 22    |
+  | in  | pass   | tcp      | 10.0.10.0/24| any   | 443   |
+  | in  | block  | tcp      | any       | any     | 3306  |
+  +-----+--------+----------+-----------+---------+--------+
+
+  [ + Add interface ]   [ + Add bridge ]   [ + Add VLAN ]   [ + Add route ]   [ + Add firewall rule ]
+```
+
+### Node actions
+
+- **Edit** (top-right of node detail page) — modal with: displayLabel, role, labels, tags, auto-update, maintenance mode, resource limits
+- **Drain** — graceful: refuses new VMs, waits for existing VMs to migrate (timeout 1h)
+- **Remove** — force: immediate offline, VMs not migrated (warning required)
+- **Restart agent** — `service cloudbsd-node-agent restart`
+- **Reinstall OS** — drastic, full wipe (confirmation required, takes 30+ min)
+- **Update agent** — `cloudbsd-node-agent update` (semver check)
+
+### Implementation tasks (new)
+
+| Task | Description |
+|------|-------------|
+| **T216** | `nodes.list` / `nodes.get` / `nodes.add` / `nodes.update` / `nodes.remove` / `nodes.drain` endpoints |
+| **T217** | `AddNodeDialog` component with 3 tabs (Manual / Auto-detect / Join token) |
+| **T218** | `ManualNodeFormComponent` — hostname/IP, port, token, cluster URL |
+| **T219** | `AutoDetectTabComponent` — mDNS scan, list of discovered nodes, add buttons |
+| **T220** | `JoinTokenTabComponent` — generate token, show command, copy, refresh |
+| **T221** | mDNS discovery backend (UDP 5353 multicast query handler) |
+| **T222** | Node edit modal (displayLabel, role, labels, tags, auto-update, limits) |
+| **T223** | Node detail page with tabs (Overview, ZFS, GPU, Network, VMs, Logs, Settings) |
+| **T224** | `ZfsManagementComponent` — list pools/datasets, create, snapshot, destroy, rollback, send/receive |
+| **T225** | `GpuManagementComponent` (gated by showVgpuResources flag) — list GPUs, allocations, allocate/release |
+| **T226** | `NetworkManagementComponent` — interfaces, bridges, VLANs, routes, firewall rules |
+| **T227** | Node state machine (joining \u2192 syncing \u2192 online) with error states (unreachable, token expired, version mismatch, clock skew) |
+| **T228** | Node removal (drain / force) with type-to-confirm for destructive actions |
+| **T229** | Tests: 100% coverage of AddNodeDialog, ZfsMgmt, GpuMgmt, NetworkMgmt |
+| **T230** | Tests: mDNS discovery backend (mock multicast packets) |
+| **T231** | Mock data: 2-3 nodes in `environment.ts.mockData.nodes` for development |
+| **T232** | Docs: `docs/configuration/nodes.md` — manual/autodiscovery/token, ZFS, GPU, network mgmt |
+
+### Acceptance criteria
+
+1. "Add Node" dialog has 3 tabs (Manual / Auto-detect / Join token)
+2. Auto-detect via mDNS finds nearby nodes (mock data in dev, real mDNS in prod)
+3. Join token is 1-hour TTL, single-use
+4. Node state machine: joining \u2192 syncing \u2192 online, with error states
+5. Node edit modal updates displayLabel, role, labels, tags, limits
+6. ZFS tab shows pools, datasets, usage bars, scrub status, mountpoints
+7. GPU tab only shown when showVgpuResources flag is on (feature gating)
+8. GPU tab shows physical GPUs, VRAM, allocations, slice info
+9. Network tab shows interfaces, bridges, VLANs, routes, firewall rules
+10. Destructive actions (destroy dataset, remove node) require type-to-confirm
+11. Drain vs force removal clearly differentiated with warnings
+12. Honcho peer `cloudbsd-admin-node-management` has 8 conclusions captured
 
 ---
 

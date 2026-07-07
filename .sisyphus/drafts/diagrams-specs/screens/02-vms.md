@@ -61,18 +61,18 @@
 
 | Name | Status | OS | vCPU | RAM | Disk | Uptime | Host | Tags | IP | IOPS | Net | Created |
 |------|--------|----|-----:|-----|------|--------|------|------|----|------|------|---------|
-| nextcloud | ● RUN | Debian 12 | 4 | 8.0 GB | 120 GB | 14d 02:11 | freenas-mock | [prod][files] | 10.0.10.10 | 1.2k | 12.4/4.1 | 2026-06-22 |
-| homeassistant | ● RUN | HAOS 12 | 2 | 4.0 GB | 32 GB | 8d 18:42 | freenas-mock | [smarthome] | 10.0.10.12 | 380 | 0.6/0.2 | 2026-06-27 |
-| jellyfin | ● RUN | Ubuntu 24.04 | 6 | 12.0 GB | 500 GB | 22d 06:00 | freenas-mock | [media] | 10.0.10.11 | 4.8k | 86.1/12.4 | 2026-06-14 |
-| postgres-dev | ○ STOP | Debian 12 | 2 | 4.0 GB | 80 GB | — | freenas-mock | [dev] | 10.0.10.20 | — | —/— | 2026-05-12 |
-| win11-sandbox | ◐ PAUS | Windows 11 | 4 | 8.0 GB | 100 GB | 0d 04:18 | freenas-mock | [test] | 10.0.10.30 | 0 | 0.0/0.0 | 2026-07-05 |
-| gitlab-runner | ● RUN | Alpine 3.20 | 2 | 4.0 GB | 40 GB | 5d 11:02 | freenas-mock | [ci] | 10.0.10.40 | 220 | 1.1/0.3 | 2026-07-01 |
+| nextcloud | ● RUN | Debian 12 | 4 | 8.0 GB | 120 GB | 14d 02:11 | cloudbsd-node-01 | [prod][files] | 10.0.10.10 | 1.2k | 12.4/4.1 | 2026-06-22 |
+| homeassistant | ● RUN | HAOS 12 | 2 | 4.0 GB | 32 GB | 8d 18:42 | cloudbsd-node-01 | [smarthome] | 10.0.10.12 | 380 | 0.6/0.2 | 2026-06-27 |
+| jellyfin | ● RUN | Ubuntu 24.04 | 6 | 12.0 GB | 500 GB | 22d 06:00 | cloudbsd-node-01 | [media] | 10.0.10.11 | 4.8k | 86.1/12.4 | 2026-06-14 |
+| postgres-dev | ○ STOP | Debian 12 | 2 | 4.0 GB | 80 GB | — | cloudbsd-node-01 | [dev] | 10.0.10.20 | — | —/— | 2026-05-12 |
+| win11-sandbox | ◐ PAUS | Windows 11 | 4 | 8.0 GB | 100 GB | 0d 04:18 | cloudbsd-node-01 | [test] | 10.0.10.30 | 0 | 0.0/0.0 | 2026-07-05 |
+| gitlab-runner | ● RUN | Alpine 3.20 | 2 | 4.0 GB | 40 GB | 5d 11:02 | cloudbsd-node-01 | [ci] | 10.0.10.40 | 220 | 1.1/0.3 | 2026-07-01 |
 | mastodon | ● RUN | Debian 12 | 4 | 8.0 GB | 200 GB | 32d 14:09 | node-02 | [social] | 10.0.20.10 | 1.6k | 8.2/7.5 | 2026-06-04 |
 | node-02-win | ✕ ERR | Win Srv 2022 | 8 | 16.0 GB | 250 GB | 1d 02:44 | node-02 | [infra] | 10.0.20.11 | 0 | 0.0/0.0 | 2026-07-05 |
-| gitea | ● RUN | Ubuntu 22.04 | 2 | 4.0 GB | 50 GB | 11d 09:33 | freenas-mock | [dev] | 10.0.10.50 | 540 | 2.1/0.9 | 2026-06-25 |
-| pihole-vm | ● RUN | Debian 12 | 1 | 1.0 GB | 8 GB | 19d 21:11 | freenas-mock | [network] | 10.0.10.60 | 60 | 0.1/0.0 | 2026-06-16 |
-| immich | ● RUN | Debian 12 | 4 | 8.0 GB | 800 GB | 7d 03:24 | freenas-mock | [media][backup] | 10.0.10.70 | 2.2k | 14.2/8.7 | 2026-06-29 |
-| paperless-ngx | ○ STOP | Debian 12 | 2 | 4.0 GB | 60 GB | — | freenas-mock | [docs] | 10.0.10.80 | — | —/— | 2026-06-18 |
+| gitea | ● RUN | Ubuntu 22.04 | 2 | 4.0 GB | 50 GB | 11d 09:33 | cloudbsd-node-01 | [dev] | 10.0.10.50 | 540 | 2.1/0.9 | 2026-06-25 |
+| pihole-vm | ● RUN | Debian 12 | 1 | 1.0 GB | 8 GB | 19d 21:11 | cloudbsd-node-01 | [network] | 10.0.10.60 | 60 | 0.1/0.0 | 2026-06-16 |
+| immich | ● RUN | Debian 12 | 4 | 8.0 GB | 800 GB | 7d 03:24 | cloudbsd-node-01 | [media][backup] | 10.0.10.70 | 2.2k | 14.2/8.7 | 2026-06-29 |
+| paperless-ngx | ○ STOP | Debian 12 | 2 | 4.0 GB | 60 GB | — | cloudbsd-node-01 | [docs] | 10.0.10.80 | — | —/— | 2026-06-18 |
 
 ## Row 5 (win11-sandbox) — Hover State
 
