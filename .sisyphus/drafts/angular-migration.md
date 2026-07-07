@@ -2532,3 +2532,315 @@ web-new/src/app/logging/
 ## Branch Strategy
 - Create new branch BEFORE work begins
 - Branch should isolate Angular migration work
+
+## FINAL DELIVERY: TWO NEW REPOSITORIES (NEW)
+
+Per user: "once completed, we need to populate git@github.com:cloudbsdorg/cloudbsd-admin-ui.git for this. the backend will be git@github.com:cloudbsdorg/cloudbsd-admin-backend.git. continue. you can make a new dir in ~/git/ for the new frontend to keep things clean. the dir may exist. check first."
+
+**Target repos (TWO):**
+1. **Frontend**: `git@github.com:cloudbsdorg/cloudbsd-admin-ui.git`
+2. **Backend**: `git@github.com:cloudbsdorg/cloudbsd-admin-backend.git`
+
+**Pre-flight check (already done):**
+- `~/git/` directory listing checked
+- `~/git/cloudbsd-admin-ui` does NOT exist (confirmed)
+- `~/git/cloudbsd-admin-backend` does NOT exist (confirmed)
+- `~/git/www-cloudbsd-org` exists BUT is a different project (cloudbsd.org marketing site, React/Vite, separate repo `cloudbsdorg/www.git`). Do NOT use this dir.
+
+**Strategy change (from "push from current repo"):**
+The current repo `marklapointe/cloudbsd-ai-www` is a planning workspace. The final deliverables will be split into **two separate repos** with separate local checkouts:
+
+| Repo | Local Path | Contents |
+|------|------------|----------|
+| `cloudbsdorg/cloudbsd-admin-ui.git` | `~/git/cloudbsd-admin-ui/` | Angular app, theme system, plugin templates, SVG diagrams, docs, in-app help content |
+| `cloudbsdorg/cloudbsd-admin-backend.git` | `~/git/cloudbsd-admin-backend/` | New PAM-auth backend, plugin registry, MIME type handlers, JSONL logger, OpenAPI spec, FreeBSD port |
+
+**Trigger**: After F1-F4 Final Verification Wave passes AND user explicitly approves work complete.
+
+### Frontend Repo: cloudbsdorg/cloudbsd-admin-ui.git
+
+**Local checkout**: `~/git/cloudbsd-admin-ui/` (NEW directory, must be created)
+
+**Pre-flight checks:**
+1. Verify SSH key access to cloudbsdorg org (`ssh -T git@github.com` as user `marklapointe`)
+2. Verify repo doesn't already exist (`gh repo view cloudbsdorg/cloudbsd-admin-ui`)
+3. Verify local dir doesn't exist (`ls ~/git/cloudbsd-admin-ui`)
+4. If local dir exists but is empty/non-git: use it
+5. If local dir exists and has git history from prior attempt: ask user
+
+**Repo creation:**
+```bash
+mkdir -p ~/git/cloudbsd-admin-ui
+gh repo create cloudbsdorg/cloudbsd-admin-ui \
+  --description "CloudBSD Admin UI - view-only Angular 20 frontend with plugin system, custom MIME types, themes, and FreeBSD port" \
+  --homepage "https://cloudbsd.org" \
+  --private=false
+```
+
+**Local init + content split:**
+```bash
+cd ~/git/cloudbsd-admin-ui
+git init
+git remote add origin git@github.com:cloudbsdorg/cloudbsd-admin-ui.git
+
+# Copy from migration workspace
+cp -r /home/mlapointe/secure/git/cloudbsd-ai-www/web-new/* .
+cp /home/mlapointe/secure/git/cloudbsd-ai-www/diagrams/*.svg docs/diagrams/ 2>/dev/null
+cp /home/mlapointe/secure/git/cloudbsd-ai-www/openapi-ui.yaml .
+
+# Frontend-specific docs
+cp /home/mlapointe/secure/git/cloudbsd-ai-www/README.md .
+cp /home/mlapointe/secure/git/cloudbsd-ai-www/INSTALL.md .
+# (UI-relevant subset)
+cp /home/mlapointe/secure/git/cloudbsd-ai-www/THEME_REFERENCE.md .
+cp /home/mlapointe/secure/git/cloudbsd-ai-www/PLUGIN_REFERENCE.md .
+cp /home/mlapointe/secure/git/cloudbsd-ai-www/DEVELOPER_GUIDE.md .
+cp /home/mlapointe/secure/git/cloudbsd-ai-www/TROUBLESHOOTING.md .
+cp /home/mlapointe/secure/git/cloudbsd-ai-www/FAQ.md .
+cp /home/mlapointe/secure/git/cloudbsd-ai-www/SECURITY.md .
+
+git add .
+git -c user.name='marklapointe' -c user.email='mark@cloudbsd.org' commit -m "feat: initial commit of CloudBSD Admin UI (Angular 20)"
+git branch -M main
+git push -u origin main
+```
+
+**Repository configuration:**
+1. Default branch: `main`
+2. Branch protection on `main`:
+   - Require PR reviews (1+ approver)
+   - Require linear history
+   - Include administrators
+3. Topics: `cloudbsd`, `angular`, `freebsd`, `plugin-system`, `admin-ui`, `bsd3`
+4. Enable Issues, Discussions
+5. Disable Wiki, Projects
+6. Security policy: `SECURITY.md`
+
+### Backend Repo: cloudbsdorg/cloudbsd-admin-backend.git
+
+**Local checkout**: `~/git/cloudbsd-admin-backend/` (NEW directory, must be created)
+
+**Pre-flight checks:**
+1. Verify SSH key access
+2. Verify repo doesn't exist (`gh repo view cloudbsdorg/cloudbsd-admin-backend`)
+3. Verify local dir doesn't exist (`ls ~/git/cloudbsd-admin-backend`)
+
+**Repo creation:**
+```bash
+mkdir -p ~/git/cloudbsd-admin-backend
+gh repo create cloudbsdorg/cloudbsd-admin-backend \
+  --description "CloudBSD Admin Backend - PAM-auth Node.js backend with plugin registry, custom MIME types, JSONL logging, and FreeBSD port" \
+  --homepage "https://cloudbsd.org" \
+  --private=false
+```
+
+**Local init + content split:**
+```bash
+cd ~/git/cloudbsd-admin-backend
+git init
+git remote add origin git@github.com:cloudbsdorg/cloudbsd-admin-backend.git
+
+# Copy from migration workspace
+cp -r /home/mlapointe/secure/git/cloudbsd-ai-www/backend-new/* .
+cp -r /home/mlapointe/secure/git/cloudbsd-ai-www/ports .
+cp /home/mlapointe/secure/git/cloudbsd-ai-www/openapi.yaml .
+
+# Backend-specific docs
+cp /home/mlapointe/secure/git/cloudbsd-ai-www/README.md .
+cp /home/mlapointe/secure/git/cloudbsd-ai-www/INSTALL.md .
+cp /home/mlapointe/secure/git/cloudbsd-ai-www/ADMIN_GUIDE.md .
+cp /home/mlapointe/secure/git/cloudbsd-ai-www/UPGRADE.md .
+cp /home/mlapointe/secure/git/cloudbsd-ai-www/API_REFERENCE.md .
+cp /home/mlapointe/secure/git/cloudbsd-ai-www/SECURITY.md .
+cp /home/mlapointe/secure/git/cloudbsd-ai-www/CHANGELOG.md .
+
+# Man pages
+mkdir -p docs/man
+cp -r /home/mlapointe/secure/git/cloudbsd-ai-www/docs/man/* docs/man/ 2>/dev/null
+
+git add .
+git -c user.name='marklapointe' -c user.email='mark@cloudbsd.org' commit -m "feat: initial commit of CloudBSD Admin Backend (PAM auth + plugin registry)"
+git branch -M main
+git push -u origin main
+```
+
+**Repository configuration:**
+1. Default branch: `main`
+2. Branch protection on `main`:
+   - Require PR reviews (1+ approver)
+   - Require linear history
+   - Include administrators
+3. Topics: `cloudbsd`, `nodejs`, `freebsd`, `plugin-system`, `pam-auth`, `openpam`, `bsd3`
+4. Enable Issues, Discussions
+5. Security policy: `SECURITY.md`
+
+### Cross-Repo Configuration
+
+**Frontend references backend:**
+- `web-new/src/environments/environment.ts`:
+  - `apiBaseUrl: 'https://api.cloudbsd.org'` (production)
+  - `apiBaseUrl: 'http://localhost:3001'` (development)
+- `web-new/package.json`:
+  - No direct backend code dependency (only API contract)
+- `web-new/README.md`:
+  - Link to backend repo for API contract
+
+**Backend references frontend:**
+- `backend-new/src/middleware/cors.ts`:
+  - Allow origin: `https://admin.cloudbsd.org`
+  - Allow origin: `http://localhost:4200` (development)
+- `backend-new/src/config/defaults.json`:
+  - `frontend_url: 'https://admin.cloudbsd.org'`
+- `backend-new/README.md`:
+  - Link to frontend repo
+
+**FreeBSD Port (lives in backend repo):**
+- Path: `ports/www/cloudbsd-admin/`
+- Reason: Backend provides the service, port installs it
+- Frontend builds separately (npm build) and gets served by backend's static file middleware
+
+### Verification After Both Pushes
+
+**Frontend verification:**
+```bash
+cd ~/git/cloudbsd-admin-ui
+gh repo view cloudbsdorg/cloudbsd-admin-ui
+git clone git@github.com:cloudbsdorg/cloudbsd-admin-ui.git /tmp/verify-ui
+cd /tmp/verify-ui && npm install && npm run build
+```
+
+**Backend verification:**
+```bash
+cd ~/git/cloudbsd-admin-backend
+gh repo view cloudbsdorg/cloudbsd-admin-backend
+git clone git@github.com:cloudbsdorg/cloudbsd-admin-backend.git /tmp/verify-backend
+cd /tmp/verify-backend && npm install && npm test
+# FreeBSD port syntax check
+make -C ports/www/cloudbsd-admin -n INSTALL
+```
+
+**Release tags (both repos):**
+```bash
+# Frontend
+cd ~/git/cloudbsd-admin-ui
+git tag -a v1.0.0 -m "Initial release of CloudBSD Admin UI"
+git push origin v1.0.0
+gh release create v1.0.0 --notes-file RELEASE_NOTES.md --target main
+
+# Backend
+cd ~/git/cloudbsd-admin-backend
+git tag -a v1.0.0 -m "Initial release of CloudBSD Admin Backend"
+git push origin v1.0.0
+gh release create v1.0.0 --notes-file RELEASE_NOTES.md --target main
+```
+
+**RELEASE_NOTES.md** (created during delivery):
+- Highlights of the Angular migration
+- Breaking changes (React → Angular, custom MIME types, view-only, PAM auth)
+- Migration guide from v0.x
+- Plugin development guide link
+- FreeBSD port install instructions
+- Security disclosure policy
+- Contributors/acknowledgments
+- Cross-repo installation: backend first, then frontend (with API URL config)
+
+### Old Repo Handling (RETIRED, per user)
+
+Per user: "yeah, we will retire the current repo"
+
+**`marklapointe/cloudbsd-ai-www`** (the planning workspace): **RETIRED/ARCHIVED**
+
+**Retirement procedure:**
+1. Stop all active development on `feat/angular-migration` branch after delivery
+2. Archive the repo via GitHub UI (`Settings` → `Danger Zone` → `Archive this repository`)
+3. Update repo description: "ARCHIVED - Legacy React version + migration planning workspace. See cloudbsdorg/cloudbsd-admin-ui and cloudbsdorg/cloudbsd-admin-backend."
+4. Update README.md to redirect:
+   ```markdown
+   # ⚠️ ARCHIVED
+   
+   This repository has been retired. The CloudBSD Admin project has moved to:
+   
+   - **Frontend (Angular 20)**: [cloudbsdorg/cloudbsd-admin-ui](https://github.com/cloudbsdorg/cloudbsd-admin-ui)
+   - **Backend (PAM auth + plugin registry)**: [cloudbsdorg/cloudbsd-admin-backend](https://github.com/cloudbsdorg/cloudbsd-admin-backend)
+   - **FreeBSD Port**: Bundled with the backend repository
+   
+   Historical artifacts (migration planning, React legacy code) are preserved here for reference only.
+   No further development will occur on this repository.
+   ```
+5. Close all open issues (if any) with redirect comment
+6. Add topic: `archived`
+7. Add `ARCHIVED` to repo name display (GitHub handles this automatically when archived)
+
+**Local repo `~/git/cloudbsd-ai-www/` handling:**
+- Stays as-is locally for historical reference (read-only recommended)
+- Add `RETIRED.md` at root pointing to new repos
+- Local `.git/config` remote `origin` can stay
+- Do NOT delete the local dir (user may want to reference history)
+- Consider removing any pending uncommitted work before archiving
+
+**What is preserved in the archived repo:**
+- All React 19 + Express code (`src/`, `server/`)
+- All 47 locale files
+- Original Makefile, Containerfile
+- All migration planning (`.sisyphus/`)
+- Original git history (commits, branches, tags)
+- Original PR/issue history (if any)
+
+**What is NOT preserved (already migrated):**
+- New Angular code → moved to cloudbsd-admin-ui
+- New backend code → moved to cloudbsd-admin-backend
+- FreeBSD port → moved to cloudbsd-admin-backend/ports
+- Documentation → split between both new repos
+
+### Failure Handling
+
+**SSH access fails:**
+- Surface error: "Cannot reach github.com/cloudbsdorg via SSH"
+- Ask user to verify SSH key added to cloudbsdorg org
+- Check: `gh auth status`
+
+**Repo already exists:**
+- Frontend: prompt user (overwrite via force push, or cancel and ask user to delete first)
+- Backend: prompt user (overwrite via force push, or cancel and ask user to delete first)
+
+**Local dir already exists with content:**
+- If non-empty and not a git repo: ask user (delete + recreate, or use existing)
+- If empty: use it
+- If git repo with prior content: ask user (delete + recreate, or fetch and merge)
+
+**Push fails (network/large repo):**
+- Retry with `--no-thin`
+- Retry with exponential backoff (max 3 attempts)
+- If still failing: surface error with push URL for manual retry
+
+### Why Two Repos (vs One Monorepo)
+
+- Clean separation: frontend code != backend code
+- Independent release cadences (UI changes more often than backend API)
+- Independent issue tracking
+- Different contributor pools (UI devs vs backend devs)
+- Different deployment artifacts (UI bundle vs Node service + FreeBSD package)
+- FreeBSD port belongs with backend (it's a backend service)
+- Each repo can have its own README, CONTRIBUTING, CI config later
+
+### Why Not a Monorepo with Workspaces
+
+- npm workspaces would add complexity
+- Build systems differ (Angular CLI vs Node service)
+- FreeBSD port can't easily coexist with web framework
+- CI/CD will be simpler per-repo (later)
+
+### Why Split Into Two Local Dirs (vs Subdirs in One Dir)
+
+- Cleaner: each repo has its own git history, branches, tags
+- Independent work: can git pull one without affecting the other
+- Matches GitHub repo structure
+- Easier to script: each repo has its own build/test/deploy
+
+### Task Assignment
+
+- **Frontend delivery task (T52)**: Wave FINAL, after F1-F4
+- **Backend delivery task (T53)**: Wave FINAL, after F1-F4
+- Both run sequentially or in parallel (independent operations)
+- Agent: `unspecified-high` with `git-master` skill
+- Requires user approval before execution (destructive: new repo creation + new local dirs)

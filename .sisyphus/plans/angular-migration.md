@@ -4137,37 +4137,138 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ### Wave 8: Cutover
 
-- [ ] 51. **Mark old React app + old backend as deprecated**
+- [ ] 51. **Populate new frontend repo `cloudbsdorg/cloudbsd-admin-ui.git`**
 
   **What to do**:
-  - Move `src/`, `server/` to `_deprecated/` (or rename to `src.react-deprecated/`, `server.express-deprecated/`).
-  - Update root `package.json` to remove React scripts, add `web-new` and `server-new` as workspaces.
-  - Update `Containerfile` to use `web-new/Containerfile` and `server-new/Containerfile`.
-  - Update README.md to point to new structure.
+  Per user: "once completed, we need to populate git@github.com:cloudbsdorg/cloudbsd-admin-ui.git for this. you can make a new dir in ~/git/ for the new frontend to keep things clean."
+  - Create local dir: `mkdir -p ~/git/cloudbsd-admin-ui` (verified: dir does not exist)
+  - Create GitHub repo: `gh repo create cloudbsdorg/cloudbsd-admin-ui --description "CloudBSD Admin UI - view-only Angular 20 frontend with plugin system, custom MIME types, themes, and FreeBSD port" --homepage "https://cloudbsd.org" --public`
+  - `git init` in `~/git/cloudbsd-admin-ui/`
+  - `git remote add origin git@github.com:cloudbsdorg/cloudbsd-admin-ui.git`
+  - Copy Angular app code from `/home/mlapointe/secure/git/cloudbsd-ai-www/web-new/` → `~/git/cloudbsd-admin-ui/`
+  - Copy frontend-relevant docs: `README.md`, `INSTALL.md`, `THEME_REFERENCE.md`, `PLUGIN_REFERENCE.md`, `DEVELOPER_GUIDE.md`, `TROUBLESHOOTING.md`, `FAQ.md`, `SECURITY.md`
+  - Copy SVG diagrams (UI mock-ups)
+  - Create `RELEASE_NOTES.md` (initial v1.0.0 notes)
+  - Initial commit + `git push -u origin main`
+  - Tag: `git tag -a v1.0.0 -m "Initial release" && git push origin v1.0.0`
+  - `gh release create v1.0.0 --notes-file RELEASE_NOTES.md --target main`
+  - Configure repo: branch protection on main, topics (`cloudbsd`, `angular`, `freebsd`, `plugin-system`, `admin-ui`, `bsd3`), enable Issues + Discussions, disable Wiki + Projects
+  - Verify: clone fresh, `npm install`, `npm run build` succeeds
 
   **Must NOT do**:
-  - Do NOT delete the React code (preserve for rollback).
+  - Do NOT delete or modify the planning repo (`marklapointe/cloudbsd-ai-www`)
+  - Do NOT include `.sisyphus/`, `node_modules/`, `.env`, secrets, build artifacts
+  - Do NOT copy backend code or FreeBSD port (those go to backend repo)
 
   **Recommended Agent Profile**:
-  - `unspecified-high`
-  - **Parallelization**: Wave 8 (sequential after F1-F4)
-  - **Commit**: YES
-  - Message: `chore(cutover): deprecate old React app + Express backend`
+  - **Category**: `unspecified-high`
+  - **Skills**: `git-master`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES (with T52)
+  - **Parallel Group**: Wave FINAL (after F1-F4, requires user approval)
+  - **Blocked By**: All implementation tasks complete, F1-F4 APPROVED, user explicit approval
+
+  **Acceptance Criteria**:
+  - [ ] `~/git/cloudbsd-admin-ui/` exists with git history
+  - [ ] `git@github.com:cloudbsdorg/cloudbsd-admin-ui.git` exists on GitHub
+  - [ ] `git push -u origin main` succeeded
+  - [ ] `v1.0.0` tag pushed
+  - [ ] `gh release create v1.0.0` succeeded
+  - [ ] Fresh clone test: `git clone ... && npm install && npm run build` succeeds
+  - [ ] Branch protection configured
+  - [ ] Topics + description set
+
+  **Commit**: NO (this task creates the new repo, not commits to existing)
 
 ---
 
-- [ ] 52. **Final push to `feat/angular-migration`**
+- [ ] 52. **Populate new backend repo `cloudbsdorg/cloudbsd-admin-backend.git`**
 
   **What to do**:
-  - Final commit: `chore(release): CloudBSD Admin Angular migration complete`.
-  - `git push origin feat/angular-migration`.
-  - Verify `origin/feat/angular-migration` has all artifacts.
+  Per user: "the backend will be git@github.com:cloudbsdorg/cloudbsd-admin-backend.git"
+  - Create local dir: `mkdir -p ~/git/cloudbsd-admin-backend` (verified: dir does not exist)
+  - Create GitHub repo: `gh repo create cloudbsdorg/cloudbsd-admin-backend --description "CloudBSD Admin Backend - PAM-auth Node.js backend with plugin registry, custom MIME types, JSONL logging, and FreeBSD port" --homepage "https://cloudbsd.org" --public`
+  - `git init` in `~/git/cloudbsd-admin-backend/`
+  - `git remote add origin git@github.com:cloudbsdorg/cloudbsd-admin-backend.git`
+  - Copy backend code from `/home/mlapointe/secure/git/cloudbsd-ai-www/backend-new/` → `~/git/cloudbsd-admin-backend/`
+  - Copy FreeBSD port: `/home/mlapointe/secure/git/cloudbsd-ai-www/ports/` → `~/git/cloudbsd-admin-backend/ports/`
+  - Copy backend-relevant docs: `README.md`, `INSTALL.md`, `ADMIN_GUIDE.md`, `UPGRADE.md`, `API_REFERENCE.md`, `SECURITY.md`, `CHANGELOG.md`
+  - Copy man pages (5 pages): `docs/man/man5/*`, `docs/man/man8/*`
+  - Copy OpenAPI spec: `openapi.yaml`
+  - Create `RELEASE_NOTES.md` (initial v1.0.0 notes)
+  - Initial commit + `git push -u origin main`
+  - Tag: `git tag -a v1.0.0 -m "Initial release" && git push origin v1.0.0`
+  - `gh release create v1.0.0 --notes-file RELEASE_NOTES.md --target main`
+  - Configure repo: branch protection on main, topics (`cloudbsd`, `nodejs`, `freebsd`, `plugin-system`, `pam-auth`, `openpam`, `bsd3`), enable Issues + Discussions
+  - Verify: clone fresh, `npm install`, `npm test` succeeds, FreeBSD port syntax check (`make -n -C ports/www/cloudbsd-admin`)
+
+  **Must NOT do**:
+  - Do NOT delete or modify the planning repo
+  - Do NOT include `.sisyphus/`, `node_modules/`, `.env`, secrets, build artifacts
+  - Do NOT copy frontend code (that goes to UI repo)
 
   **Recommended Agent Profile**:
-  - `quick`
-  - **Parallelization**: Wave 8 (sequential)
-  - **Commit**: YES
-  - Message: `chore(release): Angular migration complete - push to feat/angular-migration`
+  - **Category**: `unspecified-high`
+  - **Skills**: `git-master`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES (with T51)
+  - **Parallel Group**: Wave FINAL (after F1-F4, requires user approval)
+  - **Blocked By**: All implementation tasks complete, F1-F4 APPROVED, user explicit approval
+
+  **Acceptance Criteria**:
+  - [ ] `~/git/cloudbsd-admin-backend/` exists with git history
+  - [ ] `git@github.com:cloudbsdorg/cloudbsd-admin-backend.git` exists on GitHub
+  - [ ] `git push -u origin main` succeeded
+  - [ ] `v1.0.0` tag pushed
+  - [ ] `gh release create v1.0.0` succeeded
+  - [ ] Fresh clone test: `git clone ... && npm install && npm test` succeeds
+  - [ ] FreeBSD port syntax check passes
+  - [ ] Branch protection configured
+  - [ ] Topics + description set
+
+  **Commit**: NO (this task creates the new repo, not commits to existing)
+
+---
+
+- [ ] 53. **Retire/Archive old planning repo `marklapointe/cloudbsd-ai-www`**
+
+  **What to do**:
+  Per user: "yeah, we will retire the current repo"
+  - Update local README.md: add ARCHIVED notice pointing to both new repos
+  - Add `RETIRED.md` at repo root with full redirect notice
+  - Commit: `chore(retire): archive - moved to cloudbsdorg/cloudbsd-admin-ui and cloudbsd-admin-backend`
+  - `git push origin feat/angular-migration`
+  - Archive via GitHub: `gh repo archive marklapointe/cloudbsd-ai-www --yes`
+  - Update repo description: "ARCHIVED - Legacy React version + migration planning workspace. See cloudbsdorg/cloudbsd-admin-ui and cloudbsdorg/cloudbsd-admin-backend."
+  - Close any open issues with redirect comment
+  - Verify: GitHub shows repo as archived, redirects work
+
+  **Must NOT do**:
+  - Do NOT delete the repo
+  - Do NOT delete the local clone at `~/git/cloudbsd-ai-www/`
+
+  **Recommended Agent Profile**:
+  - **Category**: `unspecified-high`
+  - **Skills**: `git-master`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: NO (must run after T51 + T52 complete)
+  - **Parallel Group**: Wave FINAL (after T51 + T52)
+  - **Blocked By**: T51, T52 complete
+
+  **Acceptance Criteria**:
+  - [ ] Local README.md updated with ARCHIVED notice
+  - [ ] `RETIRED.md` added at root
+  - [ ] Commit pushed to origin
+  - [ ] GitHub repo archived (`gh repo view` shows "Archived")
+  - [ ] Repo description updated
+  - [ ] Open issues closed (if any)
+
+  **Commit**: YES
+  - Message: `chore(retire): archive - moved to cloudbsdorg/cloudbsd-admin-ui and cloudbsd-admin-backend`
+  - Files: `README.md`, `RETIRED.md`
 
 ---
 
