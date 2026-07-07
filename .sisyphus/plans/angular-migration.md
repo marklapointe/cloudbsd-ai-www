@@ -7,13 +7,17 @@
 > **Framework Override**: User has overridden the application_guidelines WEBUI default of "React is the primary frontend framework". Justification: *"angular is now something to be accepted because it is better in some cases"*. Angular 20 is the framework for this project. Documented in Honcho peer memory (`cloudbsd-admin-test-lessons`).
 >
 > **Deliverables**:
-> - 14 SVG screen mockups + 5 interaction flow SVGs (`diagrams/`)
+> - **16 SVG screen mockups** + **18 component mockups** + 6 modal + 12 error + 5 notification + 4 loading + 3 mobile + 3 variant + 3 plugin + 15 theme + 8 customizer + 5 interaction flow + 1 architecture (`diagrams/`)
 > - OpenAPI 3.1 spec (`diagrams/openapi.yaml`)
 > - Plugin contract spec (`diagrams/plugin-contract.md`)
 > - Custom MIME-type + header registry (`diagrams/mime-registry.md`)
+> - Wire-protocol envelope spec (`.sisyphus/plans/WIRE_PROTOCOL.md` — `application/vnd.cloudbsd+envelope`)
+> - **Canonical data-structures spec** (`.sisyphus/drafts/data-structures.md` — UnitKind, Quantity, GPU/CPU/Network schemas)
+> - **Canonical UI standard index** (`.sisyphus/drafts/ui-index.md` — universal ordering rules)
 > - New PAM-auth backend (Node.js 24 + Express 5 + libpam)
 > - Angular 20 frontend with plugin template renderer + view-only pages
 > - Karma+Jasmine tests (**100% coverage gate** — user requirement, overrides 80% default)
+> - Stress-test handoff document (`.sisyphus/drafts/STRESS_AGENT.md`) covering 8 chaos scenarios
 > - Unified ErrorHandlingService (no `window.alert()`)
 > - Rate limiting (login 5/15min, lists 600/min, WS 3000 events/min)
 > - VM console via noVNC + websockify (FreeBSD jail sidecar)
@@ -88,8 +92,10 @@ These define the visual target for every page in the new Angular app. Each SVG i
 | [`12-login.svg`](../../diagrams/screens/12-login.svg) | Login | Full login form: branding, tagline, username/password with show/hide, Remember checkbox, Session timeout notice, Sign in button, passkey option, MFA TOTP (6 digit boxes). Help links (Forgot password, Why PAM, First time, Locked out). Right side decorative gradient panel with network topology pattern. Status pill (Backend reachable). |
 | [`13-about.svg`](../../diagrams/screens/13-about.svg) | About | CloudBSD product versions (Admin, Base System, Node Agent, Storage/VM/Container plugins, Theme Pack). Status badges (current/supported/beta). License card (proprietary, contact licensing@cloudbsd.org). Support card (subscription, tier, account). Resources panel (no source code link). **Closed-source**: no git commit, no internal deps, no open-source library list — only product versions the customer is licensed to use. |
 | [`14-status.svg`](../../diagrams/screens/14-status.svg) | Status | Backend health (UP, 18ms, 14d uptime), Database (SQLite 412 MB / 142 tables), 5 Plugins (all healthy with one zfs-monitor warning). 5 plugin health cards grid. System resources with bars. 12-row configuration table. 4 log file locations. |
+| [`15-nodes.svg`](../../diagrams/screens/15-nodes.svg) | Nodes | Cluster-node list page (was previously a sub-section of Cluster). Status + Name + Role + Rack + CPU% + MEM% + Disk% + Uptime columns (per `ui-index.md` row 4). Add / Edit / Drain / Remove actions in row context menu (view-only enforcement hidden when `nodes.readonly`). Separate from Cluster page so node detail can be linked directly. |
+| [`16-system.svg`](../../diagrams/screens/16-system.svg) | System Management | Consolidated admin page (was previously hidden inside Settings > Admin). 6 tabs: Backups, Exports, Stats, History, Audit Log, Updates. Hosts all destructive/operational admin actions that are out-of-scope for the per-resource pages. |
 
-### Component Mock-ups (15) — `diagrams/components/`
+### Component Mock-ups (18) — `diagrams/components/`
 
 Reusable UI building blocks. View at 600×400, light theme.
 
@@ -110,6 +116,9 @@ Reusable UI building blocks. View at 600×400, light theme.
 | `13-pagination.svg` | Pagination controls |
 | `14-progress-bar.svg` | Progress bar (60% complete) |
 | `15-tooltip.svg` | Tooltip on hover with "Don't show again" link |
+| `16-ips-modal.svg` | Dual-stack IPv4/IPv6 address editor modal. CIDR prefix, lifetime (RFC 4861/4862), DHCP options, scope flag grid. Used in VM/Container/Network editing flows. |
+| `17-vgpu-pool.svg` | vGPU Pool resource tracking widget (feature-flag-gated by `showVgpuResources`). Per-GPU compute slice inventory (NVIDIA SM/CUDA/tensor, AMD CU, Intel EU) + vGPU allocations. Vendor-specific detail in 'More info' modal per `data-structures.md` ComputeSlice. |
+| `18-add-node-dialog.svg` | Add Node dialog (3 tabs): Manual / Auto-detect (mDNS) / Join token. Mock shows Auto-detect active with 2 nodes found. Used from Nodes page toolbar. |
 
 ### Error States (12) — `diagrams/errors/`
 
@@ -297,28 +306,36 @@ Replace the entire CloudBSD Admin frontend (React 19 + Vite) and backend (Expres
 
 ### Concrete Deliverables
 - Git branch `feat/angular-migration` (created from `f01c24b` on `vstest`).
-- 14 SVG screen mockups (`diagrams/screens/*.svg`).
-- 5 SVG interaction flow diagrams (`diagrams/flows/*.svg`).
+- **16 SVG screen mockups** (`diagrams/screens/01-dashboard.svg` through `16-system.svg`).
+- **18 SVG component mockups** (`diagrams/components/01-button.svg` through `18-add-node-dialog.svg`).
+- 6 modal + 12 error + 5 notification + 4 loading + 3 mobile + 3 variant + 3 plugin + 15 theme + 8 customizer SVG mockups.
+- 5 SVG interaction flow diagrams (`diagrams/flows/*.svg`) + 1 architecture Mermaid.
 - `diagrams/openapi.yaml` — OpenAPI 3.1 contract for the new backend.
 - `diagrams/plugin-contract.md` — Plugin/template manifest schema.
 - `diagrams/mime-registry.md` — `application/vnd.cloudbsd+*` catalog.
 - `diagrams/ADJUSTMENTS.md` — Screen adjustments tracking table.
+- `.sisyphus/plans/WIRE_PROTOCOL.md` — canonical wire-protocol spec (envelope, headers, payloads).
+- `.sisyphus/drafts/data-structures.md` — canonical data-structures spec (UnitKind, Quantity, GPU/CPU/Network schemas, audit log, alerts, secrets).
+- `.sisyphus/drafts/ui-index.md` — canonical UI standard index (universal column/panel/tab/menu order rules).
+- `.sisyphus/drafts/STRESS_AGENT.md` — stress-test handoff for 8 chaos scenarios.
 - New backend at `/server-new` (kept separate from `/server` during transition).
 - New Angular app at `/web-new` (kept separate from `/src` during transition).
 - Playwright visual regression suite (`tests/visual/*.spec.ts`).
-- Karma+Jasmine unit tests, 80% coverage gate.
+- Karma+Jasmine unit tests, 100% coverage gate (user override of 80% default).
 - All planning artifacts committed and pushed to `origin/feat/angular-migration`.
 
 ### Definition of Done
-- [ ] `git checkout feat/angular-migration && npm test` exits 0 with ≥80% coverage.
-- [ ] `git checkout feat/angular-migration && npm run e2e` exits 0 with all 14 page screenshots passing.
+- [ ] `git checkout feat/angular-migration && npm test` exits 0 with **100%** coverage.
+- [ ] `git checkout feat/angular-migration && npm run e2e` exits 0 with all 16 page screenshots passing.
 - [ ] `podman build -f web-new/Containerfile .` produces working image.
 - [ ] New backend responds to `/api/health` with 200; PAM login returns session cookie.
 - [ ] Frontend frost-out modal triggers on 401/403 from any authenticated endpoint.
 - [ ] Backend plugin manifest at `/api/manifest` returns valid template list.
-- [ ] Custom MIME types enforced (responses use `application/vnd.cloudbsd+<action>`).
+- [ ] Custom MIME types enforced (responses use `application/vnd.cloudbsd+<action>` AND `application/vnd.cloudbsd+envelope` per WIRE_PROTOCOL.md).
 - [ ] All 47 locales selectable; constructed (`tlh`/`doth`/`elv`/`qav`/`qvy`/`atl`) fall back gracefully.
-- [ ] Branch pushed to `origin/feat/angular-migration` with planning artifacts.
+- [ ] UI columns/panels/tabs/menus follow `.sisyphus/drafts/ui-index.md` universal ordering.
+- [ ] Backend data models match `.sisyphus/drafts/data-structures.md` Quantity/UnitKind/epochs.
+- [ ] Branch pushed to `origin/feat/angular-migration` with all planning artifacts.
 
 ### Must Have
 - 14 Angular pages with **view-only** UX (write controls hidden).
@@ -684,6 +701,103 @@ export const loginRateLimiter = rateLimit({
 | **T111** | Frontend `RateLimitService` (countdown, disable button, retry) |
 | **T112** | Admin bypass endpoint + audit logging |
 | **T113** | Rate limit metrics (per-endpoint counts, exported for Prometheus) |
+
+---
+
+## Data Structures (Units, Types, Sources)
+
+> Full reference in `.sisyphus/drafts/data-structures.md`. Every numerical field with units is typed as `Quantity` with explicit `unit`. Storage auto-scales (B/KB/MB/GB/TB/PB), counts are whole numbers, percentages are whole numbers. CPU/RAM/disk/GPU details go in 'More info' modal - the table only shows summary. NEVER show geolocation city - only country code (US) for public IPs.
+
+### Unit system (universal)
+
+```ts
+type UnitKind = 'bytes' | 'hz' | 'percent' | 'seconds' | 'operations' | 'bytes_per_sec' | 'celsius' | 'watts' | 'ip' | 'version' | 'count' | 'enum' | 'string' | 'timestamp' | 'ip_port' | 'uuid';
+
+interface Quantity {
+  value: number;       // raw number, always in SI base unit
+  unit: UnitKind;       // what the value represents
+  displayUnit?: string; // hint: 'MB' vs 'MiB'
+}
+```
+
+### Display rules (per user feedback)
+
+- **Storage sizes**: round to 1 decimal if <100 of unit (e.g. "86.1 GB", "4.7 TB"); whole number if >=100
+- **Counts**: always whole numbers with thousands separator (e.g. "1,234")
+- **Percentages**: whole numbers only ("95%" not "95.4%")
+- **CPU**: brand + model + cores + threads shown compact; flags in 'More info' modal
+- **RAM**: total + slots (used/total) + each slot size; full details in 'More info'
+- **Disk**: model + size + bus + RPM/NVMe + SMART in 'More info'
+- **GPU**: model + VRAM + utilization; full driver/capabilities in 'More info'
+- **Network**: state + speed + IP (truncated if too long); full stats in detail
+- **NO geolocation**: 'US' (country) for public IPs, never city/region
+- **NEVER** show "1.7 GB" for whole numbers — round to "2 GB" or "1.7 GB" only when not whole
+- **CPU/RAM/disk full details**: 'More info' modal (NOT inline in table)
+
+### Core data structures
+
+- **Node** — physical or virtual host with CPU, memory slots, storage, network, GPU
+- **PhysicalCPU** — full CPU details (cores, threads, cache, features, microcode)
+- **MemorySlot** — DIMM slot info (size, speed, type, manufacturer, part number)
+- **Disk** — physical block device (model, size, bus, SMART health, temperature)
+- **StoragePool** — ZFS pool (topology, devices, datasets, health, fragmentation)
+- **Dataset** — ZFS dataset (compression, encryption, quota, mountpoint, snapshots)
+- **GPU** — physical GPU or vGPU (model, VRAM, temperature, power, allocations)
+- **VGPUAllocation** — slice on a GPU for a VM (whole, 1/2, 1/3, etc.)
+- **NetworkInterface** — interface (type, state, IPs, traffic counters, throughput)
+- **IPAddress** — IPv4 or IPv6 with scope, prefix, lifetime
+- **VM** — bhyve virtual machine (OS, vCPU, RAM, disk, IPs, vGPU, snapshots)
+- **Container** — OCI container (image, ports, mounts, resources, env)
+- **Jail** — FreeBSD jail (hostname, IPs, memory, vCPUs, flags, services)
+- **Volume** — ZFS dataset, NFS export, or iSCSI target with host(s), health
+- **Cluster** — group of nodes with jobs and recent events
+- **User** — PAM account (UID, GID, groups, 2FA, SSH keys, last logins)
+- **Notification** — toast with severity, type, source, action buttons
+- **ActivityEvent** — audit trail entry (user, source, action, target, details)
+- **LogEntry** — JSONL log (level, module, source, user, requestId, message, structured)
+- **BackupSchedule** — cron job (target, destination, retention, recent runs)
+- **Plugin** — manifest with capabilities, menu items, routes, sandbox limits
+- **SystemStats** — dashboard aggregates (counts, total usage, uptime, SLA)
+
+### Source mapping (per user feedback)
+
+| Data | Source | Refresh | Mock/Real |
+|------|--------|---------|-----------|
+| CPU count/model | `sysctl hw.model`, `dmidecode` | 1h | Mock |
+| CPU features | `cpuid` | once at boot | Mock |
+| RAM slots | `dmidecode -t memory` | 1h | Mock |
+| RAM speed | `dmidecode -t memory` | 1h | Mock |
+| Disk SMART | `smartctl -a` | 1h | Mock |
+| GPU info | `nvidia-smi`, `rocm-smi` | 1m | Mock (when flag on) |
+| Network stats | `netstat -i`, `netstat -s` | 10s | Real |
+| IP geolocation | **NEVER** query external service | n/a | n/a |
+| VM stats | `bhyvectl --get-stats` | 5s | Real |
+| Container stats | `podman stats --no-stream` | 5s | Real |
+| Jail stats | `jls -v` | 30s | Real |
+| Volume stats | `zfs list -o space` | 30s | Real |
+| Cluster heartbeat | agent -> backend | 5s | Real |
+| User login | backend log | on event | Real |
+| 2FA enrollment | user action | once | Real |
+| SSH keys | `~/.ssh/authorized_keys` | on change | Real |
+| Backup run | backup script output | on run | Real |
+| Log entries | JSONL file | on append | Real |
+| Notification | event source | on event | Real |
+| Activity | any subsystem | on event | Real |
+| Plugin | filesystem scan | on change | Real |
+| Theme | filesystem scan | on change | Real |
+
+### Implementation tasks (new)
+
+| Task | Description |
+|------|-------------|
+| **T248** | `Quantity` TypeScript type + unit system module (`web-new/src/lib/quantity.ts`) |
+| **T249** | `formatQty()` utility — auto-scales bytes/Hz/etc, rounds counts |
+| **T250** | Backend Go `Quantity` struct with `MarshalJSON`/`UnmarshalJSON` for units |
+| **T251** | Envelope schema: add `unit: UnitKind` to all numerical fields |
+| **T252** | Mock data files: `web-new/src/app/mocks/nodes.json`, `vms.json`, `containers.json` (rich) |
+| **T253** | Node detail modal showing full CPU/RAM/disk info (per-slot, per-disk) |
+| **T254** | GPU pool panel (T196/T196) enhanced with vendor/driver/power/temp details |
+| **T255** | 100% unit tests: quantity formatter, mock data shape, display transformations |
 
 ---
 
@@ -3440,12 +3554,15 @@ describe('ErrorModalComponent', () => {
 ```
 Wave 0 (Documentation Foundation — START IN PARALLEL):
 ├── T01: Branch + repo structure
-├── T02: SVG screen diagrams (14 screens)
+├── T02: SVG screen diagrams (**16 screens, 18 components**, 6 modals, 12 errors, 5 notifications, 4 loading, 3 mobile, 3 variants, 3 plugin, 15 themes, 8 customizer)
 ├── T03: SVG interaction flow diagrams (5 flows)
 ├── T04: OpenAPI 3.1 spec extraction
 ├── T05: Plugin contract spec
 ├── T06: MIME-type registry + header schema doc
-└── T07: Screen adjustments inventory (initial pass)
+├── T07: Screen adjustments inventory (initial pass)
+├── T54: Promote `data-structures.md` to canonical spec (move under `diagrams/`, reference from every backend type)
+├── T55: Promote `ui-index.md` to canonical spec (move under `diagrams/`, reference from every frontend page/component)
+└── T56-T63: Stress-test scenarios (8 chaos scenarios from `STRESS_AGENT.md`)
 
 Wave 1 (Backend Foundation — Parallel):
 ├── T08: New backend repo scaffold (web-new/server)
@@ -3550,6 +3667,77 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 | 14 | NotFound | (pending review) | (pending) | (pending) |
 
 > **Populated during SVG generation in Wave 0 (T02).** Final table committed to `diagrams/ADJUSTMENTS.md` and surfaced to user during Momus review.
+
+---
+
+## Canonical Artifacts Registry
+
+> **Single source of truth** for every spec document governing this migration. Any implementation task that needs a contract MUST point at one of these. Drift between the plan and these specs is a blocking failure.
+
+### Specs (already exist, MUST be referenced)
+
+| Spec | Path | Status | Owns |
+|------|------|--------|------|
+| **Visual planning diagrams** | `diagrams/screens/*.svg` (16) + `diagrams/components/*.svg` (18) + `diagrams/{errors,notifications,modals,loading,variants,mobile,plugin,themes,customizer,flows,architecture}/*` | ✅ Committed | Visual layout, content, hierarchy |
+| **Screen adjustments table** | `diagrams/ADJUSTMENTS.md` | ✅ Committed | Every React→Angular screen delta |
+| **OpenAPI 3.1 spec** | `diagrams/openapi.yaml` | ❌ Pending (T4) | Backend route contracts |
+| **Plugin contract** | `diagrams/plugin-contract.md` | ❌ Pending (T5) | Plugin manifest schema |
+| **MIME-type registry** | `diagrams/mime-registry.md` | ❌ Pending (T6) | `application/vnd.cloudbsd+*` catalog + `X-CloudBSD-*` headers |
+| **Wire-protocol envelope** | `.sisyphus/plans/WIRE_PROTOCOL.md` | ✅ Committed | Envelope shape, payload rules, header semantics |
+| **Data structures spec** | `.sisyphus/drafts/data-structures.md` | ⚠️ Draft — must promote (T54) | UnitKind, Quantity, epochs, GPU/CPU/Network/Storage/Container/Jail schemas, AlertRule, Secret, Tag, AuditLogEntry, IPAddress, TaskSchedule, TLSCert |
+| **UI standard index** | `.sisyphus/drafts/ui-index.md` | ⚠️ Draft — must promote (T55) | Universal column order, panel order, action-bar order, filter-chip order, status indicator palette, action-button order, modal form order, sidebar order, header order, stats-card order, toast order, form-field order, list-item order, menu-item order, forbidden patterns, tab order, toolbar order, pagination order, color palette |
+| **Stress-test handoff** | `.sisyphus/drafts/STRESS_AGENT.md` | ✅ Committed | 8 chaos scenarios (websocket load, longevity, login storm, VM kill, backend restart, log volume, plugin chaos, noVNC concurrent) |
+| **Lessons learned** | `.sisyphus/drafts/lessons.md` | ✅ Committed | Convention rules (Mermaid-only for arch/flow, no Tailwind-in-SVG, no geolocation, etc.) |
+
+### Diagram convention (per `.sisyphus/drafts/lessons.md`)
+
+| Use case | Format | Reason |
+|----------|--------|--------|
+| Architecture / flow / state / sequence / ER | **Mermaid** in markdown (`.md`) | CloudBSD convention 0008 §11: Mermaid is preferred |
+| UI screen mockup (high-fidelity pixel-accurate) | **SVG `<foreignObject>` + inline `style="..."` ONLY** | Inline styles survive GitHub sanitizer; Tailwind classes do not render without a CSS runtime |
+| UI screen mockup (low-fidelity block diagram) | **Mermaid `flowchart TD`** with nodes labeled by screen section | Avoids SVG complexity for simple mockups |
+
+**Forbidden**: SVG-with-Tailwind-classes, raw HTML in plan markdown, ASCII art for architecture diagrams, Mermaid inside SVG files.
+
+### Implementation contract
+
+Every backend TypeScript type MUST round-trip through `Quantity` (or a primitive registered in `data-structures.md` §2 UnitKind). Every frontend column/panel/menu MUST follow `ui-index.md` universal ordering. Every API response MUST set `Content-Type: application/vnd.cloudbsd+*` per `mime-registry.md` and the envelope shape in `WIRE_PROTOCOL.md`. Drift is a test failure, not a discussion.
+
+### Reconciliation Audit (2026-07-07)
+
+> **Source of truth for "what's actually on disk vs what the plan claims"**.
+> All cleanup tasks (Wave 10) are derived from this audit.
+
+| Audit artifact | Path | Purpose |
+|---|---|---|
+| **Reconciliation audit 2026-07-07** | `.sisyphus/drafts/reconciliation-audit-2026-07-07.md` | Maps every on-disk artifact to plan tasks; flags 10 REGRESSED tasks; prescribes Wave 10 cleanup (78 SVG regen + Mermaid promotion + wire-protocol consolidation + Tailwind translation + 5 obsolete plans archive + 2 orphan drafts deletion) |
+
+**Audit findings (summary)**:
+- **16 screens** match T02 ✓ (2 untracked: `15-nodes.svg`, `16-system.svg` — register before commit)
+- **3 components on disk** but no plan task maps to them (T2c.1-T2c.3 to be added in Wave 10 T71)
+- **10 of 13 "DONE" tasks are FALSE** — all reference cleanup commit `1b1878d`; un-marked to PENDING with REGRESSION note (T3a, T3c, T3d, T3e, T3f, T3g, T3h, T3i, T3l, T3m)
+- **5 Mermaid flow files + 1 architecture file** exist in WRONG location (`.sisyphus/drafts/diagrams/`) — must move to canonical `diagrams/{flows,architecture}/`
+- **3 screen specs** in `.sisyphus/drafts/diagrams-specs/screens/` contain Tailwind classes (29 violations) — must translate to inline CSS
+- **21 empty directories** (11 under `diagrams/`, 10 under `drafts/diagrams-specs/`) — will be populated by T64a-T64j regeneration
+- **5 obsolete pre-migration plans** in `.sisyphus/plans/` (May 26–31 era, 1,775 lines total) — must archive
+- **2 orphan drafts** (`.sisyphus/drafts/angular-migration.md` superseded by plan, `.sisyphus/drafts/diagrams/README.md` duplicate of canonical) — must delete
+- **Wire-protocol duplication**: `.sisyphus/plans/WIRE_PROTOCOL.md` (1,370 lines) vs `.sisyphus/drafts/api-mocks/00-protocol-spec.md` (1,195 lines) — drafts version has 2026-07-07 update missing from canonical
+
+**Reconciliation Audit verification commands** (run before F1):
+```bash
+test -f .sisyphus/drafts/reconciliation-audit-2026-07-07.md && echo "audit present"
+ls diagrams/screens/*.svg | wc -l                       # expect 16
+ls diagrams/components/*.svg | wc -l                    # expect 3+
+test -f .sisyphus/drafts/data-structures.md
+test -f .sisyphus/drafts/ui-index.md
+test -f .sisyphus/drafts/STRESS_AGENT.md
+test -f .sisyphus/drafts/lessons.md
+test -f .sisyphus/drafts/ADJUSTMENTS.md
+test -f .sisyphus/drafts/reconciliation-audit-2026-07-07.md
+# 0 Tailwind classes in any SVG/foreignObject
+grep -rE 'class="[^"]*\b(bg-|text-|p-[0-9]|m-[0-9]|w-[0-9]|h-[0-9]|flex|grid|rounded)' diagrams/{screens,components}/*.svg
+# expect: NO matches
+```
 
 ---
 
@@ -3672,11 +3860,14 @@ Max Concurrent: 7 (Waves 1, 4, 5)
     </svg>
     ```
   - 14 screens: `login.svg`, `index.svg`, `dashboard.svg`, `vms.svg`, `containers.svg`, `jails.svg`, `cluster.svg`, `volumes.svg`, `network.svg`, `users.svg`, `logs.svg`, `notifications.svg`, `settings.svg`, `notfound.svg`.
+  - **Reconciled 2026-07-07**: 2 additional screens committed on disk (`15-nodes.svg`, `16-system.svg`) and 3 additional components (`16-ips-modal.svg`, `17-vgpu-pool.svg`, `18-add-node-dialog.svg`). Total: **16 screens, 18 components**. See "Canonical Artifacts Registry" above for the full list.
+  - **Reconciled 2026-07-07 (audit §15.7)**: Actual canonical screen names on disk are: `01-dashboard.svg`, `02-vms.svg`, `03-containers.svg`, `04-jails.svg`, `05-volumes.svg`, `06-network-map.svg`, `07-cluster.svg`, `08-users.svg`, `09-logs.svg`, `10-notifications.svg`, `11-settings.svg`, `12-login.svg`, `13-about.svg`, `14-status.svg`, `15-nodes.svg`, `16-system.svg` (16 screens). Note: `index.svg` and `notfound.svg` do NOT exist on disk; `network.svg` was renamed to `06-network-map.svg`; `about.svg` and `status.svg` are new names added since the original 14-screen list.
 
   **Must NOT do**:
   - Do NOT use raw HTML in markdown (per Honcho convention).
   - Do NOT use Mermaid inside SVG files.
   - Do NOT use class/id selectors (GitHub sanitizer strips them).
+  - Do NOT use Tailwind utility classes in SVG (no runtime; inline styles only per `diagrams/README.md`).
   - Do NOT use external CSS files (inline styles only).
   - Do NOT skip the ADJUSTMENTS table even if no changes are needed (note "no changes" explicitly).
 
@@ -3770,7 +3961,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [x] 3a. **SVG error presentation mock-ups (12 error states)** ✅ DONE
+- [ ] 3a. **SVG error presentation mock-ups (12 error states)** ⚠️ REGRESSION: was DONE in commit `5c02236`, removed by cleanup commit `1b1878d` ("remove SVG/foreignObject diagrams, violates CloudBSD conventions"). `diagrams/errors/` is currently EMPTY. Needs regeneration per lessons.md (inline styles only, no Tailwind).
 
   **What to do**:
   - Create `diagrams/errors/` directory with 12 SVG mock-ups covering all error states:
@@ -3879,7 +4070,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [x] 3c. **SVG notification mock-ups (5 types)** ✅ DONE
+- [ ] 3c. **SVG notification mock-ups (5 types)** ⚠️ REGRESSION: was DONE, removed by cleanup commit `1b1878d`. `diagrams/notifications/` is currently EMPTY. Regenerate per lessons.md.
 
   **What to do**:
   - Create `diagrams/notifications/` directory.
@@ -3913,7 +4104,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [x] 3d. **SVG modal mock-ups (6 modal types)** ✅ DONE
+- [ ] 3d. **SVG modal mock-ups (6 modal types)** ⚠️ REGRESSION: was DONE, removed by cleanup commit `1b1878d`. `diagrams/modals/` is currently EMPTY. Regenerate per lessons.md.
 
   **What to do**:
   - Create `diagrams/modals/` directory.
@@ -3946,7 +4137,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [x] 3e. **SVG core UI component mock-ups (15 components)** ✅ DONE
+- [ ] 3e. **SVG core UI component mock-ups (15 components)** ⚠️ REGRESSION: was DONE, removed by cleanup commit `1b1878d`. `diagrams/components/` currently only has 16-ips-modal, 17-vgpu-pool, 18-add-node-dialog (the 3 added 2026-07-07). Regenerate 01-button through 15-tooltip per lessons.md.
 
   **What to do**:
   - Create `diagrams/components/` directory.
@@ -3987,7 +4178,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [x] 3f. **SVG theme variants (light/dark/high-contrast)** ✅ DONE
+- [ ] 3f. **SVG theme variants (light/dark/high-contrast)** ⚠️ REGRESSION: was DONE, removed by cleanup commit `1b1878d`. `diagrams/variants/` is currently EMPTY. Regenerate per lessons.md.
 
   **What to do**:
   - Create `diagrams/themes/` directory.
@@ -4016,7 +4207,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [x] 3g. **SVG mobile variants (3 key screens at 375×812)** ✅ DONE
+- [ ] 3g. **SVG mobile variants (3 key screens at 375×812)** ⚠️ REGRESSION: was DONE, removed by cleanup commit `1b1878d`. `diagrams/mobile/` is currently EMPTY. Regenerate per lessons.md.
 
   **What to do**:
   - Create `diagrams/mobile/` directory.
@@ -4046,7 +4237,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [x] 3h. **SVG loading/state variant mock-ups (4 states)** ✅ DONE
+- [ ] 3h. **SVG loading/state variant mock-ups (4 states)** ⚠️ REGRESSION: was DONE, removed by cleanup commit `1b1878d`. `diagrams/loading/` is currently EMPTY. Regenerate per lessons.md.
 
   **What to do**:
   - Create `diagrams/states/` directory.
@@ -4071,7 +4262,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [x] 3i. **SVG plugin manifest mock-ups (3 dynamic UI surfaces)** ✅ DONE
+- [ ] 3i. **SVG plugin manifest mock-ups (3 dynamic UI surfaces)** ⚠️ REGRESSION: was DONE, removed by cleanup commit `1b1878d`. `diagrams/plugin/` is currently EMPTY. Regenerate per lessons.md.
 
   **What to do**:
   - Create `diagrams/plugins/` directory.
@@ -4158,7 +4349,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [x] 3l. **15 theme mock-up SVGs + comparison grid** ✅ DONE
+- [ ] 3l. **15 theme mock-up SVGs + comparison grid** ⚠️ REGRESSION: was DONE, removed by cleanup commit `1b1878d`. `diagrams/themes/` is currently EMPTY. Regenerate 15 theme variants + comparison grid per lessons.md.
 
   **What to do**:
   - Create `diagrams/themes/<theme-slug>.svg` × 15.
@@ -4194,7 +4385,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
-- [x] 3m. **Theme customizer mock-ups (8 SVG files)** ✅ DONE
+- [ ] 3m. **Theme customizer mock-ups (8 SVG files)** ⚠️ REGRESSION: was DONE, removed by cleanup commit `1b1878d`. `diagrams/customizer/` is currently EMPTY. Regenerate per lessons.md.
 
   **What to do**:
   - Create `diagrams/screens/theme-editor.svg` — Full theme editor with tab navigation.
@@ -7574,6 +7765,241 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
+### Wave 9: Canonical Artifacts Promotion (reconciled 2026-07-07)
+
+> Reconciliation tasks added to bring the plan in sync with artifacts already on disk and in `.sisyphus/drafts/`. All Wave 9 tasks must complete BEFORE any Wave 1+ implementation task begins (since they are the source-of-truth contracts).
+
+- [ ] 54. **Promote `.sisyphus/drafts/data-structures.md` to canonical spec**
+
+  **What to do**:
+  - Move `.sisyphus/drafts/data-structures.md` → `diagrams/data-structures.md` (canonical location next to other specs).
+  - Add cross-references from every backend type file: import or reference `Quantity`, `UnitKind`, `EpochMs`, `Percentage`, `Fraction`, `ComputeSlice`, `NetworkInterface`, `StoragePool`, `Container`, `Jail`, `AlertRule`, `AlertFire`, `Secret`, `Tag`, `AuditLogEntry`, `IPAddress`, `TaskSchedule`, `TaskRun`, `TLSCert` from this spec.
+  - Update `diagrams/README.md` to list `data-structures.md` in the "Files" index (NOTE: this is in the diagrams repo, outside `.sisyphus/`; tracked as "must update" but executor cannot edit per path constraints — leave a NOTE in PR description).
+  - Add a backend test that imports each type and asserts round-trip JSON serialization matches the spec.
+
+  **Must NOT do**:
+  - Do NOT duplicate the type definitions in backend code (import from spec).
+  - Do NOT use `string` for any timestamp field.
+  - Do NOT use `number` for any quantity without explicit `unit`.
+
+  **Recommended Agent Profile**:
+  - **Category**: `unspecified-high`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 9 (with T55-T63)
+  - **Blocks**: All Wave 1+ backend tasks (T08, T09, T11, T40-T44)
+  - **Blocked By**: None (foundational)
+
+  **Acceptance Criteria**:
+  - [ ] `diagrams/data-structures.md` exists with content identical to `.sisyphus/drafts/data-structures.md`.
+  - [ ] Backend type imports include at least one reference comment per type.
+  - [ ] No `string` timestamps in any backend type file (`grep -rE ': string.*//.*date|timestamp.*string' server-new/src/` returns 0).
+  - [ ] No raw `number` for quantities without unit comment.
+
+  **QA Scenarios**:
+  ```
+  Scenario: Type round-trip
+    Tool: Bash + bun
+    Steps:
+      1. cat diagrams/data-structures.md | grep -c "interface "  → expect: ≥ 19
+      2. Import each interface in a smoke test, serialize to JSON, deserialize, assert equality.
+    Expected Result: All 19 interfaces serialize/deserialize losslessly.
+    Evidence: .sisyphus/evidence/task-54-type-roundtrip.txt
+  ```
+
+  **Commit**: YES
+  - Message: `docs(spec): promote data-structures.md to canonical`
+  - Files: `diagrams/data-structures.md`
+
+---
+
+- [ ] 55. **Promote `.sisyphus/drafts/ui-index.md` to canonical spec**
+
+  **What to do**:
+  - Move `.sisyphus/drafts/ui-index.md` → `diagrams/ui-index.md`.
+  - For every Angular component, page, and modal created in T15-T39, reference the relevant section in `ui-index.md` (column order, panel order, action bar order, etc.) in a top-of-file comment.
+  - Add an ESLint custom rule (or simple shell check in CI) that greps every new `.ts` Angular template/component file for an `@ui-index-ref` annotation pointing at the relevant section.
+  - Add a Playwright snapshot assertion that all data-table headers match `ui-index.md` §1 (Resource table column order).
+
+  **Must NOT do**:
+  - Do NOT introduce a column, panel, or menu order that violates `ui-index.md` without a written exception added to the spec.
+  - Do NOT use the forbidden patterns listed in `ui-index.md` §16 (`window.alert`, "View-only" badge, "Refresh" full button, geolocation, git hash in About, etc.).
+
+  **Recommended Agent Profile**:
+  - **Category**: `unspecified-high`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 9 (with T54, T56-T63)
+  - **Blocks**: All Wave 2+ frontend tasks (T15-T25, T26-T39)
+  - **Blocked By**: None
+
+  **Acceptance Criteria**:
+  - [ ] `diagrams/ui-index.md` exists with content identical to `.sisyphus/drafts/ui-index.md`.
+  - [ ] At least 1 reference comment per Angular component created in T15-T39 points at the relevant `ui-index.md` section.
+  - [ ] CI check (shell script in `.github/workflows/`) grep-fails if any new Angular template uses `window.alert`, `window.confirm`, or `window.prompt`.
+  - [ ] CI check grep-fails if any SVG mockup uses Tailwind class attribute (`class="bg-`, `class="text-`, etc.).
+
+  **QA Scenarios**:
+  ```
+  Scenario: UI index enforcement
+    Tool: Bash + grep
+    Steps:
+      1. grep -rE "window\.(alert|confirm|prompt)" web-new/src/  → expect: 0 hits
+      2. grep -rE 'class="bg-|class="text-' diagrams/screens/  → expect: 0 hits (inline styles only)
+      3. grep -c '@ui-index-ref' web-new/src/app/  → expect: ≥ 30 (one per major component/page)
+    Expected Result: Zero forbidden-pattern violations.
+    Evidence: .sisyphus/evidence/task-55-ui-index-enforcement.txt
+  ```
+
+  **Commit**: YES
+  - Message: `docs(spec): promote ui-index.md to canonical`
+  - Files: `diagrams/ui-index.md`, CI workflow update
+
+---
+
+- [ ] 56. **Stress scenario 1: WebSocket load test (1000 clients, 1h)**
+
+  **What to do**: Per `.sisyphus/drafts/STRESS_AGENT.md` Scenario 1.
+  - Build production bundle, start backend, run k6 with 1000 VUs for 1h.
+  - Assert: p99 message latency < 500ms, zero message loss, backend RSS < 1GB, CPU < 60%, >99% socket uptime.
+
+  **Recommended Agent Profile**:
+  - **Category**: `unspecified-high`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES (independent scenarios)
+  - **Parallel Group**: Wave 9 (with T57-T63)
+  - **Blocked By**: T47, T48 (visual + E2E smoke pass first), running on dedicated hardware
+
+  **Acceptance Criteria**:
+  - [ ] k6 script `stress/01-websocket-load.js` committed.
+  - [ ] Test ran for 1h, all 5 pass criteria met.
+  - [ ] Results under `stress-results/scenario-01-websocket-load/`.
+
+  **Commit**: YES
+  - Message: `test(stress): websocket 1000-client load scenario`
+  - Files: `stress/01-websocket-load.js`
+
+---
+
+- [ ] 57. **Stress scenario 2: Browser longevity (8h idle)**
+
+  **What to do**: Per `STRESS_AGENT.md` Scenario 2.
+  - Playwright test `stress/02-longevity.spec.ts` runs for 8h, asserts heap growth < 5%, listener growth < 5, CPU returns to baseline during idle, zero console errors, page responsive.
+
+  **Recommended Agent Profile**: `unspecified-high`. Wave 9. Blocked by T47.
+
+  **Acceptance Criteria**:
+  - [ ] Playwright spec committed.
+  - [ ] 8h run completed, all 5 criteria met.
+  - [ ] Heap diff artifacts saved.
+
+  **Commit**: YES — `test(stress): browser longevity scenario`
+
+---
+
+- [ ] 58. **Stress scenario 3: Login storm (24h, 100 RPS)**
+
+  **What to do**: Per `STRESS_AGENT.md` Scenario 3.
+  - k6 `stress/03-login-storm.js`: 50 VUs for 24h at 100 RPS.
+  - Asserts p99 login latency < 2s, rate limiter triggers (>5 invalid attempts/IP → 429), no backend OOM, session validation holds up.
+
+  **Recommended Agent Profile**: `unspecified-high`. Wave 9. Blocked by T47, T48.
+
+  **Acceptance Criteria**:
+  - [ ] k6 script committed.
+  - [ ] 24h run completed, all 4 criteria met.
+  - [ ] pam_unix limits verified not hit.
+
+  **Commit**: YES — `test(stress): login storm scenario`
+
+---
+
+- [ ] 59. **Stress scenario 4: VM kill chaos (1h)**
+
+  **What to do**: Per `STRESS_AGENT.md` Scenario 4.
+  - Random VM stop/start every 5min for 1h + Playwright spec `stress/04-vm-chaos.spec.ts`.
+  - Asserts state store recovery, no stuck transitions, plugin manifests remain valid, no duplicate discoverer emissions.
+
+  **Recommended Agent Profile**: `unspecified-high`. Wave 9. Blocked by T47, T40-T44.
+
+  **Acceptance Criteria**:
+  - [ ] Chaos script + spec committed.
+  - [ ] 1h run completed, all 5 criteria met.
+
+  **Commit**: YES — `test(stress): VM kill chaos scenario`
+
+---
+
+- [ ] 60. **Stress scenario 5: Backend restart mid-session (10 iterations)**
+
+  **What to do**: Per `STRESS_AGENT.md` Scenario 5.
+  - Loop: Playwright spec + backend stop/start, 10 iterations.
+  - Asserts frost-out modal within 30s, modal blocks UI, OK → /login, can re-login, session cookie attributes preserved.
+
+  **Recommended Agent Profile**: `unspecified-high`. Wave 9. Blocked by T46 (frost-out modal E2E).
+
+  **Acceptance Criteria**:
+  - [ ] Loop script + spec committed.
+  - [ ] 10 iterations completed, all 5 criteria met.
+
+  **Commit**: YES — `test(stress): backend restart chaos scenario`
+
+---
+
+- [ ] 61. **Stress scenario 6: Log volume (10k entries/min, 1h)**
+
+  **What to do**: Per `STRESS_AGENT.md` Scenario 6.
+  - Curl storm: 167 POST /api/test/log per second for 1h.
+  - Asserts ring buffer rotation, Socket.IO delivery, no memory leak, no log loss, no backend OOM.
+
+  **Recommended Agent Profile**: `unspecified-high`. Wave 9. Blocked by T8a-T8d (logger module complete).
+
+  **Acceptance Criteria**:
+  - [ ] Log storm script committed.
+  - [ ] 1h run completed, all 6 criteria met.
+
+  **Commit**: YES — `test(stress): log volume scenario`
+
+---
+
+- [ ] 62. **Stress scenario 7: Plugin discovery chaos (1h)**
+
+  **What to do**: Per `STRESS_AGENT.md` Scenario 7.
+  - Loop: copy/remove plugin fixtures every 120s + reload, 20 iterations over 1h.
+  - Asserts sidebar updates within 30s, removed plugins disappear, modified plugins hot-update, no stuck dynamic routes.
+
+  **Recommended Agent Profile**: `unspecified-high`. Wave 9. Blocked by T47, T10 (plugin registry).
+
+  **Acceptance Criteria**:
+  - [ ] Chaos script + spec committed.
+  - [ ] 1h run completed, all 5 criteria met.
+
+  **Commit**: YES — `test(stress): plugin discovery chaos scenario`
+
+---
+
+- [ ] 63. **Stress scenario 8: VM console noVNC (10 concurrent, 1h)**
+
+  **What to do**: Per `STRESS_AGENT.md` Scenario 8.
+  - Playwright spec `stress/08-novnc-concurrent.spec.ts` with 10 workers for 1h.
+  - Asserts all 10 connections stable, keyboard input < 200ms, frame rate > 15 FPS, WebSocket proxy doesn't leak, bhyve VNC sockets released on disconnect.
+
+  **Recommended Agent Profile**: `unspecified-high`. Wave 9. Blocked by T114-T125 (console implementation).
+
+  **Acceptance Criteria**:
+  - [ ] Spec committed.
+  - [ ] 1h run completed, all 5 criteria met.
+
+  **Commit**: YES — `test(stress): noVNC concurrent console scenario`
+
+---
+
 - [ ] 39. **BackendStatusProvider (Socket.IO health)**
 
   **What to do**:
@@ -7905,12 +8331,829 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 ---
 
+### Wave 10: Reconciliation Cleanup (reconciled 2026-07-07)
+
+> Cleanup tasks derived from `.sisyphus/drafts/reconciliation-audit-2026-07-07.md`.
+> Wave 10 must complete BEFORE F1 verification. Wave 10 is parallel-safe — each task touches a different directory.
+
+- [ ] 64. **Regenerate 78 REGRESSED SVG mockups across 10 directories**
+
+  **What to do** (split by sub-task for parallel execution):
+  - T64a: Regenerate `diagrams/errors/` (12 files) — offline, 401, 500, validation, etc.
+  - T64b: Regenerate `diagrams/notifications/` (5 files) — toast, banner, modal, badge, empty
+  - T64c: Regenerate `diagrams/modals/` (6 files) — confirm, prompt, custom-page-size, VM-detail, etc.
+  - T64d: Regenerate `diagrams/components/` (12 NEW files; 3 already exist as 16/17/18) — bring total to 15+
+  - T64e: Regenerate `diagrams/variants/` (3 files) — compact, dense, focus
+  - T64f: Regenerate `diagrams/mobile/` (3 files @ 375×812 viewport)
+  - T64g: Regenerate `diagrams/loading/` (4 files) — skeleton, spinner, progress, empty
+  - T64h: Regenerate `diagrams/plugin/` (3 files) — manifest list, plugin shell, capabilities grid
+  - T64i: Regenerate `diagrams/themes/` (15 files) — one per strategy impl per `.sisyphus/drafts/lessons.md`
+  - T64j: Regenerate `diagrams/customizer/` (8 files) — color picker, slider, import dialog, etc.
+  - **Total: 71 new SVG files + 7 already-existing-style regenerations**
+
+  **Must NOT do**:
+  - Do NOT use Tailwind classes (`class="bg-blue-500"`) — use inline `style="background: #3b82f6"` per `.sisyphus/drafts/lessons.md`.
+  - Do NOT use `<style>` blocks or external CSS (GitHub sanitizer strips them).
+  - Do NOT omit `xmlns="http://www.w3.org/1999/xhtml"` on inner `<div>`.
+  - Do NOT write raw HTML in this plan markdown.
+
+  **Recommended Agent Profile**:
+  - **Category**: `artistry` (visual precision required)
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES (10 sub-tasks, 5+ in same wave)
+  - **Parallel Group**: Wave 10 (with T65-T71)
+  - **Blocks**: F1 (Plan Compliance Audit must verify all SVGs exist)
+  - **Blocked By**: None
+
+  **Acceptance Criteria**:
+  - [ ] 78 SVG files regenerated across 10 directories (counted via `ls diagrams/*/*.svg | wc -l`)
+  - [ ] All SVGs use `<foreignObject>` + inline `style="..."` ONLY
+  - [ ] Zero Tailwind classes in any regenerated SVG (`grep -rE 'class="[^"]*\b(bg-|text-|flex|grid)' diagrams/{errors,notifications,modals,components,variants,mobile,loading,plugin,themes,customizer}/*.svg` returns 0)
+  - [ ] All directories have ≥1 file (`find diagrams/{errors,notifications,modals,components,variants,mobile,loading,plugin,themes,customizer} -type d -empty | wc -l` returns 0)
+
+  **QA Scenarios**:
+  ```
+  Scenario: Visual sanity check — Regenerated SVG renders in browser
+    Tool: Bash (file open in headless chrome via Playwright skill)
+    Steps:
+      1. Pick e.g. `diagrams/errors/01-offline.svg`
+      2. Open in browser tab (file:///path/to/.svg)
+      3. Assert: page background color matches `style="background: #f1f5f9"` (no transparent/white leak)
+      4. Assert: foreignObject content is visible (no Tailwind class strings hanging in DOM)
+    Expected Result: SVG renders with inline styles applied; no layout breaking.
+    Evidence: .sisyphus/evidence/task-64a-error-svg-renders.png
+
+  Scenario: No-Tailwind grep guard
+    Tool: Bash (grep)
+    Steps:
+      1. grep -rE 'class="[^"]*\b(bg-|text-|p-[0-9]|m-[0-9]|flex|grid)' diagrams/{errors,notifications,modals,components,variants,mobile,loading,plugin,themes,customizer}/*.svg
+    Expected Result: No matches (silent command).
+    Evidence: .sisyphus/evidence/task-64-no-tailwind.txt
+  ```
+
+  **Commit**: YES
+  - Message: `feat(diagrams): regenerate 78 REGRESSED SVG mockups per audit 2026-07-07`
+  - Files: `diagrams/{errors,notifications,modals,components,variants,mobile,loading,plugin,themes,customizer}/*.svg`
+
+---
+
+- [ ] 65. **Promote 5 Mermaid flow files + 1 architecture file to canonical `diagrams/`**
+
+  **What to do**:
+  - Move `.sisyphus/drafts/diagrams/flows/0{1,2,3,4,5}-*-flow.md` → `diagrams/flows/` (5 files, all syntax-verified `flowchart TD` valid).
+  - Move `.sisyphus/drafts/diagrams/architecture/01-system-architecture.md` → `diagrams/architecture/` (1 file, 134 lines, 7 sub-diagrams with `flowchart TB/LR` + 2 `sequenceDiagram`).
+  - Update `diagrams/README.md` (NOTE: outside `.sisyphus/`, leave PR description note per T54 precedent) to reference canonical locations.
+  - Verify `.sisyphus/drafts/diagrams/` can be safely removed after move (confirm 5+1 files gone).
+
+  **Must NOT do**:
+  - Do NOT modify Mermaid syntax during move (all 6 files verified syntactically valid).
+  - Do NOT leave `.sisyphus/drafts/diagrams/` populated after move (delete empty parent).
+
+  **Recommended Agent Profile**:
+  - **Category**: `quick`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 10
+  - **Blocks**: F1
+  - **Blocked By**: None
+
+  **Acceptance Criteria**:
+  - [ ] 5 files in `diagrams/flows/`: `01-login-flow.md`, `02-session-expiry-flow.md`, `03-plugin-discovery-flow.md`, `04-theme-application-flow.md`, `05-log-streaming-flow.md`
+  - [ ] 1 file in `diagrams/architecture/01-system-architecture.md`
+  - [ ] `diagrams/README.md` lists all 6 files in "Flows (5 Mermaid) + Architecture (1 Mermaid)" section
+  - [ ] `.sisyphus/drafts/diagrams/` empty after move
+
+  **QA Scenarios**:
+  ```
+  Scenario: Mermaid renders in GitHub markdown preview
+    Tool: Bash (mdcat or github-cli render)
+    Steps:
+      1. cat diagrams/flows/01-login-flow.md | grep -A1 '```mermaid'
+      2. Verify flowchart TD/TB syntax parses (no unmatched brackets)
+    Expected Result: All 6 files have valid Mermaid blocks.
+    Evidence: .sisyphus/evidence/task-65-mermaid-syntax.txt
+
+  Scenario: Files moved correctly
+    Tool: Bash
+    Steps:
+      1. for f in diagrams/flows/*.md diagrams/architecture/*.md; do head -1 "$f"; done | grep '^# '
+    Expected Result: 6 lines, each starting with a recognizable title.
+    Evidence: .sisyphus/evidence/task-65-titles.txt
+  ```
+
+  **Commit**: YES
+  - Message: `docs(diagrams): promote 5 flow + 1 architecture Mermaid files to canonical location`
+  - Files: `diagrams/flows/*.md`, `diagrams/architecture/*.md`
+
+---
+
+- [ ] 66. **Consolidate wire-protocol spec — merge 2026-07-07 update + fix duplicate line**
+
+  **What to do**:
+  - Read both `.sisyphus/plans/WIRE_PROTOCOL.md` (1,370 lines) and `.sisyphus/drafts/api-mocks/00-protocol-spec.md` (1,195 lines).
+  - Canonical version is `.sisyphus/plans/WIRE_PROTOCOL.md`. Merge the 2026-07-07 "Uniform Table Column Order" section from the drafts version into the plans version (append after current §8 Acceptance criteria).
+  - Fix the duplicate line "8. Go backend MUST reject..." bug in `.sisyphus/plans/WIRE_PROTOCOL.md` (the line appears twice at the end).
+  - After merge, supersede `.sisyphus/drafts/api-mocks/00-protocol-spec.md`: convert its body to a redirect note (`# Redirect to .sisyphus/plans/WIRE_PROTOCOL.md`) with a single-line deprecation note.
+
+  **Must NOT do**:
+  - Do NOT delete the canonical `.sisyphus/plans/WIRE_PROTOCOL.md` content.
+  - Do NOT modify envelope contract sections (§1-§6) without updating backend tests.
+
+  **Recommended Agent Profile**:
+  - **Category**: `quick`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 10
+  - **Blocks**: F1
+  - **Blocked By**: None
+
+  **Acceptance Criteria**:
+  - [ ] `.sisyphus/plans/WIRE_PROTOCOL.md` includes "## 2026-07-07 Update: Uniform Table Column Order" section
+  - [ ] Duplicate "8. Go backend MUST reject..." line is gone (`grep -c "8. Go backend" .sisyphus/plans/WIRE_PROTOCOL.md` returns 1)
+  - [ ] `.sisyphus/drafts/api-mocks/00-protocol-spec.md` is a redirect stub (< 100 lines)
+  - [ ] No content lost (total bytes in both files ≥ original bigger one)
+
+  **QA Scenarios**:
+  ```
+  Scenario: Wire-protocol merge verification
+    Tool: Bash (grep + wc)
+    Steps:
+      1. grep -c "Uniform Table Column Order" .sisyphus/plans/WIRE_PROTOCOL.md  → expect: 1
+      2. grep -c "8. Go backend" .sisyphus/plans/WIRE_PROTOCOL.md              → expect: 1
+      3. wc -l .sisyphus/drafts/api-mocks/00-protocol-spec.md                 → expect: < 100
+    Expected Result: All assertions pass.
+    Evidence: .sisyphus/evidence/task-66-wire-protocol-merge.txt
+  ```
+
+  **Commit**: YES
+  - Message: `docs(wire): consolidate wire-protocol spec (merge 2026-07-07 update)`
+  - Files: `.sisyphus/plans/WIRE_PROTOCOL.md`, `.sisyphus/drafts/api-mocks/00-protocol-spec.md`
+
+---
+
+- [ ] 67. **Translate Tailwind classes to inline CSS in 3 screen specs (29 violations)**
+
+  **What to do**:
+  - Apply the Tailwind→CSS translation table from `.sisyphus/drafts/lessons.md` to:
+    - `.sisyphus/drafts/diagrams-specs/screens/01-dashboard.md` (15 violations)
+    - `.sisyphus/drafts/diagrams-specs/screens/02-vms.md` (3 violations)
+    - `.sisyphus/drafts/diagrams-specs/screens/11-settings.md` (11 violations)
+  - Replace each `class="bg-blue-500"` with `style="background: #3b82f6"` (and equivalents per lessons.md table).
+  - Output specs that, when copy-pasted into SVG `<foreignObject>`, will render correctly without a Tailwind runtime.
+
+  **Must NOT do**:
+  - Do NOT leave any `class="bg-..."`, `class="text-..."`, `class="p-..."` etc. attributes in the specs.
+  - Do NOT add Tailwind directives or CDN links (defeats the purpose).
+
+  **Recommended Agent Profile**:
+  - **Category**: `quick`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 10
+  - **Blocks**: F1 (strict no-Tailwind-in-SVG check)
+  - **Blocked By**: None
+
+  **Acceptance Criteria**:
+  - [ ] Zero `class="bg-`, `class="text-`, `class="p-`, `class="m-`, `class="flex` attributes in any of the 3 files (`grep -rE 'class="[^"]*\b(bg-|text-|p-[0-9]|m-[0-9]|flex|grid)' .sisyphus/drafts/diagrams-specs/screens/*.md` returns 0)
+  - [ ] Each replacement preserves the visual outcome (spot-check 3 random replacements against lessons.md table)
+
+  **QA Scenarios**:
+  ```
+  Scenario: No-Tailwind spec verification
+    Tool: Bash (grep)
+    Steps:
+      1. grep -rE 'class="[^"]*\b(bg-|text-|p-[0-9]|m-[0-9]|flex|grid)' .sisyphus/drafts/diagrams-specs/screens/*.md
+    Expected Result: No matches.
+    Evidence: .sisyphus/evidence/task-67-no-tailwind.txt
+  ```
+
+  **Commit**: YES
+  - Message: `docs(specs): translate Tailwind classes to inline CSS in 3 screen specs`
+  - Files: `.sisyphus/drafts/diagrams-specs/screens/{01-dashboard,02-vms,11-settings}.md`
+
+---
+
+- [ ] 68. **Verify empty directories (21) populated after T64 + cleanup `.sisyphus/drafts/diagrams-specs/` subdirs**
+
+  **What to do**:
+  - After T64 completes, run: `find diagrams/{errors,notifications,modals,components,variants,mobile,loading,plugin,themes,customizer} -type d -empty`
+  - Assert: 0 results.
+  - For the 10 empty sub-dirs under `.sisyphus/drafts/diagrams-specs/{components,customizer,errors,loading,mobile,modals,notifications,plugin,themes,variants}/`: if T67 has moved screen specs to canonical `diagrams/` (preferred) or if no specs are planned, run `rm -rf` on empty subdirs.
+  - Confirm `.sisyphus/drafts/diagrams/` is empty (after T65 + T66 redirect) — can be left as empty directory.
+
+  **Must NOT do**:
+  - Do NOT delete populated directories.
+  - Do NOT delete `.sisyphus/drafts/diagrams/` if it still contains files.
+
+  **Recommended Agent Profile**:
+  - **Category**: `quick`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 10
+  - **Blocks**: F1
+  - **Blocked By**: T64 (needs regenerated SVGs)
+
+  **Acceptance Criteria**:
+  - [ ] Zero empty directories under `diagrams/{errors,notifications,modals,components,variants,mobile,loading,plugin,themes,customizer}/`
+  - [ ] 10 empty sub-dirs under `drafts/diagrams-specs/` removed OR populated per T67 outcome
+  - [ ] Total directory count (non-hidden) consistent with audit §8 (21 → 0)
+
+  **QA Scenarios**:
+  ```
+  Scenario: Empty directory cleanup verification
+    Tool: Bash (find)
+    Steps:
+      1. find diagrams/* -type d -empty | wc -l  → expect: 0
+      2. find .sisyphus/drafts/diagrams-specs/* -type d -empty | wc -l  → expect: 0
+    Expected Result: All assertion pass.
+    Evidence: .sisyphus/evidence/task-68-empty-dirs.txt
+  ```
+
+  **Commit**: YES
+  - Message: `chore(structure): remove empty subdirs after regeneration`
+  - Files: deleted-only (working tree only)
+
+---
+
+- [ ] 69. **Archive 5 obsolete pre-migration plans (1,775 lines, May 26–31 era)**
+
+  **What to do**:
+  - Move these files to `archive/2026-05-pre-angular/` (preserve git history via `git mv`):
+    - `.sisyphus/plans/cloudbsd-shared-packages.md` (343 lines) — React-era shared package extraction
+    - `.sisyphus/plans/component-extraction.md` (150 lines) — React component refactor
+    - `.sisyphus/plans/fix-issues.md` (372 lines) — Pre-Angular bug fix log
+    - `.sisyphus/plans/ui-modernization.md` (702 lines) — Tailwind React UI
+    - `.sisyphus/plans/volumes-api.md` (208 lines) — Pre-Angular Volumes REST API
+  - Update the `.sisyphus/plans/` directory to contain only canonical artifacts: `angular-migration.md`, `WIRE_PROTOCOL.md`.
+
+  **Must NOT do**:
+  - Do NOT delete (use `git mv` to preserve history).
+  - Do NOT move any file dated after 2026-06-01 (those are within Angular migration scope).
+
+  **Recommended Agent Profile**:
+  - **Category**: `quick`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 10
+  - **Blocks**: F1 (must verify only canonical plans remain)
+  - **Blocked By**: None
+
+  **Acceptance Criteria**:
+  - [ ] `.sisyphus/plans/` contains exactly: `angular-migration.md`, `WIRE_PROTOCOL.md` (plus this archive reference README if created)
+  - [ ] `archive/2026-05-pre-angular/` contains the 5 moved files
+  - [ ] `git log --follow archive/2026-05-pre-angular/cloudbsd-shared-packages.md` shows full history
+
+  **QA Scenarios**:
+  ```
+  Scenario: Archive contents
+    Tool: Bash
+    Steps:
+      1. ls .sisyphus/plans/                                    → expect: angular-migration.md, WIRE_PROTOCOL.md
+      2. ls archive/2026-05-pre-angular/ 2>/dev/null | wc -l   → expect: 5 files
+    Expected Result: Plans directory cleaned, archive preserved.
+    Evidence: .sisyphus/evidence/task-69-archive.txt
+  ```
+
+  **Commit**: YES
+  - Message: `chore(plans): archive 5 obsolete pre-Angular migration plans`
+  - Files: `archive/2026-05-pre-angular/*.md`, delete from `.sisyphus/plans/`
+
+---
+
+- [ ] 70. **Delete 2 orphan drafts**
+
+  **What to do**:
+  - `.sisyphus/drafts/angular-migration.md` (109,951 B, 2,879 lines) — pre-canonical interview draft, fully superseded by canonical `.sisyphus/plans/angular-migration.md`. Verify no newer content by `diff` before delete.
+  - `.sisyphus/drafts/diagrams/README.md` (9,199 B) — duplicate of canonical `diagrams/README.md`. Confirmed identical via `diff` (see audit §10). Delete.
+
+  **Must NOT do**:
+  - Do NOT delete if `diff` shows any unique content in either orphan.
+
+  **Recommended Agent Profile**:
+  - **Category**: `quick`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 10
+  - **Blocks**: F1
+  - **Blocked By**: None
+
+  **Acceptance Criteria**:
+  - [ ] `diff .sisyphus/drafts/angular-migration.md .sisyphus/plans/angular-migration.md` shows the drafts version is fully subsumed by canonical
+  - [ ] After delete, `ls .sisyphus/drafts/` shows only: `ADJUSTMENTS.md`, `STRESS_AGENT.md`, `data-structures.md`, `ui-index.md`, `lessons.md`, `diagrams-specs/`, `diagrams/`, `api-mocks/`, `reconciliation-audit-2026-07-07.md`
+  - [ ] `ls .sisyphus/drafts/diagrams/` shows ≤ README or empty after T65/T66
+
+  **QA Scenarios**:
+  ```
+  Scenario: Orphan draft cleanup verification
+    Tool: Bash
+    Steps:
+      1. test ! -f .sisyphus/drafts/angular-migration.md && echo "deleted: drafts/angular-migration.md"
+      2. test ! -f .sisyphus/drafts/diagrams/README.md && echo "deleted: drafts/diagrams/README.md"
+    Expected Result: Both echo success.
+    Evidence: .sisyphus/evidence/task-70-orphans.txt
+  ```
+
+  **Commit**: YES
+  - Message: `chore(drafts): delete 2 orphan drafts (superseded by canonical)`
+  - Files: deleted-only
+
+---
+
+- [ ] 71. **Register 5 new mockups (3 component sub-tasks T2c.1-T2c.3 + 2 screen increments) in plan**
+
+  **What to do**:
+  - Insert 3 new sub-tasks under T02 (Wave 0):
+    - **T2c.1**: Implement `diagrams/components/16-ips-modal.svg` as Angular `<app-ips-modal>` component with dual-stack IPv4+IPv6 editor.
+    - **T2c.2**: Implement `diagrams/components/17-vgpu-pool.svg` as Angular `<app-vgpu-pool>` widget behind `showVgpuResources` feature flag.
+    - **T2c.3**: Implement `diagrams/components/18-add-node-dialog.svg` as 3-tab Angular `<app-add-node-dialog>` (Manual/Discover/Import).
+  - Update Component Mock-ups table in TL;DR section to include all 5 entries.
+  - Update Definition of Done "5 of 18" → "5 of 18 (T2c.1-T2c.3 + 2 screen registrations)".
+  - Add acceptance criteria referencing the on-disk SVG file paths.
+
+  **Must NOT do**:
+  - Do NOT skip the Angular feature-flag gate for T2c.2 (per audit, screen 17 is feature-flag-gated).
+  - Do NOT mark T2c.1-T2c.3 as `DONE` until the corresponding Angular component exists.
+
+  **Recommended Agent Profile**:
+  - **Category**: `artistry`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Parallel Group**: Wave 10
+  - **Blocks**: F1
+  - **Blocked By**: None (planning edit)
+
+  **Acceptance Criteria**:
+  - [ ] T2c.1, T2c.2, T2c.3 inserted in Wave 0 section
+  - [ ] Each sub-task references its on-disk SVG via file:// or relative path
+  - [ ] Component Mock-ups table includes 16-ips-modal, 17-vgpu-pool, 18-add-node-dialog
+
+  **QA Scenarios**:
+  ```
+  Scenario: Plan update verification
+    Tool: Bash (grep)
+    Steps:
+      1. grep -c "T2c.1\|T2c.2\|T2c.3" .sisyphus/plans/angular-migration.md  → expect: ≥ 3
+      2. grep -c "16-ips-modal\|17-vgpu-pool\|18-add-node-dialog" .sisyphus/plans/angular-migration.md  → expect: ≥ 3
+    Expected Result: All sub-tasks registered in plan.
+    Evidence: .sisyphus/evidence/task-71-plan-update.txt
+  ```
+
+  **Commit**: YES
+  - Message: `docs(plan): register 5 new mockups (2 screens, 3 components) per audit`
+  - Files: `.sisyphus/plans/angular-migration.md`
+
+---
+
+- [ ] 72. **Enforce 2026-07-07 column-order mandate on 4 resource tables (discovered in audit addendum)**
+
+  **What to do**:
+  - Per `.sisyphus/drafts/reconciliation-audit-2026-07-07.md` §15.2 + §17.1, the authoritative column-order spec is `.sisyphus/drafts/ui-index.md` §1 ("Resource table column order (UNIVERSAL)"). The user-mandated column order from 2026-07-07 is **NOT** reflected in 4 older SVG tables. Past commit `f9e48bd feat: uniform table columns + UI standard index` claimed to apply uniformity but the 2026-07-07 mandate postdates it.
+  - Regenerate 4 resource table SVGs with corrected column order per ui-index.md §1 (universal 8-col spec applied per-table):
+    - **`diagrams/screens/02-vms.svg`**: `Status, Name, OS, Host, vCPU, RAM, IPs, Uptime` (8 cols per ui-index)
+    - **`diagrams/screens/03-containers.svg`**: `Status, Name, Image, Host, CPU%, MEM, Ports, Uptime` (8 cols per ui-index)
+    - **`diagrams/screens/04-jails.svg`**: `Status, Name, OS, Hostname, vCPUs, RAM, IP, Uptime` (8 cols per ui-index)
+    - **`diagrams/screens/05-volumes.svg`**: Confirm canonical with user before render (spec is ambiguous for Vol column 1: Health or Name?).
+  - Update `diagrams/ADJUSTMENTS.md` row per screen citing this drift + the user mandate.
+
+  **Must NOT do**:
+  - Do NOT touch `02-vms.svg`, `03-containers.svg`, `04-jails.svg` until column-order spec is locked in.
+  - Do NOT mark this task `DONE` for `05-volumes.svg` without user confirmation of canonical order.
+
+  **Recommended Agent Profile**:
+  - **Category**: `artistry` (visual precision)
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES (3 of 4 sub-tasks; 05-volumes blocked on user input)
+  - **Parallel Group**: Wave 10 (with T64–T71)
+  - **Blocks**: F1 (column-order enforcement check)
+  - **Blocked By**: User confirmation for Volumes only
+
+  **Acceptance Criteria**:
+  - [ ] `grep -oE '<th[^>]*>[^<]+</th>' diagrams/screens/02-vms.svg` returns: Status, Name, OS, Host, vCPU, RAM, IP, Uptime, Net (in that order)
+  - [ ] Same for `03-containers.svg` matching: Status, Name, Image, Ports, CPU%, MEM, Uptime, Net
+  - [ ] Same for `04-jails.svg` matching: Status, Name, OS, Hostname, vCPUs, RAM, Disk, IP, Uptime, Resources, Net, JID
+  - [ ] Same for `05-volumes.svg` (depends on user confirmation of canonical order; default: fold Mountpoint+Host(s) per spec rows 5/7/8)
+  - [ ] `diagrams/ADJUSTMENTS.md` has 4 new rows citing this audit addendum
+
+  **QA Scenarios**:
+  ```
+  Scenario: Column-order extraction + visual diff
+    Tool: Bash + diff
+    Steps:
+      1. for f in diagrams/screens/0{2,3,4,5}-*.svg; do
+            echo "=== $f ==="
+            grep -oE '<th[^>]*>[^<]+</th>' "$f"
+         done | tee .sisyphus/evidence/task-72-column-order.txt
+      2. diff extracted order against canonical from .sisyphus/drafts/api-mocks/00-protocol-spec.md Update 2026-07-07
+    Expected Result: Identical (or no diff for 4 files).
+    Evidence: .sisyphus/evidence/task-72-column-order.txt
+  ```
+
+  **Commit**: YES
+  - Message: `fix(diagrams): enforce 2026-07-07 uniform column order on 4 resource tables`
+  - Files: `diagrams/screens/0{2,3,4,5}-*.svg`, `diagrams/ADJUSTMENTS.md`
+
+---
+
+- [ ] 73. **Add ADJUSTMENTS.md rows for 4 new screens (13-about, 14-status, 15-nodes, 16-system)**
+
+  **What to do**:
+  - `.sisyphus/drafts/ADJUSTMENTS.md` (220 lines) currently documents 14 React→Angular screen mappings with rows like `Dashboard.tsx → pages/dashboard/`. The 4 newer SVGs (13-about, 14-status, 15-nodes, 16-system) are not yet represented.
+  - Add 4 rows to the table:
+    - Row 13: `about.svg` → `pages/about/` | Status `➕ ADDED` | Adjustment "About page — closed-source CloudBSD products only (per commit 0be07b6)" | Rationale "CloudBSD brand purity"
+    - Row 14: `status.svg` → `pages/status/` | Status `➕ ADDED` | Adjustment "Service status page" | Rationale "User wanted consolidated health view"
+    - Row 15: `15-nodes.svg` → `pages/nodes/` | Status `➕ ADDED` | Adjustment "Cluster nodes list" | Rationale "Distinction from cluster canvas (07-cluster.svg)"
+    - Row 16: `16-system.svg` → `pages/system/` | Status `➕ ADDED` | Adjustment "Consolidated System Management page (TaskSchedule + AuditLog +)" | Rationale "Per audit §15.7 addendum"
+  - Verify ordering: rows 1-12 retain original order; rows 13-16 append in numbered order.
+
+  **Must NOT do**:
+  - Do NOT delete existing rows (preserves React→Angular history).
+  - Do NOT renumber existing entries.
+
+  **Recommended Agent Profile**:
+  - **Category**: `writing`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES (4 rows can be added atomically)
+  - **Parallel Group**: Wave 10 (with T64–T72)
+  - **Blocks**: F1 (ADJUSTMENTS completeness)
+  - **Blocked By**: None
+
+  **Acceptance Criteria**:
+  - [ ] `.sisyphus/drafts/ADJUSTMENTS.md` has rows for screens 1-16 inclusive (verify with `grep -cE '^\| (1[3-6]|[1-9]|1[0-2]) \|' .sisyphus/drafts/ADJUSTMENTS.md` returning ≥ 12)
+  - [ ] Rows 13-16 mention the new screen paths (13-about, 14-status, 15-nodes, 16-system)
+  - [ ] Total file length grows by ~12-16 lines (4 rows × 1 line each)
+
+  **QA Scenarios**:
+  ```
+  Scenario: ADJUSTMENTS.md coverage verification
+    Tool: Bash (grep)
+    Steps:
+      1. grep -E '^\| 1[3-6] \|' .sisyphus/drafts/ADJUSTMENTS.md  → expect: 4 lines
+      2. grep -E '13-about|14-status|15-nodes|16-system' .sisyphus/drafts/ADJUSTMENTS.md  → expect: ≥ 4 matches
+    Expected Result: All 4 rows present.
+    Evidence: .sisyphus/evidence/task-73-adjustments.txt
+  ```
+
+  **Commit**: YES
+  - Message: `docs(adjustments): add 4 rows for new screens 13-16`
+  - Files: `.sisyphus/drafts/ADJUSTMENTS.md`
+
+---
+
+- [ ] 74. **Restore 2 missing sidebar items (Nodes + System Mgmt) across all 16 screen SVGs**
+
+  **What to do**:
+  - Per `.sisyphus/drafts/reconciliation-audit-2026-07-07.md` §17.2, the sidebar in every screen SVG is missing `Nodes` (Overview #8, between Cluster and Users) and `System Mgmt` (Admin #5, between Settings and Status).
+  - Edit all 16 screen SVGs (`diagrams/screens/0{1-9}-*.svg` and `1{0-6}-*.svg`) to inject these 2 sidebar items using the same `<a style="..."><span>Name</span></a>` block as existing 13 items.
+  - Sidebar targets: `#/nodes` (cluster node list page), `#/system-mgmt` (consolidated admin actions per ui-index §8).
+  - Verify ordering after edit: each SVG sidebar should show 15 items in this order: `Dashboard, Virtual Machines, Containers, Jails, Volumes, Network Map, Cluster, Nodes, Users, Logs, Notifications, Settings, System Mgmt, Status, About`.
+
+  **Must NOT do**:
+  - Do NOT change the visual style of existing sidebar items.
+  - Do NOT add sidebar items other than the 2 specified.
+
+  **Recommended Agent Profile**:
+  - **Category**: `quick`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES (16 files, same pattern)
+  - **Parallel Group**: Wave 10 (with T64–T73, T75)
+  - **Blocks**: F1 (sidebar completeness check)
+  - **Blocked By**: None
+
+  **Acceptance Criteria**:
+  - [ ] Every `diagrams/screens/0{1-9}-*.svg` and `1{0-6}-*.svg` has 15 sidebar items (was 13)
+  - [ ] Each SVG sidebar contains "Nodes" between "Cluster" and "Users" (verifiable via `grep -A1 'Cluster' file | grep -B1 'Users'`)
+  - [ ] Each SVG sidebar contains "System Mgmt" between "Settings" and "Status"
+  - [ ] Total sidebar edits: 16 files × 2 items = 32 sidebar item additions
+
+  **QA Scenarios**:
+  ```
+  Scenario: Sidebar item count verification
+    Tool: Bash (grep)
+    Steps:
+      1. for f in diagrams/screens/0{1-9}-*.svg diagrams/screens/1{0-6}-*.svg; do
+            count=$(grep -c '<span>[A-Z][a-z]' "$f")
+            echo "$f: $count sidebar items"
+         done
+    Expected Result: Each file shows 15 sidebar items.
+    Evidence: .sisyphus/evidence/task-74-sidebar-count.txt
+  ```
+
+  **Commit**: YES
+  - Message: `fix(diagrams): restore missing Nodes + System Mgmt sidebar items across 16 screens`
+  - Files: `diagrams/screens/*.svg`
+
+---
+
+- [ ] 75. **Restore missing filter chip bars on 09-logs.svg and 10-notifications.svg**
+
+  **What to do**:
+  - **09-logs.svg**: Add 4 missing filter chips after existing "All" chip: `Error`, `Warn`, `Info`, `Debug` (per ui-index.md §4 Logs row: "All, Error, Warn, Info, Debug"). Use same chip styling as 02-vms.svg.
+  - **10-notifications.svg**: Add filter chip bar with 4 chips: `All`, `Error`, `Warn`, `Info` (per ui-index.md §4 Notifications row).
+  - Order matters: All first, then severity descending (Error > Warn > Info > Debug per operational priority in ui-index §4).
+  - Each chip: `<button>` with `background:#2563eb` for selected, `#ffffff` for unselected, matching 02-vms.svg pattern.
+
+  **Must NOT do**:
+  - Do NOT change existing chip styling on 02-vms.svg or other pages.
+  - Do NOT add filter chips other than those specified per spec.
+
+  **Recommended Agent Profile**:
+  - **Category**: `visual-engineering`
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES (2 files)
+  - **Parallel Group**: Wave 10
+  - **Blocks**: F1
+  - **Blocked By**: None
+
+  **Acceptance Criteria**:
+  - [ ] `diagrams/screens/09-logs.svg` has 5 chips: `All, Error, Warn, Info, Debug` (in that order, severity descending)
+  - [ ] `diagrams/screens/10-notifications.svg` has 4 chips: `All, Error, Warn, Info` (in that order)
+  - [ ] Chip styling matches 02-vms.svg pattern (active=blue `#2563eb`, inactive=`#ffffff` with border)
+
+  **QA Scenarios**:
+  ```
+  Scenario: Filter chip extraction verification
+    Tool: Bash (grep)
+    Steps:
+      1. grep -oE '>All<|>Error<|>Warn<|>Info<|>Debug<' diagrams/screens/09-logs.svg
+         # Expected: All, Error, Warn, Info, Debug in order
+      2. grep -oE '>All<|>Error<|>Warn<|>Info<' diagrams/screens/10-notifications.svg
+         # Expected: All, Error, Warn, Info in order
+    Expected Result: Chip labels match ui-index.md §4 specs.
+    Evidence: .sisyphus/evidence/task-75-filter-chips.txt
+  ```
+
+  **Commit**: YES
+  - Message: `fix(diagrams): restore filter chip bars on 09-logs + 10-notifications per ui-index §4`
+  - Files: `diagrams/screens/09-logs.svg`, `diagrams/screens/10-notifications.svg`
+
+---
+
+- [ ] 76. **Lay out System Management tab panels (6 SVGs) per ui-index §17 — option C confirmed**
+
+  **What to do**:
+  - Per `.sisyphus/drafts/reconciliation-audit-2026-07-07.md` §19, the existing `diagrams/screens/16-system.svg` renders 6 tabs (Backups, Exports, Stats, History, Audit Log, Updates) but **all content is flat below the tab bar** — no per-tab panels. 2 of 6 tabs (History + Updates) have NO content at all. **User feedback**: "we have a system stats tab, and then on the backups page we have a 'System Statistics' panel that is redundant."
+  - **Layout option C confirmed by user** (separate SVG per tab). Split into 6 sub-tasks T76a-T76f.
+  - **Sub-task T76a**: Create `diagrams/screens/16-system-1-backups.svg` — re-export of current "Scheduled Backups" panel (5-row table). **MUST NOT contain** Export Data, Stats, or Audit Log content (resolved redundancy per audit §19.10).
+  - **Sub-task T76b**: Create `diagrams/screens/16-system-2-exports.svg` — re-export of current "Export Data" 8-button grid. Standalone.
+  - **Sub-task T76c**: Create `diagrams/screens/16-system-3-stats.svg` — re-export of current "System Statistics" 12-card grid + **add 3 sparkline charts** (CPU/MEM/Disk time series, 24h/7d/30d tabs within stats).
+  - **Sub-task T76d**: Create `diagrams/screens/16-system-4-history.svg` — **NEW**. Event timeline with 50 most recent events, filterable by type (backup/export/auth/config-update).
+  - **Sub-task T76e**: Create `diagrams/screens/16-system-5-audit-log.svg` — re-export of current "Recent Admin Actions" → **rename heading to "Audit Log"** (matches tab label).
+  - **Sub-task T76f**: Create `diagrams/screens/16-system-6-updates.svg` — **NEW**. Software update UI: current version (don't show git hash per ui-index §16), available updates list with "Apply"/"Schedule" actions, last-update timestamp, channels (stable/edge), ZFS snapshot rollback option.
+  - **Landing page rewrite**: replace existing `diagrams/screens/16-system.svg` with tab-bar-only landing page (links to per-tab SVGs). Tab nav shows: Backups (default), Exports, Stats, History, Audit Log, Updates.
+  - Each new tab SVG: 1280×800, full tab bar showing active state, NO redundant content.
+
+  **Must NOT do**:
+  - Do NOT use option A/B/D — option C is locked.
+  - Do NOT put "System Statistics" panel inline with Backups (resolved redundancy).
+  - Do NOT keep "Recent Admin Actions" — must rename to "Audit Log".
+  - Do NOT use `class=` attributes (inline styles only per `lessons.md`).
+  - Do NOT use Tailwind in any new SVG.
+  - Do NOT show git commit hash in Updates panel (per ui-index §16 forbidden patterns).
+
+  **Recommended Agent Profile**:
+  - **Category**: `artistry` (visual engineering) + `writing` (History/Updates spec creation)
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES (6 sub-tasks T76a-T76f, ~70% parallelizable)
+  - **Parallel Group**: Wave 10
+  - **Blocks**: F1 (System Management tab coverage)
+  - **Blocked By**: NONE — option C confirmed
+
+  **Acceptance Criteria**:
+  - [ ] 7 SVGs total: `16-system.svg` (landing) + `16-system-{1..6}-*.svg` (6 tab panels)
+  - [ ] Each tab SVG is 1280×800
+  - [ ] Each tab SVG has full tab bar (6 tabs) with correct active state
+  - [ ] **T76a (Backups)**: NO content from Stats/Exports/Audit Log sections
+  - [ ] **T76b (Exports)**: only Export Data 8-button grid; NO stats or backups table
+  - [ ] **T76c (Stats)**: 12 cards + 3 sparkline time-series charts (NEW addition)
+  - [ ] **T76d (History)**: 50 sample events with type filter chips (Backup/Export/Auth/Config)
+  - [ ] **T76e (Audit Log)**: action log table; heading reads "Audit Log" not "Recent Admin Actions"
+  - [ ] **T76f (Updates)**: software update UI per data-structures.md `SystemUpdate`; NO git hash
+  - [ ] All SVGs use inline styles only (no `class=`), no Tailwind classes
+
+  **QA Scenarios**:
+  ```
+  Scenario: Tab panel isolation verification
+    Tool: Bash (grep + wc)
+    Steps:
+      1. ls diagrams/screens/16-system*.svg | wc -l         → expect: 7
+      2. grep -c 'Scheduled Backups' diagrams/screens/16-system-1-backups.svg   → expect: ≥ 1
+         grep -c 'System Statistics' diagrams/screens/16-system-1-backups.svg    → expect: 0 (resolved redundancy)
+         grep -c 'Export Data' diagrams/screens/16-system-1-backups.svg         → expect: 0
+      3. grep -c 'Audit Log' diagrams/screens/16-system-5-audit-log.svg         → expect: ≥ 1 (renamed)
+         grep -c 'Recent Admin Actions' diagrams/screens/16-system-5-audit-log.svg → expect: 0
+    Expected Result: Each tab SVG contains only its own panel content.
+    Evidence: .sisyphus/evidence/task-76-panel-isolation.txt
+  ```
+
+  **Commit**: YES
+  - Message: `feat(diagrams): lay out System Management tab panels (option C, 6 SVGs + landing)`
+  - Files: `diagrams/screens/16-system*.svg` (7 files)
+
+---
+
+- [ ] 77. **Add backup-create modal SVG + wire-protocol TaskSchedule CRUD section**
+
+  **What to do** (per `.sisyphus/drafts/reconciliation-audit-2026-07-07.md` §21):
+  - The `"+ New schedule"` button at `diagrams/screens/16-system.svg:58` (now T76a) has **no target modal, no endpoint spec, no wire-protology TaskSchedule section**. Angular executor has nothing to bind the click to.
+  - **T77a**: Create `diagrams/modals/19-backup-create.svg` — modal-center 1280×800 SVG per ui-index §11, fields ordered per ui-index §7:
+    - Identity: name + description
+    - Configuration: task kind (Snapshot/Replicate/Scrub/Backup/Exec/Webhook/Plugin)
+    - Resources: source volume + target volume pickers
+    - Network: N/A (hidden or omitted for backup)
+    - Schedule: cron/interval/event/on-demand picker
+    - Description: combined with Identity field
+    - Danger zone: dry-run + delete
+  - **T77b**: Add `.sisyphus/plans/WIRE_PROTOCOL.md` §2.14 "Task Schedules (CRUD)" with 9 endpoints:
+    - POST `/api/task-schedules` (create)
+    - GET `/api/task-schedules` (list, paginated)
+    - GET `/api/task-schedules/{id}` (single)
+    - PUT `/api/task-schedules/{id}` (full update)
+    - PATCH `/api/task-schedules/{id}` (partial — toggle enabled)
+    - DELETE `/api/task-schedules/{id}`
+    - POST `/api/task-schedules/{id}/run` (manual trigger)
+    - POST `/api/task-schedules/{id}/cancel` (cancel running)
+    - GET `/api/task-schedules/{id}/runs` (history)
+  - **T77c**: Reference `data-structures.md` §5 `TaskSchedule` from §2.14 (cite interface as the shape source of truth).
+  - **T77d**: Update plan "Canonical Artifacts Registry" with new wire-protocol §2.14 entry.
+
+  **Must NOT do**:
+  - Do NOT duplicate TaskSchedule interface in wire-protocol — reference data-structures.md.
+  - Do NOT put modal SVG outside `diagrams/modals/`.
+  - Do NOT use `class=` or Tailwind in modal SVG (inline styles only).
+  - Do NOT add endpoints that violate MIME convention — must use `application/vnd.cloudbsd+task-schedule*`.
+
+  **Recommended Agent Profile**:
+  - **Category**: `artistry` (modal SVG) + `unspecified-high` (wire-protocol §2.14)
+  - **Skills**: `[]`
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES (T77a + T77b + T77d)
+  - **Parallel Group**: Wave 10 (with T64–T76)
+  - **Blocks**: F1 (System Management + TaskSchedule CRUD coverage)
+  - **Blocked By**: None — option C for T76 unblocked T77
+
+  **Acceptance Criteria**:
+  - [ ] `diagrams/modals/19-backup-create.svg` exists at 1280×800 with 6 fields per ui-index §7
+  - [ ] `.sisyphus/plans/WIRE_PROTOCOL.md` has §2.14 "Task Schedules (CRUD)"
+  - [ ] 9 endpoints listed (POST/GET list/GET single/PUT/PATCH/DELETE/run/cancel/runs)
+  - [ ] All endpoints use `application/vnd.cloudbsd+task-schedule*` MIME type
+  - [ ] §2.14 references `data-structures.md` §5 TaskSchedule as source of truth
+  - [ ] Canonical Artifacts Registry table updated with new wire-protocol section
+
+  **QA Scenarios**:
+  ```
+  Scenario: Modal + wire-protocol coverage verification
+    Tool: Bash (grep + wc)
+    Steps:
+      1. test -f diagrams/modals/19-backup-create.svg && echo "modal present"
+      2. grep -c 'POST.*/api/task-schedules\|GET.*/api/task-schedules\|DELETE.*/api/task-schedules' \
+            .sisyphus/plans/WIRE_PROTOCOL.md  → expect: ≥ 9 (each endpoint counted)
+      3. grep -A1 '2.14 Task Schedules' .sisyphus/plans/WIRE_PROTOCOL.md | head
+    Expected Result: Modal + 9 endpoints + §2.14 header all present.
+    Evidence: .sisyphus/evidence/task-77-modal-endpoints.txt
+  ```
+
+  **Commit**: YES
+  - Message: `feat(diagrams+api): add backup-create modal + wire-protocol TaskSchedule CRUD section`
+  - Files: `diagrams/modals/19-backup-create.svg`, `.sisyphus/plans/WIRE_PROTOCOL.md`
+
+---
+
+- [ ] 78. **VM detail side panel + GET /api/vms/{id} endpoint**
+
+  **What to do** (per `.sisyphus/drafts/reconciliation-audit-2026-07-07.md` §21.5 + extension):
+  - `diagrams/screens/02-vms.svg` has 21 `cursor:pointer` row affordances but **no detail panel SVG** is rendered when a row is clicked. Precedent: `08-users.svg` shows a right-side detail panel for selected user.
+  - **T78a**: Create `diagrams/components/19-vm-detail-panel.svg` — right-side panel (or modal) showing selected VM details:
+    - Header: VM name + status pill
+    - Tabs per ui-index §17: Overview / Disks / Network / Snapshots / Console / Logs / Settings
+    - Overview: VM metadata (id, OS, host, vCPU, RAM, disk, uptime, IPs)
+    - Disks: list of attached disks with size/used/usage
+    - Network: interfaces + IPs
+    - Snapshots: list of ZFS snapshots with "View diff" / "Rollback" actions
+    - Console: noVNC iframe placeholder (per wire-protocol §2.20 VM console token)
+    - Logs: tail of VM logs
+    - Settings: VM metadata edit (read-only meta — actual writes not in scope per view-only)
+  - **T78b**: Add `.sisyphus/plans/WIRE_PROTOCOL.md` §2.4.x "VM detail (single)" with:
+    - `GET /api/vms/{id}` — single VM with full schema per `data-structures.md` `interface VM`
+    - `GET /api/vms/{id}/disks` — list disks attached to VM
+    - `GET /api/vms/{id}/network` — interfaces + IPs (incl. dual-stack IPv4+IPv6 per 16-ips-modal)
+    - `GET /api/vms/{id}/snapshots` — ZFS snapshots
+    - `GET /api/vms/{id}/logs` — paginated log feed
+    - `GET /api/vms/{id}/console-token` — noVNC token (already §2.20)
+    - MIME types: `application/vnd.cloudbsd+vm`, `application/vnd.cloudbsd+vm-disk+list`, etc.
+
+  **Must NOT do**:
+  - Do NOT add write endpoints (POST/PUT/DELETE) for VMs — view-only directive
+  - Do NOT ship without `data-structures.md` `interface VM` reference
+
+  **Recommended Agent Profile**: `artistry` + `unspecified-high`
+  **Parallelization**: Wave 10, parallel with T64-T77
+
+  **Acceptance**:
+  - [ ] `diagrams/components/19-vm-detail-panel.svg` exists, 1280×800 (panel on right ~600px, list on left ~680px)
+  - [ ] 7 tabs per ui-index §17 example
+  - [ ] Wire-protocol §2.4.x lists 6 detail endpoints with correct MIME
+  - [ ] Each endpoint references `data-structures.md` `interface VM` as source
+
+---
+
+- [ ] 79. **Container detail side panel + GET /api/containers/{id} endpoint**
+
+  **What to do**: Same pattern as T78 for containers.
+  - **T79a**: `diagrams/components/20-container-detail-panel.svg` — Overview / Disks / Network / Logs / Env vars tabs
+  - **T79b**: Wire-protocol §2.5.x with GET /api/containers/{id} (+ /disks, /network, /logs, /env) per `interface Container`
+
+  **Parallelization**: Wave 10, parallel with T78
+
+---
+
+- [ ] 80. **Jail detail side panel + GET /api/jails/{id} endpoint**
+
+  **What to do**:
+  - **T80a**: `diagrams/components/21-jail-detail-panel.svg` — Overview / IPs / Network / Limits / Logs tabs
+  - **T80b**: Wire-protocol §2.6.x with GET /api/jails/{id} per `interface Jail`
+
+  **Parallelization**: Wave 10, parallel with T78-T79
+
+---
+
+- [ ] 81. **Volume detail side panel + GET /api/volumes/{id} endpoint**
+
+  **What to do**:
+  - **T81a**: `diagrams/components/22-volume-detail-panel.svg` — Overview / Datasets / Snapshots / Scrubs / Performance / Settings tabs (per ui-index §17 Volume example)
+  - **T81b**: Wire-protocol §2.7.x with GET /api/volumes/{id} (+ /datasets, /snapshots, /scrubs, /perf)
+
+  **Parallelization**: Wave 10, parallel with T78-T80
+
+---
+
+- [ ] 82. **Node detail side panel + GET /api/nodes/{id} endpoint**
+
+  **What to do**:
+  - **T82a**: `diagrams/components/23-node-detail-panel.svg` — Overview / ZFS / GPUs / Network / VMs / Logs / Settings tabs (per ui-index §17 Node example)
+  - **T82b**: Wire-protocol §2.9.x (or new section) with GET /api/nodes/{id} (+ /zfs, /gpus per 17-vgpu-pool.svg, /network, /vms, /logs)
+
+  **Parallelization**: Wave 10, parallel with T78-T81
+
+---
+
+- [ ] 83. **Plugin detail/install modal + plugin endpoints (extension)**
+
+  **What to do**:
+  - No `diagrams/screens/*plugin*.svg` exists for plugin page (per audit §8 — empty plugin dir).
+  - **T83a**: `diagrams/components/24-plugin-detail-modal.svg` — modal for plugin info: manifest, capabilities, permissions, install/uninstall buttons
+  - **T83b**: Wire-protocol §2.15-2.16 already exist — extend with `POST /api/plugins/{id}/install`, `DELETE /api/plugins/{id}/uninstall`, `GET /api/plugins/{id}/manifest` per `data-structures.md` plugin schema
+  - **T83c**: Plugin landing page `diagrams/components/25-plugins-page.svg` — list installed + available plugins (per data-structures.md Plugin manifest spec)
+
+  **Note**: Plugin directory is admin-write; wire-protocol may need additional write endpoints.
+
+  **Parallelization**: Wave 10, parallel with T78-T82
+
+---
+
+- [ ] 84. **Custom theme import modal (11-settings disabled button)**
+
+  **What to do**:
+  - `diagrams/screens/11-settings.svg` has a disabled "Customize theme" button (`cursor:not-allowed`) and disabled "Save" button — view-only directive respects that admins can't save via this mockup. But theme picker shows 15 themes (per §20 in ui-index).
+  - **T84a**: `diagrams/components/26-theme-import-modal.svg` — file picker for custom CSS variable theme (.json per `application/vnd.cloudbsd+theme` MIME)
+  - **T84b**: Wire-protocol §2.13 already covers "Theme list + apply + custom import/export" — verify "POST /api/themes/import" exists. If not, add.
+
+  **Parallelization**: Wave 10, parallel with T78-T83
+
+---
+
 ## Final Verification Wave (MANDATORY — after ALL implementation tasks)
 
 > 4 review agents run in PARALLEL. ALL must APPROVE. Present consolidated results to user and get explicit "okay" before completing.
 
 - [ ] F1. **Plan Compliance Audit** — `oracle`
-  Read plan end-to-end. Verify all 14 pages exist as Angular components with view-only enforcement. Verify backend has PAM auth, plugin registry, custom MIME types. Verify 14 SVG mockups + 5 interaction flows exist in `diagrams/`. Verify OpenAPI spec exists at `diagrams/openapi.yaml`. Verify Playwright visual regression covers all 14 pages. Verify `diagrams/ADJUSTMENTS.md` has all 14 screens documented. Verify branch `feat/angular-migration` pushed to origin with all artifacts.
+  Read plan end-to-end. Verify all 16 pages exist as Angular components with view-only enforcement. Verify backend has PAM auth, plugin registry, custom MIME types. Verify 16 SVG screen mockups + 18 component mockups (incl. 16-ips-modal, 17-vgpu-pool, 18-add-node-dialog) + 5 interaction flows + 1 architecture exist in `diagrams/`. Verify OpenAPI spec exists at `diagrams/openapi.yaml`. Verify Playwright visual regression covers all 16 pages. Verify `diagrams/ADJUSTMENTS.md` has all 16 screens documented. Verify **canonical specs exist**: `diagrams/data-structures.md`, `diagrams/ui-index.md`, `.sisyphus/plans/WIRE_PROTOCOL.md`, `.sisyphus/drafts/STRESS_AGENT.md`, `.sisyphus/drafts/reconciliation-audit-2026-07-07.md`. Verify stress test scenarios T56-T63 ran and pass criteria met. Verify Wave 10 cleanup complete: 78 REGRESSED SVGs regenerated (T64), 5 flows + 1 arch promoted to canonical `diagrams/` (T65), wire-protocol consolidated + duplicate line fixed (T66), 0 Tailwind classes in screen specs (T67), 0 empty directories under `diagrams/` (T68), 5 obsolete plans archived (T69), 2 orphan drafts deleted (T70), 5 new mockups registered in plan (T71). **Verify T72 column-order mandate applied to 4 resource tables (02-vms, 03-containers, 04-jails, 05-volumes) per 2026-07-07 user mandate** — `grep -oE '<th[^>]*>[^<]+</th>'` output matches canonical order in `.sisyphus/drafts/ui-index.md` §1. **Verify T73 ADJUSTMENTS.md rows cover all 16 screens** (rows 1-16 inclusive, including 13-about, 14-status, 15-nodes, 16-system). **Verify T74 sidebar completeness** across all 16 SVGs (15 items each, including `Nodes` + `System Mgmt`). **Verify T75 filter chip bars** restored on 09-logs (5 chips) + 10-notifications (4 chips). **Verify T76 System Management tab panels** (Backups/Exports/Stats/History/Audit Log/Updates) per ui-index §17 (option C = 6 SVGs at `16-system-{1..6}-*.svg`). **Verify T77 backup-create modal SVG** at `diagrams/modals/19-backup-create.svg` (1280×800, 6 fields per ui-index §7) **+ wire-protocol §2.14 TaskSchedule CRUD section** with 9 endpoints. **Verify T78-T82 detail panels** for VM/Container/Jail/Volume/Node at `diagrams/components/{19-23}-*.svg` with matching wire-protocol GET /api/{type}/{id} endpoints (each with sub-endpoints for disks/network/logs/etc.). **Verify T83 plugin detail modal + page** at `diagrams/components/{24-25}-*.svg`. **Verify T84 theme import modal** at `diagrams/components/26-theme-import-modal.svg`. Verify branch `feat/angular-migration` pushed to origin with all artifacts.
   Output: `Must Have [N/N] | Must NOT Have [N/N] | Tasks [N/N] | VERDICT`
 
 - [ ] F2. **Code Quality Review** — `unspecified-high`
@@ -7931,12 +9174,33 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 - **Phase 0 commits**:
   - `chore(branch): create feat/angular-migration from f01c24b`
-  - `docs(diagrams): add 14 screen SVG mockups`
+  - `docs(diagrams): add 16 screen SVG mockups (reconciled 2026-07-07)`
+  - `docs(diagrams): add 18 component SVG mockups (reconciled 2026-07-07)`
   - `docs(diagrams): add 5 interaction flow SVGs`
   - `docs(api): add OpenAPI 3.1 spec for new PAM-auth backend`
   - `docs(plugin): add plugin/template contract spec`
   - `docs(mime): add cloudbsd/* MIME-type registry`
   - `docs(adjustments): add screen adjustments tracking table`
+  - `docs(spec): promote data-structures.md to canonical` (T54)
+  - `docs(spec): promote ui-index.md to canonical` (T55)
+  - `docs(wire): add wire-protocol envelope spec` (already committed)
+- **Phase 0.5 commits** (Wave 10 reconciliation cleanup, per `.sisyphus/drafts/reconciliation-audit-2026-07-07.md`):
+  - `feat(diagrams): regenerate 78 REGRESSED SVG mockups` (T64)
+  - `docs(diagrams): promote 5 flow + 1 architecture Mermaid files` (T65)
+  - `docs(wire): consolidate wire-protocol spec (merge 2026-07-07 update)` (T66)
+  - `docs(specs): translate Tailwind classes to inline CSS in 3 screen specs` (T67)
+  - `chore(structure): remove empty subdirs after regeneration` (T68)
+  - `chore(plans): archive 5 obsolete pre-Angular migration plans` (T69)
+  - `chore(drafts): delete 2 orphan drafts` (T70)
+  - `docs(plan): register 5 new mockups (2 screens, 3 components)` (T71)
+  - `fix(diagrams): enforce 2026-07-07 uniform column order on 4 resource tables` (T72)
+  - `docs(adjustments): add 4 rows for new screens 13-16` (T73)
+  - `fix(diagrams): restore missing Nodes + System Mgmt sidebar items across 16 screens` (T74)
+  - `fix(diagrams): restore filter chip bars on 09-logs + 10-notifications per ui-index §4` (T75)
+  - `feat(diagrams): lay out System Management tab panels per ui-index §17` (T76, option C)
+  - `feat(diagrams+api): add backup-create modal + wire-protocol TaskSchedule CRUD` (T77)
+  - `feat(diagrams+api): add resource detail panels (VM/Container/Jail/Volume/Node)` (T78-T82)
+  - `feat(diagrams+api): add plugin detail modal + plugin page + theme import modal` (T83-T84)
 - **Phase 1 commits** (backend foundation, one per task group):
   - `feat(backend): scaffold new PAM-auth backend`
   - `feat(auth): add PAM authentication middleware`
@@ -8133,12 +9397,17 @@ git log --oneline -5
 git push origin feat/angular-migration --dry-run
 
 # Documentation exists
-ls diagrams/screens/*.svg  # 14 files
-ls diagrams/flows/*.svg    # 5 files
+ls diagrams/screens/*.svg  # 16 files (was 14, +2 reconciled)
+ls diagrams/components/*.svg  # 3 files baseline + regenerated ≥ 12 from T64d
+ls diagrams/flows/*.md     # 5 Mermaid flow files (was drafts, promoted per T65)
+ls diagrams/architecture/*.md  # 1 Mermaid architecture file (was drafts, promoted per T65)
 test -f diagrams/openapi.yaml
 test -f diagrams/plugin-contract.md
 test -f diagrams/mime-registry.md
 test -f diagrams/ADJUSTMENTS.md
+
+# Reconciliation audit (Wave 10)
+test -f .sisyphus/drafts/reconciliation-audit-2026-07-07.md
 
 # Backend builds and serves
 cd server-new && npm install && npm run build && npm start &
@@ -8152,31 +9421,105 @@ curl -sI http://localhost:4200/ | head -3
 
 # Tests pass
 cd web-new && ng test --watch=false --code-coverage
-# Expect: 80% coverage gate enforced, all tests pass
+# Expect: 100% coverage gate enforced, all tests pass
 
 # Visual regression
 cd web-new && npx playwright test
-# Expect: 14 page snapshots, frost-out modal flow, plugin manifest flow
+# Expect: 16 page snapshots, frost-out modal flow, plugin manifest flow
+
+# Canonical specs exist
+test -f diagrams/data-structures.md
+test -f diagrams/ui-index.md
+test -f diagrams/openapi.yaml
+test -f diagrams/plugin-contract.md
+test -f diagrams/mime-registry.md
+test -f diagrams/ADJUSTMENTS.md
+test -f .sisyphus/plans/WIRE_PROTOCOL.md
+test -f .sisyphus/drafts/STRESS_AGENT.md
+
+# Stress scenarios ran (results under stress-results/)
+ls stress-results/scenario-{01..08}-*/summary.json
+
+# UI-index enforcement (no forbidden patterns)
+! grep -rE "window\.(alert|confirm|prompt)" web-new/src/  # expect: 0 hits
+! grep -rE 'class="(bg-|text-)[a-z]+' diagrams/screens/ diagrams/components/  # expect: 0 hits (inline styles only)
+
+# Column-order enforcement (T72) — Status first, Name second across 4 resource tables
+for f in diagrams/screens/02-vms.svg diagrams/screens/03-containers.svg diagrams/screens/04-jails.svg diagrams/screens/05-volumes.svg; do
+  echo "=== $f ==="
+  grep -oE '<th[^>]*>[^<]+</th>' "$f" | head -12
+done | tee .sisyphus/evidence/column-order-audit.txt
+# Expected: each file's first <th> should be "Status" (or "Health" for 05-volumes if user confirms)
+# After T72, expect output to match canonical from .sisyphus/drafts/api-mocks/00-protocol-spec.md Update 2026-07-07
+
+# Data-structures enforcement (no string timestamps, all quantities have units)
+! grep -rE 'timestamp.*:.*string' server-new/src/  # expect: 0 hits
+! grep -rE 'value: number' server-new/src/  # expect: 0 hits without adjacent `unit: UnitKind` annotation
+
+# Wave 10 cleanup verifications (T64-T71)
+ls diagrams/errors/*.svg | wc -l           # expect: ≥12 (T64a)
+ls diagrams/notifications/*.svg | wc -l    # expect: ≥5 (T64b)
+ls diagrams/modals/*.svg | wc -l            # expect: ≥6 (T64c)
+ls diagrams/components/*.svg | wc -l       # expect: ≥12 new + 3 baseline = 15+ (T64d)
+ls diagrams/variants/*.svg | wc -l          # expect: ≥3 (T64e)
+ls diagrams/mobile/*.svg | wc -l            # expect: ≥3 (T64f)
+ls diagrams/loading/*.svg | wc -l           # expect: ≥4 (T64g)
+ls diagrams/plugin/*.svg | wc -l            # expect: ≥3 (T64h)
+ls diagrams/themes/*.svg | wc -l            # expect: ≥15 (T64i)
+ls diagrams/customizer/*.svg | wc -l        # expect: ≥8 (T64j)
+find diagrams/* -type d -empty | wc -l      # expect: 0 (T68)
+ls .sisyphus/plans/ | grep -E '\.md$'       # expect: only angular-migration.md + WIRE_PROTOCOL.md (T69)
+test ! -f .sisyphus/drafts/angular-migration.md && echo "orphan deleted"  # expect: success (T70)
+test ! -f .sisyphus/drafts/diagrams/README.md && echo "orphan deleted"  # expect: success (T70)
+ls .sisyphus/drafts/diagrams/               # expect: empty or only README (T70)
+# Tailwind in screen specs (T67) — already filtered by `! grep -rE` above for SVG; extend to spec files:
+! grep -rE 'class="[^"]*\b(bg-|text-|p-[0-9]|m-[0-9]|flex|grid)' .sisyphus/drafts/diagrams-specs/screens/*.md  # expect: 0 hits
 ```
 
 ### Final Checklist
 - [ ] All "Must Have" present and verified
 - [ ] All "Must NOT Have" absent (no React code in web-new, no SSR, no Material lib)
-- [ ] All 14 SVG mockups committed
-- [ ] All 5 interaction flow SVGs committed
+- [ ] All 16 SVG screen mockups committed
+- [ ] All 18 SVG component mockups committed
+- [ ] All 5 interaction flow SVGs + 1 architecture Mermaid committed
 - [ ] OpenAPI spec committed and loadable
 - [ ] Plugin contract spec committed
 - [ ] MIME-type registry committed
-- [ ] ADJUSTMENTS.md populated for all 14 screens
+- [ ] ADJUSTMENTS.md populated for all 16 screens
+- [ ] **Canonical specs promoted**: `diagrams/data-structures.md`, `diagrams/ui-index.md`
+- [ ] Wire-protocol envelope spec committed (`.sisyphus/plans/WIRE_PROTOCOL.md`)
+- [ ] Stress-test handoff committed (`.sisyphus/drafts/STRESS_AGENT.md`)
+- [ ] Stress scenarios T56-T63 ran with all pass criteria met
 - [ ] Backend uses PAM auth (verify with `pam_tester` or integration test)
 - [ ] Frost-out modal triggers on 401 (verified by Playwright)
 - [ ] Plugin manifest items render in sidebar (verified by Playwright)
-- [ ] Custom MIME types in responses (verified by curl)
+- [ ] Custom MIME types in responses (verified by curl, including `application/vnd.cloudbsd+envelope` per WIRE_PROTOCOL)
 - [ ] X-CloudBSD-Who/What/Why/Where headers present (verified by curl)
-- [ ] 80% test coverage
-- [ ] 14 page Playwright snapshots passing
+- [ ] **100% test coverage** (user override of 80% default)
+- [ ] **16 page Playwright snapshots** passing (was 14)
+- [ ] **UI-index enforcement**: zero `window.alert/confirm/prompt`, zero Tailwind classes in SVG mockups
+- [ ] **Data-structures enforcement**: zero string timestamps, zero untyped `value: number` fields
 - [ ] Branch pushed to origin
 - [ ] All planning artifacts committed
+- [ ] **Reconciliation audit present**: `.sisyphus/drafts/reconciliation-audit-2026-07-07.md`
+- [ ] **Wave 10 cleanup complete**:
+  - [ ] T64: 78 REGRESSED SVGs regenerated across 10 directories (errors, notifications, modals, components, variants, mobile, loading, plugin, themes, customizer)
+  - [ ] T65: 5 flow + 1 architecture Mermaid files promoted from `.sisyphus/drafts/diagrams/` to canonical `diagrams/`
+  - [ ] T66: wire-protocol spec consolidated (2026-07-07 update merged, duplicate line fixed)
+  - [ ] T67: zero Tailwind classes in `.sisyphus/drafts/diagrams-specs/screens/*.md` (29 violations translated)
+  - [ ] T68: zero empty directories under `diagrams/` and `.sisyphus/drafts/diagrams-specs/`
+  - [ ] T69: 5 obsolete pre-Angular migration plans archived (cloudbsd-shared-packages, component-extraction, fix-issues, ui-modernization, volumes-api)
+  - [ ] T70: 2 orphan drafts deleted (`.sisyphus/drafts/angular-migration.md`, `.sisyphus/drafts/diagrams/README.md`)
+  - [ ] T71: 5 new mockups registered in plan (16-ips-modal, 17-vgpu-pool, 18-add-node-dialog + 15-nodes, 16-system)
+  - [ ] T72: 4 resource tables (02-vms, 03-containers, 04-jails, 05-volumes) regenerated with canonical 2026-07-07 column order (Status first, Name second)
+  - [ ] T73: `.sisyphus/drafts/ADJUSTMENTS.md` has rows covering all 16 screens (1-16 inclusive, including 4 new screens 13-16)
+  - [ ] T74: All 16 screen SVGs have 15 sidebar items including `Nodes` + `System Mgmt` per ui-index §8
+  - [ ] T75: `09-logs.svg` has 5 filter chips (All/Error/Warn/Info/Debug); `10-notifications.svg` has 4 filter chips (All/Error/Warn/Info) per ui-index §4
+  - [ ] T76: System Management has 6 laid-out tab panels (Backups/Exports/Stats/History/Audit Log/Updates) per ui-index §17
+  - [ ] T77: Backup-create modal SVG + wire-protology §2.14 TaskSchedule CRUD (9 endpoints) produced
+  - [ ] T78-T82: Detail panels for VM/Container/Jail/Volume/Node at `diagrams/components/{19-23}-*.svg` with matching GET /api/{type}/{id} endpoints
+  - [ ] T83: Plugin detail modal + plugins page at `diagrams/components/{24-25}-*.svg`
+  - [ ] T84: Theme import modal at `diagrams/components/26-theme-import-modal.svg`
 - [ ] User explicit "okay" received
 
 ---
@@ -8184,8 +9527,10 @@ cd web-new && npx playwright test
 ## Hand-off
 
 After Momus approves (or user skips high-accuracy mode):
-1. Plan + draft + diagrams committed to `feat/angular-migration`.
+1. Plan + audit + diagrams committed to `feat/angular-migration` (see `Phase 0.5 commits` in Commit Strategy for the 8-commit reconciliation recipe).
 2. Branch pushed to `origin/feat/angular-migration`.
 3. User runs `/start-work angular-migration` to begin execution.
-4. Sisyphus executor picks up the plan, executes waves 0-7, then final verification wave.
+4. Sisyphus executor picks up the plan, executes **waves 0–10** (Wave 10 = reconciliation cleanup per `.sisyphus/drafts/reconciliation-audit-2026-07-07.md`), then final verification wave F1–F4.
 5. User explicitly approves F1-F4 results before work is marked complete.
+
+**Audit reference**: All Wave 10 tasks derive from `.sisyphus/drafts/reconciliation-audit-2026-07-07.md`. If the executor encounters drift between the plan and the audit, the audit is authoritative for Wave 10 — the plan tracks the audit's findings.

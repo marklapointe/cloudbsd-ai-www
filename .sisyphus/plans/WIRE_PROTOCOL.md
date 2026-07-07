@@ -410,7 +410,7 @@ Called every 60s by `SocketService` and on every page navigation.
         { "mime": "application/vnd.cloudbsd+vm", "kind": "vm", "version": "v1", "data": {
             "id": "vm-nextcloud", "name": "nextcloud", "status": "RUN", "os": "Debian 12",
             "vcpu": 4, "ramBytes": 8589934592, "diskBytes": 128849018880,
-            "uptimeSec": 1211670, "host": "freenas-mock", "ip": "10.0.10.10",
+            "uptimeSec": 1211670, "host": "cloudbsd-node-01", "ip": "10.0.10.10",
             "tags": ["prod", "files"], "iopsRead": 1200, "iopsWrite": 0,
             "netRxBytesPerSec": 13002342, "netTxBytesPerSec": 4404019,
             "createdAt": "2026-06-22T12:00:00Z", "version": "v1-a7f3"
@@ -418,7 +418,7 @@ Called every 60s by `SocketService` and on every page navigation.
         { "mime": "application/vnd.cloudbsd+vm", "kind": "vm", "version": "v1", "data": {
             "id": "vm-homeassistant", "name": "homeassistant", "status": "RUN", "os": "HAOS 12",
             "vcpu": 2, "ramBytes": 4294967296, "diskBytes": 34359738368,
-            "uptimeSec": 764520, "host": "freenas-mock", "ip": "10.0.10.12",
+            "uptimeSec": 764520, "host": "cloudbsd-node-01", "ip": "10.0.10.12",
             "tags": ["smarthome"], "iopsRead": 380, "iopsWrite": 0,
             "netRxBytesPerSec": 644245, "netTxBytesPerSec": 212341,
             "createdAt": "2026-06-27T12:00:00Z", "version": "v1-b8c4"
@@ -426,7 +426,7 @@ Called every 60s by `SocketService` and on every page navigation.
         { "mime": "application/vnd.cloudbsd+vm", "kind": "vm", "version": "v1", "data": {
             "id": "vm-jellyfin", "name": "jellyfin", "status": "RUN", "os": "Ubuntu 24.04",
             "vcpu": 6, "ramBytes": 12884901888, "diskBytes": 536870912000,
-            "uptimeSec": 1911360, "host": "freenas-mock", "ip": "10.0.10.11",
+            "uptimeSec": 1911360, "host": "cloudbsd-node-01", "ip": "10.0.10.11",
             "tags": ["media"], "iopsRead": 4800, "iopsWrite": 0,
             "netRxBytesPerSec": 90420335, "netTxBytesPerSec": 13002342,
             "createdAt": "2026-06-14T12:00:00Z", "version": "v1-c9d5"
@@ -541,7 +541,7 @@ Called every 60s by `SocketService` and on every page navigation.
     "aggregates": { "cpuAvgPercent": 22, "memAvgPercent": 37, "diskAvgPercent": 41 }
 } },
 { "mime": "application/vnd.cloudbsd+cluster.node", "kind": "cluster.node", "data": {
-    "id": "node-freenas-mock", "hostname": "freenas-mock", "role": "master", "rack": "A1",
+    "id": "node-cloudbsd-node-01", "hostname": "cloudbsd-node-01", "role": "master", "rack": "A1",
     "status": "healthy", "cpuPercent": 18, "memPercent": 51, "diskPercent": 27,
     "uptimeSec": 1211670
 } },
