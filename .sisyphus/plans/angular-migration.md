@@ -80,7 +80,7 @@ These define the visual target for every page in the new Angular app. Each SVG i
 | [`04-jails.svg`](../../diagrams/screens/04-jails.svg) | Jails | 10 jail rows: transmission, syncthing, pi-hole, unifi-controller, homebridge, paperless (STOPPED), gitea-runner (FROZEN), dnscrypt, minio, vaultwarden. Status, hostname, IP, vCPUs, RAM, Disk, resource bar, uptime, JID. |
 | [`05-volumes.svg`](../../diagrams/screens/05-volumes.svg) | Volumes | 13 volume rows: tank/data, tank/media, tank/backups, tank/vms, tank/apps, fast/ssd (SLOG), vault/cold (encrypted), nfs_export, iscsi-lun0, tank/snapshots, tank/nextcloud, tank/jails, tank/photos. Type (ZFS/NFS/iSCSI), size, used, usage bar, mountpoint, compression, encryption, last scrub, health. |
 | [`06-network-map.svg`](../../diagrams/screens/06-network-map.svg) | Network Map | 18 nodes: Internet, pfsense.local, sw-core.local, NAS, 5 VMs, 4 CTs, 4 jails, 2 services, 3 cluster nodes. 3 subnets (10.0.10.0/24, 10.0.20.0/24, 10.0.30.0/24). Mini-map. Legend. Controls (Zoom, Fit, Refresh, Layout). |
-| [`07-cluster.svg`](../../diagrams/screens/07-cluster.svg) | Cluster | 6 nodes: freenas-mock (master), node-02/03/04/06 (workers), node-05 (OFFLINE rose). CPU/MEM/Disk usage bars per node. Recent cluster events list (8 events). Aggregate stats. |
+| [`07-cluster.svg`](../../diagrams/screens/07-cluster.svg) | Cluster | 6 nodes: cloudbsd-node-01 (master), node-02/03/04/06 (workers), node-05 (OFFLINE rose). CPU/MEM/Disk usage bars per node. Recent cluster events list (8 events). Aggregate stats. |
 | [`08-users.svg`](../../diagrams/screens/08-users.svg) | Users | 14 user rows with avatars (mlapointe, root, www, backup, jenkins, guest, postgres, ubuntu, svc-bhyve, deploy, monitoring, audit, etc.). PAM status (active/locked/expired/disabled), last login, groups as badges, shell. Right detail panel for mlapointe (UID, email, 2FA, SSH keys, sessions, sudo, 5 recent logins). |
 | [`09-logs.svg`](../../diagrams/screens/09-logs.svg) | Logs | Admin-only JSONL viewer. Level pills (All/Error/Warn/Info/Debug), severity histogram (60 buckets, red bars for errors), Tail ON indicator. 18 log rows from zfs/bhyve/jail/nginx/sshd/smb/cron/smart/caddy/ctdb modules with realistic messages. |
 | [`10-notifications.svg`](../../diagrams/screens/10-notifications.svg) | Notifications | 14 notifications grouped by severity: ERROR (disk > 80%, auth failures, cluster heartbeat), WARN (vm paused, network flap, jail disabled), INFO (system updates, snapshots). Severity icons, source filters, Mark all read, Preferences. |
@@ -704,7 +704,7 @@ export const loginRateLimiter = rateLimit({
     { "mime": "application/vnd.cloudbsd+vm", "kind": "vm", "version": "v1",
       "data": { "id": "vm-nextcloud", "name": "nextcloud", "status": "RUN",
                 "vcpu": 4, "ramBytes": 8589934592, "diskBytes": 128849018880,
-                "uptimeSec": 1211670, "host": "freenas-mock", "ip": "10.0.10.10",
+                "uptimeSec": 1211670, "host": "cloudbsd-node-01", "ip": "10.0.10.10",
                 "tags": ["prod","files"], "version": "v1-a7f3" } }
   ],
   "next": "eyJ2bVMtaWQiOiJ2bS1qb2JiaW5nIiwiYW9yZGVyIjpbIm5hbWUiXX0"
@@ -1828,6 +1828,515 @@ test:
 15. **No empty strings** in any locale file
 16. **All 47 locales** have matching keys to en-US
 17. **No untranslated placeholders** (no `TODO`, no `xxxx`, no `[...]`)
+
+---
+
+## Volume Management (host-aware, system-read-only)
+
+> Per Honcho peer `cloudbsd-admin-test-lessons` (3 new conclusions). Volumes table MUST include a Host column and system volumes (OS, EFI, swap) MUST be read-only with no manipulation actions.
+
+### Volume data model
+
+```typescript
+interface Volume {
+  id: string;                    // 'tank-data', 'os-cloudbsd-01', 'efi-cloudbsd-01', etc.
+  name: string;                  // dataset name or device path
+  type: 'ZFS' | 'ZFS (SLOG)' | 'ZFS (enc)' | 'ZFS (boot)' | 'ZFS (root)' | 'NFS' | 'iSCSI' | 'EFI' | 'Swap' | 'XFS' | 'EXT4';
+  sizeBytes: number;
+  usedBytes: number;
+  mountpoint: string;            // '/', '/boot/efi', '[SWAP]', '/mnt/tank/data', 'hidden'
+  hosts: string[];               // ['cloudbsd-node-01', 'cloudbsd-node-02'] for replicated
+  isSystem: boolean;             // true for OS, EFI, swap, recovery, boot
+  systemReason?: 'os' | 'efi' | 'swap' | 'boot' | 'recovery';
+  canResize: boolean;
+  canDelete: boolean;
+  canSnapshot: boolean;
+  canManipulate: boolean;        // canResize && canDelete && canSnapshot
+  compression?: 'zstd-3' | 'zstd-9' | 'lz4' | 'off';
+  encryption?: 'aes-256-gcm' | 'none';
+  health: 'healthy' | 'watch' | 'error';
+  lastScrub?: string;           // ISO timestamp
+  isTemplate?: boolean;         // from backend: skip in user filters
+}
+```
+
+### System volume detection rules (backend-derived)
+
+A volume is `isSystem: true` if ANY of:
+- `name` starts with `os-`, `efi-`, `swap-`, `boot-`, `recovery-` (prefix-based)
+- `type` is `EFI`, `Swap`, `EFI System Partition`, or contains `boot`/`root`
+- backend sets `system: true` flag explicitly
+- `isTemplate: true` (template volumes are not manipulable either)
+
+### UI rendering rules
+
+| Volume type | Background | Opacity | Action buttons | Badge |
+|-------------|-------------|----------|---------------|-------|
+| User manipulable (`isSystem: false` && `canManipulate: true`) | white | 1.0 | Snap / Resize / Del | none |
+| User view-only (`isSystem: false` && `canManipulate: false`) | white | 1.0 | none | "View only" |
+| System (`isSystem: true`) | `#f8fafc` | **0.65** | none | 🔒 + "SYSTEM" amber badge |
+| Template (`isTemplate: true`) | `#f8fafc` | 0.65 | none | "TEMPLATE" |
+
+### Host column
+
+A volume can reside on multiple hosts (replicated ZFS, shared NFS exports). Display:
+- Single host: `<node-01>` in plain text
+- Multi host: `<N> hosts` (e.g. `2 hosts`) with hover tooltip listing all hostnames
+- Replicated ZFS: shows replica count: `tank/data (×3: node-01, node-02, node-03)`
+
+### "Hide system volumes" toggle (NEW)
+
+Toolbar contains a toggle:
+```
+Show: [User only] [All (incl. system)]
+```
+
+Default: `User only` (system volumes hidden by default for cleanliness).
+`All` reveals system volumes in dimmed style with lock icon. User preference persisted to localStorage.
+
+### Action button gating
+
+```typescript
+@Component({ /* volume-action-buttons.component.ts */ })
+export class VolumeActionButtons {
+  @Input() volume: Volume;
+  @Output() snapshot = new EventEmitter();
+  @Output() resize = new EventEmitter();
+  @Output() delete = new EventEmitter();
+  
+  canSnapshot = computed(() => this.volume?.canSnapshot && !this.volume?.isSystem);
+  canResize = computed(() => this.volume?.canResize && !this.volume?.isSystem);
+  canDelete = computed(() => this.volume?.canDelete && !this.volume?.isSystem && this.volume?.usedBytes === 0);
+}
+```
+
+### Volume list mock data (13 user volumes + 8 system volumes)
+
+```typescript
+// 13 user volumes
+{ id: 'tank-data',      type: 'ZFS',        size: '920 GB', used: '245',  pct: 27, hosts: ['cloudbsd-node-01'],                mount: '/mnt/tank/data',       isSystem: false }
+{ id: 'tank-media',     type: 'ZFS',        size: '4.0 TB', used: '3.2 TB', pct: 80, hosts: ['cloudbsd-node-01'],                mount: '/mnt/tank/media',      isSystem: false }
+{ id: 'tank-backups',   type: 'ZFS',        size: '1.5 TB', used: '412',  pct: 27, hosts: ['cloudbsd-node-01','node-02'],      mount: '/mnt/tank/backups',    isSystem: false }
+{ id: 'tank-vms',       type: 'ZFS',        size: '800 GB', used: '612',  pct: 76, hosts: ['cloudbsd-node-01'],                mount: '/mnt/tank/vms',        isSystem: false }
+{ id: 'tank-apps',      type: 'ZFS',        size: '200 GB', used: '84',   pct: 42, hosts: ['cloudbsd-node-01'],                mount: '/mnt/tank/apps',       isSystem: false }
+{ id: 'fast-ssd',       type: 'ZFS (SLOG)', size: '64 GB',  used: '12',   pct: 18, hosts: ['cloudbsd-node-01'],                mount: '/dev/da0',            isSystem: false }
+{ id: 'vault-cold',     type: 'ZFS (enc)',  size: '8.0 TB', used: '6.4 TB', pct: 80, hosts: ['cloudbsd-node-02'],                mount: '/mnt/vault',          isSystem: false }
+{ id: 'nfs-export',     type: 'NFS',        size: '—',     used: '—',     pct: 0,  hosts: ['cloudbsd-node-01','node-02'],      mount: '/mnt/nfs',            isSystem: false }
+{ id: 'iscsi-lun0',     type: 'iSCSI',      size: '500 GB', used: '412',  pct: 82, hosts: ['cloudbsd-node-02'],                mount: '/dev/iscsi0',         isSystem: false }
+{ id: 'tank-snapshots', type: 'ZFS',        size: '920 GB', used: '88',   pct: 9,  hosts: ['cloudbsd-node-01'],                mount: 'hidden',             isSystem: false }
+{ id: 'tank-nextcloud', type: 'ZFS',        size: '1.2 TB', used: '980',  pct: 81, hosts: ['cloudbsd-node-01'],                mount: '/mnt/tank/nextcloud', isSystem: false }
+{ id: 'tank-jails',     type: 'ZFS',        size: '50 GB',  used: '28',   pct: 56, hosts: ['cloudbsd-node-01'],                mount: '/usr/local/jails',   isSystem: false }
+{ id: 'tank-photos',    type: 'ZFS',        size: '2.0 TB', used: '1.6 TB', pct: 80, hosts: ['cloudbsd-node-01'],                mount: '/mnt/tank/photos',    isSystem: false }
+
+// 8 system volumes (hidden by default)
+{ id: 'os-cloudbsd-01',      type: 'ZFS (root)', size: '32 GB',  used: '18', pct: 56, hosts: ['cloudbsd-node-01'], mount: '/',           isSystem: true, systemReason: 'os' }
+{ id: 'efi-cloudbsd-01',     type: 'EFI',        size: '512 MB', used: '32', pct: 6,  hosts: ['cloudbsd-node-01'], mount: '/boot/efi',   isSystem: true, systemReason: 'efi' }
+{ id: 'swap-cloudbsd-01',    type: 'Swap',       size: '16 GB',  used: '2',  pct: 12, hosts: ['cloudbsd-node-01'], mount: '[SWAP]',     isSystem: true, systemReason: 'swap' }
+{ id: 'boot-cloudbsd-01',    type: 'ZFS (boot)', size: '4 GB',   used: '1',  pct: 25, hosts: ['cloudbsd-node-01'], mount: '/boot',      isSystem: true, systemReason: 'boot' }
+{ id: 'recovery-cloudbsd-01', type: 'ZFS',      size: '8 GB',   used: '0',  pct: 0,  hosts: ['cloudbsd-node-01'], mount: '/recovery', isSystem: true, systemReason: 'recovery' }
+// same 3 for node-02
+```
+
+### Implementation tasks (new)
+
+| Task | Description |
+|------|-------------|
+| **T208** | Volume data model with `hosts[]`, `isSystem`, `canResize/Delete/Snapshot/Manipulate` flags |
+| **T209** | Backend: `volumes.list` returns full volume data including system volumes (with `isSystem: true`) |
+| **T210** | Frontend: `VolumeActionButtons` component with conditional rendering by capability flags |
+| **T211** | Frontend: "Hide system volumes" toggle (User only / All), persisted to localStorage |
+| **T212** | Frontend: Host column shows single host, multi-host count, or replica count for ZFS |
+| **T213** | Frontend: System volumes get lock icon + reduced opacity (0.65) + SYSTEM badge |
+| **T214** | Tests: `volumes.spec.ts` — verify system volumes have no action buttons, user volumes do, multi-host display, toggle persistence |
+| **T215** | Tests: Go `volumes_test.go` — verify backend returns isSystem correctly for each volume type |
+
+### Acceptance criteria
+
+1. Volumes table includes **Host(s)** column showing physical host(s) for each volume
+2. Multi-host volumes display as `<N> hosts` with hover tooltip listing all hostnames
+3. System volumes (OS, EFI, swap, boot, recovery) are displayed in **dimmed** style (opacity 0.65)
+4. System volumes have a **lock icon** + **SYSTEM badge**
+5. System volumes have **NO action buttons** (Snap/Resize/Del)
+6. Toolbar has "Hide system volumes" toggle, defaulting to **User only**
+7. User volumes have full Snap/Resize/Del buttons per their `can*` flags
+8. Per-volume capabilities (`canResize`, `canDelete`, `canSnapshot`) honored from backend
+
+---
+
+## Feature Flags & Mock Data (Application-wide switch)
+
+> Per Honcho peer `cloudbsd-admin-feature-flags` (5 conclusions). Three-state per flag: `production` (OFF, no experimental data), `development` (ON, mocks visible), `force` (always on regardless of env). Like IntelliJ run configs.
+
+### Flag definitions
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `showVgpuResources` | `production` | Show vGPU passthrough detail on worker nodes (GPU pool, allocation bars, VRAM tracking) |
+| `showBetaFeatures` | `production` | Show early WIP features (e.g., plugin marketplace, multi-tenant, audit log export) |
+| `showDebugInfo` | `production` | Show verbose tooltips, stack traces in non-prod, debug JSON panels |
+| `enableMockBackend` | `force` (dev) / `production` (prod) | Use in-memory mock data instead of real backend. In production, this is forced OFF. |
+| `showExperimentalSchemas` | `production` | Show v2.0.0 envelope schema fields in API docs (for early adopters) |
+
+### Frontend: `FeatureFlagService` (TS)
+
+```typescript
+// web-new/src/app/core/feature-flags/feature-flag.service.ts
+import { Injectable, signal, computed } from '@angular/core';
+
+export type FlagState = 'production' | 'development' | 'force';
+export type EffectiveState = 'off' | 'on';
+
+export interface FeatureFlag {
+  /** Stable identifier (used in code, logs, telemetry) */
+  name: string;
+  /** Human-readable label */
+  label: string;
+  /** Detailed description (shown in debug panel) */
+  description: string;
+  /** Default state when no override is set */
+  default: FlagState;
+  /** Env var that overrides the default (e.g. CLOUBSD_ADMIN_SHOW_VGPU) */
+  envVar: string;
+  /** Whether this flag is for production-relevant features (false = dev-only) */
+  affectsProduction: boolean;
+}
+
+@Injectable({ providedIn: 'root' })
+export class FeatureFlagService {
+  private readonly _overrides = signal<Map<string, FlagState>>(this.loadOverrides());
+  
+  /** All known flags. Single source of truth. */
+  readonly flags: FeatureFlag[] = [
+    {
+      name: 'showVgpuResources',
+      label: 'vGPU Resources',
+      description: 'Show vGPU passthrough detail on worker nodes (GPU pool, allocation bars, VRAM tracking)',
+      default: 'production',
+      envVar: 'CLOUBSD_ADMIN_SHOW_VGPU',
+      affectsProduction: false,
+    },
+    {
+      name: 'showBetaFeatures',
+      label: 'Beta Features',
+      description: 'Show early WIP features (e.g., plugin marketplace, multi-tenant, audit log export)',
+      default: 'production',
+      envVar: 'CLOUBSD_ADMIN_SHOW_BETA',
+      affectsProduction: false,
+    },
+    {
+      name: 'showDebugInfo',
+      label: 'Debug Info',
+      description: 'Show verbose tooltips, stack traces in non-prod, debug JSON panels',
+      default: 'production',
+      envVar: 'CLOUBSD_ADMIN_SHOW_DEBUG',
+      affectsProduction: false,
+    },
+    {
+      name: 'enableMockBackend',
+      label: 'Mock Backend',
+      description: 'Use in-memory mock data instead of real backend',
+      default: 'force',  // dev default, prod forces off
+      envVar: 'CLOUBSD_ADMIN_MOCK_BACKEND',
+      affectsProduction: true,  // affects how prod is configured
+    },
+  ];
+  
+  /** Effective state (resolved: 'off' or 'on') */
+  effectiveState = computed(() => {
+    const map = new Map<string, EffectiveState>();
+    for (const flag of this.flags) {
+      map.set(flag.name, this.computeEffective(flag));
+    }
+    return map;
+  });
+  
+  isEnabled(name: string): boolean {
+    return this.effectiveState().get(name) === 'on';
+  }
+  
+  isDevelopment(name: string): boolean {
+    const state = this._overrides().get(name);
+    return state === 'development';
+  }
+  
+  isForce(name: string): boolean {
+    const state = this._overrides().get(name);
+    return state === 'force';
+  }
+  
+  setOverride(name: string, state: FlagState): void {
+    const next = new Map(this._overrides());
+    next.set(name, state);
+    this._overrides.set(next);
+    this.persistOverrides(next);
+    // Audit log via JSONL
+    console.log(`[flag] ${name} = ${state} (user=mlapointe)`);
+  }
+  
+  resetOverride(name: string): void {
+    const next = new Map(this._overrides());
+    next.delete(name);
+    this._overrides.set(next);
+    this.persistOverrides(next);
+  }
+  
+  private computeEffective(flag: FeatureFlag): EffectiveState {
+    const override = this._overrides().get(flag.name);
+    const state = override ?? flag.default;
+    // Production safety: features not production-affecting are FORCED off in prod
+    if (state === 'production' && !flag.affectsProduction && environment.production) {
+      return 'off';
+    }
+    if (state === 'force') return 'on';
+    if (state === 'development') return 'on';
+    return 'off';
+  }
+  
+  private loadOverrides(): Map<string, FlagState> {
+    try {
+      const stored = localStorage.getItem('cloudbsd-admin-flags');
+      if (stored) return new Map(JSON.parse(stored));
+    } catch {}
+    return new Map();
+  }
+  
+  private persistOverrides(map: Map<string, FlagState>): void {
+    localStorage.setItem('cloudbsd-admin-flags', JSON.stringify([...map.entries()]));
+  }
+}
+```
+
+### Backend: `FeatureFlagConfig` (Go)
+
+```go
+// internal/config/feature_flags.go
+package config
+
+type FeatureFlag string
+
+const (
+    FlagShowVGPU       FeatureFlag = "show_vgpu_resources"
+    FlagShowBeta       FeatureFlag = "show_beta_features"
+    FlagShowDebug      FeatureFlag = "show_debug_info"
+    FlagMockBackend    FeatureFlag = "enable_mock_backend"
+)
+
+type FeatureFlags struct {
+    ShowVGPUResources FlagState `json:"showVgpuResources" default:"production"`
+    ShowBetaFeatures   FlagState `json:"showBetaFeatures" default:"production"`
+    ShowDebugInfo      FlagState `json:"showDebugInfo" default:"production"`
+    EnableMockBackend  FlagState `json:"enableMockBackend" default:"production"`
+}
+
+func (c *Config) EffectiveFlag(name string) string {
+    if !c.IsProduction() {
+        return "force"  // dev always returns force
+    }
+    // prod: feature flag as configured
+    return c.Flags.Get(name)
+}
+
+func (c *Config) IsVGPUEnabled() bool {
+    return c.EffectiveFlag(string(FlagShowVGPU)) != "production"
+}
+```
+
+### `web-new/src/environments/environment.ts`
+
+```typescript
+export const environment = {
+  production: false,
+  apiBaseUrl: 'http://localhost:3001',
+  wsBaseUrl: 'ws://localhost:3001',
+  buildVersion: 'v1.0.0+go1.26.3+freebsd16.0',
+  useMocks: true,
+  envelopeVersion: 1,
+  supportedSchemaVersions: [1],
+  
+  // Feature flags — overridden by env vars or IntelliJ run configurations
+  featureFlags: {
+    showVgpuResources: 'development',  // 'production' | 'development' | 'force'
+    showBetaFeatures:   'production',
+    showDebugInfo:      'development',
+    enableMockBackend:  'force',
+  },
+  
+  // Mock data toggle (independent of feature flag)
+  mockData: {
+    vgpu: {
+      enabled: true,
+      cards: [
+        { id: 'gpu-0', model: 'NVIDIA T4',  vramBytes: 16 * 1024**3, allocatedBytes: 4 * 1024**3, node: 'cloudbsd-node-01' },
+        { id: 'gpu-1', model: 'NVIDIA T4',  vramBytes: 16 * 1024**3, allocatedBytes: 0,                node: 'cloudbsd-node-01' },
+        { id: 'gpu-2', model: 'NVIDIA RTX A5000', vramBytes: 24 * 1024**3, allocatedBytes: 12 * 1024**3, node: 'cloudbsd-node-02' },
+      ],
+      allocations: [
+        { vm: 'jellyfin',    gpu: 'gpu-0', vramBytes: 4 * 1024**3, type: 'whole' },
+        { vm: 'immich',      gpu: 'gpu-0', vramBytes: 2 * 1024**3, type: 'slice-1-2' },
+        { vm: 'win11-sandbox', gpu: 'gpu-2', vramBytes: 8 * 1024**3, type: 'slice-1-3' },
+        { vm: 'win11-gaming',  gpu: 'gpu-2', vramBytes: 4 * 1024**3, type: 'slice-1-6' },
+      ],
+    },
+  },
+};
+
+export const environmentProd = {
+  ...environment,
+  production: true,
+  apiBaseUrl: 'https://api.cloudbsd.org',
+  wsBaseUrl: 'wss://api.cloudbsd.org',
+  useMocks: false,
+  featureFlags: {
+    showVgpuResources: 'production',
+    showBetaFeatures:   'production',
+    showDebugInfo:      'production',
+    enableMockBackend:  'production',  // forced off in prod
+  },
+  mockData: { vgpu: { enabled: false, cards: [], allocations: [] } },
+};
+```
+
+### Mock vGPU component (when flag enabled)
+
+`web-new/src/app/features/vgpu-pool/`
+
+```typescript
+// vgpu-pool.component.ts
+import { Component, inject, computed } from '@angular/core';
+import { FeatureFlagService } from '../core/feature-flags/feature-flag.service';
+import { environment } from '../../environments/environment';
+
+@Component({
+  selector: 'app-vgpu-pool-panel',
+  template: `
+    @if (show()) {
+      <div class="vgpu-pool">
+        <h3>GPU Pool ({{ cards().length }} physical GPUs)</h3>
+        @for (card of cards(); track card.id) {
+          <div class="gpu-card">
+            <span class="gpu-name">{{ card.model }}</span>
+            <div class="vram-bar">
+              <div [style.width.%]="(card.allocatedBytes / card.vramBytes) * 100"
+                   [class.full]="card.allocatedBytes / card.vramBytes > 0.9">
+                {{ formatBytes(card.allocatedBytes) }} / {{ formatBytes(card.vramBytes) }}
+              </div>
+            </div>
+            <div class="allocations">
+              @for (alloc of allocationsFor(card.id); track alloc.vm) {
+                <span>{{ alloc.vm }}: {{ formatBytes(alloc.vramBytes) }} ({{ alloc.type }})</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  `,
+})
+export class VgpuPoolPanel {
+  private flags = inject(FeatureFlagService);
+  
+  show = computed(() => this.flags.isEnabled('showVgpuResources') && environment.mockData.vgpu.enabled);
+  cards = computed(() => environment.mockData.vgpu.cards);
+  allocations = computed(() => environment.mockData.vgpu.allocations);
+  
+  allocationsFor(gpuId: string) {
+    return this.allocations().filter(a => a.gpu === gpuId);
+  }
+  
+  formatBytes(b: number): string {
+    return `${(b / (1024**3)).toFixed(1)} GB`;
+  }
+}
+```
+
+### Run configurations (IntelliJ/JetBrains only)
+
+`.idea/runConfigurations/Production.xml`:
+```xml
+<configuration name="Production" type="JavaScriptDebugType" name="Production" applicationName="cloudbsd-admin-ui" uri="http://localhost:4200" workingDir="$PROJECT_DIR$/web-new">
+  <envs>
+    <env name="CLOUBSD_ADMIN_SHOW_VGPU" value="production" />
+    <env name="CLOUBSD_ADMIN_SHOW_BETA" value="production" />
+    <env name="CLOUBSD_ADMIN_SHOW_DEBUG" value="production" />
+    <env name="CLOUBSD_ADMIN_MOCK_BACKEND" value="production" />
+  </envs>
+</configuration>
+```
+
+`.idea/runConfigurations/Development_with_mocks.xml`:
+```xml
+<configuration name="Development with mocks" type="JavaScriptDebugType" ...>
+  <envs>
+    <env name="CLOUBSD_ADMIN_SHOW_VGPU" value="development" />
+    <env name="CLOUBSD_ADMIN_SHOW_BETA" value="development" />
+    <env name="CLOUBSD_ADMIN_SHOW_DEBUG" value="development" />
+    <env name="CLOUBSD_ADMIN_MOCK_BACKEND" value="force" />
+  </envs>
+</configuration>
+```
+
+`.idea/runConfigurations/Mock_only.xml`:
+```xml
+<configuration name="Mock only" type="JavaScriptDebugType" ...>
+  <envs>
+    <env name="CLOUBSD_ADMIN_SHOW_VGPU" value="force" />
+    <env name="CLOUBSD_ADMIN_SHOW_BETA" value="force" />
+    <env name="CLOUBSD_ADMIN_SHOW_DEBUG" value="force" />
+    <env name="CLOUBSD_ADMIN_MOCK_BACKEND" value="force" />
+  </envs>
+</configuration>
+```
+
+`.vscode/launch.json`:
+> **NOT GENERATED.** This project uses IntelliJ/JetBrains products only (IntelliJ IDEA, GoLand, PyCharm, WebStorm). Use Run > Edit Configurations in your IDE. The `.idea/runConfigurations/*.xml` files are the canonical config (see T201).
+```json
+// VSCode not supported. IntelliJ-only.
+{}
+```
+
+### vGPU mock diagram (component reference)
+
+`diagrams/components/17-vgpu-pool.svg` (new)
+
+Shows the vGPU pool panel with:
+- 2x NVIDIA T4 cards (16 GB each, 1 fully allocated, 1 empty)
+- 1x NVIDIA RTX A5000 (24 GB, 12 GB allocated across 2 VMs)
+- Per-card VRAM bars with allocation
+- Allocation list per card
+- Whole-GPU vs slice indicator
+
+### Implementation tasks (new)
+
+| Task | Description |
+|------|-------------|
+| **T193** | `FeatureFlagService` (TS) with `isEnabled()`, `setOverride()`, signal reactivity, localStorage persistence |
+| **T194** | `environment.ts` flags field + dev/prod variants |
+| **T195** | `internal/config/feature_flags.go` (Go mirror) with `EffectiveFlag()` |
+| **T196** | `web-new/src/app/features/vgpu-pool/vgpu-pool.component.ts` (conditional render on flag) |
+| **T197** | `web-new/src/app/features/vgpu-pool/vgpu-pool.component.spec.ts` (unit tests, 100% coverage) |
+| **T198** | `web-new/src/environments/environment.spec.ts` (3-state flag tests) |
+| **T199** | `internal/config/feature_flags_test.go` (Go mirror tests) |
+| **T200** | Mock vGPU data in `environment.ts` (3 GPUs, 4 allocations, realistic NVIDIA/AMD specs) |
+| **T201** | `.idea/runConfigurations/Production.xml` + `Development_with_mocks.xml` + `Mock_only.xml` + `Force_all_flags.xml` (IntelliJ only, no VSCode) |
+| **T203** | `diagrams/components/17-vgpu-pool.svg` (mock-up of GPU pool panel) |
+| **T204** | `FeatureFlagDebugPanel` (only visible when `showDebugInfo=force`) |
+| **T205** | Flag change audit log (JSONL: user, timestamp, old, new) |
+| **T206** | CI matrix: run unit tests against all 4 run config scenarios (12 test runs) |
+| **T207** | Docs: `docs/configuration/feature-flags.md` — when to use each flag, security implications |
+
+### Acceptance criteria
+
+1. **3-state flag** (`production` / `development` / `force`) implemented in TS + Go
+2. **Environment override** via env vars (`CLOUBSD_ADMIN_SHOW_VGPU=development`)
+3. **localStorage override** for interactive dev changes without page reload
+4. **Signal reactivity** — UI components re-render when flag changes
+5. **vGPU feature OFF by default** in production builds
+6. **Mock data deterministic** — same seed (42) produces same GPUs/allocations
+7. **4 run configurations** in `.idea/runConfigurations/` (IntelliJ/JetBrains only — no VSCode)
+8. **CI tests all 4 scenarios** (production, dev-mocks, force-all, mock-only)
+9. **Flag change audit** logged to JSONL
+10. **Debug panel** only shown when `showDebugInfo=force`
+11. **Honcho peer `cloudbsd-admin-feature-flags`** has 5 conclusions capturing the standard
 
 ---
 
