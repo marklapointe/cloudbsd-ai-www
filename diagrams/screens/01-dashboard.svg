@@ -22,7 +22,7 @@
             <button class="text-sm text-slate-600 hover:text-slate-900">Refresh</button>
             <button class="relative w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center">
               <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-rose-500"></span>
-              <span class="text-sm">&#128276;</span>
+              <span class="text-sm">🔔</span>
             </button>
             <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">M</div>
           </div>
@@ -130,7 +130,7 @@
                   </div>
                   <div class="mt-2 space-y-1 text-xs">
                     <div class="flex items-center gap-2"><span class="w-16 text-slate-600">tank/data</span><div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-blue-500" style="width:27%"></div></div><span class="w-12 text-right tabular-nums">27%</span></div>
-                    <div class="flex items-center gap-2"><span class="w-16 text-slate-600">tank/media</span><div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-amber-500" style="width:80%"></div></div><span class="w-12 text-right tabular-nums text-amber-700">80% &#9888;</span></div>
+                    <div class="flex items-center gap-2"><span class="w-16 text-slate-600">tank/media</span><div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-amber-500" style="width:80%"></div></div><span class="w-12 text-right tabular-nums text-amber-700">80% ⚠</span></div>
                     <div class="flex items-center gap-2"><span class="w-16 text-slate-600">tank/vms</span><div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-amber-500" style="width:76%"></div></div><span class="w-12 text-right tabular-nums">76%</span></div>
                     <div class="flex items-center gap-2"><span class="w-16 text-slate-600">tank/backup</span><div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-emerald-500" style="width:27%"></div></div><span class="w-12 text-right tabular-nums">27%</span></div>
                   </div>
@@ -145,8 +145,8 @@
                     <a class="text-xs text-blue-600">View details</a>
                   </div>
                   <div class="flex items-baseline gap-3">
-                    <span class="text-lg font-bold text-emerald-700">&#8593; 12.4 MB/s</span>
-                    <span class="text-lg font-bold text-blue-700">&#8595; 86.1 MB/s</span>
+                    <span class="text-lg font-bold text-emerald-700">↑ 12.4 MB/s</span>
+                    <span class="text-lg font-bold text-blue-700">↓ 86.1 MB/s</span>
                   </div>
                   <div class="mt-2 space-y-1 text-xs">
                     <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span><span class="w-12 text-slate-600">igc0</span><span class="text-emerald-700">up</span><span class="text-slate-500">1GbE</span><span class="ml-auto tabular-nums">142K pkts/s</span></div>
@@ -163,12 +163,12 @@
                     <span class="text-xs text-slate-500 uppercase tracking-wide">Temperature</span>
                     <a class="text-xs text-blue-600">View details</a>
                   </div>
-                  <div class="text-3xl font-bold">47<span class="text-base text-slate-500">&deg;C</span></div>
+                  <div class="text-3xl font-bold">47<span class="text-base text-slate-500">°C</span></div>
                   <div class="text-xs text-emerald-700">CPU normal</div>
                   <div class="mt-2 space-y-1 text-xs">
-                    <div class="flex justify-between"><span class="text-slate-600">CPU</span><span class="text-slate-700">47&deg;C</span></div>
-                    <div class="flex justify-between"><span class="text-slate-600">NVMe</span><span class="text-slate-700">38&deg;C</span></div>
-                    <div class="flex justify-between"><span class="text-slate-600">Ambient</span><span class="text-slate-700">41&deg;C</span></div>
+                    <div class="flex justify-between"><span class="text-slate-600">CPU</span><span class="text-slate-700">47°C</span></div>
+                    <div class="flex justify-between"><span class="text-slate-600">NVMe</span><span class="text-slate-700">38°C</span></div>
+                    <div class="flex justify-between"><span class="text-slate-600">Ambient</span><span class="text-slate-700">41°C</span></div>
                   </div>
                   <div class="text-xs text-slate-400 mt-2">Sensor calibrated 2026-06-12</div>
                 </div>
