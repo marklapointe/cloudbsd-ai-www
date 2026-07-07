@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
   <title>CloudBSD Admin — Dashboard</title>
+  <desc>System health with sparkline widgets, uniform activity feed, per-panel time-range, searchable timezone selector.</desc>
   <foreignObject x="0" y="0" width="1280" height="800">
     <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:13px;box-sizing:border-box;overflow:hidden;">
       <div style="height:56px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;padding:0 16px;box-sizing:border-box;">
         <div style="width:32px;height:32px;border-radius:6px;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;">C</div>
         <span style="font-weight:700;font-size:17px;margin-left:8px;color:#0f172a;">CloudBSD Admin</span>
-        <span style="margin-left:10px;padding:2px 8px;font-size:11px;border-radius:4px;background:#f1f5f9;color:#475569;">freenas-mock.local</span>
-        <span style="margin-left:6px;padding:2px 8px;font-size:11px;border-radius:4px;background:#d1fae5;color:#065f46;display:inline-flex;align-items:center;gap:4px;"><span style="width:6px;height:6px;border-radius:50%;background:#10b981;"></span>connected</span>
-        <div style="margin-left:auto;display:flex;align-items:center;gap:14px;font-size:12px;color:#64748b;">
-          <span style="display:inline-flex;align-items:center;gap:5px;"><span style="width:6px;height:6px;border-radius:50%;background:#10b981;"></span>backend OK · 18ms</span>
-          <span style="cursor:pointer;">Refresh</span>
-          <div style="position:relative;width:30px;height:30px;border-radius:50%;background:#f1f5f9;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;">␇<span style="position:absolute;top:2px;right:2px;width:8px;height:8px;border-radius:50%;background:#ef4444;border:1.5px solid #ffffff;"></span></div>
+        <span style="margin-left:10px;padding:2px 8px;font-size:11px;border-radius:4px;background:#f1f5f9;color:#475569;">cloudbsd-node-01.local</span>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:12px;font-size:12px;color:#64748b;">
+          <select style="padding:4px 8px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;">
+            <option>Browser TZ</option>
+            <option selected="selected">UTC</option>
+            <option>America/Montreal</option>
+            <option>America/New_York</option>
+            <option>America/Los_Angeles</option>
+            <option>Europe/Berlin</option>
+            <option>Europe/London</option>
+            <option>Asia/Tokyo</option>
+            <option>Asia/Shanghai</option>
+            <option>Australia/Sydney</option>
+          </select>
+          <button style="position:relative;width:30px;height:30px;border-radius:50%;background:#f1f5f9;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;border:0;color:#475569;">&#x2407;
+            <span style="position:absolute;top:0;right:0;min-width:18px;height:18px;border-radius:9px;background:#ef4444;color:#ffffff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 5px;">17</span>
+          </button>
           <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;">M</div>
         </div>
       </div>
@@ -19,53 +31,285 @@
         <aside style="width:224px;background:#ffffff;border-right:1px solid #e2e8f0;padding:14px 10px;box-sizing:border-box;overflow-y:auto;flex-shrink:0;">
           <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;padding:0 10px 6px;">Overview</div>
           <nav style="font-size:13px;">
-            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;background:linear-gradient(90deg,#eff6ff,#dbeafe);color:#1d4ed8;font-weight:600;border-left:3px solid #2563eb;margin-bottom:2px;"><span>■ Dashboard</span><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:#2563eb;color:#ffffff;">12</span></a>
-            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>▢ Virtual Machines</span><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:#e2e8f0;color:#475569;">47</span></a>
-            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>□ Containers</span><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:#e2e8f0;color:#475569;">62</span></a>
-            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>■ Jails</span><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:#e2e8f0;color:#475569;">12</span></a>
-            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>◆ Volumes</span><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:#e2e8f0;color:#475569;">13</span></a>
-            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>◎ Network Map</span></a>
-            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>◈ Cluster</span><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:#e2e8f0;color:#475569;">6</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;background:linear-gradient(90deg,#eff6ff,#dbeafe);color:#1d4ed8;font-weight:600;border-left:3px solid #2563eb;margin-bottom:2px;cursor:pointer;"><span>Dashboard</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Virtual Machines</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Containers</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Jails</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Volumes</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Network Map</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Cluster</span></a>
           </nav>
           <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;padding:14px 10px 6px;">Admin</div>
           <nav style="font-size:13px;">
-            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>⚖ Users</span></a>
-            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>☰ Logs</span><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:#fee2e2;color:#b91c1c;">142</span></a>
-            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>␇ Notifications</span><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:#fef3c7;color:#92400e;">17</span></a>
-            <a style="display:block;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">⚙ Settings</a>
-            <a style="display:block;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">✔ Status</a>
-            <a style="display:block;padding:7px 12px;border-radius:6px;color:#334155;cursor:pointer;">About</a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Users</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Logs</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Notifications</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Settings</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Status</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>About</span></a>
           </nav>
           <div style="margin-top:auto;padding:14px 10px;border-top:1px solid #f1f5f9;font-size:11px;color:#94a3b8;">
-            <div>Backend: 14.2-RELEASE</div>
+            <div>Host: cloudbsd-node-01</div>
             <div>Uptime: 14d 02:11</div>
           </div>
         </aside>
         <main style="flex:1;overflow-y:auto;padding:16px 20px;box-sizing:border-box;">
-          <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;background:#ffffff;padding:10px 14px;border-radius:8px;border:1px solid #e2e8f0;">
-            <span style="font-size:12px;color:#64748b;">Host: <b style="color:#0f172a;">freenas-mock</b></span>
-            <div style="display:flex;border:1px solid #e2e8f0;border-radius:6px;overflow:hidden;font-size:11px;">
-              <button style="padding:4px 10px;border:0;background:#f8fafc;color:#64748b;cursor:pointer;">1h</button>
-              <button style="padding:4px 10px;border:0;background:#f8fafc;color:#64748b;cursor:pointer;">6h</button>
-              <button style="padding:4px 10px;border:0;background:#2563eb;color:#ffffff;font-weight:600;cursor:pointer;">24h</button>
-              <button style="padding:4px 10px;border:0;background:#f8fafc;color:#64748b;cursor:pointer;">7d</button>
-              <button style="padding:4px 10px;border:0;background:#f8fafc;color:#64748b;cursor:pointer;">30d</button>
-            </div>
-            <span style="font-size:11px;color:#94a3b8;">• Last updated: 4s ago</span>
-            <div style="margin-left:auto;display:flex;gap:6px;">
-              <button style="padding:5px 12px;font-size:12px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#334155;cursor:pointer;">↻ Refresh</button>
-              <button style="padding:5px 12px;font-size:12px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#334155;cursor:pointer;">↓ Export</button>
-            </div>
-          </div>
           <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px;">
-            <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04);"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><span style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">CPU Usage</span><a style="font-size:11px;color:#2563eb;text-decoration:none;font-weight:500;">View details</a></div><div style="display:flex;align-items:baseline;gap:6px;"><span style="font-size:28px;font-weight:700;color:#0f172a;background:#dbeafe;padding:2px 8px;border-radius:6px;">42%</span><span style="font-size:13px;color:#64748b;"></span></div><div style="font-size:11px;color:#64748b;margin-top:6px;">Load Avg: 1.42 / 1.38 / 1.21</div>
-              <div style="display:flex;gap:2px;margin-top:8px;height:6px;"><div style="flex:1;height:6px;background:#10b981;border-radius:2px;" title="38%"></div><div style="flex:1;height:6px;background:#10b981;border-radius:2px;" title="28%"></div><div style="flex:1;height:6px;background:#f59e0b;border-radius:2px;" title="52%"></div><div style="flex:1;height:6px;background:#ef4444;border-radius:2px;" title="68%"></div><div style="flex:1;height:6px;background:#10b981;border-radius:2px;" title="32%"></div><div style="flex:1;height:6px;background:#f59e0b;border-radius:2px;" title="42%"></div><div style="flex:1;height:6px;background:#10b981;border-radius:2px;" title="18%"></div><div style="flex:1;height:6px;background:#10b981;border-radius:2px;" title="14%"></div></div><div style="display:flex;gap:2px;margin-top:2px;"><div style="flex:1;text-align:center;font-size:9px;color:#94a3b8;">38</div><div style="flex:1;text-align:center;font-size:9px;color:#94a3b8;">28</div><div style="flex:1;text-align:center;font-size:9px;color:#94a3b8;">52</div><div style="flex:1;text-align:center;font-size:9px;color:#94a3b8;">68</div><div style="flex:1;text-align:center;font-size:9px;color:#94a3b8;">32</div><div style="flex:1;text-align:center;font-size:9px;color:#94a3b8;">42</div><div style="flex:1;text-align:center;font-size:9px;color:#94a3b8;">18</div><div style="flex:1;text-align:center;font-size:9px;color:#94a3b8;">14</div></div>
-              <svg viewBox="0 0 120 20" preserveAspectRatio="none" style="width:100%;height:24px;margin-top:6px;display:block;"><defs><linearGradient id="sg0" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#2563eb" stop-opacity="0.4"/><stop offset="100%" stop-color="#2563eb" stop-opacity="0"/></linearGradient></defs><polygon points="0,20 0,2 10,6 20,4 30,10 40,8 50,12 60,9 70,14 80,11 90,13 100,16 110,12 120,15 120,20" fill="url(#sg0)"/><polyline points="0,2 10,6 20,4 30,10 40,8 50,12 60,9 70,14 80,11 90,13 100,16 110,12 120,15" fill="none" stroke="#2563eb" stroke-width="1.5"/></svg></div>
-            <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04);"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><span style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">Memory</span><a style="font-size:11px;color:#059669;text-decoration:none;font-weight:500;">View details</a></div><div style="display:flex;align-items:baseline;gap:6px;"><span style="font-size:28px;font-weight:700;color:#0f172a;background:#d1fae5;padding:2px 8px;border-radius:6px;">8.2</span><span style="font-size:13px;color:#64748b;">/ 16 GB</span></div><div style="font-size:11px;color:#64748b;margin-top:6px;">Used 6.4 · Buffers 1.2 · Cache 1.8 · ARC 2.4</div>
-              <svg viewBox="0 0 120 20" preserveAspectRatio="none" style="width:100%;height:24px;margin-top:6px;display:block;"><defs><linearGradient id="sg1" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#10b981" stop-opacity="0.4"/><stop offset="100%" stop-color="#10b981" stop-opacity="0"/></linearGradient></defs><polygon points="0,20 0,4 10,6 20,5 30,8 40,7 50,10 60,9 70,12 80,11 90,13 100,14 110,12 120,13 120,20" fill="url(#sg1)"/><polyline points="0,4 10,6 20,5 30,8 40,7 50,10 60,9 70,12 80,11 90,13 100,14 110,12 120,13" fill="none" stroke="#10b981" stroke-width="1.5"/></svg></div>
-            <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04);"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><span style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">Disk</span><a style="font-size:11px;color:#d97706;text-decoration:none;font-weight:500;">View details</a></div><div style="display:flex;align-items:baseline;gap:6px;"><span style="font-size:28px;font-weight:700;color:#0f172a;background:#fef3c7;padding:2px 8px;border-radius:6px;">245</span><span style="font-size:13px;color:#64748b;">/ 920 GB</span></div><div style="font-size:11px;color:#64748b;margin-top:6px;">tank/data 27% · tank/media 80% ⚠ · tank/vms 76%</div>
-              <svg viewBox="0 0 120 20" preserveAspectRatio="none" style="width:100%;height:24px;margin-top:6px;display:block;"><defs><linearGradient id="sg2" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.4"/><stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/></linearGradient></defs><polygon points="0,20 0,0 10,2 20,3 30,4 40,6 50,7 60,8 70,9 80,11 90,12 100,13 110,14 120,15 120,20" fill="url(#sg2)"/><polyline points="0,0 10,2 20,3 30,4 40,6 50,7 60,8 70,9 80,11 90,12 100,13 110,14 120,15" fill="none" stroke="#f59e0b" stroke-width="1.5"/></svg></div>
-            <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04);"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><span style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">Network</span><a style="font-size:11px;color:#9333ea;text-decoration:none;font-weight:500;">View details</a></div><div style="display:flex;align-items:baseline;gap:6px;"><span style="font-size:28px;font-weight:700;color:#0f172a;background:#e9d5ff;padding:2px 8px;border-radius:6px;">↑ 12.4</span><span style="font-size:13px;color:#64748b;">MB/s</span></div><div style="font-size:11px;color:#64748b;margin-top:6px;">↓ 86.1 MB/s · 3 interfaces up</div>
-              <svg viewBox="0 0 120 20" preserveAspectRatio="none" style="width:100%;height:24px;margin-top:6px;display:block;"><defs><linearGradient id="sg3" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#a855f7" stop-opacity="0.4"/><stop offset="100%" stop-color="#a855f7" stop-opacity="0"/></linearGradient></defs><polygon points="0,20 0,8 10,12 20,6 30,14 40,10 50,16 60,12 70,18 80,14 90,17 100,12 110,15 120,17 120,20" fill="url(#sg3)"/><polyline points="0,8 10,12 20,6 30,14 40,10 50,16 60,12 70,18 80,14 90,17 100,12 110,15 120,17" fill="none" stroke="#a855f7" stroke-width="1.5"/></svg></div>
+            <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                <span style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">CPU Usage</span>
+                <svg viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
+                  <polyline points="0,7.8 5,9.399999999999999 10,8.6 15,11.0 20,10.2 25,11.8 30,10.6 35,12.6 40,11.4 45,12.2 50,13.4 55,11.8 60,13.0" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:4px;">
+                <span style="font-size:24px;font-weight:700;color:#0f172a;background:#dbeafe;padding:1px 6px;border-radius:5px;line-height:1.1;">42%</span>
+                <span style="font-size:11px;color:#64748b;">Load 1.42</span>
+              </div>
+              <div style="display:flex;justify-content:flex-end;margin-top:6px;">
+                <select style="padding:1px 4px;font-size:9px;border:1px solid #e2e8f0;border-radius:3px;background:#f8fafc;color:#94a3b8;">
+                  <option>5m</option><option>15m</option><option selected="selected">1h</option><option>6h</option><option>24h</option><option>7d</option>
+                </select>
+              </div>
+            </div>
+            <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                <span style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">Memory</span>
+                <svg viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
+                  <polyline points="0,6.199999999999999 5,5.399999999999999 10,4.6 15,3.799999999999999 20,3.0 25,2.1999999999999993 30,1.3999999999999986 35,0.5999999999999996 40,-0.20000000000000107 45,-1.0 50,-1.4000000000000021 55,-1.8000000000000007 60,-1.8000000000000007" fill="none" stroke="#059669" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:4px;">
+                <span style="font-size:24px;font-weight:700;color:#0f172a;background:#d1fae5;padding:1px 6px;border-radius:5px;line-height:1.1;">8.2</span>
+                <span style="font-size:11px;color:#64748b;">/16 GB</span>
+              </div>
+              <div style="display:flex;justify-content:flex-end;margin-top:6px;">
+                <select style="padding:1px 4px;font-size:9px;border:1px solid #e2e8f0;border-radius:3px;background:#f8fafc;color:#94a3b8;">
+                  <option>5m</option><option>15m</option><option selected="selected">1h</option><option>6h</option><option>24h</option><option>7d</option>
+                </select>
+              </div>
+            </div>
+            <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                <span style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">Disk I/O</span>
+                <svg viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
+                  <polyline points="0,-33.0 5,-57.0 10,-69.0 15,-83.0 20,-97.0 25,-89.0 30,-83.0 35,-77.0 40,-69.0 45,-63.0 50,-57.0 55,-51.0 60,-45.0" fill="none" stroke="#d97706" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:4px;">
+                <span style="font-size:24px;font-weight:700;color:#0f172a;background:#fef3c7;padding:1px 6px;border-radius:5px;line-height:1.1;">245</span>
+                <span style="font-size:11px;color:#64748b;">MB/s</span>
+              </div>
+              <div style="display:flex;justify-content:flex-end;margin-top:6px;">
+                <select style="padding:1px 4px;font-size:9px;border:1px solid #e2e8f0;border-radius:3px;background:#f8fafc;color:#94a3b8;">
+                  <option>5m</option><option>15m</option><option selected="selected">1h</option><option>6h</option><option>24h</option><option>7d</option>
+                </select>
+              </div>
+            </div>
+            <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                <span style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">Network</span>
+                <svg viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
+                  <polyline points="0,-9.0 5,-11.0 10,-13.0 15,-15.0 20,-17.0 25,-19.0 30,-19.4 35,-18.6 40,-17.800000000000004 45,-17.0 50,-16.200000000000003 55,-15.0 60,-13.0" fill="none" stroke="#9333ea" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:4px;">
+                <span style="font-size:24px;font-weight:700;color:#0f172a;background:#e9d5ff;padding:1px 6px;border-radius:5px;line-height:1.1;">86.1</span>
+                <span style="font-size:11px;color:#64748b;">MB/s</span>
+              </div>
+              <div style="display:flex;justify-content:flex-end;margin-top:6px;">
+                <select style="padding:1px 4px;font-size:9px;border:1px solid #e2e8f0;border-radius:3px;background:#f8fafc;color:#94a3b8;">
+                  <option>5m</option><option>15m</option><option selected="selected">1h</option><option>6h</option><option>24h</option><option>7d</option>
+                </select>
+              </div>
+            </div>
+            <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                <span style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">ZFS Health</span>
+                <svg viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
+                  <polyline points="0,14.6 5,14.6 10,14.6 15,14.6 20,14.6 25,14.6 30,14.6 35,14.6 40,14.6 45,14.6 50,14.6 55,14.6 60,14.6" fill="none" stroke="#0891b2" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:4px;">
+                <span style="font-size:24px;font-weight:700;color:#0f172a;background:#cffafe;padding:1px 6px;border-radius:5px;line-height:1.1;">tank</span>
+                <span style="font-size:11px;color:#64748b;">healthy</span>
+              </div>
+              <div style="display:flex;justify-content:flex-end;margin-top:6px;">
+                <select style="padding:1px 4px;font-size:9px;border:1px solid #e2e8f0;border-radius:3px;background:#f8fafc;color:#94a3b8;">
+                  <option>5m</option><option>15m</option><option selected="selected">1h</option><option>6h</option><option>24h</option><option>7d</option>
+                </select>
+              </div>
+            </div>
+            <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                <span style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">Memory Cache</span>
+                <svg viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
+                  <polyline points="0,-17.0 5,-17.800000000000004 10,-18.6 15,-19.0 20,-19.4 25,-19.800000000000004 30,-19.800000000000004 35,-20.200000000000003 40,-19.800000000000004 45,-19.800000000000004 50,-20.200000000000003 55,-19.800000000000004 60,-19.800000000000004" fill="none" stroke="#be185d" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:4px;">
+                <span style="font-size:24px;font-weight:700;color:#0f172a;background:#fce7f3;padding:1px 6px;border-radius:5px;line-height:1.1;">87.4%</span>
+                <span style="font-size:11px;color:#64748b;">ARC hit</span>
+              </div>
+              <div style="display:flex;justify-content:flex-end;margin-top:6px;">
+                <select style="padding:1px 4px;font-size:9px;border:1px solid #e2e8f0;border-radius:3px;background:#f8fafc;color:#94a3b8;">
+                  <option>5m</option><option>15m</option><option selected="selected">1h</option><option>6h</option><option>24h</option><option>7d</option>
+                </select>
+              </div>
+            </div>
+            <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                <span style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">Load Average</span>
+                <svg viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
+                  <polyline points="0,14.68 5,14.64 10,14.6 15,14.56 20,14.52 25,14.48 30,14.46 35,14.44 40,14.432 45,14.44 50,14.448 55,14.44 60,14.432" fill="none" stroke="#059669" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:4px;">
+                <span style="font-size:24px;font-weight:700;color:#0f172a;background:#d1fae5;padding:1px 6px;border-radius:5px;line-height:1.1;">1.42</span>
+                <span style="font-size:11px;color:#64748b;">5m 1.38</span>
+              </div>
+              <div style="display:flex;justify-content:flex-end;margin-top:6px;">
+                <select style="padding:1px 4px;font-size:9px;border:1px solid #e2e8f0;border-radius:3px;background:#f8fafc;color:#94a3b8;">
+                  <option>5m</option><option>15m</option><option selected="selected">1h</option><option>6h</option><option>24h</option><option>7d</option>
+                </select>
+              </div>
+            </div>
+            <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                <span style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">Process Count</span>
+                <svg viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
+                  <polyline points="0,-97.0 5,-99.0 10,-101.0 15,-103.0 20,-105.0 25,-107.0 30,-108.2 35,-109.0 40,-109.4 45,-109.80000000000001 50,-109.80000000000001 55,-109.80000000000001 60,-109.80000000000001" fill="none" stroke="#4f46e5" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:4px;">
+                <span style="font-size:24px;font-weight:700;color:#0f172a;background:#e0e7ff;padding:1px 6px;border-radius:5px;line-height:1.1;">312</span>
+                <span style="font-size:11px;color:#64748b;">+8% 1h</span>
+              </div>
+              <div style="display:flex;justify-content:flex-end;margin-top:6px;">
+                <select style="padding:1px 4px;font-size:9px;border:1px solid #e2e8f0;border-radius:3px;background:#f8fafc;color:#94a3b8;">
+                  <option>5m</option><option>15m</option><option selected="selected">1h</option><option>6h</option><option>24h</option><option>7d</option>
+                </select>
+              </div>
+            </div>
           </div>
-          <div style="display:grid;grid-template-columns:2fr 1fr;gap:12px;"><div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:14px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;"><h3 style="font-size:14px;font-weight:700;color:#0f172a;margin:0;">Recent Activity</h3><a style="font-size:11px;color:#2563eb;text-decoration:none;">View all logs →</a></div><div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f8fafc;font-size:11px;"><span style="font-family:monospace;color:#94a3b8;width:56px;flex-shrink:0;">12:42:01</span><span style="width:6px;height:6px;border-radius:50%;background:#10b981;flex-shrink:0;"></span><span style="flex:1;color:#334155;"><span style="font-weight:600;color:#0f172a;">zfs</span> snapshot daily@auto-2026-07-06_03-00 created on tank/data</span></div><div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f8fafc;font-size:11px;"><span style="font-family:monospace;color:#94a3b8;width:56px;flex-shrink:0;">12:31:18</span><span style="width:6px;height:6px;border-radius:50%;background:#10b981;flex-shrink:0;"></span><span style="flex:1;color:#334155;"><span style="font-weight:600;color:#0f172a;">jail</span> transmission entered STATE: STARTED</span></div><div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f8fafc;font-size:11px;"><span style="font-family:monospace;color:#94a3b8;width:56px;flex-shrink:0;">12:18:44</span><span style="width:6px;height:6px;border-radius:50%;background:#10b981;flex-shrink:0;"></span><span style="flex:1;color:#334155;"><span style="font-weight:600;color:#0f172a;">vm</span> nextcloud guest-agent heartbeat (3s drift)</span></div><div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f8fafc;font-size:11px;"><span style="font-family:monospace;color:#94a3b8;width:56px;flex-shrink:0;">11:55:09</span><span style="width:6px;height:6px;border-radius:50%;background:#10b981;flex-shrink:0;"></span><span style="flex:1;color:#334155;"><span style="font-weight:600;color:#0f172a;">scrub</span> of tank completed with 0 errors</span></div><div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f8fafc;font-size:11px;"><span style="font-family:monospace;color:#94a3b8;width:56px;flex-shrink:0;">11:42:18</span><span style="width:6px;height:6px;border-radius:50%;background:#10b981;flex-shrink:0;"></span><span style="flex:1;color:#334155;"><span style="font-weight:600;color:#0f172a;">alert</span> resolved: tank/data &lt; 80%</span></div><div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f8fafc;font-size:11px;"><span style="font-family:monospace;color:#94a3b8;width:56px;flex-shrink:0;">11:14:02</span><span style="width:6px;height:6px;border-radius:50%;background:#10b981;flex-shrink:0;"></span><span style="flex:1;color:#334155;"><span style="font-weight:600;color:#0f172a;">ct</span> nginx-proxy restarted (exit 0)</span></div><div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f8fafc;font-size:11px;"><span style="font-family:monospace;color:#94a3b8;width:56px;flex-shrink:0;">10:58:33</span><span style="width:6px;height:6px;border-radius:50%;background:#10b981;flex-shrink:0;"></span><span style="flex:1;color:#334155;"><span style="font-weight:600;color:#0f172a;">jail</span> pi-hole blocked 1,204 queries</span></div><div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f8fafc;font-size:11px;"><span style="font-family:monospace;color:#94a3b8;width:56px;flex-shrink:0;">10:33:07</span><span style="width:6px;height:6px;border-radius:50%;background:#10b981;flex-shrink:0;"></span><span style="flex:1;color:#334155;"><span style="font-weight:600;color:#0f172a;">vm</span> nextcloud snapshot to offsite OK</span></div></div><div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:14px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;"><h3 style="font-size:14px;font-weight:700;color:#0f172a;margin:0;">Top Consumers</h3><span style="font-size:10px;color:#94a3b8;">last 5 min</span></div><div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px;"><span style="color:#475569;">vm-bhyve/jellyfin</span><span style="font-family:monospace;color:#0f172a;font-weight:600;">86.1 MB/s</span></div><div style="height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div style="width:100.0%;height:100%;background:linear-gradient(90deg,#0ea5e9,#2563eb);"></div></div></div><div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px;"><span style="color:#475569;">postgres-16</span><span style="font-family:monospace;color:#0f172a;font-weight:600;">42.0 MB/s</span></div><div style="height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div style="width:48.78048780487806%;height:100%;background:linear-gradient(90deg,#0ea5e9,#2563eb);"></div></div></div><div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px;"><span style="color:#475569;">jail/syncthing</span><span style="font-family:monospace;color:#0f172a;font-weight:600;">28.4 MB/s</span></div><div style="height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div style="width:32.98490127758421%;height:100%;background:linear-gradient(90deg,#0ea5e9,#2563eb);"></div></div></div><div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px;"><span style="color:#475569;">vm-bhyve/nextcloud</span><span style="font-family:monospace;color:#0f172a;font-weight:600;">21.2 MB/s</span></div><div style="height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div style="width:24.62253193960511%;height:100%;background:linear-gradient(90deg,#0ea5e9,#2563eb);"></div></div></div><div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px;"><span style="color:#475569;">jail/transmission</span><span style="font-family:monospace;color:#0f172a;font-weight:600;">14.8 MB/s</span></div><div style="height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div style="width:17.189314750290364%;height:100%;background:linear-gradient(90deg,#0ea5e9,#2563eb);"></div></div></div></div></div></main></div></div></foreignObject></svg>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:14px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                <h3 style="font-size:14px;font-weight:700;color:#0f172a;margin:0;">Top Consumers</h3>
+                <select style="padding:2px 6px;font-size:10px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;">
+                  <option>5m</option><option>15m</option><option selected="selected">1h</option><option>6h</option><option>24h</option><option>7d</option>
+                </select>
+              </div>
+              <div style="margin-bottom:8px;">
+                <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px;"><span style="color:#475569;">vm-bhyve/jellyfin</span><span style="font-family:monospace;color:#0f172a;font-weight:600;">86.1 MB/s</span></div>
+                <div style="height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div style="width:78.27272727272727%;height:100%;background:linear-gradient(90deg,#0ea5e9,#2563eb);"></div></div>
+              </div>
+              <div style="margin-bottom:8px;">
+                <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px;"><span style="color:#475569;">postgres-16</span><span style="font-family:monospace;color:#0f172a;font-weight:600;">42.0 MB/s</span></div>
+                <div style="height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div style="width:44.21052631578947%;height:100%;background:linear-gradient(90deg,#0ea5e9,#2563eb);"></div></div>
+              </div>
+              <div style="margin-bottom:8px;">
+                <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px;"><span style="color:#475569;">jail/syncthing</span><span style="font-family:monospace;color:#0f172a;font-weight:600;">28.4 MB/s</span></div>
+                <div style="height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div style="width:37.86666666666667%;height:100%;background:linear-gradient(90deg,#0ea5e9,#2563eb);"></div></div>
+              </div>
+              <div style="margin-bottom:8px;">
+                <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px;"><span style="color:#475569;">vm-bhyve/nextcloud</span><span style="font-family:monospace;color:#0f172a;font-weight:600;">21.2 MB/s</span></div>
+                <div style="height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div style="width:42.4%;height:100%;background:linear-gradient(90deg,#0ea5e9,#2563eb);"></div></div>
+              </div>
+              <div style="margin-bottom:8px;">
+                <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px;"><span style="color:#475569;">jail/transmission</span><span style="font-family:monospace;color:#0f172a;font-weight:600;">14.8 MB/s</span></div>
+                <div style="height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div style="width:37.0%;height:100%;background:linear-gradient(90deg,#0ea5e9,#2563eb);"></div></div>
+              </div>
+            </div>
+            <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:14px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                <h3 style="font-size:14px;font-weight:700;color:#0f172a;margin:0;">Recent Activity</h3>
+                <a style="font-size:11px;color:#2563eb;text-decoration:none;">View all</a>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f8fafc;font-size:11px;height:32px;box-sizing:border-box;">
+                <span style="width:6px;height:6px;border-radius:50%;background:#10b981;flex-shrink:0;"></span>
+                <span style="font-size:14px;width:20px;text-align:center;flex-shrink:0;color:#64748b;">&#x2398;</span>
+                <span style="width:140px;flex-shrink:0;">
+                  <span style="font-family:monospace;color:#94a3b8;font-size:10px;display:block;">2026-07-06T12:42:01Z</span>
+                  <span style="color:#64748b;font-size:10px;">4m ago</span>
+                </span>
+                <span style="padding:1px 5px;border-radius:3px;background:#f1f5f9;color:#475569;font-size:9px;font-weight:600;text-transform:uppercase;flex-shrink:0;">snapshot</span>
+                <span style="flex:1;color:#334155;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">zfs</span> snapshot daily@auto-2026-07-06_03-00 created on tank/data</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f8fafc;font-size:11px;height:32px;box-sizing:border-box;">
+                <span style="width:6px;height:6px;border-radius:50%;background:#10b981;flex-shrink:0;"></span>
+                <span style="font-size:14px;width:20px;text-align:center;flex-shrink:0;color:#64748b;">&#x25B6;</span>
+                <span style="width:140px;flex-shrink:0;">
+                  <span style="font-family:monospace;color:#94a3b8;font-size:10px;display:block;">2026-07-06T12:31:18Z</span>
+                  <span style="color:#64748b;font-size:10px;">15m ago</span>
+                </span>
+                <span style="padding:1px 5px;border-radius:3px;background:#f1f5f9;color:#475569;font-size:9px;font-weight:600;text-transform:uppercase;flex-shrink:0;">start</span>
+                <span style="flex:1;color:#334155;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">jail</span> transmission entered STATE: STARTED</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f8fafc;font-size:11px;height:32px;box-sizing:border-box;">
+                <span style="width:6px;height:6px;border-radius:50%;background:#10b981;flex-shrink:0;"></span>
+                <span style="font-size:14px;width:20px;text-align:center;flex-shrink:0;color:#64748b;">&#x2764;</span>
+                <span style="width:140px;flex-shrink:0;">
+                  <span style="font-family:monospace;color:#94a3b8;font-size:10px;display:block;">2026-07-06T12:18:44Z</span>
+                  <span style="color:#64748b;font-size:10px;">27m ago</span>
+                </span>
+                <span style="padding:1px 5px;border-radius:3px;background:#f1f5f9;color:#475569;font-size:9px;font-weight:600;text-transform:uppercase;flex-shrink:0;">heartbeat</span>
+                <span style="flex:1;color:#334155;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">vm</span> nextcloud guest-agent heartbeat (3s drift)</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f8fafc;font-size:11px;height:32px;box-sizing:border-box;">
+                <span style="width:6px;height:6px;border-radius:50%;background:#10b981;flex-shrink:0;"></span>
+                <span style="font-size:14px;width:20px;text-align:center;flex-shrink:0;color:#64748b;">&#x2713;</span>
+                <span style="width:140px;flex-shrink:0;">
+                  <span style="font-family:monospace;color:#94a3b8;font-size:10px;display:block;">2026-07-06T11:55:09Z</span>
+                  <span style="color:#64748b;font-size:10px;">51m ago</span>
+                </span>
+                <span style="padding:1px 5px;border-radius:3px;background:#f1f5f9;color:#475569;font-size:9px;font-weight:600;text-transform:uppercase;flex-shrink:0;">complete</span>
+                <span style="flex:1;color:#334155;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">scrub</span> of tank completed with 0 errors</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f8fafc;font-size:11px;height:32px;box-sizing:border-box;">
+                <span style="width:6px;height:6px;border-radius:50%;background:#10b981;flex-shrink:0;"></span>
+                <span style="font-size:14px;width:20px;text-align:center;flex-shrink:0;color:#64748b;">&#x2715;</span>
+                <span style="width:140px;flex-shrink:0;">
+                  <span style="font-family:monospace;color:#94a3b8;font-size:10px;display:block;">2026-07-06T11:42:18Z</span>
+                  <span style="color:#64748b;font-size:10px;">1h ago</span>
+                </span>
+                <span style="padding:1px 5px;border-radius:3px;background:#f1f5f9;color:#475569;font-size:9px;font-weight:600;text-transform:uppercase;flex-shrink:0;">resolve</span>
+                <span style="flex:1;color:#334155;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">alert</span> tank/data &lt; 80% threshold restored</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f8fafc;font-size:11px;height:32px;box-sizing:border-box;">
+                <span style="width:6px;height:6px;border-radius:50%;background:#10b981;flex-shrink:0;"></span>
+                <span style="font-size:14px;width:20px;text-align:center;flex-shrink:0;color:#64748b;">&#x21BB;</span>
+                <span style="width:140px;flex-shrink:0;">
+                  <span style="font-family:monospace;color:#94a3b8;font-size:10px;display:block;">2026-07-06T11:14:02Z</span>
+                  <span style="color:#64748b;font-size:10px;">1h ago</span>
+                </span>
+                <span style="padding:1px 5px;border-radius:3px;background:#f1f5f9;color:#475569;font-size:9px;font-weight:600;text-transform:uppercase;flex-shrink:0;">restart</span>
+                <span style="flex:1;color:#334155;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">ct</span> nginx-proxy restarted (exit 0)</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f8fafc;font-size:11px;height:32px;box-sizing:border-box;">
+                <span style="width:6px;height:6px;border-radius:50%;background:#10b981;flex-shrink:0;"></span>
+                <span style="font-size:14px;width:20px;text-align:center;flex-shrink:0;color:#64748b;">&#x25A0;</span>
+                <span style="width:140px;flex-shrink:0;">
+                  <span style="font-family:monospace;color:#94a3b8;font-size:10px;display:block;">2026-07-06T10:58:33Z</span>
+                  <span style="color:#64748b;font-size:10px;">2h ago</span>
+                </span>
+                <span style="padding:1px 5px;border-radius:3px;background:#f1f5f9;color:#475569;font-size:9px;font-weight:600;text-transform:uppercase;flex-shrink:0;">block</span>
+                <span style="flex:1;color:#334155;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">jail</span> pi-hole blocked 1,204 queries</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f8fafc;font-size:11px;height:32px;box-sizing:border-box;">
+                <span style="width:6px;height:6px;border-radius:50%;background:#10b981;flex-shrink:0;"></span>
+                <span style="font-size:14px;width:20px;text-align:center;flex-shrink:0;color:#64748b;">&#x2398;</span>
+                <span style="width:140px;flex-shrink:0;">
+                  <span style="font-family:monospace;color:#94a3b8;font-size:10px;display:block;">2026-07-06T10:33:07Z</span>
+                  <span style="color:#64748b;font-size:10px;">2h ago</span>
+                </span>
+                <span style="padding:1px 5px;border-radius:3px;background:#f1f5f9;color:#475569;font-size:9px;font-weight:600;text-transform:uppercase;flex-shrink:0;">snapshot</span>
+                <span style="flex:1;color:#334155;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">vm</span> nextcloud snapshot to offsite OK</span>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

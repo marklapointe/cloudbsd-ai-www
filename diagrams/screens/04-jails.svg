@@ -6,35 +6,49 @@
       <div style="height:56px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;padding:0 16px;box-sizing:border-box;">
         <div style="width:32px;height:32px;border-radius:6px;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;">C</div>
         <span style="font-weight:700;font-size:17px;margin-left:8px;color:#0f172a;">CloudBSD Admin</span>
-        <span style="margin-left:10px;padding:2px 8px;font-size:11px;border-radius:4px;background:#f1f5f9;color:#475569;">freenas-mock.local</span>
-        <div style="margin-left:auto;display:flex;align-items:center;gap:14px;font-size:12px;color:#64748b;">
-          <span style="display:inline-flex;align-items:center;gap:5px;"><span style="width:6px;height:6px;border-radius:50%;background:#10b981;"></span>backend OK · 18ms</span>
-          <span style="cursor:pointer;">Refresh</span>
-          <div style="position:relative;width:30px;height:30px;border-radius:50%;background:#f1f5f9;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;">␇<span style="position:absolute;top:2px;right:2px;width:8px;height:8px;border-radius:50%;background:#ef4444;border:1.5px solid #ffffff;"></span></div>
+        <span style="margin-left:10px;padding:2px 8px;font-size:11px;border-radius:4px;background:#f1f5f9;color:#475569;">cloudbsd-node-01.local</span>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:12px;font-size:12px;color:#64748b;">
+          <select style="padding:4px 8px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;">
+            <option>Browser TZ</option>
+            <option selected="selected">UTC</option>
+            <option>America/Montreal</option>
+            <option>America/New_York</option>
+            <option>America/Los_Angeles</option>
+            <option>Europe/Berlin</option>
+            <option>Europe/London</option>
+            <option>Asia/Tokyo</option>
+            <option>Asia/Shanghai</option>
+            <option>Australia/Sydney</option>
+          </select>
+          <button style="position:relative;width:30px;height:30px;border-radius:50%;background:#f1f5f9;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;border:0;color:#475569;">&#x2407;
+            <span style="position:absolute;top:0;right:0;min-width:18px;height:18px;border-radius:9px;background:#ef4444;color:#ffffff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 5px;">17</span>
+          </button>
           <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;">M</div>
         </div>
       </div>
       <div style="display:flex;height:744px;">
         <aside style="width:224px;background:#ffffff;border-right:1px solid #e2e8f0;padding:14px 10px;box-sizing:border-box;overflow-y:auto;flex-shrink:0;">
           <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;padding:0 10px 6px;">Overview</div>
-          <nav style="font-size:13px;"><a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Dashboard</span><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:#e2e8f0;color:#475569;">12</span></a>
-<a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Virtual Machines</span><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:#e2e8f0;color:#475569;">47</span></a>
-<a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Containers</span><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:#e2e8f0;color:#475569;">62</span></a>
-<a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;background:linear-gradient(90deg,#eff6ff,#dbeafe);color:#1d4ed8;font-weight:600;border-left:3px solid #2563eb;margin-bottom:2px;cursor:pointer;"><span>Jails</span><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:#2563eb;color:#ffffff;">12</span></a>
-<a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Volumes</span><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:#e2e8f0;color:#475569;">13</span></a>
-<a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Network Map</span></a>
-<a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Cluster</span><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:#e2e8f0;color:#475569;">6</span></a>
-</nav>
+          <nav style="font-size:13px;">
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Dashboard</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Virtual Machines</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Containers</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;background:linear-gradient(90deg,#eff6ff,#dbeafe);color:#1d4ed8;font-weight:600;border-left:3px solid #2563eb;margin-bottom:2px;cursor:pointer;"><span>Jails</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Volumes</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Network Map</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Cluster</span></a>
+          </nav>
           <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;padding:14px 10px 6px;">Admin</div>
-          <nav style="font-size:13px;"><a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Users</span></a>
-<a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Logs</span><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:#fee2e2;color:#b91c1c;">142</span></a>
-<a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Notifications</span><span style="font-size:10px;padding:1px 6px;border-radius:3px;background:#fef3c7;color:#92400e;">17</span></a>
-<a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Settings</span></a>
-<a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Status</span></a>
-<a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>About</span></a>
-</nav>
+          <nav style="font-size:13px;">
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Users</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Logs</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Notifications</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Settings</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Status</span></a>
+            <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>About</span></a>
+          </nav>
           <div style="margin-top:auto;padding:14px 10px;border-top:1px solid #f1f5f9;font-size:11px;color:#94a3b8;">
-            <div>Backend: 14.2-RELEASE</div>
+            <div>Host: cloudbsd-node-01</div>
             <div>Uptime: 14d 02:11</div>
           </div>
         </aside>
