@@ -4,6 +4,8 @@
 
 > **Quick Summary**: Big-bang rewrite of the CloudBSD Admin frontend from React 19 to Angular 20 with a **plugin-extensible architecture**, **view-only UX** (writes hidden), **frost-out session modal**, **modular PAM-backed auth**, and a **new backend** that uses **CloudBSD-specific MIME types** (`application/vnd.cloudbsd+<action>`) with `X-CloudBSD-Who/What/Why/Where` headers. The backend can dynamically push new menu items, pages, modals, and wizards via a template manifest — no redeploy required.
 >
+> **Framework Override**: User has overridden the application_guidelines WEBUI default of "React is the primary frontend framework". Justification: *"angular is now something to be accepted because it is better in some cases"*. Angular 20 is the framework for this project. Documented in Honcho peer memory (`cloudbsd-admin-test-lessons`).
+>
 > **Deliverables**:
 > - 14 SVG screen mockups + 5 interaction flow SVGs (`diagrams/`)
 > - OpenAPI 3.1 spec (`diagrams/openapi.yaml`)
@@ -11,14 +13,17 @@
 > - Custom MIME-type + header registry (`diagrams/mime-registry.md`)
 > - New PAM-auth backend (Node.js 24 + Express 5 + libpam)
 > - Angular 20 frontend with plugin template renderer + view-only pages
-> - Karma+Jasmine tests (80% coverage gate)
-> - Playwright visual regression suite for 14 pages
+> - Karma+Jasmine tests (**100% coverage gate** — user requirement, overrides 80% default)
+> - Unified ErrorHandlingService (no `window.alert()`)
+> - Rate limiting (login 5/15min, lists 600/min, WS 3000 events/min)
+> - VM console via noVNC + websockify (FreeBSD jail sidecar)
+> - Playwright visual regression suite + browser console error checks + 8h stability tests
 > - Frost-out session modal component
 > - Git branch `feat/angular-migration` with all artifacts pushed
 >
 > **Estimated Effort**: **XL** (~600-1200 hours; multi-week, multi-phase)
 > **Parallel Execution**: YES — 8 waves, peak 7 concurrent tasks
-> **Critical Path**: Phase 0 → Phase 1 (docs) → Phase 2 (backend core) → Phase 3 (frontend shell + plugin renderer) → Phase 4 (first page slice) → Phase 5 (visual regression) → Phase 6 (cutover)
+> **Critical Path**: Phase 0 → Phase 1 (docs) → Phase 2 (backend core) → Phase 3 (frontend shell + plugin renderer) → Phase 4 (first page slice) → Phase 5 (visual regression + 100% coverage) → Phase 6 (cutover)
 
 ---
 
@@ -365,6 +370,490 @@ Every task MUST include agent-executed QA scenarios (see TODO template). Evidenc
 - **Auth flow**: Use `curl` with cookie jar + Playwright to drive UI login.
 - **Plugin manifest**: Use Playwright to assert manifest items render in sidebar/menus.
 - **MIME type**: Use `curl -I` + `jq -r '.headers["content-type"]'` to assert `application/vnd.cloudbsd+*`.
+
+---
+
+## Unified Error Reporting (MANDATORY)
+
+> **No `window.alert()`, `window.confirm()`, or `window.prompt()` — EVER.**
+> Every error surface uses the unified `ErrorModalService` (T15f). This applies to every implementation task.
+
+### The Rule
+
+**ALL errors in the application — from any source — flow through a single presentation system:**
+
+| Error Source | Presentation |
+|--------------|--------------|
+| HTTP 4xx/5xx response | `ErrorModalService.show({ severity, code, message, errorId })` |
+| Socket.IO disconnect | Inline banner in header (persistent) + status icon |
+| Socket.IO reconnect failure | `ErrorModalService.show({ severity: 'WARNING', ... })` after 3 retries |
+| Backend unavailable (pre-flight L1) | Inline top banner + degraded shell mode |
+| Plugin load error | Inline error in plugin slot + error row in Plugins page |
+| Theme load error | `ErrorModalService.show({ severity: 'WARNING', code: 'THEME_INVALID' })` |
+| PAM auth failed | Inline error in login form (not modal — keeps user on form) |
+| Form validation error | Inline field-level errors (no modals) |
+| JS runtime error (uncaught) | Global `ErrorHandler` → `ErrorModalService.show({ severity: 'CRITICAL' })` |
+| Promise rejection (unhandled) | Global `unhandledrejection` → `ErrorModalService.show({ severity: 'ERROR' })` |
+| Network offline | Inline top banner ("You are offline") |
+| Server-sent error event (Socket.IO `error:*`) | `ErrorModalService.show(...)` |
+| Background task failure | Toast notification (not modal) with action to view details |
+| Copy-to-clipboard error | Toast notification |
+
+### What is BANNED
+
+```typescript
+// BANNED — these exist in the codebase, must be removed:
+alert('Something went wrong');
+window.alert('Login failed');
+confirm('Delete this VM?');
+window.confirm('Are you sure?');
+prompt('Enter value:');
+window.prompt('Enter your API key:');
+
+// Also banned:
+throw new Error('uncaught'); // without routing to ErrorHandler
+console.error('User-facing error message'); // console is for debug, not UX
+toastr.error('msg'); // if not routed through our NotificationService
+```
+
+### Lint Enforcement
+
+ESLint rule in `web-new/.eslintrc.json`:
+
+```json
+{
+  "rules": {
+    "no-alert": "error",
+    "no-restricted-globals": [
+      "error",
+      {
+        "name": "alert",
+        "message": "Use ErrorModalService.show() instead of window.alert(). See plan §Unified Error Reporting."
+      },
+      {
+        "name": "confirm",
+        "message": "Use ConfirmDialogComponent instead of window.confirm(). See plan §Unified Error Reporting."
+      },
+      {
+        "name": "prompt",
+        "message": "Build a proper form input instead of window.prompt(). See plan §Unified Error Reporting."
+      }
+    ]
+  }
+}
+```
+
+CI runs `npm run lint` and fails the build if any violation is found.
+
+### Architecture
+
+```
+┌─────────────────┐
+│  Error Source   │  HTTP error / uncaught exception / Socket.IO error / plugin error / ...
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────────────────────────────────────────────────┐
+│  ErrorHandlingService (root service, injected as singleton) │
+│  - Centralizes all error capture                             │
+│  - Translates error types → ErrorPayload                     │
+│  - Routes to: ErrorModalService | NotificationService | Inline │
+└────────┬────────────────────────────────────────────────────┘
+         │
+         ├─→ ErrorModalService.show(error)   →  CDK Overlay + ErrorModalComponent
+         ├─→ NotificationService.toast(error) → CDK Overlay + ToastComponent
+         ├─→ Inline banner                       → Header banner / form field / page slot
+         └─→ Logger.error(error)                → JSONL log file
+```
+
+### Backend Error → Frontend Error Mapping
+
+Backend errors use `application/vnd.cloudbsd+error` MIME type for error responses:
+
+```typescript
+// Backend (T11, T14)
+res.status(503)
+  .type('application/vnd.cloudbsd+error')
+  .set('X-CloudBSD-Error-Id', errorId)
+  .set('X-CloudBSD-Request-Id', requestId)
+  .set('X-CloudBSD-Hint', 'Backend restarting')
+  .send({
+    severity: 'CRITICAL' | 'ERROR' | 'WARNING' | 'INFO',
+    code: 'BACKEND_UNAVAILABLE',
+    message: 'Human-readable description',
+    errorId: 'err-2026-07-06-abc123',
+    requestId: 'req-xyz789',
+    endpoint: '/api/vms',
+    status: 503,
+    retryAfter: 30, // seconds
+    hint: 'Backend restarting',
+    docs: '/docs/errors/backend-unavailable',
+    timestamp: '2026-07-06T12:34:56Z',
+  });
+```
+
+```typescript
+// Frontend HTTP interceptor (T19)
+httpClient.get(...).pipe(
+  catchError((err: HttpErrorResponse) => {
+    if (err.headers.get('content-type')?.startsWith('application/vnd.cloudbsd+error')) {
+      const payload: ErrorPayload = err.error;
+      errorHandlingService.handle(payload);
+      return throwError(() => payload);
+    }
+    // Fallback for non-CloudBSD errors
+    errorHandlingService.handle({
+      severity: err.status >= 500 ? 'CRITICAL' : 'ERROR',
+      code: `HTTP_${err.status}`,
+      message: err.message,
+      errorId: err.headers.get('X-CloudBSD-Error-Id') ?? 'unknown',
+    });
+    return throwError(() => err);
+  })
+);
+```
+
+### Per-Channel Rules
+
+| Channel | When | Component | Dismissible? |
+|---------|------|-----------|---------------|
+| **Modal** | Critical/Error that blocks action | `ErrorModalComponent` (CDK Overlay) | CRITICAL = no, ERROR = yes |
+| **Toast** (top-right) | Non-blocking notification | `ToastComponent` (CDK Overlay) | Yes (auto-dismiss 5s) |
+| **Inline form error** | Validation failure | Field-level error message | N/A (clears on edit) |
+| **Header banner** | Persistent app-wide state (offline, backend down) | Inline top banner | Yes (when state resolves) |
+| **Page slot error** | Per-component failure (plugin not loaded, widget failed) | Inline error in slot | Yes (retry button) |
+| **Frost-out modal** | Session expired | Full-screen modal | NO (must click OK) |
+| **Notification center** | Background notification (system event, plugin alert) | Notifications page entry | Yes |
+
+### Implementation Tasks (new)
+
+| Task | Description |
+|------|-------------|
+| T15f | ErrorModalComponent (already planned) — modal-based error display |
+| **T15r** | `ErrorHandlingService` (NEW) — central error router |
+| **T15s** | `NotificationService` + `ToastComponent` (NEW) — toast notifications |
+| **T15t** | Global `ErrorHandler` + `unhandledrejection` listener (NEW) |
+| **T15u** | ESLint config with `no-alert` rule (NEW) |
+| **T15v** | Header banner component for persistent state (NEW) |
+
+---
+
+## Rate Limiting (MANDATORY)
+
+> Per security chapter 0102-AccessControl and Honcho lessons on rate-limit middleware. Rate limiting protects against abuse, brute-force, and DoS.
+
+### Backend Rate Limits
+
+Implemented via `express-rate-limit` + Redis store (when available) or in-memory fallback.
+
+| Endpoint Pattern | Limit | Window | Purpose |
+|------------------|-------|--------|---------|
+| `POST /api/auth/login` | **5** | 15 min | Brute-force protection |
+| `POST /api/auth/logout` | 30 | 1 min | Session cleanup abuse |
+| `POST /api/session.validate` | **120** | 1 min | Normal session validation (Socket.IO reconnects) |
+| `GET /api/vms`, `/api/containers`, etc. (list) | 600 | 1 min | General UI polling |
+| `GET /api/vms/:id` (detail) | 1200 | 1 min | Frequent detail views |
+| `POST /api/logs/ingest` | 600 | 1 min | Frontend log buffering |
+| `GET /api/plugins/*` | 60 | 1 min | Plugin metadata fetch |
+| `GET /api/openapi.json` | 30 | 1 min | Spec downloads |
+| `WS /socket.io/` connection | 5 | 1 min | Socket.IO reconnect abuse |
+| `WS /socket.io/` events | 3000 | 1 min | Normal event rate |
+
+### Rate Limit Headers (RFC 6585 + IETF draft)
+
+Every response includes:
+```
+X-RateLimit-Limit: 600
+X-RateLimit-Remaining: 587
+X-RateLimit-Reset: 1625568000
+Retry-After: 60  // only on 429 responses
+```
+
+### 429 Response Shape (CloudBSD error format)
+
+```json
+{
+  "severity": "WARNING",
+  "code": "RATE_LIMIT_EXCEEDED",
+  "message": "Too many requests. Please retry in 60 seconds.",
+  "errorId": "err-2026-07-06-rl-abc123",
+  "requestId": "req-xyz789",
+  "endpoint": "/api/auth/login",
+  "retryAfter": 60,
+  "limit": 5,
+  "window": "15m"
+}
+```
+
+Content-Type: `application/vnd.cloudbsd+error`
+
+### Frontend Rate Limit Handling
+
+When a 429 response arrives:
+- Extract `Retry-After` header
+- Show `ErrorModal` with countdown: "Too many requests. Try again in 60s."
+- Disable the offending button during the countdown
+- Log via JSONL logger at WARN level
+- Re-enable button when countdown expires
+
+### Rate Limit Bypass (Admin Only)
+
+Admins can request temporary rate limit bypass via:
+- `POST /api/admin/rate-limit/bypass` with reason + duration
+- Stored in `rate_limit_bypass` table with expiry
+- Logged at INFO level with admin user ID + reason
+- Auto-expires after requested duration
+
+### Implementation
+
+```typescript
+// backend-new/src/middleware/rate-limiter.ts
+import rateLimit from 'express-rate-limit';
+
+export const loginRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => `${req.ip}:${req.body.username ?? 'unknown'}`,
+  handler: (req, res) => {
+    const errorId = generateErrorId();
+    res.status(429)
+      .type('application/vnd.cloudbsd+error')
+      .set('Retry-After', '900')
+      .set('X-CloudBSD-Error-Id', errorId)
+      .send({
+        severity: 'WARNING',
+        code: 'RATE_LIMIT_EXCEEDED',
+        message: 'Too many login attempts. Try again in 15 minutes.',
+        errorId,
+        retryAfter: 900,
+      });
+  },
+});
+```
+
+### Implementation Tasks (new)
+
+| Task | Description |
+|------|-------------|
+| **T109** | `rate-limiter.ts` middleware (login, session, list, log ingest) |
+| **T110** | Rate limit headers + 429 response shape |
+| **T111** | Frontend `RateLimitService` (countdown, disable button, retry) |
+| **T112** | Admin bypass endpoint + audit logging |
+| **T113** | Rate limit metrics (per-endpoint counts, exported for Prometheus) |
+
+---
+
+## VM Console (noVNC)
+
+> Per `diagrams/screens/09-logs.svg` and the requirement for "view-only with full ops via backend actions". VMs need a console view accessible from the browser.
+
+### Library Choice
+
+**noVNC** (HTML5 VNC client) — industry standard, BSD-licensed, runs entirely in the browser, no plugin required.
+
+```bash
+cd web-new
+bun add @novnc/novnc  # npm package, includes webpack bundle
+```
+
+### Architecture
+
+```
+Browser (noVNC client)
+  └─→ WebSocket (wss://)
+       └─→ Backend proxy (websockify or node proxy)
+            └─→ bhyve VNC socket (/dev/vmm/<vm-name> or bhyve -V option)
+```
+
+### noVNC Client Configuration
+
+```typescript
+// web-new/src/app/features/vm-console/vm-console.component.ts
+import RFB from '@novnc/novnc/lib/core/rfb';
+
+export class VmConsoleComponent {
+  private rfb: RFB;
+  
+  async connect(vmId: string) {
+    const url = `wss://${window.location.host}/api/vms/${vmId}/console`;
+    this.rfb = new RFB(document.getElementById('console-canvas'), url, {
+      credentials: { password: '' }, // bhyve VNC doesn't require password
+      shared: true,
+      repeaterID: vmId,
+    });
+    this.rfb.addEventListener('connect', () => this.onConnected());
+    this.rfb.addEventListener('disconnect', (e) => this.onDisconnected(e));
+    this.rfb.addEventListener('securityfailure', (e) => this.onSecurityFailure(e));
+    this.rfb.scaleViewport = true;
+    this.rfb.resizeSession = true;
+  }
+  
+  sendKey(keysym: number) { this.rfb.sendKey(keysym); }
+  sendCtrlAltDel() { this.rfb.sendCtrlAltDel(); }
+  disconnect() { this.rfb.disconnect(); }
+}
+```
+
+### Backend Proxy
+
+noVNC requires raw TCP/WebSocket relay. Options:
+
+| Option | Pros | Cons |
+|--------|------|------|
+| **websockify** | Battle-tested, BSD-licensed, no auth needed | Separate process to manage |
+| **node proxy via `ws` package** | Single binary, integrated with backend | Need to handle VNC protocol |
+| **nginx `proxy_pass`** | Built into reverse proxy | Less control over VNC framing |
+
+**Chosen**: `websockify` running as a sidecar (FreeBSD jail for isolation), supervised by `cloudbsd-admin` rc.d script.
+
+```ini
+# /usr/local/etc/cloudbsd/admin/websockify.conf
+[port]
+listen = 6080
+target = 127.0.0.1:5900+
+
+[security]
+allow_root = false
+run_as_user = cloudbsd-admin
+cert = /usr/local/etc/cloudbsd/admin/cert.pem
+key = /usr/local/etc/cloudbsd/admin/key.pem
+```
+
+Backend exposes `/api/vms/:id/console` which:
+1. Verifies user has access to VM
+2. Checks rate limit (1 connection per user per VM, 30s reconnect cooldown)
+3. Returns a signed WebSocket token (JWT, 5min TTL)
+4. Browser opens WebSocket → backend upgrades → proxies to websockify → bhyve VNC
+
+### Security Considerations
+
+- **Auth**: WebSocket upgrade requires valid session cookie + JWT console token
+- **Rate limit**: 1 console connection per user per VM (prevents bandwidth abuse)
+- **Idle timeout**: Disconnect after 15min inactivity (configurable per VM)
+- **Recording**: Optional VNC frame buffer recording for audit (off by default)
+- **Encrypted**: WSS only, never WS in production
+- **Session audit**: Console open/close events logged at INFO level with user ID + VM ID
+
+### Error Handling for Console
+
+Per Unified Error Reporting policy:
+
+| Error | Presentation |
+|-------|--------------|
+| VM not found | `ErrorModal` with code `VM_NOT_FOUND` |
+| No VNC socket (VM not running) | `ErrorModal` with hint "Start the VM via backend, then retry" |
+| Auth failed | `ErrorModal` with action "Login" |
+| Rate limited (1 per VM) | `ErrorModal` with hint "Already connected. Close other tabs." |
+| WebSocket disconnected | Inline reconnecting banner in console view |
+| Idle timeout | Toast notification with action "Reconnect" |
+| bhyve error | `ErrorModal` with stack trace (admin only) |
+
+### UI Component
+
+```typescript
+// web-new/src/app/features/vm-console/vm-console.component.ts
+@Component({
+  selector: 'app-vm-console',
+  template: `
+    <div class="console-wrapper">
+      <header>
+        <h2>{{ vm.name }} \u2014 Console</h2>
+        <div class="actions">
+          <button (click)="sendCtrlAltDel()" [disabled]="!connected">Ctrl+Alt+Del</button>
+          <button (click)="toggleFullscreen()">Fullscreen</button>
+          <button (click)="disconnect()" [disabled]="!connected">Disconnect</button>
+        </div>
+        <div class="status" [class.connected]="connected">
+          {{ connected ? 'Connected' : 'Disconnected' }}
+          \u00b7 {{ latencyMs }}ms
+        </div>
+      </header>
+      <div #canvas class="canvas"></div>
+      <footer>
+        <span>Resolution: {{ width }}x{{ height }}</span>
+        <span>FPS: {{ fps }}</span>
+      </footer>
+    </div>
+  `,
+})
+export class VmConsoleComponent { ... }
+```
+
+### Routes
+
+| Route | Component | Access |
+|-------|-----------|--------|
+| `/vms/:id` | `VmPage` (view-only) | All users |
+| `/vms/:id/console` | `VmConsoleComponent` (full screen) | All users (1 connection per VM) |
+| `/vms/:id/console?fullscreen=1` | `VmConsoleComponent` (fullscreen mode) | All users |
+
+### Implementation Tasks (new)
+
+| Task | Description |
+|------|-------------|
+| **T114** | Backend: `GET /api/vms/:id/console` — returns JWT console token |
+| **T115** | Backend: WebSocket proxy `/api/vms/:id/console/ws` (upgrades to VNC) |
+| **T116** | Backend: `console-rate-limiter.ts` (1 per user per VM, 30s reconnect) |
+| **T117** | Backend: `console-idle-timeout.ts` (15min default, configurable) |
+| **T118** | Backend: `console-audit.ts` (open/close/key events logged) |
+| **T119** | Backend: FreeBSD rc.d script for websockify sidecar |
+| **T120** | Frontend: Install noVNC + create `VmConsoleComponent` |
+| **T121** | Frontend: Console toolbar (Ctrl+Alt+Del, fullscreen, disconnect) |
+| **T122** | Frontend: Console status indicators (latency, FPS, resolution) |
+| **T123** | Frontend: Console integration tests (Playwright + noVNC) |
+| **T124** | Frontend: Diagram `diagrams/screens/vm-console.svg` (console UI mock-up) |
+| **T125** | Man page: `cloudbsd-admin-console(5)` — console architecture |
+
+### Testing
+
+| Test | Tool | Coverage |
+|------|------|----------|
+| Unit tests for all console service methods | Jest | 100% |
+| Integration: WebSocket auth flow | supertest + ws | All status codes |
+| E2E: Open console from VM page | Playwright | All UI states |
+| E2E: Keyboard input works | Playwright | Ctrl+Alt+Del, text input |
+| E2E: Idle timeout disconnects | Playwright | After 15min |
+| Load test: 100 concurrent consoles | k6 | Latency, memory |
+| Security: JWT validation, rate limit, session cookie | OWASP ZAP | All paths |
+
+### Security Audit (per Honcho security chapter 0103)
+
+| Threat | Mitigation |
+|--------|------------|
+| Unauthorized VNC access | Session cookie + JWT + per-VM ACL |
+| VNC credential leak | WebSocket only, never TCP direct, TLS only |
+| Bandwidth abuse | 1 connection per user per VM + idle timeout |
+| VM escape via console | FreeBSD jail for websockify, bhyve isolation unchanged |
+| Audit trail missing | Every open/close/key event logged via JSONL |
+
+---
+
+### Testing Requirements (100% Coverage)
+
+Every error presentation path must be tested:
+
+```typescript
+describe('ErrorHandlingService', () => {
+  it('routes CRITICAL errors to modal', () => { ... });
+  it('routes WARNING errors to toast', () => { ... });
+  it('routes INFO errors to inline only', () => { ... });
+  it('logs every error to JSONL', () => { ... });
+  it('includes errorId in all presentations', () => { ... });
+  it('does NOT use window.alert() anywhere', () => {
+    expect(window.alert).not.toHaveBeenCalled();
+  });
+});
+
+describe('ErrorModalComponent', () => {
+  it('renders all 4 detail levels', () => { ... });
+  it('blocks dismissal for CRITICAL', () => { ... });
+  it('traps focus', () => { ... });
+  it('handles Esc key (when dismissible)', () => { ... });
+  it('copies error ID to clipboard', () => { ... });
+});
+```
 
 ---
 
@@ -4898,6 +5387,166 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 - **Final commit**:
   - `chore(cutover): mark old React app + old backend as deprecated`
   - `chore(branch): push feat/angular-migration to origin`
+
+---
+
+## 100% Test Coverage Plan
+
+> **Per Honcho memory**: 80% target, 100% for critical paths (auth, security, error handling). User wants **100% coverage of every class and every method**.
+
+### Coverage Targets by Category
+
+| Category | Target | Justification |
+|----------|--------|---------------|
+| **Critical paths** (auth, security, error handling, session) | **100%** (lines + branches + functions) | Honcho lessons: 100% for critical paths |
+| **Backend services** (PAM, plugin registry, logger, MIME) | **100%** | Security-critical |
+| **Frontend services** (AuthStore, plugin renderer, theme, state) | **100%** | User-facing |
+| **Frontend components** (all 17 components, all 26 pages) | **100%** | User-facing |
+| **Utility functions** (helpers, validators) | **100%** | Easy to achieve |
+| **Generated code** (Angular CLI scaffolds, Mocks) | Excluded | Not meaningful |
+
+### Coverage Audit: Every Class & Method
+
+#### Backend (`backend-new/`)
+
+| Class / Module | Methods to Test | Test File |
+|----------------|------------------|-----------|
+| `pam-auth.service.ts` | `authenticate()`, `validateSession()`, `logout()`, `getUserInfo()`, `getGroups()`, `isLocked()`, `getLockoutExpiry()` | `pam-auth.service.spec.ts` |
+| `plugin-registry.ts` | `discover()`, `loadManifest()`, `validate()`, `register()`, `unregister()`, `reload()`, `getPlugin()`, `listPlugins()`, `getHealth()` | `plugin-registry.spec.ts` |
+| `mime-handler.ts` | `matchMime()`, `validateHeaders()`, `addCloudBSDHeaders()`, `parseRequest()`, `formatResponse()`, `getMimeType()` | `mime-handler.spec.ts` |
+| `logger.ts` (interface) | `debug()`, `info()`, `warn()`, `error()`, `fatal()`, `withContext()`, `withCorrelation()` | `logger.spec.ts` |
+| `console-jsonl-sink.ts` | `write()`, `flush()`, `close()`, `format()` | `console-jsonl-sink.spec.ts` |
+| `file-jsonl-sink.ts` | `write()`, `flush()`, `close()`, `rotate()` | `file-jsonl-sink.spec.ts` |
+| `remote-jsonl-sink.ts` | `write()`, `flush()`, `reconnect()`, `batch()` | `remote-jsonl-sink.ts` |
+| `multi-sink.ts` | `add()`, `remove()`, `write()`, `flush()` | `multi-sink.spec.ts` |
+| `null-sink.ts` | `write()`, `flush()` | `null-sink.spec.ts` |
+| `session-manager.ts` | `create()`, `validate()`, `refresh()`, `destroy()`, `getSession()` | `session-manager.spec.ts` |
+| `error-handler.ts` | `handleError()`, `formatError()`, `logError()`, `getErrorId()` | `error-handler.spec.ts` |
+| `socket-broadcaster.ts` | `emit()`, `broadcast()`, `subscribe()`, `unsubscribe()`, `getClients()` | `socket-broadcaster.spec.ts` |
+| `discoverer.ts` (interface) | `discover()`, `getInterval()`, `getName()` | per-implementation |
+| `bhyve-discoverer.ts` | `discover()`, `formatVm()`, `getHealth()` | `bhyve-discoverer.spec.ts` |
+| `podman-discoverer.ts` | `discover()`, `formatContainer()`, `getHealth()` | `podman-discoverer.spec.ts` |
+| `jail-discoverer.ts` | `discover()`, `formatJail()`, `getHealth()` | `jail-discoverer.spec.ts` |
+| `freebsd-stats-discoverer.ts` | `discover()`, `getCpu()`, `getMemory()`, `getDisk()` | `freebsd-stats.spec.ts` |
+| `theme-service.ts` | `list()`, `get()`, `validate()`, `compile()`, `apply()` | `theme-service.spec.ts` |
+| `plugin-router.ts` | `registerRoute()`, `unregisterRoute()`, `match()`, `dispatch()` | `plugin-router.spec.ts` |
+| `health-check.ts` | `check()`, `getStatus()`, `registerCheck()` | `health-check.spec.ts` |
+| `preflight-check.ts` | `check()`, `getStatus()`, `cacheResult()` | `preflight-check.spec.ts` |
+| `csrf-middleware.ts` | `verify()`, `generateToken()`, `validateOrigin()` | `csrf-middleware.spec.ts` |
+| `rate-limiter.ts` | `check()`, `reset()`, `configure()` | `rate-limiter.spec.ts` |
+| `request-id-middleware.ts` | `generate()`, `propagate()`, `extract()` | `request-id-middleware.spec.ts` |
+| `security-headers.ts` | `apply()`, `getCSP()`, `getHSTS()` | `security-headers.spec.ts` |
+| `cookie-session.ts` | `set()`, `get()`, `clear()`, `sign()`, `verify()` | `cookie-session.spec.ts` |
+
+#### Frontend (`web-new/`)
+
+| Class / Module | Methods to Test | Test File |
+|----------------|------------------|-----------|
+| `AuthStore` (T18) | `login()`, `logout()`, `validateSession()`, `refresh()`, `getUser()`, `isAdmin()`, `hasRole()`, `setErrorLevel()` | `auth.store.spec.ts` |
+| `BackendStatusStore` | `connect()`, `disconnect()`, `reconnect()`, `isOnline()`, `getLatency()` | `backend-status.store.spec.ts` |
+| `VmStore` | `load()`, `refresh()`, `getById()`, `filter()`, `sort()` | `vm.store.spec.ts` |
+| `ContainerStore` | `load()`, `refresh()`, `getById()` | `container.store.spec.ts` |
+| `JailStore` | `load()`, `refresh()`, `getById()` | `jail.store.spec.ts` |
+| `VolumeStore` | `load()`, `refresh()` | `volume.store.spec.ts` |
+| `NotificationStore` | `add()`, `markRead()`, `markAllRead()`, `getUnreadCount()`, `filter()` | `notification.store.spec.ts` |
+| `LogStore` | `append()`, `clear()`, `filterByLevel()`, `getRecent()` | `log.store.spec.ts` |
+| `ThemeStore` | `setTheme()`, `applyTheme()`, `customize()`, `exportTheme()`, `importTheme()` | `theme.store.spec.ts` |
+| `SettingsStore` | `get()`, `set()`, `reset()`, `export()`, `import()` | `settings.store.spec.ts` |
+| `PluginStore` | `loadManifest()`, `getPlugin()`, `isEnabled()` | `plugin.store.spec.ts` |
+| `PluginLoader` | `discover()`, `validate()`, `register()`, `render()` | `plugin-loader.spec.ts` |
+| `PluginTemplateRenderer` | `renderComponent()`, `mapType()`, `dataBind()` | `plugin-template-renderer.spec.ts` |
+| `ErrorModalService` (T15f) | `show()`, `queue()`, `dismiss()`, `getCurrent()` | `error-modal.service.spec.ts` |
+| `ErrorHandlingService` (T15r) | `handle()`, `route()`, `log()`, `enrich()` | `error-handling.service.spec.ts` |
+| `NotificationService` (T15s) | `toast()`, `info()`, `success()`, `warning()`, `error()`, `dismiss()` | `notification.service.spec.ts` |
+| `Logger` (T15a) | `debug()`, `info()`, `warn()`, `error()`, `fatal()` | `logger.spec.ts` |
+| `PreFlightService` (T15c) | `check()`, `cache()`, `getStatus()` | `preflight.service.spec.ts` |
+| `SocketService` | `connect()`, `disconnect()`, `emit()`, `on()`, `off()` | `socket.service.spec.ts` |
+| `HttpInterceptor` (T19) | `intercept()`, `errorHandler()`, `mimeType()`, `headers()` | `http-interceptor.spec.ts` |
+| `ErrorModalComponent` | All 4 detail levels, dismiss, copy, focus trap | `error-modal.component.spec.ts` |
+| `ToastComponent` | Render, auto-dismiss, action button | `toast.component.spec.ts` |
+| `HeaderBannerComponent` | Show/hide, types (offline, backend-down, plugin-error) | `header-banner.component.spec.ts` |
+| `ThemeToggleComponent` | Toggle, list themes, apply | `theme-toggle.component.spec.ts` |
+| `FrostOutModalComponent` | Open/close, OK button, focus | `frost-out-modal.component.spec.ts` |
+| `HelpModalComponent` | Search, topics, shortcuts | `help-modal.component.spec.ts` |
+| `TooltipDirective` | Show, hide, position, dismiss | `tooltip.directive.spec.ts` |
+| `EmptyStateComponent` | Render variants | `empty-state.component.spec.ts` |
+| `ButtonComponent` | Variants, loading, disabled | `button.component.spec.ts` |
+| `CardComponent` | Variants, content | `card.component.spec.ts` |
+| `StatCardComponent` | Render stats | `stat-card.component.spec.ts` |
+| `TableComponent` | Sort, paginate, virtual scroll | `table.component.spec.ts` |
+| `PaginationComponent` | Pages, navigation | `pagination.component.spec.ts` |
+| `BadgeComponent` | Variants | `badge.component.spec.ts` |
+| `ProgressBarComponent` | Render progress | `progress-bar.component.spec.ts` |
+| `OnboardingTourComponent` | Steps, skip, complete | `onboarding-tour.component.spec.ts` |
+| `AboutComponent` | Render | `about.component.spec.ts` |
+| `StatusComponent` | Render health | `status.component.spec.ts` |
+| `ThemeGalleryComponent` | Render gallery | `theme-gallery.component.spec.ts` |
+| `ThemeCustomizerComponent` | All tabs | `theme-customizer.component.spec.ts` |
+| `DocsBrowserComponent` | Render docs | `docs-browser.component.spec.ts` |
+| `SwaggerViewerComponent` | Render Swagger | `swagger-viewer.component.spec.ts` |
+| `ReleaseNotesComponent` | Render | `release-notes.component.spec.ts` |
+| `DocsPage` (404/403/500/503) | All error pages | per-page spec |
+| `DashboardPage` | Render widgets | `dashboard.component.spec.ts` |
+| `VmPage`, `ContainerPage`, `JailPage`, `VolumePage`, `NetworkMapPage`, `ClusterPage`, `UserPage`, `LogPage`, `NotificationPage`, `SettingPage` | All 14 pages | per-page spec |
+
+### Test Types Required
+
+| Type | Tool | Coverage |
+|------|------|----------|
+| **Unit tests** | Karma + Jasmine (frontend), Jest (backend) | 100% lines + branches + functions |
+| **Integration tests** | Playwright (frontend E2E), supertest (backend API) | All critical paths |
+| **Visual regression** | Playwright snapshots | All 14 pages, 2 themes, 3 viewports |
+| **Performance** | Lighthouse, k6 | LCP < 2.5s, CLS < 0.1 |
+| **Security** | OWASP ZAP, npm audit, Snyk | 0 high/critical |
+
+### Branch Coverage Rule (per Honcho lessons-2026)
+
+> **v8 coverage tracks `??` branches as separate from the surrounding `||`/`if` logic. In `if (x) {} else if (y) {} else if (z) {}`, hitting the `x` branch does NOT count the `y`/`z` else-if branches as hit — each must be hit by a separate test.**
+
+Test data must be constructed to hit EACH path independently.
+
+### Implementation Tasks (new)
+
+| Task | Description |
+|------|-------------|
+| **T96** | Setup Jest in backend (`backend-new/jest.config.js`) with coverage threshold = 100% |
+| **T97** | Setup Karma in frontend with coverage threshold = 100% (override default 80%) |
+| **T98** | Write unit tests for all 26 backend classes (T96 base) |
+| **T99** | Write unit tests for all frontend services + 17 components + 26 pages |
+| **T100** | Write integration tests for backend API (supertest) — every endpoint, every status code, every MIME type |
+| **T101** | Write Playwright E2E tests for all critical paths (login, theme, plugin, error handling, frost-out, settings) |
+| **T102** | Write visual regression tests (Playwright snapshots) — all 14 pages × 3 themes × 3 viewports |
+| **T103** | CI pipeline: lint + test + coverage gate (fails if < 100%) + visual regression |
+| **T104** | Coverage report artifact (HTML) committed to CI artifacts |
+| **T105** | Mutation testing with Stryker (verifies tests actually catch bugs) — target mutation score ≥ 80% |
+| **T106** | Contract testing for plugin manifest schema (Pact or similar) |
+| **T107** | Load test: 1000 concurrent WebSocket clients (k6) |
+| **T108** | Security scan: OWASP ZAP baseline + npm audit + secret scan (TruffleHog) |
+
+### Coverage Verification Command
+
+```bash
+# Backend
+cd backend-new && npm test -- --coverage --coverageThreshold='{"global":{"lines":100,"branches":100,"functions":100,"statements":100}}'
+
+# Frontend
+cd web-new && ng test --code-coverage --watch=false \
+  --coverage-threshold='{"global":{"lines":100,"branches":100,"functions":100,"statements":100}}'
+```
+
+Both must pass with **0 uncovered lines, 0 uncovered branches, 0 uncovered functions**.
+
+### What is Excluded
+
+```typescript
+/* istanbul ignore next */
+// Only allowed for:
+// - Defensive `catch (e) {}` blocks that should never execute
+// - Generated Angular CLI boilerplate
+// - Third-party library type definitions
+```
+
+Any other use of `istanbul ignore` or `c8 ignore` requires explicit code review approval.
 
 ---
 
