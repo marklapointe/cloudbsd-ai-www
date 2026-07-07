@@ -645,6 +645,436 @@ export const loginRateLimiter = rateLimit({
 
 ---
 
+## Wire Protocol: CloudBSD Envelope
+
+> **The actual wire protocol with full request/response examples lives in [`WIRE_PROTOCOL.md`](./WIRE_PROTOCOL.md) (873 lines).**
+> **Every UI screen has a corresponding envelope exchange defined there. Mocks in `web-new/src/app/mocks/` implement it exactly so the future Go backend is a drop-in replacement.**
+
+### Summary
+
+| Aspect | Value |
+|--------|-------|
+| Transport | HTTP `POST /api` (uniform, avoids GET-no-body problem) |
+| Request content-type | `application/vnd.cloudbsd+envelope` |
+| Response content-type | `application/vnd.cloudbsd+envelope` (success) or `application/vnd.cloudbsd+error` (4xx/5xx) |
+| HTTP headers | `X-CloudBSD-{Who,What,Why,Where,When,How,If-Match,Idempotency-Key}` |
+| Body envelope | `{ mime, requestId, timestamp, context, headers[], payload[], errors?, next?, meta? }` |
+| `payload[]` | Always an array (pluralistic — multiple typed items per call) |
+| Per-item MIME | `application/vnd.cloudbsd+<noun>.<action>` (e.g. `+vm`, `+vms.batch`, `+metric.cpu`) |
+| Per-item identity | `kind`, `version`, optional `action`, optional `includes[]` |
+| Auth | Session cookie (HttpOnly Secure SameSite=Strict) + envelope `context.userId/sessionId` |
+| Backend target | Go 1.26 on FreeBSD 16-CURRENT (per FreshPorts `lang/go126`) |
+
+### Envelope envelope (canonical — full example below)
+
+```jsonc
+// REQUEST
+{
+  "mime": "application/vnd.cloudbsd+envelope",
+  "requestId": "req-7e8f-4a2b-9c1d",
+  "timestamp": "2026-07-06T12:34:56.789Z",
+  "context": { "userId": "mlapointe", "sessionId": "sess-abc123" },
+  "headers": [
+    { "name": "who",  "value": "mlapointe@cloudbsd.org" },
+    { "name": "what", "value": "vms.list" },
+    { "name": "why",  "value": "user_requested" },
+    { "name": "where", "value": "vms_view" }
+  ],
+  "payload": [
+    { "mime": "application/vnd.cloudbsd+query", "kind": "query", "data": {
+        "filter": { "status": ["RUN"], "host": null, "tag": null, "search": "" },
+        "sort":  { "field": "name", "direction": "asc" },
+        "page":  { "limit": 12, "cursor": null }
+    } }
+  ]
+}
+
+// RESPONSE (200)
+{
+  "mime": "application/vnd.cloudbsd+envelope",
+  "requestId": "req-7e8f-4a2b-9c1d",
+  "timestamp": "2026-07-06T12:35:00.082Z",
+  "headers": [
+    { "name": "who", "value": "system:vms" },
+    { "name": "what", "value": "vms.list" }
+  ],
+  "payload": [
+    { "mime": "application/vnd.cloudbsd+vms.batch", "kind": "vms.batch",
+      "data": { "total": 47, "shown": 12, "stats": { "running": 39, "stopped": 6, "paused": 1, "error": 1 } } },
+    { "mime": "application/vnd.cloudbsd+vm", "kind": "vm", "version": "v1",
+      "data": { "id": "vm-nextcloud", "name": "nextcloud", "status": "RUN",
+                "vcpu": 4, "ramBytes": 8589934592, "diskBytes": 128849018880,
+                "uptimeSec": 1211670, "host": "freenas-mock", "ip": "10.0.10.10",
+                "tags": ["prod","files"], "version": "v1-a7f3" } }
+  ],
+  "next": "eyJ2bVMtaWQiOiJ2bS1qb2JiaW5nIiwiYW9yZGVyIjpbIm5hbWUiXX0"
+}
+
+// ERROR RESPONSE (401 — session expired)
+{
+  "mime": "application/vnd.cloudbsd+error",
+  "requestId": "req-7e8f-4a2b-9c1d",
+  "timestamp": "2026-07-06T12:34:56.789Z",
+  "headers": [
+    { "name": "who", "value": "system:auth" },
+    { "name": "what", "value": "auth.session.expired" }
+  ],
+  "payload": [
+    { "mime": "application/vnd.cloudbsd+problem", "kind": "problem",
+      "data": { "type": "https://errors.cloudbsd.org/auth/session-expired",
+                "severity": "ERROR", "code": "AUTH_SESSION_EXPIRED",
+                "message": "Your session has expired. Please sign in again.",
+                "errorId": "err-2026-07-06-session-9b1c" } }
+  ]
+}
+```
+
+### Inventory of every UI↔backend exchange
+
+(Full examples in [`WIRE_PROTOCOL.md`](./WIRE_PROTOCOL.md) — read that file for the complete payloads.)
+
+| Screen / Component | `what` action(s) |
+|--------------------|------------------|
+| Login | `auth.login` |
+| App boot | `preflight.check`, `auth.session.validate` |
+| Dashboard | `dashboard.bootstrap` |
+| VMs | `vms.list`, `vms.get`, `vms.console.token` |
+| Containers | `containers.list` |
+| Jails | `jails.list` |
+| Volumes | `volumes.list` |
+| Network Map | `network.topology` |
+| Cluster | `cluster.status`, `cluster.node.list`, `cluster.events` |
+| Users | `users.list` |
+| Logs | `logs.list` + WebSocket `subscribe:logs` |
+| Notifications | `notifications.list`, `notifications.markRead` |
+| Themes | `themes.list`, `themes.apply`, `themes.import`, `themes.export` |
+| Settings | `settings.get`, `settings.update` |
+| Plugins | `plugins.manifest`, `plugins.invoke` |
+| Status | `status.aggregate` |
+| About | (subset of `status.aggregate`) |
+| Help | `help.search`, `help.topics` |
+| Docs | `docs.list`, `docs.get` |
+| API docs | `openapi.spec` |
+| Release notes | `release-notes.list` |
+
+### Message format versioning
+
+> **Every message format MUST be versioned. Clients and servers MUST support multiple versions concurrently during deprecation windows. Never break existing clients.**
+
+#### Three orthogonal versioning dimensions
+
+| Dimension | Where it appears | Example |
+|-----------|------------------|---------|
+| **Envelope schema version** | HTTP `Accept`/`Content-Type` header parameter + `meta.envelopeVersion` | `application/vnd.cloudbsd+envelope;v=2` |
+| **MIME type schema version** | Inside JSON Schema `$id` and `$version` fields | `vm.v1.json`, `vm.v2.json` |
+| **Wire version (capability negotiation)** | Server-supplied, client-cached | `"v2.3.0+go1.26.3"` |
+
+#### HTTP content negotiation
+
+```
+# Client requests a specific envelope version
+POST /api
+Accept: application/vnd.cloudbsd+envelope;v=2
+Content-Type: application/vnd.cloudbsd+envelope;v=2
+
+# Server responds with the version it ACTUALLY used
+Content-Type: application/vnd.cloudbsd+envelope;v=2
+X-CloudBSD-Envelope-Version: 2
+X-CloudBSD-Server-Version: 2.3.0+go1.26.3
+```
+
+If the client requests `v=2` but server only supports `v=1`:
+```
+HTTP/1.1 406 Not Acceptable
+Content-Type: application/vnd.cloudbsd+error
+
+{
+  "mime": "application/vnd.cloudbsd+error",
+  "payload": [{
+    "mime": "application/vnd.cloudbsd+problem",
+    "data": {
+      "type": "https://errors.cloudbsd.org/protocol/version-unsupported",
+      "severity": "ERROR",
+      "code": "PROTOCOL_VERSION_UNSUPPORTED",
+      "message": "Envelope version 2 requested but server supports 1",
+      "errorId": "err-2026-07-06-ver-9b1c",
+      "context": { "requestedVersion": 2, "supportedVersions": [1] }
+    }
+  }]
+}
+```
+
+#### Per-MIME schema versioning
+
+Each per-MIME schema is an independent file with its own version:
+
+```
+schemas/resources/
+├── vm.v1.json              # current production schema
+├── vm.v2.json              # next version (additive, no breaking changes)
+├── vm.v3.json              # future breaking version (DRAFT)
+```
+
+The MIME type itself does NOT change with schema version (still `application/vnd.cloudbsd+vm`), but the server includes the schema version in each payload item:
+
+```json
+{
+  "mime": "application/vnd.cloudbsd+vm",
+  "kind": "vm",
+  "version": "v1-a7f3",            // semver + content hash
+  "data": { ... }
+}
+```
+
+The `version` field uses the format `v<MAJOR>-<8-char-content-hash>`:
+- `MAJOR` = schema version (1, 2, 3, ...)
+- `8-char-content-hash>` = first 8 chars of SHA-256 of the schema file
+
+This allows:
+- Clients to detect if they understand the schema
+- Servers to log mismatches
+- Cache invalidation when schema changes
+
+#### Compatibility rules (semver-style)
+
+| Schema change | Version bump | Backward compatible? |
+|---------------|--------------|----------------------|
+| Add new optional field | MINOR (v1 → v1.1, file `vm.v1.json` updated) | ✓ Yes |
+| Add new required field | MAJOR (v1 → v2, new file `vm.v2.json`) | ✗ No — breaking |
+| Remove field | MAJOR | ✗ No — breaking |
+| Rename field | MAJOR | ✗ No — breaking |
+| Add new enum value | MINOR | ✓ Yes |
+| Remove enum value | MAJOR | ✗ No — breaking |
+| Widen type (int → number) | MINOR | ✓ Yes |
+| Narrow type (number → int) | MAJOR | ✗ No — breaking |
+| Add new MIME type | MINOR (envelope) | ✓ Yes |
+| Add new payload item type | MINOR | ✓ Yes |
+
+**Rule**: any change to `additionalProperties: false` is **always** MAJOR (breaking — clients sending old fields will be rejected).
+
+#### Deprecation protocol
+
+1. New schema version released (e.g. `vm.v2.json`)
+2. Old schema version continues to be served (e.g. `vm.v1.json`)
+3. Server sets `meta.deprecation: ["vm.v1 will be removed 2026-10-01"]` in responses
+4. Server sends `Warning: 299 cloudbsd.org "vm.v1 deprecated, use v2"` HTTP header
+5. Server logs warning when v1 is used
+6. After 90 days: v1 removed; v1 requests return `PROTOCOL_VERSION_UNSUPPORTED`
+
+#### Client-side version handling
+
+```typescript
+// web-new/src/app/protocol/version-negotiator.ts
+@Injectable({ providedIn: 'root' })
+export class VersionNegotiator {
+  // Cached after first response
+  private serverVersion: string | null = null;
+  private supportedEnvelopeVersions: number[] = [1];  // start with 1
+  
+  setFromResponse(headers: HttpHeaders): void {
+    const v = headers.get('X-CloudBSD-Server-Version');
+    if (v) this.serverVersion = v;
+  }
+  
+  buildAcceptHeader(): string {
+    // always advertise highest version we support
+    const max = Math.max(...this.supportedEnvelopeVersions);
+    return `application/vnd.cloudbsd+envelope;v=${max}`;
+  }
+  
+  isSchemaDeprecated(payloadItem: any): boolean {
+    return payloadItem.version?.startsWith('v1-') && !this.isOldVersionAllowed();
+  }
+}
+```
+
+#### Wire version (full server version)
+
+`X-CloudBSD-Server-Version: <git-describe>+<go-version>+<freebsd-version>`
+
+Example: `v2.3.0+go1.26.3+freebsd16.0-current-amd64`
+
+Components:
+- `v2.3.0` — semantic version of cloudbsd-admin-backend
+- `go1.26.3` — Go compiler version (per FreshPorts `lang/go126`)
+- `freebsd16.0-current-amd64` — FreeBSD build target
+
+This allows debugging "works on my machine" issues: client knows exactly what server version it talks to.
+
+#### Per-action version opt-in
+
+Some actions may opt into newer behavior. Client signals via `Accept`:
+```
+POST /api
+Accept: application/vnd.cloudbsd+envelope;v=2;actions=vms.list=v2,theme.apply=v2
+```
+
+Server responds with which actions it served at which version in `meta.versions`:
+```json
+{
+  "meta": {
+    "versions": {
+      "vms.list": "v2",
+      "theme.apply": "v1",
+      "auth.login": "v1"
+    }
+  }
+}
+```
+
+This allows **per-action gradual rollout** without forcing all-or-nothing version upgrades.
+
+#### Backward compatibility test matrix
+
+CI runs this matrix on every PR:
+
+```
+┌─────────────────────┬──────────┬──────────┬──────────┐
+│ Client \ Server     │ Server 1 │ Server 2 │ Server 3 │
+├─────────────────────┼──────────┼──────────┼──────────┤
+│ Client 1 (envelope) │   ✓      │   ✓      │   ✓      │
+│ Client 2 (envelope) │   ✗      │   ✓      │   ✓      │
+│ Client 3 (envelope) │   ✗      │   ✗      │   ✓      │
+└─────────────────────┴──────────┴──────────┴──────────┘
+```
+
+Each cell: 6 representative exchanges (login, list, get, create, update, error) × 3 fixture types (happy path, edge case, error).
+
+#### Wire version history (canonical)
+
+| Version | Released | Sunset | Status | Changes |
+|---------|----------|--------|--------|---------|
+| v1.0.0 | 2026-07-15 | — | **current** | Initial release, 30+ actions, 47 locales, 15 themes |
+| v1.1.0 | 2026-09-01 | 2027-01-01 | planned | Add `vms.console.*` actions, noVNC WebSocket |
+| v2.0.0 | 2026-12-01 | 2027-06-01 | planned | **breaking**: add required `context.requestFingerprint`, switch to Cursor-based pagination only |
+| v2.1.0 | 2027-02-01 | 2027-08-01 | planned | Add plugin marketplace actions, signed plugin bundles |
+| v3.0.0 | 2027-06-01 | — | future | **breaking**: switch to streaming-only, no more REST list |
+
+Each version documented in `CHANGELOG.md` with migration path.
+
+#### Implementation tasks
+
+| Task | Description |
+|------|-------------|
+| **T158** | `VersionNegotiator` service (TS) with `buildAcceptHeader()`, `setFromResponse()`, `isSchemaDeprecated()` |
+| **T159** | Go equivalent: `internal/protocol/version.go` with same semantics |
+| **T160** | Server: `X-CloudBSD-Server-Version` response header (git-describe + go version + freebsd version) |
+| **T161** | Server: `Accept` header parsing — support `v=2;actions=vms.list=v2,...` |
+| **T162** | Server: `meta.versions` in responses — map action → schema version actually served |
+| **T163** | Server: `Warning: 299 cloudbsd.org "..."` HTTP header for deprecated schema usage |
+| **T164** | Server: per-action version map (which actions at which schema versions) |
+| **T165** | CI: backward compatibility matrix (3 server versions × 3 client versions × 6 exchanges) |
+| **T166** | CI: schema-against-examples per version (run all fixtures against all schema versions) |
+| **T167** | `WIRE_PROTOCOL.md` "Versioning" section with full spec of deprecation protocol |
+| **T168** | Mock backend supports version negotiation (responds with same version as requested, or `PROTOCOL_VERSION_UNSUPPORTED`) |
+| **T169** | `CHANGELOG.md` with version history table (T157 already created) |
+| **T170** | `meta.deprecation` array populated by server for all v1 responses after v2 release |
+
+#### Acceptance criteria for versioning
+
+1. Server returns `X-CloudBSD-Server-Version: v<semver>+go<ver>+freebsd<ver>` on every response
+2. Server parses `Accept: application/vnd.cloudbsd+envelope;v=<N>` and uses highest mutually supported version
+3. Server returns `406 Not Acceptable` with `PROTOCOL_VERSION_UNSUPPORTED` if no compatible version
+4. Per-MIME schema files have `$id` and `$version`; server tracks which versions it supports
+5. Per-action version map (`meta.versions`) populated in every response
+6. Deprecated schemas emit `Warning: 299 cloudbsd.org "..."` HTTP header
+7. CI runs backward compatibility matrix on every PR
+8. CI runs schema-against-fixtures per version on every PR
+9. `CHANGELOG.md` documents breaking changes with migration path
+10. Mock backend supports version negotiation end-to-end
+
+### Mock implementation
+
+In `web-new/src/app/mocks/`:
+- `envelope.ts` — Envelope type + helpers (matches §1 of WIRE_PROTOCOL.md)
+- `handlers/<resource>.ts` — one file per resource family, implements every `what` action with in-memory data matching the SVG mock-ups
+- `http.ts` — MockHttpInterceptor converts `HttpClient.post(...)` into envelope exchanges; translates `application/vnd.cloudbsd+error` into `ErrorHandlingService.handle()`
+- `socket.ts` — MockSocketService emits Socket.IO-style events for streaming exchanges (`subscribe:logs`, `subscribe:metrics`)
+
+### Backend (Go) implementation
+
+When the Go backend is implemented (in `~/git/cloudbsd-admin-backend/`):
+- Module: `github.com/cloudbsdorg/cloudbsd-admin-backend`
+- Go version: **1.26** (per FreshPorts `lang/go126` for FreeBSD 14/15/16)
+- HTTP router: `chi` (lightweight, idiomatic)
+- Validation: `go-playground/validator/v10` with per-action struct tags
+- PAM: `github.com/msteinert/pam` (or local CGO binding)
+- SQLite: `modernc.org/sqlite` (pure Go, no CGO, cross-builds to FreeBSD)
+- WebSocket: `github.com/gorilla/websocket`
+- Plugin isolation: Go `plugin.Open()` (Go's native plugin system, requires CGO)
+- Architecture: hexagonal — handlers → services → repositories
+
+### FreeBSD Port Makefile excerpt
+
+```make
+# lang/go126 is available on FreeBSD 14/15/16 (CURRENT)
+PORTNAME=      cloudbsd-admin-backend
+DISTVERSION=    1.0.0
+CATEGORIES=    www
+MASTER_SITES=  https://github.com/cloudbsdorg/cloudbsd-admin-backend/releases/download/v${DISTVERSION}/
+DISTNAME=      ${PORTNAME}-${DISTVERSION}
+EXTRACT_SUFX=  .tar.xz
+
+MAINTAINER=    mark@cloudbsd.org
+COMMENT=       CloudBSD Admin backend (Go service)
+WWW=           https://cloudbsd.org
+
+LICENSE=       BSD3CLAUSE
+LICENSE_FILE=  ${WRKSRC}/LICENSE
+
+BUILD_DEPENDS= go126>=1.26.3:lang/go126
+RUN_DEPENDS=   openpam>=0:${PORTSDIR}/security/openpam
+
+USES=          cpe gettext-runtime
+CPE_VENDOR=    cloudbsdorg
+USE_RC_SUBR=    cloudbsd-admin-backend
+
+GO_VERSION=    1.26.3
+GO_ENV=        GOFLAGS="-mod=readonly" GOPROXY="https://proxy.golang.org,direct"
+GO_PKGNAME=    github.com/cloudbsdorg/cloudbsd-admin-backend
+GO_TARGET=    ./cmd/cloudbsd-admin-backend:${GO_PKGNAME}
+
+USERS=         cloudbsd-admin
+GROUPS=        cloudbsd-admin
+
+SUB_FILES=      pkg-message pkg-install pkg-deinstall
+SUB_LIST+=      ...
+
+PLIST_FILES+=    bin/cloudbsd-admin-backend \
+                 share/cloudbsd-admin-backend/openapi.yaml \
+                 "@(,etc/cloudbsd-admin/,config.json.sample,)"
+
+OPTIONS_DEFINE=  PAM SQLITE PLUGINS WEBSOCKIFY
+OPTIONS_DEFAULT= PAM SQLITE PLUGINS WEBSOCKIFY
+
+PAM_DESC=        Enable PAM authentication (security/openpam)
+SQLITE_DESC=     Embed SQLite via modernc.org/sqlite
+PLUGINS_DESC=    Enable plugin loader (Go plugin package)
+WEBSOCKIFY_DESC= Install websockify for noVNC console sidecar
+
+post-install:
+    ${MKDIR} ${STAGEDIR}${PREFIX}/etc/cloudbsd-admin
+    ${INSTALL_DATA} ${WRKDIR}/config.json.sample ${STAGEDIR}${PREFIX}/etc/cloudbsd-admin/
+    ${INSTALL_DATA} ${WRKDIR}/README.md ${STAGEDIR}${DOCSDIR}/
+
+.include <bsd.port.mk>
+```
+
+> **IMPORTANT:** Set `GO_VERSION=1.26` (not the `lang/go` meta-port) so the build is reproducible across FreeBSD quarterly branches. The `lang/go126` port tracks 1.26.x patches independently.
+
+### Acceptance criteria for this section
+
+1. Every UI screen has a matching envelope exchange defined in WIRE_PROTOCOL.md
+2. Every envelope request includes `who`, `what`, `why`, `where`
+3. Every error response uses `application/vnd.cloudbsd+error` envelope (not standard envelope)
+4. All MIME types follow `application/vnd.cloudbsd+<noun>.<action>` convention
+5. Mock handlers in `web-new/src/app/mocks/` implement all 30+ actions
+6. Switching from mock to real backend requires only changing `environment.apiBaseUrl`
+7. Go backend MUST validate `who`, `what`, `why`, `where` against allowlist
+8. Go backend MUST reject requests missing any required header with `400 BAD_REQUEST` + `PROBLEM_TYPE` `https://errors.cloudbsd.org/protocol/missing-header`
+
+---
+
 ## Adversarial Resilience (MANDATORY)
 
 > Per Honcho peer `cloudbsd-admin-adversarial` (20 conclusions + 18-card peer card). The application MUST handle itself well under attack, failure, and partial degradation. No blank pages, no silent failures, no information leaks.

@@ -1,0 +1,1173 @@
+# CloudBSD Admin — UI ↔ Backend Wire Protocol
+
+**Status**: Canonical wire protocol specification. UI mocks in `web-new/src/app/mocks/`
+implement these exactly so the future Go backend (in `cloudbsd-admin-backend`) is a drop-in replacement.
+
+---
+
+## 1. Envelope
+
+Every request and response uses the **same envelope shape**. This is what makes the protocol "pluralistic" — payloads are typed arrays, so a single HTTP call can carry any combination of data.
+
+### 1.1 Envelope schema (TypeScript)
+
+```typescript
+interface Envelope<P = unknown> {
+  /** IANA media type. For CloudBSD envelopes, MUST be `application/vnd.cloudbsd+envelope`. */
+  mime: 'application/vnd.cloudbsd+envelope';
+
+  /** CloudBSD-specific headers (mirrored into HTTP headers as `X-CloudBSD-*`). */
+  headers: CloudBSDHeader[];
+
+  /** IANA `Request-Id` / `Correlation-Id`. UUID v4. Server echoes for tracing. */
+  requestId: string;
+
+  /** ISO-8601 UTC timestamp. */
+  timestamp: string;
+
+  /** Tenant/session context. */
+  context: {
+    userId?: string;
+    sessionId?: string;
+    traceId?: string;
+    idempotencyKey?: string;
+  };
+
+  /** Payload items. Always an array — even a single item is `[item]`. */
+  payload: PayloadItem[];
+
+  /** Error items (parallel to payload; never both in success response). */
+  errors?: ErrorItem[];
+
+  /** Pagination cursor for the *next* payload chunk. */
+  next?: string;
+
+  /** Server-set hints. */
+  meta?: {
+    serverVersion?: string;
+    deprecation?: string[];
+    cacheHint?: 'no-cache' | 'max-age=60' | 'private';
+  };
+}
+
+interface CloudBSDHeader {
+  /** Header name. Stable enum: `who`, `what`, `why`, `where`, `when`, `how`. */
+  name: 'who' | 'what' | 'why' | 'where' | 'when' | 'how' | 'if-match' | 'if-none-match' | 'idempotency-key';
+  value: string;
+}
+
+interface PayloadItem {
+  /** Per-item MIME type. This is the real "what is this data" type. */
+  mime: string;
+
+  /** Stable identifier for this payload type (e.g. `vms.list`, `notifications.batch`). */
+  kind: string;
+
+  /** Per-item action discriminator. Optional. */
+  action?: 'create' | 'read' | 'update' | 'delete' | 'list' | 'stream';
+
+  /** Per-item version (`ETag` semantics). */
+  version?: string;
+
+  /** The actual data. Schema depends on `mime`. */
+  data: unknown;
+
+  /** Sub-items (for compound payloads like a row with embedded relations). */
+  includes?: PayloadItem[];
+}
+
+interface ErrorItem {
+  /** RFC 7807 problem type URI. */
+  type: string;
+  /** Severity per UI severity rules. */
+  severity: 'CRITICAL' | 'ERROR' | 'WARNING' | 'INFO';
+  /** Short machine-readable code (UPPER_SNAKE). */
+  code: string;
+  /** Human-readable summary. NEVER includes stack, paths, secrets. */
+  message: string;
+  /** Opaque server ID for log lookup. */
+  errorId: string;
+  /** When this error should be retried (RFC 7231 Retry-After equivalent). */
+  retryAfter?: number;
+  /** Per-item context. */
+  context?: Record<string, unknown>;
+}
+```
+
+### 1.2 HTTP transport
+
+| Aspect | Rule |
+|--------|------|
+| Method | `POST` for all envelope exchanges (read/write/list/delete) — see §1.4 |
+| Request content-type | `application/vnd.cloudbsd+envelope` |
+| Response content-type | `application/vnd.cloudbsd+envelope` (success) **or** `application/vnd.cloudbsd+error` (4xx/5xx) |
+| CloudBSD headers in HTTP | `headers[*].name` → `X-CloudBSD-<TitleCase>` (e.g. `who` → `X-CloudBSD-Who`) |
+| Errors | 4xx/5xx response uses `application/vnd.cloudbsd+error` envelope (NOT the standard envelope) |
+| Cookies | `session=<opaque>` HttpOnly Secure SameSite=Strict; session_id is also in `envelope.context.sessionId` for tracing |
+
+### 1.3 Standard CloudBSD headers (in every envelope)
+
+| Name | HTTP header | Required | Meaning | Example |
+|------|-------------|----------|---------|---------|
+| `who` | `X-CloudBSD-Who` | yes | Identifies the actor | `mlapointe@cloudbsd.org` or `system:discoverer:bhyve` |
+| `what` | `X-CloudBSD-What` | yes | Action being performed | `vms.list`, `sessions.validate` |
+| `why` | `X-CloudBSD-Why` | yes | Reason/intent (audit) | `user_requested`, `scheduled_sync`, `recovery_retry` |
+| `where` | `X-CloudBSD-Where` | yes | Origin/source | `dashboard_view`, `vm_detail_panel`, `discoverer_tick` |
+| `when` | `X-CloudBSD-When` | optional | Client timestamp | `2026-07-06T12:34:56.789Z` |
+| `how` | `X-CloudBSD-How` | optional | Transport (HTTP/Socket.IO/cli) | `socket.io`, `http` |
+| `if-match` | `X-CloudBSD-If-Match` | conditional | Optimistic concurrency | `v3-abc123` |
+| `idempotency-key` | `X-CloudBSD-Idempotency-Key` | conditional | UUID, dedupe retries | `550e8400-e29b-41d4-a716-446655440000` |
+
+### 1.4 Why `POST` for everything
+
+GETs cannot have a JSON body in many proxies/CDNs. By using POST + envelope, the wire protocol is uniform. The backend dispatches on `envelope.headers["what"]`. `If-Match` is the cache validator for revalidation reads.
+
+---
+
+## 2. UI ↔ Backend interactions (full inventory)
+
+For each UI screen I built, here is the exact exchange. **All examples use mock data consistent with the SVG mock-ups.**
+
+### 2.1 Dashboard
+
+**Request** (initial load):
+```http
+POST /api
+Content-Type: application/vnd.cloudbsd+envelope
+X-CloudBSD-Who: mlapointe
+X-CloudBSD-What: dashboard.bootstrap
+X-CloudBSD-Why: user_requested
+X-CloudBSD-Where: dashboard_view
+
+{
+  "mime": "application/vnd.cloudbsd+envelope",
+  "requestId": "req-7e8f-4a2b-9c1d",
+  "timestamp": "2026-07-06T12:34:56.789Z",
+  "context": { "userId": "mlapointe", "sessionId": "sess-abc123" },
+  "headers": [
+    { "name": "who",  "value": "mlapointe@cloudbsd.org" },
+    { "name": "what", "value": "dashboard.bootstrap" },
+    { "name": "why",  "value": "user_requested" },
+    { "name": "where", "value": "dashboard_view" },
+    { "name": "when", "value": "2026-07-06T12:34:56.789Z" },
+    { "name": "how",  "value": "http" }
+  ],
+  "payload": []
+}
+```
+
+**Response** (200):
+```json
+{
+  "mime": "application/vnd.cloudbsd+envelope",
+  "requestId": "req-7e8f-4a2b-9c1d",
+  "timestamp": "2026-07-06T12:34:56.812Z",
+  "context": { "userId": "mlapointe", "sessionId": "sess-abc123" },
+  "headers": [
+    { "name": "who",  "value": "mlapointe@cloudbsd.org" },
+    { "name": "what", "value": "dashboard.bootstrap" }
+  ],
+  "meta": { "serverVersion": "1.0.0+go1.24.3" },
+  "payload": [
+    { "mime": "application/vnd.cloudbsd+metric.cpu",        "kind": "metric.cpu",        "version": "v3-a1b2", "data": { "usagePercent": 42, "cores": 8, "loadAvg": [1.42, 1.38, 1.21], "sparkline": [18,14,16,10,12,8,11,6,9,7,4,8,5] } },
+    { "mime": "application/vnd.cloudbsd+metric.memory",     "kind": "metric.memory",     "version": "v3-c3d4", "data": { "usedBytes": 8804682956, "totalBytes": 17179869184, "breakdown": { "used": 6.4, "buffers": 1.2, "cache": 1.8, "arc": 2.4, "swap": 0.064 }, "unit": "GB" } },
+    { "mime": "application/vnd.cloudbsd+metric.disk",       "kind": "metric.disk",       "version": "v3-e5f6", "data": { "volumes": [
+        { "name": "tank/data",     "usedBytes": 263066746880, "totalBytes": 987842478080, "usagePercent": 27, "status": "healthy" },
+        { "name": "tank/media",    "usedBytes": 3518437208883, "totalBytes": 4398046511104, "usagePercent": 80, "status": "watch" },
+        { "name": "tank/vms",      "usedBytes": 657666867200,  "totalBytes": 858993459200,  "usagePercent": 76, "status": "watch" },
+        { "name": "tank/backups",  "usedBytes": 442381713408,  "totalBytes": 1649267441664, "usagePercent": 27, "status": "healthy" }
+      ], "lastScrub": "2026-07-04T00:00:00Z" } },
+    { "mime": "application/vnd.cloudbsd+metric.network",    "kind": "metric.network",    "version": "v3-g7h8", "data": { "rxBytesPerSec": 90420335, "txBytesPerSec": 13002342, "interfaces": [
+        { "name": "igc0", "status": "up", "speedMbps": 1000, "packetsPerSec": 142500 },
+        { "name": "bge0", "status": "up", "speedMbps": 1000, "packetsPerSec": 18432 },
+        { "name": "lo0", "status": "up", "speedMbps": 0,    "packetsPerSec": 2143 }
+      ] } },
+    { "mime": "application/vnd.cloudbsd+metric.temperature","kind": "metric.temperature","version":"v3-i9j0", "data": { "sensors": [
+        { "label": "CPU",     "celsius": 47, "status": "normal" },
+        { "label": "NVMe",    "celsius": 38, "status": "normal" },
+        { "label": "Ambient", "celsius": 41, "status": "normal" }
+      ] } },
+    { "mime": "application/vnd.cloudbsd+metric.load",       "kind": "metric.load",       "version": "v3-k1l2", "data": { "load1": 1.42, "load5": 1.38, "load15": 1.21, "thresholds": { "normal": 2, "warn": 4, "critical": 8 } } },
+    { "mime": "application/vnd.cloudbsd+process.top",      "kind": "process.top",      "version": "v3-m3n4", "data": { "processes": [
+        { "pid": 1242, "user": "www",   "cpuPercent": 18, "memPercent": 8.2, "command": "nginx: worker" },
+        { "pid": 8821, "user": "pgsql", "cpuPercent": 14, "memPercent": 24,  "command": "postgres: writer" },
+        { "pid": 3104, "user": "root",  "cpuPercent": 12, "memPercent": 4.1, "command": "vm-bhyve: nextcloud" },
+        { "pid": 9214, "user": "mlap",  "cpuPercent": 8,  "memPercent": 2.1, "command": "sshd" },
+        { "pid": 5512, "user": "mlap",  "cpuPercent": 6,  "memPercent": 1.8, "command": "zsh" }
+      ] } },
+    { "mime": "application/vnd.cloudbsd+zfs.health",      "kind": "zfs.health",       "version": "v3-o5p6", "data": { "pool": "tank", "status": "healthy", "fragmentationPercent": 4, "arcHitPercent": 87.4, "lastScrub": "2026-07-04T00:00:00Z", "lastScrubErrors": 0, "nextScrub": "2026-07-16T00:00:00Z" } },
+    { "mime": "application/vnd.cloudbsd+activity.recent",  "kind": "activity.recent",  "version": "v3-q7r8", "data": { "events": [
+        { "ts": "2026-07-06T12:42:01Z", "module": "zfs",   "severity": "INFO", "message": "snapshot daily@auto-2026-07-06_03-00 created on tank/data" },
+        { "ts": "2026-07-06T12:31:18Z", "module": "jail",  "severity": "INFO", "message": "transmission entered STATE: STARTED" },
+        { "ts": "2026-07-06T12:18:44Z", "module": "vm",    "severity": "INFO", "message": "nextcloud guest-agent heartbeat (3s drift)" },
+        { "ts": "2026-07-06T11:55:09Z", "module": "scrub", "severity": "INFO", "message": "of tank completed with 0 errors" },
+        { "ts": "2026-07-06T11:42:18Z", "module": "alert", "severity": "INFO", "message": "resolved: tank/data < 80%" },
+        { "ts": "2026-07-06T11:14:02Z", "module": "ct",    "severity": "INFO", "message": "nginx-proxy restarted (exit 0)" },
+        { "ts": "2026-07-06T10:58:33Z", "module": "jail",  "severity": "INFO", "message": "pi-hole blocked 1,204 queries" },
+        { "ts": "2026-07-06T10:33:07Z", "module": "vm",    "severity": "INFO", "message": "nextcloud snapshot to offsite OK" },
+        { "ts": "2026-07-06T09:48:22Z", "module": "backup","severity": "INFO", "message": "snapshot daily replicated to offsite" },
+        { "ts": "2026-07-06T09:14:00Z", "module": "systemd","severity": "INFO", "message": "timer fstrim ran (freed 2.4 GB)" }
+      ] } },
+    { "mime": "application/vnd.cloudbsd+topconsumers",     "kind": "topconsumers",     "version": "v3-s9t0", "data": { "windowSec": 300, "consumers": [
+        { "name": "vm-bhyve/jellyfin",   "rxBytesPerSec": 90420335, "txBytesPerSec": 13002342 },
+        { "name": "postgres-16",         "rxBytesPerSec": 44040192, "txBytesPerSec":  2202009 },
+        { "name": "jail/syncthing",      "rxBytesPerSec": 29779558, "txBytesPerSec":  1830492 },
+        { "name": "vm-bhyve/nextcloud",  "rxBytesPerSec": 22229898, "txBytesPerSec":  13591200 },
+        { "name": "jail/transmission",   "rxBytesPerSec": 15518924, "txBytesPerSec":  2049103 }
+      ] } }
+  ]
+}
+```
+
+### 2.2 Login (PAM)
+
+**Request**:
+```json
+{
+  "mime": "application/vnd.cloudbsd+envelope",
+  "requestId": "req-login-1",
+  "timestamp": "2026-07-06T12:00:00Z",
+  "context": {},
+  "headers": [
+    { "name": "who",  "value": "mlapointe" },
+    { "name": "what", "value": "auth.login" },
+    { "name": "why",  "value": "user_requested" },
+    { "name": "where", "value": "login_form" },
+    { "name": "how",  "value": "http" },
+    { "name": "idempotency-key", "value": "550e8400-e29b-41d4-a716-446655440001" }
+  ],
+  "payload": [
+    { "mime": "application/vnd.cloudbsd+credentials", "kind": "credentials", "data": {
+        "username": "mlapointe",
+        "password": "<plaintext; sent over WSS only>",
+        "otp": "492715",
+        "rememberBrowser": true
+    } }
+  ]
+}
+```
+
+**Response (success)** — 200 with `Set-Cookie: session=...; HttpOnly; Secure; SameSite=Strict`:
+```json
+{
+  "mime": "application/vnd.cloudbsd+envelope",
+  "requestId": "req-login-1",
+  "timestamp": "2026-07-06T12:00:01.234Z",
+  "headers": [
+    { "name": "who",  "value": "system:auth" },
+    { "name": "what", "value": "auth.login.success" }
+  ],
+  "payload": [
+    { "mime": "application/vnd.cloudbsd+session", "kind": "session", "version": "v1", "data": {
+        "sessionId": "sess-abc123",
+        "userId": "mlapointe",
+        "email": "mlapointe@cloudbsd.org",
+        "displayName": "Mark LaPointe",
+        "groups": ["wheel", "admins", "docker"],
+        "roles": ["admin"],
+        "isAdmin": true,
+        "totpEnrolled": true,
+        "expiresAt": "2026-07-06T12:30:01Z",
+        "idleTimeoutSec": 1800
+    } }
+  ]
+}
+```
+
+**Response (locked account)** — 423 (Locked):
+```http
+HTTP/1.1 423 Locked
+Content-Type: application/vnd.cloudbsd+error
+```
+```json
+{
+  "mime": "application/vnd.cloudbsd+error",
+  "requestId": "req-login-1",
+  "timestamp": "2026-07-06T12:00:01.123Z",
+  "headers": [
+    { "name": "who",  "value": "guest" },
+    { "name": "what", "value": "auth.login.locked" }
+  ],
+  "payload": [
+    { "mime": "application/vnd.cloudbsd+problem", "kind": "problem", "data": {
+        "type": "https://errors.cloudbsd.org/auth/account-locked",
+        "severity": "WARNING",
+        "code": "AUTH_ACCOUNT_LOCKED",
+        "message": "Account is temporarily locked due to failed attempts. Try again in 14 minutes.",
+        "errorId": "err-2026-07-06-lock-7e8f",
+        "retryAfter": 840,
+        "context": { "unlocksAt": "2026-07-06T12:14:00Z", "failedAttempts": 5, "maxAttempts": 5 }
+    } }
+  ]
+}
+```
+
+### 2.3 Session validation (heartbeat)
+
+Called every 60s by `SocketService` and on every page navigation.
+
+**Request**:
+```json
+{
+  "mime": "application/vnd.cloudbsd+envelope",
+  "requestId": "req-validate-42",
+  "timestamp": "2026-07-06T12:34:00Z",
+  "context": { "sessionId": "sess-abc123" },
+  "headers": [
+    { "name": "who",  "value": "mlapointe@cloudbsd.org" },
+    { "name": "what", "value": "auth.session.validate" },
+    { "name": "why",  "value": "heartbeat" },
+    { "name": "where", "value": "http_or_socket" },
+    { "name": "when", "value": "2026-07-06T12:34:00Z" }
+  ],
+  "payload": []
+}
+```
+
+**Response** — 200:
+```json
+{
+  "mime": "application/vnd.cloudbsd+envelope",
+  "requestId": "req-validate-42",
+  "timestamp": "2026-07-06T12:34:00.045Z",
+  "headers": [
+    { "name": "who",  "value": "system:auth" },
+    { "name": "what", "value": "auth.session.valid" }
+  ],
+  "payload": [
+    { "mime": "application/vnd.cloudbsd+session.status", "kind": "session.status", "version": "v1", "data": {
+        "sessionId": "sess-abc123",
+        "valid": true,
+        "expiresInSec": 1620,
+        "serverTime": "2026-07-06T12:34:00.045Z",
+        "idleRemainingSec": 1740
+    } }
+  ]
+}
+```
+
+**Response — expired** — 401 + frost-out trigger:
+```json
+{
+  "mime": "application/vnd.cloudbsd+error",
+  "requestId": "req-validate-42",
+  "timestamp": "2026-07-06T12:34:00.045Z",
+  "headers": [
+    { "name": "who",  "value": "system:auth" },
+    { "name": "what", "value": "auth.session.expired" }
+  ],
+  "payload": [
+    { "mime": "application/vnd.cloudbsd+problem", "kind": "problem", "data": {
+        "type": "https://errors.cloudbsd.org/auth/session-expired",
+        "severity": "ERROR",
+        "code": "AUTH_SESSION_EXPIRED",
+        "message": "Your session has expired. Please sign in again.",
+        "errorId": "err-2026-07-06-session-9b1c"
+    } }
+  ]
+}
+```
+
+### 2.4 VMs list (with filters, sort, pagination)
+
+**Request**:
+```json
+{
+  "mime": "application/vnd.cloudbsd+envelope",
+  "requestId": "req-vms-list-1",
+  "timestamp": "2026-07-06T12:35:00Z",
+  "context": { "userId": "mlapointe", "sessionId": "sess-abc123" },
+  "headers": [
+    { "name": "who",  "value": "mlapointe@cloudbsd.org" },
+    { "name": "what", "value": "vms.list" },
+    { "name": "why",  "value": "user_requested" },
+    { "name": "where", "value": "vms_view" }
+  ],
+  "payload": [
+    { "mime": "application/vnd.cloudbsd+query", "kind": "query", "data": {
+        "filter": { "status": ["RUN"], "host": null, "os": null, "tag": null, "search": "" },
+        "sort": { "field": "name", "direction": "asc" },
+        "page": { "limit": 12, "cursor": null }
+    } }
+  ]
+}
+```
+
+**Response** — 200:
+```json
+{
+  "mime": "application/vnd.cloudbsd+envelope",
+  "requestId": "req-vms-list-1",
+  "timestamp": "2026-07-06T12:35:00.082Z",
+  "headers": [
+    { "name": "who",  "value": "system:vms" },
+    { "name": "what", "value": "vms.list" }
+  ],
+  "payload": [
+    { "mime": "application/vnd.cloudbsd+vms.batch", "kind": "vms.batch", "version": "v3", "data": {
+        "total": 47, "shown": 12, "stats": { "running": 39, "stopped": 6, "paused": 1, "error": 1 }
+    }, "includes": [
+        { "mime": "application/vnd.cloudbsd+vm", "kind": "vm", "version": "v1", "data": {
+            "id": "vm-nextcloud", "name": "nextcloud", "status": "RUN", "os": "Debian 12",
+            "vcpu": 4, "ramBytes": 8589934592, "diskBytes": 128849018880,
+            "uptimeSec": 1211670, "host": "freenas-mock", "ip": "10.0.10.10",
+            "tags": ["prod", "files"], "iopsRead": 1200, "iopsWrite": 0,
+            "netRxBytesPerSec": 13002342, "netTxBytesPerSec": 4404019,
+            "createdAt": "2026-06-22T12:00:00Z", "version": "v1-a7f3"
+        } },
+        { "mime": "application/vnd.cloudbsd+vm", "kind": "vm", "version": "v1", "data": {
+            "id": "vm-homeassistant", "name": "homeassistant", "status": "RUN", "os": "HAOS 12",
+            "vcpu": 2, "ramBytes": 4294967296, "diskBytes": 34359738368,
+            "uptimeSec": 764520, "host": "freenas-mock", "ip": "10.0.10.12",
+            "tags": ["smarthome"], "iopsRead": 380, "iopsWrite": 0,
+            "netRxBytesPerSec": 644245, "netTxBytesPerSec": 212341,
+            "createdAt": "2026-06-27T12:00:00Z", "version": "v1-b8c4"
+        } },
+        { "mime": "application/vnd.cloudbsd+vm", "kind": "vm", "version": "v1", "data": {
+            "id": "vm-jellyfin", "name": "jellyfin", "status": "RUN", "os": "Ubuntu 24.04",
+            "vcpu": 6, "ramBytes": 12884901888, "diskBytes": 536870912000,
+            "uptimeSec": 1911360, "host": "freenas-mock", "ip": "10.0.10.11",
+            "tags": ["media"], "iopsRead": 4800, "iopsWrite": 0,
+            "netRxBytesPerSec": 90420335, "netTxBytesPerSec": 13002342,
+            "createdAt": "2026-06-14T12:00:00Z", "version": "v1-c9d5"
+        } }
+    ] }
+  ],
+  "next": "eyJ2bVMtaWQiOiJ2bS1qb2JiaW5nIiwiYW9yZGVyIjpbIm5hbWUiXX0"
+}
+```
+
+### 2.5 Containers list
+
+**Request**:
+```json
+{
+  "mime": "application/vnd.cloudbsd+envelope",
+  "requestId": "req-ct-list",
+  "timestamp": "2026-07-06T12:36:00Z",
+  "context": { "userId": "mlapointe", "sessionId": "sess-abc123" },
+  "headers": [
+    { "name": "who",  "value": "mlapointe@cloudbsd.org" },
+    { "name": "what", "value": "containers.list" },
+    { "name": "why",  "value": "user_requested" },
+    { "name": "where", "value": "containers_view" }
+  ],
+  "payload": [
+    { "mime": "application/vnd.cloudbsd+query", "kind": "query", "data": { "filter": {}, "sort": { "field": "name", "direction": "asc" }, "page": { "limit": 50 } } }
+  ]
+}
+```
+
+**Response**:
+```json
+{
+  "mime": "application/vnd.cloudbsd+envelope",
+  "requestId": "req-ct-list",
+  "timestamp": "2026-07-06T12:36:00.121Z",
+  "headers": [
+    { "name": "who", "value": "system:containers" },
+    { "name": "what", "value": "containers.list" }
+  ],
+  "payload": [
+    { "mime": "application/vnd.cloudbsd+containers.batch", "kind": "containers.batch", "data": { "total": 62, "shown": 15, "stats": { "running": 58, "exited": 4, "paused": 0 } } },
+    { "mime": "application/vnd.cloudbsd+container", "kind": "container", "data": {
+        "id": "ct-nginx-proxy", "name": "nginx-proxy", "image": "nginx:1.27-alpine", "imageRegistry": "docker.io",
+        "status": "RUN", "ports": [{"container":80,"host":80,"protocol":"tcp"},{"container":443,"host":443,"protocol":"tcp"}],
+        "cpuPercent": 3, "memBytes": 148897792, "netRxBytesPerSec": 12976128, "netTxBytesPerSec": 12000000,
+        "uptimeSec": 2782620, "createdAt": "2026-06-06T12:00:00Z", "version": "v1-d0e6"
+    } },
+    { "mime": "application/vnd.cloudbsd+container", "kind": "container", "data": {
+        "id": "ct-postgres-16", "name": "postgres-16", "image": "postgres:16.3-alpine", "imageRegistry": "docker.io",
+        "status": "RUN", "ports": [{"container":5432,"host":5432,"protocol":"tcp"}],
+        "cpuPercent": 18, "memBytes": 1288490188, "netRxBytesPerSec": 8604876, "netTxBytesPerSec": 1024,
+        "uptimeSec": 2782620, "createdAt": "2026-06-06T12:00:00Z", "version": "v1-e1f7"
+    } }
+  ]
+}
+```
+
+### 2.6 Jails list
+
+**Request/Response** mirrors containers with `jails.batch` and `jail` MIME types.
+
+```json
+{
+  "mime": "application/vnd.cloudbsd+jails.batch", "kind": "jails.batch", "data": { "total": 12, "stats": { "running": 10, "stopped": 1, "frozen": 1 } } },
+{ "mime": "application/vnd.cloudbsd+jail", "kind": "jail", "data": {
+    "id": "jail-transmission", "name": "transmission", "status": "RUN", "os": "FreeBSD 14.2",
+    "hostname": "transmission.lan", "ip": "10.0.10.21", "vcpus": 2, "ramBytes": 1073741824,
+    "diskBytes": 21474836480, "resourceUsagePercent": 64, "uptimeSec": 2782620, "jailId": 3
+} }
+```
+
+### 2.7 Volumes list
+
+```json
+{ "mime": "application/vnd.cloudbsd+volumes.batch", "kind": "volumes.batch", "data": { "total": 13, "stats": { "healthy": 9, "watch": 3, "encrypted": 11 } } },
+{ "mime": "application/vnd.cloudbsd+volume", "kind": "volume", "data": {
+    "id": "tank-data", "name": "tank/data", "type": "ZFS", "sizeBytes": 987842478080, "usedBytes": 263066746880, "usagePercent": 27,
+    "mountpoint": "/mnt/tank/data", "compression": "zstd-3", "encryption": "aes-256-gcm", "lastScrub": "2026-07-04T00:00:00Z", "health": "healthy"
+} }
+```
+
+### 2.8 Network map topology
+
+```json
+{ "mime": "application/vnd.cloudbsd+network.topology", "kind": "network.topology", "data": {
+    "subnets": [
+        { "cidr": "10.0.10.0/24", "label": "mgmt + workloads", "vlan": 10 },
+        { "cidr": "10.0.20.0/24", "label": "storage",         "vlan": 20 },
+        { "cidr": "10.0.30.0/24", "label": "cluster",         "vlan": 30 }
+    ],
+    "nodes": [
+        { "id": "internet", "type": "external", "label": "Internet", "ip": "203.0.113.1", "x": 60, "y": 50 },
+        { "id": "pfsense",  "type": "router",   "label": "pfsense.local", "ip": "10.0.10.1", "x": 240, "y": 50 },
+        { "id": "sw-core",  "type": "switch",   "label": "sw-core.local", "ip": "10.0.10.2", "x": 420, "y": 50 },
+        { "id": "vm-nextcloud", "type": "vm", "label": "nextcloud", "subnet": "10.0.10.0/24", "x": 60, "y": 240, "metrics": { "rxBytesPerSec": 13002342 } }
+    ],
+    "links": [
+        { "from": "internet", "to": "pfsense", "bandwidthMbps": 1000, "latencyMs": 0.4 },
+        { "from": "pfsense",  "to": "sw-core", "bandwidthMbps": 1000, "latencyMs": 0.1 },
+        { "from": "sw-core",  "to": "vm-nextcloud", "bandwidthMbps": 1000, "latencyMs": 0.3, "status": "degraded" }
+    ]
+} }
+```
+
+### 2.9 Cluster status
+
+```json
+{ "mime": "application/vnd.cloudbsd+cluster.status", "kind": "cluster.status", "data": {
+    "nodesTotal": 6, "nodesOffline": 1, "jobsRunning": 12,
+    "aggregates": { "cpuAvgPercent": 22, "memAvgPercent": 37, "diskAvgPercent": 41 }
+} },
+{ "mime": "application/vnd.cloudbsd+cluster.node", "kind": "cluster.node", "data": {
+    "id": "node-freenas-mock", "hostname": "freenas-mock", "role": "master", "rack": "A1",
+    "status": "healthy", "cpuPercent": 18, "memPercent": 51, "diskPercent": 27,
+    "uptimeSec": 1211670
+} },
+{ "mime": "application/vnd.cloudbsd+cluster.node", "kind": "cluster.node", "data": {
+    "id": "node-05", "hostname": "node-05", "role": "worker", "rack": "C1",
+    "status": "offline", "lastSeenSec": 14400
+} }
+```
+
+### 2.10 Users list (admin)
+
+```json
+{ "mime": "application/vnd.cloudbsd+users.batch", "kind": "users.batch", "data": { "total": 14, "byPAMStatus": { "active": 10, "locked": 1, "expired": 1, "disabled": 1 } } },
+{ "mime": "application/vnd.cloudbsd+user", "kind": "user", "data": {
+    "uid": 1000, "username": "mlapointe", "gid": 1000, "pamStatus": "active",
+    "lastLoginAt": "2026-07-06T12:34:00Z", "lastLoginIp": "10.0.10.42",
+    "groups": ["wheel", "admins", "docker"], "shell": "/bin/zsh", "home": "/home/mlapointe",
+    "twoFA": { "enrolled": true, "method": "totp" },
+    "activeSessions": 2, "sshKeys": 4, "sudoLast24h": 8
+} }
+```
+
+### 2.11 Logs (paginated, level-filtered)
+
+```json
+{ "mime": "application/vnd.cloudbsd+logs.batch", "kind": "logs.batch", "data": {
+    "total": 118, "shown": 18, "levelCounts": { "error": 4, "warn": 12, "info": 118, "debug": 42 },
+    "tailMode": true
+} },
+{ "mime": "application/vnd.cloudbsd+log.entry", "kind": "log.entry", "data": {
+    "ts": "2026-07-06T12:42:01.218Z", "level": "INFO", "module": "zfs", "source": "vdev.zpool.daily",
+    "message": "snapshot daily@auto-2026-07-06_03-00 created on tank/data (2.1 GB)",
+    "requestId": "req-snap-42", "userId": null
+} }
+```
+
+### 2.12 Notifications list
+
+```json
+{ "mime": "application/vnd.cloudbsd+notifications.batch", "kind": "notifications.batch", "data": { "unread": 17, "total": 84 } },
+{ "mime": "application/vnd.cloudbsd+notification", "kind": "notification", "data": {
+    "id": "notif-84", "ts": "2026-07-06T12:30:00Z", "severity": "ERROR", "source": "disk",
+    "title": "tank/media usage > 80%", "message": "Volume tank/media crossed 80% threshold (currently 80.2%)",
+    "actions": [{"id":"view","label":"View details","href":"/volumes/tank-media"}],
+    "read": false
+} }
+```
+
+### 2.13 Theme list + apply + custom import/export
+
+```json
+{ "mime": "application/vnd.cloudbsd+themes.batch", "kind": "themes.batch", "data": { "count": 15, "active": "cloudbsd-revytech", "customCount": 2 } },
+{ "mime": "application/vnd.cloudbsd+theme", "kind": "theme", "data": {
+    "id": "phosphor-crt", "name": "Phosphor CRT", "author": "system", "license": "BSD-3-Clause",
+    "tags": ["retro", "dark", "green-phosphor"],
+    "tokens": { "bg-primary": "#0a0e0a", "fg-primary": "#66ff66", "font-family": "VT323, monospace" },
+    "version": "v1"
+} }
+```
+
+**Theme apply**:
+```json
+{
+  "headers": [
+    { "name": "who", "value": "mlapointe@cloudbsd.org" },
+    { "name": "what", "value": "theme.apply" },
+    { "name": "why", "value": "user_requested" },
+    { "name": "where", "value": "settings_theme" }
+  ],
+  "payload": [{ "mime": "application/vnd.cloudbsd+theme", "kind": "theme", "data": { "id": "phosphor-crt" } }]
+}
+```
+
+**Theme import**:
+```json
+{ "mime": "application/vnd.cloudbsd+envelope", "headers": [{ "name": "what", "value": "theme.import" }], "payload": [
+    { "mime": "application/vnd.cloudbsd+theme.import", "kind": "theme.import", "data": {
+        "format": "cloudbsd-theme-v1",
+        "payload": "base64-encoded-theme-json",
+        "signature": "ed25519:abcdef...",
+        "name": "My Custom Theme"
+    } }
+] }
+```
+
+### 2.14 Settings update
+
+```json
+{
+  "headers": [
+    { "name": "who", "value": "mlapointe@cloudbsd.org" },
+    { "name": "what", "value": "settings.update" },
+    { "name": "why", "value": "user_requested" },
+    { "name": "where", "value": "settings_appearance" },
+    { "name": "if-match", "value": "v3-abc123" }
+  ],
+  "payload": [
+    { "mime": "application/vnd.cloudbsd+settings", "kind": "settings", "data": {
+        "section": "appearance",
+        "values": {
+            "theme": "phosphor-crt",
+            "density": "compact",
+            "fontFamily": "system-ui",
+            "baseFontSize": 14,
+            "borderRadius": "medium",
+            "reduceMotion": true,
+            "autoRefreshSec": 15
+        }
+    } }
+  ]
+}
+```
+
+### 2.15 Plugin manifest fetch
+
+```json
+{
+  "headers": [{ "name": "what", "value": "plugins.manifest" }, { "name": "where", "value": "app_boot" }],
+  "payload": []
+}
+```
+
+**Response**:
+```json
+{ "mime": "application/vnd.cloudbsd+plugin.manifest", "kind": "plugin.manifest", "data": {
+    "name": "vm-metrics", "version": "1.4.2", "author": "mlapointe", "license": "BSD-3-Clause",
+    "sha256": "a1b2c3...", "signature": "ed25519:...",
+    "capabilities": ["vms.read", "metrics.read", "menu.add", "page.add"],
+    "menuItems": [
+        { "id": "vm-metrics", "label": "VM Metrics", "icon": "chart-bar", "route": "/ext/vm-metrics" }
+    ],
+    "pages": [
+        { "id": "vm-metrics-overview", "title": "VM Metrics", "route": "/ext/vm-metrics", "template": "..." }
+    ],
+    "routes": [{ "method": "POST", "path": "/ext/vm-metrics/api/query", "handler": "..." }]
+} }
+```
+
+### 2.16 Plugin data request
+
+```json
+{ "mime": "application/vnd.cloudbsd+envelope", "headers": [{ "name": "what", "value": "plugin.vm-metrics.query" }], "payload": [
+    { "mime": "application/vnd.cloudbsd+plugin.query", "kind": "plugin.query", "data": { "timeRange": "1h", "metrics": ["cpu", "mem"] } }
+] }
+```
+
+**Response**:
+```json
+{ "mime": "application/vnd.cloudbsd+plugin.result", "kind": "plugin.result", "data": { "series": [{"name":"cpu","points":[["2026-07-06T12:00:00Z",42],["2026-07-06T12:05:00Z",44]]}] } }
+```
+
+### 2.17 Pre-flight check (L1, L2, L3)
+
+```json
+{ "mime": "application/vnd.cloudbsd+envelope", "headers": [{ "name": "what", "value": "preflight.check" }], "payload": [
+    { "mime": "application/vnd.cloudbsd+preflight.request", "kind": "preflight.request", "data": { "level": "L1" } }
+] }
+```
+
+**Response**:
+```json
+{ "mime": "application/vnd.cloudbsd+preflight.result", "kind": "preflight.result", "data": {
+    "status": "healthy",
+    "checks": [
+        { "id": "backend-ping", "status": "PASS", "latencyMs": 18, "message": null },
+        { "id": "session-valid", "status": "PASS", "latencyMs": 1, "message": null },
+        { "id": "manifest-load", "status": "PASS", "latencyMs": 12, "message": null }
+    ]
+} }
+```
+
+### 2.18 Error envelope (uniform error response)
+
+Used for all 4xx/5xx with `Content-Type: application/vnd.cloudbsd+error`:
+
+```json
+{
+  "mime": "application/vnd.cloudbsd+error",
+  "requestId": "req-abc-123",
+  "timestamp": "2026-07-06T12:34:56.789Z",
+  "headers": [
+    { "name": "who",  "value": "system:api" },
+    { "name": "what", "value": "vms.list" }
+  ],
+  "payload": [
+    { "mime": "application/vnd.cloudbsd+problem", "kind": "problem", "data": {
+        "type": "https://errors.cloudbsd.org/rate-limit/exceeded",
+        "severity": "WARNING",
+        "code": "RATE_LIMIT_EXCEEDED",
+        "message": "Too many requests. Try again in 60 seconds.",
+        "errorId": "err-2026-07-06-rate-7e8f",
+        "retryAfter": 60,
+        "context": { "limit": 600, "window": "1m", "endpoint": "vms.list" }
+    } }
+  ]
+}
+```
+
+### 2.19 Status / health
+
+```json
+{ "mime": "application/vnd.cloudbsd+status.aggregate", "kind": "status.aggregate", "data": {
+    "backend": { "status": "UP", "latencyMs": 18, "uptimeSec": 1211670 },
+    "database": { "status": "HEALTHY", "sizeBytes": 432012800, "tableCount": 142 },
+    "plugins": { "enabled": 5, "failed": 0, "total": 5 },
+    "config": {
+        "port": 3001, "demoMode": false, "logLevel": "info", "retention": "14d",
+        "refreshIntervalSec": 15, "theme": "cloudbsd", "locale": "en_US",
+        "tz": "America/Montreal", "plugins": 5, "mfa": "required", "sshdPort": 22, "ipv6": true
+    }
+} }
+```
+
+### 2.20 VM console token (noVNC)
+
+```json
+{ "mime": "application/vnd.cloudbsd+envelope", "headers": [{ "name": "what", "value": "vms.console.token" }], "payload": [
+    { "mime": "application/vnd.cloudbsd+vm.console.request", "kind": "vm.console.request", "data": { "vmId": "vm-nextcloud", "screenSize": "1024x768" } }
+] }
+```
+
+**Response**:
+```json
+{ "mime": "application/vnd.cloudbsd+vm.console.token", "kind": "vm.console.token", "data": {
+    "token": "eyJhbGciOiJFZERTQSIs...", "expiresInSec": 300, "websocketUrl": "wss://api.cloudbsd.org/api/vms/vm-nextcloud/console/ws?token=...",
+    "ticketId": "tkt-7e8f4a2b"
+} }
+```
+
+---
+
+## 3. Mock implementation in the UI
+
+The Angular app's `web-new/src/app/mocks/` directory MUST implement this exact protocol against in-memory data so the future Go backend is a drop-in replacement.
+
+```
+web-new/src/app/mocks/
+  envelope.ts            # Envelope type + helpers (matches §1.1)
+  handlers/
+    auth.ts              # auth.login, auth.session.validate, auth.logout
+    vms.ts               # vms.list, vms.console.token
+    containers.ts        # containers.list
+    jails.ts             # jails.list
+    volumes.ts           # volumes.list
+    network.ts           # network.topology
+    cluster.ts           # cluster.status, cluster.node.list
+    users.ts             # users.list
+    logs.ts              # logs.list, logs.stream (RxJS Subject)
+    notifications.ts     # notifications.list, notifications.markRead
+    themes.ts            # themes.list, themes.apply, themes.import/export
+    settings.ts          # settings.get, settings.update
+    plugins.ts           # plugins.manifest, plugins.invoke
+    preflight.ts         # preflight.check
+    status.ts            # status.aggregate
+  http.ts                # MockHttpInterceptor that converts HttpClient calls → envelope exchanges
+  socket.ts              # MockSocketService that emits Socket.IO-style events
+```
+
+The HTTP interceptor MUST:
+1. Convert every `HttpClient.post(...)` into the envelope shape
+2. Return `Observable<Envelope<P>>` unwrapped to `P` (the payload data)
+3. Translate `application/vnd.cloudbsd+error` envelopes to `ErrorHandlingService.handle()`
+4. Inject `X-CloudBSD-Who/What/Why/Where` from current `AuthStore` + route context
+
+---
+
+## 4. Backend (Go) implementation notes
+
+When implementing in Go:
+
+- HTTP server uses `chi` router (lightweight, idiomatic, middleware-friendly)
+- All handlers read `*Envelope[P]`, dispatch on `headers["what"]`, return `*Envelope[R]`
+- Validation via `go-playground/validator/v10` against per-action struct tags
+- PAM via `github.com/msteinert/pam` or local CGO binding
+- SQLite via `modernc.org/sqlite` (pure Go, no CGO required for FreeBSD cross-build)
+- WebSocket via `github.com/gorilla/websocket`
+- Plugin isolation via `plugin.Open()` (Go's native plugin system, requires CGO on FreeBSD)
+- Hexagonal architecture: handlers → services → repositories, with interfaces for testability
+
+The Go service lives in `~/git/cloudbsd-admin-backend/` (Go module `github.com/cloudbsdorg/cloudbsd-admin-backend`).
+
+For FreeBSD port: depends on `lang/go124` (most stable, security updates tracked per FreshPorts). NOT `lang/go` meta-port (latest) to avoid Go version drift across rebuilds. The FreeBSD port Makefile should set `GO_VERSION=	1.24`.
+
+---
+
+## 5. Inventory of all UI→backend exchanges (full surface)
+
+| Screen / Component | `what` action(s) | What server returns |
+|--------------------|------------------|---------------------|
+| Login (T15q) | `auth.login` | `session` |
+| App boot (T15c, T18) | `preflight.check` (L1), `auth.session.validate` | `preflight.result`, `session.status` |
+| App boot (T7b) | (WebSocket) `subscribe:manifests`, `subscribe:metrics` | Stream events |
+| Dashboard (T26) | `dashboard.bootstrap` | 11 payload items (CPU/MEM/Disk/Network/Temp/Load/Proc/ZFS/Activity/Consumers/Stats) |
+| VMs (T28) | `vms.list` (paginated) | `vms.batch` + `vm[]` |
+| VM detail (T34) | `vms.get` | `vm` + `metrics` + `volumes[]` |
+| VM console (T120) | `vms.console.token` → `wss://...` | `vm.console.token` (JWT for websockify) |
+| Containers (T29) | `containers.list` | `containers.batch` + `container[]` |
+| Jails (T30) | `jails.list` | `jails.batch` + `jail[]` |
+| Volumes (T31) | `volumes.list` | `volays.batch` + `volume[]` |
+| Network Map (T32) | `network.topology` | `network.topology` |
+| Cluster (T33) | `cluster.status`, `cluster.node.list`, `cluster.events` | Multiple items |
+| Users (T35) | `users.list` | `users.batch` + `user[]` |
+| Logs (T36) | `logs.list` (paginated) + WebSocket `subscribe:logs` | `logs.batch` + `log.entry[]` (REST + stream) |
+| Notifications (T37) | `notifications.list`, `notifications.markRead` | `notifications.batch` + `notification[]` |
+| Themes (T22a, T22b) | `themes.list`, `themes.apply`, `themes.import`, `themes.export` | `themes.batch` + `theme[]` |
+| Settings (T22, T22e) | `settings.get`, `settings.update` | `settings` |
+| Plugin page render | `plugins.manifest`, `plugins.invoke` | `plugin.manifest[]`, `plugin.result` |
+| Status (T14) | `status.aggregate` | `status.aggregate` + `plugin.health[]` |
+| About (T13) | `status.aggregate` (subset) + `version` | Multiple |
+| Help (T15m) | `help.search`, `help.topics` | `help.results` |
+| Docs (T3s) | `docs.list`, `docs.get` | `docs.batch` + `doc[]` |
+| API docs (T3t) | `openapi.spec` | `openapi.spec` |
+| Release notes (T3v) | `release-notes.list` | `release-notes.batch` |
+| Frost-out trigger (T20) | (response to any 401) | `application/vnd.cloudbsd+error` envelope with `code=AUTH_SESSION_EXPIRED` |
+| Error reporting (T15r) | (consumer of all error envelopes) | N/A |
+
+Every `what` action MUST be implemented in the Go backend per the response shape in §2.
+
+---
+
+## 6. Validation: JSON Schema for every object & key
+
+> **Every JSON message (envelope + every payload item) MUST validate against an explicit JSON Schema. Reject (400) anything that doesn't match — never silently coerce.**
+
+### 6.1 Validation principles
+
+1. **Reject unknown fields** at the envelope level (`additionalProperties: false`). Prevents prototype pollution and accidental data leaks.
+2. **Reject missing required fields** with a clear problem type (`https://errors.cloudbsd.org/protocol/missing-field`).
+3. **Type-strict** — no implicit coercion (string "42" must NOT become number 42).
+4. **Length-bounded** — every string has `maxLength`, every array has `maxItems`.
+5. **Enum-constrained** — header `name` enum, `what` action enum per route, status values enum, etc.
+6. **Pattern-bounded** — IDs, names, IPs, hostnames have regex patterns.
+7. **Versioned schemas** — every schema has `$id` and `$version`. Schema changes are versioned; breaking changes require a new schema version.
+8. **Format-validated** — strings claiming to be URIs, dates, IPv4/IPv6 are validated via `format` keyword.
+
+### 6.2 Envelope schema (canonical, versioned)
+
+```jsonc
+// schemas/envelope.v1.json (draft 2020-12)
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cloudbsd.org/schemas/envelope.v1.json",
+  "$version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["mime", "requestId", "timestamp", "context", "headers", "payload"],
+  "properties": {
+    "mime":      { "type": "string", "const": "application/vnd.cloudbsd+envelope" },
+    "requestId": { "type": "string", "format": "uuid", "maxLength": 36 },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "context":   { "$ref": "context.v1.json" },
+    "headers":   { "type": "array", "minItems": 1, "maxItems": 32, "items": { "$ref": "header.v1.json" } },
+    "payload":   { "type": "array", "maxItems": 64, "items": { "$ref": "payload-item.v1.json" } },
+    "errors":    { "type": "array", "maxItems": 32, "items": { "$ref": "error-item.v1.json" } },
+    "next":      { "type": "string", "maxLength": 4096 },
+    "meta":      { "$ref": "meta.v1.json" }
+  }
+}
+```
+
+### 6.3 CloudBSD header schema
+
+```jsonc
+// schemas/header.v1.json
+{
+  "$id": "https://cloudbsd.org/schemas/header.v1.json",
+  "$version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "value"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "enum": [
+        "who", "what", "why", "where",          // required core
+        "when", "how",                            // optional
+        "if-match", "if-none-match",              // conditional
+        "idempotency-key"                          // idempotency
+      ]
+    },
+    "value": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^[\\x20-\\x7E]+$"             // printable ASCII only
+    }
+  }
+}
+```
+
+`who` value: `^[a-zA-Z0-9._@-]+$` (max 256) — username OR `system:<component>:<action>`.
+`what` value: `^[a-z][a-z0-9_]*\\.[a-z][a-z0-9_]*$` (max 128) — `<resource>.<action>` lowercase, dot-separated.
+`why` value: `^[a-z][a-z0-9_]*$` (max 64) — single lowercase snake_case token (e.g. `user_requested`, `scheduled_sync`).
+`where` value: `^[a-z][a-z0-9_]*$` (max 64) — same rules as `why`.
+
+### 6.4 Payload item schema
+
+```jsonc
+// schemas/payload-item.v1.json
+{
+  "$id": "https://cloudbsd.org/schemas/payload-item.v1.json",
+  "$version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["mime", "kind", "data"],
+  "properties": {
+    "mime":      { "type": "string", "pattern": "^application/vnd\\.cloudbsd\\+[a-z][a-z0-9._-]*$", "maxLength": 128 },
+    "kind":      { "type": "string", "pattern": "^[a-z][a-z0-9._-]*$", "maxLength": 64 },
+    "action":    { "type": "string", "enum": ["create", "read", "update", "delete", "list", "stream"] },
+    "version":   { "type": "string", "pattern": "^v[0-9]+-[a-f0-9]+$", "maxLength": 64 },
+    "data":      { "type": "object" },
+    "includes":  { "type": "array", "maxItems": 32, "items": { "$ref": "#" } }
+  }
+}
+```
+
+The `data` field's schema depends on the `mime` value — see §6.5 for per-resource schemas.
+
+### 6.5 Per-resource schemas (required minimum)
+
+| MIME | Schema file | Required keys |
+|------|-------------|---------------|
+| `application/vnd.cloudbsd+session` | `session.v1.json` | `sessionId`, `userId`, `email`, `groups[]`, `roles[]`, `isAdmin`, `expiresAt` |
+| `application/vnd.cloudbsd+vm` | `vm.v1.json` | `id`, `name`, `status`, `vcpu`, `ramBytes`, `diskBytes`, `host`, `ip` |
+| `application/vnd.cloudbsd+vms.batch` | `vms.batch.v1.json` | `total`, `shown`, `stats` |
+| `application/vnd.cloudbsd+container` | `container.v1.json` | `id`, `name`, `image`, `imageRegistry`, `status`, `ports[]` |
+| `application/vnd.cloudbsd+jail` | `jail.v1.json` | `id`, `name`, `status`, `os`, `hostname`, `ip`, `jailId` |
+| `application/vnd.cloudbsd+volume` | `volume.v1.json` | `id`, `name`, `type`, `sizeBytes`, `usedBytes`, `mountpoint`, `health` |
+| `application/vnd.cloudbsd+network.topology` | `network.topology.v1.json` | `subnets[]`, `nodes[]`, `links[]` |
+| `application/vnd.cloudbsd+cluster.node` | `cluster.node.v1.json` | `id`, `hostname`, `role`, `status` |
+| `application/vnd.cloudbsd+user` | `user.v1.json` | `uid`, `username`, `gid`, `pamStatus`, `groups[]` |
+| `application/vnd.cloudbsd+log.entry` | `log.entry.v1.json` | `ts`, `level`, `module`, `source`, `message` |
+| `application/vnd.cloudbsd+notification` | `notification.v1.json` | `id`, `ts`, `severity`, `title`, `message` |
+| `application/vnd.cloudbsd+theme` | `theme.v1.json` | `id`, `name`, `author`, `license`, `tokens` |
+| `application/vnd.cloudbsd+settings` | `settings.v1.json` | `section`, `values` |
+| `application/vnd.cloudbsd+plugin.manifest` | `plugin.manifest.v1.json` | `name`, `version`, `author`, `license`, `sha256`, `signature`, `capabilities[]` |
+| `application/vnd.cloudbsd+problem` | `problem.v1.json` | `type`, `severity`, `code`, `message`, `errorId` |
+| `application/vnd.cloudbsd+status.aggregate` | `status.aggregate.v1.json` | `backend`, `database`, `plugins`, `config` |
+| `application/vnd.cloudbsd+preflight.result` | `preflight.result.v1.json` | `status`, `checks[]` |
+
+Every per-resource schema MUST:
+1. Have `$id` = `https://cloudbsd.org/schemas/<resource>.v<N>.json`
+2. Have `$version` matching the schema version in the MIME type
+3. Use `additionalProperties: false` to reject unknown fields
+4. Define `required` array listing all mandatory keys
+5. Constrain each string with `maxLength`, each array with `maxItems`, each number with `minimum`/`maximum`
+6. Define `enum` for status, role, severity, action discriminator fields
+
+### 6.6 ID validation rules
+
+| Field | Pattern | Max length |
+|-------|----------|------------|
+| `id` (VM, container, jail, volume, user, notification, etc.) | `^[a-z][a-z0-9_-]*$` | 64 |
+| `vmId`, `containerId`, `jailId` | `^vm-\|^ct-\|^jail-\|^vol-\|^user-` | 64 |
+| `sessionId` | `^sess-[a-f0-9]{32}$` | 64 |
+| `userId` | `^[a-z][a-z0-9._@-]*$` | 256 |
+| `errorId` | `^err-[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-f0-9]{6,12}$` | 64 |
+| `requestId` | `^req-[a-f0-9-]{36}$` (UUID v4) | 64 |
+| `idempotencyKey` | `^[a-f0-9-]{36}$` (UUID v4) | 64 |
+
+### 6.7 Numeric validation
+
+| Field | Type | Range | Unit |
+|-------|------|-------|------|
+| `vcpu` | int | 1..256 | cores |
+| `ramBytes`, `diskBytes`, `sizeBytes`, `usedBytes` | int64 | 0..2^63-1 | bytes |
+| `usagePercent`, `cpuPercent`, `memPercent` | int | 0..100 | percent |
+| `iopsRead`, `iopsWrite` | int | 0..10^9 | ops/s |
+| `netRxBytesPerSec`, `netTxBytesPerSec` | int64 | 0..10^12 | bytes/s |
+| `uptimeSec` | int64 | 0..2^63-1 | seconds |
+| `latencyMs` | int | 0..60000 | milliseconds |
+| `retryAfter` | int | 1..86400 | seconds |
+| `expiresInSec`, `idleTimeoutSec` | int | 1..86400 | seconds |
+
+### 6.8 Enum constraints
+
+| Field | Allowed values |
+|-------|---------------|
+| `status` (VM) | `RUN`, `STOP`, `PAUS`, `ERR` |
+| `status` (container) | `RUN`, `EXIT`, `PAUS`, `ERR` |
+| `status` (jail) | `RUN`, `STOP`, `FROZEN` |
+| `status` (volume) | `healthy`, `watch`, `error` |
+| `status` (cluster node) | `healthy`, `degraded`, `offline` |
+| `status` (overall backend) | `UP`, `DOWN` |
+| `status` (database) | `HEALTHY`, `DEGRADED`, `ERROR` |
+| `status` (plugin) | `RUN`, `DISABLED`, `ERROR` |
+| `status` (user PAM) | `active`, `locked`, `expired`, `disabled` |
+| `severity` (notification) | `ERROR`, `WARN`, `INFO` |
+| `severity` (problem) | `CRITICAL`, `ERROR`, `WARNING`, `INFO` |
+| `level` (log) | `DEBUG`, `INFO`, `WARN`, `ERROR`, `FATAL` |
+| `role` (cluster node) | `master`, `worker` |
+| `action` (payload item) | `create`, `read`, `update`, `delete`, `list`, `stream` |
+| `protocol` (port) | `tcp`, `udp` |
+| `compression` (volume) | `off`, `lz4`, `zstd-3`, `zstd-9` |
+| `encryption` (volume) | `none`, `aes-256-gcm` |
+| `mfa` (config) | `none`, `optional`, `required` |
+
+### 6.9 Rejection behavior (server-side)
+
+```
+Request validation fails:
+  → HTTP 400 BAD_REQUEST
+  → Content-Type: application/vnd.cloudbsd+error
+  → Body: ErrorItem with code field set to PROBLEM_TYPE:
+
+    PROBLEM_TYPE_VALUES = [
+      "https://errors.cloudbsd.org/protocol/missing-header",        # who/what/why/where absent
+      "https://errors.cloudbsd.org/protocol/unknown-header",         # header.name not in enum
+      "https://errors.cloudbsd.org/protocol/missing-field",         # required field absent
+      "https://errors.cloudbsd.org/protocol/unknown-field",          # additionalProperties violation
+      "https://errors.cloudbsd.org/protocol/invalid-type",           # type mismatch
+      "https://errors.cloudbsd.org/protocol/invalid-enum",           # value not in enum
+      "https://errors.cloudbsd.org/protocol/invalid-format",         # format mismatch (UUID, IPv4, etc.)
+      "https://errors.cloudbsd.org/protocol/value-too-long",         # maxLength exceeded
+      "https://errors.cloudbsd.org/protocol/prototype-pollution",     # __proto__/constructor detected
+    ]
+```
+
+### 6.10 Validation tooling
+
+**Frontend (Angular mock)** — uses `ajv` (JSON Schema validator, fastest in JS):
+```typescript
+import Ajv from 'ajv';
+const ajv = new Ajv({ allErrors: true, strict: true, removeAdditional: false });
+
+// Compile each schema once at startup
+const validateEnvelope = ajv.compile(envelopeSchema);
+const validateVm        = ajv.compile(vmSchema);
+const validateBatch      = ajv.compile(vmsBatchSchema);
+// ...one per resource
+
+// In MockHttpInterceptor:
+const envelope = JSON.parse(req.body);
+if (!validateEnvelope(envelope)) {
+  throw new ErrorHandlingService.handle({
+    severity: 'ERROR',
+    code: validateEnvelope.errors?.[0]?.keyword ?? 'INVALID',
+    message: 'Envelope validation failed',
+    context: { errors: validateEnvelope.errors },
+  });
+}
+// Then validate each payload item against its per-MIME schema
+for (const item of envelope.payload) {
+  const validator = schemaForMime[item.mime];
+  if (!validator(item)) { /* same error path */ }
+}
+```
+
+**Backend (Go)** — uses `github.com/santhosh-tekuri/jsonschema/v5`:
+```go
+import "github.com/santhosh-tekuri/jsonschema/v5"
+
+var envelopeSchema = loadSchema("envelope.v1.json")
+var vmSchema       = loadSchema("vm.v1.json")
+// ...
+
+func validateRequest(envelope *Envelope) *Problem {
+    if err := envelopeSchema.Validate(envelope); err != nil {
+        return &Problem{
+            Type:     problemTypeFromKeyword(err.(*jsonschema.ValidationError).Keyword()),
+            Severity: "ERROR",
+            Code:     "PROTOCOL_INVALID",
+            Message:  "Request validation failed",
+            Context:  map[string]any{"errors": err.(*jsonschema.ValidationError).BasicOutput()},
+        }
+    }
+    for _, item := range envelope.Payload {
+        sch := schemaForMime[item.MIME]
+        if sch == nil {
+            return unknownMimeProblem(item.MIME)
+        }
+        if err := sch.Validate(item); err != nil {
+            return invalidPayloadProblem(err)
+        }
+    }
+    return nil
+}
+```
+
+### 6.11 Schema version negotiation
+
+When a client sends `version: "v2-a1b2"` but server only knows `v1`:
+- Server returns `application/vnd.cloudbsd+error` with `code=PROTOCOL_VERSION_UNSUPPORTED`
+- Server includes `supported_versions: ["v1"]` in error context
+- Client falls back to `v1` (highest version both support)
+
+When server introduces `v2`:
+- Server accepts BOTH `v1` and `v2` for 90 days (deprecation period)
+- During deprecation, `meta.deprecation: ["v1 will be removed 2026-10-01"]`
+- After 90 days, only `v2` accepted
+
+### 6.12 Acceptance criteria for validation
+
+1. Every JSON message has a corresponding JSON Schema file in `schemas/` directory
+2. Every schema has `$id`, `$version`, `additionalProperties: false`, `required` array
+3. Frontend mocks validate EVERY outgoing request envelope + payload items BEFORE logging "request sent"
+4. Backend validates EVERY incoming request envelope + payload items BEFORE dispatching to handlers
+5. Rejection of malformed requests returns proper `application/vnd.cloudbsd+error` envelope with correct problem type URI
+6. Schema changes are versioned; breaking changes ship as new schema version, not in-place edits
+7. Unknown headers rejected with `PROTOCOL_UNKNOWN_HEADER`; unknown MIME types rejected with `PROTOCOL_UNKNOWN_MIME`
+8. Prototype pollution attempt (`__proto__` key in payload) rejected with `PROTOCOL_PROTOTYPE_POLLUTION`
+9. CI runs schema-against-fixtures test: every example in WIRE_PROTOCOL.md must validate against its schema
+10. CI runs schema-against-fuzz test: 10k random mutations of valid envelopes must ALL fail validation
+
+---
+
+## 7. Acceptance criteria (overall)
+
+1. Every UI screen has at least one matching envelope exchange defined here
+2. Every envelope request includes `who`, `what`, `why`, `where`
+3. Every error response uses `application/vnd.cloudbsd+error` envelope (not standard envelope)
+4. All MIME types follow `application/vnd.cloudbsd+<action-or-type>` convention
+5. Mock handlers in `web-new/src/app/mocks/` implement all actions listed in §5
+6. Switching from mock to real backend requires only changing `environment.apiBaseUrl` in `environment.ts`
+7. Go backend (when implemented) MUST validate `who`, `what`, `why`, `where` against allowlist
+8. Go backend MUST reject requests missing any required header with `400 BAD_REQUEST` and problem type `https://errors.cloudbsd.org/protocol/missing-header`
+9. **Every JSON message validates against an explicit JSON Schema (see §6)**
+10. **Prototype pollution attempts rejected with proper problem type**
+11. **All string fields have maxLength, arrays have maxItems, numbers have range constraints**
+12. **Schema versioning enables graceful fallback when versions mismatch**
+
+1. Every UI screen has at least one matching envelope exchange defined here
+2. Every envelope request includes `who`, `what`, `why`, `where`
+3. Every error response uses `application/vnd.cloudbsd+error` envelope (not standard envelope)
+4. All MIME types follow `application/vnd.cloudbsd+<action-or-type>` convention
+5. Mock handlers in `web-new/src/app/mocks/` implement all actions listed in §5
+6. Switching from mock to real backend requires only changing `environment.apiBaseUrl` in `environment.ts`
+7. Go backend (when implemented) MUST validate `who`, `what`, `why`, `where` against allowlist
+8. Go backend MUST reject requests missing any required header with `400 BAD_REQUEST` and problem type `https://errors.cloudbsd.org/protocol/missing-header`
