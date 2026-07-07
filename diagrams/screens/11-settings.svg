@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="system-ui, sans-serif">
-  <title>CloudBSD Admin — Settings</title>
-  <desc>Settings page with 5 tabs: General, Network, Storage, Security, Advanced.</desc>
+  <title>CloudBSD Admin — Settings: Appearance</title>
   <foreignObject x="0" y="0" width="1280" height="800">
     <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900">
       <g id="header" class="contents">
@@ -12,108 +11,142 @@
             <span class="ml-2 px-2 py-0.5 text-xs rounded bg-slate-100 text-slate-600">freenas-mock.local</span>
           </div>
           <div class="ml-auto flex items-center gap-4">
-            <span class="text-sm text-slate-500">Theme: CloudBSD</span>
-            <button class="text-sm text-slate-600 hover:text-slate-900">Refresh</button>
+            <span class="text-sm text-slate-500 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>backend OK · 18ms</span>
+            <button class="text-sm text-slate-600">Refresh</button>
             <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">M</div>
           </div>
         </div>
       </g>
-      <div class="flex" style="height: calc(100% - 56px);">
+      <div class="flex" style="height: calc(800px - 56px)">
         <g id="sidebar" class="contents">
-          <aside class="w-56 bg-white border-r border-slate-200 p-3 overflow-y-auto">
+          <aside class="w-60 bg-white border-r border-slate-200 p-3 overflow-y-auto">
+            <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wide px-3 mb-2">Settings</h2>
             <nav class="space-y-1 text-sm">
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Dashboard</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Virtual Machines</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Containers</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Jails</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Volumes</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Network Map</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Cluster</a>
-              <div class="pt-3 pb-1 text-xs uppercase tracking-wide text-slate-400 px-3">Admin</div>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Users</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Logs</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">General</a>
+              <a class="block px-3 py-2 rounded bg-blue-50 text-blue-700 font-medium">Appearance</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Theme</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50 flex items-center justify-between"><span>Theme Customizer</span><span class="text-xs text-rose-600">⚿</span></a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Language</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Locale</a>
               <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Notifications</a>
-              <a class="block px-3 py-2 rounded bg-blue-50 text-blue-700 font-medium">Settings</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Status</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50 flex items-center justify-between"><span>Error Display</span><span class="text-xs text-rose-600">⚿</span></a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50 flex items-center justify-between"><span>Plugins</span><span class="text-xs text-rose-600">⚿</span></a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50 flex items-center justify-between"><span>Users</span><span class="text-xs text-rose-600">⚿</span></a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50 flex items-center justify-between"><span>Sessions</span><span class="text-xs text-rose-600">⚿</span></a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50 flex items-center justify-between"><span>API Keys</span><span class="text-xs text-rose-600">⚿</span></a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Backup</a>
+              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Logs</a>
               <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">About</a>
             </nav>
           </aside>
         </g>
-        <main class="flex-1 p-6 overflow-hidden flex flex-col">
-          <g id="content" class="contents">
-            <div class="flex items-center justify-between mb-4">
-              <div>
-                <h1 class="text-2xl font-bold">Settings</h1>
-                <p class="text-sm text-slate-500">System configuration · values are read-only in this milestone</p>
-              </div>
-              <span class="px-2 py-1 rounded bg-slate-100 text-slate-700 text-xs">Read-only</span>
-            </div>
-            <div class="bg-white rounded-lg border border-slate-200 shadow-sm flex-1 flex flex-col overflow-hidden">
-              <div class="border-b border-slate-200 px-2">
-                <nav class="flex gap-1 text-sm" role="tablist">
-                  <button class="px-4 py-3 border-b-2 border-blue-600 text-blue-700 font-medium">General</button>
-                  <button class="px-4 py-3 border-b-2 border-transparent text-slate-600 hover:text-slate-900">Network</button>
-                  <button class="px-4 py-3 border-b-2 border-transparent text-slate-600 hover:text-slate-900">Storage</button>
-                  <button class="px-4 py-3 border-b-2 border-transparent text-slate-600 hover:text-slate-900">Security</button>
-                  <button class="px-4 py-3 border-b-2 border-transparent text-slate-600 hover:text-slate-900">Advanced</button>
-                </nav>
-              </div>
-              <div class="flex-1 overflow-auto p-6">
-                <div class="grid grid-cols-2 gap-6 max-w-3xl">
-                  <div class="space-y-1.5">
-                    <label class="text-sm font-medium text-slate-700">Hostname</label>
-                    <input type="text" value="freenas-mock.local" readonly="readonly" class="w-full text-sm border border-slate-200 bg-slate-50 text-slate-700 rounded px-3 py-2"/>
-                  </div>
-                  <div class="space-y-1.5">
-                    <label class="text-sm font-medium text-slate-700">Domain</label>
-                    <input type="text" value="local" readonly="readonly" class="w-full text-sm border border-slate-200 bg-slate-50 text-slate-700 rounded px-3 py-2"/>
-                  </div>
-                  <div class="space-y-1.5">
-                    <label class="text-sm font-medium text-slate-700">Theme</label>
-                    <input type="text" value="CloudBSD (blue/slate)" readonly="readonly" class="w-full text-sm border border-slate-200 bg-slate-50 text-slate-700 rounded px-3 py-2"/>
-                  </div>
-                  <div class="space-y-1.5">
-                    <label class="text-sm font-medium text-slate-700">Default locale</label>
-                    <input type="text" value="en_US.UTF-8" readonly="readonly" class="w-full text-sm border border-slate-200 bg-slate-50 text-slate-700 rounded px-3 py-2"/>
-                  </div>
-                  <div class="space-y-1.5">
-                    <label class="text-sm font-medium text-slate-700">Timezone</label>
-                    <input type="text" value="America/Montreal" readonly="readonly" class="w-full text-sm border border-slate-200 bg-slate-50 text-slate-700 rounded px-3 py-2"/>
-                  </div>
-                  <div class="space-y-1.5">
-                    <label class="text-sm font-medium text-slate-700">NTP servers</label>
-                    <input type="text" value="0.pool.ntp.org, 1.pool.ntp.org" readonly="readonly" class="w-full text-sm border border-slate-200 bg-slate-50 text-slate-700 rounded px-3 py-2"/>
-                  </div>
-                  <div class="space-y-1.5 col-span-2">
-                    <label class="text-sm font-medium text-slate-700">Description</label>
-                    <textarea readonly="readonly" rows="2" class="w-full text-sm border border-slate-200 bg-slate-50 text-slate-700 rounded px-3 py-2">Primary homelab hypervisor · 5-node cluster</textarea>
-                  </div>
-                  <div class="col-span-2 pt-2">
-                    <div class="text-sm font-medium text-slate-700 mb-2">Preferences</div>
-                    <div class="space-y-2 text-sm">
-                      <label class="flex items-center gap-2 text-slate-700">
-                        <input type="checkbox" checked="checked" disabled="disabled" class="rounded text-blue-600"/>
-                        Show dashboard widgets
-                      </label>
-                      <label class="flex items-center gap-2 text-slate-700">
-                        <input type="checkbox" checked="checked" disabled="disabled" class="rounded text-blue-600"/>
-                        Refresh metrics every 15 seconds
-                      </label>
-                      <label class="flex items-center gap-2 text-slate-700">
-                        <input type="checkbox" disabled="disabled" class="rounded text-blue-600"/>
-                        Enable compact mode
-                      </label>
-                    </div>
-                  </div>
+        <g id="content" class="contents">
+          <main class="flex-1 overflow-auto">
+            <div class="p-6 space-y-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h1 class="text-2xl font-bold">Appearance</h1>
+                  <p class="text-sm text-slate-500">Customize how the app looks and feels</p>
                 </div>
-                <div class="mt-8 bg-amber-50 border border-amber-200 text-amber-900 rounded-lg p-3 text-sm">
-                  <div class="font-medium">Read-only mode</div>
-                  <div class="text-amber-800">Settings mutations are queued for milestone 2. Contact an operator via <span class="font-mono">cloudbsd.conf</span> for changes today.</div>
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-1 rounded text-xs bg-amber-50 text-amber-700 border border-amber-200">Read-only mode</span>
                 </div>
               </div>
+              <div class="bg-amber-50 border border-amber-200 rounded p-3 text-xs text-amber-900">⚠ Read-only mode — mutations queued for milestone 2. Backend write actions will be available in v1.1.</div>
+              <div class="bg-white rounded-lg border shadow-sm p-4">
+                <h3 class="text-sm font-semibold mb-3">Theme</h3>
+                <div class="flex items-center gap-2 text-xs mb-3">
+                  <label class="flex items-center gap-2"><input type="radio" name="theme" checked="checked" /><span>CloudBSD</span></label>
+                  <label class="flex items-center gap-2"><input type="radio" name="theme" /><span>Dark midnight</span></label>
+                  <label class="flex items-center gap-2"><input type="radio" name="theme" /><span>High contrast</span></label>
+                  <label class="flex items-center gap-2"><input type="radio" name="theme" /><span>Solarized</span></label>
+                </div>
+                <div class="grid grid-cols-4 gap-2">
+                  <div class="border-2 border-blue-500 rounded p-2"><div class="h-12 bg-gradient-to-br from-blue-500 to-slate-700 rounded mb-1"></div><div class="text-xs font-medium">CloudBSD</div></div>
+                  <div class="border rounded p-2"><div class="h-12 bg-slate-900 rounded mb-1"></div><div class="text-xs font-medium">Dark</div></div>
+                  <div class="border rounded p-2"><div class="h-12 bg-white border-2 border-black rounded mb-1"></div><div class="text-xs font-medium">High Contrast</div></div>
+                  <div class="border rounded p-2"><div class="h-12 bg-amber-50 rounded mb-1"></div><div class="text-xs font-medium">Solarized</div></div>
+                </div>
+                <button class="mt-3 px-3 py-1.5 text-xs border rounded bg-slate-100 text-slate-500 cursor-not-allowed">Customize theme</button>
+              </div>
+              <div class="bg-white rounded-lg border shadow-sm p-4">
+                <h3 class="text-sm font-semibold mb-3">Colors</h3>
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-xs font-medium mb-1">Primary color</label>
+                    <div class="flex items-center gap-2"><div class="w-8 h-8 rounded bg-blue-500"></div><input type="text" value="#3b82f6" class="flex-1 px-2 py-1 border rounded text-xs font-mono" /></div>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-medium mb-1">Accent</label>
+                    <div class="flex items-center gap-2"><div class="w-8 h-8 rounded bg-emerald-500"></div><input type="text" value="#10b981" class="flex-1 px-2 py-1 border rounded text-xs font-mono" /></div>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-medium mb-1">Surface</label>
+                    <div class="flex items-center gap-2"><div class="w-8 h-8 rounded bg-slate-50 border"></div><input type="text" value="#f8fafc" class="flex-1 px-2 py-1 border rounded text-xs font-mono" /></div>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-medium mb-1">Border radius</label>
+                    <select class="w-full px-2 py-1 border rounded text-xs"><option>none</option><option>small</option><option selected="selected">medium</option><option>large</option><option>pill</option></select>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-medium mb-1">Density</label>
+                    <select class="w-full px-2 py-1 border rounded text-xs"><option>compact</option><option selected="selected">comfortable</option><option>spacious</option></select>
+                  </div>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-white rounded-lg border shadow-sm p-4">
+                  <h3 class="text-sm font-semibold mb-3">Typography</h3>
+                  <div class="space-y-3">
+                    <div><label class="block text-xs font-medium mb-1">Font family</label><select class="w-full px-2 py-1 border rounded text-xs"><option selected="selected">system-ui</option><option>Inter</option><option>SF Pro</option><option>Roboto</option><option>JetBrains Mono</option></select></div>
+                    <div><label class="block text-xs font-medium mb-1">Base font size: 14px</label><input type="range" min="12" max="18" value="14" class="w-full" /></div>
+                    <div><label class="block text-xs font-medium mb-1">Monospace font</label><select class="w-full px-2 py-1 border rounded text-xs"><option selected="selected">SF Mono</option><option>JetBrains Mono</option><option>Menlo</option></select></div>
+                    <div><label class="block text-xs font-medium mb-1">Line height</label><select class="w-full px-2 py-1 border rounded text-xs"><option>1.4</option><option selected="selected">1.5</option><option>1.6</option></select></div>
+                  </div>
+                </div>
+                <div class="bg-white rounded-lg border shadow-sm p-4">
+                  <h3 class="text-sm font-semibold mb-3">Layout</h3>
+                  <div class="space-y-3">
+                    <div><label class="block text-xs font-medium mb-1">Sidebar width: 220px</label><input type="range" min="200" max="320" value="220" class="w-full" /></div>
+                    <div><label class="block text-xs font-medium mb-1">Sidebar position</label><select class="w-full px-2 py-1 border rounded text-xs"><option selected="selected">Left</option><option>Right</option></select></div>
+                    <div class="flex items-center justify-between"><label class="text-xs">Show breadcrumbs</label><input type="checkbox" checked="checked" /></div>
+                    <div class="flex items-center justify-between"><label class="text-xs">Show status bar</label><input type="checkbox" checked="checked" /></div>
+                    <div class="flex items-center justify-between"><label class="text-xs">Compact header</label><input type="checkbox" /></div>
+                  </div>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-white rounded-lg border shadow-sm p-4">
+                  <h3 class="text-sm font-semibold mb-3">Accessibility</h3>
+                  <div class="space-y-2">
+                    <div class="flex items-center justify-between"><label class="text-xs">Reduce motion</label><input type="checkbox" checked="checked" /></div>
+                    <div class="flex items-center justify-between"><label class="text-xs">High contrast</label><input type="checkbox" /></div>
+                    <div class="flex items-center justify-between"><label class="text-xs">Underline links</label><input type="checkbox" /></div>
+                    <div class="flex items-center justify-between"><label class="text-xs">Screen reader announcements</label><input type="checkbox" checked="checked" /></div>
+                    <div><label class="block text-xs font-medium mb-1">Focus ring thickness</label><select class="w-full px-2 py-1 border rounded text-xs"><option>thin</option><option selected="selected">medium</option><option>thick</option></select></div>
+                  </div>
+                </div>
+                <div class="bg-white rounded-lg border shadow-sm p-4">
+                  <h3 class="text-sm font-semibold mb-3">Behavior</h3>
+                  <div class="space-y-3">
+                    <div><label class="block text-xs font-medium mb-1">Auto-refresh: 15s</label><input type="range" min="5" max="60" value="15" class="w-full" /></div>
+                    <div class="flex items-center justify-between"><label class="text-xs">Confirm destructive actions</label><input type="checkbox" checked="checked" /></div>
+                    <div class="flex items-center justify-between"><label class="text-xs">Restore last session</label><input type="checkbox" checked="checked" /></div>
+                    <div><label class="block text-xs font-medium mb-1">Language</label><select class="w-full px-2 py-1 border rounded text-xs"><option selected="selected">English (en_US)</option><option>Français (fr_FR)</option><option>Deutsch (de_DE)</option><option>Español (es_ES)</option><option>日本語 (ja_JP)</option><option>47 more…</option></select></div>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white rounded-lg border shadow-sm p-3 flex items-center justify-between">
+                <div class="text-xs text-slate-500">Last modified: 2026-07-06 12:14 UTC · by mlapointe · <a class="text-blue-600 hover:underline">Doc link</a></div>
+                <div class="flex items-center gap-2">
+                  <button class="px-4 py-2 bg-slate-200 text-slate-400 rounded text-sm cursor-not-allowed" disabled="disabled">Save</button>
+                  <button class="px-4 py-2 border rounded text-sm bg-white text-slate-700">Discard</button>
+                  <button class="px-4 py-2 border rounded text-sm bg-white text-slate-700">Reset to defaults</button>
+                </div>
+              </div>
             </div>
-          </g>
-        </main>
+          </main>
+        </g>
       </div>
     </div>
   </foreignObject>
