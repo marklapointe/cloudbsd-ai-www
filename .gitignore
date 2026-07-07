@@ -28,3 +28,4 @@ dist-ssr
 .junie
 .playwright-mcp
 .sisyphus
+/opencode
