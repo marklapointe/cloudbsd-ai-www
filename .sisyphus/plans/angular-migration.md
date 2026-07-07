@@ -645,6 +645,371 @@ export const loginRateLimiter = rateLimit({
 
 ---
 
+## Adversarial Resilience (MANDATORY)
+
+> Per Honcho peer `cloudbsd-admin-adversarial` (20 conclusions + 18-card peer card). The application MUST handle itself well under attack, failure, and partial degradation. No blank pages, no silent failures, no information leaks.
+
+### Threat Model (STRIDE)
+
+| Threat Actor | Capabilities | Primary Mitigations |
+|--------------|-------------|----------------------|
+| **Unauthenticated external attacker** | CVE scan, brute-force login, DoS | Rate limiting, HTTPS-only, CSP, HSTS, captcha |
+| **Authenticated low-privilege user** | Privilege escalation, IDOR, JWT forgery | RBAC checks at every endpoint, session validation, CSRF tokens |
+| **Malicious plugin author** | Schema bypass, template injection, supply chain | Sandbox iframe, SHA-256 verified bundles, signed manifests |
+| **Insider admin** | Read other users' data, race conditions | Audit logging with HMAC chain, tamper detection, separation of duties |
+| **Network MITM** | Downgrade, cert bypass | TLS 1.3, cert pinning, HSTS preload |
+| **DoS attacker** | WS flood, rate limit exhaustion, slowloris | Circuit breakers, rate limits, request timeouts, connection caps |
+
+### Trust Zones
+
+```
+T0 [Browser, untrusted] → T1 [Auth Gateway, nginx] → T2 [App Backend, Node.js]
+                                                       ↓
+                            T3 [PAM, SQLite, plugins] ← (worker_thread, restricted)
+                                                       ↓
+                            T4 [FreeBSD kernel, bhyve]
+```
+
+### Self-Healing Principles
+
+The app **never** shows blank page or infinite spinner. Always:
+
+1. **Bounded retry** with exponential backoff + jitter (base 1s, max 30s, factor 2, ±20% jitter)
+2. **Circuit breakers** (opossum library) on every external call (HTTP, WS, file I/O, DB)
+3. **Graceful degradation** (degraded shell + cached state from localStorage)
+4. **Idempotent operations** (UUID idempotency keys for POST/PUT/DELETE)
+5. **State store recovery** (LRU eviction, snapshot checkpoints)
+6. **Connection pool auto-reconnect** (Socket.IO with health monitoring)
+7. **Health checks** with 3 states (healthy/degraded/unhealthy)
+8. **Automatic crash restart** (rc.d respawn + Node.js `--unhandled-rejections=strict`)
+9. **Bulkheading** (one plugin crash doesn't affect others)
+10. **No silent failures** (every error logged + shown via ErrorHandlingService)
+
+### Failure Modes & Responses
+
+| Failure | User-Visible Response | Internal Response |
+|---------|----------------------|-------------------|
+| Backend down | Degraded shell + top banner + "Last update: 4m ago" | Circuit breaker opens, polling every 30s |
+| WebSocket disconnect | Top banner "Reconnecting..." | Auto-reconnect with backoff |
+| Plugin load failure | Error in plugin slot + "Retry" button | Other plugins unaffected, log error |
+| Theme load failure | Toast "Theme failed to load, using default" | Fall back to default theme |
+| PAM auth failure | Inline error in login form (NOT modal) | Log attempt, increment counter |
+| Session expired | Frost-out modal (blocks UI) | Clear in-memory state, redirect to /login |
+| Uncaught exception | ErrorModal (per severity) | Global ErrorHandler, log to JSONL |
+| Network offline | Banner "You are offline" + read-only mode | Queue mutations for replay |
+| DB write failure | Toast with "Retry" | Rollback transaction, log error |
+| Plugin manifest invalid | Skip plugin, log warning | Other plugins still load |
+| Rate limit hit (429) | Modal "Too many requests, retry in 60s" | Disable offending button with countdown |
+| Backend OOM | Health check returns 503 | Orchestrator restarts process |
+| bhyve VM crash | Discoverer marks VM offline | UI shows status as "ERROR" badge |
+
+### Input Validation (zod schemas at every boundary)
+
+| Boundary | Schema |
+|----------|--------|
+| HTTP request body | `z.object({...}).safeParse(req.body)` |
+| HTTP response body | `z.object({...}).safeParse(res.body)` (defensive) |
+| DB read | `z.object({...}).parse(row)` before use |
+| DB write | `z.object({...}).parse(input)` before insert |
+| WebSocket message | `JSONSchema.validate(msg)` |
+| Plugin manifest | `JSONSchema.validate(manifest)` |
+| Theme JSON | `JSONSchema.validate(theme)` |
+| User HTML input | `DOMPurify.sanitize(input)` |
+
+**Validation rules** (sample):
+- VM names: `^[a-zA-Z0-9.-]{1,63}$`
+- IP addresses: IPv4/IPv6 + CIDR
+- File paths: relative only, no `..`
+- URLs: `https:` scheme only
+- JSON depth: max 10
+- String length: max 64KB per field
+
+### XSS Prevention
+
+```typescript
+// ALLOWED — Angular auto-escapes:
+{{ userInput }}
+
+// BANNED:
+<div [innerHTML]="userInput"></div>
+this.sanitizer.bypassSecurityTrustHtml(userInput);
+DOMParser.parseFromString(userInput, 'text/html');
+```
+
+**CSP** (Content-Security-Policy):
+```
+default-src 'self';
+script-src 'self' 'nonce-{random-per-request}';
+style-src 'self' 'nonce-{random-per-request}';
+img-src 'self' data:;
+object-src 'none';
+base-uri 'self';
+frame-ancestors 'none';
+form-action 'self';
+```
+
+### CSRF Prevention
+
+Already have HttpOnly + Secure + SameSite=Strict cookies. **Additionally**:
+- State-changing requests require `X-CloudBSD-Request: <csrf-token>` header
+- Token stored in session, rotated on auth
+- Origin header verified on POST/PUT/DELETE
+- CORS: same-origin only (no `Access-Control-Allow-Origin: *`)
+
+### SQL Injection Prevention
+
+```typescript
+// ALLOWED — prepared statement:
+db.prepare('SELECT * FROM vms WHERE id = ?').get(vmId);
+
+// BANNED — string concatenation:
+db.prepare(`SELECT * FROM vms WHERE id = '${vmId}'`);
+```
+
+ESLint rule flags string concatenation in `.prepare()` calls.
+
+### Prototype Pollution Prevention
+
+```typescript
+// ALLOWED — destructure to known fields:
+const { name, version, routes } = JSON.parse(input);
+
+// BANNED:
+Object.assign(target, JSON.parse(input));
+{ ...JSON.parse(input) };
+merge(target, parsed); // without safe merge
+```
+
+**Safe merge** skips `__proto__`, `constructor`, `prototype`.
+
+**Test**: send `{"__proto__": {"isAdmin": true}}` and verify Object.prototype is not polluted.
+
+### Plugin Sandboxing
+
+**Backend plugins**: Node.js `worker_thread` with restricted context:
+- Allowed: `manifest`, `routes`, `discoverers`, `console`, `fetch`
+- Banned: `fs`, `child_process`, `require` of arbitrary modules
+- Worker terminates on plugin crash
+
+**Frontend plugin templates**: sandbox iframe with `sandbox="allow-scripts"` attribute + CSP `sandbox 'allow-scripts'`.
+
+**Plugin bundle integrity**: SHA-256 hash in manifest, signature verified before dynamic import. Bundle URL is fixed allowlist path (`/api/plugins/<id>/bundle.js`), never user-controlled.
+
+### Secret Handling
+
+```typescript
+// ALLOWED — env vars only:
+const jwtSecret = process.env.JWT_SECRET;
+if (!jwtSecret) throw new Error('JWT_SECRET required');
+
+// BANNED:
+const jwtSecret = 'my-super-secret-key'; // hardcoded
+const jwtSecret = req.query.token;       // from URL
+console.log(`Login for ${password}`);    // in logs
+error.message = `Invalid password: ${password}`;
+```
+
+**Log redaction** (automatic via Logger):
+```typescript
+const REDACTED_PATTERNS = [
+  /password[=:]\s*\S+/gi,
+  /token[=:]\s*\S+/gi,
+  /api[_-]?key[=:]\s*\S+/gi,
+  /Bearer\s+\S+/gi,
+  /cookie[=:]\s*\S+/gi,
+];
+```
+
+### Dependency Security
+
+CI runs (per Honcho lessons-2026):
+```bash
+npm audit --audit-level=high  # fails build on high/critical
+npm audit signatures          # verify package signatures
+license-checker --onlyAllow 'MIT;BSD-3-Clause;Apache-2.0;ISC'
+```
+
+- Dependabot enabled for weekly PRs
+- Lockfile (`bun.lockb`) committed
+- No postinstall scripts (`--ignore-scripts` in CI)
+- Pinned exact versions
+
+### Transport Security
+
+- TLS 1.3 only (no fallback)
+- Strong ciphers only (no RC4, no 3DES, no MD5)
+- Certificate pinning (pubkey hash + rotation overlap)
+- HSTS preload
+- OCSP stapling
+- mTLS for backend ↔ plugin communication
+- SRI for CDN assets
+- ECDHE forward secrecy
+
+### Race Condition Prevention
+
+- **Idempotency keys** (UUID) for all POST/PUT/DELETE
+- **Optimistic locking** (version field, reject on mismatch)
+- **Atomic operations** only (DB transactions)
+- **Redis WATCH/MULTI/EXEC** for distributed state
+- **compareAndSet** for shared counters
+
+Test race conditions with parallel test runner (100 concurrent updates to same resource).
+
+### Audit Logging
+
+Every privileged action logs:
+```json
+{
+  "ts": "2026-07-06T12:34:56.789Z",
+  "user_id": "mlapointe",
+  "action": "vms.delete",
+  "target": "vm-123",
+  "before": {"name": "test", "state": "running"},
+  "after": null,
+  "ip": "10.0.10.42",
+  "user_agent": "Mozilla/5.0...",
+  "session_id": "sess-abc123",
+  "hmac": "sha256:..."
+}
+```
+
+- **Append-only** (no UPDATE/DELETE on log table)
+- **HMAC chain** (line N includes HMAC of N-1, verified on read)
+- **Retention**: 90 days hot, 1 year cold (S3-compatible)
+- **Tamper detection**: any HMAC mismatch alerts admin immediately
+
+### Error Reporting (No Info Leak)
+
+| Field | MINIMAL | STANDARD | DETAILED | DEBUG |
+|-------|---------|----------|----------|-------|
+| All users | ✓ | ✓ | | |
+| Admin | | | ✓ | ✓ |
+| message | ✓ | ✓ | ✓ | ✓ |
+| errorId | | ✓ | ✓ | ✓ |
+| timestamp | | ✓ | ✓ | ✓ |
+| requestId | | | ✓ | ✓ |
+| stack trace | | | truncated | full |
+| state snapshot | | | | ✓ |
+| internal paths | | | | ✓ |
+| library versions | | | | ✓ |
+
+Stack traces stored server-side in JSONL logs, retrievable by errorId only by admin.
+
+### Circuit Breakers (opossum)
+
+```typescript
+const breaker = new CircuitBreaker(callPAM, {
+  timeout: 30_000,
+  errorThresholdPercentage: 50,
+  resetTimeout: 60_000,
+});
+
+breaker.on('open', () => log.warn('PAM circuit OPEN'));
+breaker.on('halfOpen', () => log.info('PAM circuit HALF_OPEN'));
+breaker.on('close', () => log.info('PAM circuit CLOSED'));
+```
+
+Wrap every external call: HTTP, WebSocket emits, file I/O, DB queries.
+
+### Health Checks
+
+| Endpoint | Purpose | Returns |
+|----------|---------|---------|
+| `GET /health` | Liveness | 200 if process alive (always) |
+| `GET /ready` | Readiness | 200 if backend + DB + plugins ready, 503 otherwise |
+| `GET /metrics` | Prometheus metrics | Counters, histograms, gauges |
+
+**States**: `healthy` (all green), `degraded` (some non-critical failed), `unhealthy` (critical failed).
+
+**Metrics**: request count, error rate, latency histogram, WS connections, plugin errors, memory/CPU.
+
+**Alerts**: Honcho MCP peer notification when degraded for >5min.
+
+### Implementation Tasks (new)
+
+| Task | Description |
+|------|-------------|
+| **T126** | `zod` schema validation middleware for all endpoints |
+| **T127** | CSP, HSTS, X-Frame-Options, X-Content-Type-Options middleware |
+| **T128** | `csrf-middleware.ts` with rotating token |
+| **T129** | `safe-merge.ts` utility (skips `__proto__`, `constructor`, `prototype`) |
+| **T130** | ESLint rules: `no-banned-html`, `no-restricted-globals` (for alert), `no-sql-concat`, `no-unsafe-spread` |
+| **T131** | `opossum` circuit breaker wrappers for all external calls |
+| **T132** | `idempotency.ts` middleware for POST/PUT/DELETE |
+| **T133** | `audit-logger.ts` with HMAC chain |
+| **T134** | `secret-redactor.ts` log filter |
+| **T135** | `health-checks.ts` (`/health`, `/ready`, `/metrics`) |
+| **T136** | `graceful-degradation.service.ts` (frontend cache + banner) |
+| **T137** | Plugin `worker_thread` runner with restricted API |
+| **T138** | Plugin bundle SHA-256 verification + signature check |
+| **T139** | Adversarial test suite (XSS, CSRF, SQL injection, prototype pollution) |
+| **T140** | OWASP ZAP baseline scan in CI |
+| **T141** | `npm audit --audit-level=high` in CI |
+| **T142** | `license-checker` in CI |
+| **T143** | `snyk test` (or equivalent SCA) in CI |
+| **T144** | `tls-scan` / `testssl.sh` in CI |
+| **T145** | Penetration test (annual, by external firm) — handled by STRESS_AGENT.md |
+| **T146** | Threat model document `0101-ThreatModel.md` in `.plan/` per CloudBSD standard |
+| **T147** | Security audit document `security-audit.md` updated quarterly |
+
+### Adversarial Test Suite
+
+```typescript
+// XSS — every input field
+test.each([
+  '<script>alert(1)</script>',
+  '<img src=x onerror=alert(1)>',
+  'javascript:alert(1)',
+  '<svg onload=alert(1)>',
+  '"><script>alert(1)</script>',
+])('input field renders XSS as text', (payload) => {
+  const { container } = render(<InputField value={payload} />);
+  expect(container.innerHTML).not.toContain('<script>');
+  expect(container.textContent).toContain(payload);
+});
+
+// CSRF — every state-changing endpoint
+test('rejects state change without CSRF token', () => {
+  return request(app)
+    .post('/api/vms')
+    .send({ name: 'test' })
+    .expect(403);
+});
+
+// SQL injection — every DB query
+test('VM lookup is parameterized', () => {
+  return request(app)
+    .get('/api/vms/' + encodeURIComponent("'; DROP TABLE vms;--"))
+    .expect(400);
+});
+
+// Prototype pollution
+test('manifest merge skips __proto__', () => {
+  const malicious = JSON.parse('{"__proto__": {"isAdmin": true}}');
+  safeMerge({}, malicious);
+  expect({}.isAdmin).toBeUndefined();
+});
+
+// Rate limiting
+test('5th login attempt from same IP returns 429', async () => {
+  for (let i = 0; i < 5; i++) {
+    await request(app).post('/api/auth/login').send({...});
+  }
+  await request(app).post('/api/auth/login').send({...}).expect(429);
+});
+
+// Idempotency
+test('same idempotency key returns cached response', () => {
+  const key = uuid();
+  const r1 = await request(app).post('/api/vms').set('X-Idempotency-Key', key).send({...});
+  const r2 = await request(app).post('/api/vms').set('X-Idempotency-Key', key).send({...});
+  expect(r1.body).toEqual(r2.body);
+  expect(r1.headers['x-idempotency-replay']).toBe('true');
+});
+```
+
+---
+
 ## VM Console (noVNC)
 
 > Per `diagrams/screens/09-logs.svg` and the requirement for "view-only with full ops via backend actions". VMs need a console view accessible from the browser.
