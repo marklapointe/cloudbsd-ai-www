@@ -1,129 +1,242 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="system-ui, sans-serif">
   <title>CloudBSD Admin — Network Map</title>
-  <desc>Topology canvas rendered with @xyflow/angular: VM, container, jail, and service nodes connected by edges.</desc>
   <foreignObject x="0" y="0" width="1280" height="800">
-    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900 relative">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900">
       <g id="header" class="contents">
-        <div class="h-14 bg-white border-b border-slate-200 flex items-center px-4 relative z-20">
+        <div class="h-14 bg-white border-b border-slate-200 flex items-center px-4">
           <div class="flex items-center gap-2">
             <div class="w-8 h-8 rounded bg-blue-600 text-white flex items-center justify-center font-bold">C</div>
             <span class="font-bold text-lg">CloudBSD Admin</span>
             <span class="ml-2 px-2 py-0.5 text-xs rounded bg-slate-100 text-slate-600">freenas-mock.local</span>
           </div>
           <div class="ml-auto flex items-center gap-4">
-            <span class="text-sm text-slate-500">Theme: CloudBSD</span>
-            <button class="text-sm text-slate-600 hover:text-slate-900">Refresh</button>
+            <span class="text-sm text-slate-500 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>backend OK · 18ms</span>
+            <button class="text-sm text-slate-600">Refresh</button>
             <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">M</div>
           </div>
         </div>
       </g>
-      <div class="flex relative" style="height: calc(100% - 56px);">
+      <div class="flex" style="height: calc(800px - 56px)">
         <g id="sidebar" class="contents">
-          <aside class="w-56 bg-white border-r border-slate-200 p-3 overflow-y-auto relative z-10">
+          <aside class="w-56 bg-white border-r border-slate-200 p-3 overflow-y-auto">
             <nav class="space-y-1 text-sm">
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Dashboard</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Virtual Machines</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Containers</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Jails</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Volumes</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Dashboard</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Virtual Machines</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Containers</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Jails</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Volumes</a>
               <a class="block px-3 py-2 rounded bg-blue-50 text-blue-700 font-medium">Network Map</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Cluster</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Cluster</a>
               <div class="pt-3 pb-1 text-xs uppercase tracking-wide text-slate-400 px-3">Admin</div>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Users</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Logs</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Notifications</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Settings</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Status</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">About</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Users</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Logs</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Notifications</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Settings</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Status</a>
+              <a class="block px-3 py-2 rounded text-slate-700">About</a>
             </nav>
           </aside>
         </g>
-        <main class="flex-1 p-6 overflow-hidden relative">
-          <g id="content" class="contents">
-            <div class="flex items-center justify-between mb-3">
+        <g id="content" class="contents">
+          <main class="flex-1 p-6 overflow-auto">
+            <div class="flex items-center justify-between mb-4">
               <div>
                 <h1 class="text-2xl font-bold">Network Map</h1>
-                <p class="text-sm text-slate-500">Topological view rendered with @xyflow/angular · pan and zoom enabled, edits disabled</p>
+                <p class="text-sm text-slate-500">Topology view of hosts, VMs, containers, jails, and services</p>
               </div>
               <div class="flex items-center gap-2">
-                <div class="flex items-center gap-1 bg-white border border-slate-200 rounded p-1 text-xs">
-                  <button class="px-2 py-1 rounded bg-slate-100">Fit</button>
-                  <button class="px-2 py-1 rounded">+</button>
-                  <button class="px-2 py-1 rounded">−</button>
-                </div>
-                <select class="text-sm border border-slate-300 rounded px-2 py-1.5">
-                  <option>All layers</option>
-                  <option>VMs only</option>
-                  <option>Containers only</option>
-                </select>
+                <span class="px-2 py-1 rounded text-xs bg-amber-50 text-amber-700 border border-amber-200">View-only</span>
+                <button class="px-2 py-1 text-xs border rounded bg-white">Zoom −</button>
+                <button class="px-2 py-1 text-xs border rounded bg-white">Zoom +</button>
+                <button class="px-2 py-1 text-xs border rounded bg-white">Fit</button>
+                <button class="px-2 py-1 text-xs border rounded bg-white">Layout</button>
+                <button class="px-2 py-1 text-xs border rounded bg-white">Refresh</button>
               </div>
             </div>
-            <div class="relative bg-white rounded-lg border border-slate-200 shadow-sm" style="height: 640px;">
-              <svg class="absolute inset-0 pointer-events-none" width="100%" height="100%" viewBox="0 0 1056 640" preserveAspectRatio="none">
-                <defs>
-                  <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
-                    <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#f1f5f9" stroke-width="1"/>
-                  </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#grid)"/>
-                <line x1="270" y1="160" x2="500" y2="220" stroke="#3b82f6" stroke-width="2"/>
-                <line x1="270" y1="160" x2="500" y2="320" stroke="#3b82f6" stroke-width="2"/>
-                <line x1="270" y1="160" x2="500" y2="440" stroke="#3b82f6" stroke-width="2"/>
-                <line x1="540" y1="220" x2="760" y2="220" stroke="#10b981" stroke-width="2"/>
-                <line x1="540" y1="320" x2="760" y2="320" stroke="#10b981" stroke-width="2"/>
-                <line x1="540" y1="440" x2="760" y2="440" stroke="#10b981" stroke-width="2"/>
-                <line x1="800" y1="220" x2="940" y2="320" stroke="#64748b" stroke-width="2" stroke-dasharray="4,3"/>
-                <line x1="800" y1="320" x2="940" y2="320" stroke="#64748b" stroke-width="2" stroke-dasharray="4,3"/>
-                <line x1="800" y1="440" x2="940" y2="320" stroke="#64748b" stroke-width="2" stroke-dasharray="4,3"/>
-              </svg>
-              <div class="absolute rounded-lg border-2 border-blue-600 bg-blue-50 text-blue-900 px-3 py-2 text-xs shadow-sm" style="left: 200px; top: 130px; width: 140px;">
-                <div class="font-semibold flex items-center gap-1">
-                  <span class="w-2 h-2 rounded-full bg-blue-600"></span>
-                  br0 (gateway)
+            <div class="bg-white rounded-lg border shadow-sm relative" style="height: 560px; background-image: radial-gradient(circle, #e2e8f0 1px, transparent 1px); background-size: 24px 24px;">
+              <!-- Subnet boxes -->
+              <div class="absolute border border-dashed border-blue-300 rounded p-2" style="top: 30px; left: 40px; width: 480px; height: 510px;">
+                <div class="text-[10px] font-bold text-blue-700 mb-1">10.0.10.0/24 — mgmt + workloads</div>
+              </div>
+              <div class="absolute border border-dashed border-violet-300 rounded p-2" style="top: 30px; left: 540px; width: 280px; height: 240px;">
+                <div class="text-[10px] font-bold text-violet-700 mb-1">10.0.20.0/24 — storage</div>
+              </div>
+              <div class="absolute border border-dashed border-amber-300 rounded p-2" style="top: 290px; left: 540px; width: 280px; height: 250px;">
+                <div class="text-[10px] font-bold text-amber-700 mb-1">10.0.30.0/24 — cluster</div>
+              </div>
+              <!-- Nodes -->
+              <div class="absolute bg-white border-2 border-slate-400 rounded p-1.5 text-center shadow-sm" style="left:80px;top:60px;width:96px;font-size:9px">
+                <div class="text-base text-slate-600">☁</div>
+                <div class="font-bold leading-tight">Internet</div>
+                <div class="text-[8px] text-slate-500">203.0.113.1</div>
+                <div class="text-[8px] px-1 rounded bg-slate-50 text-slate-700 inline-block">CLOUD</div>
+              </div>
+              <div class="absolute bg-white border-2 border-blue-400 rounded p-1.5 text-center shadow-sm" style="left:240px;top:60px;width:96px;font-size:9px">
+                <div class="text-base text-blue-600">➟</div>
+                <div class="font-bold leading-tight">pfsense.local</div>
+                <div class="text-[8px] text-slate-500">10.0.10.1</div>
+                <div class="text-[8px] px-1 rounded bg-blue-50 text-blue-700 inline-block">ROUTER</div>
+              </div>
+              <div class="absolute bg-white border-2 border-blue-400 rounded p-1.5 text-center shadow-sm" style="left:400px;top:60px;width:96px;font-size:9px">
+                <div class="text-base text-blue-600">▤</div>
+                <div class="font-bold leading-tight">sw-core.local</div>
+                <div class="text-[8px] text-slate-500">10.0.10.2</div>
+                <div class="text-[8px] px-1 rounded bg-blue-50 text-blue-700 inline-block">SWITCH</div>
+              </div>
+              <div class="absolute bg-white border-2 border-amber-400 rounded p-1.5 text-center shadow-sm" style="left:100px;top:140px;width:96px;font-size:9px">
+                <div class="text-base text-amber-600">▦</div>
+                <div class="font-bold leading-tight">freenas-mock (NAS)</div>
+                <div class="text-[8px] text-slate-500">this host</div>
+                <div class="text-[8px] px-1 rounded bg-amber-50 text-amber-700 inline-block">NAS</div>
+              </div>
+              <div class="absolute bg-white border-2 border-emerald-400 rounded p-1.5 text-center shadow-sm" style="left:80px;top:240px;width:96px;font-size:9px">
+                <div class="text-base text-emerald-600">▢</div>
+                <div class="font-bold leading-tight">nextcloud</div>
+                <div class="text-[8px] text-slate-500">VM</div>
+                <div class="text-[8px] px-1 rounded bg-emerald-50 text-emerald-700 inline-block">VM</div>
+              </div>
+              <div class="absolute bg-white border-2 border-emerald-400 rounded p-1.5 text-center shadow-sm" style="left:200px;top:240px;width:96px;font-size:9px">
+                <div class="text-base text-emerald-600">▢</div>
+                <div class="font-bold leading-tight">jellyfin</div>
+                <div class="text-[8px] text-slate-500">VM</div>
+                <div class="text-[8px] px-1 rounded bg-emerald-50 text-emerald-700 inline-block">VM</div>
+              </div>
+              <div class="absolute bg-white border-2 border-emerald-400 rounded p-1.5 text-center shadow-sm" style="left:320px;top:240px;width:96px;font-size:9px">
+                <div class="text-base text-emerald-600">▢</div>
+                <div class="font-bold leading-tight">homeassistant</div>
+                <div class="text-[8px] text-slate-500">VM</div>
+                <div class="text-[8px] px-1 rounded bg-emerald-50 text-emerald-700 inline-block">VM</div>
+              </div>
+              <div class="absolute bg-white border-2 border-emerald-400 rounded p-1.5 text-center shadow-sm" style="left:440px;top:240px;width:96px;font-size:9px">
+                <div class="text-base text-emerald-600">▢</div>
+                <div class="font-bold leading-tight">gitlab-runner</div>
+                <div class="text-[8px] text-slate-500">VM</div>
+                <div class="text-[8px] px-1 rounded bg-emerald-50 text-emerald-700 inline-block">VM</div>
+              </div>
+              <div class="absolute bg-white border-2 border-emerald-400 rounded p-1.5 text-center shadow-sm" style="left:80px;top:340px;width:96px;font-size:9px">
+                <div class="text-base text-emerald-600">▢</div>
+                <div class="font-bold leading-tight">gitea</div>
+                <div class="text-[8px] text-slate-500">VM</div>
+                <div class="text-[8px] px-1 rounded bg-emerald-50 text-emerald-700 inline-block">VM</div>
+              </div>
+              <div class="absolute bg-white border-2 border-cyan-400 rounded p-1.5 text-center shadow-sm" style="left:200px;top:340px;width:96px;font-size:9px">
+                <div class="text-base text-cyan-600">□</div>
+                <div class="font-bold leading-tight">nginx-proxy</div>
+                <div class="text-[8px] text-slate-500">CT</div>
+                <div class="text-[8px] px-1 rounded bg-cyan-50 text-cyan-700 inline-block">CT</div>
+              </div>
+              <div class="absolute bg-white border-2 border-cyan-400 rounded p-1.5 text-center shadow-sm" style="left:320px;top:340px;width:96px;font-size:9px">
+                <div class="text-base text-cyan-600">□</div>
+                <div class="font-bold leading-tight">postgres-16</div>
+                <div class="text-[8px] text-slate-500">CT</div>
+                <div class="text-[8px] px-1 rounded bg-cyan-50 text-cyan-700 inline-block">CT</div>
+              </div>
+              <div class="absolute bg-white border-2 border-cyan-400 rounded p-1.5 text-center shadow-sm" style="left:440px;top:340px;width:96px;font-size:9px">
+                <div class="text-base text-cyan-600">□</div>
+                <div class="font-bold leading-tight">redis-cache</div>
+                <div class="text-[8px] text-slate-500">CT</div>
+                <div class="text-[8px] px-1 rounded bg-cyan-50 text-cyan-700 inline-block">CT</div>
+              </div>
+              <div class="absolute bg-white border-2 border-cyan-400 rounded p-1.5 text-center shadow-sm" style="left:200px;top:440px;width:96px;font-size:9px">
+                <div class="text-base text-cyan-600">□</div>
+                <div class="font-bold leading-tight">caddy</div>
+                <div class="text-[8px] text-slate-500">CT</div>
+                <div class="text-[8px] px-1 rounded bg-cyan-50 text-cyan-700 inline-block">CT</div>
+              </div>
+              <div class="absolute bg-white border-2 border-violet-400 rounded p-1.5 text-center shadow-sm" style="left:80px;top:440px;width:96px;font-size:9px">
+                <div class="text-base text-violet-600">■</div>
+                <div class="font-bold leading-tight">transmission</div>
+                <div class="text-[8px] text-slate-500">JAIL</div>
+                <div class="text-[8px] px-1 rounded bg-violet-50 text-violet-700 inline-block">JAIL</div>
+              </div>
+              <div class="absolute bg-white border-2 border-violet-400 rounded p-1.5 text-center shadow-sm" style="left:200px;top:440px;width:96px;font-size:9px">
+                <div class="text-base text-violet-600">■</div>
+                <div class="font-bold leading-tight">syncthing</div>
+                <div class="text-[8px] text-slate-500">JAIL</div>
+                <div class="text-[8px] px-1 rounded bg-violet-50 text-violet-700 inline-block">JAIL</div>
+              </div>
+              <div class="absolute bg-white border-2 border-violet-400 rounded p-1.5 text-center shadow-sm" style="left:320px;top:440px;width:96px;font-size:9px">
+                <div class="text-base text-violet-600">■</div>
+                <div class="font-bold leading-tight">pi-hole</div>
+                <div class="text-[8px] text-slate-500">JAIL</div>
+                <div class="text-[8px] px-1 rounded bg-violet-50 text-violet-700 inline-block">JAIL</div>
+              </div>
+              <div class="absolute bg-white border-2 border-violet-400 rounded p-1.5 text-center shadow-sm" style="left:440px;top:440px;width:96px;font-size:9px">
+                <div class="text-base text-violet-600">■</div>
+                <div class="font-bold leading-tight">vaultwarden</div>
+                <div class="text-[8px] text-slate-500">JAIL</div>
+                <div class="text-[8px] px-1 rounded bg-violet-50 text-violet-700 inline-block">JAIL</div>
+              </div>
+              <div class="absolute bg-white border-2 border-amber-400 rounded p-1.5 text-center shadow-sm" style="left:600px;top:60px;width:96px;font-size:9px">
+                <div class="text-base text-amber-600">◆</div>
+                <div class="font-bold leading-tight">node-02</div>
+                <div class="text-[8px] text-slate-500">storage node</div>
+                <div class="text-[8px] px-1 rounded bg-amber-50 text-amber-700 inline-block">HOST</div>
+              </div>
+              <div class="absolute bg-white border-2 border-amber-400 rounded p-1.5 text-center shadow-sm" style="left:700px;top:60px;width:96px;font-size:9px">
+                <div class="text-base text-amber-600">◆</div>
+                <div class="font-bold leading-tight">node-03</div>
+                <div class="text-[8px] text-slate-500">storage node</div>
+                <div class="text-[8px] px-1 rounded bg-amber-50 text-amber-700 inline-block">HOST</div>
+              </div>
+              <div class="absolute bg-white border-2 border-emerald-400 rounded p-1.5 text-center shadow-sm" style="left:600px;top:340px;width:96px;font-size:9px">
+                <div class="text-base text-emerald-600">◆</div>
+                <div class="font-bold leading-tight">node-04</div>
+                <div class="text-[8px] text-slate-500">cluster node</div>
+                <div class="text-[8px] px-1 rounded bg-emerald-50 text-emerald-700 inline-block">HOST</div>
+              </div>
+              <div class="absolute bg-white border-2 border-rose-400 rounded p-1.5 text-center shadow-sm" style="left:700px;top:340px;width:96px;font-size:9px">
+                <div class="text-base text-rose-600">◆</div>
+                <div class="font-bold leading-tight">node-05</div>
+                <div class="text-[8px] text-slate-500">cluster OFFLINE</div>
+                <div class="text-[8px] px-1 rounded bg-rose-50 text-rose-700 inline-block">HOST</div>
+              </div>
+              <div class="absolute bg-white border-2 border-emerald-400 rounded p-1.5 text-center shadow-sm" style="left:600px;top:440px;width:96px;font-size:9px">
+                <div class="text-base text-emerald-600">◆</div>
+                <div class="font-bold leading-tight">node-06</div>
+                <div class="text-[8px] text-slate-500">cluster node</div>
+                <div class="text-[8px] px-1 rounded bg-emerald-50 text-emerald-700 inline-block">HOST</div>
+              </div>
+              <div class="absolute bg-white border-2 border-slate-400 rounded p-1.5 text-center shadow-sm" style="left:100px;top:510px;width:96px;font-size:9px">
+                <div class="text-base text-slate-600">⚙</div>
+                <div class="font-bold leading-tight">dns-resolver</div>
+                <div class="text-[8px] text-slate-500">SVC</div>
+                <div class="text-[8px] px-1 rounded bg-slate-50 text-slate-700 inline-block">SVC</div>
+              </div>
+              <div class="absolute bg-white border-2 border-slate-400 rounded p-1.5 text-center shadow-sm" style="left:240px;top:510px;width:96px;font-size:9px">
+                <div class="text-base text-slate-600">⚙</div>
+                <div class="font-bold leading-tight">ntp-server</div>
+                <div class="text-[8px] text-slate-500">SVC</div>
+                <div class="text-[8px] px-1 rounded bg-slate-50 text-slate-700 inline-block">SVC</div>
+              </div>
+              <!-- Mini-map -->
+              <div class="absolute bg-white border rounded shadow p-2" style="right: 12px; top: 12px; width: 160px; height: 100px;">
+                <div class="text-[9px] font-semibold text-slate-500 mb-1">Mini-map</div>
+                <div class="bg-slate-50 rounded h-16 relative">
+                  <div class="absolute border-2 border-blue-500 bg-blue-100/30" style="left:20px;top:8px;width:60px;height:24px"></div>
                 </div>
-                <div class="font-mono text-[10px] mt-1">10.0.10.1/24</div>
               </div>
-              <div class="absolute rounded-lg border-2 border-emerald-600 bg-emerald-50 text-emerald-900 px-3 py-2 text-xs shadow-sm" style="left: 430px; top: 190px; width: 120px;">
-                <div class="font-semibold">VM: nextcloud</div>
-                <div class="font-mono text-[10px] mt-1">10.0.10.10</div>
-              </div>
-              <div class="absolute rounded-lg border-2 border-emerald-600 bg-emerald-50 text-emerald-900 px-3 py-2 text-xs shadow-sm" style="left: 430px; top: 290px; width: 120px;">
-                <div class="font-semibold">VM: jellyfin</div>
-                <div class="font-mono text-[10px] mt-1">10.0.10.11</div>
-              </div>
-              <div class="absolute rounded-lg border-2 border-emerald-600 bg-emerald-50 text-emerald-900 px-3 py-2 text-xs shadow-sm" style="left: 430px; top: 410px; width: 120px;">
-                <div class="font-semibold">CT: nginx-proxy</div>
-                <div class="font-mono text-[10px] mt-1">10.0.10.30</div>
-              </div>
-              <div class="absolute rounded-lg border-2 border-emerald-600 bg-emerald-50 text-emerald-900 px-3 py-2 text-xs shadow-sm" style="left: 700px; top: 190px; width: 110px;">
-                <div class="font-semibold">Jail: syncthing</div>
-                <div class="font-mono text-[10px] mt-1">10.0.10.22</div>
-              </div>
-              <div class="absolute rounded-lg border-2 border-emerald-600 bg-emerald-50 text-emerald-900 px-3 py-2 text-xs shadow-sm" style="left: 700px; top: 290px; width: 110px;">
-                <div class="font-semibold">Jail: pi-hole</div>
-                <div class="font-mono text-[10px] mt-1">10.0.10.21</div>
-              </div>
-              <div class="absolute rounded-lg border-2 border-emerald-600 bg-emerald-50 text-emerald-900 px-3 py-2 text-xs shadow-sm" style="left: 700px; top: 410px; width: 110px;">
-                <div class="font-semibold">CT: postgres-16</div>
-                <div class="font-mono text-[10px] mt-1">10.0.10.31</div>
-              </div>
-              <div class="absolute rounded-lg border-2 border-slate-500 bg-slate-100 text-slate-900 px-3 py-2 text-xs shadow-sm" style="left: 880px; top: 290px; width: 120px;">
-                <div class="font-semibold flex items-center gap-1">
-                  <span class="w-2 h-2 rounded-full bg-slate-500"></span>
-                  services.local
+              <!-- Legend -->
+              <div class="absolute bg-white border rounded shadow p-2 text-[10px]" style="right: 12px; bottom: 12px; width: 180px;">
+                <div class="font-semibold text-slate-700 mb-1">Legend</div>
+                <div class="grid grid-cols-2 gap-1">
+                  <span><span class="text-emerald-600">▢</span> VM</span>
+                  <span><span class="text-cyan-600">□</span> Container</span>
+                  <span><span class="text-violet-600">■</span> Jail</span>
+                  <span><span class="text-slate-600">⚙</span> Service</span>
+                  <span><span class="text-blue-600">➟</span> Router</span>
+                  <span><span class="text-blue-600">▤</span> Switch</span>
                 </div>
-                <div class="font-mono text-[10px] mt-1">10.0.10.250</div>
-              </div>
-              <div class="absolute bottom-3 right-3 bg-white border border-slate-200 rounded p-2 text-xs shadow-sm">
-                <div class="font-semibold mb-1">Legend</div>
-                <div class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-blue-600"></span><span>VM link</span></div>
-                <div class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-emerald-600"></span><span>Workload link</span></div>
-                <div class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-slate-500"></span><span>Service link</span></div>
+                <div class="mt-2 pt-1 border-t border-slate-100 space-y-0.5">
+                  <div class="flex items-center gap-1"><span class="w-3 h-0.5 bg-emerald-500"></span> 1GbE</div>
+                  <div class="flex items-center gap-1"><span class="w-3 h-0.5 bg-amber-500"></span> 100MbE</div>
+                  <div class="flex items-center gap-1"><span class="w-3 h-0.5 bg-rose-500"></span> degraded</div>
+                </div>
               </div>
             </div>
-          </g>
-        </main>
+          </main>
+        </g>
       </div>
     </div>
   </foreignObject>

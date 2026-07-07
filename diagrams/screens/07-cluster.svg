@@ -1,135 +1,134 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="system-ui, sans-serif">
-  <title>CloudBSD Admin — Cluster Topology</title>
-  <desc>Hierarchical cluster view with leader, workers, and shared storage.</desc>
+  <title>CloudBSD Admin — Cluster</title>
   <foreignObject x="0" y="0" width="1280" height="800">
-    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900 relative">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="h-full bg-slate-50 text-slate-900">
       <g id="header" class="contents">
-        <div class="h-14 bg-white border-b border-slate-200 flex items-center px-4 relative z-20">
+        <div class="h-14 bg-white border-b border-slate-200 flex items-center px-4">
           <div class="flex items-center gap-2">
             <div class="w-8 h-8 rounded bg-blue-600 text-white flex items-center justify-center font-bold">C</div>
             <span class="font-bold text-lg">CloudBSD Admin</span>
             <span class="ml-2 px-2 py-0.5 text-xs rounded bg-slate-100 text-slate-600">freenas-mock.local</span>
           </div>
           <div class="ml-auto flex items-center gap-4">
-            <span class="text-sm text-slate-500">Theme: CloudBSD</span>
-            <button class="text-sm text-slate-600 hover:text-slate-900">Refresh</button>
+            <span class="text-sm text-slate-500 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>backend OK · 18ms</span>
+            <button class="text-sm text-slate-600">Refresh</button>
             <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">M</div>
           </div>
         </div>
       </g>
-      <div class="flex relative" style="height: calc(100% - 56px);">
+      <div class="flex" style="height: calc(800px - 56px)">
         <g id="sidebar" class="contents">
-          <aside class="w-56 bg-white border-r border-slate-200 p-3 overflow-y-auto relative z-10">
+          <aside class="w-56 bg-white border-r border-slate-200 p-3 overflow-y-auto">
             <nav class="space-y-1 text-sm">
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Dashboard</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Virtual Machines</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Containers</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Jails</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Volumes</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Network Map</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Dashboard</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Virtual Machines</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Containers</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Jails</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Volumes</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Network Map</a>
               <a class="block px-3 py-2 rounded bg-blue-50 text-blue-700 font-medium">Cluster</a>
               <div class="pt-3 pb-1 text-xs uppercase tracking-wide text-slate-400 px-3">Admin</div>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Users</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Logs</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Notifications</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Settings</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">Status</a>
-              <a class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-50">About</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Users</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Logs</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Notifications</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Settings</a>
+              <a class="block px-3 py-2 rounded text-slate-700">Status</a>
+              <a class="block px-3 py-2 rounded text-slate-700">About</a>
             </nav>
           </aside>
         </g>
-        <main class="flex-1 p-6 overflow-hidden">
-          <g id="content" class="contents">
+        <g id="content" class="contents">
+          <main class="flex-1 p-6 overflow-auto">
             <div class="flex items-center justify-between mb-4">
               <div>
-                <h1 class="text-2xl font-bold">Cluster Topology</h1>
-                <p class="text-sm text-slate-500">5 nodes · 1 leader, 3 workers, 1 witness · corosync + glusterfs</p>
+                <h1 class="text-2xl font-bold">Cluster</h1>
+                <p class="text-sm text-slate-500">6 nodes · Replication, failover, jobs</p>
               </div>
-              <div class="flex items-center gap-3 text-sm">
-                <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>Healthy</span></div>
-                <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-500"></span><span>Degraded</span></div>
-                <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-rose-500"></span><span>Offline</span></div>
-              </div>
-            </div>
-            <div class="relative bg-white rounded-lg border border-slate-200 shadow-sm" style="height: 660px;">
-              <svg class="absolute inset-0 pointer-events-none" width="100%" height="100%" viewBox="0 0 1056 660" preserveAspectRatio="none">
-                <line x1="528" y1="90" x2="240" y2="280" stroke="#3b82f6" stroke-width="2"/>
-                <line x1="528" y1="90" x2="528" y2="280" stroke="#3b82f6" stroke-width="2"/>
-                <line x1="528" y1="90" x2="816" y2="280" stroke="#3b82f6" stroke-width="2"/>
-                <line x1="240" y1="320" x2="528" y2="500" stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
-                <line x1="528" y1="320" x2="528" y2="500" stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
-                <line x1="816" y1="320" x2="528" y2="500" stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
-                <line x1="240" y1="320" x2="816" y2="320" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4,3"/>
-                <line x1="528" y1="540" x2="528" y2="600" stroke="#64748b" stroke-width="2"/>
-                <line x1="280" y1="600" x2="776" y2="600" stroke="#64748b" stroke-width="2"/>
-                <line x1="280" y1="600" x2="280" y2="640" stroke="#64748b" stroke-width="2"/>
-                <line x1="528" y1="600" x2="528" y2="640" stroke="#64748b" stroke-width="2"/>
-                <line x1="776" y1="600" x2="776" y2="640" stroke="#64748b" stroke-width="2"/>
-              </svg>
-              <div class="absolute rounded-lg border-2 border-blue-700 bg-blue-600 text-white px-4 py-3 shadow-md" style="left: 420px; top: 30px; width: 220px;">
-                <div class="text-xs uppercase tracking-wide opacity-80">Leader</div>
-                <div class="text-base font-bold">node-01</div>
-                <div class="text-xs opacity-90">10.0.20.11 · quorum</div>
-              </div>
-              <div class="absolute rounded-lg border-2 border-emerald-600 bg-white text-emerald-900 px-4 py-3 shadow-sm" style="left: 120px; top: 230px; width: 240px;">
-                <div class="flex items-center justify-between">
-                  <div>
-                    <div class="text-xs uppercase tracking-wide text-slate-500">Worker</div>
-                    <div class="text-base font-bold">node-02</div>
-                  </div>
-                  <span class="px-2 py-0.5 rounded-full text-xs bg-emerald-50 text-emerald-700">HEALTHY</span>
-                </div>
-                <div class="text-xs text-slate-700 mt-1">10.0.20.12 · 32 GB</div>
-                <div class="mt-2 text-xs text-slate-500">vms: 2 · ct: 3</div>
-              </div>
-              <div class="absolute rounded-lg border-2 border-emerald-600 bg-white text-emerald-900 px-4 py-3 shadow-sm" style="left: 408px; top: 230px; width: 240px;">
-                <div class="flex items-center justify-between">
-                  <div>
-                    <div class="text-xs uppercase tracking-wide text-slate-500">Worker</div>
-                    <div class="text-base font-bold">node-03</div>
-                  </div>
-                  <span class="px-2 py-0.5 rounded-full text-xs bg-emerald-50 text-emerald-700">HEALTHY</span>
-                </div>
-                <div class="text-xs text-slate-700 mt-1">10.0.20.13 · 64 GB</div>
-                <div class="mt-2 text-xs text-slate-500">vms: 3 · ct: 1</div>
-              </div>
-              <div class="absolute rounded-lg border-2 border-amber-500 bg-white text-amber-900 px-4 py-3 shadow-sm" style="left: 696px; top: 230px; width: 240px;">
-                <div class="flex items-center justify-between">
-                  <div>
-                    <div class="text-xs uppercase tracking-wide text-slate-500">Worker</div>
-                    <div class="text-base font-bold">node-04</div>
-                  </div>
-                  <span class="px-2 py-0.5 rounded-full text-xs bg-amber-50 text-amber-700">DEGRADED</span>
-                </div>
-                <div class="text-xs text-slate-700 mt-1">10.0.20.14 · 64 GB</div>
-                <div class="mt-2 text-xs text-amber-700">scrub paused · 1 disk SMART warn</div>
-              </div>
-              <div class="absolute rounded-lg border-2 border-slate-500 bg-white text-slate-900 px-4 py-3 shadow-sm" style="left: 408px; top: 460px; width: 240px;">
-                <div class="flex items-center justify-between">
-                  <div>
-                    <div class="text-xs uppercase tracking-wide text-slate-500">Witness</div>
-                    <div class="text-base font-bold">node-w1</div>
-                  </div>
-                  <span class="px-2 py-0.5 rounded-full text-xs bg-emerald-50 text-emerald-700">HEALTHY</span>
-                </div>
-                <div class="text-xs text-slate-700 mt-1">10.0.20.99 · tiebreaker</div>
-              </div>
-              <div class="absolute bg-slate-700 text-white px-3 py-2 rounded text-xs shadow-sm" style="left: 220px; top: 600px;">
-                <div class="font-semibold">zpool: tank</div>
-                <div class="opacity-80">RAIDZ2 · 6× 2 TB</div>
-              </div>
-              <div class="absolute bg-slate-700 text-white px-3 py-2 rounded text-xs shadow-sm" style="left: 460px; top: 600px;">
-                <div class="font-semibold">zpool: tank</div>
-                <div class="opacity-80">RAIDZ2 · 6× 2 TB</div>
-              </div>
-              <div class="absolute bg-slate-700 text-white px-3 py-2 rounded text-xs shadow-sm" style="left: 710px; top: 600px;">
-                <div class="font-semibold">zpool: tank</div>
-                <div class="opacity-80">RAIDZ2 · 6× 2 TB</div>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-1 rounded text-xs bg-amber-50 text-amber-700 border border-amber-200">View-only</span>
+                <button class="px-3 py-1.5 text-sm border rounded bg-white">Refresh</button>
+                <button class="px-3 py-1.5 text-sm border rounded bg-white">Export</button>
               </div>
             </div>
-          </g>
-        </main>
+            <div class="grid grid-cols-4 gap-3 mb-4">
+              <div class="bg-white rounded-lg border p-3"><div class="text-xs text-slate-500 uppercase">Nodes</div><div class="text-2xl font-semibold">6</div><div class="text-xs text-rose-600">1 offline</div></div>
+              <div class="bg-white rounded-lg border p-3"><div class="text-xs text-slate-500 uppercase">CPU avg</div><div class="text-2xl font-semibold">22%</div></div>
+              <div class="bg-white rounded-lg border p-3"><div class="text-xs text-slate-500 uppercase">MEM avg</div><div class="text-2xl font-semibold">37%</div></div>
+              <div class="bg-white rounded-lg border p-3"><div class="text-xs text-slate-500 uppercase">Jobs running</div><div class="text-2xl font-semibold">12</div></div>
+            </div>
+            <div class="grid grid-cols-3 gap-3 mb-4">
+              <div class="bg-white rounded-lg border-l-4 border-emerald-500 p-3 shadow-sm">
+                <div class="flex items-center justify-between mb-2"><div class="font-semibold">freenas-mock</div><span class="text-[10px] px-1.5 rounded bg-emerald-50 text-emerald-700 uppercase">master</span></div>
+                <div class="text-[10px] text-slate-500">rack A1</div>
+                <div class="mt-2 space-y-1.5">
+                  <div><div class="flex justify-between text-[10px]"><span>CPU</span><span>18%</span></div><div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-blue-500" style="width:18%"></div></div></div>
+                  <div><div class="flex justify-between text-[10px]"><span>MEM</span><span>51%</span></div><div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-purple-500" style="width:51%"></div></div></div>
+                  <div><div class="flex justify-between text-[10px]"><span>Disk</span><span>27%</span></div><div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-amber-500" style="width:27%"></div></div></div>
+                </div>
+                <div class="text-[10px] text-slate-500 mt-2">uptime: 14d 02:11</div>
+              </div>
+              <div class="bg-white rounded-lg border-l-4 border-emerald-500 p-3 shadow-sm">
+                <div class="flex items-center justify-between mb-2"><div class="font-semibold">node-02</div><span class="text-[10px] px-1.5 rounded bg-emerald-50 text-emerald-700 uppercase">worker</span></div>
+                <div class="text-[10px] text-slate-500">rack A2</div>
+                <div class="mt-2 space-y-1.5">
+                  <div><div class="flex justify-between text-[10px]"><span>CPU</span><span>42%</span></div><div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-blue-500" style="width:42%"></div></div></div>
+                  <div><div class="flex justify-between text-[10px]"><span>MEM</span><span>64%</span></div><div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-purple-500" style="width:64%"></div></div></div>
+                  <div><div class="flex justify-between text-[10px]"><span>Disk</span><span>76%</span></div><div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-amber-500" style="width:76%"></div></div></div>
+                </div>
+                <div class="text-[10px] text-slate-500 mt-2">uptime: 22d 06:00</div>
+              </div>
+              <div class="bg-white rounded-lg border-l-4 border-emerald-500 p-3 shadow-sm">
+                <div class="flex items-center justify-between mb-2"><div class="font-semibold">node-03</div><span class="text-[10px] px-1.5 rounded bg-emerald-50 text-emerald-700 uppercase">worker</span></div>
+                <div class="text-[10px] text-slate-500">rack B1</div>
+                <div class="mt-2 space-y-1.5">
+                  <div><div class="flex justify-between text-[10px]"><span>CPU</span><span>28%</span></div><div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-blue-500" style="width:28%"></div></div></div>
+                  <div><div class="flex justify-between text-[10px]"><span>MEM</span><span>38%</span></div><div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-purple-500" style="width:38%"></div></div></div>
+                  <div><div class="flex justify-between text-[10px]"><span>Disk</span><span>41%</span></div><div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-amber-500" style="width:41%"></div></div></div>
+                </div>
+                <div class="text-[10px] text-slate-500 mt-2">uptime: 14d 02:11</div>
+              </div>
+              <div class="bg-white rounded-lg border-l-4 border-emerald-500 p-3 shadow-sm">
+                <div class="flex items-center justify-between mb-2"><div class="font-semibold">node-04</div><span class="text-[10px] px-1.5 rounded bg-emerald-50 text-emerald-700 uppercase">worker</span></div>
+                <div class="text-[10px] text-slate-500">rack B2</div>
+                <div class="mt-2 space-y-1.5">
+                  <div><div class="flex justify-between text-[10px]"><span>CPU</span><span>12%</span></div><div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-blue-500" style="width:12%"></div></div></div>
+                  <div><div class="flex justify-between text-[10px]"><span>MEM</span><span>22%</span></div><div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-purple-500" style="width:22%"></div></div></div>
+                  <div><div class="flex justify-between text-[10px]"><span>Disk</span><span>19%</span></div><div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-amber-500" style="width:19%"></div></div></div>
+                </div>
+                <div class="text-[10px] text-slate-500 mt-2">uptime: 6d 03:24</div>
+              </div>
+              <div class="bg-white rounded-lg border-l-4 border-rose-500 p-3 shadow-sm">
+                <div class="flex items-center justify-between mb-2"><div class="font-semibold">node-05</div><span class="text-[10px] px-1.5 rounded bg-rose-50 text-rose-700 uppercase">worker</span></div>
+                <div class="text-[10px] text-slate-500">rack C1</div>
+                <div class="mt-2 text-rose-600 text-sm">● OFFLINE</div>
+                <div class="text-[10px] text-slate-500 mt-1">last seen 4h ago</div>
+              </div>
+              <div class="bg-white rounded-lg border-l-4 border-emerald-500 p-3 shadow-sm">
+                <div class="flex items-center justify-between mb-2"><div class="font-semibold">node-06</div><span class="text-[10px] px-1.5 rounded bg-emerald-50 text-emerald-700 uppercase">worker</span></div>
+                <div class="text-[10px] text-slate-500">rack C2</div>
+                <div class="mt-2 space-y-1.5">
+                  <div><div class="flex justify-between text-[10px]"><span>CPU</span><span>36%</span></div><div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-blue-500" style="width:36%"></div></div></div>
+                  <div><div class="flex justify-between text-[10px]"><span>MEM</span><span>48%</span></div><div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-purple-500" style="width:48%"></div></div></div>
+                  <div><div class="flex justify-between text-[10px]"><span>Disk</span><span>55%</span></div><div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-amber-500" style="width:55%"></div></div></div>
+                </div>
+                <div class="text-[10px] text-slate-500 mt-2">uptime: 14d 02:11</div>
+              </div>
+            </div>
+            <div class="bg-white rounded-lg border p-4 shadow-sm">
+              <div class="flex items-center justify-between mb-3"><h3 class="text-sm font-semibold">Recent Cluster Events</h3><a class="text-xs text-blue-600">View all</a></div>
+              <div class="space-y-1 text-xs">
+                <div class="flex gap-2 py-1 border-b border-slate-100"><span class="font-mono text-slate-500 w-16">12:14:22</span><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1"></span><span class="flex-1"><b>node-04</b> marked healthy after 3 retries</span></div>
+                <div class="flex gap-2 py-1 border-b border-slate-100"><span class="font-mono text-slate-500 w-16">11:48:01</span><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1"></span><span class="flex-1">replication <b>tank/data → node-02</b> completed (2.1 GB)</span></div>
+                <div class="flex gap-2 py-1 border-b border-slate-100"><span class="font-mono text-slate-500 w-16">10:33:18</span><span class="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1"></span><span class="flex-1"><b>node-05</b> lost heartbeat (2 retries) — investigating</span></div>
+                <div class="flex gap-2 py-1 border-b border-slate-100"><span class="font-mono text-slate-500 w-16">09:48:22</span><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1"></span><span class="flex-1">backup snapshot <b>daily</b> replicated to offsite</span></div>
+                <div class="flex gap-2 py-1 border-b border-slate-100"><span class="font-mono text-slate-500 w-16">09:14:00</span><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1"></span><span class="flex-1">systemd timer <b>fstrim</b> ran on 3 nodes</span></div>
+                <div class="flex gap-2 py-1 border-b border-slate-100"><span class="font-mono text-slate-500 w-16">08:42:11</span><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1"></span><span class="flex-1"><b>node-06</b> joined cluster</span></div>
+              </div>
+              <div class="mt-3 pt-2 border-t text-xs text-slate-500">Add node — available on backend: see <code class="bg-slate-100 px-1 rounded">cluster join</code> in CLI</div>
+            </div>
+          </main>
+        </g>
       </div>
     </div>
   </foreignObject>
