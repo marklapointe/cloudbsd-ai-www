@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Admin — Recovery Codes Modal</title>
+  <desc>Account recovery codes (one-time use, shown ONCE). 10 codes printed in a grid with download/copy/print actions + regenerated = invalidate prior.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:rgba(15,23,42,0.55);color:#0f172a;font-size:13px;box-sizing:border-box;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+      <div style="background:#ffffff;border-radius:12px;box-shadow:0 25px 50px rgba(0,0,0,0.4);width:600px;display:flex;flex-direction:column;overflow:hidden;">
+        <header style="padding:16px 20px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#f59e0b,#dc2626);color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;">🔑</div><h2 style="margin:0;font-size:16px;font-weight:700;color:#0f172a;">Recovery codes</h2></div>
+          <button style="width:28px;height:28px;border-radius:50%;background:#f1f5f9;border:0;cursor:pointer;font-size:14px;color:#64748b;">✕</button>
+        </header>
+        <div style="padding:18px 20px;flex:1;overflow-y:auto;">
+
+          <div style="padding:14px 16px;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;margin-bottom:16px;display:flex;align-items:flex-start;gap:12px;">
+            <div style="font-size:18px;">⚠</div>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:#92400e;margin-bottom:2px;">These codes are shown once</div>
+              <div style="font-size:11px;color:#78350f;line-height:1.5;">If you lose access to your authenticator AND don't have these codes, you cannot log in. Save them in a password manager NOW.</div>
+            </div>
+          </div>
+
+          <div style="padding:18px;background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px dashed #92400e;border-radius:8px;margin-bottom:14px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;font-family:monospace;font-size:14px;">
+              <div style="padding:8px 10px;background:#ffffff;border-radius:4px;font-weight:700;color:#0f172a;">abandoned-bagel-r7</div>
+              <div style="padding:8px 10px;background:#ffffff;border-radius:4px;font-weight:700;color:#0f172a;">spilled-coffee-92</div>
+              <div style="padding:8px 10px;background:#ffffff;border-radius:4px;font-weight:700;color:#0f172a;">mocking-jay-fan-3</div>
+              <div style="padding:8px 10px;background:#ffffff;border-radius:4px;font-weight:700;color:#0f172a;">azure-meadow-77</div>
+              <div style="padding:8px 10px;background:#ffffff;border-radius:4px;font-weight:700;color:#0f172a;">untitled-doc-31</div>
+              <div style="padding:8px 10px;background:#ffffff;border-radius:4px;font-weight:700;color:#0f172a;">cumulus-river-08</div>
+              <div style="padding:8px 10px;background:#ffffff;border-radius:4px;font-weight:700;color:#0f172a;">marble-stone-19</div>
+              <div style="padding:8px 10px;background:#ffffff;border-radius:4px;font-weight:700;color:#0f172a;">flickering-light-4</div>
+              <div style="padding:8px 10px;background:#ffffff;border-radius:4px;font-weight:700;color:#0f172a;">soft-morning-66</div>
+              <div style="padding:8px 10px;background:#ffffff;border-radius:4px;font-weight:700;color:#0f172a;">ember-cinder-22</div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;">
+            <button style="padding:9px 12px;font-size:11px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">📋 Copy all</button>
+            <button style="padding:9px 12px;font-size:11px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">⬇ Download .txt</button>
+            <button style="padding:9px 12px;font-size:11px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">🖨 Print</button>
+            <button style="padding:9px 12px;font-size:11px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">📱 QR code</button>
+          </div>
+
+          <div style="padding:12px 14px;background:#f1f5f9;border-radius:6px;margin-bottom:10px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#475569;">
+              <span><strong>3 of 10</strong> codes remaining</span>
+              <button style="padding:5px 12px;font-size:11px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#92400e;font-weight:600;">Regenerate (invalidates prior)</button>
+            </div>
+          </div>
+
+          <label style="display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#475569;cursor:pointer;">
+            <input type="checkbox" style="accent-color:#1d4ed8;margin-top:2px;"/>
+            <span>I have saved these codes somewhere safe (password manager / offline).</span>
+          </label>
+
+        </div>
+
+        <footer style="padding:14px 20px;border-top:1px solid #e2e8f0;background:#f8fafc;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:8px 14px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">Close</button>
+          <button style="padding:9px 22px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:linear-gradient(135deg,#16a34a,#0d9488);color:#ffffff;cursor:pointer;">Done</button>
+        </footer>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Admin — Join Token Result Modal</title>
+  <desc>Shows the generated token once. Copy + QR + revoke. Replaces 29 once token is generated.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:rgba(15,23,42,0.55);color:#0f172a;font-size:13px;box-sizing:border-box;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+      <div style="background:#ffffff;border-radius:12px;box-shadow:0 25px 50px rgba(0,0,0,0.4);width:620px;display:flex;flex-direction:column;overflow:hidden;">
+        <header style="padding:16px 20px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:8px;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;">✓</div><h2 style="margin:0;font-size:16px;font-weight:700;color:#0f172a;">Token generated</h2></div>
+          <button style="width:28px;height:28px;border-radius:50%;background:#f1f5f9;border:0;cursor:pointer;font-size:14px;color:#64748b;">✕</button>
+        </header>
+        <div style="padding:18px 20px;flex:1;overflow-y:auto;">
+
+          <div style="padding:14px 16px;background:#dcfce7;border:1px solid #86efac;border-radius:8px;margin-bottom:14px;display:flex;align-items:center;gap:10px;">
+            <div style="font-size:20px;color:#16a34a;">⏱</div>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:#166534;">Single-use · expires in 24h · revoked on first use</div>
+              <div style="font-size:11px;color:#15803d;margin-top:2px;">Worker role · valid from 10.0.0.0/16, 192.168.0.0/16</div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <label style="display:block;font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:6px;">Join token (one-time display)</label>
+            <div style="display:flex;gap:6px;">
+              <input value="cbsd-join-7H92-N3XF-K8R4-VW5Y-AB6C-DEFG-HIJK-LMNO" style="flex:1;padding:12px;font-family:monospace;font-size:13px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#f8fafc;color:#0f172a;box-sizing:border-box;letter-spacing:0.04em;" readonly="readonly"/>
+              <button style="padding:10px 16px;font-size:12px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#1d4ed8;font-weight:600;">Copy</button>
+            </div>
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <label style="display:block;font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:6px;">Or run on the new node</label>
+            <pre style="margin:0;padding:14px;background:#1e293b;color:#a5f3fc;border-radius:6px;font-family:monospace;font-size:13px;line-height:1.55;overflow-x:auto;">cloudbsd node join --token cbsd-join-7H92-N3XF-K8R4-VW5Y-AB6C-DEFG-HIJK-LMNO --role worker</pre>
+          </div>
+
+          <div style="padding:14px 16px;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;margin-bottom:12px;display:flex;align-items:flex-start;gap:10px;">
+            <div style="font-size:18px;">⚠</div>
+            <div>
+              <div style="font-size:12px;font-weight:700;color:#92400e;">Do not paste this token in chat / tickets</div>
+              <div style="font-size:11px;color:#78350f;line-height:1.5;">Anyone with this token can register a node in this cluster. Use an out-of-band channel (your own workstation → SSH to new node).</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;justify-content:center;">
+            <button style="padding:8px 14px;font-size:11px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">📱 QR code</button>
+            <button style="padding:8px 14px;font-size:11px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">⬇ Download .sh script</button>
+            <button style="padding:8px 14px;font-size:11px;border:1px solid #fecaca;border-radius:6px;background:#ffffff;color:#dc2626;font-weight:600;">Revoke now</button>
+          </div>
+        </div>
+        <footer style="padding:14px 20px;border-top:1px solid #e2e8f0;background:#f8fafc;display:flex;justify-content:flex-end;align-items:center;">
+          <button style="padding:9px 22px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:#1d4ed8;color:#ffffff;cursor:pointer;">Done</button>
+        </footer>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

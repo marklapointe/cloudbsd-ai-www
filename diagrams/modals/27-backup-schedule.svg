@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Admin — Backup Schedule Modal</title>
+  <desc>Backup schedule (cron). Name + cron + retention policy + target (local/remote/offsite) + encryption + notifications. POST /api/task-schedules (T77b / §2.21).</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:rgba(15,23,42,0.55);color:#0f172a;font-size:13px;box-sizing:border-box;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+      <div style="background:#ffffff;border-radius:12px;box-shadow:0 25px 50px rgba(0,0,0,0.4);width:640px;display:flex;flex-direction:column;overflow:hidden;">
+        <header style="padding:16px 20px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:8px;background:#7c3aed;color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;">⏰</div><h2 style="margin:0;font-size:16px;font-weight:700;color:#0f172a;">New backup schedule</h2></div>
+          <button style="width:28px;height:28px;border-radius:50%;background:#f1f5f9;border:0;cursor:pointer;font-size:14px;color:#64748b;">✕</button>
+        </header>
+        <div style="padding:18px 20px;flex:1;overflow-y:auto;">
+
+          <div style="margin-bottom:14px;">
+            <label style="display:block;font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;">Name *</label>
+            <input value="nightly-vm-snapshots" style="width:100%;padding:8px 10px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;box-sizing:border-box;font-family:monospace;"/>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+            <div>
+              <label style="display:block;font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;">Cron expression <span style="color:#dc2626;">*</span></label>
+              <div style="display:flex;gap:6px;">
+                <input value="0 2 * * *" style="flex:1;padding:8px 10px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;box-sizing:border-box;font-family:monospace;"/>
+                <select style="padding:8px 8px;font-size:11px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;">
+                  <option>Cron</option><option>Hourly</option><option>Daily</option><option>Weekly</option><option>Monthly</option>
+                </select>
+              </div>
+              <div style="font-size:10px;color:#94a3b8;margin-top:3px;">Daily at 02:00 UTC. Timezone: cluster TZ.</div>
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;">Timezone</label>
+              <select style="width:100%;padding:8px 10px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;box-sizing:border-box;">
+                <option>UTC</option><option>America/Montreal</option><option>Europe/Berlin</option><option>Asia/Tokyo</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="padding:12px 14px;background:#1e293b;border-radius:6px;margin-bottom:14px;">
+            <div style="font-size:10px;color:#94a3b8;letter-spacing:0.06em;margin-bottom:6px;">NEXT 5 RUNS</div>
+            <table style="width:100%;font-size:11px;color:#a5f3fc;font-family:monospace;">
+              <tr><td style="padding:2px 0;">→</td><td style="padding:2px 12px;">2026-07-11 02:00:00 UTC</td><td style="color:#64748b;">in 18h 4m</td></tr>
+              <tr><td style="padding:2px 0;">→</td><td style="padding:2px 12px;">2026-07-12 02:00:00 UTC</td><td style="color:#64748b;">in 42h 4m</td></tr>
+              <tr><td style="padding:2px 0;">→</td><td style="padding:2px 12px;">2026-07-13 02:00:00 UTC</td></tr>
+              <tr><td style="padding:2px 0;">→</td><td style="padding:2px 12px;">2026-07-14 02:00:00 UTC</td></tr>
+              <tr><td style="padding:2px 0;">→</td><td style="padding:2px 12px;">2026-07-15 02:00:00 UTC</td></tr>
+            </table>
+          </div>
+
+          <h3 style="margin:0 0 8px;font-size:12px;font-weight:700;color:#0f172a;text-transform:uppercase;letter-spacing:0.06em;">Retention</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
+            <div style="padding:10px;border:1px solid #cbd5e1;border-radius:6px;">
+              <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#475569;cursor:pointer;margin-bottom:4px;">
+                <input type="checkbox" checked="checked" style="accent-color:#1d4ed8;"/> Daily · keep
+              </label>
+              <input value="7" style="width:100%;padding:6px 8px;font-family:monospace;font-size:13px;border:1px solid #cbd5e1;border-radius:4px;text-align:center;font-weight:600;"/>
+            </div>
+            <div style="padding:10px;border:1px solid #cbd5e1;border-radius:6px;">
+              <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#475569;cursor:pointer;margin-bottom:4px;">
+                <input type="checkbox" checked="checked" style="accent-color:#1d4ed8;"/> Weekly · keep
+              </label>
+              <input value="4" style="width:100%;padding:6px 8px;font-family:monospace;font-size:13px;border:1px solid #cbd5e1;border-radius:4px;text-align:center;font-weight:600;"/>
+            </div>
+            <div style="padding:10px;border:1px solid #cbd5e1;border-radius:6px;">
+              <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#475569;cursor:pointer;margin-bottom:4px;">
+                <input type="checkbox" style="accent-color:#1d4ed8;"/> Monthly · keep
+              </label>
+              <input value="12" style="width:100%;padding:6px 8px;font-family:monospace;font-size:13px;border:1px solid #cbd5e1;border-radius:4px;text-align:center;font-weight:600;"/>
+            </div>
+          </div>
+
+          <h3 style="margin:8px 0 8px;font-size:12px;font-weight:700;color:#0f172a;text-transform:uppercase;letter-spacing:0.06em;">Targets + delivery</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:#f8fafc;border-radius:6px;font-size:12px;color:#475569;cursor:pointer;"><input type="checkbox" checked="checked" style="accent-color:#1d4ed8;"/> Local (tank/backups)</label>
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:#f8fafc;border-radius:6px;font-size:12px;color:#475569;cursor:pointer;"><input type="checkbox" style="accent-color:#1d4ed8;"/> Remote (S3)</label>
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:#f8fafc;border-radius:6px;font-size:12px;color:#475569;cursor:pointer;"><input type="checkbox" style="accent-color:#1d4ed8;"/> Offsite-cluster node</label>
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:#f8fafc;border-radius:6px;font-size:12px;color:#475569;cursor:pointer;"><input type="checkbox" checked="checked" style="accent-color:#1d4ed8;"/> Encrypt at rest (AES-256-GCM)</label>
+          </div>
+
+          <h3 style="margin:8px 0 8px;font-size:12px;font-weight:700;color:#0f172a;text-transform:uppercase;letter-spacing:0.06em;">Notifications</h3>
+          <div style="display:flex;gap:10px;margin-bottom:8px;">
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:#f8fafc;border-radius:6px;font-size:12px;color:#475569;cursor:pointer;"><input type="checkbox" style="accent-color:#1d4ed8;"/> Email on failure</label>
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:#f8fafc;border-radius:6px;font-size:12px;color:#475569;cursor:pointer;"><input type="checkbox" checked="checked" style="accent-color:#1d4ed8;"/> Webhook on failure (alertmanager)</label>
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:#f8fafc;border-radius:6px;font-size:12px;color:#475569;cursor:pointer;"><input type="checkbox" style="accent-color:#1d4ed8;"/> Silent on success</label>
+          </div>
+
+        </div>
+
+        <footer style="padding:14px 20px;border-top:1px solid #e2e8f0;background:#f8fafc;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:8px 14px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">Cancel</button>
+          <button style="padding:9px 22px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:linear-gradient(135deg,#7c3aed,#1d4ed8);color:#ffffff;cursor:pointer;">+ Save schedule</button>
+        </footer>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

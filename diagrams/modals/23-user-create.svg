@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Admin — Add User Modal</title>
+  <desc>User creation modal centered over Users list. Username + email + display name + role + SSH key + send invite. POST /api/users (proposed).</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:rgba(15,23,42,0.55);color:#0f172a;font-size:13px;box-sizing:border-box;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+      <div style="background:#ffffff;border-radius:12px;box-shadow:0 25px 50px rgba(0,0,0,0.4);width:580px;display:flex;flex-direction:column;overflow:hidden;">
+        <header style="padding:16px 20px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:8px;background:#0d9488;color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;">+</div><h2 style="margin:0;font-size:16px;font-weight:700;color:#0f172a;">Add user</h2></div>
+          <button style="width:28px;height:28px;border-radius:50%;background:#f1f5f9;border:0;cursor:pointer;font-size:14px;color:#64748b;">✕</button>
+        </header>
+        <div style="padding:18px 20px;flex:1;overflow-y:auto;">
+
+          <div style="margin-bottom:14px;">
+            <label style="display:block;font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;">Username *</label>
+            <input value="alex.kim" style="width:100%;padding:8px 10px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;box-sizing:border-box;font-family:monospace;"/>
+            <div style="font-size:10px;color:#94a3b8;margin-top:3px;">a-z, 0-9, _, -. Must be unique across cluster.</div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+            <div>
+              <label style="display:block;font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;">Display name</label>
+              <input value="Alex Kim" style="width:100%;padding:8px 10px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;box-sizing:border-box;"/>
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;">Email</label>
+              <input value="alex.kim@example.com" style="width:100%;padding:8px 10px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;box-sizing:border-box;"/>
+            </div>
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <label style="display:block;font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;">Role *</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+              <label style="display:block;padding:10px;border:2px solid #cbd5e1;border-radius:6px;cursor:pointer;text-align:center;">
+                <div style="font-size:11px;font-weight:700;color:#0f172a;">admin</div>
+                <div style="font-size:10px;color:#64748b;">full control</div>
+              </label>
+              <label style="display:block;padding:10px;border:2px solid #1d4ed8;border-radius:6px;background:#1d4ed810;cursor:pointer;text-align:center;">
+                <div style="font-size:11px;font-weight:700;color:#1d4ed8;">operator</div>
+                <div style="font-size:10px;color:#1d4ed8;">SELECTED · create/move VMs</div>
+              </label>
+              <label style="display:block;padding:10px;border:2px solid #cbd5e1;border-radius:6px;cursor:pointer;text-align:center;">
+                <div style="font-size:11px;font-weight:700;color:#0f172a;">viewer</div>
+                <div style="font-size:10px;color:#64748b;">read-only</div>
+              </label>
+            </div>
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <label style="display:block;font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;">SSH public key (paste, one per line)</label>
+            <textarea rows="3" style="width:100%;padding:8px 10px;font-size:11px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;box-sizing:border-box;font-family:monospace;resize:vertical;"></textarea>
+            <div style="font-size:10px;color:#94a3b8;margin-top:3px;">Optional. Ed25519 / RSA / ECDSA accepted. SSH key only — no password needed when set.</div>
+          </div>
+
+          <div style="padding:12px 14px;background:#f1f5f9;border-radius:6px;margin-bottom:14px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <span style="font-size:12px;font-weight:600;color:#0f172a;">Initial password</span>
+              <select style="font-size:11px;padding:3px 6px;border:1px solid #cbd5e1;border-radius:4px;"><option selected="selected">Auto-generate</option><option>Set manually</option></select>
+            </div>
+            <div style="font-size:10px;color:#94a3b8;line-height:1.5;">Auto-generated 24-char password, shown once after create. User must change on first login.</div>
+          </div>
+
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:#475569;cursor:pointer;margin-bottom:6px;">
+            <input type="checkbox" checked="checked" style="accent-color:#1d4ed8;"/> Send invitation email with setup link
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:#475569;cursor:pointer;">
+            <input type="checkbox" style="accent-color:#1d4ed8;"/> Require 2FA setup on first login
+          </label>
+        </div>
+
+        <footer style="padding:14px 20px;border-top:1px solid #e2e8f0;background:#f8fafc;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:8px 14px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">Cancel</button>
+          <button style="padding:9px 22px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:linear-gradient(135deg,#0d9488,#1d4ed8);color:#ffffff;cursor:pointer;">+ Create user</button>
+        </footer>
+      </div>
+    </div>
+  </foreignObject>
+</svg>
