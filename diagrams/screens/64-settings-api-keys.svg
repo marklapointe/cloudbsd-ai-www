@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 720" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Settings API Keys</title>
+  <foreignObject x="0" y="0" width="1280" height="720">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:720px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+      
+<div style="display:flex;width:1280px;height:720px;">
+  <div style="width:280px;background:#0f172a;color:#cbd5e1;padding:24px 18px;box-sizing:border-box;border-right:1px solid #1e293b;">
+    <div style="display:inline-block;padding:6px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;letter-spacing:0.04em;margin-bottom:8px;">CloudBSD</div>
+    <h3 style="margin:0 0 2px;font-size:13px;font-weight:600;color:#ffffff;">Settings</h3>
+    <div style="font-size:10px;color:#64748b;margin-bottom:24px;">admin@cloudbsd.local</div>
+    
+<div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:4px;display:flex;flex-direction:column;gap:2px;">
+  <div style="font-size:12px;font-weight:500;color:#cbd5e1;">General</div>
+  <div style="font-size:10px;color:#64748b;line-height:1.3;">Cluster name, locale, NTP, timeouts</div>
+</div>
+<div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:4px;display:flex;flex-direction:column;gap:2px;">
+  <div style="font-size:12px;font-weight:500;color:#cbd5e1;">Account</div>
+  <div style="font-size:10px;color:#64748b;line-height:1.3;">Your profile, change password</div>
+</div>
+<div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:4px;display:flex;flex-direction:column;gap:2px;">
+  <div style="font-size:12px;font-weight:500;color:#cbd5e1;">Security</div>
+  <div style="font-size:10px;color:#64748b;line-height:1.3;">2FA, recovery codes, sessions</div>
+</div>
+<div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:4px;display:flex;flex-direction:column;gap:2px;">
+  <div style="font-size:12px;font-weight:500;color:#cbd5e1;">Appearance</div>
+  <div style="font-size:10px;color:#64748b;line-height:1.3;">Theme, density, font size</div>
+</div>
+<div style="padding:9px 12px;border-radius:5px;background:#1e40af;margin-bottom:4px;display:flex;flex-direction:column;gap:2px;">
+  <div style="font-size:12px;font-weight:700;color:#ffffff;">API Keys</div>
+  <div style="font-size:10px;color:#bfdbfe;line-height:1.3;">Personal access tokens</div>
+</div>
+<div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:4px;display:flex;flex-direction:column;gap:2px;">
+  <div style="font-size:12px;font-weight:500;color:#cbd5e1;">Webhooks</div>
+  <div style="font-size:10px;color:#64748b;line-height:1.3;">Outbound event notifications</div>
+</div>
+<div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:4px;display:flex;flex-direction:column;gap:2px;">
+  <div style="font-size:12px;font-weight:500;color:#cbd5e1;">Notifications</div>
+  <div style="font-size:10px;color:#64748b;line-height:1.3;">Inbox rules, escalation</div>
+</div>
+<div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:4px;display:flex;flex-direction:column;gap:2px;">
+  <div style="font-size:12px;font-weight:500;color:#cbd5e1;">Backup config</div>
+  <div style="font-size:10px;color:#64748b;line-height:1.3;">Schedule + retention policies</div>
+</div>
+<div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:4px;display:flex;flex-direction:column;gap:2px;">
+  <div style="font-size:12px;font-weight:500;color:#cbd5e1;">Network</div>
+  <div style="font-size:10px;color:#64748b;line-height:1.3;">Cluster IP, DNS, NTP servers</div>
+</div>
+<div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:4px;display:flex;flex-direction:column;gap:2px;">
+  <div style="font-size:12px;font-weight:500;color:#cbd5e1;">About</div>
+  <div style="font-size:10px;color:#64748b;line-height:1.3;">Version, license, credits</div>
+</div>
+  </div>
+  <div style="flex:1;overflow:auto;background:#f1f5f9;">
+    
+<div style="padding:34px 48px;">
+  <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:24px;">
+    <div>
+      <h2 style="margin:0;font-size:20px;font-weight:700;">API keys</h2>
+      <p style="margin:4px 0 0;color:#64748b;font-size:13px;">Personal access tokens for scripts and integrations</p>
+    </div>
+    <button style="padding:10px 18px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:#1d4ed8;color:#ffffff;">+ New API key</button>
+  </div>
+
+  <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:14px 18px;margin-bottom:14px;display:flex;gap:12px;align-items:start;">
+    <div style="font-size:18px;color:#d97706;">⚠</div>
+    <div style="flex:1;">
+      <div style="font-weight:600;font-size:13px;color:#92400e;">New token shown only once</div>
+      <div style="font-size:12px;color:#92400e;">When creating a key, the token value is displayed once. Save it now in your secret manager.</div>
+    </div>
+  </div>
+
+  <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:24px;">
+    <table style="width:100%;font-size:12px;border-collapse:collapse;">
+      <thead>
+        <tr style="border-bottom:2px solid #e2e8f0;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b;">
+          <th style="padding:10px 8px;">Name</th>
+          <th style="padding:10px 8px;">Token prefix</th>
+          <th style="padding:10px 8px;">Scopes</th>
+          <th style="padding:10px 8px;">Last used</th>
+          <th style="padding:10px 8px;">Expires</th>
+          <th style="padding:10px 8px;">Created</th>
+          <th style="padding:10px 8px;"></th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr style="border-bottom:1px solid #f8fafc;">
+          <td style="padding:10px 8px;font-weight:600;color:#0f172a;">backup-cli</td>
+          <td style="padding:10px 8px;font-family:monospace;font-size:11px;color:#475569;">cbs_tk_a3k9...</td>
+          <td style="padding:10px 8px;font-family:monospace;font-size:10px;color:#1d4ed8;">vm.read, vm.snap, job.read</td>
+          <td style="padding:10px 8px;font-size:11px;color:#475569;">2026-07-07 02:00</td>
+          <td style="padding:10px 8px;font-size:11px;color:#10b981;">never</td>
+          <td style="padding:10px 8px;font-size:11px;color:#475569;">2024-12-01</td>
+          <td style="padding:10px 8px;text-align:right;">
+            <button style="padding:4px 9px;font-size:10px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;">Edit</button>
+            <button style="padding:4px 9px;font-size:10px;border:1px solid #fecaca;border-radius:4px;background:#fef2f2;color:#b91c1c;margin-left:4px;">Revoke</button>
+          </td>
+        </tr>
+        <tr style="border-bottom:1px solid #f8fafc;">
+          <td style="padding:10px 8px;font-weight:600;color:#0f172a;">github-mirrors-plugin</td>
+          <td style="padding:10px 8px;font-family:monospace;font-size:11px;color:#475569;">cbs_tk_7h2p...</td>
+          <td style="padding:10px 8px;font-family:monospace;font-size:10px;color:#1d4ed8;">vm.read, vm.snap.write, dataset.read</td>
+          <td style="padding:10px 8px;font-size:11px;color:#475569;">2026-07-06 22:00</td>
+          <td style="padding:10px 8px;font-size:11px;color:#475569;">2026-12-31</td>
+          <td style="padding:10px 8px;font-size:11px;color:#475569;">2025-04-14</td>
+          <td style="padding:10px 8px;text-align:right;">
+            <button style="padding:4px 9px;font-size:10px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;">Edit</button>
+            <button style="padding:4px 9px;font-size:10px;border:1px solid #fecaca;border-radius:4px;background:#fef2f2;color:#b91c1c;margin-left:4px;">Revoke</button>
+          </td>
+        </tr>
+        <tr style="border-bottom:1px solid #f8fafc;">
+          <td style="padding:10px 8px;font-weight:600;color:#0f172a;">ci-agent-deployer</td>
+          <td style="padding:10px 8px;font-family:monospace;font-size:11px;color:#475569;">cbs_tk_q9w4...</td>
+          <td style="padding:10px 8px;font-family:monospace;font-size:10px;color:#1d4ed8;">vm.write, container.write</td>
+          <td style="padding:10px 8px;font-size:11px;color:#475569;">2026-07-07 09:10</td>
+          <td style="padding:10px 8px;font-size:11px;color:#d97706;">2026-08-12</td>
+          <td style="padding:10px 8px;font-size:11px;color:#475569;">2025-08-22</td>
+          <td style="padding:10px 8px;text-align:right;">
+            <button style="padding:4px 9px;font-size:10px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;">Edit</button>
+            <button style="padding:4px 9px;font-size:10px;border:1px solid #fecaca;border-radius:4px;background:#fef2f2;color:#b91c1c;margin-left:4px;">Revoke</button>
+          </td>
+        </tr>
+        <tr style="border-bottom:1px solid #f8fafc;">
+          <td style="padding:10px 8px;font-weight:600;color:#0f172a;">grafana-exporter</td>
+          <td style="padding:10px 8px;font-family:monospace;font-size:11px;color:#475569;">cbs_tk_l8r2...</td>
+          <td style="padding:10px 8px;font-family:monospace;font-size:10px;color:#1d4ed8;">metrics.read</td>
+          <td style="padding:10px 8px;font-size:11px;color:#475569;">now</td>
+          <td style="padding:10px 8px;font-size:11px;color:#475569;">2030-01-01</td>
+          <td style="padding:10px 8px;font-size:11px;color:#475569;">2025-09-04</td>
+          <td style="padding:10px 8px;text-align:right;">
+            <button style="padding:4px 9px;font-size:10px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;">Edit</button>
+            <button style="padding:4px 9px;font-size:10px;border:1px solid #fecaca;border-radius:4px;background:#fef2f2;color:#b91c1c;margin-left:4px;">Revoke</button>
+          </td>
+        </tr>
+        <tr style="border-bottom:1px solid #f8fafc;">
+          <td style="padding:10px 8px;font-weight:600;color:#0f172a;">old-audit-readonly</td>
+          <td style="padding:10px 8px;font-family:monospace;font-size:11px;color:#475569;">cbs_tk_z3j5...</td>
+          <td style="padding:10px 8px;font-family:monospace;font-size:10px;color:#1d4ed8;">audit.read</td>
+          <td style="padding:10px 8px;font-size:11px;color:#475569;">2025-09-12</td>
+          <td style="padding:10px 8px;font-size:11px;color:#d97706;">2026-01-01</td>
+          <td style="padding:10px 8px;font-size:11px;color:#475569;">2024-11-30</td>
+          <td style="padding:10px 8px;text-align:right;">
+            <button style="padding:4px 9px;font-size:10px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;">Edit</button>
+            <button style="padding:4px 9px;font-size:10px;border:1px solid #fecaca;border-radius:4px;background:#fef2f2;color:#b91c1c;margin-left:4px;">Revoke</button>
+          </td>
+        </tr>
+        <tr style="border-bottom:1px solid #f8fafc;">
+          <td style="padding:10px 8px;font-weight:600;color:#0f172a;">admin-recovery</td>
+          <td style="padding:10px 8px;font-family:monospace;font-size:11px;color:#475569;">cbs_tk_m1n6...</td>
+          <td style="padding:10px 8px;font-family:monospace;font-size:10px;color:#1d4ed8;">* (admin)</td>
+          <td style="padding:10px 8px;font-size:11px;color:#475569;">2026-07-07 09:14</td>
+          <td style="padding:10px 8px;font-size:11px;color:#10b981;">never</td>
+          <td style="padding:10px 8px;font-size:11px;color:#475569;">2024-08-12</td>
+          <td style="padding:10px 8px;text-align:right;">
+            <button style="padding:4px 9px;font-size:10px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;">Edit</button>
+            <button style="padding:4px 9px;font-size:10px;border:1px solid #fecaca;border-radius:4px;background:#fef2f2;color:#b91c1c;margin-left:4px;">Revoke</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+  </div>
+</div>
+
+    </div>
+  </foreignObject>
+</svg>

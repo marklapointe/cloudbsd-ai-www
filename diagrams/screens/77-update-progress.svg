@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 720" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Update Progress</title>
+  <foreignObject x="0" y="0" width="1280" height="720">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:720px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+      
+<div style="display:flex;flex-direction:column;height:100%;">
+  <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+      <h2 style="margin:0;font-size:15px;font-weight:600;">Upgrading prod-cluster &#x2192; v1.4.4</h2>
+    </div>
+    <div style="font-size:11px;color:#64748b;">Started 17:30:12 UTC &#xB7; ETA 17:42 UTC</div>
+  </div>
+
+  <div style="flex:1;padding:30px 60px;display:flex;flex-direction:column;gap:14px;">
+    <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:24px;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+        <h4 style="margin:0;font-size:13px;font-weight:600;">Overall progress</h4>
+        <div style="font-size:11px;color:#475569;">Stage 4 of 7 &#xB7; 58% complete</div>
+      </div>
+      <div style="height:18px;background:#f1f5f9;border-radius:9px;overflow:hidden;margin-bottom:18px;">
+        <div style="width:58%;height:100%;background:linear-gradient(90deg,#0ea5e9,#1e40af);"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr;gap:8px;">
+
+        <div style="display:flex;align-items:center;gap:14px;padding:11px 14px;background:#10b98115;border-radius:6px;">
+          <div style="width:22px;height:22px;border-radius:50%;background:#10b981;color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">✓</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:600;color:#0f172a;">Pre-flight checks</div>
+            <div style="font-size:10px;color:#64748b;">12s ago</div>
+          </div>
+          <span style="font-size:10px;padding:3px 8px;background:#10b981;color:#ffffff;border-radius:9999px;font-weight:700;">OK</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:11px 14px;background:#10b98115;border-radius:6px;">
+          <div style="width:22px;height:22px;border-radius:50%;background:#10b981;color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">✓</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:600;color:#0f172a;">Snapshot all running VMs</div>
+            <div style="font-size:10px;color:#64748b;">8s ago</div>
+          </div>
+          <span style="font-size:10px;padding:3px 8px;background:#10b981;color:#ffffff;border-radius:9999px;font-weight:700;">OK</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:11px 14px;background:#10b98115;border-radius:6px;">
+          <div style="width:22px;height:22px;border-radius:50%;background:#10b981;color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">✓</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:600;color:#0f172a;">Migrate VMs to backup node</div>
+            <div style="font-size:10px;color:#64748b;">5s ago</div>
+          </div>
+          <span style="font-size:10px;padding:3px 8px;background:#10b981;color:#ffffff;border-radius:9999px;font-weight:700;">OK</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:11px 14px;background:#1d4ed815;border-radius:6px;">
+          <div style="width:22px;height:22px;border-radius:50%;background:#1d4ed8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">●</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:600;color:#0f172a;">Install v1.4.4 on node-01</div>
+            <div style="font-size:10px;color:#64748b;">now &#xB7; 1m 14s</div>
+          </div>
+          <span style="font-size:10px;padding:3px 8px;background:#1d4ed8;color:#ffffff;border-radius:9999px;font-weight:700;">RUNNING</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:11px 14px;background:#f8fafc;border-radius:6px;">
+          <div style="width:22px;height:22px;border-radius:50%;background:#94a3b8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">5</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:600;color:#0f172a;">CARP failover test</div>
+            <div style="font-size:10px;color:#64748b;">starts when above finishes</div>
+          </div>
+          <span style="font-size:10px;padding:3px 8px;background:#94a3b8;color:#ffffff;border-radius:9999px;font-weight:700;">PENDING</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:11px 14px;background:#f8fafc;border-radius:6px;">
+          <div style="width:22px;height:22px;border-radius:50%;background:#94a3b8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">6</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:600;color:#0f172a;">Install v1.4.4 on node-02</div>
+            <div style="font-size:10px;color:#64748b;">queued</div>
+          </div>
+          <span style="font-size:10px;padding:3px 8px;background:#94a3b8;color:#ffffff;border-radius:9999px;font-weight:700;">PENDING</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:11px 14px;background:#f8fafc;border-radius:6px;">
+          <div style="width:22px;height:22px;border-radius:50%;background:#94a3b8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">7</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:600;color:#0f172a;">Rebalance + validation</div>
+            <div style="font-size:10px;color:#64748b;">queued</div>
+          </div>
+          <span style="font-size:10px;padding:3px 8px;background:#94a3b8;color:#ffffff;border-radius:9999px;font-weight:700;">PENDING</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+      <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:18px;">
+        <h4 style="margin:0 0 12px;font-size:13px;font-weight:600;">Live log</h4>
+        <div style="font-family:monospace;font-size:10px;color:#475569;line-height:1.6;background:#f8fafc;padding:12px;border-radius:5px;max-height:200px;overflow:auto;">
+          <div><span style="color:#475569;">17:30:12</span> <span style="color:#64748b;font-weight:700;">INFO</span> <span style="color:#334155;">starting v1.4.4 upgrade</span></div>
+          <div><span style="color:#475569;">17:30:14</span> <span style="color:#64748b;font-weight:700;">INFO</span> <span style="color:#334155;">running pre-flight on node-01</span></div>
+          <div><span style="color:#475569;">17:30:18</span> <span style="color:#64748b;font-weight:700;">INFO</span> <span style="color:#334155;">pre-flight passed</span></div>
+          <div><span style="color:#475569;">17:30:25</span> <span style="color:#64748b;font-weight:700;">INFO</span> <span style="color:#334155;">snapshotting 62 VMs (storage 41.2 GB)</span></div>
+          <div><span style="color:#475569;">17:30:42</span> <span style="color:#64748b;font-weight:700;">INFO</span> <span style="color:#334155;">all snapshots completed in 17s</span></div>
+          <div><span style="color:#475569;">17:30:42</span> <span style="color:#64748b;font-weight:700;">INFO</span> <span style="color:#334155;">migrating VMs to node-02</span></div>
+          <div><span style="color:#475569;">17:31:08</span> <span style="color:#64748b;font-weight:700;">INFO</span> <span style="color:#334155;">62 of 62 migrated in 26s</span></div>
+          <div><span style="color:#475569;">17:31:18</span> <span style="color:#64748b;font-weight:700;">INFO</span> <span style="color:#334155;">starting CARP demote</span></div>
+          <div><span style="color:#475569;">17:31:25</span> <span style="color:#64748b;font-weight:700;">INFO</span> <span style="color:#334155;">node-02 is now master (VIP 10.0.10.50 moved)</span></div>
+          <div><span style="color:#475569;">17:31:42</span> <span style="color:#64748b;font-weight:700;">INFO</span> <span style="color:#334155;">downloading v1.4.4 release tarball (4.2 GB)</span></div>
+          <div><span style="color:#475569;">17:31:48</span> <span style="color:#64748b;font-weight:700;">INFO</span> <span style="color:#334155;">verifying SHA512 signature</span></div>
+          <div><span style="color:#475569;">17:32:14</span> <span style="color:#64748b;font-weight:700;">INFO</span> <span style="color:#334155;">extracting tarball</span></div>
+          <div><span style="color:#475569;">17:32:25</span> <span style="color:#64748b;font-weight:700;">INFO</span> <span style="color:#334155;">stopping cloudbsd service on node-01</span></div>
+          <div><span style="color:#475569;">17:32:28</span> <span style="color:#64748b;font-weight:700;">INFO</span> <span style="color:#334155;">running migration scripts...</span></div>
+          <div><span style="color:#475569;">17:32:38</span> <span style="color:#64748b;font-weight:700;">INFO</span> <span style="color:#334155;">plugin manifest v2 migration: 4 plugins</span></div>
+          <div><span style="color:#475569;">17:34:02</span> <span style="color:#64748b;font-weight:700;">INFO</span> <span style="color:#334155;">starting cloudbsd service on node-01</span></div>
+          <div><span style="color:#475569;">17:34:14</span> <span style="color:#64748b;font-weight:700;">INFO</span> <span style="color:#334155;">running post-upgrade validations</span></div>
+          <div><span style="color:#475569;">17:35:01</span> <span style="color:#64748b;font-weight:700;">INFO</span> <span style="color:#334155;">API reconnected</span></div>
+          <div><span style="color:#475569;">17:35:14</span> <span style="color:#d97706;font-weight:700;">WARN</span> <span style="color:#334155;">plugin 'smtp-notifier' deprecated, will update later</span></div>
+          <div><span style="color:#475569;">17:36:02</span> <span style="color:#64748b;font-weight:700;">INFO</span> <span style="color:#334155;">node-01 ready for failover back</span></div>
+
+        </div>
+      </div>
+
+      <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:18px;">
+        <h4 style="margin:0 0 12px;font-size:13px;font-weight:600;">Rollback plan</h4>
+        <div style="padding:12px;background:#fef2f2;border:1px solid #fecaca;border-radius:5px;font-size:11px;color:#b91c1c;margin-bottom:10px;">
+          <strong>Auto-rollback triggers</strong>:
+          <div>&#xB7; API returns 5xx for 60s</div>
+          <div>&#xB7; 3+ VMs fail to migrate back</div>
+          <div>&#xB7; CARP split-brain detected</div>
+          <div>&#xB7; ZFS pool import fails</div>
+        </div>
+        <div style="font-size:11px;color:#475569;line-height:1.6;">
+          If something goes wrong, the upgrade will auto-rollback to v1.4.3 within 2 minutes. Snapshots preserved for manual rollback up to 7d.
+        </div>
+        <button style="width:100%;margin-top:14px;padding:10px;font-size:11px;font-weight:600;border:1px solid #fecaca;border-radius:5px;background:#fef2f2;color:#b91c1c;">Force stop and rollback</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </foreignObject>
+</svg>

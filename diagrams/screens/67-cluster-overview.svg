@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 720" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Cluster Overview</title>
+  <foreignObject x="0" y="0" width="1280" height="720">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:720px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+      
+<div style="padding:24px 32px;height:100%;box-sizing:border-box;">
+  <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:18px;">
+    <div>
+      <h2 style="margin:0;font-size:18px;font-weight:700;">Cluster overview</h2>
+      <p style="margin:4px 0 0;color:#64748b;font-size:12px;">prod-cluster · 3 nodes · 99.98% uptime (90d)</p>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button style="padding:7px 12px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;">View cluster log</button>
+      <button style="padding:7px 12px;font-size:11px;font-weight:600;border:none;border-radius:5px;background:#1d4ed8;color:#ffffff;">+ Add node</button>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:18px;">
+
+    <div style="position:relative;background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:18px;">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div>
+          <div style="font-size:14px;font-weight:700;color:#0f172a;">node-01</div>
+          <div style="font-size:10px;color:#64748b;">i9-13900K + RTX 4090</div>
+        </div>
+        <span style="font-size:9px;padding:2px 7px;background:#10b98115;color:#10b981;border-radius:3px;font-weight:700;">MASTER</span>
+      </div>
+      <div style="margin-top:10px;display:flex;justify-content:space-between;">
+        <div style="text-align:center;flex:1;">
+          <div style="font-size:9px;color:#64748b;text-transform:uppercase;">CPU</div>
+          <div style="font-size:18px;font-weight:700;color:#0f172a;">23%</div>
+        </div>
+        <div style="text-align:center;flex:1;">
+          <div style="font-size:9px;color:#64748b;text-transform:uppercase;">RAM</div>
+          <div style="font-size:18px;font-weight:700;color:#0f172a;">62%</div>
+        </div>
+      </div>
+      <div style="margin-top:8px;">
+        <div style="height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div style="width:23%;height:100%;background:linear-gradient(90deg,#0ea5e9,#1e40af);"></div></div>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#475569;">
+        <div>Up: <strong>12d 04:18</strong></div>
+        <div>Storage: 92 GB used of 220</div>
+      </div>
+      <div style="margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:10px;color:#64748b;">
+        <span style="display:flex;align-items:center;gap:4px;"><div style="width:6px;height:6px;border-radius:50%;background:#10b981;"></div>online</span>
+        <span>CARP 50</span>
+      </div>
+    </div>
+    <div style="position:relative;background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:18px;">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div>
+          <div style="font-size:14px;font-weight:700;color:#0f172a;">node-02</div>
+          <div style="font-size:10px;color:#64748b;">Xeon w7-3465X</div>
+        </div>
+        <span style="font-size:9px;padding:2px 7px;background:#10b98115;color:#10b981;border-radius:3px;font-weight:700;">BACKUP</span>
+      </div>
+      <div style="margin-top:10px;display:flex;justify-content:space-between;">
+        <div style="text-align:center;flex:1;">
+          <div style="font-size:9px;color:#64748b;text-transform:uppercase;">CPU</div>
+          <div style="font-size:18px;font-weight:700;color:#0f172a;">47%</div>
+        </div>
+        <div style="text-align:center;flex:1;">
+          <div style="font-size:9px;color:#64748b;text-transform:uppercase;">RAM</div>
+          <div style="font-size:18px;font-weight:700;color:#0f172a;">41%</div>
+        </div>
+      </div>
+      <div style="margin-top:8px;">
+        <div style="height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div style="width:47%;height:100%;background:linear-gradient(90deg,#0ea5e9,#1e40af);"></div></div>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#475569;">
+        <div>Up: <strong>8d 14:42</strong></div>
+        <div>Storage: 1.8 TB used of 8</div>
+      </div>
+      <div style="margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:10px;color:#64748b;">
+        <span style="display:flex;align-items:center;gap:4px;"><div style="width:6px;height:6px;border-radius:50%;background:#10b981;"></div>online</span>
+        <span>CARP 50</span>
+      </div>
+    </div>
+    <div style="position:relative;background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:18px;">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div>
+          <div style="font-size:14px;font-weight:700;color:#0f172a;">node-03</div>
+          <div style="font-size:10px;color:#64748b;">EPYC 9554 + A6000x2</div>
+        </div>
+        <span style="font-size:9px;padding:2px 7px;background:#10b98115;color:#10b981;border-radius:3px;font-weight:700;">WORKER</span>
+      </div>
+      <div style="margin-top:10px;display:flex;justify-content:space-between;">
+        <div style="text-align:center;flex:1;">
+          <div style="font-size:9px;color:#64748b;text-transform:uppercase;">CPU</div>
+          <div style="font-size:18px;font-weight:700;color:#0f172a;">62%</div>
+        </div>
+        <div style="text-align:center;flex:1;">
+          <div style="font-size:9px;color:#64748b;text-transform:uppercase;">RAM</div>
+          <div style="font-size:18px;font-weight:700;color:#0f172a;">78%</div>
+        </div>
+      </div>
+      <div style="margin-top:8px;">
+        <div style="height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div style="width:62%;height:100%;background:linear-gradient(90deg,#0ea5e9,#1e40af);"></div></div>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#475569;">
+        <div>Up: <strong>14d 22:11</strong></div>
+        <div>Storage: 2.1 TB used of 4</div>
+      </div>
+      <div style="margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:10px;color:#64748b;">
+        <span style="display:flex;align-items:center;gap:4px;"><div style="width:6px;height:6px;border-radius:50%;background:#10b981;"></div>online</span>
+        <span>CARP 50</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:20px;margin-bottom:14px;">
+    <h4 style="margin:0 0 16px;font-size:13px;font-weight:700;">Network topology</h4>
+    <div style="position:relative;height:180px;display:flex;align-items:center;justify-content:space-around;">
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;">CARP</div>
+        <div style="margin-top:8px;font-size:11px;color:#0f172a;font-weight:600;">VIP 10.0.10.50</div>
+      </div>
+      <!-- connections (3 lines to 3 nodes) -->
+      <svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;">
+        <line x1="640" y1="90" x2="240" y2="50" stroke="#10b981" stroke-width="2" stroke-dasharray="0"/>
+        <line x1="640" y1="90" x2="640" y2="50" stroke="#10b981" stroke-width="2" stroke-dasharray="0"/>
+        <line x1="640" y1="90" x2="1040" y2="50" stroke="#10b981" stroke-width="2" stroke-dasharray="0"/>
+      </svg>
+      <!-- 3 nodes -->
+      <div style="position:absolute;left:18%;top:30px;text-align:center;">
+        <div style="width:70px;height:70px;border-radius:8px;background:#0f172a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">node-01</div>
+        <div style="margin-top:6px;font-size:10px;color:#475569;">MASTER</div>
+        <div style="font-size:9px;color:#10b981;">10.0.10.42</div>
+      </div>
+      <div style="position:absolute;left:46%;top:30px;text-align:center;">
+        <div style="width:70px;height:70px;border-radius:8px;background:#1e293b;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">node-02</div>
+        <div style="margin-top:6px;font-size:10px;color:#475569;">BACKUP</div>
+        <div style="font-size:9px;color:#10b981;">10.0.10.43</div>
+      </div>
+      <div style="position:absolute;right:18%;top:30px;text-align:center;">
+        <div style="width:70px;height:70px;border-radius:8px;background:#1e293b;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">node-03</div>
+        <div style="margin-top:6px;font-size:10px;color:#475569;">WORKER</div>
+        <div style="font-size:9px;color:#10b981;">10.0.10.44</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+    <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:14px;">
+      <div style="font-size:11px;color:#64748b;">VMs (running)</div>
+      <div style="font-size:24px;font-weight:700;color:#10b981;">62</div>
+      <div style="font-size:10px;color:#64748b;">of 84 (max)</div>
+    </div>
+    <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:14px;">
+      <div style="font-size:11px;color:#64748b;">Containers</div>
+      <div style="font-size:24px;font-weight:700;color:#0ea5e9;">14</div>
+      <div style="font-size:10px;color:#64748b;">12 running</div>
+    </div>
+    <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:14px;">
+      <div style="font-size:11px;color:#64748b;">Datasets</div>
+      <div style="font-size:24px;font-weight:700;color:#1d4ed8;">196</div>
+      <div style="font-size:10px;color:#64748b;">12 TB total</div>
+    </div>
+    <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:14px;">
+      <div style="font-size:11px;color:#64748b;">Scrub health</div>
+      <div style="font-size:24px;font-weight:700;color:#10b981;">100%</div>
+      <div style="font-size:10px;color:#64748b;">last: 7d ago</div>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </foreignObject>
+</svg>

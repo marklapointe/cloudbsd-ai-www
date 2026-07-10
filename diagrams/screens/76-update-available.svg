@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 720" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Update Available</title>
+  <foreignObject x="0" y="0" width="1280" height="720">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:720px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+      
+<div style="padding:24px 32px;height:100%;box-sizing:border-box;">
+  <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:18px;">
+    <div>
+      <h2 style="margin:0;font-size:18px;font-weight:700;">System updates</h2>
+      <p style="margin:4px 0 0;color:#64748b;font-size:12px;">CloudBSD v1.4.3 &#x2192; <span style="color:#1d4ed8;font-weight:600;">v1.4.4 available</span></p>
+    </div>
+    <div style="font-size:11px;color:#64748b;">Released 2026-07-04 &#xB7; 14d ago</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:3fr 2fr;gap:14px;">
+    <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:24px;">
+      <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:16px;">
+        <div>
+          <h3 style="margin:0;font-size:18px;font-weight:700;">v1.4.4 &#x2014; <span style="color:#0f172a;">"Serene Sloth"</span></h3>
+          <div style="margin-top:4px;font-size:12px;color:#475569;">Released 2026-07-04 by <strong style="color:#1d4ed8;">@cloudbsd/release-team</strong></div>
+        </div>
+        <span style="font-size:10px;padding:4px 10px;background:#d1fae5;color:#065f46;border-radius:9999px;font-weight:700;">STABLE</span>
+      </div>
+
+      <h4 style="margin:18px 0 8px;font-size:13px;font-weight:700;">Highlights</h4>
+      <ul style="margin:0 0 18px;font-size:12px;color:#475569;line-height:1.7;padding-left:18px;">
+        <li><strong style="color:#0f172a;">vGPU MIG slicing</strong>: A100 MIG profiles with hot-swap support (12 new profiles)</li>
+        <li><strong style="color:#0f172a;">Plugin marketplace v2</strong>: signed manifests, version pinning, automatic updates</li>
+        <li><strong style="color:#0f172a;">Snapshot HA</strong>: cross-node snapshot replication with eventual 99.9999% durability</li>
+        <li><strong style="color:#0f172a;">Audit log search</strong>: full-text +amp; regex on 180-day retained history</li>
+        <li><strong style="color:#0f172a;">CPU hot-add</strong>: add vCPU to running VM without restart (Linux guests)</li>
+      </ul>
+
+      <h4 style="margin:14px 0 8px;font-size:13px;font-weight:700;">Breaking changes</h4>
+      <div style="font-size:12px;color:#475569;line-height:1.6;">
+        <div style="padding:8px 12px;background:#fef3c7;border-left:3px solid #f59e0b;border-radius:4px;margin-bottom:6px;">
+          <strong style="color:#92400e;">plugin.manifest v1</strong> now rejects unsigned manifests. Migrate to v2 before Aug 1.
+        </div>
+        <div style="padding:8px 12px;background:#fef3c7;border-left:3px solid #f59e0b;border-radius:4px;">
+          <strong style="color:#92400e;">api/vms list</strong> cursor field renamed &#x2192; next_page_token. Old clients keep working until v1.5.0.
+        </div>
+      </div>
+
+      <h4 style="margin:18px 0 10px;font-size:13px;font-weight:700;">Changelog</h4>
+      <div style="font-family:monospace;font-size:11px;color:#475569;line-height:1.7;background:#f8fafc;padding:14px;border-radius:6px;max-height:240px;overflow:auto;">
+        <div style="color:#10b981;">+ feat(vgpu): A100 MIG profiles with 12 new profile types</div>
+        <div style="color:#10b981;">+ feat(plugins): signed manifests with version pinning</div>
+        <div style="color:#10b981;">+ feat(snapshot): cross-node replication for 99.9999% durability</div>
+        <div style="color:#10b981;">+ feat(audit): full-text +amp; regex search on history</div>
+        <div style="color:#10b981;">+ feat(vm): CPU hot-add for Linux guests</div>
+        <div style="color:#ef4444;">- feat(api): deprecated cursor field in /vms list response</div>
+        <div style="color:#94a3b8;">~ chore(build): move to Bazel 7.0 from 6.4</div>
+        <div style="color:#d97706;">! fix(bhyve): VM crash on hot-unplug disk after 30d uptime</div>
+        <div style="color:#d97706;">! fix(zfs): scrub pause state lost on failover (PR #4821)</div>
+        <div style="color:#d97706;">! fix(carper): demote race when two nodes boot simultaneously</div>
+        <div style="color:#d97706;">! fix(ui): settings &gt; security tab broken on Firefox 126</div>
+        <div style="color:#1d4ed8;">i docs: update plugin migration guide for v2</div>
+      </div>
+    </div>
+
+    <div>
+      <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:18px;margin-bottom:14px;">
+        <h4 style="margin:0 0 12px;font-size:13px;font-weight:700;">Install options</h4>
+        <div style="padding:10px 12px;background:#eff6ff;border-radius:5px;margin-bottom:8px;cursor:pointer;border:1px solid #1d4ed8;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-size:12px;font-weight:600;color:#1d4ed8;">Rolling upgrade</div>
+              <div style="font-size:10px;color:#475569;">VMs migrate &#xB7; zero downtime</div>
+            </div>
+            <div style="width:14px;height:14px;border-radius:50%;background:#1d4ed8;"></div>
+          </div>
+        </div>
+        <div style="padding:10px 12px;background:#f8fafc;border-radius:5px;margin-bottom:8px;cursor:pointer;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-size:12px;font-weight:600;color:#0f172a;">All at once</div>
+              <div style="font-size:10px;color:#475569;">~5 min downtime &#xB7; faster</div>
+            </div>
+            <div style="width:14px;height:14px;border-radius:50%;background:#cbd5e1;"></div>
+          </div>
+        </div>
+        <div style="padding:10px 12px;background:#f8fafc;border-radius:5px;cursor:pointer;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-size:12px;font-weight:600;color:#0f172a;">Stage only (download)</div>
+              <div style="font-size:10px;color:#475569;">Install later from CLI</div>
+            </div>
+            <div style="width:14px;height:14px;border-radius:50%;background:#cbd5e1;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:18px;">
+        <h4 style="margin:0 0 12px;font-size:13px;font-weight:700;color:#1d4ed8;">Estimated impact</h4>
+        <div style="font-size:11px;color:#1e40af;line-height:1.7;">
+          <div>Download size: <strong>4.2 GB</strong></div>
+          <div>Estimated time: <strong>18 minutes</strong></div>
+          <div>VMs migrated: <strong>62 of 62</strong></div>
+          <div>CARP failover count: <strong>3 expected</strong></div>
+          <div>Data loss risk: <strong>none</strong> (ZFS replication +amp; snapshots)</div>
+        </div>
+      </div>
+
+      <button style="width:100%;margin-top:14px;padding:14px;font-size:14px;font-weight:600;border:none;border-radius:6px;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;cursor:pointer;">Install v1.4.4 now</button>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </foreignObject>
+</svg>

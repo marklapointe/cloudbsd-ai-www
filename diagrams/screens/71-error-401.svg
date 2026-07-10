@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 720" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Error 401</title>
+  <foreignObject x="0" y="0" width="1280" height="720">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:720px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+      
+<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:60px;text-align:center;">
+  <div style="font-family:monospace;font-size:140px;font-weight:900;color:#f59e0b;letter-spacing:-0.04em;line-height:0.95;margin-bottom:18px;">401</div>
+  <div style="display:inline-block;padding:5px 12px;background:#f59e0b15;color:#f59e0b;border-radius:9999px;font-size:11px;font-weight:700;letter-spacing:0.06em;margin-bottom:14px;">UNAUTHORIZED</div>
+  <h1 style="margin:0 0 14px;font-size:24px;font-weight:700;color:#0f172a;">Sign-in required</h1>
+  <p style="margin:0 0 6px;font-size:14px;color:#475569;max-width:560px;line-height:1.55;">You need to sign in to access this page. Your session may have expired or this resource requires authentication.</p>
+  <p style="margin:6px 0 0;font-family:monospace;font-size:11px;color:#94a3b8;background:#f1f5f9;padding:6px 12px;border-radius:5px;">code: AUTH_REQUIRED · req-id: req-7h2p4k9w · 17:32:18 UTC</p>
+  <div style="margin-top:32px;display:flex;gap:10px;"><button style="padding:11px 22px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:#1d4ed8;color:#ffffff;cursor:pointer;">Sign in</button><button style="padding:11px 22px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;cursor:pointer;">Use recovery code</button><button style="padding:11px 22px;font-size:13px;border:none;border-radius:6px;background:transparent;color:#64748b;cursor:pointer;text-decoration:underline;">Contact admin</button></div>
+</div>
+
+    </div>
+  </foreignObject>
+</svg>

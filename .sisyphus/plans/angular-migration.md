@@ -9262,6 +9262,39 @@ grep -rE 'class="[^"]*\b(bg-|text-|p-[0-9]|m-[0-9]|w-[0-9]|h-[0-9]|flex|grid|rou
     - All 9 list views now support all 3 density modes (Cozy | Compact | Extra)
   - T94g (NEW 2026-07-09): ✅ Empty-state canonical SVGs
 
+  - T95 (NEW 2026-07-09): Auth flow UI mockups:
+    - `diagrams/screens/51-login.svg` (3.8 KB) — PAM auth form
+    - `diagrams/screens/52-two-factor-setup.svg` (32.8 KB) — TOTP setup w/ QR code
+    - `diagrams/screens/53-password-reset.svg` (3.0 KB) — recovery email flow
+    - `diagrams/screens/54-account-locked.svg` (2.9 KB) — lockout notice
+  - T96 (NEW 2026-07-09): Onboarding wizard (4-step):
+    - `diagrams/screens/56-onboarding-welcome.svg` (4.8 KB) — step 1 intro
+    - `diagrams/screens/57-onboarding-cluster-join.svg` (5.6 KB) — step 3 form
+    - `diagrams/screens/58-onboarding-complete.svg` (3.5 KB) — step 4 success
+  - T97 (NEW 2026-07-09): Settings suite (6 sub-pages, all using common sidebar pattern):
+    - `60-settings-general.svg` (9.8 KB) — cluster identity, locale, NTP
+    - `61-settings-account.svg` (10.0 KB) — profile + change password
+    - `62-settings-security.svg` (11.0 KB) — 2FA status, sessions, recovery codes
+    - `63-settings-appearance.svg` (13.5 KB) — 4-theme grid + density + fonts
+    - `64-settings-api-keys.svg` (12.4 KB) — table of 6 personal access tokens
+    - `65-settings-webhooks.svg` (10.7 KB) — 4 outbound webhook cards
+  - T98 (NEW 2026-07-09): Themes browser + cluster overview + monitoring:
+    - `66-themes-browser.svg` (15.0 KB) — 12 themes in 4-col grid + detail right column
+    - `67-cluster-overview.svg` (10.9 KB) — 3-node topology + 4 stat cards
+    - `68-monitoring-dashboard.svg` (19.2 KB) — 3 time-series graphs (CPU/RAM/NET) + top consumers + P50/P99 latency
+  - T99 (NEW 2026-07-09): Network IP pools + Backup detail:
+    - `69-network-ip-pools.svg` (11.2 KB) — 7 IP pools with allocation bars
+    - `70-backup-detail.svg` (15.2 KB) — backup #148 detail + restore wizard
+  - T100 (NEW 2026-07-09): Error pages (5 standard + 2 update flow):
+    - `71-error-401.svg` (2.2 KB) — Unauthorized w/ recovery options
+    - `72-error-403.svg` (2.2 KB) — Forbidden w/ permission details
+    - `73-error-404.svg` (2.2 KB) — Not Found w/ trail of breadcrumbs
+    - `74-error-500.svg` (2.3 KB) — Internal Server Error w/ incident ref
+    - `75-error-503-maintenance.svg` (2.3 KB) — rolling-upgrade ETA shown
+    - `76-update-available.svg` (7.6 KB) — release notes + install options
+    - `77-update-progress.svg` (12.2 KB) — 7-stage progress bar + live log
+
+
   - T94h (NEW 2026-07-09): ✅ Per-page selector + pagination footer added to 4 list screens (was missing):
     - `diagrams/screens/03-containers.svg` (84 total, 50/page, 5-page nav)
     - `diagrams/screens/04-jails.svg` (48 total, 50/page, 1-page nav)

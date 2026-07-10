@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 720" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Onboarding Complete</title>
+  <foreignObject x="0" y="0" width="1280" height="720">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:720px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+      
+<div style="display:flex;flex-direction:column;height:100%;padding:60px;text-align:center;align-items:center;justify-content:center;">
+  <div style="width:96px;height:96px;border-radius:50%;background:#d1fae5;color:#10b981;display:inline-flex;align-items:center;justify-content:center;font-size:50px;margin-bottom:24px;">✓</div>
+  <h1 style="margin:0 0 10px;font-size:32px;font-weight:800;color:#0f172a;">Your cluster is ready</h1>
+  <p style="margin:0 0 36px;font-size:15px;color:#64748b;">node-02 joined prod-cluster. All 4 required checks passed. CARP replication active.</p>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:780px;margin-bottom:32px;">
+    <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:16px;">
+      <div style="font-size:22px;margin-bottom:6px;">⦿</div>
+      <div style="font-size:24px;font-weight:700;color:#0f172a;">3</div>
+      <div style="font-size:11px;color:#64748b;">nodes</div>
+    </div>
+    <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:16px;">
+      <div style="font-size:22px;margin-bottom:6px;">⌗</div>
+      <div style="font-size:24px;font-weight:700;color:#0f172a;">62</div>
+      <div style="font-size:11px;color:#64748b;">VMs ready to start</div>
+    </div>
+    <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:16px;">
+      <div style="font-size:22px;margin-bottom:6px;">⌘</div>
+      <div style="font-size:24px;font-weight:700;color:#0f172a;">12 TB</div>
+      <div style="font-size:11px;color:#64748b;">ZFS pool</div>
+    </div>
+    <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:16px;">
+      <div style="font-size:22px;margin-bottom:6px;">⚡</div>
+      <div style="font-size:24px;font-weight:700;color:#10b981;">99.98%</div>
+      <div style="font-size:11px;color:#64748b;">predicted uptime</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;">
+    <button style="padding:12px 24px;font-size:14px;font-weight:600;border:none;border-radius:6px;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;cursor:pointer;">Go to dashboard →</button>
+    <button style="padding:12px 24px;font-size:14px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;cursor:pointer;">View tour</button>
+    <button style="padding:12px 24px;font-size:14px;border:none;border-radius:6px;background:transparent;color:#64748b;cursor:pointer;text-decoration:underline;">Skip tour</button>
+  </div>
+  <div style="margin-top:32px;padding:14px 18px;background:#f8fafc;border-radius:6px;font-size:11px;color:#475569;max-width:520px;">
+    <strong>Tip</strong>: Install the <a style="color:#1d4ed8;text-decoration:none;">CloudBSD cli</a> or check the <a style="color:#1d4ed8;text-decoration:none;">docs</a> for advanced config (CARP weights, ZFS send/receive, vGPU slicing).
+  </div>
+</div>
+
+    </div>
+  </foreignObject>
+</svg>
