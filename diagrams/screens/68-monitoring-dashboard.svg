@@ -24,7 +24,7 @@
         <div style="font-size:10px;color:#10b981;font-weight:600;">▼ 4% vs avg</div>
       </div>
       
-<svg style="background:#f8fafc;border-radius:6px;" width="420" height="220" viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg" style="background:#f8fafc;border-radius:6px;" width="420" height="220" viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg">
   <!-- axis -->
   <line x1="40" y1="190" x2="405" y2="190" stroke="#e2e8f0" stroke-width="1"/>
   <line x1="40" y1="20" x2="40" y2="190" stroke="#e2e8f0" stroke-width="1"/>
@@ -46,7 +46,7 @@
         <div style="font-size:10px;color:#d97706;font-weight:600;">▲ 2% vs avg</div>
       </div>
       
-<svg style="background:#f8fafc;border-radius:6px;" width="420" height="220" viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg" style="background:#f8fafc;border-radius:6px;" width="420" height="220" viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg">
   <!-- axis -->
   <line x1="40" y1="190" x2="405" y2="190" stroke="#e2e8f0" stroke-width="1"/>
   <line x1="40" y1="20" x2="40" y2="190" stroke="#e2e8f0" stroke-width="1"/>
@@ -68,7 +68,7 @@
         <div style="font-size:10px;color:#10b981;font-weight:600;">▼ stable</div>
       </div>
       
-<svg style="background:#f8fafc;border-radius:6px;" width="420" height="220" viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg" style="background:#f8fafc;border-radius:6px;" width="420" height="220" viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg">
   <!-- axis -->
   <line x1="40" y1="190" x2="405" y2="190" stroke="#e2e8f0" stroke-width="1"/>
   <line x1="40" y1="20" x2="40" y2="190" stroke="#e2e8f0" stroke-width="1"/>

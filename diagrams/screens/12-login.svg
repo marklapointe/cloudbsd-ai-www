@@ -53,7 +53,7 @@
         </div>
         <div style="width:480px;background:linear-gradient(135deg,#1e40af 0%,#0f172a 100%);padding:60px 48px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;">
           <div style="position:absolute;inset:0;opacity:0.15;">
-            <svg viewBox="0 0 480 800" preserveAspectRatio="none" style="width:100%;height:100%;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 800" preserveAspectRatio="none" style="width:100%;height:100%;">
               <circle cx="80" cy="100" r="100" fill="none" stroke="#60a5fa" stroke-width="1"/>
               <circle cx="380" cy="250" r="70" fill="none" stroke="#60a5fa" stroke-width="1"/>
               <circle cx="180" cy="500" r="120" fill="none" stroke="#60a5fa" stroke-width="1"/>

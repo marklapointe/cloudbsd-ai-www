@@ -58,7 +58,7 @@
             <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
                 <span style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">CPU Usage</span>
-                <svg viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
                   <polyline points="0,7.8 5,9.399999999999999 10,8.6 15,11.0 20,10.2 25,11.8 30,10.6 35,12.6 40,11.4 45,12.2 50,13.4 55,11.8 60,13.0" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-linejoin="round"/>
                 </svg>
               </div>
@@ -75,7 +75,7 @@
             <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
                 <span style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">Memory</span>
-                <svg viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
                   <polyline points="0,6.199999999999999 5,5.399999999999999 10,4.6 15,3.799999999999999 20,3.0 25,2.1999999999999993 30,1.3999999999999986 35,0.5999999999999996 40,-0.20000000000000107 45,-1.0 50,-1.4000000000000021 55,-1.8000000000000007 60,-1.8000000000000007" fill="none" stroke="#059669" stroke-width="1.5" stroke-linejoin="round"/>
                 </svg>
               </div>
@@ -92,7 +92,7 @@
             <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
                 <span style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">Disk I/O</span>
-                <svg viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
                   <polyline points="0,-33.0 5,-57.0 10,-69.0 15,-83.0 20,-97.0 25,-89.0 30,-83.0 35,-77.0 40,-69.0 45,-63.0 50,-57.0 55,-51.0 60,-45.0" fill="none" stroke="#d97706" stroke-width="1.5" stroke-linejoin="round"/>
                 </svg>
               </div>
@@ -109,7 +109,7 @@
             <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
                 <span style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">Network</span>
-                <svg viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
                   <polyline points="0,-9.0 5,-11.0 10,-13.0 15,-15.0 20,-17.0 25,-19.0 30,-19.4 35,-18.6 40,-17.800000000000004 45,-17.0 50,-16.200000000000003 55,-15.0 60,-13.0" fill="none" stroke="#9333ea" stroke-width="1.5" stroke-linejoin="round"/>
                 </svg>
               </div>
@@ -126,7 +126,7 @@
             <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
                 <span style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">ZFS Health</span>
-                <svg viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
                   <polyline points="0,14.6 5,14.6 10,14.6 15,14.6 20,14.6 25,14.6 30,14.6 35,14.6 40,14.6 45,14.6 50,14.6 55,14.6 60,14.6" fill="none" stroke="#0891b2" stroke-width="1.5" stroke-linejoin="round"/>
                 </svg>
               </div>
@@ -143,7 +143,7 @@
             <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
                 <span style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">Memory Cache</span>
-                <svg viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
                   <polyline points="0,-17.0 5,-17.800000000000004 10,-18.6 15,-19.0 20,-19.4 25,-19.800000000000004 30,-19.800000000000004 35,-20.200000000000003 40,-19.800000000000004 45,-19.800000000000004 50,-20.200000000000003 55,-19.800000000000004 60,-19.800000000000004" fill="none" stroke="#be185d" stroke-width="1.5" stroke-linejoin="round"/>
                 </svg>
               </div>
@@ -160,7 +160,7 @@
             <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
                 <span style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">Load Average</span>
-                <svg viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
                   <polyline points="0,14.68 5,14.64 10,14.6 15,14.56 20,14.52 25,14.48 30,14.46 35,14.44 40,14.432 45,14.44 50,14.448 55,14.44 60,14.432" fill="none" stroke="#059669" stroke-width="1.5" stroke-linejoin="round"/>
                 </svg>
               </div>
@@ -177,7 +177,7 @@
             <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
                 <span style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">Process Count</span>
-                <svg viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 16" style="width:60px;height:16px;display:block;" preserveAspectRatio="none">
                   <polyline points="0,-97.0 5,-99.0 10,-101.0 15,-103.0 20,-105.0 25,-107.0 30,-108.2 35,-109.0 40,-109.4 45,-109.80000000000001 50,-109.80000000000001 55,-109.80000000000001 60,-109.80000000000001" fill="none" stroke="#4f46e5" stroke-width="1.5" stroke-linejoin="round"/>
                 </svg>
               </div>
