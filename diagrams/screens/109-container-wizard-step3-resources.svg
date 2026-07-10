@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Container Create Wizard — Step 3 of 4 — Resources</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">Create container</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Step 3 — Resources</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:11px;color:#64748b;">
+            Step 3 of 4 · ~1 min remaining
+            <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">✕ Cancel</button>
+          </div>
+        </div>
+
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">1. Image <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">2. Identity <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #1d4ed8;background:#1d4ed810;"><div style="width:20px;height:20px;border-radius:50%;background:#1d4ed8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">3</div><span style="font-size:11px;font-weight:600;color:#1d4ed8;">Resources</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">4</div><span style="font-size:11px;color:#475569;">Review</span></div>
+            <div style="flex:1;"></div>
+            <span style="font-size:10px;color:#16a34a;">2 of 4 complete</span>
+          </div>
+        </div>
+
+        <div style="flex:1;display:flex;background:#f1f5f9;overflow:hidden;">
+          <div style="flex:1;padding:28px 40px;overflow-y:auto;">
+
+            <h1 style="margin:0 0 4px;font-size:22px;font-weight:700;color:#0f172a;">CPU + memory</h1>
+            <p style="margin:0 0 20px;font-size:13px;color:#64748b;max-width:680px;line-height:1.55;">Hard limits kill the container if exceeded. Soft limits throttle it. Most apps need at least one hard limit to prevent runaway processes.</p>
+
+            <!-- CPU + Memory grid -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+              <div style="padding:18px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="font-size:13px;font-weight:600;color:#0f172a;margin-bottom:12px;">CPU</div>
+                <table style="width:100%;font-size:11px;margin-bottom:10px;">
+                  <tr>
+                    <td style="padding:4px 0;color:#64748b;width:30%;">Hard limit</td>
+                    <td><div style="display:flex;align-items:center;gap:4px;"><input value="2.0" style="width:60px;height:26px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:12px;text-align:center;"/><span style="color:#475569;">cores</span></div></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:4px 0;color:#64748b;">Soft limit</td>
+                    <td><div style="display:flex;align-items:center;gap:4px;"><input value="1.0" style="width:60px;height:26px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:12px;text-align:center;"/><span style="color:#475569;">cores</span></div></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:4px 0;color:#64748b;">CPU set (affinity)</td>
+                    <td><input value="0-3" style="width:100px;height:26px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:12px;"/></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:4px 0;color:#64748b;">Shares (relative)</td>
+                    <td><input value="1024" style="width:80px;height:26px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:12px;"/></td>
+                  </tr>
+                </table>
+                <div style="font-size:10px;color:#94a3b8;line-height:1.4;">Hard = cgroup cpu.max. Soft = cpu.weight. CPU set = binding.</div>
+              </div>
+
+              <div style="padding:18px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="font-size:13px;font-weight:600;color:#0f172a;margin-bottom:12px;">Memory</div>
+                <table style="width:100%;font-size:11px;margin-bottom:10px;">
+                  <tr>
+                    <td style="padding:4px 0;color:#64748b;width:30%;">Hard limit</td>
+                    <td><div style="display:flex;align-items:center;gap:4px;"><input value="512" style="width:60px;height:26px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:12px;text-align:center;"/><select style="height:26px;border:1px solid #cbd5e1;border-radius:4px;padding:0 4px;font-size:11px;background:#ffffff;"><option selected="selected">MB</option><option>GB</option></select></div></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:4px 0;color:#64748b;">Soft limit</td>
+                    <td><div style="display:flex;align-items:center;gap:4px;"><input value="256" style="width:60px;height:26px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:12px;text-align:center;"/><span style="color:#475569;">MB</span></div></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:4px 0;color:#64748b;">Swap limit</td>
+                    <td><div style="display:flex;align-items:center;gap:4px;"><input value="0" style="width:60px;height:26px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:12px;text-align:center;"/><span style="color:#475569;">MB</span><span style="color:#94a3b8;font-size:10px;">(0 = no swap)</span></div></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:4px 0;color:#64748b;">OOM behavior</td>
+                    <td><select style="height:26px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-size:11px;background:#ffffff;"><option selected="selected">kill container</option><option>restart container</option></select></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <!-- Networking -->
+            <h2 style="margin:8px 0 12px;font-size:15px;font-weight:700;color:#0f172a;">Network</h2>
+            <div style="padding:14px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:18px;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Network mode</div>
+                  <select style="width:100%;height:32px;border:1px solid #cbd5e1;border-radius:5px;padding:0 10px;font-size:12px;background:#ffffff;">
+                    <option>none (no network)</option>
+                    <option selected="selected">bridge (default NAT)</option>
+                    <option>host (host network stack)</option>
+                    <option>container:&lt;id|name&gt;</option>
+                    <option>custom: cn0</option>
+                  </select>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">DNS policy</div>
+                  <select style="width:100%;height:32px;border:1px solid #cbd5e1;border-radius:5px;padding:0 10px;font-size:12px;background:#ffffff;">
+                    <option>inherit from host</option>
+                    <option selected="selected">cluster DNS (10.0.0.53)</option>
+                    <option>custom</option>
+                  </select>
+                </div>
+              </div>
+              <table style="width:100%;font-size:11px;border-collapse:collapse;">
+                <thead>
+                  <tr style="background:#f8fafc;border-bottom:1px solid #e2e8f0;">
+                    <th style="padding:6px;text-align:left;font-size:10px;font-weight:700;color:#64748b;letter-spacing:0.06em;">HOST PORT</th>
+                    <th style="padding:6px;text-align:left;font-size:10px;font-weight:700;color:#64748b;letter-spacing:0.06em;">CONTAINER PORT</th>
+                    <th style="padding:6px;text-align:left;font-size:10px;font-weight:700;color:#64748b;letter-spacing:0.06em;">PROTO</th>
+                    <th style="padding:6px;text-align:left;font-size:10px;font-weight:700;color:#64748b;letter-spacing:0.06em;">BIND</th>
+                    <th style="padding:6px;text-align:left;font-size:10px;font-weight:700;color:#64748b;letter-spacing:0.06em;">DESCRIPTION</th>
+                    <th style="width:30px;"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="padding:6px;"><input value="8080" style="width:80px;height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:12px;"/></td>
+                    <td style="padding:6px;"><input value="80" style="width:80px;height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:12px;"/></td>
+                    <td style="padding:6px;"><select style="height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 4px;font-size:11px;background:#ffffff;"><option selected="selected">tcp</option><option>udp</option></select></td>
+                    <td style="padding:6px;"><select style="height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 4px;font-size:11px;background:#ffffff;"><option>0.0.0.0</option><option selected="selected">127.0.0.1</option><option>10.0.0.0/24</option></select></td>
+                    <td style="padding:6px;font-size:11px;color:#475569;">HTTP (localhost-only)</td>
+                    <td style="padding:6px;"><button style="background:transparent;border:none;color:#dc2626;cursor:pointer;">✕</button></td>
+                  </tr>
+                </tbody>
+              </table>
+              <button style="margin-top:10px;padding:5px 12px;font-size:11px;border:1px dashed #cbd5e1;border-radius:4px;background:#f8fafc;color:#475569;cursor:pointer;">+ Add port mapping</button>
+            </div>
+
+            <!-- Volumes -->
+            <h2 style="margin:8px 0 12px;font-size:15px;font-weight:700;color:#0f172a;">Volumes &amp; mounts</h2>
+            <div style="padding:14px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+              <table style="width:100%;font-size:11px;border-collapse:collapse;margin-bottom:10px;">
+                <thead>
+                  <tr style="background:#f8fafc;border-bottom:1px solid #e2e8f0;">
+                    <th style="padding:6px;text-align:left;font-size:10px;font-weight:700;color:#64748b;letter-spacing:0.06em;">HOST SOURCE</th>
+                    <th style="padding:6px;text-align:left;font-size:10px;font-weight:700;color:#64748b;letter-spacing:0.06em;">CONTAINER TARGET</th>
+                    <th style="padding:6px;text-align:left;font-size:10px;font-weight:700;color:#64748b;letter-spacing:0.06em;">MODE</th>
+                    <th style="padding:6px;text-align:left;font-size:10px;font-weight:700;color:#64748b;letter-spacing:0.06em;">DESCRIPTION</th>
+                    <th style="width:30px;"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="padding:6px;"><input value="tank/web-nginx-01" style="width:100%;height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:11px;"/></td>
+                    <td style="padding:6px;"><input value="/usr/share/nginx/html" style="width:100%;height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:11px;"/></td>
+                    <td style="padding:6px;"><select style="height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 4px;font-size:11px;background:#ffffff;"><option>ro</option><option selected="selected">rw</option></select></td>
+                    <td style="padding:6px;font-size:11px;color:#475569;">Static content root</td>
+                    <td style="padding:6px;"><button style="background:transparent;border:none;color:#dc2626;cursor:pointer;">✕</button></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:6px;"><input value="tank/certs/lets-encrypt" style="width:100%;height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:11px;"/></td>
+                    <td style="padding:6px;"><input value="/etc/nginx/certs" style="width:100%;height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:11px;"/></td>
+                    <td style="padding:6px;"><select style="height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 4px;font-size:11px;background:#ffffff;"><option selected="selected">ro</option><option>rw</option></select></td>
+                    <td style="padding:6px;font-size:11px;color:#475569;">TLS certs (read-only)</td>
+                    <td style="padding:6px;"><button style="background:transparent;border:none;color:#dc2626;cursor:pointer;">✕</button></td>
+                  </tr>
+                </tbody>
+              </table>
+              <div style="display:flex;gap:10px;">
+                <button style="padding:5px 12px;font-size:11px;border:1px dashed #cbd5e1;border-radius:4px;background:#f8fafc;color:#475569;cursor:pointer;">+ Add bind mount</button>
+                <button style="padding:5px 12px;font-size:11px;border:1px dashed #cbd5e1;border-radius:4px;background:#f8fafc;color:#475569;cursor:pointer;">+ Add tmpfs</button>
+                <button style="padding:5px 12px;font-size:11px;border:1px dashed #cbd5e1;border-radius:4px;background:#f8fafc;color:#475569;cursor:pointer;">+ Mount volume</button>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="width:280px;padding:28px 24px;border-left:1px solid #e2e8f0;background:#ffffff;overflow-y:auto;">
+            <div style="padding:14px;background:#1d4ed810;border:1px solid #bfdbfe;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#1d4ed8;letter-spacing:0.06em;margin-bottom:6px;">RESOURCE SUMMARY</div>
+              <table style="width:100%;font-size:11px;color:#1e3a8a;">
+                <tr><td style="padding:3px 0;color:#64748b;">CPU hard</td><td style="text-align:right;font-weight:600;">2.0 cores</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">CPU soft</td><td style="text-align:right;font-weight:600;">1.0 core</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Mem hard</td><td style="text-align:right;font-weight:600;">512 MB</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Mem soft</td><td style="text-align:right;font-weight:600;">256 MB</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Network</td><td style="text-align:right;font-weight:600;">bridge</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Ports</td><td style="text-align:right;font-weight:600;">1 mapping</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Mounts</td><td style="text-align:right;font-weight:600;">2 bind</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:9px 16px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">← Back to Identity</button>
+          <button style="padding:10px 22px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:#1d4ed8;color:#ffffff;">Next → Review</button>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>

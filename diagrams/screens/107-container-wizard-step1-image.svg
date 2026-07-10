@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Container Create Wizard — Step 1 of 4 — Choose image</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">Create container</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Step 1 — Image</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:11px;color:#64748b;">
+            Step 1 of 4 · ~2 min remaining
+            <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">✕ Cancel</button>
+          </div>
+        </div>
+
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #1d4ed8;background:#1d4ed810;">
+              <div style="width:20px;height:20px;border-radius:50%;background:#1d4ed8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">1</div>
+              <span style="font-size:11px;font-weight:600;color:#1d4ed8;">Image</span>
+            </div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;">
+              <div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">2</div>
+              <span style="font-size:11px;font-weight:500;color:#475569;">Identity</span>
+            </div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;">
+              <div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">3</div>
+              <span style="font-size:11px;font-weight:500;color:#475569;">Resources</span>
+            </div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;">
+              <div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">4</div>
+              <span style="font-size:11px;font-weight:500;color:#475569;">Review</span>
+            </div>
+            <div style="flex:1;"></div>
+            <span style="font-size:10px;color:#94a3b8;">0 of 4 complete</span>
+          </div>
+        </div>
+
+        <div style="flex:1;display:flex;background:#f1f5f9;overflow:hidden;">
+          <div style="flex:1;padding:28px 40px;overflow-y:auto;">
+            <h1 style="margin:0 0 4px;font-size:22px;font-weight:700;color:#0f172a;">Choose a container image</h1>
+            <p style="margin:0 0 20px;font-size:13px;color:#64748b;max-width:680px;line-height:1.55;">Pull from a registry, build from a Dockerfile, or import a saved image. The image includes everything your container needs at runtime.</p>
+
+            <!-- Source tabs -->
+            <div style="display:flex;gap:0;margin-bottom:18px;border-bottom:1px solid #cbd5e1;">
+              <div style="padding:10px 18px;border-bottom:2px solid #1d4ed8;color:#1d4ed8;font-weight:600;font-size:12px;cursor:pointer;margin-bottom:-1px;">📦 Pull from registry</div>
+              <div style="padding:10px 18px;color:#64748b;font-size:12px;cursor:pointer;">🔨 Build from Dockerfile</div>
+              <div style="padding:10px 18px;color:#64748b;font-size:12px;cursor:pointer;">📥 Import from .tar</div>
+              <div style="flex:1;border-bottom:1px solid #cbd5e1;"></div>
+            </div>
+
+            <!-- Registry + image search -->
+            <div style="display:grid;grid-template-columns:240px 1fr;gap:14px;margin-bottom:18px;">
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Registry</div>
+                <select style="width:100%;height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 12px;font-size:12px;background:#ffffff;">
+                  <option selected="selected">Docker Hub (docker.io)</option>
+                  <option>GitHub Container Registry (ghcr.io)</option>
+                  <option>GitLab Registry (registry.gitlab.com)</option>
+                  <option>Quay.io</option>
+                  <option>CloudBSD Local (registry.cloudbsd.local)</option>
+                  <option>Custom…</option>
+                </select>
+                <div style="font-size:10px;color:#94a3b8;margin-top:4px;">Authenticated via backend config</div>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Repository (image:tag)</div>
+                <div style="display:flex;gap:8px;">
+                  <input value="nginx" style="flex:1;height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 12px;font-family:monospace;font-size:13px;"/>
+                  <span style="display:flex;align-items:center;color:#94a3b8;">:</span>
+                  <select style="width:140px;height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 8px;font-size:12px;background:#ffffff;">
+                    <option>latest</option>
+                    <option selected="selected">1.27-alpine</option>
+                    <option>1.27</option>
+                    <option>1.25-alpine</option>
+                    <option>mainline-alpine</option>
+                  </select>
+                  <button style="height:36px;padding:0 16px;background:#1d4ed8;color:#ffffff;border:none;border-radius:5px;font-weight:600;cursor:pointer;">Inspect</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Image info card -->
+            <div style="padding:18px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:18px;display:flex;gap:18px;align-items:flex-start;">
+              <div style="width:60px;height:60px;border-radius:10px;background:#0ea5e9;color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;">N</div>
+              <div style="flex:1;">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+                  <span style="font-family:monospace;font-size:14px;font-weight:700;color:#0f172a;">nginx:1.27-alpine</span>
+                  <span style="padding:2px 7px;background:#0d9488;color:#ffffff;border-radius:4px;font-size:10px;font-weight:700;">OFFICIAL</span>
+                  <span style="padding:2px 7px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-size:10px;font-weight:600;">amd64</span>
+                  <span style="padding:2px 7px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-size:10px;font-weight:600;">arm64</span>
+                </div>
+                <div style="font-size:12px;color:#475569;line-height:1.5;margin-bottom:10px;">Official NGINX HTTP server image, based on Alpine Linux. Serves static content, reverse proxy, load balancer. ENTRYPOINT: ["/docker-entrypoint.sh"]; CMD: ["nginx", "-g", "daemon off;"]</div>
+                <table style="width:100%;font-size:11px;border-collapse:collapse;">
+                  <tr style="background:#f8fafc;">
+                    <td style="padding:6px 10px;color:#64748b;width:30%;">Size (compressed)</td>
+                    <td style="padding:6px 10px;font-family:monospace;">43.7 MB</td>
+                    <td style="padding:6px 10px;color:#64748b;width:30%;">Last updated</td>
+                    <td style="padding:6px 10px;font-family:monospace;">2 days ago</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:6px 10px;color:#64748b;">Size (unpacked)</td>
+                    <td style="padding:6px 10px;font-family:monospace;">146.3 MB</td>
+                    <td style="padding:6px 10px;color:#64748b;">Pulls (this repo)</td>
+                    <td style="padding:6px 10px;font-family:monospace;">3.2k / 14d</td>
+                  </tr>
+                  <tr style="background:#f8fafc;">
+                    <td style="padding:6px 10px;color:#64748b;">Layers</td>
+                    <td style="padding:6px 10px;font-family:monospace;">8</td>
+                    <td style="padding:6px 10px;color:#64748b;">Digest</td>
+                    <td style="padding:6px 10px;font-family:monospace;color:#475569;">sha256:8a3b1ad…ce3a</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:6px 10px;color:#64748b;">Exposed ports</td>
+                    <td style="padding:6px 10px;">80/tcp</td>
+                    <td style="padding:6px 10px;color:#64748b;">Architectures</td>
+                    <td style="padding:6px 10px;">linux/amd64, linux/arm64, linux/arm/v7</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <!-- Vulnerability scan toggle -->
+            <div style="padding:14px 18px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:8px;display:flex;align-items:center;gap:14px;">
+              <div style="font-size:20px;">🛡</div>
+              <div style="flex:1;">
+                <div style="font-size:12px;font-weight:600;color:#312e81;">Vulnerability scan on pull (recommended)</div>
+                <div style="font-size:11px;color:#4338ca;line-height:1.5;margin-top:2px;">Scans image layers against Trivy CVE database. Adds ~5s. Last scan: 0 critical, 0 high, 2 medium, 7 low.</div>
+              </div>
+              <input type="checkbox" checked="checked" style="accent-color:#1d4ed8;width:36px;height:20px;"/>
+            </div>
+
+          </div>
+
+          <!-- Right rail -->
+          <div style="width:280px;padding:28px 24px;border-left:1px solid #e2e8f0;background:#ffffff;overflow-y:auto;">
+            <div style="padding:14px;background:#1d4ed810;border:1px solid #bfdbfe;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#1d4ed8;letter-spacing:0.06em;margin-bottom:6px;">SELECTION</div>
+              <div style="font-size:12px;color:#1e3a8a;font-weight:700;font-family:monospace;">nginx:1.27-alpine</div>
+              <div style="font-size:11px;color:#475569;margin-top:4px;">Pulled from Docker Hub · 43.7 MB</div>
+            </div>
+            <div style="padding:14px;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#92400e;letter-spacing:0.06em;margin-bottom:6px;">TIP</div>
+              <div style="font-size:11px;color:#78350f;line-height:1.5;">Use <code style="font-family:monospace;background:#fef9c3;padding:1px 5px;border-radius:3px;">-alpine</code> tags for smaller images. Avoid <code style="font-family:monospace;background:#fef9c3;padding:1px 5px;border-radius:3px;">:latest</code> in production — pin to a digest.</div>
+            </div>
+            <div style="padding:14px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;font-size:11px;color:#475569;line-height:1.55;">
+              <div style="font-weight:700;color:#1d4ed8;letter-spacing:0.06em;font-size:10px;margin-bottom:6px;">RECENTLY USED</div>
+              <div style="font-family:monospace;padding:3px 0;">nginx:1.27-alpine</div>
+              <div style="font-family:monospace;padding:3px 0;">postgres:16-alpine</div>
+              <div style="font-family:monospace;padding:3px 0;">redis:7.4-alpine</div>
+              <div style="font-family:monospace;padding:3px 0;">caddy:2.8-alpine</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:9px 16px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;" disabled="disabled">← Back</button>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:11px;color:#94a3b8;">Image ready to use · <code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">nginx:1.27-alpine</code></span>
+            <button style="padding:10px 22px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:#1d4ed8;color:#ffffff;">Next → Identity</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>

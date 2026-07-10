@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Container Create Wizard — Step 4 of 4 — Review</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">Create container</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Step 4 — Review</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:11px;color:#64748b;">
+            Step 4 of 4 · final review
+            <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">✕ Cancel</button>
+          </div>
+        </div>
+
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">1. Image <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">2. Identity <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">3. Resources <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #16a34a;background:#16a34a10;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">4</div><span style="font-size:11px;font-weight:600;color:#16a34a;">Review</span></div>
+            <div style="flex:1;"></div>
+            <span style="font-size:10px;color:#16a34a;">ready to create</span>
+          </div>
+        </div>
+
+        <div style="flex:1;display:flex;background:#f1f5f9;overflow:hidden;">
+          <div style="flex:1;padding:28px 40px;overflow-y:auto;">
+
+            <!-- Hero card -->
+            <div style="padding:22px;background:linear-gradient(135deg,#0d948820,#1d4ed810);border:1px solid #a7f3d0;border-radius:10px;margin-bottom:20px;display:flex;align-items:center;gap:18px;">
+              <div style="width:64px;height:64px;border-radius:12px;background:#0ea5e9;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:32px;">N</div>
+              <div style="flex:1;">
+                <h1 style="margin:0 0 4px;font-size:24px;font-weight:700;color:#0f172a;">web-nginx-01</h1>
+                <div style="display:flex;align-items:center;gap:14px;font-size:12px;color:#475569;">
+                  <span><strong style="color:#0d9488;">nginx:1.27-alpine</strong> · 43.7 MB</span>
+                  <span style="color:#cbd5e1;">·</span>
+                  <span style="font-family:monospace;font-size:11px;color:#64748b;">01J8Y3K9M2N5P7Q4R8S6T1V4W3X</span>
+                </div>
+                <div style="display:flex;gap:6px;margin-top:6px;">
+                  <span style="padding:2px 8px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-size:10px;font-weight:600;">production</span>
+                  <span style="padding:2px 8px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-size:10px;font-weight:600;">web</span>
+                  <span style="padding:2px 8px;background:#16a34a20;color:#16a34a;border-radius:4px;font-size:10px;font-weight:600;">restart: always</span>
+                  <span style="padding:2px 8px;background:#7c3aed20;color:#7c3aed;border-radius:4px;font-size:10px;font-weight:600;">Owner: admin</span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:11px;color:#64748b;">Allocation</div>
+                <div style="font-size:18px;font-weight:700;color:#0f172a;">2 CPU · 512 MB</div>
+                <div style="font-size:10px;color:#94a3b8;">Port 8080 → 80</div>
+              </div>
+            </div>
+
+            <!-- Detail panels -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                  <h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">IMAGE</h3>
+                  <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button>
+                </div>
+                <div style="font-size:13px;font-family:monospace;font-weight:600;color:#0f172a;">nginx:1.27-alpine</div>
+                <div style="font-size:11px;color:#64748b;margin-top:4px;">Docker Hub · 43.7 MB / 146.3 MB unpacked · 8 layers</div>
+                <div style="margin-top:8px;display:flex;gap:6px;">
+                  <span style="padding:2px 7px;background:#dcfce7;color:#16a34a;border-radius:3px;font-size:9px;font-weight:700;">0 CRITICAL</span>
+                  <span style="padding:2px 7px;background:#fef3c7;color:#92400e;border-radius:3px;font-size:9px;font-weight:700;">2 MEDIUM</span>
+                  <span style="padding:2px 7px;background:#f1f5f9;color:#64748b;border-radius:3px;font-size:9px;font-weight:700;">7 LOW</span>
+                </div>
+              </div>
+
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                  <h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">IDENTITY</h3>
+                  <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button>
+                </div>
+                <table style="width:100%;font-size:11px;">
+                  <tr><td style="padding:2px 0;color:#64748b;width:30%;">Name</td><td style="font-family:monospace;font-weight:600;">web-nginx-01</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Hostname</td><td style="font-family:monospace;color:#475569;">web-nginx-01.cloudbsd.lan</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Owner</td><td style="font-weight:600;">admin</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">User</td><td style="font-family:monospace;">101:101</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Restart</td><td>always</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Tags</td><td>production, web</td></tr>
+                </table>
+              </div>
+
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                  <h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">RESOURCES</h3>
+                  <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                  <div><div style="font-size:10px;color:#64748b;">CPU hard</div><div style="font-size:18px;font-weight:700;color:#0f172a;">2.0 cores</div></div>
+                  <div><div style="font-size:10px;color:#64748b;">Memory hard</div><div style="font-size:18px;font-weight:700;color:#0f172a;">512 MB</div></div>
+                  <div><div style="font-size:10px;color:#64748b;">CPU soft</div><div style="font-size:12px;font-weight:600;">1.0 core</div></div>
+                  <div><div style="font-size:10px;color:#64748b;">Memory soft</div><div style="font-size:12px;font-weight:600;">256 MB</div></div>
+                </div>
+              </div>
+
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                  <h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">NETWORK &amp; STORAGE</h3>
+                  <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button>
+                </div>
+                <table style="width:100%;font-size:11px;">
+                  <tr><td style="padding:3px 0;color:#64748b;width:30%;">Network</td><td>bridge · cluster DNS</td></tr>
+                  <tr><td style="padding:3px 0;color:#64748b;">Ports</td><td style="font-family:monospace;">127.0.0.1:8080 → 80/tcp</td></tr>
+                  <tr><td style="padding:3px 0;color:#64748b;">Mounts</td><td>2 bind (1 ro, 1 rw)</td></tr>
+                </table>
+              </div>
+
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;grid-column:span 2;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                  <h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">ENVIRONMENT</h3>
+                  <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button>
+                </div>
+                <table style="width:100%;font-size:11px;">
+                  <tr style="background:#f8fafc;"><td style="padding:4px 8px;font-family:monospace;color:#64748b;width:35%;">NGINX_HOST</td><td style="font-family:monospace;">web-nginx-01.cloudbsd.lan</td><td style="padding:4px 8px;color:#94a3b8;font-size:10px;">literal</td></tr>
+                  <tr><td style="padding:4px 8px;font-family:monospace;color:#64748b;">NGINX_PORT</td><td style="font-family:monospace;">80</td><td style="padding:4px 8px;color:#94a3b8;font-size:10px;">literal</td></tr>
+                  <tr style="background:#f8fafc;"><td style="padding:4px 8px;font-family:monospace;color:#64748b;">DB_PASSWORD</td><td style="font-family:monospace;color:#1d4ed8;">${vault:kv/cloudbsd/db#password}</td><td style="padding:4px 8px;color:#1d4ed8;font-size:10px;font-weight:600;">vault</td></tr>
+                </table>
+              </div>
+            </div>
+
+            <!-- Advisory -->
+            <div style="padding:14px 16px;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;">
+              <div style="font-size:18px;">⚠</div>
+              <div>
+                <div style="font-size:12px;font-weight:700;color:#92400e;margin-bottom:4px;">1 advisory to acknowledge</div>
+                <div style="font-size:11px;color:#78350f;line-height:1.5;">Image scan flagged 2 medium-severity CVEs in <code style="font-family:monospace;background:#fef9c3;padding:1px 5px;border-radius:3px;">alpine:3.20</code> base layer (CVE-2024-33663, CVE-2024-33599). Non-blocking. Patch available — rebase on <code style="font-family:monospace;background:#fef9c3;padding:1px 5px;border-radius:3px;">alpine:3.20.3</code>.</div>
+                <label style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:11px;color:#475569;cursor:pointer;">
+                  <input type="checkbox" style="accent-color:#1d4ed8;"/> I understand and want to deploy anyway.
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="width:280px;padding:28px 24px;border-left:1px solid #e2e8f0;background:#ffffff;overflow-y:auto;">
+            <div style="padding:14px;background:#16a34a10;border:1px solid #bbf7d0;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#16a34a;letter-spacing:0.06em;margin-bottom:6px;">READY TO CREATE</div>
+              <table style="width:100%;font-size:11px;color:#166534;">
+                <tr><td style="padding:3px 0;color:#64748b;">Image</td><td style="text-align:right;font-weight:600;">nginx:1.27</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">CPU/Mem</td><td style="text-align:right;font-weight:600;">2c / 512 MB</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Storage</td><td style="text-align:right;font-weight:600;">~80 MB image</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Port</td><td style="text-align:right;font-weight:600;font-family:monospace;">8080→80</td></tr>
+                <tr><td style="padding:8px 0 0;color:#64748b;border-top:1px solid #bbf7d0;font-weight:700;">Provision</td><td style="text-align:right;font-weight:700;border-top:1px solid #bbf7d0;">~12s</td></tr>
+              </table>
+            </div>
+            <div style="padding:14px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;font-size:11px;color:#475569;line-height:1.55;">
+              <div style="font-weight:700;color:#1d4ed8;letter-spacing:0.06em;font-size:10px;margin-bottom:6px;">ACCESS</div>
+              After start: <code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">http://127.0.0.1:8080</code><br/>Logs: <code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">docker logs -f web-nginx-01</code>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:9px 16px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">← Back to Resources</button>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <button style="padding:9px 16px;font-size:12px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">Save as draft</button>
+            <button style="padding:11px 26px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:linear-gradient(135deg,#1d4ed8,#0d9488);color:#ffffff;cursor:pointer;box-shadow:0 1px 3px rgba(29,78,216,0.4);">+ Pull &amp; start container</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>
