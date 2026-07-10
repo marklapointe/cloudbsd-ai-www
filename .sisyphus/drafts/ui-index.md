@@ -804,3 +804,70 @@ Beyond the current session, also surface recent sessions:
 Index sessions by `last_active desc`. Visual treatment: ● = current, ● = other active, ○ = expired/revoked.
 
 
+
+
+---
+
+## §25. 401 → /login redirect policy (per user 2026-07-09)
+
+> **Rule**: any 401 response from an authenticated API endpoint causes an immediate redirect to `/login` with `?reason=expired` (or `?reason=invalid_token`). No standalone 401 screen. No frost-out modal. No intermediate page.
+
+### What's removed
+- ❌ `diagrams/screens/71-error-401.svg` — REMOVED 2026-07-09
+- ❌ `diagrams/errors/10-session-expired.svg` — REMOVED 2026-07-09 (referenced in plan T-codes but never authored)
+- ❌ `diagrams/errors/03-401-unauthorized.svg` — REMOVED 2026-07-09
+- ❌ Frost-out modal pattern (Memento / GoF) — REMOVED from plan + design patterns
+
+### What's kept
+- ✓ `diagrams/screens/72-error-403.svg` — user IS authenticated, just lacks permission
+- ✓ `diagrams/screens/73-error-404.svg` — informational, not auth-related
+- ✓ `diagrams/screens/74-error-500.svg` — server error, not auth-related
+- ✓ `diagrams/screens/75-error-503.svg` — maintenance window, not auth-related
+- ✓ `diagrams/screens/54-account-locked.svg` — POST-login PAM lockout, shown ON /login screen (not after)
+
+### Why no frost-out modal
+1. **Preservation is meaningless** — when session is invalid, the user must re-authenticate before any preserved page state is useful. Showing what they were doing for 2 seconds before redirect is unnecessary.
+2. **One state machine, not two** — the auth flow becomes: 401 → /login → re-enter creds → /dashboard. No intermediate "frosted page with OK button".
+3. **Simpler mental model** — "expired session = same as logged out = go log in"
+4. **Industry convention** — GitHub, GitLab, Vercel, AWS all do exactly this. They don't show a modal, they redirect.
+
+### Implementation
+```ts
+// frontend/src/app/core/auth/session.interceptor.ts
+@Injectable()
+export class SessionInterceptor implements HttpInterceptor {
+  constructor(private auth: AuthService, private router: Router) {}
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    return next.handle(req).pipe(
+      catchError((err: HttpErrorResponse) => {
+        if (err.status === 401 && !req.url.includes('/api/auth/')) {
+          this.auth.clearSession();
+          const reason = err.error?.code === 'AUTH_SESSION_INVALID_TOKEN' ? 'invalid_token' : 'expired';
+          this.router.navigate(['/login'], { queryParams: { reason } });
+        }
+        return throwError(() => err);
+      })
+    );
+  }
+}
+```
+
+### Login page reads the reason
+```ts
+// frontend/src/app/features/login/login.component.ts
+ngOnInit() {
+  this.reason = this.route.snapshot.queryParamMap.get('reason');
+  if (this.reason === 'expired') {
+    this.banner = 'Your session expired. Please sign in again.';
+  } else if (this.reason === 'invalid_token') {
+    this.banner = 'Your session is invalid. Please sign in again.';
+  } else {
+    this.banner = null;
+  }
+}
+```
+
+### Audit trail
+- `logout` events: emit a `auth.session.expired` wire-protocol event so we know whether users are getting bounced frequently (would indicate session-too-short config issue)
+- `login` events after `logout`: log both as correlated events to spot-mid-session logout patterns
+

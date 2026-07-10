@@ -128,14 +128,14 @@ All error surfaces in the application, with 4 detail levels (Minimal/Standard/De
 |------|-------|
 | `01-backend-unavailable.svg` | Pre-flight check: backend down, degraded shell |
 | `02-network-error.svg` | Network request failed with retry |
-| `03-401-unauthorized.svg` | Authentication required → login |
+| ~~`03-401-unauthorized.svg` (REMOVED 2026-07-09 — redundant, 401 redirects to /login)~~ | — |
 | `04-403-forbidden.svg` | Admin-only area, role-gated |
 | `05-404-not-found.svg` | Friendly 404 with search + nav back |
 | `06-500-server-error.svg` | Internal error with reference code |
 | `07-503-service-unavailable.svg` | Backend down, retry countdown |
 | `08-pam-auth-failed.svg` | PAM auth failed, attempt counter |
 | `09-pam-account-locked.svg` | PAM account locked, unlock timer |
-| `10-session-expired.svg` | Frost-out modal (page frosted, info hidden) |
+| ~~`10-session-expired.svg` (REMOVED 2026-07-09 — redundant, 401 redirects to /login)~~ | — |
 | `11-plugin-load-error.svg` | Plugin manifest invalid/missing |
 | `12-themes-load-error.svg` | Theme file corrupt, restore default |
 
@@ -3968,7 +3968,7 @@ grep -rE 'class="[^"]*\b(bg-|text-|p-[0-9]|m-[0-9]|w-[0-9]|h-[0-9]|flex|grid|rou
   - Create `diagrams/errors/` directory with 12 SVG mock-ups covering all error states:
     1. `backend-unavailable.svg` — Red banner top, main area with "Backend Unavailable" + Retry button + status details + support link.
     2. `backend-degraded.svg` — Yellow banner top, partial data showing, "Some features unavailable" warning.
-    3. `session-expired.svg` — Frost-out modal, "Session Expired" message, OK button.
+    3. ~~`session-expired.svg` — REMOVED 2026-07-09, see 401 handling policy below.~~
     4. `session-revoked.svg` — Frost-out modal, "Session Revoked by Administrator" message.
     5. `permission-denied.svg` — Inline error card, "Permission Denied" with explanation, contact admin.
     6. `network-timeout.svg` — Toast notification bottom-right, "Request timed out", retry button.
@@ -9411,8 +9411,9 @@ grep -rE 'class="[^"]*\b(bg-|text-|p-[0-9]|m-[0-9]|w-[0-9]|h-[0-9]|flex|grid|rou
   - T99 (NEW 2026-07-09): Network IP pools + Backup detail:
     - `69-network-ip-pools.svg` (11.2 KB) — 7 IP pools with allocation bars
     - `70-backup-detail.svg` (15.2 KB) — backup #148 detail + restore wizard
-  - T100 (NEW 2026-07-09): Error pages (5 standard + 2 update flow):
-    - `71-error-401.svg` (2.2 KB) — Unauthorized w/ recovery options
+  - T100 (NEW 2026-07-09, UPDATED 2026-07-09): Error pages (4 standard + 2 update flow):
+    - ~~71-error-401.svg — REMOVED 2026-07-09, redundant with /login redirect per user feedback~~
+    - (no separate 401 screen — 401 responses redirect to /login directly)
     - `72-error-403.svg` (2.2 KB) — Forbidden w/ permission details
     - `73-error-404.svg` (2.2 KB) — Not Found w/ trail of breadcrumbs
     - `74-error-500.svg` (2.3 KB) — Internal Server Error w/ incident ref
@@ -9834,3 +9835,15 @@ After Momus approves (or user skips high-accuracy mode):
 5. User explicitly approves F1-F4 results before work is marked complete.
 
 **Audit reference**: All Wave 10 tasks derive from `.sisyphus/drafts/reconciliation-audit-2026-07-07.md`. If the executor encounters drift between the plan and the audit, the audit is authoritative for Wave 10 — the plan tracks the audit's findings.
+
+### 401 handling policy (added 2026-07-09 per user feedback)
+
+- **Any 401 response** from a backend API endpoint causes the frontend to **immediately redirect to `/login`** with `?reason=expired` (or `?reason=invalid_token`) query param.
+- **No standalone 401 page** (no `diagrams/screens/71-error-401.svg`, no `diagrams/errors/10-session-expired.svg`, no frost-out modal). The user lands directly on the login form.
+- The previous "Frost-out modal" pattern (Memento / GoF) was REMOVED because: (a) preserving page state behind a modal doesn't help if user must re-authenticate anyway; (b) one less state machine to manage; (c) simpler mental model.
+- 403, 404, 500, 503 DO get their own screen (you ARE authenticated, just blocked or hitting infrastructure issue).
+- 401 flow:
+  1. API returns `401 Unauthorized` with `WWW-Authenticate: CloudBSD session="..."`
+  2. Frontend interceptor captures, calls `AuthService.clearSession()`
+  3. `Router.navigate(['/login'], { queryParams: { reason: 'expired' } })`
+  4. `/login` page (51-login.svg) reads `reason` param, shows subtle banner: "Your session expired. Sign in again."
