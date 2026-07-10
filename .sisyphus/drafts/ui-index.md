@@ -309,9 +309,19 @@ When a page has tabs, left-to-right:
 
 Examples:
 - VM detail: Overview, Disks, Network, Snapshots, Console, Logs, Settings
+  - Mockups: 19-vm-detail-panel.svg (Overview tab) + 90-vm-network-tab-content.svg + 91-vm-snapshots-tab-content.svg
+- Container: Overview, Disks, Network, Logs, Env vars
+  - Mockups: 20-container-detail-panel.svg + 92-container-network-tab-content.svg + 93-container-env-vars-tab-content.svg
+- Jail: Overview, IPs, Network, Limits, Logs
+  - Mockups: 21-jail-detail-panel.svg + 94-jail-network-tab-content.svg + 95-jail-limits-tab-content.svg
 - Volume: Overview, Datasets, Snapshots, Scrubs, Performance, Settings
+  - Mockups: 22-volume-detail-panel.svg + 96-volume-scrubs-tab-content.svg + 97-volume-performance-tab-content.svg
 - Node: Overview, ZFS, GPUs, Network, VMs, Logs, Settings
+  - Mockups: 23-node-detail-panel.svg + 98-node-zfs-tab-content.svg + 99-node-gpus-tab-content.svg + 100-node-network-tab-content.svg + 101-node-vms-tab-content.svg
 - System Management: Backups, Exports, Stats, History, Audit Log, Updates
+  - Mockups: 16-system.svg + 16-system-1-backups.svg through 16-system-6-updates.svg
+
+Every tab in a detail panel MUST have its own content mockup. Tabs declared via <desc> but not authored are plan-vs-artifact drift.
 
 ## 18. Toolbar button order (UNIVERSAL)
 

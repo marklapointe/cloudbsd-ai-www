@@ -9321,6 +9321,73 @@ grep -rE 'class="[^"]*\b(bg-|text-|p-[0-9]|m-[0-9]|w-[0-9]|h-[0-9]|flex|grid|rou
     - **Honcho lesson**: chrome header avatar + bell are interactive elements, not decoration.
       Always cursor:pointer. Always anchored dropdown. Always need a mockup to demonstrate
       the menu state (open) since the closed state is implied by the icon presence.
+  - T94o (NEW 2026-07-09): Detail-panel tab-content mockups (12 NEW SVGs):
+    - **Gap surfaced by user 2026-07-09**: detail panels (19-vm through 23-node) declare
+      5-7 tabs each via <desc>, but only the Overview tab content was actually rendered.
+      The other 22 declared tabs had LABELS but NO CONTENT MOCKUPS — leaving the Angular
+      executor guessing at what each tab should contain.
+    - **12 new tab-content SVGs authored** (143 KB total, each ~7-19 KB):
+      - `diagrams/components/90-vm-network-tab-content.svg` (16.5 KB) - VM Network
+        · 2 NICs (vtnet0 + vtnet1) with MAC (click-to-copy) + MTU/link state
+        · 5 IPs table (4 click-to-copy rows)
+        · BW sparkline (RX/TX last 1h)
+        · 4 firewall rules (allow/deny)
+        · 3 port forwardings (host->VM)
+        · yellow view-only banner (PUT endpoint pending)
+      - `diagrams/components/91-vm-snapshots-tab-content.svg` (13 KB) - VM Snapshots
+        · 12-row snapshot table (daily@auto-YYYY-MM-DD + pre-update + monthly)
+        · Tag column click-to-copy
+        · Retention policy: daily (14) / weekly (8) / monthly (12) / offsite
+      - `diagrams/components/92-container-network-tab-content.svg` (9.5 KB) - Container Network
+        · 2 networks attached (bridge/macvlan)
+        · 3 port mappings
+        · DNS policy + search domain
+        · Container BW sparkline (purple)
+      - `diagrams/components/93-container-env-vars-tab-content.svg` (11 KB) - Container Env vars
+        · 4 system-injected (LOCKED) + 8 user-defined
+        · Secret masking (••••) with click-to-reveal + audit log note
+        · Sensitive count badge (3)
+      - `diagrams/components/94-jail-network-tab-content.svg` (7.5 KB) - Jail Network
+        · VNET namespace + epair + IP/gateway/DNS (rfc1918 only, no geo)
+        · 4-line pf ruleset
+      - `diagrams/components/95-jail-limits-tab-content.svg` (7.7 KB) - Jail Limits
+        · 6 rctl quotas (CPU/MEM/disk/proc/fds/pipes)
+        · CPU + MEM sparklines
+        · 2 throttling events (maxproc/memoryuse)
+      - `diagrams/components/96-volume-scrubs-tab-content.svg` (12.3 KB) - Volume Scrubs
+        · Last/next scrub summary + scan rate
+        · 12-row scrub history with errors/repaired columns
+        · 1 historical warn (2026-06-30 L2 checksum)
+      - `diagrams/components/97-volume-performance-tab-content.svg` (6.9 KB) - Volume Performance
+        · Read+Write throughput sparkline (60 buckets)
+        · P50/P99 latencies (read 1.4/8.2 ms · write 2.1/5.8 ms)
+        · IOPS + queue depth
+        · Capacity forecast (148 days to 80%)
+      - `diagrams/components/98-node-zfs-tab-content.svg` (12.4 KB) - Node ZFS
+        · 1 pool (tank 18 TB · 63% used)
+        · Capacity bar (green->amber gradient at 70%)
+        · 6 of 12 datasets table
+        · ARC stats (84 GB target, 98.4% hit rate)
+      - `diagrams/components/99-node-gpus-tab-content.svg` (12.2 KB) - Node GPUs
+        · Note: defers to 17-vgpu-pool-list.svg for cluster-wide view
+        · 4 GPU cards (gpu-8/9/10/11) for cloudbsd-node-01
+        · 7 vGPU allocations table
+      - `diagrams/components/100-node-network-tab-content.svg` (12 KB) - Node Network
+        · 4 physical interfaces (lagg0/igb0/igb1/ipmi0) with MAC + MTU + state
+        · LACP status (active members, hash policy, failover mode)
+        · 3 cluster IPs (mgmt / replication / CTDB pub)
+        · Lagg0 throughput sparkline (RX/TX)
+      - `diagrams/components/101-node-vms-tab-content.svg` (19 KB) - Node VMs
+        · Workload summary (8 VMs + 7 containers + 3 jails)
+        · 8-row VM list (filter node=this)
+        · 7-row container list
+        · 3-row jail list
+    - **All 12 use consistent patterns**: page-header with role pill, tab strip with active
+      highlight, view-only yellow info banner at bottom when backend endpoint missing.
+    - **All identifiers click-to-copy**: ulids, MACs, IPs, snapshot tags, container names
+    - **No "MOCK" labels, no fabricated geolocation, no claim of non-existent shortcuts** -
+      follows the same standards enforced earlier (T94i, T94n, T94n-followup lessons)
+
   - T95 (NEW 2026-07-09): Auth flow UI mockups:
     - `diagrams/screens/51-login.svg` (3.8 KB) — PAM auth form
     - `diagrams/screens/52-two-factor-setup.svg` (32.8 KB) — TOTP setup w/ QR code
