@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Admin — Plugin Registry</title>
+  <desc>Plugins page. 12 slots: 3 installed, 9 available. Template Method (GoF) per Honcho peer plugin pattern. Click row to view detail modal (T83).</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:13px;box-sizing:border-box;overflow:hidden;display:flex;">
+      <aside style="width:224px;background:#ffffff;border-right:1px solid #e2e8f0;padding:14px 10px;box-sizing:border-box;flex-shrink:0;overflow-y:auto;">
+        <div style="width:32px;height:32px;border-radius:6px;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;margin-bottom:14px;">C</div>
+        <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;padding:0 4px 6px;">Overview</div>
+        <nav style="font-size:13px;">
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Dashboard</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Virtual Machines</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Containers</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Jails</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Volumes</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Network Map</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Cluster</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Nodes</a>
+        </nav>
+        <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;padding:14px 4px 6px;">Admin</div>
+        <nav style="font-size:13px;">
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Users</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Logs</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Notifications</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Settings</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;background:linear-gradient(90deg,#eff6ff,#dbeafe);color:#1d4ed8;font-weight:600;border-left:3px solid #2563eb;margin-bottom:2px;cursor:pointer;">Plugins</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Status</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">About</a>
+        </nav>
+      </aside>
+      <main style="flex:1;overflow-y:auto;padding:16px 20px;box-sizing:border-box;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <div><h1 style="font-size:24px;font-weight:700;margin:0;color:#0f172a;">Plugin Registry</h1><p style="font-size:13px;color:#64748b;margin:4px 0 0;">Extend CloudBSD with custom integrations. Template Method (GoF) loader.</p></div>
+          <div style="display:flex;gap:8px;align-items:center;"><span style="font-size:11px;color:#64748b;">3 / 12 slots used</span><button style="padding:6px 14px;font-size:12px;border:0;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;border-radius:6px;font-weight:600;">+ Install plugin</button></div>
+        </div>
+        <div style="display:flex;gap:0;border-bottom:1px solid #e2e8f0;margin-bottom:14px;">
+          <div style="padding:10px 16px;font-size:12px;font-weight:600;color:#1d4ed8;background:#ffffff;border-bottom:2px solid #2563eb;border-radius:6px 6px 0 0;cursor:pointer;">Installed (3)</div>
+          <div style="padding:10px 16px;font-size:12px;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;">Available (9)</div>
+          <div style="padding:10px 16px;font-size:12px;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;">Updates (2)</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+          <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:14px;cursor:pointer;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+              <div style="display:flex;align-items:center;gap:6px;"><span style="font-size:16px;">🐙</span><span style="font-weight:700;color:#0f172a;">github-mirrors</span></div>
+              <span style="padding:1px 6px;border-radius:3px;font-size:9px;font-weight:600;background:#d1fae5;color:#065f46;">ENABLED</span>
+            </div>
+            <div style="font-size:11px;color:#64748b;margin-bottom:8px;">v1.4.2 · by @cloudbsd · 28 KB</div>
+            <div style="font-size:11px;color:#334155;line-height:1.4;margin-bottom:10px;">Mirror GitHub release artifacts to local volume for air-gap installs.</div>
+            <div style="display:flex;gap:4px;font-size:10px;flex-wrap:wrap;"><span style="padding:2px 6px;border-radius:3px;background:#dbeafe;color:#1d4ed8;">mirror</span><span style="padding:2px 6px;border-radius:3px;background:#dbeafe;color:#1d4ed8;">webhook</span><span style="padding:2px 6px;border-radius:3px;background:#dbeafe;color:#1d4ed8;">backup</span></div>
+          </div>
+          <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:14px;cursor:pointer;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+              <div style="display:flex;align-items:center;gap:6px;"><span style="font-size:16px;">📧</span><span style="font-weight:700;color:#0f172a;">smtp-notifier</span></div>
+              <span style="padding:1px 6px;border-radius:3px;font-size:9px;font-weight:600;background:#d1fae5;color:#065f46;">ENABLED</span>
+            </div>
+            <div style="font-size:11px;color:#64748b;margin-bottom:8px;">v2.1.0 · by @marklapointe · 18 KB</div>
+            <div style="font-size:11px;color:#334155;line-height:1.4;margin-bottom:10px;">Send email notifications for backup failures and node-down events.</div>
+            <div style="display:flex;gap:4px;font-size:10px;flex-wrap:wrap;"><span style="padding:2px 6px;border-radius:3px;background:#dbeafe;color:#1d4ed8;">notify</span><span style="padding:2px 6px;border-radius:3px;background:#dbeafe;color:#1d4ed8;">smtp</span></div>
+          </div>
+          <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:14px;cursor:pointer;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+              <div style="display:flex;align-items:center;gap:6px;"><span style="font-size:16px;">📊</span><span style="font-weight:700;color:#0f172a;">prometheus-exporter</span></div>
+              <span style="padding:1px 6px;border-radius:3px;font-size:9px;font-weight:600;background:#d1fae5;color:#065f46;">ENABLED</span>
+            </div>
+            <div style="font-size:11px;color:#64748b;margin-bottom:8px;">v0.9.1 · by @cloudbsd · 14 KB</div>
+            <div style="font-size:11px;color:#334155;line-height:1.4;margin-bottom:10px;">Expose CloudBSD metrics on /metrics for Prometheus scraping.</div>
+            <div style="display:flex;gap:4px;font-size:10px;flex-wrap:wrap;"><span style="padding:2px 6px;border-radius:3px;background:#dbeafe;color:#1d4ed8;">metrics</span><span style="padding:2px 6px;border-radius:3px;background:#dbeafe;color:#1d4ed8;">monitoring</span></div>
+          </div>
+          <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:14px;opacity:0.65;cursor:pointer;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+              <div style="display:flex;align-items:center;gap:6px;"><span style="font-size:16px;">🔍</span><span style="font-weight:700;color:#0f172a;">nfs-stats-collector</span></div>
+              <span style="padding:1px 6px;border-radius:3px;font-size:9px;font-weight:600;background:#f1f5f9;color:#475569;">AVAILABLE</span>
+            </div>
+            <div style="font-size:11px;color:#64748b;margin-bottom:8px;">v0.3.0 · by @jimbob · 22 KB</div>
+            <div style="font-size:11px;color:#334155;line-height:1.4;">Per-client NFS statistics per exports volume.</div>
+          </div>
+          <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:14px;opacity:0.65;cursor:pointer;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+              <div style="display:flex;align-items:center;gap:6px;"><span style="font-size:16px;">🪝</span><span style="font-weight:700;color:#0f172a;">webhook-receiver</span></div>
+              <span style="padding:1px 6px;border-radius:3px;font-size:9px;font-weight:600;background:#f1f5f9;color:#475569;">AVAILABLE</span>
+            </div>
+            <div style="font-size:11px;color:#64748b;margin-bottom:8px;">v0.1.0 · by @cloudbsd · 8 KB</div>
+            <div style="font-size:11px;color:#334155;line-height:1.4;">Generic inbound webhook endpoint with HMAC verification.</div>
+          </div>
+          <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:14px;opacity:0.65;cursor:pointer;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+              <div style="display:flex;align-items:center;gap:6px;"><span style="font-size:16px;">🐝</span><span style="font-weight:700;color:#0f172a;">beeswax-budget</span></div>
+              <span style="padding:1px 6px;border-radius:3px;font-size:9px;font-weight:600;background:#f1f5f9;color:#475569;">AVAILABLE</span>
+            </div>
+            <div style="font-size:11px;color:#64748b;margin-bottom:8px;">v0.2.5 · by @maxime · 11 KB</div>
+            <div style="font-size:11px;color:#334155;line-height:1.4;">Track resource usage per VM for billing-aware autoscaling.</div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </foreignObject>
+</svg>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Admin — Jail Detail Panel (homebridge)</title>
+  <desc>Jails list view (left) + selected jail detail panel (right). 5 tabs: Overview, IPs, Network, Limits, Logs. View-only.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:13px;box-sizing:border-box;overflow:hidden;display:flex;">
+      <aside style="width:224px;background:#ffffff;border-right:1px solid #e2e8f0;padding:14px 10px;box-sizing:border-box;flex-shrink:0;overflow-y:auto;">
+        <div style="width:32px;height:32px;border-radius:6px;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;margin-bottom:14px;">C</div>
+        <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;padding:0 4px 6px;">Overview</div>
+        <nav style="font-size:13px;">
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Dashboard</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Virtual Machines</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Containers</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;background:linear-gradient(90deg,#eff6ff,#dbeafe);color:#1d4ed8;font-weight:600;border-left:3px solid #2563eb;margin-bottom:2px;cursor:pointer;">Jails</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Volumes</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Network Map</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Cluster</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Nodes</a>
+        </nav>
+        <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;padding:14px 4px 6px;">Admin</div>
+        <nav style="font-size:13px;">
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Users</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Logs</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Notifications</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Settings</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">System Mgmt</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">Status</a>
+          <a style="display:flex;align-items:center;padding:7px 10px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;">About</a>
+        </nav>
+      </aside>
+      <main style="flex:1;display:flex;overflow:hidden;">
+        <section style="width:620px;background:#ffffff;border-right:1px solid #e2e8f0;display:flex;flex-direction:column;overflow:hidden;">
+          <header style="padding:14px 18px;border-bottom:1px solid #e2e8f0;">
+            <h1 style="font-size:22px;font-weight:700;margin:0 0 4px;color:#0f172a;">Jails</h1>
+            <p style="font-size:12px;color:#64748b;margin:0;">Native FreeBSD jails. View-only catalog. Click a row to inspect.</p>
+          </header>
+          <div style="padding:10px 14px;border-bottom:1px solid #e2e8f0;background:#f8fafc;display:flex;gap:8px;align-items:center;">
+            <input type="text" placeholder="Search jails..." style="flex:1;padding:6px 10px;font-size:12px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;"/>
+            <div style="display:flex;gap:4px;font-size:11px;">
+              <span style="padding:4px 10px;border-radius:9999px;background:#1d4ed8;color:#ffffff;font-weight:600;">All (12)</span>
+              <span style="padding:4px 10px;border-radius:9999px;background:#ffffff;border:1px solid #cbd5e1;color:#475569;">ezjail (8)</span>
+              <span style="padding:4px 10px;border-radius:9999px;background:#ffffff;border:1px solid #cbd5e1;color:#475569;">iocage (4)</span>
+            </div>
+          </div>
+          <div style="flex:1;overflow-y:auto;">
+            <table style="width:100%;font-size:12px;border-collapse:collapse;">
+              <thead style="position:sticky;top:0;background:#f1f5f9;color:#475569;font-size:10px;text-transform:uppercase;"><tr><th style="text-align:left;padding:8px 14px;font-weight:600;">Status</th><th style="text-align:left;padding:8px 14px;font-weight:600;">Hostname</th><th style="text-align:left;padding:8px 14px;font-weight:600;">Type</th><th style="text-align:right;padding:8px 14px;font-weight:600;">JID</th><th style="text-align:right;padding:8px 14px;font-weight:600;">RAM</th><th style="text-align:left;padding:8px 14px;font-weight:600;">IPv4</th></tr></thead>
+              <tbody style="color:#334155;">
+                <tr><td style="padding:10px 14px;"><span style="color:#10b981;font-size:14px;">●</span></td><td style="padding:10px 14px;font-weight:600;color:#0f172a;">dns-primary</td><td style="padding:10px 14px;">ezjail</td><td style="padding:10px 14px;text-align:right;font-family:monospace;">3</td><td style="padding:10px 14px;text-align:right;">512 MB</td><td style="padding:10px 14px;font-family:monospace;">10.0.30.10</td></tr>
+                <tr><td style="padding:10px 14px;"><span style="color:#10b981;font-size:14px;">●</span></td><td style="padding:10px 14px;font-weight:600;color:#0f172a;">dns-secondary</td><td style="padding:10px 14px;">ezjail</td><td style="padding:10px 14px;text-align:right;font-family:monospace;">4</td><td style="padding:10px 14px;text-align:right;">512 MB</td><td style="padding:10px 14px;font-family:monospace;">10.0.30.11</td></tr>
+                <tr><td style="padding:10px 14px;"><span style="color:#10b981;font-size:14px;">●</span></td><td style="padding:10px 14px;font-weight:600;color:#0f172a;">ntp-server</td><td style="padding:10px 14px;">ezjail</td><td style="padding:10px 14px;text-align:right;font-family:monospace;">7</td><td style="padding:10px 14px;text-align:right;">256 MB</td><td style="padding:10px 14px;font-family:monospace;">10.0.30.20</td></tr>
+                <tr style="background:linear-gradient(90deg,#eff6ff,#ffffff);border-left:3px solid #2563eb;"><td style="padding:10px 14px;"><span style="color:#10b981;font-size:14px;">●</span></td><td style="padding:10px 14px;font-weight:600;color:#1d4ed8;">homebridge</td><td style="padding:10px 14px;">ezjail</td><td style="padding:10px 14px;text-align:right;font-family:monospace;">12</td><td style="padding:10px 14px;text-align:right;">1 GB</td><td style="padding:10px 14px;font-family:monospace;">10.0.30.42</td></tr>
+                <tr><td style="padding:10px 14px;"><span style="color:#10b981;font-size:14px;">●</span></td><td style="padding:10px 14px;font-weight:600;color:#0f172a;">mqtt-broker</td><td style="padding:10px 14px;">iocage</td><td style="padding:10px 14px;text-align:right;font-family:monospace;">8</td><td style="padding:10px 14px;text-align:right;">512 MB</td><td style="padding:10px 14px;font-family:monospace;">10.0.30.30</td></tr>
+                <tr><td style="padding:10px 14px;"><span style="color:#10b981;font-size:14px;">●</span></td><td style="padding:10px 14px;font-weight:600;color:#0f172a;">unifi-controller</td><td style="padding:10px 14px;">iocage</td><td style="padding:10px 14px;text-align:right;font-family:monospace;">9</td><td style="padding:10px 14px;text-align:right;">2 GB</td><td style="padding:10px 14px;font-family:monospace;">10.0.30.31</td></tr>
+                <tr><td style="padding:10px 14px;"><span style="color:#94a3b8;font-size:14px;">■</span></td><td style="padding:10px 14px;font-weight:600;color:#64748b;">grafana</td><td style="padding:10px 14px;">ezjail</td><td style="padding:10px 14px;text-align:right;font-family:monospace;color:#94a3b8;">—</td><td style="padding:10px 14px;text-align:right;">1 GB</td><td style="padding:10px 14px;font-family:monospace;">10.0.30.50</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <footer style="padding:10px 14px;border-top:1px solid #e2e8f0;background:#f8fafc;font-size:11px;color:#64748b;display:flex;justify-content:space-between;align-items:center;"><span>Showing 1-7 of 12</span><span>‹ 1 <b>2</b> ›</span></footer>
+        </section>
+        <section style="flex:1;background:#f1f5f9;display:flex;flex-direction:column;overflow:hidden;">
+          <header style="padding:14px 18px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <h2 style="font-size:18px;font-weight:700;margin:0;color:#0f172a;">homebridge</h2>
+                <span style="padding:2px 8px;border-radius:3px;font-size:10px;font-weight:600;background:#d1fae5;color:#065f46;">● RUN</span>
+              </div>
+              <div style="font-size:11px;color:#64748b;margin-top:3px;font-family:monospace;">JID 12 — homebridge.local — ezjail</div>
+            </div>
+            <div style="display:flex;gap:6px;">
+              <button style="padding:6px 14px;font-size:12px;border:0;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;border-radius:6px;font-weight:600;">View</button>
+              <button style="padding:6px 14px;font-size:12px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">Console</button>
+              <button style="padding:6px 14px;font-size:12px;border:1px solid #fecaca;border-radius:6px;background:#ffffff;color:#b91c1c;">Delete</button>
+            </div>
+          </header>
+          <nav style="display:flex;padding:0 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+            <div style="padding:10px 16px;font-size:12px;font-weight:600;color:#1d4ed8;border-bottom:2px solid #2563eb;cursor:pointer;">Overview</div>
+            <div style="padding:10px 16px;font-size:12px;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;">IPs</div>
+            <div style="padding:10px 16px;font-size:12px;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;">Network</div>
+            <div style="padding:10px 16px;font-size:12px;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;">Limits</div>
+            <div style="padding:10px 16px;font-size:12px;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;">Logs</div>
+          </nav>
+          <div style="flex:1;overflow-y:auto;padding:16px;">
+            <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:14px;margin-bottom:10px;">
+              <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Identity</div>
+              <div style="display:grid;grid-template-columns:1fr 2fr;gap:6px 16px;font-size:12px;"><span style="color:#64748b;">JID</span><span style="font-family:monospace;color:#334155;">12</span><span style="color:#64748b;">hostname</span><span style="font-family:monospace;color:#334155;">homebridge.local</span><span style="color:#64748b;">name</span><span style="color:#0f172a;">homebridge</span></div>
+            </div>
+            <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:14px;margin-bottom:10px;">
+              <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Configuration</div>
+              <div style="display:grid;grid-template-columns:1fr 2fr;gap:6px 16px;font-size:12px;"><span style="color:#64748b;">type</span><span style="font-family:monospace;color:#334155;">ezjail</span><span style="color:#64748b;">base</span><span style="color:#334155;">FreeBSD 14.2-RELEASE</span><span style="color:#64748b;">template</span><span style="color:#334155;">homeautomation</span></div>
+            </div>
+            <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:14px;margin-bottom:10px;">
+              <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Resources</div>
+              <div style="display:grid;grid-template-columns:1fr 2fr;gap:6px 16px;font-size:12px;"><span style="color:#64748b;">vCPUs</span><span style="color:#334155;">2</span><span style="color:#64748b;">RAM</span><span style="color:#334155;">1 GB</span><span style="color:#64748b;">Disk</span><span style="color:#334155;">8 GB (zfs jail dataset)</span></div>
+            </div>
+            <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:14px;margin-bottom:10px;">
+              <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Network</div>
+              <div style="display:grid;grid-template-columns:1fr 2fr;gap:6px 16px;font-size:12px;font-family:monospace;"><span style="color:#64748b;font-family:-apple-system;">IPv4</span><span style="color:#334155;">10.0.30.42 / 24 (rfc1918)</span><span style="color:#64748b;font-family:-apple-system;">IPv6</span><span style="color:#94a3b8;">not bound</span></div>
+            </div>
+            <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:14px;">
+              <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">State</div>
+              <div style="display:grid;grid-template-columns:1fr 2fr;gap:6px 16px;font-size:12px;"><span style="color:#64748b;">uptime</span><span style="color:#334155;">47d 14:08</span><span style="color:#64748b;">state</span><span style="color:#10b981;font-weight:600;">active</span></div>
+            </div>
+          </div>
+          <footer style="padding:10px 18px;background:#ffffff;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8;display:flex;justify-content:space-between;"><span>GET /api/jails/12 — application/vnd.cloudbsd+jail+json</span><span>view-only · no write endpoints</span></footer>
+        </section>
+      </main>
+    </div>
+  </foreignObject>
+</svg>

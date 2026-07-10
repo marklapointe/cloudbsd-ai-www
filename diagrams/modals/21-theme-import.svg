@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Admin — Theme Import Modal</title>
+  <desc>Import custom theme via JSON URL or paste. Validates against theme-schema.json; Strategy pattern (GoF). Preview live. POST /api/themes/import.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:rgba(15,23,42,0.55);color:#0f172a;font-size:13px;box-sizing:border-box;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+      <div style="background:#ffffff;border-radius:12px;box-shadow:0 25px 50px rgba(0,0,0,0.4);width:720px;display:flex;flex-direction:column;overflow:hidden;">
+        <header style="padding:16px 20px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;">
+          <h2 style="margin:0;font-size:16px;font-weight:700;color:#0f172a;">Import Theme</h2>
+          <button style="width:28px;height:28px;border-radius:50%;background:#f1f5f9;border:0;cursor:pointer;font-size:14px;color:#64748b;">✕</button>
+        </header>
+        <div style="padding:16px 20px;flex:1;overflow-y:auto;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div>
+            <div style="display:flex;gap:0;border-bottom:1px solid #e2e8f0;margin-bottom:12px;">
+              <div style="padding:8px 14px;font-size:12px;font-weight:600;color:#1d4ed8;background:#ffffff;border-bottom:2px solid #2563eb;cursor:pointer;">⌘ URL</div>
+              <div style="padding:8px 14px;font-size:12px;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;">⎘ Paste JSON</div>
+              <div style="padding:8px 14px;font-size:12px;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;">⬆ Upload</div>
+            </div>
+            <div style="margin-bottom:12px;">
+              <label style="display:block;font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;">Theme URL *</label>
+              <input type="text" value="https://community.cloudbsd.io/themes/solarized-dark.json" style="width:100%;padding:8px 10px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;box-sizing:border-box;font-family:monospace;font-size:11px;"/>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+              <div>
+                <label style="display:block;font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;margin-bottom:4px;">Author name</label>
+                <input type="text" value="Ethan Schoonover" style="width:100%;padding:8px 10px;font-size:12px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;box-sizing:border-box;"/>
+              </div>
+              <div>
+                <label style="display:block;font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;margin-bottom:4px;">License</label>
+                <select style="width:100%;padding:8px 10px;font-size:12px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;"><option>MIT</option><option>Apache-2.0</option><option>BSD-3-Clause</option><option>CC-BY-4.0</option></select>
+              </div>
+            </div>
+            <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:10px 12px;font-size:12px;color:#15803d;display:flex;align-items:center;gap:8px;">
+              <span>✓</span>
+              <span>Theme fetched and validated against theme-schema.json (42 keys checked).</span>
+            </div>
+          </div>
+          <div style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;padding:12px;">
+            <div style="font-size:11px;color:#94a3b8;font-weight:700;text-transform:uppercase;margin-bottom:8px;">Live preview</div>
+            <div style="background:#002b36;border-radius:6px;padding:14px;color:#93a1a1;font-family:monospace;font-size:11px;margin-bottom:8px;">
+              <div style="color:#b58900;font-weight:600;">solarized-dark</div>
+              <div style="margin-top:6px;color:#586e75;">Solarized · base03 #002b36</div>
+              <div style="display:flex;gap:4px;margin-top:8px;">
+                <div style="width:16px;height:16px;border-radius:3px;background:#073642;"></div>
+                <div style="width:16px;height:16px;border-radius:3px;background:#586e75;"></div>
+                <div style="width:16px;height:16px;border-radius:3px;background:#b58900;"></div>
+                <div style="width:16px;height:16px;border-radius:3px;background:#cb4b16;"></div>
+                <div style="width:16px;height:16px;border-radius:3px;background:#dc322f;"></div>
+                <div style="width:16px;height:16px;border-radius:3px;background:#d33682;"></div>
+                <div style="width:16px;height:16px;border-radius:3px;background:#6c71c4;"></div>
+                <div style="width:16px;height:16px;border-radius:3px;background:#2aa198;"></div>
+              </div>
+            </div>
+            <button style="padding:5px 12px;font-size:11px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;">Apply preview</button>
+          </div>
+        </div>
+        <footer style="padding:14px 20px;border-top:1px solid #e2e8f0;background:#f8fafc;display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-size:10px;color:#94a3b8;">validates: theme-schema.json · 15 themes already installed</div>
+          <div style="display:flex;gap:6px;">
+            <button style="padding:8px 16px;font-size:12px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#334155;">Cancel</button>
+            <button style="padding:8px 16px;font-size:12px;border:0;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;border-radius:6px;font-weight:600;">Import theme</button>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </foreignObject>
+</svg>
