@@ -251,12 +251,16 @@ Notifications, logs, search results, etc. show:
 7. ---
 8. Sign out
 
+Mockup: `diagrams/components/88-user-menu-dropdown.svg` (280px panel, anchored top-right under avatar bubble, opened state shows identity grid + theme picker row + 6 menu items + red Sign out at footer). Apply `cursor:pointer` to avatar in chrome wrapper.
+
 **Notifications menu** (bell dropdown):
 1. Notification list (last 10, grouped by date)
 2. "Mark all as read" link
 3. ---
 4. View all notifications
 5. Notification preferences
+
+Mockup: `diagrams/components/89-notifications-menu-dropdown.svg` (380px panel, anchored top-right under bell). 3-section grouping by recency (Today / Yesterday / Earlier this week). Each item: severity dot + source label + excerpt + age + View button. Unread items: colored dot (amber/red/violet) + tinted bg; read items: gray dot + faded + checkmark.
 
 **System menu** (icon in header, when present):
 1. Backend status indicator

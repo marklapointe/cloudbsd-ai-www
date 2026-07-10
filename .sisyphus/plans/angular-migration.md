@@ -9298,6 +9298,29 @@ grep -rE 'class="[^"]*\b(bg-|text-|p-[0-9]|m-[0-9]|w-[0-9]|h-[0-9]|flex|grid|rou
     - **Honcho lessons** added: list-with-sidecar pattern, threshold rule, sidecar spec, events-in-logs rule, grouped-card-grid anti-pattern
 
 
+  - T94n (NEW 2026-07-09): Chrome header menu dropdowns (avatar + bell):
+    - **`diagrams/components/88-user-menu-dropdown.svg`** NEW (9.7 KB): avatar clicked → user dropdown
+      - Anchored top-right under avatar bubble in chrome header (280px wide panel)
+      - Header: avatar circle + name (mlapointe) + role (Cluster Admin) + ADMIN badge
+      - Identity grid: ulid (click-to-copy) · email · logged-in (3d 14h via SSH key)
+      - Theme picker row: Cloudbsd / Carbon / Ocean (active) / Solar + "All 12 →"
+      - Menu items per ui-index §15: Profile, Preferences (⌘,), Keyboard shortcuts (?), API tokens (6 badge), Help & docs (F1), About (v0.4.2)
+      - Sign out (red) at footer with ⌃⇧Q shortcut
+      - Caret arrow pointing up at avatar, 8px corner radius, 0.12 shadow
+    - **`diagrams/components/89-notifications-menu-dropdown.svg`** NEW (10.5 KB): bell clicked → notification dropdown
+      - Anchored top-right under bell (380px wide panel)
+      - Header: "Notifications" + "17 UNREAD" badge + "Mark all as read" link
+      - 3-section grouping by recency: Today (4) / Yesterday (8) / Earlier this week (5)
+      - Each item: severity dot (8px) + source label + message excerpt + age + View button
+      - Unread items: dot colored by severity (amber/green/violet) + pale tinted bg (#fefce8 / uncolored)
+      - Read items: gray dot, faded (opacity:0.65), checkmark ✓ on right
+      - Footer: "View all notifications →" + "⚙ Preferences"
+      - Caret arrow pointing up at bell
+    - **Gap surfaced by user 2026-07-09**: avatar (and bell) appeared in canonical chrome wrapper
+      across all screens as static circles with no menu behind. These two mockups fill the gap.
+    - **Honcho lesson**: chrome header avatar + bell are interactive elements, not decoration.
+      Always cursor:pointer. Always anchored dropdown. Always need a mockup to demonstrate
+      the menu state (open) since the closed state is implied by the icon presence.
   - T95 (NEW 2026-07-09): Auth flow UI mockups:
     - `diagrams/screens/51-login.svg` (3.8 KB) — PAM auth form
     - `diagrams/screens/52-two-factor-setup.svg` (32.8 KB) — TOTP setup w/ QR code
