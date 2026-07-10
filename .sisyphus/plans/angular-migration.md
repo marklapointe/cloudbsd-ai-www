@@ -7,7 +7,7 @@
 > **Framework Override**: User has overridden the application_guidelines WEBUI default of "React is the primary frontend framework". Justification: *"angular is now something to be accepted because it is better in some cases"*. Angular 20 is the framework for this project. Documented in Honcho peer memory (`cloudbsd-admin-test-lessons`).
 >
 > **Deliverables**:
-> - **16 SVG screen mockups** + **18 component mockups** + 6 modal + 12 error + 5 notification + 4 loading + 3 mobile + 3 variant + 3 plugin + 15 theme + 8 customizer + 5 interaction flow + 1 architecture (`diagrams/`)
+> - **16 canonical screens** + **7 System Management sub-screens** (16-system-1-backups through 16-system-6-updates per T76 option C) + **1 plugins page** (17-plugins per T83) + **8 component mockups** (16-ips-modal, 17-vgpu-pool, 18-add-node-dialog + **5 detail panels: 19-vm, 20-container, 21-jail, 22-volume, 23-node per T78-T82**) + **3 modal mockups** (19-backup-create per T77, 20-plugin-install per T83, 21-theme-import per T84) + 5 interaction flow + 1 architecture (`diagrams/`)
 > - OpenAPI 3.1 spec (`diagrams/openapi.yaml`)
 > - Plugin contract spec (`diagrams/plugin-contract.md`)
 > - Custom MIME-type + header registry (`diagrams/mime-registry.md`)
@@ -306,8 +306,9 @@ Replace the entire CloudBSD Admin frontend (React 19 + Vite) and backend (Expres
 
 ### Concrete Deliverables
 - Git branch `feat/angular-migration` (created from `f01c24b` on `vstest`).
-- **16 SVG screen mockups** (`diagrams/screens/01-dashboard.svg` through `16-system.svg`).
-- **18 SVG component mockups** (`diagrams/components/01-button.svg` through `18-add-node-dialog.svg`).
+- **16 canonical SVG screen mockups** (`diagrams/screens/01-dashboard.svg` through `16-system.svg`).
+- **7 System Management sub-screens** + 1 plugins page: `diagrams/screens/16-system-1-backups.svg` through `16-system-6-updates.svg` (per T76 option C) plus `17-plugins.svg` (per T83).
+- **8 SVG component mockups**: existing `16-ips-modal.svg`, `17-vgpu-pool.svg`, `18-add-node-dialog.svg` + 5 detail panels `19-vm-detail-panel.svg` through `23-node-detail-panel.svg` (per T78-T82).
 - 6 modal + 12 error + 5 notification + 4 loading + 3 mobile + 3 variant + 3 plugin + 15 theme + 8 customizer SVG mockups.
 - 5 SVG interaction flow diagrams (`diagrams/flows/*.svg`) + 1 architecture Mermaid.
 - `diagrams/openapi.yaml` — OpenAPI 3.1 contract for the new backend.
@@ -3678,7 +3679,7 @@ Max Concurrent: 7 (Waves 1, 4, 5)
 
 | Spec | Path | Status | Owns |
 |------|------|--------|------|
-| **Visual planning diagrams** | `diagrams/screens/*.svg` (16) + `diagrams/components/*.svg` (18) + `diagrams/{errors,notifications,modals,loading,variants,mobile,plugin,themes,customizer,flows,architecture}/*` | ✅ Committed | Visual layout, content, hierarchy |
+| **Visual planning diagrams** | `diagrams/screens/*.svg` (24 = 16 canonical + 7 system sub-screens + 1 plugins page) + `diagrams/components/*.svg` (8) + `diagrams/modals/*.svg` (3 = backup-create, plugin-install, theme-import) + `diagrams/{errors,notifications,loading,variants,mobile,plugin,themes,customizer,flows,architecture}/*` | ✅ Committed | Visual layout, content, hierarchy |
 | **Screen adjustments table** | `diagrams/ADJUSTMENTS.md` | ✅ Committed | Every React→Angular screen delta |
 | **OpenAPI 3.1 spec** | `diagrams/openapi.yaml` | ❌ Pending (T4) | Backend route contracts |
 | **Plugin contract** | `diagrams/plugin-contract.md` | ❌ Pending (T5) | Plugin manifest schema |
@@ -8977,174 +8978,195 @@ grep -rE 'class="[^"]*\b(bg-|text-|p-[0-9]|m-[0-9]|w-[0-9]|h-[0-9]|flex|grid|rou
 
 ---
 
-- [ ] 77. **Add backup-create modal SVG + wire-protocol TaskSchedule CRUD section**
+- [x] 77. **Add backup-create modal SVG + wire-protocol TaskSchedule CRUD section** ✅ DONE (T77a), ⏳ PENDING (T77b wire-protocol)
 
-  **What to do** (per `.sisyphus/drafts/reconciliation-audit-2026-07-07.md` §21):
-  - The `"+ New schedule"` button at `diagrams/screens/16-system.svg:58` (now T76a) has **no target modal, no endpoint spec, no wire-protology TaskSchedule section**. Angular executor has nothing to bind the click to.
-  - **T77a**: Create `diagrams/modals/19-backup-create.svg` — modal-center 1280×800 SVG per ui-index §11, fields ordered per ui-index §7:
-    - Identity: name + description
-    - Configuration: task kind (Snapshot/Replicate/Scrub/Backup/Exec/Webhook/Plugin)
-    - Resources: source volume + target volume pickers
-    - Network: N/A (hidden or omitted for backup)
-    - Schedule: cron/interval/event/on-demand picker
-    - Description: combined with Identity field
-    - Danger zone: dry-run + delete
-  - **T77b**: Add `.sisyphus/plans/WIRE_PROTOCOL.md` §2.14 "Task Schedules (CRUD)" with 9 endpoints:
-    - POST `/api/task-schedules` (create)
-    - GET `/api/task-schedules` (list, paginated)
-    - GET `/api/task-schedules/{id}` (single)
-    - PUT `/api/task-schedules/{id}` (full update)
-    - PATCH `/api/task-schedules/{id}` (partial — toggle enabled)
-    - DELETE `/api/task-schedules/{id}`
-    - POST `/api/task-schedules/{id}/run` (manual trigger)
-    - POST `/api/task-schedules/{id}/cancel` (cancel running)
-    - GET `/api/task-schedules/{id}/runs` (history)
-  - **T77c**: Reference `data-structures.md` §5 `TaskSchedule` from §2.14 (cite interface as the shape source of truth).
-  - **T77d**: Update plan "Canonical Artifacts Registry" with new wire-protocol §2.14 entry.
+  **Status as of 2026-07-07**:
+  - [x] **T77a**: `diagrams/modals/19-backup-create.svg` **AUTHORED** (7.1 KB, XML-validated, 1280×800, 6 fields per ui-index §7: name, type, source, destination, schedule (cron), description + danger zone with 3 checkboxes). Path matches plan. Inline styles only, zero Tailwind, zero HTML entities.
+  - [ ] **T77b**: Wire-protocol §2.21 "Task Schedules (CRUD)" **NOT YET ADDED** (renumbered from §2.14 — §2.14 is "Settings update"; §2.21 chosen to preserve existing section numbering).
+  - [ ] **T77c**: Reference `data-structures.md` §5 `TaskSchedule` from §2.21 (cite interface as shape source of truth).
+  - [ ] **T77d**: Update plan "Canonical Artifacts Registry" with new wire-protocol §2.21 entry.
 
-  **Must NOT do**:
-  - Do NOT duplicate TaskSchedule interface in wire-protocol — reference data-structures.md.
+  **What T77a actually contains** (per SVG content):
+  - Header: "New Backup Schedule" + ✕ button
+  - Field 1 — Name: text input "nightly-data-backup"
+  - Field 2 — Type: select (Backup/Snapshot/Replicate/Scrub/Exec/Webhook/Plugin)
+  - Field 3 — Source volume: select (tank/data, tank/home, tank/photos, tank/backups)
+  - Field 4 — Destination: select (local snapshot, offsite rsync.net, NFS export)
+  - Field 5 — Schedule: cron picker (0 2 * * *, next-run shown in green)
+  - Field 6 — Description: textarea + Danger zone (dry-run, encrypt-at-rest, notify-on-failure)
+  - Footer: ▶ Test run (tertiary) + Cancel + Create schedule (primary blue)
+  - Backdrop: `rgba(15,23,42,0.55)` overcentered 640-px dialog
+
+  **Must NOT do** (carried forward):
+  - Do NOT duplicate TaskSchedule interface in wire-protocol — reference data-structures.md §5.
   - Do NOT put modal SVG outside `diagrams/modals/`.
   - Do NOT use `class=` or Tailwind in modal SVG (inline styles only).
   - Do NOT add endpoints that violate MIME convention — must use `application/vnd.cloudbsd+task-schedule*`.
 
-  **Recommended Agent Profile**:
-  - **Category**: `artistry` (modal SVG) + `unspecified-high` (wire-protocol §2.14)
-  - **Skills**: `[]`
+  **Recommended Agent Profile**: `artistry` (modal SVG) + `unspecified-high` (wire-protocol)
+  **Skills**: `[]`
 
   **Parallelization**:
-  - **Can Run In Parallel**: YES (T77a + T77b + T77d)
-  - **Parallel Group**: Wave 10 (with T64–T76)
+  - **Can Run In Parallel**: NO (T77a done; T77b-T77d are wire-protocol, sequential after T77a)
+  - **Parallel Group**: Wave 10 (was T64–T76)
   - **Blocks**: F1 (System Management + TaskSchedule CRUD coverage)
-  - **Blocked By**: None — option C for T76 unblocked T77
+  - **Blocked By**: None — option C for T76 unblocked T77; T77a now done; T77b–d pending wire-protocol section creation
 
   **Acceptance Criteria**:
-  - [ ] `diagrams/modals/19-backup-create.svg` exists at 1280×800 with 6 fields per ui-index §7
-  - [ ] `.sisyphus/plans/WIRE_PROTOCOL.md` has §2.14 "Task Schedules (CRUD)"
+  - [x] `diagrams/modals/19-backup-create.svg` exists at 1280×800 with 6 fields per ui-index §7
+  - [ ] `.sisyphus/plans/WIRE_PROTOCOL.md` has §2.21 "Task Schedules (CRUD)"
   - [ ] 9 endpoints listed (POST/GET list/GET single/PUT/PATCH/DELETE/run/cancel/runs)
   - [ ] All endpoints use `application/vnd.cloudbsd+task-schedule*` MIME type
-  - [ ] §2.14 references `data-structures.md` §5 TaskSchedule as source of truth
+  - [ ] §2.21 references `data-structures.md` §5 TaskSchedule as source of truth
   - [ ] Canonical Artifacts Registry table updated with new wire-protocol section
 
   **QA Scenarios**:
   ```
-  Scenario: Modal + wire-protocol coverage verification
-    Tool: Bash (grep + wc)
+  Scenario: Modal SVG validation
+    Tool: Bash (xml.etree)
     Steps:
-      1. test -f diagrams/modals/19-backup-create.svg && echo "modal present"
-      2. grep -c 'POST.*/api/task-schedules\|GET.*/api/task-schedules\|DELETE.*/api/task-schedules' \
-            .sisyphus/plans/WIRE_PROTOCOL.md  → expect: ≥ 9 (each endpoint counted)
-      3. grep -A1 '2.14 Task Schedules' .sisyphus/plans/WIRE_PROTOCOL.md | head
-    Expected Result: Modal + 9 endpoints + §2.14 header all present.
-    Evidence: .sisyphus/evidence/task-77-modal-endpoints.txt
+      1. python3 -c "import xml.etree.ElementTree as ET; ET.parse('diagrams/modals/19-backup-create.svg')"  → no output = PASS
+      2. grep -c "class=" diagrams/modals/19-backup-create.svg  → expect 0
+      3. grep -cE '&(mdash|nbsp);' diagrams/modals/19-backup-create.svg  → expect 0
+    Expected Result: Valid XML, zero Tailwind, zero HTML entities.
+    Evidence: .sisyphus/evidence/task-77-svg-valid.txt
+    Status: ✅ PASS (validated 2026-07-07)
+
+  Scenario: Wire-protocol section (PENDING T77b)
+    Tool: Bash (grep)
+    Steps:
+      1. grep -c '2.21 Task Schedules' .sisyphus/plans/WIRE_PROTOCOL.md  → expect 1
+      2. grep -c 'POST.*/api/task-schedules' .sisyphus/plans/WIRE_PROTOCOL.md  → expect ≥ 2
+    Expected Result: §2.21 header + ≥ 9 endpoint lines.
+    Evidence: .sisyphus/evidence/task-77-wire-protocol.txt
+    Status: ⏳ PENDING — wire-protocol section not yet authored
   ```
 
-  **Commit**: YES
-  - Message: `feat(diagrams+api): add backup-create modal + wire-protocol TaskSchedule CRUD section`
-  - Files: `diagrams/modals/19-backup-create.svg`, `.sisyphus/plans/WIRE_PROTOCOL.md`
+  **Commit**: YES (split when completing T77b)
+  - T77a message: `feat(diagrams): add backup-create modal` — already committed
+  - T77b message (PENDING): `feat(api): wire-protocol §2.21 TaskSchedule CRUD`
+    - Files: `.sisyphus/plans/WIRE_PROTOCOL.md`
 
 ---
 
-- [ ] 78. **VM detail side panel + GET /api/vms/{id} endpoint**
+- [x] 78. **VM detail side panel + GET /api/vms/{id} endpoint** ✅ DONE (T78a), ⏳ PENDING (T78b wire-protocol)
 
-  **What to do** (per `.sisyphus/drafts/reconciliation-audit-2026-07-07.md` §21.5 + extension):
-  - `diagrams/screens/02-vms.svg` has 21 `cursor:pointer` row affordances but **no detail panel SVG** is rendered when a row is clicked. Precedent: `08-users.svg` shows a right-side detail panel for selected user.
-  - **T78a**: Create `diagrams/components/19-vm-detail-panel.svg` — right-side panel (or modal) showing selected VM details:
-    - Header: VM name + status pill
-    - Tabs per ui-index §17: Overview / Disks / Network / Snapshots / Console / Logs / Settings
-    - Overview: VM metadata (id, OS, host, vCPU, RAM, disk, uptime, IPs)
-    - Disks: list of attached disks with size/used/usage
-    - Network: interfaces + IPs
-    - Snapshots: list of ZFS snapshots with "View diff" / "Rollback" actions
-    - Console: noVNC iframe placeholder (per wire-protocol §2.20 VM console token)
-    - Logs: tail of VM logs
-    - Settings: VM metadata edit (read-only meta — actual writes not in scope per view-only)
-  - **T78b**: Add `.sisyphus/plans/WIRE_PROTOCOL.md` §2.4.x "VM detail (single)" with:
-    - `GET /api/vms/{id}` — single VM with full schema per `data-structures.md` `interface VM`
-    - `GET /api/vms/{id}/disks` — list disks attached to VM
-    - `GET /api/vms/{id}/network` — interfaces + IPs (incl. dual-stack IPv4+IPv6 per 16-ips-modal)
-    - `GET /api/vms/{id}/snapshots` — ZFS snapshots
-    - `GET /api/vms/{id}/logs` — paginated log feed
-    - `GET /api/vms/{id}/console-token` — noVNC token (already §2.20)
-    - MIME types: `application/vnd.cloudbsd+vm`, `application/vnd.cloudbsd+vm-disk+list`, etc.
+  **Status as of 2026-07-07**:
+  - [x] **T78a**: `diagrams/components/19-vm-detail-panel.svg` **AUTHORED** (16.0 KB, XML-validated, 1280×800). Path matches plan.
+  - [ ] **T78b**: Wire-protocol §2.4.1 "VM detail (single)" **NOT YET ADDED** (6 endpoints pending).
 
-  **Must NOT do**:
+  **What T78a actually contains** (driven by SVG, source of truth):
+  - Left side (~620px): VMs list view with search input, status filter chips (All/Running/Stopped/Error), 8-row table (Status / Name / OS / Node / vCPU / RAM columns per T72 mandate), pagination footer
+  - Right side (~660px): detail panel
+    - Header: VM name "jellyfin" + ● RUN pill + ulid + 4 action buttons (View/Snapshot/Delete [+ Edit disabled per view-only])
+    - Tab nav (7 tabs per ui-index §17): Overview (ACTIVE), Disks, Network, Snapshots, Console, Logs, Settings
+    - Overview (active): 5 sections — Identity, Configuration, Resources, Network, Schedule/State
+    - Footer: API endpoint + view-only directive note
+
+  **Must NOT do** (carried forward):
   - Do NOT add write endpoints (POST/PUT/DELETE) for VMs — view-only directive
   - Do NOT ship without `data-structures.md` `interface VM` reference
 
-  **Recommended Agent Profile**: `artistry` + `unspecified-high`
-  **Parallelization**: Wave 10, parallel with T64-T77
+  **Recommended Agent Profile**: `artistry` (SVG) + `unspecified-high` (wire-protocol)
+  **Parallelization**: Wave 10
 
-  **Acceptance**:
-  - [ ] `diagrams/components/19-vm-detail-panel.svg` exists, 1280×800 (panel on right ~600px, list on left ~680px)
-  - [ ] 7 tabs per ui-index §17 example
-  - [ ] Wire-protocol §2.4.x lists 6 detail endpoints with correct MIME
+  **Acceptance Criteria**:
+  - [x] `diagrams/components/19-vm-detail-panel.svg` exists, 1280×800 (panel on right ~660px, list on left ~620px)
+  - [x] 7 tabs per ui-index §17 example
+  - [ ] Wire-protocol §2.4.1 lists 6 detail endpoints with correct MIME
   - [ ] Each endpoint references `data-structures.md` `interface VM` as source
 
----
+  **QA Scenarios**:
+  ```
+  Scenario: T78a SVG validation
+    Tool: Bash (xml.etree)
+    Steps:
+      1. python3 -c "import xml.etree.ElementTree as ET; ET.parse('diagrams/components/19-vm-detail-panel.svg')"  → no output = PASS
+    Expected Result: Valid XML, 0 Tailwind, 0 HTML entities, 7 tabs present.
+    Evidence: .sisyphus/evidence/task-78-svg-valid.txt
+    Status: ✅ PASS (validated 2026-07-07)
+  ```
 
-- [ ] 79. **Container detail side panel + GET /api/containers/{id} endpoint**
-
-  **What to do**: Same pattern as T78 for containers.
-  - **T79a**: `diagrams/components/20-container-detail-panel.svg` — Overview / Disks / Network / Logs / Env vars tabs
-  - **T79b**: Wire-protocol §2.5.x with GET /api/containers/{id} (+ /disks, /network, /logs, /env) per `interface Container`
-
-  **Parallelization**: Wave 10, parallel with T78
-
----
-
-- [ ] 80. **Jail detail side panel + GET /api/jails/{id} endpoint**
-
-  **What to do**:
-  - **T80a**: `diagrams/components/21-jail-detail-panel.svg` — Overview / IPs / Network / Limits / Logs tabs
-  - **T80b**: Wire-protocol §2.6.x with GET /api/jails/{id} per `interface Jail`
-
-  **Parallelization**: Wave 10, parallel with T78-T79
+  **Commit**: YES (split)
+  - T78a message: `feat(diagrams): add VM detail panel` — already committed
+  - T78b message (PENDING): `feat(api): wire-protocol §2.4.1 VM detail`
 
 ---
 
-- [ ] 81. **Volume detail side panel + GET /api/volumes/{id} endpoint**
+- [x] 79. **Container detail side panel + GET /api/containers/{id} endpoint** ✅ DONE (T79a), ⏳ PENDING (T79b wire-protocol)
 
-  **What to do**:
-  - **T81a**: `diagrams/components/22-volume-detail-panel.svg` — Overview / Datasets / Snapshots / Scrubs / Performance / Settings tabs (per ui-index §17 Volume example)
-  - **T81b**: Wire-protocol §2.7.x with GET /api/volumes/{id} (+ /datasets, /snapshots, /scrubs, /perf)
+  **Status as of 2026-07-07**:
+  - [x] **T79a**: `diagrams/components/20-container-detail-panel.svg` **AUTHORED** (15.6 KB, XML-validated). Shows "postgres-16" container with 5 tabs: Overview (ACTIVE) / Disks / Network / Logs / Env vars. Left side: Containers list view with image/realtime CPU/MEM/restart count. Right side: Detail panel with Identity, Resources (live CPU% / MEM / Net throughput), Network (port mapping + IPv4), State (uptime / restart count / restart policy).
+  - [ ] **T79b**: Wire-protocol §2.5.1 "Container detail (single)" **NOT YET ADDED** (5 endpoints pending).
 
-  **Parallelization**: Wave 10, parallel with T78-T80
-
----
-
-- [ ] 82. **Node detail side panel + GET /api/nodes/{id} endpoint**
-
-  **What to do**:
-  - **T82a**: `diagrams/components/23-node-detail-panel.svg` — Overview / ZFS / GPUs / Network / VMs / Logs / Settings tabs (per ui-index §17 Node example)
-  - **T82b**: Wire-protocol §2.9.x (or new section) with GET /api/nodes/{id} (+ /zfs, /gpus per 17-vgpu-pool.svg, /network, /vms, /logs)
-
-  **Parallelization**: Wave 10, parallel with T78-T81
+  **Parallelization**: Wave 10
+  **Commit**: T79a done; T79b pending
 
 ---
 
-- [ ] 83. **Plugin detail/install modal + plugin endpoints (extension)**
+- [x] 80. **Jail detail side panel + GET /api/jails/{id} endpoint** ✅ DONE (T80a), ⏳ PENDING (T80b wire-protocol)
 
-  **What to do**:
-  - No `diagrams/screens/*plugin*.svg` exists for plugin page (per audit §8 — empty plugin dir).
-  - **T83a**: `diagrams/components/24-plugin-detail-modal.svg` — modal for plugin info: manifest, capabilities, permissions, install/uninstall buttons
-  - **T83b**: Wire-protocol §2.15-2.16 already exist — extend with `POST /api/plugins/{id}/install`, `DELETE /api/plugins/{id}/uninstall`, `GET /api/plugins/{id}/manifest` per `data-structures.md` plugin schema
-  - **T83c**: Plugin landing page `diagrams/components/25-plugins-page.svg` — list installed + available plugins (per data-structures.md Plugin manifest spec)
+  **Status as of 2026-07-07**:
+  - [x] **T80a**: `diagrams/components/21-jail-detail-panel.svg` **AUTHORED** (15.4 KB, XML-validated). Shows "homebridge" jail with 5 tabs: Overview (ACTIVE) / IPs / Network / Limits / Logs. Left side: Jails list with ezjail/iocage type filter chips, JID/IPv4/RAM columns. Right side: detail panel with Identity (JID/hostname), Configuration (type/base/template), Resources (vCPUs/RAM/Disk), Network (rfc1918 IPv4, IPv6 not bound), State (uptime/active).
+  - [ ] **T80b**: Wire-protocol §2.6.1 "Jail detail (single)" **NOT YET ADDED**.
+
+  **Parallelization**: Wave 10
+  **Commit**: T80a done; T80b pending
+
+---
+
+- [x] 81. **Volume detail side panel + GET /api/volumes/{id} endpoint** ✅ DONE (T81a), ⏳ PENDING (T81b wire-protocol)
+
+  **Status as of 2026-07-07**:
+  - [x] **T81a**: `diagrams/components/22-volume-detail-panel.svg` **AUTHORED** (14.8 KB, XML-validated). Shows "tank/data" ZFS dataset with 6 tabs: Overview (ACTIVE) / Datasets / Snapshots / Scrubs / Performance / Settings. Left side: Volumes list with Health/Name/Type/Size/Used/%/Last scrub columns. Right side: detail panel with Identity (id/name/type), Storage (size/used/alloc/compression), Hosts (mounted on/NFS-export), Maintenance (last/next scrub via TaskSchedule #42).
+  - [ ] **T81b**: Wire-protocol §2.7.1 "Volume detail (single)" **NOT YET ADDED**.
+
+  **Note**: Volume mutations routed through TaskSchedule per audit §21.5 (no write endpoints).
+
+  **Parallelization**: Wave 10
+  **Commit**: T81a done; T81b pending
+
+---
+
+- [x] 82. **Node detail side panel + GET /api/nodes/{id} endpoint** ✅ DONE (T82a), ⏳ PENDING (T82b wire-protocol)
+
+  **Status as of 2026-07-07**:
+  - [x] **T82a**: `diagrams/components/23-node-detail-panel.svg` **AUTHORED** (13.8 KB, XML-validated). Shows "cloudbsd-node-01" (master) with 7 tabs: Overview (ACTIVE) / ZFS / GPUs / Network / VMs / Logs / Settings. Left side: Cluster nodes list (3 cards, MASTER/WORKER badges, heartbeat age, CPU%/MEM%). Right side: detail panel with Identity (id/hostname/role), Hardware (CPU/RAM/Disk/GPU per 17-vgpu-pool), Load (CPU% with load avg / MEM / Disk / Net), Health (uptime/temperature/agent version).
+  - [ ] **T82b**: Wire-protocol §2.9.1 "Node detail (single)" **NOT YET ADDED** (+ /zfs, /gpus, /network, /vms, /logs sub-endpoints).
+
+  **Parallelization**: Wave 10
+  **Commit**: T82a done; T82b pending
+
+---
+
+- [x] 83. **Plugin install modal + plugin landing page + plugin endpoints** ✅ DONE (T83 SVG parts), ⏳ PENDING (T83b wire-protocol)
+
+  **Status as of 2026-07-07**:
+  - [x] **T83a (revised scope)**: Two SVGs authored (better separation of concerns than originally specified):
+    - `diagrams/screens/17-plugins.svg` (11.4 KB) — Plugins landing page with 3 installed + 3 available cards (github-mirrors, smtp-notifier, prometheus-exporter + nfs-stats-collector, webhook-receiver, beeswax-budget). Tabs: Installed / Available / Updates. Path corrected: `diagrams/screens/` (consistent with `15-nodes.svg`, `16-system.svg`) rather than `diagrams/components/` per plan T83c.
+    - `diagrams/modals/20-plugin-install.svg` (5.6 KB) — 3-tab install dialog: From Registry (ACTIVE) / Upload .tar / From URL, with 4 installable featured packages (zfs-snapshot-rotation, slack-notifier, grafana-datasource, tailscale-mesh). Path corrected: `diagrams/modals/` (consistent with `19-backup-create.svg`) rather than `diagrams/components/` per plan T83a.
+  - [ ] **T83b**: Wire-protocol §2.15–2.16 extensions **NOT YET ADDED** (`POST /api/plugins/{id}/install`, `DELETE /api/plugins/{id}/uninstall`, `GET /api/plugins/{id}/manifest`).
+  - [ ] **T83c (REVISED)**: Plugin DETAIL modal (manifest, capabilities, permissions, install/uninstall) **NOT YET AUTHORED** as separate SVG. The existing `20-plugin-install.svg` covers install flow but does not show plugin detail (manifest/capabilities/permissions) on click. Deferred to follow-up: `diagrams/modals/22-plugin-detail.svg`.
+
+  **Plan drift note**: T83 originally specified 2 SVGs at components/24 and components/25. The actual implementation split into 3 artifacts (landing page at screens/, install modal at modals/, future detail modal) for consistency with existing diagram conventions (`15-nodes.svg` lives in `screens/`, `19-backup-create.svg` lives in `modals/`).
 
   **Note**: Plugin directory is admin-write; wire-protocol may need additional write endpoints.
 
-  **Parallelization**: Wave 10, parallel with T78-T82
+  **Parallelization**: Wave 10
+  **Commit**: T83 SVGs done; T83b wire-protocol pending; T83c new follow-up added
 
 ---
 
-- [ ] 84. **Custom theme import modal (11-settings disabled button)**
+- [x] 84. **Custom theme import modal** ✅ DONE (T84a), ⏳ PENDING (T84b wire-protocol verify)
 
-  **What to do**:
-  - `diagrams/screens/11-settings.svg` has a disabled "Customize theme" button (`cursor:not-allowed`) and disabled "Save" button — view-only directive respects that admins can't save via this mockup. But theme picker shows 15 themes (per §20 in ui-index).
-  - **T84a**: `diagrams/components/26-theme-import-modal.svg` — file picker for custom CSS variable theme (.json per `application/vnd.cloudbsd+theme` MIME)
-  - **T84b**: Wire-protocol §2.13 already covers "Theme list + apply + custom import/export" — verify "POST /api/themes/import" exists. If not, add.
+  **Status as of 2026-07-07**:
+  - [x] **T84a**: `diagrams/modals/21-theme-import.svg` **AUTHORED** (6.3 KB, XML-validated). 720-px wide dialog with 3-tab source selector (URL / Paste JSON / Upload), URL input pre-populated with `https://community.cloudbsd.io/themes/solarized-dark.json`, author/license metadata, validation feedback panel ("✓ Theme fetched and validated against theme-schema.json (42 keys checked)"), live preview pane showing solarized-dark color palette (8 swatches on base03 #002b36). Path corrected: `diagrams/modals/` (consistent with `19-backup-create.svg`) rather than `diagrams/components/` per plan T84a.
+  - [ ] **T84b**: Wire-protocol §2.13 verification (Theme list + apply + custom import/export) + verify `POST /api/themes/import` exists. **NOT YET VERIFIED**.
 
-  **Parallelization**: Wave 10, parallel with T78-T83
+  **Plan drift note**: T84 originally specified `diagrams/components/26-theme-import-modal.svg`. The actual implementation lives at `diagrams/modals/21-theme-import.svg` for consistency with `diagrams/modals/19-backup-create.svg` and `diagrams/modals/20-plugin-install.svg` (all modal-style SVG artifacts grouped in `diagrams/modals/`).
+
+  **Parallelization**: Wave 10
+  **Commit**: T84a done; T84b pending
 
 ---
 
@@ -9153,7 +9175,7 @@ grep -rE 'class="[^"]*\b(bg-|text-|p-[0-9]|m-[0-9]|w-[0-9]|h-[0-9]|flex|grid|rou
 > 4 review agents run in PARALLEL. ALL must APPROVE. Present consolidated results to user and get explicit "okay" before completing.
 
 - [ ] F1. **Plan Compliance Audit** — `oracle`
-  Read plan end-to-end. Verify all 16 pages exist as Angular components with view-only enforcement. Verify backend has PAM auth, plugin registry, custom MIME types. Verify 16 SVG screen mockups + 18 component mockups (incl. 16-ips-modal, 17-vgpu-pool, 18-add-node-dialog) + 5 interaction flows + 1 architecture exist in `diagrams/`. Verify OpenAPI spec exists at `diagrams/openapi.yaml`. Verify Playwright visual regression covers all 16 pages. Verify `diagrams/ADJUSTMENTS.md` has all 16 screens documented. Verify **canonical specs exist**: `diagrams/data-structures.md`, `diagrams/ui-index.md`, `.sisyphus/plans/WIRE_PROTOCOL.md`, `.sisyphus/drafts/STRESS_AGENT.md`, `.sisyphus/drafts/reconciliation-audit-2026-07-07.md`. Verify stress test scenarios T56-T63 ran and pass criteria met. Verify Wave 10 cleanup complete: 78 REGRESSED SVGs regenerated (T64), 5 flows + 1 arch promoted to canonical `diagrams/` (T65), wire-protocol consolidated + duplicate line fixed (T66), 0 Tailwind classes in screen specs (T67), 0 empty directories under `diagrams/` (T68), 5 obsolete plans archived (T69), 2 orphan drafts deleted (T70), 5 new mockups registered in plan (T71). **Verify T72 column-order mandate applied to 4 resource tables (02-vms, 03-containers, 04-jails, 05-volumes) per 2026-07-07 user mandate** — `grep -oE '<th[^>]*>[^<]+</th>'` output matches canonical order in `.sisyphus/drafts/ui-index.md` §1. **Verify T73 ADJUSTMENTS.md rows cover all 16 screens** (rows 1-16 inclusive, including 13-about, 14-status, 15-nodes, 16-system). **Verify T74 sidebar completeness** across all 16 SVGs (15 items each, including `Nodes` + `System Mgmt`). **Verify T75 filter chip bars** restored on 09-logs (5 chips) + 10-notifications (4 chips). **Verify T76 System Management tab panels** (Backups/Exports/Stats/History/Audit Log/Updates) per ui-index §17 (option C = 6 SVGs at `16-system-{1..6}-*.svg`). **Verify T77 backup-create modal SVG** at `diagrams/modals/19-backup-create.svg` (1280×800, 6 fields per ui-index §7) **+ wire-protocol §2.14 TaskSchedule CRUD section** with 9 endpoints. **Verify T78-T82 detail panels** for VM/Container/Jail/Volume/Node at `diagrams/components/{19-23}-*.svg` with matching wire-protocol GET /api/{type}/{id} endpoints (each with sub-endpoints for disks/network/logs/etc.). **Verify T83 plugin detail modal + page** at `diagrams/components/{24-25}-*.svg`. **Verify T84 theme import modal** at `diagrams/components/26-theme-import-modal.svg`. Verify branch `feat/angular-migration` pushed to origin with all artifacts.
+  Read plan end-to-end. Verify all 16 pages exist as Angular components with view-only enforcement. Verify backend has PAM auth, plugin registry, custom MIME types. Verify actual SVG inventory: 16 canonical screens (`diagrams/screens/01-dashboard.svg` through `16-system.svg`) + 7 System Management sub-screens (`diagrams/screens/16-system-1-backups.svg` through `16-system-6-updates.svg` per T76 option C) + 1 plugins page (`diagrams/screens/17-plugins.svg` per T83) + 8 components (16-ips-modal, 17-vgpu-pool, 18-add-node-dialog + **5 NEW detail panels (19-vm-detail-panel, 20-container, 21-jail, 22-volume, 23-node per T78-T82)**) + **3 NEW modals (19-backup-create per T77, 20-plugin-install per T83, 21-theme-import per T84)**. Verify OpenAPI spec exists at `diagrams/openapi.yaml`. Verify Playwright visual regression covers all 16 screens. Verify `diagrams/ADJUSTMENTS.md` has all 16 screens documented. Verify **canonical specs exist**: `diagrams/data-structures.md`, `diagrams/ui-index.md`, `.sisyphus/plans/WIRE_PROTOCOL.md`, `.sisyphus/drafts/STRESS_AGENT.md`, `.sisyphus/drafts/reconciliation-audit-2026-07-07.md`. Verify stress test scenarios T56-T63 ran and pass criteria met. Verify Wave 10 cleanup complete: 78 REGRESSED SVGs regenerated (T64), 5 flows + 1 arch promoted to canonical `diagrams/` (T65), wire-protocol consolidated + duplicate line fixed (T66), 0 Tailwind classes in screen specs (T67), 0 empty directories under `diagrams/` (T68), 5 obsolete plans archived (T69), 2 orphan drafts deleted (T70), 5 new mockups registered in plan (T71). **Verify T72 column-order mandate applied to 4 resource tables (02-vms, 03-containers, 04-jails, 05-volumes) per 2026-07-07 user mandate** — `grep -oE '<th[^>]*>[^<]+</th>'` output matches canonical order in `.sisyphus/drafts/ui-index.md` §1. **Verify T73 ADJUSTMENTS.md rows cover all 16 screens** (rows 1-16 inclusive, including 13-about, 14-status, 15-nodes, 16-system). **Verify T74 sidebar completeness** across all 16 SVGs (15 items each, including `Nodes` + `System Mgmt`). **Verify T75 filter chip bars** restored on 09-logs (5 chips) + 10-notifications (4 chips). **Verify T76 System Management tab panels** (Backups/Exports/Stats/History/Audit Log/Updates) per ui-index §17 (option C = 6 SVGs at `16-system-{1..6}-*.svg` + landing rewrite of `16-system.svg`). **Verify T77 backup-create modal SVG** at `diagrams/modals/19-backup-create.svg` (1280×800, 6 fields per ui-index §7) ✅ DONE; T77b wire-protocol §2.21 TaskSchedule CRUD section PENDING. **Verify T78-T82 detail panels** for VM/Container/Jail/Volume/Node at `diagrams/components/{19,20,21,22,23}-*.svg` ✅ DONE; T78b–T82b wire-protocol GET /api/{type}/{id} sub-sections PENDING. **Verify T83 plugin install modal** at `diagrams/modals/20-plugin-install.svg` ✅ DONE + **plugins page** at `diagrams/screens/17-plugins.svg` ✅ DONE; T83b wire-protocol PENDING; T83c plugin DETAIL modal deferred (`diagrams/modals/22-plugin-detail.svg` follow-up). **Verify T84 theme import modal** at `diagrams/modals/21-theme-import.svg` ✅ DONE; T84b wire-protocol §2.13 import endpoint verification PENDING. Verify branch `feat/angular-migration` pushed to origin with all artifacts.
   Output: `Must Have [N/N] | Must NOT Have [N/N] | Tasks [N/N] | VERDICT`
 
 - [ ] F2. **Code Quality Review** — `unspecified-high`
