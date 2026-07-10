@@ -9446,6 +9446,310 @@ grep -rE 'class="[^"]*\b(bg-|text-|p-[0-9]|m-[0-9]|w-[0-9]|h-[0-9]|flex|grid|rou
 - Volumes tree-view for nested datasets (gap 10). Defer to v2.
 - Bulk write actions (gap 6, 11). Defer to v3 (post-view-only).
 - Mobile responsive list views at 1K rows. Defer to v2.
+---
+
+## Wave 12a: Dynamic Auth Capabilities + Preflight (added 2026-07-09 per user directive)
+
+> **Why this exists**: User has no 2FA provider available and isn't implementing 2FA soon, but doesn't want to lose that work. Frontend must not hardcode auth forms. Backend must expose what auth mechanisms are actually enabled. App must march forward even if some subsystems are degraded, as long as local PAM auth works so admin can troubleshoot.
+
+### Goals
+1. Backend exposes `GET /api/auth/capabilities` (no auth required) returning current auth mechanism state
+2. Backend exposes `GET /api/system/preflight` (no auth required) returning subsystem health
+3. Config file (yaml) + admin endpoint cascade resolution: API override > YAML > built-in defaults > recovery state (local PAM only)
+4. Frontend fetches capabilities once on boot, caches them, renders `/login` dynamically
+5. Preflight runs before login, logs all checks to browser console (F12 source of truth)
+6. March-forward rule: show `/login` whenever `local_auth_available=true` OR any enabled mechanism is reachable. Degraded subsystems surface as amber pill banner, never block.
+
+### Cascade resolution order (3 layers, recovery-safe)
+
+```
+Layer 3 (highest priority): Admin endpoint override
+   POST /api/admin/config/auth
+   DB-backed (table: auth_mechanism_config), edit-able from admin UI
+   Survives restarts
+                                    ↓ cascade-down if invalid/error
+Layer 2: YAML config (loaded at backend startup)
+   /etc/cloudbsd/admin.yaml → auth.mechanisms.{pam_local|totp_2fa|ldap|oidc}
+   Re-read on SIGHUP; takes effect without restart
+                                    ↓ cascade-down if missing/malformed
+Layer 1: Built-in defaults
+   Hardcoded fallback in code: { pam_local: { enabled: true, primary: true } }
+   Only this layer is guaranteed to work even if YAML is corrupt and DB is unavailable
+                                    ↓ cascade-down if initialization fails entirely
+Layer 0: Recovery state
+   Single mechanism: pam_local, no extra checks
+   Backend logs warning on every request: "WARN: running in recovery state"
+   This is the absolute floor — admin MUST be able to get in
+```
+
+### Backend endpoints (no auth required)
+
+```http
+GET /api/auth/capabilities
+
+200 OK
+{
+  "mechanisms": [
+    {
+      "id": "pam_local",
+      "label": "Username & Password",
+      "enabled": true,
+      "primary": true,
+      "status": "ok"
+    },
+    {
+      "id": "totp_2fa",
+      "label": "Time-based One-Time Password",
+      "enabled": false,
+      "requires": "pam_local",
+      "status": "disabled",
+      "config_required": ["issuer_secret"]
+    },
+    {
+      "id": "ldap",
+      "label": "LDAP / Active Directory",
+      "enabled": false,
+      "status": "unconfigured",
+      "config_required": ["server", "bind_dn", "base_dn"]
+    },
+    {
+      "id": "oidc",
+      "label": "Single Sign-On",
+      "enabled": false,
+      "status": "unconfigured",
+      "config_required": ["issuer", "client_id", "client_secret"],
+      "redirect": "/api/auth/oidc/start"
+    }
+  ],
+  "local_auth_available": true,
+  "primary": "pam_local",
+  "cascade_layer": "yaml",       // "api_override" | "yaml" | "defaults" | "recovery"
+  "warnings": [
+    { "code": "MECHANISM_DISABLED",     "message": "2FA is disabled. Configure an issuer secret to enable.", "severity": "info" },
+    { "code": "MECHANISM_UNCONFIGURED", "message": "LDAP/OIDC not configured.",                            "severity": "info" }
+  ]
+}
+```
+
+```http
+GET /api/system/preflight
+
+200 OK (without auth - critical for diagnosing broken deploys)
+{
+  "status": "ok",                  // overall: ok | degraded | critical
+  "checks": [
+    { "name": "database",         "status": "ok",    "latency_ms": 4 },
+    { "name": "redis_cache",      "status": "ok",    "latency_ms": 1 },
+    { "name": "ldap_server",      "status": "skipped","reason": "not_configured" },
+    { "name": "oidc_provider",    "status": "skipped","reason": "not_configured" },
+    { "name": "smtp_relay",       "status": "ok",    "latency_ms": 12 },
+    { "name": "plugin_runtime",   "status": "ok",    "latency_ms": 8 },
+    { "name": "auth_db_table",    "status": "ok",    "latency_ms": 3 }
+  ],
+  "summary": "5 operational, 2 skipped, 0 failed",
+  "login_unaffected": true,
+  "warnings": []
+}
+```
+
+```http
+POST /api/admin/config/auth (requires admin session — does NOT count as 401)
+
+Authorization: Bearer <admin-token>
+
+200 OK
+{
+  "mechanisms": { "ldap": { "enabled": true, "server": "ldap://corp.example.com" } },
+  "cascade_layer": "api_override"
+}
+```
+
+### Config schema (YAML)
+
+```yaml
+# /etc/cloudbsd/admin.yaml
+auth:
+  mechanisms:
+    pam_local:
+      enabled: true              # local PAM is always the safety net
+      primary: true
+    totp_2fa:
+      enabled: false             # OFF until provider is configured
+      issuer: "CloudBSD Admin"   # shown in authenticator app
+      secret_env: "CLOUDBSD_TOTP_SECRET"
+    ldap:
+      enabled: false
+      server: ""
+      bind_dn: ""
+      base_dn: ""
+      tls: require
+    oidc:
+      enabled: false
+      issuer: ""                 # e.g. https://accounts.google.com
+      client_id: ""
+      client_secret_env: ""      # name of env var holding secret
+      scopes: ["openid", "email", "profile"]
+```
+
+### March-forward rules (frontend boot sequence)
+
+```
+1. APP_INITIALIZER runs PreflightService.check()
+   - calls GET /api/system/preflight
+   - if status === "ok": no banner
+   - if status === "degraded": logs warnings to console, shows amber pill on /login
+   - if status === "critical": show 76-error-backend-dead.svg fullscreen (NOT /login)
+
+2. APP_INITIALIZER runs AuthCapabilitiesService.load()
+   - calls GET /api/auth/capabilities
+   - cache result in a Signal<Capabilities>
+   - if request fails AND no cache: show 76-error-backend-dead.svg
+   - if request fails AND has stale cache (e.g. session restore): use stale cache + warn
+
+3. Router navigates to /login (if not authenticated) or /dashboard
+   /login reads capabilities from Signal
+   Renders mechanism tabs/cards dynamically — NO hardcoded forms
+   Shows "Re-check auth settings" button that re-fetches capabilities
+```
+
+### UI mockup requirements
+
+- **`51-login.svg` (REWRITE)**: render dynamic mechanism cards. Show all 4 mechanisms in the mockup with 2 enabled (pam_local, totp_2fa) and 2 disabled (ldap, oidc). Include "Re-check auth settings" link. Include degraded-pill banner if preflight is non-ok.
+- **NEW `90-auth-capabilities-admin.svg`**: admin Settings → Security → Authentication page. Shows cascade_layer, current mechanism table (id, label, enabled, status, source-layer, last-changed), inline toggles for each mechanism, advanced config fields visible only when mechanism is enabled.
+- **NEW `91-preflight-diagnostics-admin.svg`**: admin Settings → Diagnostics page. Shows full preflight report with each check expandable (latency, error, history sparkline).
+
+### Tasks (added to Wave 12a)
+
+- [ ] T110 — **Backend config schema** `auth.mechanisms`
+  - Add to `internal/config/schema.go` (or equivalent)
+  - Validate at startup; warn if `pam_local.enabled=false` (unsafe default)
+  - Tests: yaml parsing for all combinations
+
+- [ ] T111 — **Backend** `GET /api/auth/capabilities`
+  - Read cascade-resolved state
+  - Return JSON per spec above
+  - Status codes: 200 (always — even in degraded state), 503 only if backend itself dying
+  - Tests: 100% coverage on enabled/disabled/cascade combinations
+
+- [ ] T112 — **Backend** `GET /api/system/preflight`
+  - Run all checks in parallel with 5s timeout each
+  - Aggregate: status = ok if all ok, degraded if any non-critical fail, critical if DB+auth_db_table fail
+  - Tests: each check has a "make-it-fail" test variant
+
+- [ ] T113 — **Backend** `POST /api/admin/config/auth`
+  - Admin-protected endpoint (requires valid session, role=admin)
+  - Validate input shape (zod-like validator)
+  - Write to DB
+  - Re-emit `/api/auth/capabilities` so other instances see change (optional pubsub)
+  - Tests: cascade-down if DB write fails (next call returns YAML values)
+
+- [ ] T114 — **Frontend** `AuthCapabilitiesService`
+  - APP_INITIALIZER provider
+  - Signal<Capabilities> exposed
+  - Re-fetch on demand (manual refresh button)
+  - Tests: 100% coverage including stale-cache fallback
+
+- [ ] T115 — **Frontend** `PreflightService`
+  - APP_INITIALIZER provider (runs BEFORE T114)
+  - Logs ALL checks to console with `console.group('Preflight') / console.table / console.groupEnd()`
+  - Returns `Observable<PreflightResult>`
+  - Tests: ok / degraded / critical states
+
+- [ ] T116 — **Refactor** `/login` screen to render capability-driven
+  - Read `capabilities()` Signal
+  - Render mechanism cards/tabs dynamically
+  - Show degraded-pill banner from `preflight()` Signal
+  - Show "Re-check auth settings" button
+  - Show error console hint: "Press F12 → Console for diagnostics"
+  - Tests: render snapshots for 8 capability combinations
+
+- [ ] T117 — **Mockup** `90-auth-capabilities-admin.svg`
+  - Admin security settings page
+  - Tests: visual regression in Playwright
+
+- [ ] T118 — **Mockup** `91-preflight-diagnostics-admin.svg`
+  - Admin diagnostics page
+  - Tests: visual regression in Playwright
+
+- [ ] T119 — **Rewrite `51-login.svg`** (capability-driven version)
+  - Show 2 enabled (pam_local + totp_2fa) + 2 disabled (ldap + oidc) mechanisms
+  - Show degraded-pill banner example
+
+- [ ] T120 — **Tests** for cascade resolution
+  - Layer 3 API override active → Layer 2 YAML ignored → Layer 1 defaults ignored
+  - Layer 3 invalid → cascade to Layer 2
+  - Layer 3 + Layer 2 invalid → cascade to Layer 1
+  - All 3 invalid → recovery state (Layer 0)
+
+- [ ] T121 — **Update** `.sisyphus/drafts/ui-index.md` §26
+  - Capability-driven login spec
+  - Cascade resolution overview
+  - March-forward rules
+
+- [ ] T122 — **Update** `.sisyphus/plans/WIRE_PROTOCOL.md` §2.28 + §2.29
+  - §2.28: `auth.capabilities.get` (response envelope)
+  - §2.29: `system.preflight.get` (response envelope)
+  - §2.30: `auth.config.update` (admin endpoint, request + response)
+
+- [ ] T123 — **Update** `.sisyphus/drafts/lessons.md`
+  - Document cascade resolution pattern (API > YAML > defaults > recovery)
+  - March-forward rule (never block when local auth works)
+  - 401 still redirects to /login (no frost-out)
+
+- [ ] T124 — **Honcho conclusion**: cascade-resolution + march-forward pattern
+
+### Must Have
+- `/api/auth/capabilities` endpoint returns correct data for all enabled/disabled combinations
+- `/api/system/preflight` endpoint runs all checks, never blocks /login, logs everything
+- Frontend `/login` renders dynamically based on capabilities (no hardcoded mechanism assumptions)
+- Cascade works: invalid Layer 3 → Layer 2; invalid Layer 3+2 → Layer 1; all invalid → Layer 0
+- Browser console (F12) shows full preflight dump + auth errors
+- Admin endpoint can toggle mechanisms at runtime
+- 100% test coverage gate maintained (per plan convention)
+- admin can always login with PAM local creds even if everything else is broken
+
+### Must NOT Have
+- ❌ Frost-out modal (REMOVED in 39d5b68 — preserved context is meaningless)
+- ❌ Standalone 401 page (REMOVED in 39d5b68 — redirect to /login instead)
+- ❌ Hard-block /login for any non-critical subsystem failure
+- ❌ Hardcode mechanism list in frontend (must come from /api/auth/capabilities)
+- ❌ Treat totp_2fa as enabled when no provider is configured (must report `status: unconfigured`)
+- ❌ Surface admin recovery state to non-admin users (different UI, different access)
+
+### Guardrails
+- `pam_local.enabled = false` triggers a startup WARNING (not error) — admin has explicitly disabled local auth
+- All `GET /api/auth/capabilities` responses include `cascade_layer` so admin can diagnose which layer is winning
+- `preflight` always returns 200 unless backend itself is dying (so console can show it)
+- Console output uses `console.group()` for collapsibility (F12 UX)
+- All tests use table-driven cases (one test file = 8-16 sub-cases via `it.each` or `pytest.mark.parametrize`)
+
+### Cascade integration with existing 401 handling
+- If `/api/auth/capabilities` returns 401 (rare — endpoint is anonymous) → fall back to built-in defaults (Layer 1) which exposes only `pam_local`
+- If `/api/system/preflight` returns 401 (also rare) → assume degraded state, show banner, allow /login
+- Normal flow: 401 from authenticated endpoint → redirect to `/login?reason=expired` (per 39d5b68 policy)
+
+### Recovery state semantics
+- Layer 0 (recovery) is reached ONLY when Layer 3 + Layer 2 + Layer 1 all fail to initialize
+- In recovery state, backend logs a permanent WARNING to all logs (so it's visible in any console)
+- Recovery state exposes ONLY `pam_local` — this is the absolute floor for self-healing
+- Admin MUST visit `/admin/security` after recovery to fix Layer 1 (defaults) or Layer 2 (YAML)
+
+### Acceptance
+- All 24 tasks above marked DONE
+- 100% test coverage for backend capability/preflight/cascade code
+- 100% test coverage for frontend AuthCapabilitiesService/PreflightService/login.component
+- New SVG mockups authored (T117, T118) and `51-login.svg` rewritten (T119)
+- Plan + ui-index + WIRE_PROTOCOL + lessons.md updated
+- Honcho peer `prometheus` has new conclusion
+- Branch pushed to origin
+
+### Relationship to existing work
+- T110-T116 are PURE additions — no existing code is refactored (login screen writes are additive)
+- T117-T119 are PURE additions (new mockups + one rewrite)
+- T120-T124 are docs/tests/lessons
+- Auth flow in plan §auth remains primary source of truth; Wave 12a ADDS capability discovery layer above it
+- 401 redirect policy from 39d5b68 still applies (every authenticated endpoint)
+
 
 ---
 

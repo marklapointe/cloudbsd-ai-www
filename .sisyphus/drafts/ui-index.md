@@ -871,3 +871,139 @@ ngOnInit() {
 - `logout` events: emit a `auth.session.expired` wire-protocol event so we know whether users are getting bounced frequently (would indicate session-too-short config issue)
 - `login` events after `logout`: log both as correlated events to spot-mid-session logout patterns
 
+
+
+---
+
+## §26. Capability-driven login + Cascade resolution (added 2026-07-09)
+
+> **Rule**: the backend is the source of truth for which auth mechanisms are currently enabled. The frontend never assumes a mechanism is or isn't available — it always asks the backend first via `GET /api/auth/capabilities`.
+
+### Why this rule
+
+- User has no 2FA provider right now. Frontend shouldn't render TOTP form. Frontend shouldn't render OIDC button.
+- Tomorrow user might add an LDAP server. Frontend shouldn't need a redeploy to expose LDAP login.
+- Some subsystems might be broken (LDAP server down, OIDC issuer invalid). Frontend shouldn't pretend those mechanisms work.
+
+### The two endpoints (no auth required)
+
+| Endpoint | Purpose | Caching |
+|---|---|---|
+| `GET /api/auth/capabilities` | "What auth mechanisms can I use right now?" | Browser in-memory Signal, lifetime = page session |
+| `GET /api/system/preflight` | "What subsystems are healthy / degraded?" | Browser in-memory Signal, re-fetched on /login mount |
+
+### Cascade resolution (3 layers + 1 recovery floor)
+
+```
+Layer 3 (highest) ─ POST /api/admin/config/auth (runtime, DB-backed)
+Layer 2         ── /etc/cloudbsd/admin.yaml → auth.mechanisms.*
+Layer 1         ── Built-in defaults in code (pam_local always on)
+Layer 0 (floor) ─ Recovery state: only pam_local, log warning on every request
+```
+
+The backend's `/api/auth/capabilities` response always includes `cascade_layer` so the admin can see which layer is currently winning.
+
+### March-forward rule
+
+> Show `/login` whenever `local_auth_available=true` OR any enabled mechanism is reachable.
+> Degraded subsystems surface as amber pill banner. NEVER hard-block /login.
+
+Only critical failures (backend itself is dead — `/api/auth/capabilities` unreachable) trigger a fullscreen `76-error-backend-dead.svg`. That's a 1-out-of-many case, not normal.
+
+### UI flow on the login screen
+
+1. `AuthCapabilitiesService` loads once (APP_INITIALIZER), cached in a `Signal<Capabilities>`
+2. `PreflightService` runs first (also APP_INITIALIZER), logs everything to console (`console.group('Preflight') / console.table / console.groupEnd()`)
+3. Login screen reads both Signals, renders mechanism cards dynamically
+4. Each mechanism card has its own `<form>` — submit calls the appropriate endpoint:
+   - `pam_local` → `POST /api/auth/login` with `username` + `password`
+   - `totp_2fa` → `POST /api/auth/login/totp` with `username` + `password` + `totp_code`
+   - `ldap` → `POST /api/auth/login/ldap` with `username` + `password`
+   - `oidc` → `window.location = /api/auth/oidc/start` (server-side redirect)
+5. "Re-check auth settings" link below the form re-runs both endpoints
+6. If preflight is degraded, an amber pill appears above the form: "⚠ N subsystems degraded. Press F12 → Console for details."
+
+### What the 12-login.svg rewrite will show
+
+- 4 mechanism cards in the mockup
+- `pam_local`: ENABLED + green check, expanded form (Username + Password)
+- `totp_2fa`: status="disabled", greyed out, "Configure totp_2fa in admin/security to enable" hint
+- `ldap`: status="unconfigured", greyed out, "Configure LDAP server in admin/security" hint
+- `oidc`: status="unconfigured", greyed out, "Configure OIDC issuer in admin/security" hint
+- Amber pill at top: "1 subsystem degraded — view console for details"
+
+### Anti-patterns this replaces
+
+- ❌ Frontend hardcodes `<input name="totp">` — assumes 2FA is always required
+- ❌ Frontend hardcodes "Sign in with Google" button — assumes OIDC is always configured
+- ❌ Backend returns 503 when any subsystem is broken — admin is locked out
+- ❌ Admin endpoint doesn't exist — to change config, edit YAML, restart daemon, hope
+
+### Implementation
+
+```ts
+// frontend/src/app/core/auth/auth-capabilities.service.ts
+@Injectable({ providedIn: 'root' })
+export class AuthCapabilitiesService {
+  private _capabilities = signal<Capabilities | null>(null);
+  readonly capabilities = this._capabilities.asReadonly();
+  private _error = signal<Error | null>(null);
+  readonly error = this._error.asReadonly();
+
+  async load(force = false): Promise<Capabilities> {
+    if (this._capabilities() && !force) return this._capabilities()!;
+    try {
+      const caps = await firstValueFrom(this.http.get<Capabilities>('/api/auth/capabilities'));
+      this._capabilities.set(caps);
+      this._error.set(null);
+      return caps;
+    } catch (e) {
+      // Don't lose the page — return built-in defaults (Layer 1) so /login still renders
+      this._error.set(e as Error);
+      console.error('[auth-capabilities] fetch failed, using defaults', e);
+      const defaults: Capabilities = {
+        mechanisms: [{ id: 'pam_local', label: 'Username & Password', enabled: true, primary: true, status: 'ok' }],
+        local_auth_available: true,
+        primary: 'pam_local',
+        cascade_layer: 'defaults',
+        warnings: [],
+      };
+      this._capabilities.set(defaults);
+      return defaults;
+    }
+  }
+}
+
+export const AUTH_CAPABILITIES_INITIALIZER: Provider = {
+  provide: APP_INITIALIZER,
+  multi: true,
+  deps: [AuthCapabilitiesService],
+  useFactory: (svc: AuthCapabilitiesService) => () => svc.load(),
+};
+```
+
+```ts
+// frontend/src/app/features/login/login.component.ts
+@Component({ /* ... */ })
+export class LoginComponent {
+  protected readonly auth = inject(AuthCapabilitiesService);
+  protected readonly preflight = inject(PreflightService);
+  protected readonly mechanisms = computed(() => this.auth.capabilities()?.mechanisms ?? []);
+  // Render dynamic form per mechanism
+  // Show degraded pill if preflight shows any non-critical failure
+}
+```
+
+### Tests (target 100% coverage)
+- Backend `tests/auth/capabilities.test.ts` — 16 cases (4 mechanisms × enabled/disabled + cascade permutations)
+- Backend `tests/auth/preflight.test.ts` — 6 cases (ok / one-degraded / db-down / redis-down / all-skipped / critical)
+- Backend `tests/auth/cascade.test.ts` — 4 cases (Layer 3 wins / Layer 3 invalid / all invalid → Layer 0)
+- Backend `tests/admin/config.test.ts` — runtime toggle, cascade-down on failure
+- Frontend `auth-capabilities.service.spec.ts` — 8 cases (load, cache, force-reload, error-fallback-to-defaults, etc.)
+- Frontend `preflight.service.spec.ts` — 3 cases (ok / degraded / critical-error)
+- Frontend `login.component.spec.ts` — 4 render snapshots (no mechanisms / 1 enabled / mixed / degraded banner)
+
+### See also
+- `.sisyphus/plans/angular-migration.md` Wave 12a (T110-T124)
+- 401 handling policy: `ui-index.md §25`
+- Cascade resolution diagram: see `.sisyphus/drafts/lessons.md` (added 2026-07-09)
