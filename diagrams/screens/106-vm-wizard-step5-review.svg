@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD VM Create Wizard — Step 5 of 5 — Review</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <!-- Top bar -->
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">Create virtual machine</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Step 5 — Review</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:11px;color:#64748b;">
+            Step 5 of 5 · final review
+            <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">✕ Cancel</button>
+          </div>
+        </div>
+
+        <!-- Step indicator -->
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">1. Template <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">2. Identity <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">3. Resources <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">4. Storage + Network <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #16a34a;background:#16a34a10;">
+              <div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">5</div>
+              <span style="font-size:11px;font-weight:600;color:#16a34a;">Review</span>
+            </div>
+            <div style="flex:1;"></div>
+            <span style="font-size:10px;color:#16a34a;">ready to create</span>
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div style="flex:1;display:flex;background:#f1f5f9;overflow:hidden;">
+          <div style="flex:1;padding:28px 40px;overflow-y:auto;">
+
+            <!-- Hero summary card -->
+            <div style="padding:22px;background:linear-gradient(135deg,#1d4ed810,#7c3aed08);border:1px solid #bfdbfe;border-radius:10px;margin-bottom:20px;display:flex;align-items:center;gap:18px;">
+              <div style="width:64px;height:64px;border-radius:12px;background:#dc2626;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:32px;">D</div>
+              <div style="flex:1;">
+                <h1 style="margin:0 0 4px;font-size:24px;font-weight:700;color:#0f172a;">web-server-01</h1>
+                <div style="display:flex;align-items:center;gap:14px;font-size:12px;color:#475569;">
+                  <span><strong style="color:#1d4ed8;">Debian 12.6.0</strong> amd64 netinst</span>
+                  <span style="color:#cbd5e1;">·</span>
+                  <span style="font-family:monospace;font-size:11px;color:#64748b;">01J8X2H3F9K2M8N7P4Q5R6S7T8V</span>
+                </div>
+                <div style="display:flex;gap:6px;margin-top:6px;">
+                  <span style="padding:2px 8px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-size:10px;font-weight:600;">production</span>
+                  <span style="padding:2px 8px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-size:10px;font-weight:600;">web</span>
+                  <span style="padding:2px 8px;background:#16a34a20;color:#16a34a;border-radius:4px;font-size:10px;font-weight:600;">Owner: admin</span>
+                  <span style="padding:2px 8px;background:#7c3aed20;color:#7c3aed;border-radius:4px;font-size:10px;font-weight:600;">Project: default</span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:11px;color:#64748b;">Estimated cost</div>
+                <div style="font-size:22px;font-weight:700;color:#0f172a;">$13.16</div>
+                <div style="font-size:10px;color:#94a3b8;">per month · 730 hrs</div>
+              </div>
+            </div>
+
+            <!-- Detailed sections -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+              <!-- Template -->
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                  <h3 style="margin:0;font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;">TEMPLATE</h3>
+                  <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button>
+                </div>
+                <div style="font-size:13px;color:#0f172a;font-family:monospace;font-weight:600;">debian-12.6.0-amd64-netinst.iso</div>
+                <div style="font-size:11px;color:#64748b;margin-top:2px;">414 MB · amd64 · netinst (cloud-init enabled)</div>
+              </div>
+
+              <!-- Identity -->
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                  <h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">IDENTITY</h3>
+                  <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button>
+                </div>
+                <table style="width:100%;font-size:11px;">
+                  <tr><td style="padding:2px 0;color:#64748b;width:30%;">Name</td><td style="font-family:monospace;font-weight:600;">web-server-01</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">ULID</td><td style="font-family:monospace;color:#475569;">01J8X2H3F9K2M8N7P4Q5R6S7T8V</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Owner</td><td style="font-weight:600;">admin</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Tags</td><td>production, web</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Description</td><td style="color:#64748b;font-style:italic;">—</td></tr>
+                </table>
+              </div>
+
+              <!-- Resources -->
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                  <h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">RESOURCES</h3>
+                  <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                  <div>
+                    <div style="font-size:10px;color:#64748b;">vCPUs</div>
+                    <div style="font-size:18px;font-weight:700;color:#0f172a;">4 cores</div>
+                  </div>
+                  <div>
+                    <div style="font-size:10px;color:#64748b;">Memory</div>
+                    <div style="font-size:18px;font-weight:700;color:#0f172a;">8 GB</div>
+                  </div>
+                  <div>
+                    <div style="font-size:10px;color:#64748b;">CPU model</div>
+                    <div style="font-size:12px;font-weight:600;font-family:monospace;">host</div>
+                  </div>
+                  <div>
+                    <div style="font-size:10px;color:#64748b;">Features</div>
+                    <div style="font-size:12px;font-weight:600;">AES-NI, AVX2, AMD-Vi</div>
+                  </div>
+                  <div style="grid-column:span 2;">
+                    <div style="font-size:10px;color:#64748b;">Placement</div>
+                    <div style="font-size:12px;font-weight:600;">Auto-balance → <span style="font-family:monospace;color:#475569;">node-3 (16 GB free)</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Storage -->
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                  <h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">STORAGE</h3>
+                  <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button>
+                </div>
+                <table style="width:100%;font-size:11px;">
+                  <tr><td style="padding:3px 0;color:#64748b;width:35%;">virtio0 (boot)</td><td style="font-family:monospace;">60 GB</td><td style="text-align:right;"><span style="padding:1px 6px;background:#dbeafe;color:#1d4ed8;border-radius:3px;font-size:9px;font-weight:700;">raw</span></td></tr>
+                  <tr><td style="padding:3px 0;color:#64748b;">Location</td><td colspan="2" style="font-size:10px;color:#64748b;">node-3 / tank/vm-disks/web-server-01-disk-0.raw</td></tr>
+                </table>
+              </div>
+
+              <!-- Network -->
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                  <h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">NETWORK</h3>
+                  <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button>
+                </div>
+                <table style="width:100%;font-size:11px;">
+                  <tr><td style="padding:3px 0;color:#64748b;">net0</td><td>VirtIO · VLAN 10 · vmbr0</td></tr>
+                  <tr><td style="padding:3px 0;color:#64748b;">IPv4</td><td style="font-family:monospace;">DHCP</td></tr>
+                  <tr><td style="padding:3px 0;color:#64748b;">IPv6</td><td style="font-family:monospace;">SLAAC</td></tr>
+                  <tr><td style="padding:3px 0;color:#64748b;">Rate limit</td><td>unlimited</td></tr>
+                </table>
+              </div>
+
+              <!-- Advanced -->
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                  <h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">ADVANCED</h3>
+                  <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11px;">
+                  <div>✓ Start after create</div>
+                  <div>✓ QEMU Guest Agent</div>
+                  <div>✓ Auto-snapshot on first boot</div>
+                  <div>✗ Accidental-deletion lock</div>
+                  <div>✗ SPICE clipboard</div>
+                  <div>✗ Tablet pointer</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pre-flight warnings -->
+            <div style="padding:14px 16px;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;">
+              <div style="font-size:18px;">⚠</div>
+              <div>
+                <div style="font-size:12px;font-weight:700;color:#92400e;margin-bottom:4px;">2 advisories to acknowledge</div>
+                <ul style="margin:0;padding-left:18px;font-size:11px;color:#78350f;line-height:1.6;">
+                  <li>"host" CPU model prevents live-migration to other hosts. Use a named model if cluster spans hardware generations.</li>
+                  <li>Node-3 has 16 GB free. After this VM, headroom drops to 8 GB. Other VM creations may fail.</li>
+                </ul>
+                <label style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:11px;color:#475569;cursor:pointer;">
+                  <input type="checkbox" style="accent-color:#1d4ed8;"/> I understand and want to continue anyway.
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right rail -->
+          <div style="width:280px;padding:28px 24px;border-left:1px solid #e2e8f0;background:#ffffff;overflow-y:auto;">
+            <div style="padding:14px;background:#1d4ed810;border:1px solid #bfdbfe;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#1d4ed8;letter-spacing:0.06em;margin-bottom:6px;">FINAL SUMMARY</div>
+              <table style="width:100%;font-size:11px;color:#1e3a8a;">
+                <tr><td style="padding:3px 0;color:#64748b;">OS</td><td style="text-align:right;font-weight:600;">Debian 12</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Cores</td><td style="text-align:right;font-weight:600;">4</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">RAM</td><td style="text-align:right;font-weight:600;">8 GB</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Disk</td><td style="text-align:right;font-weight:600;">60 GB</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">NICs</td><td style="text-align:right;font-weight:600;">1</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Node</td><td style="text-align:right;font-weight:600;font-family:monospace;">node-3</td></tr>
+                <tr><td style="padding:8px 0 0;color:#64748b;border-top:1px solid #bfdbfe;font-weight:700;">Monthly</td><td style="text-align:right;font-weight:700;border-top:1px solid #bfdbfe;">$13.16</td></tr>
+              </table>
+            </div>
+
+            <div style="padding:14px;background:#16a34a10;border:1px solid #bbf7d0;border-radius:8px;">
+              <div style="font-size:11px;font-weight:700;color:#16a34a;letter-spacing:0.06em;margin-bottom:6px;">READY TO CREATE</div>
+              <div style="font-size:11px;color:#166534;line-height:1.5;">Estimated time to provision: <strong>~45 seconds</strong>. VM will be accessible via <code style="font-family:monospace;background:#dcfce7;padding:1px 5px;border-radius:3px;">https://node-3.cloudbsd.local:8006</code> after start.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="padding:14px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:9px 16px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">← Back to Storage + Network</button>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <button style="padding:9px 16px;font-size:12px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">Save as draft</button>
+            <button style="padding:11px 26px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#ffffff;cursor:pointer;box-shadow:0 1px 3px rgba(29,78,216,0.4);">+ Create web-server-01 VM</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD VM Create Wizard — Step 3 of 5 — Compute resources</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <!-- Top bar -->
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">Create virtual machine</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Step 3 — Resources</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:11px;color:#64748b;">
+            Step 3 of 5 · ~2 min remaining
+            <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">✕ Cancel</button>
+          </div>
+        </div>
+
+        <!-- Step indicator: 1 done, 2 done, 3 active, 4-5 pending -->
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;">
+              <div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div>
+              <span style="font-size:11px;font-weight:500;color:#475569;display:flex;align-items:center;gap:6px;">1. Template
+                <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button>
+              </span>
+            </div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;">
+              <div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div>
+              <span style="font-size:11px;font-weight:500;color:#475569;display:flex;align-items:center;gap:6px;">2. Identity
+                <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button>
+              </span>
+            </div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #1d4ed8;background:#1d4ed810;">
+              <div style="width:20px;height:20px;border-radius:50%;background:#1d4ed8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">3</div>
+              <span style="font-size:11px;font-weight:600;color:#1d4ed8;">Resources</span>
+            </div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;">
+              <div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">4</div>
+              <span style="font-size:11px;font-weight:500;color:#475569;">Storage + Network</span>
+            </div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;">
+              <div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">5</div>
+              <span style="font-size:11px;font-weight:500;color:#475569;">Review</span>
+            </div>
+            <div style="flex:1;"></div>
+            <span style="font-size:10px;color:#16a34a;">2 of 5 complete</span>
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div style="flex:1;display:flex;background:#f1f5f9;overflow:hidden;">
+          <div style="flex:1;padding:28px 40px;overflow-y:auto;">
+            <h1 style="margin:0 0 4px;font-size:22px;font-weight:700;color:#0f172a;">Compute resources</h1>
+            <p style="margin:0 0 24px;font-size:13px;color:#64748b;max-width:680px;line-height:1.55;">Pick how much CPU + RAM this VM gets. You can change this later when the VM is stopped.</p>
+
+            <!-- vCPUs slider -->
+            <div style="padding:18px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:18px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                <div>
+                  <div style="font-size:13px;font-weight:600;color:#0f172a;">vCPUs</div>
+                  <div style="font-size:11px;color:#64748b;">Virtual CPUs exposed to the guest. Sockets × cores.</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <button style="width:28px;height:28px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;font-size:14px;font-weight:700;cursor:pointer;">−</button>
+                  <input value="4" style="width:60px;height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 8px;font-family:monospace;font-size:13px;text-align:center;font-weight:600;"/>
+                  <button style="width:28px;height:28px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;font-size:14px;font-weight:700;cursor:pointer;">+</button>
+                </div>
+              </div>
+              <div style="position:relative;height:24px;margin-bottom:6px;">
+                <div style="position:absolute;top:11px;left:0;right:0;height:4px;background:#e2e8f0;border-radius:2px;"></div>
+                <div style="position:absolute;top:11px;left:0;width:9%;height:4px;background:#1d4ed8;border-radius:2px;"></div>
+                <div style="position:absolute;top:3px;left:calc(9% - 9px);width:18px;height:18px;border-radius:50%;background:#ffffff;border:2px solid #1d4ed8;cursor:pointer;"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:#94a3b8;">
+                <span>1</span><span>2</span><span>4</span><span>8</span><span>16</span><span>32</span><span>64</span>
+              </div>
+            </div>
+
+            <!-- RAM slider -->
+            <div style="padding:18px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:18px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                <div>
+                  <div style="font-size:13px;font-weight:600;color:#0f172a;">Memory (RAM)</div>
+                  <div style="font-size:11px;color:#64748b;">Total RAM allocated to the guest.</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <input value="8" style="width:60px;height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 8px;font-family:monospace;font-size:13px;text-align:center;font-weight:600;"/>
+                  <select style="height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 8px;font-size:12px;background:#ffffff;">
+                    <option>GB</option><option>MB</option>
+                  </select>
+                </div>
+              </div>
+              <div style="position:relative;height:24px;margin-bottom:6px;">
+                <div style="position:absolute;top:11px;left:0;right:0;height:4px;background:#e2e8f0;border-radius:2px;"></div>
+                <div style="position:absolute;top:11px;left:0;width:7%;height:4px;background:#1d4ed8;border-radius:2px;"></div>
+                <div style="position:absolute;top:3px;left:calc(7% - 9px);width:18px;height:18px;border-radius:50%;background:#ffffff;border:2px solid #1d4ed8;cursor:pointer;"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:#94a3b8;">
+                <span>256 MB</span><span>1 GB</span><span>8 GB</span><span>32 GB</span><span>128 GB</span><span>1 TB</span>
+              </div>
+            </div>
+
+            <!-- CPU model + features -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;">
+              <div style="padding:18px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="font-size:13px;font-weight:600;color:#0f172a;margin-bottom:12px;">CPU model</div>
+                <select style="width:100%;height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 12px;font-size:13px;background:#ffffff;margin-bottom:8px;">
+                  <option selected="selected">host (passthrough)</option>
+                  <option>kvm64 (compat)</option>
+                  <option>EPYC-v4</option>
+                  <option>Skylake-Server</option>
+                  <option>Cascade Lake</option>
+                  <option>Icelake-Server</option>
+                </select>
+                <div style="font-size:11px;color:#64748b;line-height:1.5;">"host" gives best perf but breaks live-migration. Use named models for portability.</div>
+              </div>
+
+              <div style="padding:18px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="font-size:13px;font-weight:600;color:#0f172a;margin-bottom:12px;">CPU features</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                  <label style="display:flex;align-items:center;gap:6px;font-size:11px;padding:6px 8px;background:#f8fafc;border-radius:4px;cursor:pointer;">
+                    <input type="checkbox" checked="checked" style="accent-color:#1d4ed8;"/> AES-NI
+                  </label>
+                  <label style="display:flex;align-items:center;gap:6px;font-size:11px;padding:6px 8px;background:#f8fafc;border-radius:4px;cursor:pointer;">
+                    <input type="checkbox" checked="checked" style="accent-color:#1d4ed8;"/> AVX2
+                  </label>
+                  <label style="display:flex;align-items:center;gap:6px;font-size:11px;padding:6px 8px;background:#f8fafc;border-radius:4px;cursor:pointer;">
+                    <input type="checkbox" style="accent-color:#1d4ed8;"/> AVX-512
+                  </label>
+                  <label style="display:flex;align-items:center;gap:6px;font-size:11px;padding:6px 8px;background:#f8fafc;border-radius:4px;cursor:pointer;">
+                    <input type="checkbox" checked="checked" style="accent-color:#1d4ed8;"/> AMD-Vi
+                  </label>
+                  <label style="display:flex;align-items:center;gap:6px;font-size:11px;padding:6px 8px;background:#f8fafc;border-radius:4px;cursor:pointer;">
+                    <input type="checkbox" style="accent-color:#1d4ed8;"/> SGX
+                  </label>
+                  <label style="display:flex;align-items:center;gap:6px;font-size:11px;padding:6px 8px;background:#f8fafc;border-radius:4px;cursor:pointer;">
+                    <input type="checkbox" style="accent-color:#1d4ed8;"/> vPMU
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Storage allocation preview -->
+            <div style="padding:18px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:18px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                <div style="font-size:13px;font-weight:600;color:#0f172a;">Storage allocation</div>
+                <span style="font-size:11px;color:#64748b;">Configured in Step 4</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:14px;padding:14px;background:#f8fafc;border-radius:6px;border:1px solid #e2e8f0;">
+                <div style="width:40px;height:40px;border-radius:6px;background:#dbeafe;color:#1d4ed8;display:flex;align-items:center;justify-content:center;font-size:18px;">💾</div>
+                <div style="flex:1;">
+                  <div style="font-size:13px;font-weight:600;color:#0f172a;">Boot disk</div>
+                  <div style="font-size:11px;color:#475569;">Default: 60 GB · VirtIO · raw · QCOW2 overlay</div>
+                </div>
+                <span style="font-size:11px;color:#94a3b8;">→ edit in Step 4</span>
+              </div>
+            </div>
+
+            <!-- Node placement (NEW) -->
+            <div style="padding:18px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:18px;">
+              <div style="font-size:13px;font-weight:600;color:#0f172a;margin-bottom:12px;">Node placement</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;">
+                <label style="padding:14px;background:#1d4ed810;border:2px solid #1d4ed8;border-radius:6px;cursor:pointer;text-align:center;">
+                  <div style="font-size:11px;font-weight:700;color:#1d4ed8;letter-spacing:0.06em;margin-bottom:4px;">SELECTED</div>
+                  <div style="font-size:14px;font-weight:700;color:#0f172a;">Auto-balance</div>
+                  <div style="font-size:10px;color:#64748b;margin-top:4px;">Lives on the node with most free RAM</div>
+                </label>
+                <label style="padding:14px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:6px;cursor:pointer;text-align:center;">
+                  <div style="font-size:14px;font-weight:700;color:#0f172a;margin-bottom:4px;">Pin to node</div>
+                  <div style="font-size:10px;color:#64748b;margin-top:4px;">Stay on a specific node</div>
+                </label>
+                <label style="padding:14px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:6px;cursor:pointer;text-align:center;">
+                  <div style="font-size:14px;font-weight:700;color:#0f172a;margin-bottom:4px;">Affinity rules</div>
+                  <div style="font-size:10px;color:#64748b;margin-top:4px;">Match labels / anti-affinity</div>
+                </label>
+              </div>
+              <div style="font-size:11px;color:#94a3b8;line-height:1.5;">Auto-balance picks node <code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">node-3 (16 GB free)</code> when RAM threshold &lt; 12 GB.</div>
+            </div>
+
+          </div>
+
+          <!-- Right rail: usage summary -->
+          <div style="width:280px;padding:28px 24px;border-left:1px solid #e2e8f0;background:#ffffff;overflow-y:auto;">
+            <div style="padding:14px;background:#1d4ed810;border:1px solid #bfdbfe;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#1d4ed8;letter-spacing:0.06em;margin-bottom:6px;">SELECTION SUMMARY</div>
+              <table style="width:100%;font-size:11px;color:#1e3a8a;">
+                <tr><td style="padding:3px 0;color:#64748b;">vCPUs</td><td style="text-align:right;font-weight:600;">4 cores</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">RAM</td><td style="text-align:right;font-weight:600;">8 GB</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">CPU model</td><td style="text-align:right;font-weight:600;">host</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Features</td><td style="text-align:right;font-weight:600;">3 of 6</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Placement</td><td style="text-align:right;font-weight:600;">auto</td></tr>
+                <tr><td style="padding:8px 0 0;color:#64748b;border-top:1px solid #bfdbfe;font-weight:700;">Cost</td><td style="text-align:right;font-weight:700;border-top:1px solid #bfdbfe;">$0.018/hr</td></tr>
+              </table>
+            </div>
+
+            <div style="padding:14px;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#92400e;letter-spacing:0.06em;margin-bottom:6px;">CLUSTER CAPACITY</div>
+              <div style="font-size:11px;color:#78350f;line-height:1.5;">After this VM: <strong>node-1</strong> at 78% RAM, <strong>node-3</strong> at 64% RAM, others OK.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="padding:14px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:9px 16px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">← Back to Identity</button>
+          <button style="padding:10px 22px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:#1d4ed8;color:#ffffff;">Next → Storage + Network</button>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>

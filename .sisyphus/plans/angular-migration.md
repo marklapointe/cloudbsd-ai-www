@@ -9751,6 +9751,8 @@ auth:
 - 401 redirect policy from 39d5b68 still applies (every authenticated endpoint)
 
 
+- T-codes UPDATE 2026-07-09: 5 VM wizard SVGs authored + 4 wizard sets pending (Container/Jail/Volume/Network [each 3-4 steps] + Setup/Onboarding [Onboarding 4 steps, Backup/Plugin/First-login ~3 steps each] + 2 component refs 03-plugin-wizard + 04-wizard-modal). Total ~30 additional wizard SVGs in flight.
+
 ---
 
 ## Final Verification Wave (MANDATORY — after ALL implementation tasks)
