@@ -244,14 +244,20 @@ Notifications, logs, search results, etc. show:
 **User menu** (avatar dropdown):
 1. Profile
 2. Preferences
-3. Theme picker
+3. API tokens
 4. ---
-5. Keyboard shortcuts
-6. API tokens
-7. ---
-8. Sign out
+5. Sign out
 
-Mockup: `diagrams/components/88-user-menu-dropdown.svg` (280px panel, anchored top-right under avatar bubble, opened state shows identity grid + theme picker row + 6 menu items + red Sign out at footer). Apply `cursor:pointer` to avatar in chrome wrapper.
+Note: NO "Keyboard shortcuts" menu item, NO shortcut hint chips beside other items. We have not defined any keyboard shortcuts for this app yet (per user 2026-07-09). When shortcuts are defined, re-introduce as a new item with hint chips, in a separate change.
+
+Mockup: `diagrams/components/88-user-menu-dropdown.svg` (280px panel, anchored top-right under avatar bubble).
+- Identity grid: ulid (click-to-copy) · email · auth (Password + TOTP, with 2FA pill) · session (elapsed + expiry) · ip (with device label, NO geolocation per 2026-06 lessons)
+- Theme picker is a NATIVE `<select>` dropdown (12 themes + Custom…), not inline chips. Selected theme has a left-edge color swatch overlay + ▾ caret on right. "Browse all 12 →" link on the right opens the dedicated themes browser.
+- 5 menu items: Profile · Preferences · API tokens (count badge) · Help & docs · About
+- NO "Keyboard shortcuts" item, NO shortcut hint chips on other items — we have not defined any keyboard shortcuts yet (per user 2026-07-09). Add shortcuts and re-introduce the menu item + hint chips in a separate change.
+- Footer: Sign out in red
+
+Why dropdown for theme: 12+ themes don't fit inline chips (overflows 280px panel); user picks ONE at a time, not browse-and-compare; the dedicated Themes browser (66-themes-browser.svg) is the right place for visual comparison. Apply `cursor:pointer` to avatar in chrome wrapper.
 
 **Notifications menu** (bell dropdown):
 1. Notification list (last 10, grouped by date)
@@ -729,5 +735,62 @@ The link target is `/logs` (canonical) with query string pre-selecting the sourc
 - Activity feeds
 - "What happened here recently"
 - Per-resource log viewers (replace with `→ View all events for this resource in logs` link)
+
+
+
+---
+
+## §24. Auth-context row convention (T94n follow-up)
+
+> **Rule**: every user-menu / session-detail / settings-account panel that shows the *current user* MUST show the actual session's auth method. Not made-up filler like "via SSH key" — pick from this whitelist of real CloudBSD auth methods.
+
+### Real auth methods (per wire-protocol §auth)
+
+| Method | Used for | Notes |
+|--------|----------|-------|
+| **Password** | primary | PAM via libpam; required always |
+| **TOTP** (RFC 6238) | secondary factor | 30s rotation; recovery codes required |
+| **OIDC SSO** | primary (alternative) | Google / Okta / generic OIDC; bypasses PAM password |
+| **WebAuthn / Passkey** | primary (alternative) | FIDO2 passwordless; no password entered |
+| **Recovery code** | one-time fallback | used after primary factor lost |
+
+### Things that are NOT auth methods for the web UI
+
+- **SSH key** — for CLI/SSH session only. In CloudBSD this gates the LaunchShell feature, not browser login. Login screen has a "Use SSH key →" button that opens LaunchShell, which then uses the SSH key.
+- **JWT / session cookie** — that's how the auth SESSION is maintained after login, not how login happened. Don't list it.
+- **API token** — that's how the CLI uses the API, not how the user logs into the web UI.
+
+### Auth-context row format (user-menu, account panel)
+
+```
+ulid      <ulid>            (click-to-copy)
+email     <email>
+auth      <method>          (e.g., "Password + TOTP" with 2FA pill if applicable)
+session   <elapsed> · expires in <Nd>
+ip        <ip> · <device>   (NO geolocation per 2026-06 lessons)
+```
+
+Apply to:
+- User-menu identity grid (§15) — `diagrams/components/88-user-menu-dropdown.svg`
+- Settings > Account page (61-settings-account.svg)
+- Active sessions list (62-settings-security.svg, sessions tab)
+- Login audit log entries (when showing what method was used to log in)
+
+### Active sessions list
+
+Beyond the current session, also surface recent sessions:
+
+```
+● this device        Chrome 134     10.0.10.42     now
+  Password + TOTP    last active 2s ago                [Revoke]
+
+● MacBook (work)     Safari 17.4    10.0.10.50     4h ago
+  Password only      no 2FA                            [Revoke]
+
+○ old-laptop         Firefox 124    10.0.10.99     2d ago
+  Password + TOTP    expired                          [Re-login]
+```
+
+Index sessions by `last_active desc`. Visual treatment: ● = current, ● = other active, ○ = expired/revoked.
 
 
