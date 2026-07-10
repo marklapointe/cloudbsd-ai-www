@@ -17,6 +17,9 @@
       <h2 style="margin:0;font-size:20px;font-weight:700;">Network configuration</h2>
       <p style="margin:4px 0 0;color:#64748b;font-size:13px;">Cluster IP, DNS, NTP, BGP</p>
     </div>
+  <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
+    <button style="padding:8px 16px;font-size:13px;border:0;border-radius:6px;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;font-weight:600;cursor:pointer;">+ Create IP Pool</button>
+  </div>
   </div>
 
   <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:24px;margin-bottom:14px;">

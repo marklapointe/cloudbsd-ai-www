@@ -58,6 +58,13 @@
             <div style="display:flex;gap:8px;align-items:center;">
               
               
+              <button style="padding:8px 16px;font-size:13px;border:0;border-radius:6px;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;font-weight:600;cursor:pointer;">+ Add User</button>
+
+              
+              
+              
+              
+              
               <button style="padding:6px 14px;font-size:12px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;">Refresh</button>
               <button style="padding:6px 14px;font-size:12px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;">Export</button>
             </div>
