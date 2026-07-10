@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Admin — Plugin Detail Modal (T83c)</title>
+  <desc>Plugin detail modal showing manifest, capabilities, permissions, install/uninstall buttons for github-mirrors v1.4.2. Click affordance from plugins page rows.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:rgba(15,23,42,0.55);color:#0f172a;font-size:13px;box-sizing:border-box;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+      <div style="background:#ffffff;border-radius:12px;box-shadow:0 25px 50px rgba(0,0,0,0.4);width:720px;display:flex;flex-direction:column;overflow:hidden;max-height:720px;">
+        <header style="padding:16px 20px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:24px;">🐙</span>
+            <div>
+              <h2 style="margin:0;font-size:16px;font-weight:700;color:#0f172a;">github-mirrors</h2>
+              <div style="font-size:11px;color:#64748b;margin-top:3px;font-family:monospace;">v1.4.2 · by @cloudbsd · 28 KB · published 2026-06-15</div>
+            </div>
+            <span style="padding:2px 8px;border-radius:3px;font-size:10px;font-weight:600;background:#d1fae5;color:#065f46;margin-left:6px;">INSTALLED</span>
+          </div>
+          <button style="width:28px;height:28px;border-radius:50%;background:#f1f5f9;border:0;cursor:pointer;font-size:14px;color:#64748b;">✕</button>
+        </header>
+        <div style="padding:18px 20px;flex:1;overflow-y:auto;">
+          <div style="margin-bottom:14px;">
+            <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Description</div>
+            <p style="margin:0;font-size:13px;color:#334155;line-height:1.5;">Mirror GitHub release artifacts to local volume for air-gap installs. Deduplicates by SHA-256, runs as cron-style schedule via TaskSchedule endpoint, emits JSONL events on each mirror completion.</p>
+          </div>
+          <div style="margin-bottom:14px;">
+            <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Manifest</div>
+            <div style="display:grid;grid-template-columns:1fr 2fr;gap:6px 16px;font-size:12px;font-family:monospace;background:#f8fafc;padding:10px 12px;border-radius:6px;border:1px solid #e2e8f0;">
+              <span style="color:#64748b;font-family:-apple-system;">name</span><span style="color:#334155;">github-mirrors</span>
+              <span style="color:#64748b;font-family:-apple-system;">version</span><span style="color:#334155;">1.4.2</span>
+              <span style="color:#64748b;font-family:-apple-system;">entry</span><span style="color:#334155;">plugin.cjs</span>
+              <span style="color:#64748b;font-family:-apple-system;">runtime</span><span style="color:#334155;">nodejs@22</span>
+              <span style="color:#64748b;font-family:-apple-system;">content_hash</span><span style="color:#334155;">sha256:a1b2c3d4…</span>
+              <span style="color:#64748b;font-family:-apple-system;">api_version</span><span style="color:#334155;">v2</span>
+            </div>
+          </div>
+          <div style="margin-bottom:14px;">
+            <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Capabilities (3)</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;padding:8px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;"><span style="font-weight:600;color:#0f172a;width:120px;">mirror</span><span style="color:#475569;">fetch and replicate artifacts on schedule</span></div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;padding:8px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;"><span style="font-weight:600;color:#0f172a;width:120px;">webhook</span><span style="color:#475569;">emit events to user-defined webhook URLs</span></div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;padding:8px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;"><span style="font-weight:600;color:#0f172a;width:120px;">backup</span><span style="color:#475569;">integrate with TaskSchedule for backup workflows</span></div>
+            </div>
+          </div>
+          <div style="margin-bottom:14px;">
+            <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Permissions (2 declared)</div>
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <label style="display:flex;align-items:center;gap:8px;font-size:12px;padding:6px 10px;border:1px solid #bbf7d0;background:#f0fdf4;border-radius:6px;color:#15803d;"><span style="color:#10b981;font-weight:700;">✓</span><span style="font-family:monospace;font-size:11px;">read:volumes</span><span style="margin-left:auto;font-size:10px;color:#15803d;">granted at install</span></label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12px;padding:6px 10px;border:1px solid #bbf7d0;background:#f0fdf4;border-radius:6px;color:#15803d;"><span style="color:#10b981;font-weight:700;">✓</span><span style="font-family:monospace;font-size:11px;">read:task-schedules</span><span style="margin-left:auto;font-size:10px;color:#15803d;">granted at install</span></label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12px;padding:6px 10px;border:1px solid #fecaca;background:#fef2f2;border-radius:6px;color:#b91c1c;"><span style="color:#ef4444;font-weight:700;">✗</span><span style="font-family:monospace;font-size:11px;">write:config</span><span style="margin-left:auto;font-size:10px;color:#b91c1c;">not requested</span></label>
+            </div>
+          </div>
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:10px 12px;">
+            <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Recent activity</div>
+            <div style="font-size:11px;color:#475569;font-family:monospace;">2026-07-07 02:14  mirrored 14 artifacts (482 MB)  task-schedule #47</div>
+            <div style="font-size:11px;color:#475569;font-family:monospace;margin-top:2px;">2026-07-06 02:14  mirrored 11 artifacts (412 MB)  task-schedule #47</div>
+            <div style="font-size:11px;color:#475569;font-family:monospace;margin-top:2px;">2026-07-05 02:14  mirrored 9 artifacts  (340 MB)  task-schedule #47</div>
+          </div>
+        </div>
+        <footer style="padding:14px 20px;border-top:1px solid #e2e8f0;background:#f8fafc;display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-size:10px;color:#94a3b8;">installed 2026-04-12 · template-method loader ✓</div>
+          <div style="display:flex;gap:6px;">
+            <button style="padding:8px 16px;font-size:12px;border:1px solid #fecaca;border-radius:6px;background:#ffffff;color:#b91c1c;font-weight:600;">Uninstall</button>
+            <button style="padding:8px 16px;font-size:12px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">View JSON</button>
+            <button style="padding:8px 16px;font-size:12px;border:0;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;border-radius:6px;font-weight:600;">Configure</button>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

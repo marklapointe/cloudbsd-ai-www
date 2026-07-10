@@ -771,6 +771,240 @@ Used for all 4xx/5xx with `Content-Type: application/vnd.cloudbsd+error`:
 } }
 ```
 
+### 2.21 Task Schedules (CRUD) — added 2026-07-07 (T77b)
+
+> TaskSchedules are the unified cron/interval/event/on-demand executor for backup, snapshot, replicate, scrub, exec, webhook, and plugin tasks. Shapes validate against `data-structures.md` §5 `interface TaskSchedule`.
+
+All operations use POST envelopes with `what` header routing per §1.4.
+
+**Operations**:
+
+| `what` header | Purpose | Response kind | MIME type |
+|---|---|---|---|
+| `task-schedules.create` | Create schedule | `task-schedule` | `application/vnd.cloudbsd+task-schedule+json` |
+| `task-schedules.list` | List (paginated, filtered) | `task-schedule.list` | `application/vnd.cloudbsd+task-schedule+list` |
+| `task-schedules.get` | Single by id | `task-schedule` | `application/vnd.cloudbsd+task-schedule+json` |
+| `task-schedules.update` | Full update (PUT) | `task-schedule` | `application/vnd.cloudbsd+task-schedule+json` |
+| `task-schedules.patch` | Partial update (PATCH — toggle enabled) | `task-schedule` | `application/vnd.cloudbsd+task-schedule+json` |
+| `task-schedules.delete` | Delete (soft-delete to history; physical after 90d) | (empty) | — |
+| `task-schedules.run` | Manual trigger (enqueue run) | `task-schedule.run` | `application/vnd.cloudbsd+task-schedule-run+json` |
+| `task-schedules.cancel` | Cancel a currently-running task | (empty) | — |
+| `task-schedules.runs` | Run history (paginated) | `task-schedule.run.list` | `application/vnd.cloudbsd+task-schedule-run+list` |
+
+**Create request envelope** (T77a SVG mockup: 6 fields per ui-index §7):
+```json
+{ "mime": "application/vnd.cloudbsd+envelope", "headers": [
+    { "name": "who",  "value": "admin@cloudbsd.org" },
+    { "name": "what", "value": "task-schedules.create" },
+    { "name": "why",  "value": "user_requested" },
+    { "name": "where", "value": "system_mgmt_backups_new_schedule" }
+], "payload": [
+    { "mime": "application/vnd.cloudbsd+task-schedule", "kind": "task-schedule", "data": {
+        "name":        "nightly-data-backup",
+        "kind":        "backup",
+        "source":      "tank/data",
+        "destination": "offsite:rsync.net/module",
+        "schedule":    { "type": "cron", "expression": "0 2 * * *", "tz": "UTC" },
+        "description": "Nightly incremental ZFS backup of tank/data to offsite rsync.net with 14d retention.",
+        "retention":   { "maxAgeDays": 14, "maxCount": 0 },
+        "danger":      { "dryRun": false, "encryptAtRest": true, "notifyOnFailure": true },
+        "enabled":     true
+    } }
+] }
+```
+
+**Create response**:
+```json
+{ "mime": "application/vnd.cloudbsd+task-schedule", "kind": "task-schedule", "data": {
+    "id": "sched-01HQK8M9X4VZ",
+    "createdAt": "2026-07-07T17:30:12.789Z",
+    "nextRunAt":  "2026-07-08T02:00:00.000Z",
+    "owner": "admin@cloudbsd.org",
+    "name": "nightly-data-backup",
+    "kind": "backup",
+    "enabled": true,
+    "status": "ACTIVE"
+} }
+```
+
+**Run-manual envelope** (returns immediately with run id; result is observable via `runs` history):
+```json
+{ "mime": "application/vnd.cloudbsd+envelope", "headers": [{ "name": "what", "value": "task-schedules.run" }], "payload": [
+    { "mime": "application/vnd.cloudbsd+task-schedule.run.request", "kind": "task-schedule.run.request", "data": {
+        "scheduleId": "sched-01HQK8M9X4VZ",
+        "reason":     "user_requested",
+        "override":   { "dryRun": true }
+    } }
+] }
+```
+
+**Run-manual response**:
+```json
+{ "mime": "application/vnd.cloudbsd+task-schedule-run", "kind": "task-schedule.run", "data": {
+    "runId": "run-01HQK8M9X4VZ-9821",
+    "scheduleId": "sched-01HQK8M9X4VZ",
+    "startedAt": "2026-07-07T17:30:14.122Z",
+    "status": "QUEUED",
+    "estimatedDurationSec": 240
+} }
+```
+
+**Headers** (required on every schedule action per §1.3):
+- `who` — `user@host` who initiated
+- `what` — one of the 9 operations above
+- `why` — `user_requested` | `system:scheduler` | `system:retry` | `maintenance:run`
+- `where` — UI origin e.g. `system_mgmt_backups_new_schedule`, `system_mgmt_backups_run_now`
+
+**Validation**: All schedule objects validate against `data-structures.md` §5 `interface TaskSchedule` (see `.sisyphus/drafts/data-structures.md`). The wire-protocol does NOT duplicate the TaskSchedule schema — it references the data-structures spec as the single source of truth.
+
+### 2.22 VM detail (single) — added 2026-07-07 (T78b)
+
+> Detail panel for VMs (right-side per `19-vm-detail-panel.svg`). The list endpoint `vms.list` (§2.4) returns summaries; this section adds per-VM detail with sub-resource fan-out.
+
+| `what` header | Purpose | Response kind |
+|---|---|---|
+| `vms.get` | Single VM by id | `vm` |
+| `vms.disks.list` | List disks attached to VM | `vm.disks.list` |
+| `vms.network.list` | Network interfaces + IPs (dual-stack) | `vm.network.list` |
+| `vms.snapshots.list` | ZFS snapshots for VM | `vm.snapshots.list` |
+| `vms.logs.list` | Paginated VM log tail | `vm.logs.list` |
+| `vms.console.token` | noVNC websockify token (already §2.20) | `vm.console.token` |
+
+All endpoints return `application/vnd.cloudbsd+vm*` MIME types. Shapes validate against `data-structures.md` `interface VM`, `interface VMDisk`, `interface VMNetwork`, `interface VMSnapshot`.
+
+**VM detail envelope**:
+```json
+{ "mime": "application/vnd.cloudbsd+envelope", "headers": [{ "name": "what", "value": "vms.get" }], "payload": [
+    { "mime": "application/vnd.cloudbsd+vm.detail.request", "kind": "vm.detail.request", "data": { "vmId": "ulid-01HQK8M9X4VZ" } }
+] }
+```
+
+**Response** (matches `19-vm-detail-panel.svg` Overview tab content):
+```json
+{ "mime": "application/vnd.cloudbsd+vm", "kind": "vm", "data": {
+    "id": "ulid-01HQK8M9X4VZ",
+    "name": "jellyfin",
+    "description": "Media server for living room + bedroom",
+    "status": "RUN",
+    "type": "bhyve",
+    "os": "Debian 12 (bookworm)",
+    "generation": 2,
+    "vcpu": 4,
+    "ram": { "value": 8, "unit": "GB" },
+    "disk": { "value": 80, "unit": "GB", "kind": "zvol" },
+    "ipv4": "10.0.10.22",
+    "ipv6": "fd00::22",
+    "createdAt": "2026-05-20T12:00:00Z",
+    "uptimeSec": 1214670,
+    "nextBackupAt": "2026-07-08T02:00:00Z",
+    "nextBackupScheduleId": "sched-daily-tank-data"
+} }
+```
+
+**View-only directive**: NO write endpoints (POST create / PUT update / DELETE) for VMs per audit §21.5. Mutations route through TaskSchedule (§2.21).
+
+### 2.23 Container detail (single) — added 2026-07-07 (T79b)
+
+Per `20-container-detail-panel.svg`. 5 sub-tabs: Overview, Disks, Network, Logs, Env vars.
+
+| `what` header | Purpose | Response kind |
+|---|---|---|
+| `containers.get` | Single container by id | `container` |
+| `containers.disks.list` | Mount points + volumes | `container.disks.list` |
+| `containers.network.list` | Port mappings + IPs | `container.network.list` |
+| `containers.logs.list` | stdout/stderr tail | `container.logs.list` |
+| `containers.env.list` | Env vars (sensitive masked) | `container.env.list` |
+
+MIME types: `application/vnd.cloudbsd+container*`. Shapes against `data-structures.md` `interface Container`.
+
+### 2.24 Jail detail (single) — added 2026-07-07 (T80b)
+
+Per `21-jail-detail-panel.svg`. 5 sub-tabs: Overview, IPs, Network, Limits, Logs.
+
+| `what` header | Purpose | Response kind |
+|---|---|---|
+| `jails.get` | Single jail by id (or hostname) | `jail` |
+| `jails.ips.list` | List bound IPs (v4 + v6) | `jail.ips.list` |
+| `jails.network.list` | Interfaces + VLANs | `jail.network.list` |
+| `jails.limits.list` | rctl rules (CPU%, memory, disk-IO) | `jail.limits.list` |
+| `jails.logs.list` | jail.log tail | `jail.logs.list` |
+
+MIME types: `application/vnd.cloudbsd+jail*`. Shapes against `data-structures.md` `interface Jail`.
+
+### 2.25 Volume detail (single) — added 2026-07-07 (T81b)
+
+Per `22-volume-detail-panel.svg`. 6 sub-tabs: Overview, Datasets, Snapshots, Scrubs, Performance, Settings.
+
+| `what` header | Purpose | Response kind |
+|---|---|---|
+| `volumes.get` | Single volume by id (URL-encoded path) | `volume` |
+| `volumes.datasets.list` | Child datasets (inheritance) | `volume.datasets.list` |
+| `volumes.snapshots.list` | ZFS snapshots | `volume.snapshots.list` |
+| `volumes.scrubs.list` | Scrub history + next-scrub schedule | `volume.scrubs.list` |
+| `volumes.performance` | IOPS / throughput / latency | `volume.performance` |
+
+MIME types: `application/vnd.cloudbsd+volume*`. Shapes against `data-structures.md` `interface Volume`.
+
+**View-only directive**: NO write endpoints for volumes per audit §21.5. Mutations route through TaskSchedule (§2.21).
+
+### 2.26 Node detail (single) — added 2026-07-07 (T82b)
+
+Per `23-node-detail-panel.svg`. 7 sub-tabs: Overview, ZFS, GPUs, Network, VMs, Logs, Settings.
+
+| `what` header | Purpose | Response kind |
+|---|---|---|
+| `nodes.get` | Single node by hostname | `node` |
+| `nodes.zfs.list` | ZFS pools (mirror/stripe/raidz) | `node.zfs.list` |
+| `nodes.gpus.list` | GPU inventory + vGPU pool (per `17-vgpu-pool.svg`) | `node.gpus.list` |
+| `nodes.network.list` | Interfaces + VLANs + bonds | `node.network.list` |
+| `nodes.vms.list` | VMs hosted on this node + per-VM load | `node.vms.list` |
+| `nodes.logs.list` | node.log tail (cloudbsd-agent output) | `node.logs.list` |
+
+MIME types: `application/vnd.cloudbsd+node*`. Shapes against `data-structures.md` `interface Node`.
+
+### 2.27 Plugin lifecycle (install/uninstall/per-plugin manifest) — added 2026-07-07 (T83b)
+
+> Per-plugin operations. Complements §2.15 (global manifest fetch) and §2.16 (plugin data request) with install/uninstall/manifest-by-id lifecycle actions.
+
+| `what` header | Purpose | Response kind |
+|---|---|---|
+| `plugins.manifest.get` | Single plugin manifest by id | `plugin.manifest` |
+| `plugins.install` | Install from registry/upload | `plugin.install.result` |
+| `plugins.uninstall` | Uninstall (with confirmation token) | (empty) |
+
+**Install envelope**:
+```json
+{ "mime": "application/vnd.cloudbsd+envelope", "headers": [
+    { "name": "who",  "value": "admin@cloudbsd.org" },
+    { "name": "what", "value": "plugins.install" },
+    { "name": "why",  "value": "user_requested" },
+    { "name": "where", "value": "plugins_install_modal" }
+], "payload": [
+    { "mime": "application/vnd.cloudbsd+plugin.install", "kind": "plugin.install", "data": {
+        "source": "registry",
+        "pluginId": "github-mirrors@1.4.2",
+        "signature": "ed25519:abc123...",
+        "capabilities": ["mirror", "webhook", "backup"]
+    } }
+] }
+```
+
+**Single-plugin manifest response** (matches `22-plugin-detail.svg` content):
+```json
+{ "mime": "application/vnd.cloudbsd+plugin.manifest", "kind": "plugin.manifest", "data": {
+    "id": "github-mirrors", "version": "1.4.2",
+    "name": "github-mirrors", "author": "@cloudbsd", "license": "MIT",
+    "size": 28672, "sha256": "a1b2c3...", "signature": "ed25519:...",
+    "runtime": "nodejs@22", "api_version": "v2", "entry": "plugin.cjs",
+    "capabilities": ["mirror", "webhook", "backup"],
+    "permissions": { "declared": ["read:volumes", "read:task-schedules"], "granted": ["read:volumes", "read:task-schedules"] },
+    "installedAt": "2026-04-12T18:24:00Z",
+    "publishedAt": "2026-06-15T11:00:00Z"
+} }
+```
+
+**Theme import verification (T84b)**: §2.13 "Theme list + apply + custom import/export" already defines `theme.import` envelope at lines 618-628. The corresponding `what` header value `themes.import` (POST-style envelope) exists for theme import. Verified 2026-07-07 — no gap.
+
 ---
 
 ## 3. Mock implementation in the UI
