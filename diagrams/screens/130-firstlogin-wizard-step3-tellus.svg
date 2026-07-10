@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD First-Login Setup Wizard — Step 3 of 3 — Tell us about you</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">First login · Tell us about you</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Step 3 of 3</span>
+          </div>
+        </div>
+
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">&#10003;</div><span style="font-size:11px;color:#475569;">1. Verify</span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">&#10142;</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">&#10003;</div><span style="font-size:11px;color:#475569;">2. Secure</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">&#10142;</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #1d4ed8;background:#1d4ed810;"><div style="width:20px;height:20px;border-radius:50%;background:#1d4ed8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">3</div><span style="font-size:11px;font-weight:600;color:#1d4ed8;">Tell us</span></div>
+          </div>
+        </div>
+
+        <div style="flex:1;display:flex;background:#f1f5f9;overflow:hidden;">
+          <div style="flex:1;padding:32px 40px;overflow-y:auto;">
+
+            <h1 style="margin:0 0 8px;font-size:24px;font-weight:700;color:#0f172a;">Last thing — your working style</h1>
+            <p style="margin:0 0 24px;font-size:13px;color:#475569;max-width:680px;line-height:1.55;">These choices shape the default dashboards, alerts, and shortcuts. You can change any of them later.</p>
+
+            <h2 style="margin:0 0 12px;font-size:14px;font-weight:700;color:#0f172a;text-transform:uppercase;letter-spacing:0.06em;">Role focus</h2>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px;">
+              <label style="padding:14px;background:#ffffff;border:2px solid #cbd5e1;border-radius:8px;cursor:pointer;text-align:center;">
+                <div style="font-size:22px;color:#0f172a;">&#9881;</div>
+                <div style="font-size:12px;font-weight:700;color:#0f172a;margin-top:4px;">Sysadmin</div>
+              </label>
+              <label style="padding:14px;background:#1d4ed810;border:2px solid #1d4ed8;border-radius:8px;cursor:pointer;text-align:center;">
+                <div style="font-size:22px;color:#1d4ed8;">&#9707;</div>
+                <div style="font-size:12px;font-weight:700;color:#1d4ed8;margin-top:4px;">Selected · Ops / SRE</div>
+              </label>
+              <label style="padding:14px;background:#ffffff;border:2px solid #cbd5e1;border-radius:8px;cursor:pointer;text-align:center;">
+                <div style="font-size:22px;color:#0f172a;">&#128187;</div>
+                <div style="font-size:12px;font-weight:700;color:#0f172a;margin-top:4px;">Developer</div>
+              </label>
+              <label style="padding:14px;background:#ffffff;border:2px solid #cbd5e1;border-radius:8px;cursor:pointer;text-align:center;">
+                <div style="font-size:22px;color:#0f172a;">&#128202;</div>
+                <div style="font-size:12px;font-weight:700;color:#0f172a;margin-top:4px;">Analyst</div>
+              </label>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px;">
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Default landing page</div>
+                <select style="width:100%;padding:9px 12px;border:1px solid #cbd5e1;border-radius:6px;font-size:13px;background:#ffffff;">
+                  <option>Cluster overview</option>
+                  <option selected="selected">Dashboard</option>
+                  <option>VMs list</option>
+                  <option>Live nodes</option>
+                </select>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Default density</div>
+                <select style="width:100%;padding:9px 12px;border:1px solid #cbd5e1;border-radius:6px;font-size:13px;background:#ffffff;">
+                  <option>Cozy (default)</option>
+                  <option selected="selected">Compact</option>
+                  <option>Extra-compact</option>
+                </select>
+              </div>
+            </div>
+
+            <h2 style="margin:0 0 12px;font-size:14px;font-weight:700;color:#0f172a;text-transform:uppercase;letter-spacing:0.06em;">Alerts / notifications</h2>
+            <div style="padding:18px;background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:18px;">
+              <table style="width:100%;font-size:12px;">
+                <tr><td style="padding:8px 0;color:#475569;width:40%;">Node went offline (5 min probe)</td><td style="text-align:right;"><label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" checked="checked" style="accent-color:#dc2626;"/><span>critical · all channels</span></label></td></tr>
+                <tr><td style="padding:8px 0;color:#475569;">VM high CPU (&gt; 95 % for 10 min)</td><td style="text-align:right;"><label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" checked="checked" style="accent-color:#d97706;"/><span>warning · web + email</span></label></td></tr>
+                <tr><td style="padding:8px 0;color:#475569;">Backup succeeded</td><td style="text-align:right;"><label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" style="accent-color:#16a34a;"/><span>info · web only</span></label></td></tr>
+                <tr><td style="padding:8px 0;color:#475569;">Backup failed</td><td style="text-align:right;"><label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" checked="checked" style="accent-color:#dc2626;"/><span>critical · all channels</span></label></td></tr>
+                <tr><td style="padding:8px 0;color:#475569;">Snapshot retention hit</td><td style="text-align:right;"><label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" style="accent-color:#d97706;"/><span>warning · weekly digest</span></label></td></tr>
+                <tr><td style="padding:8px 0;color:#475569;">Certificate expiring (30 d)</td><td style="text-align:right;"><label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" checked="checked" style="accent-color:#d97706;"/><span>warning · email</span></label></td></tr>
+                <tr><td style="padding:8px 0;color:#475569;">Nightly digest (06:00 UTC)</td><td style="text-align:right;"><label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" checked="checked" style="accent-color:#d97706;"/><span>summary · email</span></label></td></tr>
+              </table>
+              <div style="margin-top:14px;padding-top:14px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-size:11px;color:#64748b;">Channels active right now</span>
+                <div style="display:flex;gap:6px;">
+                  <span style="padding:3px 8px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-size:10px;font-weight:700;">Web</span>
+                  <span style="padding:3px 8px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-size:10px;font-weight:700;">Email · mlapointe@…</span>
+                </div>
+              </div>
+            </div>
+
+            <h2 style="margin:0 0 12px;font-size:14px;font-weight:700;color:#0f172a;text-transform:uppercase;letter-spacing:0.06em;">Ad-hoc questions (optional)</h2>
+            <div style="padding:18px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;">
+              <label style="display:flex;justify-content:space-between;align-items:center;gap:14px;padding:6px 0;font-size:12px;color:#475569;"><span>Should we show the onboarding tour to new users you invite?</span><input type="checkbox" checked="checked" style="accent-color:#1d4ed8;width:30px;height:18px;"/></label>
+              <label style="display:flex;justify-content:space-between;align-items:center;gap:14px;padding:6px 0;font-size:12px;color:#475569;"><span>Share anonymous usage with the cluster health dashboard?</span><input type="checkbox" style="accent-color:#1d4ed8;width:30px;height:18px;"/></label>
+              <label style="display:flex;justify-content:space-between;align-items:center;gap:14px;padding:6px 0;font-size:12px;color:#475569;"><span>Pre-fill peer roles from your LDAP groups (when available)?</span><input type="checkbox" checked="checked" style="accent-color:#1d4ed8;width:30px;height:18px;"/></label>
+              <label style="display:flex;justify-content:space-between;align-items:center;gap:14px;padding:6px 0;font-size:12px;color:#475569;"><span>Enable haptic / sound feedback on critical alerts?</span><input type="checkbox" style="accent-color:#1d4ed8;width:30px;height:18px;"/></label>
+            </div>
+
+          </div>
+
+          <div style="width:280px;padding:28px 24px;border-left:1px solid #e2e8f0;background:#ffffff;overflow-y:auto;">
+            <div style="padding:14px;background:#1d4ed810;border:1px solid #bfdbfe;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#1d4ed8;letter-spacing:0.06em;margin-bottom:6px;">DASHBOARD PREVIEW</div>
+              <div style="font-size:13px;color:#1e3a8a;font-weight:700;">Dashboard (compact · Ops focus)</div>
+              <div style="font-size:11px;color:#475569;margin-top:6px;line-height:1.5;">Critical alerts (1) and node status at the top, then VMs in compact mode with the live label.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:9px 16px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">&#8592; Back to Secure</button>
+          <button style="padding:11px 28px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:linear-gradient(135deg,#1d4ed8,#0d9488);color:#ffffff;cursor:pointer;box-shadow:0 1px 3px rgba(29,78,216,0.4);">&#10003; Finish setup →</button>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>
