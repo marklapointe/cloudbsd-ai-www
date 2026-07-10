@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Volume Create Wizard — Step 2 of 3 — Properties</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">Create ZFS dataset</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Step 2 — Properties</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:11px;color:#64748b;">
+            Step 2 of 3 · ~1 min remaining
+            <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">✕ Cancel</button>
+          </div>
+        </div>
+
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">1. Dataset <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #1d4ed8;background:#1d4ed810;"><div style="width:20px;height:20px;border-radius:50%;background:#1d4ed8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">2</div><span style="font-size:11px;font-weight:600;color:#1d4ed8;">Properties</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">3</div><span style="font-size:11px;color:#475569;">Review</span></div>
+            <div style="flex:1;"></div>
+            <span style="font-size:10px;color:#16a34a;">1 of 3 complete</span>
+          </div>
+        </div>
+
+        <div style="flex:1;display:flex;background:#f1f5f9;overflow:hidden;">
+          <div style="flex:1;padding:28px 40px;overflow-y:auto;">
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Mountpoint</div>
+                <input value="/tank/volumes/postgres-data-01" style="width:100%;height:34px;border:1px solid #cbd5e1;border-radius:5px;padding:0 12px;font-family:monospace;font-size:12px;"/>
+                <div style="font-size:10px;color:#94a3b8;margin-top:4px;">Empty = <code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">legacy</code> (mount at path = name)</div>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Mount on boot</div>
+                <select style="width:100%;height:34px;border:1px solid #cbd5e1;border-radius:5px;padding:0 12px;font-size:12px;background:#ffffff;">
+                  <option selected="selected">yes</option><option>no</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="padding:14px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:18px;">
+              <div style="font-size:12px;font-weight:700;color:#0f172a;margin-bottom:12px;">Performance</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:12px;">
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Compression</div>
+                  <select style="width:100%;height:32px;border:1px solid #cbd5e1;border-radius:5px;padding:0 10px;font-size:12px;background:#ffffff;"><option>off</option><option>gzip-{1..9}</option><option selected="selected">lz4 (low CPU, fast)</option><option>zstd-fast</option><option>zstd (high ratio)</option></select>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Recordsize</div>
+                  <select style="width:100%;height:32px;border:1px solid #cbd5e1;border-radius:5px;padding:0 10px;font-size:12px;background:#ffffff;"><option>16K (DB)</option><option selected="selected">128K (default)</option><option>1M (large seq.)</option></select>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Deduplication</div>
+                  <select style="width:100%;height:32px;border:1px solid #cbd5e1;border-radius:5px;padding:0 10px;font-size:12px;background:#ffffff;"><option selected="selected">off (recommended)</option><option>verify</option><option>on</option></select>
+                </div>
+              </div>
+            </div>
+
+            <div style="padding:14px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:18px;">
+              <div style="font-size:12px;font-weight:700;color:#0f172a;margin-bottom:12px;">Access</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:12px;">
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">ACL mode</div>
+                  <select style="width:100%;height:32px;border:1px solid #cbd5e1;border-radius:5px;padding:0 10px;font-size:12px;background:#ffffff;"><option>discard</option><option selected="selected">restricted (no xattr)</option><option>passthrough</option></select>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Atime updates</div>
+                  <select style="width:100%;height:32px;border:1px solid #cbd5e1;border-radius:5px;padding:0 10px;font-size:12px;background:#ffffff;"><option>standard</option><option selected="selected">off (recommended)</option></select>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Permissions (mode)</div>
+                  <input value="0750" style="width:100%;height:32px;border:1px solid #cbd5e1;border-radius:5px;padding:0 10px;font-family:monospace;font-size:12px;"/>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Owner (UID:GID)</div>
+                  <input value="999:999" style="width:100%;height:32px;border:1px solid #cbd5e1;border-radius:5px;padding:0 10px;font-family:monospace;font-size:12px;"/>
+                </div>
+              </div>
+            </div>
+
+            <div style="padding:14px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:18px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                <div style="font-size:12px;font-weight:700;color:#0f172a;">Encryption</div>
+                <input type="checkbox" style="accent-color:#1d4ed8;width:34px;height:18px;"/>
+              </div>
+              <div style="font-size:11px;color:#475569;margin-bottom:12px;line-height:1.5;">When enabled, requires a key or passphrase at first unlock per host. Encrypted datasets cannot be mounted on hosts without the key.</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:12px;opacity:0.5;">
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Key source</div>
+                  <select style="width:100%;height:32px;border:1px solid #cbd5e1;border-radius:5px;padding:0 10px;font-size:12px;background:#ffffff;"><option selected="selected">prompt at unlock</option><option>keychain</option><option>file</option></select>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Algorithm</div>
+                  <select style="width:100%;height:32px;border:1px solid #cbd5e1;border-radius:5px;padding:0 10px;font-size:12px;background:#ffffff;"><option selected="selected">aes-256-gcm</option><option>aes-256-ccm</option><option>aes-128-gcm</option></select>
+                </div>
+              </div>
+            </div>
+
+            <div style="padding:14px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+              <div style="font-size:12px;font-weight:700;color:#0f172a;margin-bottom:12px;">Snapshot policy</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:12px;">
+                <label style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f8fafc;border-radius:5px;cursor:pointer;"><input type="checkbox" checked="checked" style="accent-color:#1d4ed8;"/><span style="font-size:11px;color:#475569;">Hourly · keep 24</span></label>
+                <label style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f8fafc;border-radius:5px;cursor:pointer;"><input type="checkbox" checked="checked" style="accent-color:#1d4ed8;"/><span style="font-size:11px;color:#475569;">Daily · keep 7</span></label>
+                <label style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f8fafc;border-radius:5px;cursor:pointer;"><input type="checkbox" checked="checked" style="accent-color:#1d4ed8;"/><span style="font-size:11px;color:#475569;">Weekly · keep 4</span></label>
+                <label style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f8fafc;border-radius:5px;cursor:pointer;"><input type="checkbox" style="accent-color:#1d4ed8;"/><span style="font-size:11px;color:#475569;">Monthly · keep 12</span></label>
+                <label style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f8fafc;border-radius:5px;cursor:pointer;"><input type="checkbox" style="accent-color:#1d4ed8;"/><span style="font-size:11px;color:#475569;">Send to backup-pool</span></label>
+                <label style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f8fafc;border-radius:5px;cursor:pointer;"><input type="checkbox" style="accent-color:#1d4ed8;"/><span style="font-size:11px;color:#475569;">Offsite replication</span></label>
+              </div>
+              <div style="margin-top:8px;font-size:11px;color:#475569;line-height:1.5;">Auto-snapshots will consume quota space. Estimate: hourly 24 × ~200 MB ≈ 5 GB/day.</div>
+            </div>
+
+          </div>
+
+          <div style="width:280px;padding:28px 24px;border-left:1px solid #e2e8f0;background:#ffffff;overflow-y:auto;">
+            <div style="padding:14px;background:#1d4ed810;border:1px solid #bfdbfe;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#1d4ed8;letter-spacing:0.06em;margin-bottom:6px;">PROPERTY SET</div>
+              <table style="width:100%;font-size:11px;color:#1e3a8a;">
+                <tr><td style="padding:3px 0;color:#64748b;">Mount</td><td style="text-align:right;font-weight:600;">at boot</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Compression</td><td style="text-align:right;font-weight:600;">lz4</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Recordsize</td><td style="text-align:right;font-weight:600;">128K</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Dedup</td><td style="text-align:right;font-weight:600;">off</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Owner</td><td style="text-align:right;font-weight:600;font-family:monospace;">999:999</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Encryption</td><td style="text-align:right;font-weight:600;">off</td></tr>
+                <tr><td style="padding:8px 0 0;color:#64748b;border-top:1px solid #bfdbfe;font-weight:700;">Estim. overhead</td><td style="text-align:right;font-weight:700;border-top:1px solid #bfdbfe;">~5 GB snaps</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:9px 16px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">← Back to Dataset</button>
+          <button style="padding:10px 22px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:#1d4ed8;color:#ffffff;">Next → Review</button>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>

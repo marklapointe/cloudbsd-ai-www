@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Volume Create Wizard — Step 1 of 3 — Dataset basics</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">Create ZFS dataset</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Step 1 — Basics</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:11px;color:#64748b;">
+            Step 1 of 3 · ~1 min remaining
+            <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">✕ Cancel</button>
+          </div>
+        </div>
+
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #1d4ed8;background:#1d4ed810;"><div style="width:20px;height:20px;border-radius:50%;background:#1d4ed8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">1</div><span style="font-size:11px;font-weight:600;color:#1d4ed8;">Dataset</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">2</div><span style="font-size:11px;color:#475569;">Properties</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">3</div><span style="font-size:11px;color:#475569;">Review</span></div>
+            <div style="flex:1;"></div>
+            <span style="font-size:10px;color:#94a3b8;">0 of 3 complete</span>
+          </div>
+        </div>
+
+        <div style="flex:1;display:flex;background:#f1f5f9;overflow:hidden;">
+          <div style="flex:1;padding:28px 40px;overflow-y:auto;">
+            <h1 style="margin:0 0 4px;font-size:22px;font-weight:700;color:#0f172a;">ZFS dataset basics</h1>
+            <p style="margin:0 0 24px;font-size:13px;color:#64748b;max-width:680px;line-height:1.55;">Volumes are ZFS datasets. Pick a parent, set a capacity cap and compression algorithm. Tune recordsize to your workload.</p>
+
+            <div style="padding:18px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:18px;">
+              <div style="display:grid;grid-template-columns:1fr 2fr 1fr;gap:14px;margin-bottom:14px;">
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Pool <span style="color:#dc2626;">*</span></div>
+                  <select style="width:100%;height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 12px;font-size:12px;background:#ffffff;font-family:monospace;">
+                    <option selected="selected">tank</option>
+                    <option>zroot</option>
+                    <option>backup-pool</option>
+                  </select>
+                  <div style="font-size:10px;color:#64748b;margin-top:4px;">Free: 4.2 TB / 8 TB</div>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Parent dataset <span style="color:#dc2626;">*</span></div>
+                  <select style="width:100%;height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 12px;font-size:12px;background:#ffffff;font-family:monospace;">
+                    <option>tank</option>
+                    <option selected="selected">tank/volumes</option>
+                    <option>tank/datasets</option>
+                    <option>tank/backups</option>
+                    <option>tank/media</option>
+                  </select>
+                  <div style="font-size:10px;color:#64748b;margin-top:4px;">Auto-propagates parent properties.</div>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Dataset type</div>
+                  <select style="width:100%;height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 12px;font-size:12px;background:#ffffff;">
+                    <option selected="selected">Filesystem</option>
+                    <option>ZVOL (block device)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr;gap:14px;">
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Dataset name <span style="color:#dc2626;">*</span></div>
+                  <div style="display:flex;align-items:center;gap:0;">
+                    <span style="padding:10px 12px;font-family:monospace;font-size:13px;background:#f1f5f9;border:1px solid #cbd5e1;border-right:none;border-radius:5px 0 0 5px;color:#64748b;">tank/volumes/</span>
+                    <input value="postgres-data-01" style="flex:1;height:42px;border:1px solid #cbd5e1;border-radius:0 5px 5px 0;padding:0 12px;font-family:monospace;font-size:14px;font-weight:600;"/>
+                  </div>
+                  <div style="font-size:10px;color:#94a3b8;margin-top:4px;">Final path: <code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">tank/volumes/postgres-data-01</code></div>
+                </div>
+              </div>
+            </div>
+
+            <h2 style="margin:8px 0 12px;font-size:15px;font-weight:700;color:#0f172a;">Workload profile</h2>
+            <p style="margin:0 0 14px;font-size:11px;color:#475569;line-height:1.5;">Pick a preset that matches the workload. Tune individual properties on the next step.</p>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:18px;">
+              <label style="padding:14px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:6px;cursor:pointer;text-align:center;">
+                <div style="font-size:18px;margin-bottom:4px;">📁</div>
+                <div style="font-size:12px;font-weight:700;color:#0f172a;">General file</div>
+                <div style="font-size:10px;color:#64748b;margin-top:4px;">zstd · 128K recordsize</div>
+              </label>
+              <label style="padding:14px;background:#1d4ed810;border:2px solid #1d4ed8;border-radius:6px;cursor:pointer;text-align:center;">
+                <div style="font-size:18px;margin-bottom:4px;">🗄️</div>
+                <div style="font-size:12px;font-weight:700;color:#1d4ed8;">Database</div>
+                <div style="font-size:10px;color:#1e3a8a;margin-top:4px;font-weight:600;">SELECTED</div>
+                <div style="font-size:10px;color:#64748b;">lz4 · 16K recordsize</div>
+              </label>
+              <label style="padding:14px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:6px;cursor:pointer;text-align:center;">
+                <div style="font-size:18px;margin-bottom:4px;">🎬</div>
+                <div style="font-size:12px;font-weight:700;color:#0f172a;">Media / VM</div>
+                <div style="font-size:10px;color:#64748b;margin-top:4px;">zstd · 1M recordsize</div>
+              </label>
+            </div>
+
+            <h2 style="margin:8px 0 12px;font-size:15px;font-weight:700;color:#0f172a;">Quota</h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:18px;">
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Refquota (dataset size cap)</div>
+                <div style="display:flex;gap:4px;"><input value="100" style="flex:1;height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 10px;font-family:monospace;font-size:13px;"/><select style="height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 8px;font-size:11px;background:#ffffff;"><option selected="selected">GB</option><option>TB</option></select></div>
+                <div style="font-size:10px;color:#94a3b8;margin-top:4px;">Hard cap on dataset size (incl. snapshots excl.)</div>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Quota (total cap incl. snapshots)</div>
+                <div style="display:flex;gap:4px;"><input value="120" style="flex:1;height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 10px;font-family:monospace;font-size:13px;"/><select style="height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 8px;font-size:11px;background:#ffffff;"><option selected="selected">GB</option><option>TB</option></select></div>
+                <div style="font-size:10px;color:#94a3b8;margin-top:4px;">Hard cap on total (snapshots count too)</div>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Reservation (min guaranteed)</div>
+                <div style="display:flex;gap:4px;"><input value="0" style="flex:1;height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 10px;font-family:monospace;font-size:13px;"/><span style="display:flex;align-items:center;color:#475569;font-size:11px;">GB</span></div>
+                <div style="font-size:10px;color:#94a3b8;margin-top:4px;">Reserved space (cannot be consumed by siblings)</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="width:280px;padding:28px 24px;border-left:1px solid #e2e8f0;background:#ffffff;overflow-y:auto;">
+            <div style="padding:14px;background:#1d4ed810;border:1px solid #bfdbfe;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#1d4ed8;letter-spacing:0.06em;margin-bottom:6px;">DATASET PATH</div>
+              <div style="font-size:13px;color:#1e3a8a;font-weight:700;font-family:monospace;word-break:break-all;">tank/volumes/postgres-data-01</div>
+              <div style="font-size:11px;color:#475569;margin-top:4px;">Filesystem · DB profile · 100 GB cap</div>
+            </div>
+            <div style="padding:14px;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#92400e;letter-spacing:0.06em;margin-bottom:6px;">NOTE</div>
+              <div style="font-size:11px;color:#78350f;line-height:1.5;">Database preset uses <strong>lz4 compression</strong> (lower overhead than zstd) and <strong>16K recordsize</strong> — matches Postgres block size. Adjust manually only if you know why.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:9px 16px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;" disabled="disabled">← Back</button>
+          <button style="padding:10px 22px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:#1d4ed8;color:#ffffff;">Next → Properties</button>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>

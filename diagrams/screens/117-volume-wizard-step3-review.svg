@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Volume Create Wizard — Step 3 of 3 — Review</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">Create ZFS dataset</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Step 3 — Review</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:11px;color:#64748b;">
+            Step 3 of 3 · final review
+            <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">✕ Cancel</button>
+          </div>
+        </div>
+
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">1. Dataset <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">2. Properties <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #16a34a;background:#16a34a10;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">3</div><span style="font-size:11px;font-weight:600;color:#16a34a;">Review</span></div>
+            <div style="flex:1;"></div>
+            <span style="font-size:10px;color:#16a34a;">ready to create</span>
+          </div>
+        </div>
+
+        <div style="flex:1;display:flex;background:#f1f5f9;overflow:hidden;">
+          <div style="flex:1;padding:28px 40px;overflow-y:auto;">
+
+            <div style="padding:22px;background:linear-gradient(135deg,#0d948820,#1d4ed810);border:1px solid #a7f3d0;border-radius:10px;margin-bottom:20px;display:flex;align-items:center;gap:18px;">
+              <div style="width:64px;height:64px;border-radius:12px;background:#0d9488;color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:30px;">🗄️</div>
+              <div style="flex:1;">
+                <h1 style="margin:0 0 4px;font-size:22px;font-weight:700;color:#0f172a;font-family:monospace;">tank/volumes/postgres-data-01</h1>
+                <div style="display:flex;align-items:center;gap:14px;font-size:12px;color:#475569;">
+                  <span><strong style="color:#0d9488;">Filesystem</strong> · DB profile · <strong>100 GB cap</strong></span>
+                  <span style="color:#cbd5e1;">·</span>
+                  <span style="font-family:monospace;font-size:11px;">lz4 · 128K recordsize</span>
+                </div>
+                <div style="display:flex;gap:6px;margin-top:6px;">
+                  <span style="padding:2px 8px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-size:10px;font-weight:600;">mounted on boot</span>
+                  <span style="padding:2px 8px;background:#16a34a20;color:#16a34a;border-radius:4px;font-size:10px;font-weight:600;">snapshots: hourly+daily+weekly</span>
+                  <span style="padding:2px 8px;background:#7c3aed20;color:#7c3aed;border-radius:4px;font-size:10px;font-weight:600;">owner 999:999 (postgres)</span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:11px;color:#64748b;">Headroom after</div>
+                <div style="font-size:18px;font-weight:700;color:#16a34a;">3.9 TB free</div>
+                <div style="font-size:10px;color:#94a3b8;">on tank</div>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">DATASET</h3><button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button></div>
+                <table style="width:100%;font-size:11px;">
+                  <tr><td style="padding:2px 0;color:#64748b;width:35%;">Pool</td><td style="font-family:monospace;">tank</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Path</td><td style="font-family:monospace;">tank/volumes/postgres-data-01</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Type</td><td>filesystem</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Mountpoint</td><td style="font-family:monospace;">/tank/volumes/postgres-data-01</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">At boot</td><td style="color:#16a34a;font-weight:600;">yes</td></tr>
+                </table>
+              </div>
+
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">CAPACITY</h3><button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button></div>
+                <table style="width:100%;font-size:11px;">
+                  <tr><td style="padding:2px 0;color:#64748b;width:35%;">Refquota</td><td style="font-family:monospace;font-weight:600;">100 GB</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Quota (total)</td><td style="font-family:monospace;">120 GB</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Reservation</td><td>0</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Snap overhead</td><td style="font-family:monospace;color:#92400e;">~5 GB</td></tr>
+                </table>
+              </div>
+
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">PERFORMANCE</h3><button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button></div>
+                <table style="width:100%;font-size:11px;">
+                  <tr><td style="padding:2px 0;color:#64748b;width:35%;">Compression</td><td>lz4</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Recordsize</td><td>128K</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Dedup</td><td>off</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Atime</td><td>off</td></tr>
+                </table>
+              </div>
+
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">ACCESS + SNAPSHOTS</h3><button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button></div>
+                <table style="width:100%;font-size:11px;">
+                  <tr><td style="padding:2px 0;color:#64748b;width:35%;">Mode</td><td style="font-family:monospace;">0750</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Owner</td><td style="font-family:monospace;">999:999 (postgres)</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">ACL</td><td>restricted</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Snapshots</td><td>hourly+daily+weekly</td></tr>
+                </table>
+              </div>
+            </div>
+
+            <div style="padding:14px 16px;background:#1e293b;border-radius:8px;margin-top:14px;">
+              <div style="font-size:11px;font-weight:700;color:#94a3b8;letter-spacing:0.06em;margin-bottom:8px;">zfs command preview</div>
+              <code style="font-family:monospace;font-size:12px;color:#a5f3fc;line-height:1.6;display:block;">zfs create -o mountpoint=/tank/volumes/postgres-data-01 -o compression=lz4 -o recordsize=128K -o atime=off -o aclmode=restricted -o quota=100G -o refquota=100G -o mode=0750 -o readonly=off tank/volumes/postgres-data-01</code>
+            </div>
+
+          </div>
+
+          <div style="width:280px;padding:28px 24px;border-left:1px solid #e2e8f0;background:#ffffff;overflow-y:auto;">
+            <div style="padding:14px;background:#16a34a10;border:1px solid #bbf7d0;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#16a34a;letter-spacing:0.06em;margin-bottom:6px;">READY</div>
+              <table style="width:100%;font-size:11px;color:#166534;">
+                <tr><td style="padding:3px 0;color:#64748b;">Cap</td><td style="text-align:right;font-weight:600;">100 GB</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Snap</td><td style="text-align:right;font-weight:600;">~5 GB</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Compression</td><td style="text-align:right;font-weight:600;">lz4</td></tr>
+                <tr><td style="padding:8px 0 0;color:#64748b;border-top:1px solid #bbf7d0;font-weight:700;">Time</td><td style="text-align:right;font-weight:700;border-top:1px solid #bbf7d0;">instant</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:9px 16px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">← Back to Properties</button>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <button style="padding:9px 16px;font-size:12px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">Save as draft</button>
+            <button style="padding:11px 26px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:linear-gradient(135deg,#0d9488,#1d4ed8);color:#ffffff;cursor:pointer;box-shadow:0 1px 3px rgba(13,148,136,0.4);">+ Create dataset postgres-data-01</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>
