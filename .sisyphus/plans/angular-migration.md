@@ -9229,6 +9229,15 @@ grep -rE 'class="[^"]*\b(bg-|text-|p-[0-9]|m-[0-9]|w-[0-9]|h-[0-9]|flex|grid|rou
   - T93b: Add `X-Pagination-Cursor` header conventions to WIRE_PROTOCOL §1.3.
   - T93c: Update Wire-protocol versioning table at end of v1.4.0 row.
 
+- [ ] 94. **Compact density mode for all list views** ⚠️ MEDIUM (2026-07-09 user feedback)
+  Power-user "Compact" mode for list views (~28px rows vs ~50-60px Cozy).
+  Per `.sisyphus/drafts/ui-index.md` §20.5 (added 2026-07-09).
+  - T94a: ✅ `diagrams/components/24-compact-list-vm.svg` AUTHORED (24.4 KB, 20 rows visible) — canonical example
+  - T94b: Apply Compact density SVG variant for: Containers (`24-compact-list-container.svg`), Jails (`24-compact-list-jail.svg`), Volumes (`24-compact-list-volume.svg`), Users (`24-compact-list-user.svg`), Logs (`24-compact-list-log.svg`), Notifications, Audit Log, History.
+  - T94c: Settings > Appearance > List density toggle (Cozy | Compact) with persistence.
+  - T94d: Angular `SettingsService.density$` signal drives all list components.
+  - **Acceptance**: User can toggle Cozy/Compact; choice persists across sessions; all 8 list views respect setting.
+
 ### Deferred (out of Wave 11 scope)
 - Cluster network map >500 edges → WebGL canvas (gap 12 in scale review). Defer to v2.
 - Volumes tree-view for nested datasets (gap 10). Defer to v2.

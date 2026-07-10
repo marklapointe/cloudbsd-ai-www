@@ -372,3 +372,45 @@ Warning:       #f59e0b (amber)
 Error:         #ef4444 (red)
 Info:          #3b82f6 (blue)
 ```
+
+## 20.5 List density modes (added 2026-07-09)
+
+Every list view supports **two density modes** toggled by user preference (stored in `Settings > Appearance > List density`):
+
+| Mode | Row height | Visible rows in viewport (1280×800) | Use case |
+|---|---|---|---|
+| **Cozy** (default) | ~50-60px | 8-12 rows | Default. Spacious rows; secondary text on hover. |
+| **Compact** | ~28px | **20-30 rows** | Power users / dense-data preference. Single-line, monospace technical fields, no secondary text. |
+
+### Compact mode rules
+
+| Field | Cozy | Compact |
+|---|---|---|
+| Row padding | 10-14px vertical | 6px vertical |
+| Font size | 13px base | 11px base |
+| Status | Pill with color + label | Color dot only (●/■/⚠/⏸) |
+| Name | Bold + id below | Bold + monospace ulid inline |
+| OS | Plain text | Plain text (smaller) |
+| IPv4 | "10.0.10.10 +1 more" button | Monospace single |
+| Specs (RAM/vCPU) | Right-aligned | Right-aligned, monospace |
+| Uptime | "14d 02:11" or "—" | Same, monospace, smaller |
+| Hover details | Always shown | **Hidden** (popover on hover) |
+| Per-page default | 12 | 50 |
+
+### Toggle UI
+
+```
+┌──────────────┐
+│ Cozy │Compact│  ← segmented control in top-right of every list view
+└──────────────┘
+```
+
+### Canonical example SVG
+
+`diagrams/components/24-compact-list-vm.svg` shows the Compact density for VMs. Same pattern applies to Containers, Jails, Volumes, Users, Logs, Notifications, Audit Log, History.
+
+### Performance note
+
+Compact density loads less DOM (less hover popovers built eagerly). At 5,000 rows with virtualization, Compact renders ~150px taller viewport content than Cozy for the same scroll position.
+
+

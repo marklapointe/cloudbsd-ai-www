@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 720" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Admin — Compact VM List (density option)</title>
+  <desc>Compact density list view for VMs. Single line per row (~28px), inline badges, monospace technical fields. Shows 24 rows visible in same viewport where regular density shows 8 rows. Use for power users / dense-data preference. Toggle with [Cozy | Compact] button per ui-index §20.</desc>
+  <foreignObject x="0" y="0" width="1280" height="720">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:720px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;padding:12px 16px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <h3 style="margin:0;font-size:16px;font-weight:700;color:#0f172a;">Virtual Machines</h3>
+            <span style="font-size:10px;color:#64748b;">47 total · 39 running · 6 stopped · 1 paused · 1 error</span>
+            <div style="display:inline-flex;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;font-size:11px;">
+              <div style="padding:3px 9px;color:#64748b;border-right:1px solid #cbd5e1;">Cozy</div>
+              <div style="padding:3px 9px;color:#ffffff;background:#1d4ed8;font-weight:600;">Compact</div>
+            </div>
+          </div>
+        </div>
+        <input type="text" placeholder="Filter VMs..." style="width:240px;padding:4px 8px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#0f172a;"/>
+      </div>
+      <div style="background:#ffffff;border-radius:6px;border:1px solid #e2e8f0;overflow:hidden;">
+        <!-- Header row (sticky in impl) -->
+        <div style="display:grid;grid-template-columns:22px 22px 1fr 100px 130px 70px 60px 60px 22px;gap:10px;padding:7px 12px;background:#f8fafc;border-bottom:1px solid #e2e8f0;font-size:9px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.04em;align-items:center;">
+          <div></div>
+          <div title="Status"></div>
+          <div style="cursor:pointer;user-select:none;">Name <span style="color:#1d4ed8;">▲</span></div>
+          <div style="cursor:pointer;user-select:none;">OS</div>
+          <div style="cursor:pointer;user-select:none;">IPv4</div>
+          <div style="cursor:pointer;user-select:none;text-align:right;">RAM</div>
+          <div style="cursor:pointer;user-select:none;text-align:right;">vCPU</div>
+          <div style="cursor:pointer;user-select:none;">Uptime</div>
+          <div></div>
+        </div>
+        <!-- Rows: 24 visible VMs (compact ~28px each) -->
+        <div style="display:grid;grid-template-columns:22px 22px 1fr 100px 130px 70px 60px 60px 22px;gap:10px;padding:6px 12px;border-bottom:1px solid #f8fafc;font-size:11px;align-items:center;color:#334155;">
+          <div><input type="checkbox" style="margin:0;"/></div>
+          <div style="color:#10b981;font-size:13px;">●</div>
+          <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">nextcloud</span><span style="font-size:9px;color:#64748b;font-family:monospace;">ulid-HQK1</span></div>
+          <div style="color:#475569;font-size:10px;">Debian 12</div>
+          <div style="font-family:monospace;font-size:10px;color:#475569;">10.0.10.10</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">8 GB</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">4</div>
+          <div style="font-size:10px;color:#64748b;font-family:monospace;">14d 02h</div>
+          <div style="color:#94a3b8;font-size:11px;">›</div>
+        </div>
+        <div style="display:grid;grid-template-columns:22px 22px 1fr 100px 130px 70px 60px 60px 22px;gap:10px;padding:6px 12px;border-bottom:1px solid #f8fafc;font-size:11px;align-items:center;color:#334155;">
+          <div><input type="checkbox" style="margin:0;"/></div>
+          <div style="color:#10b981;font-size:13px;">●</div>
+          <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">jellyfin</span><span style="font-size:9px;color:#94a3b8;font-family:monospace;">ulid-HQK2</span></div>
+          <div style="color:#475569;font-size:10px;">Debian 12</div>
+          <div style="font-family:monospace;font-size:10px;color:#475569;">10.0.10.11</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">8 GB</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">4</div>
+          <div style="font-size:10px;color:#64748b;font-family:monospace;">14d 02h</div>
+          <div style="color:#94a3b8;font-size:11px;">›</div>
+        </div>
+        <div style="display:grid;grid-template-columns:22px 22px 1fr 100px 130px 70px 60px 60px 22px;gap:10px;padding:6px 12px;border-bottom:1px solid #f8fafc;font-size:11px;align-items:center;color:#334155;">
+          <div><input type="checkbox" style="margin:0;"/></div>
+          <div style="color:#10b981;font-size:13px;">●</div>
+          <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">mastodon</span><span style="font-size:9px;color:#94a3b8;font-family:monospace;">ulid-HQK3</span></div>
+          <div style="color:#475569;font-size:10px;">Debian 12</div>
+          <div style="font-family:monospace;font-size:10px;color:#475569;">10.0.10.12</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">16 GB</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">8</div>
+          <div style="font-size:10px;color:#64748b;font-family:monospace;">14d 02h</div>
+          <div style="color:#94a3b8;font-size:11px;">›</div>
+        </div>
+        <div style="display:grid;grid-template-columns:22px 22px 1fr 100px 130px 70px 60px 60px 22px;gap:10px;padding:6px 12px;border-bottom:1px solid #f8fafc;font-size:11px;align-items:center;color:#334155;">
+          <div><input type="checkbox" style="margin:0;"/></div>
+          <div style="color:#10b981;font-size:13px;">●</div>
+          <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">gitea</span><span style="font-size:9px;color:#94a3b8;font-family:monospace;">ulid-HQK4</span></div>
+          <div style="color:#475569;font-size:10px;">FreeBSD 14.2</div>
+          <div style="font-family:monospace;font-size:10px;color:#475569;">10.0.10.14</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">4 GB</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">2</div>
+          <div style="font-size:10px;color:#64748b;font-family:monospace;">14d 02h</div>
+          <div style="color:#94a3b8;font-size:11px;">›</div>
+        </div>
+        <div style="display:grid;grid-template-columns:22px 22px 1fr 100px 130px 70px 60px 60px 22px;gap:10px;padding:6px 12px;border-bottom:1px solid #f8fafc;font-size:11px;align-items:center;color:#334155;">
+          <div><input type="checkbox" style="margin:0;"/></div>
+          <div style="color:#10b981;font-size:13px;">●</div>
+          <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">postgres-prod</span><span style="font-size:9px;color:#94a3b8;font-family:monospace;">ulid-HQK5</span></div>
+          <div style="color:#475569;font-size:10px;">Debian 12</div>
+          <div style="font-family:monospace;font-size:10px;color:#475569;">10.0.11.20</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">32 GB</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">8</div>
+          <div style="font-size:10px;color:#64748b;font-family:monospace;">14d 02h</div>
+          <div style="color:#94a3b8;font-size:11px;">›</div>
+        </div>
+        <div style="display:grid;grid-template-columns:22px 22px 1fr 100px 130px 70px 60px 60px 22px;gap:10px;padding:6px 12px;border-bottom:1px solid #f8fafc;font-size:11px;align-items:center;color:#334155;">
+          <div><input type="checkbox" style="margin:0;"/></div>
+          <div style="color:#10b981;font-size:13px;">●</div>
+          <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">redis-cache</span><span style="font-size:9px;color:#94a3b8;font-family:monospace;">ulid-HQK6</span></div>
+          <div style="color:#475569;font-size:10px;">Alpine 3.20</div>
+          <div style="font-family:monospace;font-size:10px;color:#475569;">10.0.11.21</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">2 GB</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">1</div>
+          <div style="font-size:10px;color:#64748b;font-family:monospace;">14d 02h</div>
+          <div style="color:#94a3b8;font-size:11px;">›</div>
+        </div>
+        <div style="display:grid;grid-template-columns:22px 22px 1fr 100px 130px 70px 60px 60px 22px;gap:10px;padding:6px 12px;border-bottom:1px solid #f8fafc;font-size:11px;align-items:center;color:#334155;">
+          <div><input type="checkbox" style="margin:0;"/></div>
+          <div style="color:#10b981;font-size:13px;">●</div>
+          <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">nginx-proxy</span><span style="font-size:9px;color:#94a3b8;font-family:monospace;">ulid-HQK7</span></div>
+          <div style="color:#475569;font-size:10px;">Alpine 3.20</div>
+          <div style="font-family:monospace;font-size:10px;color:#475569;">10.0.11.22</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">1 GB</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">1</div>
+          <div style="font-size:10px;color:#64748b;font-family:monospace;">14d 02h</div>
+          <div style="color:#94a3b8;font-size:11px;">›</div>
+        </div>
+        <div style="display:grid;grid-template-columns:22px 22px 1fr 100px 130px 70px 60px 60px 22px;gap:10px;padding:6px 12px;border-bottom:1px solid #f8fafc;font-size:11px;align-items:center;color:#334155;">
+          <div><input type="checkbox" style="margin:0;"/></div>
+          <div style="color:#10b981;font-size:13px;">●</div>
+          <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">immich-server</span><span style="font-size:9px;color:#94a3b8;font-family:monospace;">ulid-HQK8</span></div>
+          <div style="color:#475569;font-size:10px;">Debian 12</div>
+          <div style="font-family:monospace;font-size:10px;color:#475569;">10.0.11.23</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">8 GB</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">4</div>
+          <div style="font-size:10px;color:#64748b;font-family:monospace;">14d 02h</div>
+          <div style="color:#94a3b8;font-size:11px;">›</div>
+        </div>
+        <div style="display:grid;grid-template-columns:22px 22px 1fr 100px 130px 70px 60px 60px 22px;gap:10px;padding:6px 12px;border-bottom:1px solid #f8fafc;font-size:11px;align-items:center;color:#334155;">
+          <div><input type="checkbox" style="margin:0;"/></div>
+          <div style="color:#10b981;font-size:13px;">●</div>
+          <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">ollama-llama3</span><span style="font-size:9px;color:#94a3b8;font-family:monospace;">ulid-HQK9</span></div>
+          <div style="color:#475569;font-size:10px;">Ubuntu 22.04</div>
+          <div style="font-family:monospace;font-size:10px;color:#475569;">10.0.12.30</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">16 GB</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">8</div>
+          <div style="font-size:10px;color:#64748b;font-family:monospace;">14d 02h</div>
+          <div style="color:#94a3b8;font-size:11px;">›</div>
+        </div>
+        <div style="display:grid;grid-template-columns:22px 22px 1fr 100px 130px 70px 60px 60px 22px;gap:10px;padding:6px 12px;border-bottom:1px solid #f8fafc;font-size:11px;align-items:center;color:#334155;">
+          <div><input type="checkbox" style="margin:0;"/></div>
+          <div style="color:#10b981;font-size:13px;">●</div>
+          <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">homeassistant</span><span style="font-size:9px;color:#94a3b8;font-family:monospace;">ulid-HQKA</span></div>
+          <div style="color:#475569;font-size:10px;">Debian 12</div>
+          <div style="font-family:monospace;font-size:10px;color:#475569;">10.0.12.31</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">4 GB</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">2</div>
+          <div style="font-size:10px;color:#64748b;font-family:monospace;">14d 02h</div>
+          <div style="color:#94a3b8;font-size:11px;">›</div>
+        </div>
+        <div style="display:grid;grid-template-columns:22px 22px 1fr 100px 130px 70px 60px 60px 22px;gap:10px;padding:6px 12px;border-bottom:1px solid #f8fafc;font-size:11px;align-items:center;color:#334155;">
+          <div><input type="checkbox" style="margin:0;"/></div>
+          <div style="color:#10b981;font-size:13px;">●</div>
+          <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">grafana</span><span style="font-size:9px;color:#94a3b8;font-family:monospace;">ulid-HQKB</span></div>
+          <div style="color:#475569;font-size:10px;">Debian 12</div>
+          <div style="font-family:monospace;font-size:10px;color:#475569;">10.0.12.32</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">4 GB</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">2</div>
+          <div style="font-size:10px;color:#64748b;font-family:monospace;">14d 02h</div>
+          <div style="color:#94a3b8;font-size:11px;">›</div>
+        </div>
+        <div style="display:grid;grid-template-columns:22px 22px 1fr 100px 130px 70px 60px 60px 22px;gap:10px;padding:6px 12px;border-bottom:1px solid #f8fafc;font-size:11px;align-items:center;color:#334155;">
+          <div><input type="checkbox" style="margin:0;"/></div>
+          <div style="color:#10b981;font-size:13px;">●</div>
+          <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">prometheus</span><span style="font-size:9px;color:#94a3b8;font-family:monospace;">ulid-HQKC</span></div>
+          <div style="color:#475569;font-size:10px;">Debian 12</div>
+          <div style="font-family:monospace;font-size:10px;color:#475569;">10.0.12.33</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">4 GB</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">2</div>
+          <div style="font-size:10px;color:#64748b;font-family:monospace;">14d 02h</div>
+          <div style="color:#94a3b8;font-size:11px;">›</div>
+        </div>
+        <div style="display:grid;grid-template-columns:22px 22px 1fr 100px 130px 70px 60px 60px 22px;gap:10px;padding:6px 12px;border-bottom:1px solid #f8fafc;font-size:11px;align-items:center;color:#334155;">
+          <div><input type="checkbox" style="margin:0;"/></div>
+          <div style="color:#10b981;font-size:13px;">●</div>
+          <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">alertmanager</span><span style="font-size:9px;color:#94a3b8;font-family:monospace;">ulid-HQKD</span></div>
+          <div style="color:#475569;font-size:10px;">Debian 12</div>
+          <div style="font-family:monospace;font-size:10px;color:#475569;">10.0.12.34</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">2 GB</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">1</div>
+          <div style="font-size:10px;color:#64748b;font-family:monospace;">14d 02h</div>
+          <div style="color:#94a3b8;font-size:11px;">›</div>
+        </div>
+        <div style="display:grid;grid-template-columns:22px 22px 1fr 100px 130px 70px 60px 60px 22px;gap:10px;padding:6px 12px;border-bottom:1px solid #f8fafc;font-size:11px;align-items:center;color:#334155;">
+          <div><input type="checkbox" style="margin:0;"/></div>
+          <div style="color:#10b981;font-size:13px;">●</div>
+          <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;color:#0f172a;">vault</span><span style="font-size:9px;color:#94a3b8;font-family:monospace;">ulid-HQKE</span></div>
+          <div style="color:#475569;font-size:10px;">Debian 12</div>
+          <div style="font-family:monospace;font-size:10px;color:#475569;">10.0.12.35</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">4 GB</div>
+          <div style="text-align:right;font-family:monospace;color:#334155;">2</div>
+          <div style="font-size:10px;color:#64748b;font-family:monospace;">14d 02h</div>
+          <div style="color:#94a3b8;font-size:11px;">›</div>
+        </div>
+        <div style="display:grid;grid-template-columns:22px 22px 1fr 100px 130px 70px 60px 60px 22px;gap:10px;padding:6px 12px;border-bottom:1px solid #f8fafc;font-size:11px;align-items:center;color:#64748b;">
+          <div><input type="checkbox" style="margin:0;"/></div>
+          <div style="color:#94a3b8;font-size:11px;">■</div>
+          <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;">plex</span><span style="font-size:9px;color:#94a3b8;font-family:monospace;">ulid-HQKF</span></div>
+          <div style="font-size:10px;">Ubuntu 22.04</div>
+          <div style="font-family:monospace;font-size:10px;">10.0.12.36</div>
+          <div style="text-align:right;font-family:monospace;">8 GB</div>
+          <div style="text-align:right;font-family:monospace;">4</div>
+          <div style="font-size:10px;font-family:monospace;">—</div>
+          <div style="color:#94a3b8;font-size:11px;">›</div>
+        </div>
+        <div style="display:grid;grid-template-columns:22px 22px 1fr 100px 130px 70px 60px 60px 22px;gap:10px;padding:6px 12px;border-bottom:1px solid #f8fafc;font-size:11px;align-items:center;color:#64748b;">
+          <div><input type="checkbox" style="margin:0;"/></div>
+          <div style="color:#94a3b8;font-size:11px;">■</div>
+          <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;">unifi-controller</span><span style="font-size:9px;color:#94a3b8;font-family:monospace;">ulid-HQKG</span></div>
+          <div style="font-size:10px;">Ubuntu 22.04</div>
+          <div style="font-family:monospace;font-size:10px;">10.0.12.37</div>
+          <div style="text-align:right;font-family:monospace;">4 GB</div>
+          <div style="text-align:right;font-family:monospace;">2</div>
+          <div style="font-size:10px;font-family:monospace;">—</div>
+          <div style="color:#94a3b8;font-size:11px;">›</div>
+        </div>
+        <div style="display:grid;grid-template-columns:22px 22px 1fr 100px 130px 70px 60px 60px 22px;gap:10px;padding:6px 12px;border-bottom:1px solid #f8fafc;font-size:11px;align-items:center;color:#64748b;">
+          <div><input type="checkbox" style="margin:0;"/></div>
+          <div style="color:#94a3b8;font-size:11px;">■</div>
+          <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;">mqtt-broker</span><span style="font-size:9px;color:#94a3b8;font-family:monospace;">ulid-HQKH</span></div>
+          <div style="font-size:10px;">Debian 12</div>
+          <div style="font-family:monospace;font-size:10px;">10.0.12.38</div>
+          <div style="text-align:right;font-family:monospace;">2 GB</div>
+          <div style="text-align:right;font-family:monospace;">1</div>
+          <div style="font-size:10px;font-family:monospace;">—</div>
+          <div style="color:#94a3b8;font-size:11px;">›</div>
+        </div>
+        <div style="display:grid;grid-template-columns:22px 22px 1fr 100px 130px 70px 60px 60px 22px;gap:10px;padding:6px 12px;border-bottom:1px solid #f8fafc;font-size:11px;align-items:center;color:#64748b;">
+          <div><input type="checkbox" style="margin:0;"/></div>
+          <div style="color:#94a3b8;font-size:11px;">⏸</div>
+          <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;">test-sandbox-01</span><span style="font-size:9px;color:#94a3b8;font-family:monospace;">ulid-HQKI</span></div>
+          <div style="font-size:10px;">Debian 12</div>
+          <div style="font-family:monospace;font-size:10px;">10.0.13.40</div>
+          <div style="text-align:right;font-family:monospace;">4 GB</div>
+          <div style="text-align:right;font-family:monospace;">2</div>
+          <div style="font-size:10px;font-family:monospace;">—</div>
+          <div style="color:#94a3b8;font-size:11px;">›</div>
+        </div>
+        <div style="display:grid;grid-template-columns:22px 22px 1fr 100px 130px 70px 60px 60px 22px;gap:10px;padding:6px 12px;border-bottom:1px solid #f8fafc;font-size:11px;align-items:center;color:#b91c1c;">
+          <div><input type="checkbox" style="margin:0;"/></div>
+          <div style="color:#ef4444;font-size:13px;">⚠</div>
+          <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><span style="font-weight:600;">homeassistant-bk</span><span style="font-size:9px;color:#94a3b8;font-family:monospace;">ulid-HQKJ</span></div>
+          <div style="font-size:10px;">Debian 12</div>
+          <div style="font-family:monospace;font-size:10px;">10.0.13.41</div>
+          <div style="text-align:right;font-family:monospace;">4 GB</div>
+          <div style="text-align:right;font-family:monospace;">2</div>
+          <div style="font-size:10px;font-family:monospace;">—</div>
+          <div style="color:#94a3b8;font-size:11px;">›</div>
+        </div>
+        <!-- Footer status bar -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 12px;background:#f8fafc;border-top:1px solid #e2e8f0;font-size:10px;color:#64748b;">
+          <span><b style="color:#0f172a;">1-20</b> of <b style="color:#0f172a;">47</b> VMs · <span style="color:#10b981;">● 17 run</span> · <span style="color:#94a3b8;">■ 2 stopped</span> · <span style="color:#64748b;">⏸ 1 paused</span></span>
+          <span>Per page: <select style="font-size:10px;border:1px solid #cbd5e1;border-radius:3px;padding:1px 4px;background:#ffffff;color:#475569;"><option>25</option><option selected="selected">50</option><option>100</option><option>200</option></select></span>
+        </div>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

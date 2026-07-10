@@ -82,6 +82,7 @@ This table documents every screen adjustment made during the React → Angular m
 | 40 | (none) | `modals/plugin-install/` | ➕ ADDED | Plugin install modal SVG (3 tabs, `diagrams/modals/20-plugin-install.svg`) | T83a |
 | 41 | (none) | `modals/plugin-detail/` | ➕ ADDED | Plugin detail modal SVG (manifest/capabilities/permissions, `diagrams/modals/22-plugin-detail.svg`) | T83c |
 | 42 | (none) | `modals/theme-import/` | ➕ ADDED | Theme import modal SVG (3-tab URL/Paste/Upload, `diagrams/modals/21-theme-import.svg`) | T84a |
+| 43 | (none) | `components/compact-list-vm/` | ➕ ADDED | Compact density list component SVG (20 rows in single viewport, `diagrams/components/24-compact-list-vm.svg`) | T94 compact-mode toggle |
 
 ---
 
