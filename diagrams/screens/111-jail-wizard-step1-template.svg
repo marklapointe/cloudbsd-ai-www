@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Jail Create Wizard — Step 1 of 4 — Base template</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">Create jail</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Step 1 — Template</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:11px;color:#64748b;">
+            Step 1 of 4 · ~2 min remaining
+            <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">✕ Cancel</button>
+          </div>
+        </div>
+
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #1d4ed8;background:#1d4ed810;"><div style="width:20px;height:20px;border-radius:50%;background:#1d4ed8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">1</div><span style="font-size:11px;font-weight:600;color:#1d4ed8;">Template</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">2</div><span style="font-size:11px;color:#475569;">Identity</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">3</div><span style="font-size:11px;color:#475569;">Resources</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">4</div><span style="font-size:11px;color:#475569;">Review</span></div>
+            <div style="flex:1;"></div>
+            <span style="font-size:10px;color:#94a3b8;">0 of 4 complete</span>
+          </div>
+        </div>
+
+        <div style="flex:1;display:flex;background:#f1f5f9;overflow:hidden;">
+          <div style="flex:1;padding:28px 40px;overflow-y:auto;">
+            <h1 style="margin:0 0 4px;font-size:22px;font-weight:700;color:#0f172a;">Choose a FreeBSD base</h1>
+            <p style="margin:0 0 24px;font-size:13px;color:#64748b;max-width:680px;line-height:1.55;">Jails share a kernel with the host. Pick a FreeBSD release, then we'll set up a ZFS-backed dataset with the userland.</p>
+
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px;">
+              <div style="padding:14px;background:#1d4ed810;border:2px solid #1d4ed8;border-radius:8px;cursor:pointer;position:relative;">
+                <div style="position:absolute;top:8px;right:8px;padding:2px 7px;background:#1d4ed8;color:#ffffff;border-radius:9999px;font-size:9px;font-weight:700;">SELECTED</div>
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                  <div style="width:36px;height:36px;border-radius:6px;background:#7c2d12;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;">FB</div>
+                  <div><div style="font-size:13px;font-weight:700;color:#0f172a;">FreeBSD 14.2</div><div style="font-size:10px;color:#64748b;">RELEASE · amd64</div></div>
+                </div>
+                <div style="font-size:11px;color:#475569;line-height:1.4;margin-bottom:8px;">Stable release. Security EOL Apr 2026. Includes pkg, ZFS, NFS.</div>
+                <div style="font-size:10px;color:#0d9488;font-weight:600;">✓ active + supported</div>
+              </div>
+
+              <div style="padding:14px;background:#ffffff;border:1px solid #cbd5e1;border-radius:8px;cursor:pointer;">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                  <div style="width:36px;height:36px;border-radius:6px;background:#7c2d12;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;">13</div>
+                  <div><div style="font-size:13px;font-weight:700;color:#0f172a;">FreeBSD 13.4</div><div style="font-size:10px;color:#64748b;">RELEASE · amd64</div></div>
+                </div>
+                <div style="font-size:11px;color:#475569;line-height:1.4;margin-bottom:8px;">LTS branch. EOL Dec 2025. Use only if you have specific reason.</div>
+                <div style="font-size:10px;color:#92400e;font-weight:600;">⚠ EOL soon</div>
+              </div>
+
+              <div style="padding:14px;background:#ffffff;border:1px solid #cbd5e1;border-radius:8px;cursor:pointer;">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                  <div style="width:36px;height:36px;border-radius:6px;background:#7c2d12;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;">15</div>
+                  <div><div style="font-size:13px;font-weight:700;color:#0f172a;">FreeBSD 15.0</div><div style="font-size:10px;color:#64748b;">CURRENT · amd64</div></div>
+                </div>
+                <div style="font-size:11px;color:#475569;line-height:1.4;margin-bottom:8px;">Bleeding-edge. New features but unstable. Not for production jails.</div>
+                <div style="font-size:10px;color:#dc2626;font-weight:600;">⚠ testing only</div>
+              </div>
+            </div>
+
+            <h2 style="margin:8px 0 12px;font-size:14px;font-weight:700;color:#0f172a;">Jail flavor</h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+              <label style="padding:14px;background:#1d4ed810;border:2px solid #1d4ed8;border-radius:8px;cursor:pointer;">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                  <div style="width:14px;height:14px;border-radius:50%;background:#1d4ed8;border:3px solid #ffffff;outline:1px solid #1d4ed8;"></div>
+                  <span style="font-size:13px;font-weight:700;color:#0f172a;">Thick jail (full userland)</span>
+                </div>
+                <div style="font-size:11px;color:#475569;line-height:1.45;">Each jail has its own copy of /usr, /lib, /bin, /sbin. Independently upgradeable. ~600 MB disk per jail. Best for isolation.</div>
+              </label>
+              <label style="padding:14px;background:#ffffff;border:1px solid #cbd5e1;border-radius:8px;cursor:pointer;">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                  <div style="width:14px;height:14px;border-radius:50%;background:#ffffff;border:1px solid #cbd5e1;"></div>
+                  <span style="font-size:13px;font-weight:700;color:#0f172a;">Thin jail (shared base)</span>
+                </div>
+                <div style="font-size:11px;color:#475569;line-height:1.45;">Jails share /bin, /sbin, /lib via nullfs. ~80 MB per jail. All upgrade together. Best for many similar jails.</div>
+              </label>
+            </div>
+
+            <h2 style="margin:8px 0 12px;font-size:14px;font-weight:700;color:#0f172a;">Bootstrap options</h2>
+            <div style="padding:14px 18px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 28px;font-size:12px;">
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:14px;">
+                  <span style="color:#475569;">Bootstrap via <code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">bsdinstall jail</code></span>
+                  <input type="checkbox" checked="checked" style="accent-color:#1d4ed8;width:34px;height:18px;"/>
+                </label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:14px;">
+                  <span style="color:#475569;">Auto-update on security advisories</span>
+                  <input type="checkbox" checked="checked" style="accent-color:#1d4ed8;width:34px;height:18px;"/>
+                </label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:14px;">
+                  <span style="color:#475569;">Install <code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">pkg</code> bootstrap</span>
+                  <input type="checkbox" checked="checked" style="accent-color:#1d4ed8;width:34px;height:18px;"/>
+                </label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:14px;">
+                  <span style="color:#475569;">Initialize ZFS dataset on first start</span>
+                  <input type="checkbox" checked="checked" style="accent-color:#1d4ed8;width:34px;height:18px;"/>
+                </label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:14px;">
+                  <span style="color:#475569;">Pre-install <code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">ca_root_nss</code></span>
+                  <input type="checkbox" style="accent-color:#1d4ed8;width:34px;height:18px;"/>
+                </label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:14px;">
+                  <span style="color:#475569;">Disable sendmail (most apps don't need)</span>
+                  <input type="checkbox" checked="checked" style="accent-color:#1d4ed8;width:34px;height:18px;"/>
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="width:280px;padding:28px 24px;border-left:1px solid #e2e8f0;background:#ffffff;overflow-y:auto;">
+            <div style="padding:14px;background:#1d4ed810;border:1px solid #bfdbfe;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#1d4ed8;letter-spacing:0.06em;margin-bottom:6px;">SELECTION</div>
+              <div style="font-size:13px;color:#1e3a8a;font-weight:700;">FreeBSD 14.2</div>
+              <div style="font-size:11px;color:#475569;margin-top:4px;">Thick · amd64 · ~600 MB</div>
+            </div>
+            <div style="padding:14px;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#92400e;letter-spacing:0.06em;margin-bottom:6px;">NOTE</div>
+              <div style="font-size:11px;color:#78350f;line-height:1.5;">Jails share the host kernel. They cannot load kernel modules or change kernel tunables. Use a VM if you need that.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:9px 16px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;" disabled="disabled">← Back</button>
+          <button style="padding:10px 22px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:#1d4ed8;color:#ffffff;">Next → Identity</button>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>

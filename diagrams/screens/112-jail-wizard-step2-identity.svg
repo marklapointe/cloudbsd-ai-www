@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Jail Create Wizard — Step 2 of 4 — Identity</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">Create jail</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Step 2 — Identity</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:11px;color:#64748b;">
+            Step 2 of 4 · ~1 min remaining
+            <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">✕ Cancel</button>
+          </div>
+        </div>
+
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">1. Template <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #1d4ed8;background:#1d4ed810;"><div style="width:20px;height:20px;border-radius:50%;background:#1d4ed8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">2</div><span style="font-size:11px;font-weight:600;color:#1d4ed8;">Identity</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">3</div><span style="font-size:11px;color:#475569;">Resources</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">4</div><span style="font-size:11px;color:#475569;">Review</span></div>
+            <div style="flex:1;"></div>
+            <span style="font-size:10px;color:#16a34a;">1 of 4 complete</span>
+          </div>
+        </div>
+
+        <div style="flex:1;display:flex;background:#f1f5f9;overflow:hidden;">
+          <div style="flex:1;padding:28px 40px;overflow-y:auto;">
+
+            <h1 style="margin:0 0 4px;font-size:22px;font-weight:700;color:#0f172a;">Jail identity</h1>
+            <p style="margin:0 0 24px;font-size:13px;color:#64748b;max-width:680px;line-height:1.55;">Unique identifier, hostname, and FreeBSD-specific options like devfs ruleset.</p>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:18px;">
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Jail name <span style="color:#dc2626;">*</span></div>
+                <input value="dns-resolver-01" style="width:100%;height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 12px;font-family:monospace;font-size:13px;"/>
+                <div style="font-size:10px;color:#94a3b8;margin-top:4px;">[a-z0-9_-]+. Becomes jail.&lt;name&gt; in /etc/jail.conf.</div>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Hostname</div>
+                <input value="dns-resolver-01.cloudbsd.lan" style="width:100%;height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 12px;font-family:monospace;font-size:12px;"/>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Owner</div>
+                <select style="width:100%;height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 12px;font-size:12px;background:#ffffff;">
+                  <option selected="selected">admin</option><option>mlapointe</option><option>sysops-team</option>
+                </select>
+              </div>
+            </div>
+
+            <h2 style="margin:8px 0 12px;font-size:14px;font-weight:700;color:#0f172a;">FreeBSD-specific</h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:18px;">
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">DevFS ruleset</div>
+                <select style="width:100%;height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 12px;font-size:12px;background:#ffffff;">
+                  <option selected="selected">4 (default ruleset — minimal /dev)</option>
+                  <option>3 (jail.rules)</option>
+                  <option>5 (custom)</option>
+                  <option>— inherit host ruleset</option>
+                </select>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">SysV IPC namespace</div>
+                <select style="width:100%;height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 12px;font-size:12px;background:#ffffff;">
+                  <option selected="selected">new (private)</option>
+                  <option>inherit</option>
+                </select>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Mount devfs</div>
+                <select style="width:100%;height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 12px;font-size:12px;background:#ffffff;">
+                  <option selected="selected">yes (allow jailed /dev access)</option>
+                  <option>no (most secure)</option>
+                </select>
+              </div>
+            </div>
+
+            <h2 style="margin:8px 0 12px;font-size:14px;font-weight:700;color:#0f172a;">Allow flags (security policy)</h2>
+            <div style="padding:14px 18px;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;margin-bottom:18px;">
+              <div style="font-size:11px;color:#78350f;margin-bottom:12px;line-height:1.5;">Jails default to maximum restriction. Enable only what your workload needs. Misconfigured flags can break the jail or compromise the host.</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;">
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;background:#ffffff;border-radius:5px;">
+                  <span style="color:#475569;"><code style="font-family:monospace;background:#fef9c3;padding:1px 5px;border-radius:3px;">allow.chflags</code> · chflags(2) syscall</span>
+                  <input type="checkbox" style="accent-color:#1d4ed8;width:30px;height:18px;"/>
+                </label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;background:#ffffff;border-radius:5px;">
+                  <span style="color:#475569;"><code style="font-family:monospace;background:#fef9c3;padding:1px 5px;border-radius:3px;">allow.mount</code> · mount/umount</span>
+                  <input type="checkbox" style="accent-color:#1d4ed8;width:30px;height:18px;"/>
+                </label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;background:#ffffff;border-radius:5px;">
+                  <span style="color:#475569;"><code style="font-family:monospace;background:#fef9c3;padding:1px 5px;border-radius:3px;">allow.mount.devfs</code></span>
+                  <input type="checkbox" style="accent-color:#1d4ed8;width:30px;height:18px;"/>
+                </label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;background:#ffffff;border-radius:5px;">
+                  <span style="color:#475569;"><code style="font-family:monospace;background:#fef9c3;padding:1px 5px;border-radius:3px;">allow.mount.nullfs</code></span>
+                  <input type="checkbox" style="accent-color:#1d4ed8;width:30px;height:18px;"/>
+                </label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;background:#ffffff;border-radius:5px;">
+                  <span style="color:#475569;"><code style="font-family:monospace;background:#fef9c3;padding:1px 5px;border-radius:3px;">allow.mount.procfs</code></span>
+                  <input type="checkbox" style="accent-color:#1d4ed8;width:30px;height:18px;"/>
+                </label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;background:#ffffff;border-radius:5px;">
+                  <span style="color:#475569;"><code style="font-family:monospace;background:#fef9c3;padding:1px 5px;border-radius:3px;">allow.mount.zfs</code></span>
+                  <input type="checkbox" style="accent-color:#1d4ed8;width:30px;height:18px;"/>
+                </label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;background:#ffffff;border-radius:5px;">
+                  <span style="color:#475569;"><code style="font-family:monospace;background:#fef9c3;padding:1px 5px;border-radius:3px;">allow.raw_sockets</code></span>
+                  <input type="checkbox" style="accent-color:#1d4ed8;width:30px;height:18px;"/>
+                </label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;background:#ffffff;border-radius:5px;">
+                  <span style="color:#475569;"><code style="font-family:monospace;background:#fef9c3;padding:1px 5px;border-radius:3px;">allow.socket_af</code></span>
+                  <input type="checkbox" style="accent-color:#1d4ed8;width:30px;height:18px;"/>
+                </label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;background:#ffffff;border-radius:5px;">
+                  <span style="color:#475569;"><code style="font-family:monospace;background:#fef9c3;padding:1px 5px;border-radius:3px;">allow.set_hostname</code></span>
+                  <input type="checkbox" checked="checked" style="accent-color:#1d4ed8;width:30px;height:18px;"/>
+                </label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;background:#ffffff;border-radius:5px;">
+                  <span style="color:#475569;"><code style="font-family:monospace;background:#fef9c3;padding:1px 5px;border-radius:3px;">allow.sysvipc</code></span>
+                  <input type="checkbox" style="accent-color:#1d4ed8;width:30px;height:18px;"/>
+                </label>
+              </div>
+            </div>
+
+            <h2 style="margin:8px 0 12px;font-size:14px;font-weight:700;color:#0f172a;">Metadata</h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Tags</div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px;padding:8px;border:1px solid #cbd5e1;border-radius:5px;min-height:36px;background:#ffffff;">
+                  <span style="padding:3px 8px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-size:11px;font-weight:600;display:inline-flex;align-items:center;gap:4px;">dns ✕</span>
+                  <span style="padding:3px 8px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-size:11px;font-weight:600;display:inline-flex;align-items:center;gap:4px;">resolver ✕</span>
+                  <input placeholder="add tag…" style="border:none;outline:none;flex:1;min-width:80px;font-size:12px;"/>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Description</div>
+                <input placeholder="What does this jail run?" style="width:100%;height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 12px;font-size:12px;"/>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="width:280px;padding:28px 24px;border-left:1px solid #e2e8f0;background:#ffffff;overflow-y:auto;">
+            <div style="padding:14px;background:#1d4ed810;border:1px solid #bfdbfe;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#1d4ed8;letter-spacing:0.06em;margin-bottom:6px;">JAIL ID</div>
+              <div style="font-size:13px;color:#1e3a8a;font-weight:700;font-family:monospace;">dns-resolver-01</div>
+              <div style="font-size:10px;color:#475569;margin-top:4px;font-family:monospace;">/etc/jail.conf:<br/>dns-resolver-01 { … }</div>
+            </div>
+            <div style="padding:14px;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;">
+              <div style="font-size:11px;font-weight:700;color:#92400e;letter-spacing:0.06em;margin-bottom:6px;">ALLOW FLAGS</div>
+              <div style="font-size:11px;color:#78350f;line-height:1.5;">Currently enabled: <strong style="color:#16a34a;">set_hostname</strong>. None of the dangerous flags are set. DNS resolver does <em>not</em> need raw_sockets.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:9px 16px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">← Back to Template</button>
+          <button style="padding:10px 22px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:#1d4ed8;color:#ffffff;">Next → Resources</button>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>

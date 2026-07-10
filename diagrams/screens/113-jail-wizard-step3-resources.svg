@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Jail Create Wizard — Step 3 of 4 — Resources</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">Create jail</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Step 3 — Resources</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:11px;color:#64748b;">
+            Step 3 of 4 · ~2 min remaining
+            <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">✕ Cancel</button>
+          </div>
+        </div>
+
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">1. Template <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">2. Identity <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #1d4ed8;background:#1d4ed810;"><div style="width:20px;height:20px;border-radius:50%;background:#1d4ed8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">3</div><span style="font-size:11px;font-weight:600;color:#1d4ed8;">Resources</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">4</div><span style="font-size:11px;color:#475569;">Review</span></div>
+            <div style="flex:1;"></div>
+            <span style="font-size:10px;color:#16a34a;">2 of 4 complete</span>
+          </div>
+        </div>
+
+        <div style="flex:1;display:flex;background:#f1f5f9;overflow:hidden;">
+          <div style="flex:1;padding:28px 40px;overflow-y:auto;">
+
+            <!-- Networking -->
+            <h1 style="margin:0 0 4px;font-size:22px;font-weight:700;color:#0f172a;">Network</h1>
+            <p style="margin:0 0 18px;font-size:13px;color:#64748b;max-width:680px;line-height:1.55;">VNET gives each jail its own network stack (separate routing, iptables, etc.). Host-only shares the host's IP. None isolates completely.</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Mode</div>
+                <div style="display:flex;gap:0;">
+                  <label style="padding:10px 14px;background:#1d4ed810;border:2px solid #1d4ed8;border-radius:6px 0 0 6px;cursor:pointer;flex:1;text-align:center;font-size:12px;font-weight:600;color:#1d4ed8;">VNET</label>
+                  <label style="padding:10px 14px;background:#ffffff;border:1px solid #cbd5e1;border-radius:0 6px 6px 0;cursor:pointer;flex:1;text-align:center;font-size:12px;color:#475569;margin-left:-1px;">host-only</label>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">VNET interface</div>
+                <select style="width:100%;height:42px;border:1px solid #cbd5e1;border-radius:6px;padding:0 12px;font-size:12px;background:#ffffff;">
+                  <option selected="selected">epair0b (auto-created, bridged to vmbr0)</option>
+                  <option>epair1b (vmbr1)</option>
+                  <option>netgraph: ng0</option>
+                  <option>tap0 (legacy)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- IPv4 + IPv6 -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+              <div style="padding:14px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                  <div style="font-size:12px;font-weight:700;color:#0f172a;">IPv4</div>
+                  <select style="font-size:11px;height:26px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;background:#ffffff;"><option selected="selected">Static</option><option>DHCP</option><option>SLAAC</option></select>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+                  <input value="10.0.5.21" style="flex:1;height:30px;border:1px solid #cbd5e1;border-radius:4px;padding:0 8px;font-family:monospace;font-size:13px;"/>
+                  <span style="color:#475569;">/</span>
+                  <input value="24" style="width:50px;height:30px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:13px;text-align:center;"/>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+                  <span style="font-size:11px;color:#64748b;width:60px;">Gateway</span>
+                  <input value="10.0.5.1" style="flex:1;height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 8px;font-family:monospace;font-size:12px;"/>
+                </div>
+                <div style="font-size:10px;color:#94a3b8;">Resolves to: <code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">dns-resolver-01.cloudbsd.lan → 10.0.5.21</code></div>
+              </div>
+
+              <div style="padding:14px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                  <div style="font-size:12px;font-weight:700;color:#0f172a;">IPv6</div>
+                  <select style="font-size:11px;height:26px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;background:#ffffff;"><option>SLAAC</option><option selected="selected">Static</option><option>Disabled</option></select>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+                  <input value="fd00:5::21" style="flex:1;height:30px;border:1px solid #cbd5e1;border-radius:4px;padding:0 8px;font-family:monospace;font-size:13px;"/>
+                  <span style="color:#475569;">/</span>
+                  <input value="64" style="width:50px;height:30px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:13px;text-align:center;"/>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+                  <span style="font-size:11px;color:#64748b;width:60px;">Gateway</span>
+                  <input value="fd00:5::1" style="flex:1;height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 8px;font-family:monospace;font-size:12px;"/>
+                </div>
+                <div style="font-size:10px;color:#94a3b8;">ULA range. Internal-only.</div>
+              </div>
+            </div>
+
+            <!-- ZFS dataset -->
+            <h2 style="margin:8px 0 12px;font-size:15px;font-weight:700;color:#0f172a;">Storage (ZFS dataset)</h2>
+            <div style="padding:14px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:18px;">
+              <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px;margin-bottom:12px;">
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Parent dataset</div>
+                  <select style="width:100%;height:32px;border:1px solid #cbd5e1;border-radius:5px;padding:0 10px;font-size:12px;background:#ffffff;font-family:monospace;">
+                    <option selected="selected">tank/jails</option>
+                    <option>tank/jails/staging</option>
+                    <option>tank/jails/production</option>
+                  </select>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Quota</div>
+                  <div style="display:flex;gap:4px;"><input value="5" style="width:60%;height:32px;border:1px solid #cbd5e1;border-radius:5px;padding:0 8px;font-family:monospace;font-size:12px;text-align:center;"/><select style="flex:1;height:32px;border:1px solid #cbd5e1;border-radius:5px;padding:0 4px;font-size:11px;background:#ffffff;"><option selected="selected">GB</option><option>TB</option></select></div>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Compression</div>
+                  <select style="width:100%;height:32px;border:1px solid #cbd5e1;border-radius:5px;padding:0 10px;font-size:12px;background:#ffffff;">
+                    <option>off</option>
+                    <option>gzip</option>
+                    <option selected="selected">zstd (recommended)</option>
+                    <option>lz4</option>
+                  </select>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:12px;">
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Recordsize</div>
+                  <select style="width:100%;height:30px;border:1px solid #cbd5e1;border-radius:5px;padding:0 10px;font-size:11px;background:#ffffff;"><option>16K</option><option selected="selected">128K</option><option>1M</option></select>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Encryption</div>
+                  <select style="width:100%;height:30px;border:1px solid #cbd5e1;border-radius:5px;padding:0 10px;font-size:11px;background:#ffffff;"><option selected="selected">inherit from parent</option><option>aes-256-gcm</option><option>off</option></select>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Atime</div>
+                  <select style="width:100%;height:30px;border:1px solid #cbd5e1;border-radius:5px;padding:0 10px;font-size:11px;background:#ffffff;"><option>standard</option><option selected="selected">off (workloads usually want off)</option></select>
+                </div>
+              </div>
+            </div>
+
+            <!-- rctl limits -->
+            <h2 style="margin:8px 0 12px;font-size:15px;font-weight:700;color:#0f172a;">Resource limits (rctl)</h2>
+            <div style="padding:14px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 28px;font-size:12px;">
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><span style="color:#475569;"><code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">cputime</code> · total CPU seconds</span><div style="display:flex;align-items:center;gap:4px;"><input value="unlimited" style="width:90px;height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:12px;text-align:center;"/></div></label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><span style="color:#475569;"><code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">memoryuse</code> · RSS max</span><div style="display:flex;align-items:center;gap:4px;"><input value="512" style="width:70px;height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:12px;text-align:center;"/><span style="color:#475569;">MB</span></div></label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><span style="color:#475569;"><code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">maxproc</code> · processes</span><input value="100" style="width:70px;height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:12px;text-align:center;"/></label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><span style="color:#475569;"><code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">openfiles</code></span><input value="1024" style="width:80px;height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:12px;text-align:center;"/></label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><span style="color:#475569;"><code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">pcpu</code> · % one CPU</span><input value="100" style="width:60px;height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:12px;text-align:center;"/><span style="color:#475569;">%</span></label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><span style="color:#475569;"><code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">datasize</code> · data seg</span><input value="512" style="width:70px;height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:12px;text-align:center;"/><span style="color:#475569;">MB</span></label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><span style="color:#475569;"><code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">stacksize</code></span><input value="512" style="width:70px;height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:12px;text-align:center;"/><span style="color:#475569;">KB</span></label>
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><span style="color:#475569;"><code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">coredumpsize</code></span><input value="off" style="width:60px;height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 6px;font-family:monospace;font-size:12px;text-align:center;color:#94a3b8;"/></label>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="width:280px;padding:28px 24px;border-left:1px solid #e2e8f0;background:#ffffff;overflow-y:auto;">
+            <div style="padding:14px;background:#1d4ed810;border:1px solid #bfdbfe;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#1d4ed8;letter-spacing:0.06em;margin-bottom:6px;">SUMMARY</div>
+              <table style="width:100%;font-size:11px;color:#1e3a8a;">
+                <tr><td style="padding:3px 0;color:#64748b;">Mode</td><td style="text-align:right;font-weight:600;">VNET</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">IPv4</td><td style="text-align:right;font-weight:600;font-family:monospace;">10.0.5.21/24</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">IPv6</td><td style="text-align:right;font-weight:600;font-family:monospace;">fd00:5::21/64</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Dataset</td><td style="text-align:right;font-weight:600;font-family:monospace;">tank/jails/dns-resolver-01</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Quota</td><td style="text-align:right;font-weight:600;">5 GB · zstd</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Mem cap</td><td style="text-align:right;font-weight:600;">512 MB</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:9px 16px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">← Back to Identity</button>
+          <button style="padding:10px 22px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:#1d4ed8;color:#ffffff;">Next → Review</button>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Jail Create Wizard — Step 4 of 4 — Review</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">Create jail</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Step 4 — Review</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:11px;color:#64748b;">
+            Step 4 of 4 · final review
+            <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">✕ Cancel</button>
+          </div>
+        </div>
+
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">1. Template <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">2. Identity <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">3. Resources <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #16a34a;background:#16a34a10;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">4</div><span style="font-size:11px;font-weight:600;color:#16a34a;">Review</span></div>
+            <div style="flex:1;"></div>
+            <span style="font-size:10px;color:#16a34a;">ready to create</span>
+          </div>
+        </div>
+
+        <div style="flex:1;display:flex;background:#f1f5f9;overflow:hidden;">
+          <div style="flex:1;padding:28px 40px;overflow-y:auto;">
+
+            <div style="padding:22px;background:linear-gradient(135deg,#7c2d1220,#1d4ed810);border:1px solid #fde68a;border-radius:10px;margin-bottom:20px;display:flex;align-items:center;gap:18px;">
+              <div style="width:64px;height:64px;border-radius:12px;background:#7c2d12;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:32px;">⛓</div>
+              <div style="flex:1;">
+                <h1 style="margin:0 0 4px;font-size:24px;font-weight:700;color:#0f172a;">dns-resolver-01</h1>
+                <div style="display:flex;align-items:center;gap:14px;font-size:12px;color:#475569;">
+                  <span><strong style="color:#7c2d12;">FreeBSD 14.2</strong> thick jail · amd64</span>
+                  <span style="color:#cbd5e1;">·</span>
+                  <span style="font-family:monospace;font-size:11px;color:#64748b;">10.0.5.21 / fd00:5::21</span>
+                </div>
+                <div style="display:flex;gap:6px;margin-top:6px;">
+                  <span style="padding:2px 8px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-size:10px;font-weight:600;">dns</span>
+                  <span style="padding:2px 8px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-size:10px;font-weight:600;">resolver</span>
+                  <span style="padding:2px 8px;background:#16a34a20;color:#16a34a;border-radius:4px;font-size:10px;font-weight:600;">VNET</span>
+                  <span style="padding:2px 8px;background:#7c3aed20;color:#7c3aed;border-radius:4px;font-size:10px;font-weight:600;">5 GB zstd quota</span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:11px;color:#64748b;">Boot time</div>
+                <div style="font-size:18px;font-weight:700;color:#0f172a;">~3 seconds</div>
+                <div style="font-size:10px;color:#94a3b8;">thicker jails boot faster than VMs</div>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">TEMPLATE</h3><button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button></div>
+                <div style="font-size:13px;font-family:monospace;font-weight:600;">FreeBSD 14.2 RELEASE · thick</div>
+                <div style="font-size:11px;color:#64748b;margin-top:4px;">~600 MB base. Auto-updates enabled.</div>
+              </div>
+
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">IDENTITY</h3><button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button></div>
+                <table style="width:100%;font-size:11px;">
+                  <tr><td style="padding:2px 0;color:#64748b;width:30%;">Name</td><td style="font-family:monospace;font-weight:600;">dns-resolver-01</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Hostname</td><td style="font-family:monospace;">dns-resolver-01.cloudbsd.lan</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Owner</td><td>admin</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">DevFS</td><td>ruleset 4</td></tr>
+                </table>
+              </div>
+
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">NETWORK</h3><button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button></div>
+                <table style="width:100%;font-size:11px;">
+                  <tr><td style="padding:2px 0;color:#64748b;width:30%;">Mode</td><td>VNET · epair0b · vmbr0</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">IPv4</td><td style="font-family:monospace;">10.0.5.21/24 · gw 10.0.5.1</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">IPv6</td><td style="font-family:monospace;">fd00:5::21/64 · gw fd00:5::1</td></tr>
+                </table>
+              </div>
+
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">STORAGE &amp; LIMITS</h3><button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button></div>
+                <table style="width:100%;font-size:11px;">
+                  <tr><td style="padding:2px 0;color:#64748b;width:30%;">Dataset</td><td style="font-family:monospace;font-size:10px;">tank/jails/dns-resolver-01</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Quota</td><td>5 GB · zstd · 128K recordsize</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Mem max</td><td>512 MB (rctl)</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Proc limit</td><td>100 processes</td></tr>
+                </table>
+              </div>
+
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;grid-column:span 2;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">ALLOW FLAGS</h3><button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button></div>
+                <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;font-size:11px;">
+                  <div style="padding:6px 10px;background:#16a34a10;border:1px solid #bbf7d0;border-radius:4px;text-align:center;color:#166534;"><code style="font-family:monospace;">set_hostname</code> ✓</div>
+                  <div style="padding:6px 10px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;text-align:center;color:#94a3b8;"><code style="font-family:monospace;">chflags</code></div>
+                  <div style="padding:6px 10px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;text-align:center;color:#94a3b8;"><code style="font-family:monospace;">mount</code></div>
+                  <div style="padding:6px 10px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;text-align:center;color:#94a3b8;"><code style="font-family:monospace;">raw_sockets</code></div>
+                  <div style="padding:6px 10px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;text-align:center;color:#94a3b8;"><code style="font-family:monospace;">sysvipc</code></div>
+                </div>
+                <div style="margin-top:8px;font-size:11px;color:#475569;line-height:1.5;">Most restrictive profile. Only <code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">set_hostname</code> enabled. Use this for untrusted code.</div>
+              </div>
+            </div>
+
+            <div style="padding:14px 16px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:8px;display:flex;align-items:flex-start;gap:12px;margin-top:14px;">
+              <div style="font-size:18px;">ⓘ</div>
+              <div>
+                <div style="font-size:12px;font-weight:700;color:#312e81;margin-bottom:4px;">/etc/jail.conf will be updated</div>
+                <pre style="margin:0;font-family:monospace;font-size:11px;color:#1e1b4b;background:#fff;padding:10px;border-radius:6px;border:1px solid #c7d2fe;line-height:1.55;overflow-x:auto;">dns-resolver-01 {
+  host.hostname   = "dns-resolver-01.cloudbsd.lan";
+  path            = "/tank/jails/dns-resolver-01";
+  interface       = "epair0b";
+  ip4             = "10.0.5.21/24";
+  ip6             = "fd00:5::21/64";
+  devfs_ruleset   = 4;
+  allow.set_hostname;
+  enforce_statfs  = 1;
+}</pre>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="width:280px;padding:28px 24px;border-left:1px solid #e2e8f0;background:#ffffff;overflow-y:auto;">
+            <div style="padding:14px;background:#16a34a10;border:1px solid #bbf7d0;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#16a34a;letter-spacing:0.06em;margin-bottom:6px;">READY</div>
+              <table style="width:100%;font-size:11px;color:#166534;">
+                <tr><td style="padding:3px 0;color:#64748b;">Boot</td><td style="text-align:right;font-weight:600;">~3 s</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Storage</td><td style="text-align:right;font-weight:600;">~620 MB</td></tr>
+                <tr><td style="padding:3px 0;color:#64748b;">Mem cap</td><td style="text-align:right;font-weight:600;">512 MB</td></tr>
+                <tr><td style="padding:8px 0 0;color:#64748b;border-top:1px solid #bbf7d0;font-weight:700;">Start</td><td style="text-align:right;font-weight:700;border-top:1px solid #bbf7d0;">start at boot</td></tr>
+              </table>
+            </div>
+            <div style="padding:14px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;font-size:11px;color:#475569;line-height:1.55;">
+              <div style="font-weight:700;color:#1d4ed8;letter-spacing:0.06em;font-size:10px;margin-bottom:6px;">START COMMANDS</div>
+              <code style="font-family:monospace;background:#f1f5f9;padding:2px 6px;border-radius:3px;display:block;margin-bottom:4px;">jail -c dns-resolver-01</code>
+              <code style="font-family:monospace;background:#f1f5f9;padding:2px 6px;border-radius:3px;display:block;margin-bottom:4px;">jexec dns-resolver-01 /bin/sh</code>
+              <code style="font-family:monospace;background:#f1f5f9;padding:2px 6px;border-radius:3px;display:block;">jail -r dns-resolver-01</code>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:9px 16px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">← Back to Resources</button>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <button style="padding:9px 16px;font-size:12px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">Save as draft</button>
+            <button style="padding:11px 26px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:linear-gradient(135deg,#7c2d12,#1d4ed8);color:#ffffff;cursor:pointer;box-shadow:0 1px 3px rgba(124,45,18,0.4);">+ Create jail dns-resolver-01</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>
