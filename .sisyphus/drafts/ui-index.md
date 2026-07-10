@@ -321,6 +321,40 @@ Left to right:
 
 Previous disabled when on first page. Next disabled when on last page.
 
+## 19.5 List-view universal controls (added 2026-07-09 per scale review)
+
+**Every list view MUST include all of the following 5 controls**, applicable to: VMs, Containers, Jails, Volumes, Users, Logs, Notifications, Audit Log, History, Plugins, Tasks, Volumes (sub-tabs: Datasets/Snapshots/Scrubs), Nodes (VMs sub-tab):
+
+| # | Control | Pattern | Reason |
+|---|---|---|---|
+| 1 | **Sortable column headers** | click any header to toggle asc/desc; `▲` for asc, `▼` for desc, `⇅` for unsorted. Default sort: Name asc. | At >100 rows, finding by sort is the dominant action. |
+| 2 | **Per-page selector** | Beside `Next [›]`: `Per page: [25 ▾] [50] [100] [200]`. Default = 50. | Page count at 1K rows: 50/page = 20 pages; 12/page = 84 pages. Mandatory to avoid click-fest. |
+| 3 | **Empty-state element** | When 0 rows match filter: show centered icon + message + 3 suggested actions (clear filter, broaden search, etc.). | Without this, blank screen looks broken. |
+| 4 | **Bulk-select checkboxes** | First column = checkbox per row. Header cell = `select all on this page` checkbox. Bottom action bar activates when N≥1 selected. | At >100 rows, bulk apply (patch, snapshot, etc.) becomes the dominant use case. |
+| 5 | **Server-side pagination + filter** | Wire-protocol §2.4 specifies `offset`+`limit`+`filter`+`sort` query; v2.0.0 adds cursor-based. **Client-side substring filter ONLY for ≤200 rows; server-side required above that.** | At 1K rows, client substring is dog-slow and unsearchable by exact id. |
+
+### Virtualization mandate (Angular implementation)
+
+At **total > 200 rows** in any list view, the Angular component MUST use `cdk-virtual-scroll-viewport` (Angular CDK). Spec mockups showing 8-12 rows are visual-only; the implementation must window to the visible viewport.
+
+| Rows | Pagination | Virtualization | Filter | Sort |
+|---|---|---|---|---|
+| ≤200 | ✅ server-side | optional | client OR server | client OK |
+| 201-2,000 | ✅ server-side + cursor (WIRE_PROTOCOL v2.0) | ✅ **MANDATORY** | **server-side mandatory** | server-side |
+| 2,000+ | ✅ server-side + cursor | ✅ mandatory | server-side + autocomplete | server-side |
+
+### Performance budgets
+
+| Operation | Budget | Notes |
+|---|---|---|
+| Filter chip change → updated list | <100ms | server-side if >200 rows |
+| Sort click → re-rendered list | <100ms | client ≤200; server otherwise |
+| Page-size change → new page | <200ms | server roundtrip |
+| Search input → debounced results | <300ms (300ms debounce) | server-side at >200 |
+| Live data update (WebSocket) → cards | <50ms | signal-driven OnPush |
+| 5,000-row scroll fps | ≥60fps | cdk-virtual-scroll |
+| Memory at 5,000 VMs | <100MB | lazy virtualization |
+
 ## 20. Color palette (UNIVERSAL)
 
 Applied consistently across all SVGs and components:

@@ -94,13 +94,13 @@
             <table style="width:100%;font-size:11px;border-collapse:collapse;">
               <thead style="background:#f1f5f9;color:#475569;font-size:10px;text-transform:uppercase;">
                 <tr style="border-bottom:1px solid #e2e8f0;">
-                  <th style="text-align:left;padding:7px 8px;font-weight:600;">Name</th>
-                  <th style="text-align:left;padding:7px 8px;font-weight:600;">Status</th>
-                  <th style="text-align:left;padding:7px 8px;font-weight:600;">OS</th>
-                  <th style="text-align:left;padding:7px 8px;font-weight:600;">vCPU</th>
-                  <th style="text-align:left;padding:7px 8px;font-weight:600;">RAM</th>
-                  <th style="text-align:left;padding:7px 8px;font-weight:600;">Uptime</th>
-                  <th style="text-align:left;padding:7px 8px;font-weight:600;">Host</th>
+                  <th style="text-align:left;padding:7px 8px;font-weight:600;cursor:pointer;user-select:none;">Name <span style="font-size:9px;color:#1d4ed8;">▲</span></th>
+                  <th style="text-align:left;padding:7px 8px;font-weight:600;cursor:pointer;user-select:none;">Status <span style="font-size:9px;color:#94a3b8;">⇅</span></th>
+                  <th style="text-align:left;padding:7px 8px;font-weight:600;cursor:pointer;user-select:none;">OS <span style="font-size:9px;color:#94a3b8;">⇅</span></th>
+                  <th style="text-align:right;padding:7px 8px;font-weight:600;cursor:pointer;user-select:none;">vCPU <span style="font-size:9px;color:#94a3b8;">⇅</span></th>
+                  <th style="text-align:right;padding:7px 8px;font-weight:600;cursor:pointer;user-select:none;">RAM <span style="font-size:9px;color:#94a3b8;">⇅</span></th>
+                  <th style="text-align:left;padding:7px 8px;font-weight:600;cursor:pointer;user-select:none;">Uptime <span style="font-size:9px;color:#94a3b8;">⇅</span></th>
+                  <th style="text-align:left;padding:7px 8px;font-weight:600;cursor:pointer;user-select:none;">Host <span style="font-size:9px;color:#94a3b8;">⇅</span></th>
                   <th style="text-align:left;padding:7px 8px;font-weight:600;">IPs</th>
                   <th style="text-align:left;padding:7px 8px;font-weight:600;">Net rx/tx</th>
                 </tr>
@@ -249,6 +249,14 @@
                 <button style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;">3</button>
                 <button style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;">4</button>
                 <button style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;">[›]</button>
+              <div style="display:flex;gap:6px;align-items:center;font-size:11px;color:#64748b;margin-left:14px;">Per page:
+                <select style="font-size:11px;border:1px solid #cbd5e1;border-radius:3px;padding:2px 5px;background:#ffffff;color:#475569;">
+                  <option>25</option>
+                  <option selected="selected">50</option>
+                  <option>100</option>
+                  <option>200</option>
+                </select>
+              </div>
               </div>
             </div>
           </div>

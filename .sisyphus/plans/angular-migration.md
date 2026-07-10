@@ -9169,6 +9169,74 @@ grep -rE 'class="[^"]*\b(bg-|text-|p-[0-9]|m-[0-9]|w-[0-9]|h-[0-9]|flex|grid|rou
 
 ---
 
+## Wave 11: Scale Hardening for 1,000+ Assets (added 2026-07-09 per scale review)
+
+> **Trigger**: User asked "can the views handle thousands of assets?" — scale review at `.sisyphus/drafts/scale-review-2026-07-09.md` found 14 gaps across 12 list views. Two CRITICAL (Logs, Audit Log), five MEDIUM (VMs, Containers, Volumes, History, Notifications), and 5 universal gaps (sort, per-page selector, empty state, bulk select, server-side filtering).
+>
+> **Spec source of truth**: `.sisyphus/drafts/ui-index.md` §19.5 added 2026-07-09 declares the universal-controls rule (5 controls per list view, virtualization mandate at >200 rows). All T85-T92 SVG patches must conform to §19.5.
+>
+> **Estimated effort**: ~60-90 hours total (~10 hrs SVG work + ~50-80 hrs Angular implementation). Defer to dedicated session.
+
+- [ ] 85. **Sortable column headers + per-page selector (universal controls 1+2)** ⚠️ HIGH
+  Apply to all 6 list SVGs: `02-vms.svg`, `03-containers.svg`, `04-jails.svg`, `05-volumes.svg`, `08-users.svg`, `09-logs.svg`.
+  - T85a: Add `▲/▼/⇅` indicator on Name column header (default sort = name asc). Other columns clickable to sort.
+  - T85b: Add per-page selector beside `Next [›]` button: `Per page: [25 ▾] [50] [100] [200]`, default 50.
+  - Per ui-index §19.5.
+  - **Acceptance**: Sort indicator visible on Name column; per-page selector functional.
+
+- [ ] 86. **Empty-state element (universal control 3)** ⚠️ MEDIUM
+  When list filter returns 0 results, show centered icon + message + 3 suggested actions.
+  - T86a: Author `diagrams/empty-states/no-results-with-filter.svg` — reusable empty state pattern.
+  - T86b: Embed empty state rendering in all 9 list views (the 6 from T85 + 16-system-4-history, 16-system-5-audit-log, 10-notifications).
+  - Messages vary by view: "No VMs match 'xyz'" / "No logs in last 1h" / etc.
+
+- [ ] 87. **Bulk-select checkboxes (universal control 4)** 🟢 LOW (deferred for v1)
+  - First column = checkbox per row. Header cell = select-all-on-this-page checkbox.
+  - Bottom action bar activates when N≥1 selected.
+  - **Defer**: view-only directive says no bulk writes; can add as read-only "Export N items" action.
+
+- [ ] 88. **Server-side pagination + filter migration (universal control 5)** ⚠️ HIGH
+  - Wire-protocol §2.4+ already supports `offset`+`limit`+`filter`+`sort` query.
+  - Angular implementation: every list component MUST switch from local filter() to HTTP-driven pagination.
+  - At ≤200 rows: client substring OK; at >200 rows: server-side mandatory (per ui-index §19.5).
+
+- [ ] 89. **Logs (09-logs.svg) virtualization + time-range selector** 🔴 CRITICAL
+  - T89a: Add time-range filter chips to 09-logs.svg: `[1h] [6h] [24h] [7d] [Custom]`
+  - T89b: Add ring-buffer cap (10K lines, drop-oldest with overflow warning per Honcho `taocp Vol 3 §6.1`)
+  - T89c: Add "Jump to oldest/newest" anchors beside Pause button
+  - T89d: Aggregate counter: `Showing 12,034 of 50,402 events`
+  - T89e: Make histogram interactive (click bucket → seek to time range)
+
+- [ ] 90. **Audit Log (16-system-5-audit-log.svg) pagination + filter** 🔴 CRITICAL
+  - T90a: Apply pagination footer per ui-index §19 (currently shows 10 rows with no footer)
+  - T90b: Add action filter chips: `[All] [Auth] [Config] [VM ops] [Volume ops] [Plugin]`
+  - T90c: Add time-range filter chips: `[1h] [24h] [7d] [30d] [All]`
+  - T90d: Add search input for actor / ip / target
+
+- [ ] 91. **cdk-virtual-scroll mandate enforcement** ⚠️ HIGH (Angular impl)
+  - T91a: Add to ui-index.md §19.5 (already done 2026-07-09)
+  - T91b: Audit angular component templates for `cdk-virtual-scroll-viewport` usage
+  - T91c: Add ESLint rule banning `<tr *ngFor>` in favor of `<cdk-virtual-scroll-viewport>` when `count > 50`
+
+- [ ] 92. **Stress test scenario: 5,000-row vms.list rendering** ⚠️ HIGH
+  - T92a: Author scenario in `.sisyphus/drafts/STRESS_AGENT.md` §X: "5,000-row VM list scroll at 60fps with live status updates"
+  - T92b: Add to STRESS_AGENT scenarios list (was T56-T63; expand to T56-T64)
+  - Pass criteria: ≥60fps scroll, <50ms frame time over 10s of scroll, <100MB memory.
+
+- [ ] 93. **Wire-protocol §2.X cursor-based pagination (v2.0.0 milestone)** ⚠️ HIGH
+  - T93a: Move cursor-based to be ACTIVE in v1.4.0 (deliver earlier than v2.0.0). 
+    Reason: at 1K assets, offset/limit pagination has hydration issues; cursor is required.
+  - T93b: Add `X-Pagination-Cursor` header conventions to WIRE_PROTOCOL §1.3.
+  - T93c: Update Wire-protocol versioning table at end of v1.4.0 row.
+
+### Deferred (out of Wave 11 scope)
+- Cluster network map >500 edges → WebGL canvas (gap 12 in scale review). Defer to v2.
+- Volumes tree-view for nested datasets (gap 10). Defer to v2.
+- Bulk write actions (gap 6, 11). Defer to v3 (post-view-only).
+- Mobile responsive list views at 1K rows. Defer to v2.
+
+---
+
 ## Final Verification Wave (MANDATORY — after ALL implementation tasks)
 
 > 4 review agents run in PARALLEL. ALL must APPROVE. Present consolidated results to user and get explicit "okay" before completing.
