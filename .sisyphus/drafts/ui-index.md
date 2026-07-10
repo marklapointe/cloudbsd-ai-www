@@ -572,3 +572,158 @@ Do NOT apply to:
 Avoid `<button>` semantics for clickable rows here — keyboard accessibility wants `Enter`/`Space` activation. Use `[role="button"] tabindex="0"` + `(keydown.enter)` handler for full A11y.
 
 
+
+---
+
+## §22. List-View + Sidecar Pattern (T94j)
+
+Replaces the older "card-grid + recent-events" pattern for resource pages with **count > ~5-10 items**.
+
+### When to use
+
+Any resource page that groups more than a handful of peer items: nodes, GPUs, IP pools, IP allowlist rules, webhooks, API keys, ssh keys, firewall rules, snapshots, etc.
+
+### Threshold rule
+
+| Count of items | Primary view | Panel toggle |
+|----------------|--------------|--------------|
+| ≤ 5 | card-grid OR list, user choice | both available |
+| 6–10 | list view (default), panel toggle visible | toggle works |
+| **> 10** | **list view only, panel toggle HIDDEN** | **list-only** |
+
+The threshold per-resource-type is defined in the resource's spec; tunable via Settings → Appearance → Layout thresholds (future). For now hard-coded values:
+
+- GPUs: **10** (simple cards, single metric) — `diagrams/components/17-vgpu-pool.svg` (≤10 panel mode) vs `diagrams/components/17-vgpu-pool-list.svg` (>10 list mode)
+- Cluster nodes: **10** (more state per node) — `diagrams/screens/07-cluster.svg` always list, threshold lets you drop panel toggle earlier
+- API keys, webhooks, IP rules: **25** (very simple rows) — always list
+- Volumes, snapshots, backups: **20** (single primary metric)
+
+### List view columns (canonical)
+
+| Column | Width | Notes |
+|--------|-------|-------|
+| Primary key | 150px | hostname / ID / token name — first column, monospace, **`cursor:pointer` + `title="Click to open sidecar"`** |
+| Type / role badge | 70-90px | pill (MASTER/WORKER, RUN/STOP, healthy/offline) |
+| Status / health | 80px | colored pill, traffic-light (●/◐/✕) |
+| Secondary group | 60px | rack / region / namespace — short mono |
+| Resource metric bars | 280px (two ×140) | CPU / MEM / DISK / VRAM — paired columns |
+| Temporal | 110px | uptime / last seen / age |
+| Heartbeat / staleness | 90px | mono, color-coded (green <5s, amber 30s, red >5m) |
+| Action chevron | 24px | `›` gray, blue when row selected |
+
+### Sidecar spec
+
+Docked right side panel:
+
+```
+┌────────────────────────────────────┬─────────────────────────────┐
+│                                    │  cloudbsd-node-03  WORKER ×│
+│         table area                 │  ───────────────────────────│
+│         (~ 880px)                  │  Overview / Network / VMs  │
+│                                    │  / Logs / Settings tabs     │
+│                                    │  ───────────────────────────│
+│                                    │  Identity section           │
+│                                    │  Hardware section           │
+│                                    │  Cluster state section      │
+│                                    │  Workload summary box       │
+│                                    │  ───────────────────────────│
+│                                    │  [Drain][Rejoin][Promote]   │
+└────────────────────────────────────┴─────────────────────────────┘
+```
+
+- **Width**: 380-392px docked right (`width:392px; border-left:1px solid #e2e8f0; box-shadow:-2px 0 8px rgba(15,23,42,0.04);`)
+- **Height**: matches table area; max-height for body with `overflow-y:auto`
+- **Header**: identity (name + role badge) + close `×` button + "open in full panel" arrow `↗` button
+- **Tabs**: 4-5 tabs (canonical: Overview / {sub-tabs} / Settings). Active tab gets `border-bottom:2px solid #2563eb`, color `#1d4ed8`
+- **Body sections**: TITLE-LABEL (uppercase 10px gray) + grid `display:grid;grid-template-columns:90px 1fr;gap:5px 10px;font-size:11px` for key/value pairs
+- **Quick actions footer**: 2-3 buttons (`flex:1` + `flex:1` + `flex:1.4` Primary). Action buttons disabled when sidecar open
+- **Open trigger**: click row, `Enter` on focused row, `?sidecar=ID` URL param (deep-linkable)
+- **Close trigger**: `×` button, `Esc` key, click outside row range, `?sidecar=` removed
+- **Multi-tab**: stacked sidecar tabs allow open 2-3 resources simultaneously; max 5 (then oldest auto-closes)
+- **Persistence**: sidecar ID persists in URL for sharing; sessionStorage for restoration after page nav
+- **Sidecar type-agnostic**: contents swap based on resource type — same `SidecarContainer` component hosts VM/Container/Jail/Volume/Node/GPU/ClusterMember details with a discriminator field
+
+### Apply across the board
+
+All list-view + sidecar pages share the same component primitive:
+
+```ts
+@Component({
+  selector: 'app-resource-list-with-sidecar',
+  template: `
+    <div class="split">
+      <app-list-table [rows]="rows()" (rowClick)="open($event)" />
+      @if (sidecar(); as s) {
+        <app-sidecar [resourceId]="s" (close)="sidecar.set(null)" />
+      }
+    </div>
+  `
+})
+```
+
+Resource-specific components wrap:
+- `<app-gpu-list-with-sidecar>` (T94j)
+- `<app-cluster-list-with-sidecar>` (T94m)
+- `<app-vm-list-with-sidecar>` (when VMs > 25)
+- `<app-firewall-rules-list-with-sidecar>`
+- `<app-api-keys-list-with-sidecar>`
+- `<app-webhooks-list-with-sidecar>`
+- `<app-ip-rules-list-with-sidecar>`
+
+---
+
+## §23. Event Timelines Live in Logs (T94m)
+
+### Rule
+
+> **Do not embed ephemeral event timelines on resource pages.**
+> "Recent X Events" / "Recent activity" / "Latest X" / "Activity feed" panels on resource pages are an anti-pattern. All event timelines belong in **Logs** (the system-wide stream) or **Notifications** (the user-targeted stream).
+
+### Why
+
+1. **Duplication** — the same events appear in two places; you don't know which is canonical.
+2. **Pagination mismatch** — resource-page events show N most-recent, but admins want to query older events. Resource page can't host query UI.
+3. **Filter conflicts** — each resource page invents its own subset of filters, while logs has the canonical filter set (severity, source, time range, regex search).
+4. **Notification vs log confusion** — user-facing events (notifications) need ack/dismiss state; system events (logs) don't. Mixing in same panel confuses both.
+5. **Rate of change** — events stream in faster than static resource fields, making resource pages feel noisy.
+
+### Migration
+
+| Old (resource-page event panel) | New |
+|---------------------------------|-----|
+| Cluster page "Recent Cluster Events" | Logs page with `cluster` source filter chip (NOW SHIPPED: `diagrams/screens/07-cluster.svg` removed its events panel, `diagrams/screens/09-logs.svg` gained 6 cluster-event rows + filter chip) |
+| VM page "Recent activity" | Logs page with `bhyve` + VM-name search |
+| Volume page "Recent snapshots" | Logs page with `zfs` source + snapshot name search |
+| Plugin page "Recent installs/uninstalls" | Logs page with `plugin` source |
+| Backup detail page "Recent restore history" | Logs page with `backup` source + restore search |
+| Network page "Recent DHCP events" | Logs page with `net` + `dhcp` |
+
+### Cross-link convention
+
+Every resource page that REMOVED its "Recent X" panel adds ONE link in the page header:
+
+```html
+<a href="/logs?src=cluster" style="display:inline-flex;align-items:center;gap:4px;
+   padding:5px 10px;border:1px solid #cbd5e1;border-radius:5px;
+   background:#ffffff;color:#475569;text-decoration:none;font-weight:600;">
+   View {resource_type} events in logs →
+</a>
+```
+
+The link target is `/logs` (canonical) with query string pre-selecting the source filter. Click → opens logs pre-filtered for that resource type. Avoids deep state in URL while still one-click away.
+
+### What STAYS on resource pages
+
+- Static config (role, hostname, ulid, joined date, hardware, tags)
+- Operational metrics (current CPU/MEM/DISK/throughput) with timestamp
+- Inline alerts tied to THIS resource only (e.g., "this VM has a paused state because…")
+- Related-resource chips ("runs on cloudbsd-node-03", "uses volume tank/data")
+
+### What does NOT stay
+
+- Event lists (>3 items)
+- Activity feeds
+- "What happened here recently"
+- Per-resource log viewers (replace with `→ View all events for this resource in logs` link)
+
+

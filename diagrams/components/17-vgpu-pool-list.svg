@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Admin — vGPU Pool (list view, sidecar open on gpu-2)</title>
+  <desc>GPU pool presented as a list (12 GPUs, click any row to open sidecar). 12 physical GPUs across 3 nodes: 5x T4, 4x A4000, 2x A5000, 1x A6000, 1x A100-MIG. Sidecar pattern: gpu-2 (A4000) selected, Overview tab active showing identity, hardware, allocations, quick actions. Threshold rule: count > 10 forces list view, panel toggle hidden (T94k).</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:13px;box-sizing:border-box;overflow:hidden;">
+      <!-- ─── PAGE HEADER ────────────────────────────────────────────────── -->
+      <div style="background:#ffffff;border-bottom:1px solid #e2e8f0;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <h3 style="margin:0;font-size:18px;font-weight:700;color:#0f172a;">GPU Pool</h3>
+          <div style="font-size:11px;color:#64748b;margin-top:2px;">12 physical GPUs · 3 nodes · 304 GB total VRAM · 22 vGPU allocations</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:11px;">
+          <span style="padding:2px 8px;border-radius:4px;background:#dbeafe;color:#1d4ed8;font-weight:600;">LIST VIEW</span>
+          <span style="font-size:10px;color:#94a3b8;font-style:italic;">panel view disabled: 12 GPUs &gt; 10</span>
+          <button style="padding:5px 12px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;font-size:11px;font-weight:600;">↻ Refresh</button>
+          <button style="padding:5px 12px;border:1px solid #2563eb;border-radius:5px;background:#2563eb;color:#ffffff;font-size:11px;font-weight:600;">+ Allocate vGPU</button>
+        </div>
+      </div>
+      <!-- ─── TOOLBAR (search + filters + density) ──────────────────────── -->
+      <div style="background:#ffffff;border-bottom:1px solid #e2e8f0;padding:10px 20px;display:flex;align-items:center;gap:12px;">
+        <div style="flex:1;display:flex;align-items:center;gap:6px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:5px;padding:5px 10px;">
+          <span style="color:#94a3b8;font-size:12px;">⌕</span>
+          <span style="color:#94a3b8;font-size:11px;">Search by GPU id, model, allocation name…</span>
+        </div>
+        <div style="display:flex;gap:4px;font-size:11px;">
+          <span style="padding:3px 9px;border-radius:4px;background:#f1f5f9;color:#475569;font-weight:600;">All 12</span>
+          <span style="padding:3px 9px;border-radius:4px;background:#ffffff;border:1px solid #e2e8f0;color:#475569;">Idle 4</span>
+          <span style="padding:3px 9px;border-radius:4px;background:#ffffff;border:1px solid #e2e8f0;color:#475569;">Allocated 8</span>
+          <span style="padding:3px 9px;border-radius:4px;background:#ffffff;border:1px solid #e2e8f0;color:#475569;">MIG 1</span>
+          <span style="padding:3px 9px;border-radius:4px;background:#ffffff;border:1px solid #e2e8f0;color:#475569;">NVIDIA 11</span>
+          <span style="padding:3px 9px;border-radius:4px;background:#ffffff;border:1px solid #e2e8f0;color:#475569;">Hot 1</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:#64748b;">
+          <span>Density</span>
+          <span style="padding:2px 7px;border-radius:3px;background:#ffffff;border:1px solid #e2e8f0;color:#94a3b8;">Cozy</span>
+          <span style="padding:2px 7px;border-radius:3px;background:#2563eb;color:#ffffff;font-weight:600;">Compact</span>
+          <span style="padding:2px 7px;border-radius:3px;background:#ffffff;border:1px solid #e2e8f0;color:#94a3b8;">Extra</span>
+        </div>
+      </div>
+      <!-- ─── MAIN ROW: TABLE (880px) + SIDECAR (380px gutter 12) ───────── -->
+      <div style="display:flex;height:680px;">
+        <!-- ═══════ TABLE COLUMN (880px) ═══════ -->
+        <div style="width:880px;background:#ffffff;border-right:1px solid #e2e8f0;display:flex;flex-direction:column;">
+          <!-- table header -->
+          <div style="display:flex;align-items:center;background:#f8fafc;border-bottom:1px solid #e2e8f0;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;font-weight:700;color:#64748b;height:32px;">
+            <span style="width:80px;padding:0 12px;">GPU</span>
+            <span style="width:80px;padding:0 8px;">Node</span>
+            <span style="width:120px;padding:0 8px;">Model</span>
+            <span style="width:80px;padding:0 8px;">VRAM</span>
+            <span style="flex:1;padding:0 8px;">Allocations</span>
+            <span style="width:140px;padding:0 8px;">Used</span>
+            <span style="width:80px;padding:0 8px;">Status</span>
+            <span style="width:24px;"></span>
+          </div>
+          <!-- gpu-0: T4 -->
+          <div style="display:flex;align-items:center;border-bottom:1px solid #f1f5f9;height:30px;font-size:11px;cursor:pointer;">
+            <span style="width:80px;padding:0 12px;font-family:monospace;font-weight:600;color:#0f172a;">gpu-0</span>
+            <span style="width:80px;padding:0 8px;color:#475569;">node-01</span>
+            <span style="width:120px;padding:0 8px;color:#0f172a;">NVIDIA T4</span>
+            <span style="width:80px;padding:0 8px;font-family:monospace;color:#475569;">16 GB</span>
+            <span style="flex:1;padding:0 8px;color:#475569;font-size:10px;">jellyfin · immich</span>
+            <span style="width:140px;padding:0 8px;">
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;">
+                <span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:38%;background:#10b981;"></span></span>
+                <span style="font-family:monospace;color:#475569;width:42px;text-align:right;">38%</span>
+              </span>
+            </span>
+            <span style="width:80px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#dcfce7;color:#059669;">OK</span></span>
+            <span style="width:24px;text-align:center;color:#cbd5e1;">›</span>
+          </div>
+          <!-- gpu-1: T4 idle -->
+          <div style="display:flex;align-items:center;border-bottom:1px solid #f1f5f9;height:30px;font-size:11px;cursor:pointer;">
+            <span style="width:80px;padding:0 12px;font-family:monospace;font-weight:600;color:#0f172a;">gpu-1</span>
+            <span style="width:80px;padding:0 8px;color:#475569;">node-01</span>
+            <span style="width:120px;padding:0 8px;color:#0f172a;">NVIDIA T4</span>
+            <span style="width:80px;padding:0 8px;font-family:monospace;color:#475569;">16 GB</span>
+            <span style="flex:1;padding:0 8px;color:#94a3b8;font-style:italic;font-size:10px;">—</span>
+            <span style="width:140px;padding:0 8px;">
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;">
+                <span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:0%;background:#10b981;"></span></span>
+                <span style="font-family:monospace;color:#94a3b8;width:42px;text-align:right;">0%</span>
+              </span>
+            </span>
+            <span style="width:80px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#f1f5f9;color:#64748b;">IDLE</span></span>
+            <span style="width:24px;text-align:center;color:#cbd5e1;">›</span>
+          </div>
+          <!-- gpu-2: A4000 [SELECTED → SIDECAR OPEN] -->
+          <div style="display:flex;align-items:center;border-bottom:1px solid #f1f5f9;height:30px;font-size:11px;cursor:pointer;background:#eff6ff;border-left:3px solid #2563eb;">
+            <span style="width:80px;padding:0 12px;font-family:monospace;font-weight:700;color:#1d4ed8;">gpu-2</span>
+            <span style="width:80px;padding:0 8px;color:#475569;">node-01</span>
+            <span style="width:120px;padding:0 8px;color:#0f172a;font-weight:600;">RTX A4000</span>
+            <span style="width:80px;padding:0 8px;font-family:monospace;color:#475569;">16 GB</span>
+            <span style="flex:1;padding:0 8px;color:#475569;font-size:10px;">win11-sandbox · gitea-runner</span>
+            <span style="width:140px;padding:0 8px;">
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;">
+                <span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:50%;background:#10b981;"></span></span>
+                <span style="font-family:monospace;color:#475569;width:42px;text-align:right;">50%</span>
+              </span>
+            </span>
+            <span style="width:80px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#dcfce7;color:#059669;">OK</span></span>
+            <span style="width:24px;text-align:center;color:#1d4ed8;font-weight:700;">›</span>
+          </div>
+          <!-- gpu-3: A5000 warm -->
+          <div style="display:flex;align-items:center;border-bottom:1px solid #f1f5f9;height:30px;font-size:11px;cursor:pointer;">
+            <span style="width:80px;padding:0 12px;font-family:monospace;font-weight:600;color:#0f172a;">gpu-3</span>
+            <span style="width:80px;padding:0 8px;color:#475569;">node-01</span>
+            <span style="width:120px;padding:0 8px;color:#0f172a;">RTX A5000</span>
+            <span style="width:80px;padding:0 8px;font-family:monospace;color:#475569;">24 GB</span>
+            <span style="flex:1;padding:0 8px;color:#475569;font-size:10px;">win11-gaming · comfyui-sd · davinci-resolve (+1)</span>
+            <span style="width:140px;padding:0 8px;">
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;">
+                <span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:75%;background:linear-gradient(90deg,#10b981,#d97706);"></span></span>
+                <span style="font-family:monospace;color:#d97706;width:42px;text-align:right;font-weight:600;">75%</span>
+              </span>
+            </span>
+            <span style="width:80px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#fef3c7;color:#92400e;">WARM</span></span>
+            <span style="width:24px;text-align:center;color:#cbd5e1;">›</span>
+          </div>
+          <!-- gpu-4: T4 -->
+          <div style="display:flex;align-items:center;border-bottom:1px solid #f1f5f9;height:30px;font-size:11px;cursor:pointer;">
+            <span style="width:80px;padding:0 12px;font-family:monospace;font-weight:600;color:#0f172a;">gpu-4</span>
+            <span style="width:80px;padding:0 8px;color:#475569;">node-02</span>
+            <span style="width:120px;padding:0 8px;color:#0f172a;">NVIDIA T4</span>
+            <span style="width:80px;padding:0 8px;font-family:monospace;color:#475569;">16 GB</span>
+            <span style="flex:1;padding:0 8px;color:#475569;font-size:10px;">frigate-nvr · deepstack</span>
+            <span style="width:140px;padding:0 8px;">
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;">
+                <span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:50%;background:#10b981;"></span></span>
+                <span style="font-family:monospace;color:#475569;width:42px;text-align:right;">50%</span>
+              </span>
+            </span>
+            <span style="width:80px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#dcfce7;color:#059669;">OK</span></span>
+            <span style="width:24px;text-align:center;color:#cbd5e1;">›</span>
+          </div>
+          <!-- gpu-5: A4000 warm -->
+          <div style="display:flex;align-items:center;border-bottom:1px solid #f1f5f9;height:30px;font-size:11px;cursor:pointer;">
+            <span style="width:80px;padding:0 12px;font-family:monospace;font-weight:600;color:#0f172a;">gpu-5</span>
+            <span style="width:80px;padding:0 8px;color:#475569;">node-02</span>
+            <span style="width:120px;padding:0 8px;color:#0f172a;">RTX A4000</span>
+            <span style="width:80px;padding:0 8px;font-family:monospace;color:#475569;">16 GB</span>
+            <span style="flex:1;padding:0 8px;color:#475569;font-size:10px;">ollama-llama3 · stable-diffusion</span>
+            <span style="width:140px;padding:0 8px;">
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;">
+                <span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:88%;background:linear-gradient(90deg,#10b981,#d97706);"></span></span>
+                <span style="font-family:monospace;color:#d97706;width:42px;text-align:right;font-weight:600;">88%</span>
+              </span>
+            </span>
+            <span style="width:80px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#fef3c7;color:#92400e;">WARM</span></span>
+            <span style="width:24px;text-align:center;color:#cbd5e1;">›</span>
+          </div>
+          <!-- gpu-6: A6000 HOT -->
+          <div style="display:flex;align-items:center;border-bottom:1px solid #f1f5f9;height:30px;font-size:11px;cursor:pointer;">
+            <span style="width:80px;padding:0 12px;font-family:monospace;font-weight:600;color:#b91c1c;">gpu-6</span>
+            <span style="width:80px;padding:0 8px;color:#475569;">node-02</span>
+            <span style="width:120px;padding:0 8px;color:#0f172a;font-weight:600;">RTX A6000</span>
+            <span style="width:80px;padding:0 8px;font-family:monospace;color:#475569;">48 GB</span>
+            <span style="flex:1;padding:0 8px;color:#475569;font-size:10px;">llama-inference-prod · comfyui-anim · qwen-vl-7b</span>
+            <span style="width:140px;padding:0 8px;">
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;">
+                <span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:98%;background:linear-gradient(90deg,#10b981,#ef4444);"></span></span>
+                <span style="font-family:monospace;color:#b91c1c;width:42px;text-align:right;font-weight:700;">98%</span>
+              </span>
+            </span>
+            <span style="width:80px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#fee2e2;color:#b91c1c;">HOT</span></span>
+            <span style="width:24px;text-align:center;color:#cbd5e1;">›</span>
+          </div>
+          <!-- gpu-7: A4000 idle -->
+          <div style="display:flex;align-items:center;border-bottom:1px solid #f1f5f9;height:30px;font-size:11px;cursor:pointer;">
+            <span style="width:80px;padding:0 12px;font-family:monospace;font-weight:600;color:#0f172a;">gpu-7</span>
+            <span style="width:80px;padding:0 8px;color:#475569;">node-02</span>
+            <span style="width:120px;padding:0 8px;color:#0f172a;">RTX A4000</span>
+            <span style="width:80px;padding:0 8px;font-family:monospace;color:#475569;">16 GB</span>
+            <span style="flex:1;padding:0 8px;color:#94a3b8;font-style:italic;font-size:10px;">reserved for LLM burst</span>
+            <span style="width:140px;padding:0 8px;">
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;">
+                <span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:0%;background:#10b981;"></span></span>
+                <span style="font-family:monospace;color:#94a3b8;width:42px;text-align:right;">0%</span>
+              </span>
+            </span>
+            <span style="width:80px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#f1f5f9;color:#64748b;">IDLE</span></span>
+            <span style="width:24px;text-align:center;color:#cbd5e1;">›</span>
+          </div>
+          <!-- gpu-8: T4 warm -->
+          <div style="display:flex;align-items:center;border-bottom:1px solid #f1f5f9;height:30px;font-size:11px;cursor:pointer;">
+            <span style="width:80px;padding:0 12px;font-family:monospace;font-weight:600;color:#0f172a;">gpu-8</span>
+            <span style="width:80px;padding:0 8px;color:#475569;">node-03</span>
+            <span style="width:120px;padding:0 8px;color:#0f172a;">NVIDIA T4</span>
+            <span style="width:80px;padding:0 8px;font-family:monospace;color:#475569;">16 GB</span>
+            <span style="flex:1;padding:0 8px;color:#475569;font-size:10px;">transcode-x265 · esphome-flasher</span>
+            <span style="width:140px;padding:0 8px;">
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;">
+                <span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:75%;background:linear-gradient(90deg,#10b981,#d97706);"></span></span>
+                <span style="font-family:monospace;color:#d97706;width:42px;text-align:right;font-weight:600;">75%</span>
+              </span>
+            </span>
+            <span style="width:80px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#fef3c7;color:#92400e;">WARM</span></span>
+            <span style="width:24px;text-align:center;color:#cbd5e1;">›</span>
+          </div>
+          <!-- gpu-9: A5000 -->
+          <div style="display:flex;align-items:center;border-bottom:1px solid #f1f5f9;height:30px;font-size:11px;cursor:pointer;">
+            <span style="width:80px;padding:0 12px;font-family:monospace;font-weight:600;color:#0f172a;">gpu-9</span>
+            <span style="width:80px;padding:0 8px;color:#475569;">node-03</span>
+            <span style="width:120px;padding:0 8px;color:#0f172a;">RTX A5000</span>
+            <span style="width:80px;padding:0 8px;font-family:monospace;color:#475569;">24 GB</span>
+            <span style="flex:1;padding:0 8px;color:#475569;font-size:10px;">blender-render · cuda-workbench</span>
+            <span style="width:140px;padding:0 8px;">
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;">
+                <span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:67%;background:#10b981;"></span></span>
+                <span style="font-family:monospace;color:#475569;width:42px;text-align:right;">67%</span>
+              </span>
+            </span>
+            <span style="width:80px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#dcfce7;color:#059669;">OK</span></span>
+            <span style="width:24px;text-align:center;color:#cbd5e1;">›</span>
+          </div>
+          <!-- gpu-10: A5000 idle -->
+          <div style="display:flex;align-items:center;border-bottom:1px solid #f1f5f9;height:30px;font-size:11px;cursor:pointer;">
+            <span style="width:80px;padding:0 12px;font-family:monospace;font-weight:600;color:#0f172a;">gpu-10</span>
+            <span style="width:80px;padding:0 8px;color:#475569;">node-03</span>
+            <span style="width:120px;padding:0 8px;color:#0f172a;">RTX A5000</span>
+            <span style="width:80px;padding:0 8px;font-family:monospace;color:#475569;">24 GB</span>
+            <span style="flex:1;padding:0 8px;color:#94a3b8;font-style:italic;font-size:10px;">—</span>
+            <span style="width:140px;padding:0 8px;">
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;">
+                <span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:0%;background:#10b981;"></span></span>
+                <span style="font-family:monospace;color:#94a3b8;width:42px;text-align:right;">0%</span>
+              </span>
+            </span>
+            <span style="width:80px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#f1f5f9;color:#64748b;">IDLE</span></span>
+            <span style="width:24px;text-align:center;color:#cbd5e1;">›</span>
+          </div>
+          <!-- gpu-11: A100-MIG -->
+          <div style="display:flex;align-items:center;border-bottom:1px solid #f1f5f9;height:30px;font-size:11px;cursor:pointer;">
+            <span style="width:80px;padding:0 12px;font-family:monospace;font-weight:600;color:#7c3aed;">gpu-11</span>
+            <span style="width:80px;padding:0 8px;color:#475569;">node-03</span>
+            <span style="width:120px;padding:0 8px;color:#7c3aed;font-weight:600;">A100-40GB</span>
+            <span style="width:80px;padding:0 8px;font-family:monospace;color:#475569;">40 GB</span>
+            <span style="flex:1;padding:0 8px;color:#475569;font-size:10px;">mixtral-8x7b · llama3-70b · embed-bge-m3 (+4)</span>
+            <span style="width:140px;padding:0 8px;">
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;">
+                <span style="display:flex;width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;">
+                  <span style="display:block;height:100%;width:38%;background:#7c3aed;"></span>
+                  <span style="display:block;height:100%;width:25%;background:#a855f7;"></span>
+                  <span style="display:block;height:100%;width:25%;background:#7c3aed;"></span>
+                </span>
+                <span style="font-family:monospace;color:#7c3aed;width:42px;text-align:right;font-weight:600;">88%</span>
+              </span>
+            </span>
+            <span style="width:80px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#ede9fe;color:#7c3aed;">MIG</span></span>
+            <span style="width:24px;text-align:center;color:#cbd5e1;">›</span>
+          </div>
+          <!-- pagination -->
+          <div style="margin-top:auto;padding:8px 16px;border-top:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#64748b;background:#f8fafc;">
+            <span>1–12 of 12 GPUs</span>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span>Per page</span>
+              <span style="padding:2px 7px;border:1px solid #cbd5e1;border-radius:3px;background:#ffffff;color:#0f172a;font-family:monospace;">25</span>
+              <span style="padding:1px 6px;color:#cbd5e1;">‹</span>
+              <span style="padding:1px 6px;color:#cbd5e1;">›</span>
+            </div>
+          </div>
+        </div>
+        <!-- ═══════ SIDECAR (380px) — gpu-2 detail ═══════ -->
+        <div style="width:392px;background:#ffffff;display:flex;flex-direction:column;border-left:1px solid #e2e8f0;box-shadow:-2px 0 8px rgba(15,23,42,0.04);">
+          <!-- sidecar header -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid #e2e8f0;background:#f8fafc;">
+            <div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="font-family:monospace;font-size:13px;font-weight:700;color:#1d4ed8;">gpu-2</span>
+                <span style="font-size:11px;color:#64748b;">·</span>
+                <span style="font-size:12px;font-weight:600;color:#0f172a;">RTX A4000</span>
+              </div>
+              <div style="font-size:10px;color:#64748b;margin-top:1px;">node-01 · PCI 0000:01:00.0</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;">
+              <button style="background:transparent;border:0;color:#64748b;font-size:14px;cursor:pointer;padding:2px 6px;border-radius:3px;" title="Open in full panel">↗</button>
+              <button style="background:transparent;border:0;color:#64748b;font-size:18px;cursor:pointer;padding:0 6px;line-height:1;" title="Close sidecar (Esc)">×</button>
+            </div>
+          </div>
+          <!-- tabs -->
+          <div style="display:flex;border-bottom:1px solid #e2e8f0;font-size:11px;font-weight:600;">
+            <span style="padding:8px 14px;color:#1d4ed8;border-bottom:2px solid #2563eb;">Overview</span>
+            <span style="padding:8px 14px;color:#64748b;">Allocations <span style="background:#f1f5f9;color:#475569;padding:1px 5px;border-radius:3px;font-family:monospace;font-size:9px;">2</span></span>
+            <span style="padding:8px 14px;color:#64748b;">Metrics</span>
+            <span style="padding:8px 14px;color:#64748b;">Logs</span>
+          </div>
+          <!-- body -->
+          <div style="flex:1;overflow-y:auto;padding:14px 16px;">
+            <!-- Identity section -->
+            <div style="margin-bottom:14px;">
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.05em;font-weight:700;color:#94a3b8;margin-bottom:5px;">Identity</div>
+              <div style="display:grid;grid-template-columns:100px 1fr;gap:5px 10px;font-size:11px;">
+                <span style="color:#64748b;">Vendor</span><span style="color:#0f172a;">NVIDIA Corporation</span>
+                <span style="color:#64748b;">Device</span><span style="color:#0f172a;font-family:monospace;">GA104 [RTX A4000]</span>
+                <span style="color:#64748b;">PCI addr</span><span style="color:#0f172a;font-family:monospace;cursor:pointer;" title="Click to copy">0000:01:00.0</span>
+                <span style="color:#64748b;">Driver</span><span style="color:#0f172a;font-family:monospace;">nvidia 550.54.15</span>
+                <span style="color:#64748b;">CUDA</span><span style="color:#0f172a;font-family:monospace;">12.4</span>
+                <span style="color:#64748b;">ECC</span><span style="color:#059669;font-weight:600;">● enabled</span>
+              </div>
+            </div>
+            <!-- Hardware section -->
+            <div style="margin-bottom:14px;">
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.05em;font-weight:700;color:#94a3b8;margin-bottom:5px;">Hardware</div>
+              <div style="display:grid;grid-template-columns:100px 1fr;gap:5px 10px;font-size:11px;">
+                <span style="color:#64748b;">VRAM</span><span style="color:#0f172a;">16 GB GDDR6 ECC</span>
+                <span style="color:#64748b;">CUDA cores</span><span style="color:#0f172a;font-family:monospace;">6,144</span>
+                <span style="color:#64748b;">Tensor</span><span style="color:#0f172a;font-family:monospace;">192 (3rd gen)</span>
+                <span style="color:#64748b;">SMs</span><span style="color:#0f172a;font-family:monospace;">48</span>
+                <span style="color:#64748b;">MIG cap</span><span style="color:#94a3b8;">not eligible</span>
+              </div>
+            </div>
+            <!-- Current Usage -->
+            <div style="margin-bottom:14px;">
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.05em;font-weight:700;color:#94a3b8;margin-bottom:5px;">Current usage</div>
+              <div style="background:#f1f5f9;border-radius:5px;height:8px;overflow:hidden;margin-bottom:5px;"><span style="display:block;height:100%;width:50%;background:linear-gradient(90deg,#10b981,#10b981cc);"></span></div>
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:#64748b;">
+                <span>8.0 / 16 GB · 50%</span>
+                <span>temp 64°C · pwr 142W</span>
+              </div>
+            </div>
+            <!-- Allocations summary -->
+            <div style="margin-bottom:14px;">
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.05em;font-weight:700;color:#94a3b8;margin-bottom:5px;">Allocations <span style="font-weight:600;color:#1d4ed8;">(2 active)</span></div>
+              <div style="border:1px solid #e2e8f0;border-radius:5px;overflow:hidden;">
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-bottom:1px solid #f1f5f9;font-size:11px;">
+                  <div><span style="font-weight:600;color:#0f172a;">win11-sandbox</span><span style="color:#94a3b8;margin-left:6px;">1/3 slice</span></div>
+                  <span style="font-family:monospace;color:#475569;">5 GB</span>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;font-size:11px;">
+                  <div><span style="font-weight:600;color:#0f172a;">gitea-runner</span><span style="color:#94a3b8;margin-left:6px;">1/3 slice</span></div>
+                  <span style="font-family:monospace;color:#475569;">3 GB</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Quick actions footer -->
+          <div style="display:flex;gap:6px;padding:11px 16px;border-top:1px solid #e2e8f0;background:#f8fafc;">
+            <button style="flex:1;padding:6px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;font-size:11px;font-weight:600;">Detach all</button>
+            <button style="flex:1;padding:6px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;font-size:11px;font-weight:600;">Reassign</button>
+            <button style="flex:1.4;padding:6px;border:1px solid #2563eb;border-radius:4px;background:#2563eb;color:#ffffff;font-size:11px;font-weight:600;">+ Allocate vGPU</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

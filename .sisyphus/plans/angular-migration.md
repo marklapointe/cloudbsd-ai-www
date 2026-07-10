@@ -9272,6 +9272,32 @@ grep -rE 'class="[^"]*\b(bg-|text-|p-[0-9]|m-[0-9]|w-[0-9]|h-[0-9]|flex|grid|rou
     - Do NOT apply to: recovery codes (security), API token full strings (security), password fields
 
 
+  - T94m (NEW 2026-07-09): Cluster list-view + sidecar + recent-events-to-logs restructure:
+    - **`diagrams/screens/07-cluster.svg`** REWRITTEN as list view (27 KB):
+      - Removed 6-card node grid + "Recent Cluster Events" panel
+      - 6 nodes as sortable rows: Hostname | Role | Status | Rack | CPU | MEM | Uptime | Last hb
+      - node-03 (cloudbsd-node-03 worker) selected → sidecar open on right
+      - Sidecar tabs: Overview / Network / VMs / Logs / Settings
+      - Sidecar contents: Identity (hostname/ulid/role/rack/joined/term), Hardware (CPU/RAM/Disks/NIC/GPU), Cluster state (heartbeat/replication/peer set/votes), Workload summary (VMs/Containers/Jails/Jobs), Quick actions (Drain/Rejoin/Promote to master)
+      - Header link: "View cluster events in logs →" → /logs?src=cluster
+      - All MOCK/feature-flag references purged (per 2026-07-09 user review)
+    - **`diagrams/screens/09-logs.svg`** PATCHED:
+      - Added source-filter chip row (src:) below severity chips: bhyve/caddy/jail/zfs/ctdb/cron/**cluster**/replication
+      - cluster chip: violet bg (#ede9fe), `#7c3aed` border + text, bold, count "17"
+      - "→ jump to cluster section" link on right
+      - Added 6 cluster-event log rows to table (12:14, 11:48, 10:33, 09:48, 09:14, 08:42) — cluster module colored violet to distinguish; rows get `background:#faf5ff` to highlight grouping
+      - 19 → 25 rows total (29 KB)
+    - **`diagrams/components/17-vgpu-pool-list.svg`** NEW (31 KB, T94j follow-up): GPU pool list view variant
+      - Used when count > 10 (threshold rule per ui-index §22)
+      - 12 GPUs as flat sortable rows: GPU | Node | Model | VRAM | Allocations | Used (bar+%) | Status
+      - gpu-2 (A4000) selected → sidecar open
+      - Sidecar: Overview tab shows Identity (vendor/PCI addr/driver/CUDA/ECC), Hardware (VRAM/CUDA cores/Tensor/SMs/MIG cap), Current usage bar, Active allocations box
+      - Quick actions: Detach all / Reassign / + Allocate vGPU
+    - **ui-index.md §22 added**: full sidecar pattern spec (threshold rule by resource type, column widths, sidecar component spec, Angular primitive `<app-resource-list-with-sidecar>`)
+    - **ui-index.md §23 added**: events-live-in-logs rule (anti-pattern rationale, migration table, cross-link convention)
+    - **Honcho lessons** added: list-with-sidecar pattern, threshold rule, sidecar spec, events-in-logs rule, grouped-card-grid anti-pattern
+
+
   - T95 (NEW 2026-07-09): Auth flow UI mockups:
     - `diagrams/screens/51-login.svg` (3.8 KB) — PAM auth form
     - `diagrams/screens/52-two-factor-setup.svg` (32.8 KB) — TOTP setup w/ QR code
