@@ -64,8 +64,24 @@ This table documents every screen adjustment made during the React → Angular m
 | 22 | (none) | `pages/errors/server-error/` | ➕ ADDED | Friendly 500 page | User requirement |
 | 23 | (none) | `pages/errors/service-unavailable/` | ➕ ADDED | Friendly 503 page | User requirement |
 | 24 | (none) | `pages/errors/frost-out/` | ➕ ADDED | Session validation failure (frosted page, OK → login) | User requirement |
-| 25 | (none) | `pages/plugins/` | ➕ ADDED | Plugin management page | Plugin system |
+| 25 | (none) | `pages/plugins/` | ➕ ADDED | Plugin management page (SVG: `diagrams/screens/17-plugins.svg`) | Plugin system |
 | 26 | (none) | `pages/plugins/<name>/docs/` | ➕ ADDED | Per-plugin documentation viewer | Plugin system |
+| 27 | (none) | `pages/system-mgmt/` | ➕ ADDED | System Management landing (SVG: `diagrams/screens/16-system.svg` rewrite) | Admin consolidation |
+| 28 | (none) | `pages/system-mgmt/backups/` | ➕ ADDED | System Mgmt · Backups tab (SVG: `16-system-1-backups.svg`) | T76 option C |
+| 29 | (none) | `pages/system-mgmt/exports/` | ➕ ADDED | System Mgmt · Exports tab (SVG: `16-system-2-exports.svg`) | T76 option C |
+| 30 | (none) | `pages/system-mgmt/stats/` | ➕ ADDED | System Mgmt · Stats tab with 4 sparklines (SVG: `16-system-3-stats.svg`) | T76 option C |
+| 31 | (none) | `pages/system-mgmt/history/` | ➕ ADDED | System Mgmt · History tab timeline (SVG: `16-system-4-history.svg`) | T76 option C |
+| 32 | (none) | `pages/system-mgmt/audit-log/` | ➕ ADDED | System Mgmt · Audit Log tab (SVG: `16-system-5-audit-log.svg`) | T76 option C |
+| 33 | (none) | `pages/system-mgmt/updates/` | ➕ ADDED | System Mgmt · Updates tab (SVG: `16-system-6-updates.svg`) | T76 option C |
+| 34 | (none) | `pages/vms/<id>/` (detail) | ➕ ADDED | VM detail panel SVG (7 tabs, `19-vm-detail-panel.svg`) | T78 right-side drill-down |
+| 35 | (none) | `pages/containers/<id>/` (detail) | ➕ ADDED | Container detail panel SVG (5 tabs, `20-container-detail-panel.svg`) | T79 right-side drill-down |
+| 36 | (none) | `pages/jails/<id>/` (detail) | ➕ ADDED | Jail detail panel SVG (5 tabs, `21-jail-detail-panel.svg`) | T80 right-side drill-down |
+| 37 | (none) | `pages/volumes/<id>/` (detail) | ➕ ADDED | Volume detail panel SVG (6 tabs, `22-volume-detail-panel.svg`) | T81 right-side drill-down |
+| 38 | (none) | `pages/nodes/<id>/` (detail) | ➕ ADDED | Node detail panel SVG (7 tabs, `23-node-detail-panel.svg`) | T82 right-side drill-down |
+| 39 | (none) | `modals/backup-create/` | ➕ ADDED | Backup-create modal SVG (6 fields, `diagrams/modals/19-backup-create.svg`) | T77a |
+| 40 | (none) | `modals/plugin-install/` | ➕ ADDED | Plugin install modal SVG (3 tabs, `diagrams/modals/20-plugin-install.svg`) | T83a |
+| 41 | (none) | `modals/plugin-detail/` | ➕ ADDED | Plugin detail modal SVG (manifest/capabilities/permissions, `diagrams/modals/22-plugin-detail.svg`) | T83c |
+| 42 | (none) | `modals/theme-import/` | ➕ ADDED | Theme import modal SVG (3-tab URL/Paste/Upload, `diagrams/modals/21-theme-import.svg`) | T84a |
 
 ---
 
@@ -208,11 +224,15 @@ This table documents every screen adjustment made during the React → Angular m
 ## Summary
 
 - **Original screens**: 11 React screens
-- **New screens**: 26 Angular screens (14 view-only + 12 new)
+- **New screens**: 42 Angular screens (rows 1-42: 14 React→Angular + 1 System Mgmt landing rewrite + 6 System Mgmt sub-screens + 5 detail-panel entry routes + 4 modal entry routes + 12 misc plugins/errors/help/pages)
+- **SVG screen mockups on disk**: 24 (`diagrams/screens/` = 16 canonical + 7 system sub-screens + 1 plugins page)
+- **SVG component mockups on disk**: 8 (`diagrams/components/` = 3 existing + 5 detail panels)
+- **SVG modal mockups on disk**: 4 (`diagrams/modals/` = backup-create, plugin-install, plugin-detail, theme-import)
 - **Original components**: 11 React components
 - **New components**: 17 Angular components (11 migrated + 6 new)
 - **Original backend routes**: ~45 Express routes
 - **New backend routes**: ~25 routes (GET-only + plugin/system routes)
+- **Wire-protocol sections**: §2.1-§2.20 (existing) + §2.21-§2.27 (added 2026-07-07: TaskSchedules CRUD, VM/Container/Jail/Volume/Node detail, Plugin lifecycle)
 - **Themes**: 1 default → 15 built-in + custom
 - **Locales**: 44 → 47 (added 3 constructed)
 - **Plugins**: 0 → plugin system with manifests, templates, permissions
