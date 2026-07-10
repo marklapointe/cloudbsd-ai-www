@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Restore from Backup Wizard — Step 3 of 3 — Review</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">Restore from backup</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Step 3 — Review</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:11px;color:#64748b;">
+            Step 3 of 3 · final review
+            <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">✕ Cancel</button>
+          </div>
+        </div>
+
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">1. Pick backup <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">2. Target <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #16a34a;background:#16a34a10;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">3</div><span style="font-size:11px;font-weight:600;color:#16a34a;">Review</span></div>
+            <div style="flex:1;"></div>
+            <span style="font-size:10px;color:#16a34a;">ready to restore</span>
+          </div>
+        </div>
+
+        <div style="flex:1;display:flex;background:#f1f5f9;overflow:hidden;">
+          <div style="flex:1;padding:28px 40px;overflow-y:auto;">
+
+            <div style="padding:22px;background:linear-gradient(135deg,#1d4ed810,#7c3aed10);border:1px solid #bfdbfe;border-radius:10px;margin-bottom:20px;display:flex;align-items:center;gap:18px;">
+              <div style="width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:30px;">⟳</div>
+              <div style="flex:1;">
+                <h1 style="margin:0 0 4px;font-size:22px;font-weight:700;color:#0f172a;">Restore nightly-data-#148 over web-server-01</h1>
+                <div style="display:flex;align-items:center;gap:14px;font-size:12px;color:#475569;">
+                  <span><strong style="color:#1d4ed8;">In-place replace</strong> · 12.4 GB zstd</span>
+                  <span style="color:#cbd5e1;">·</span>
+                  <span style="font-family:monospace;font-size:11px;">2026-07-10 02:00:00 + auto-rollback</span>
+                </div>
+                <div style="display:flex;gap:6px;margin-top:6px;">
+                  <span style="padding:2px 8px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-size:10px;font-weight:600;">~30s downtime</span>
+                  <span style="padding:2px 8px;background:#16a34a20;color:#16a34a;border-radius:4px;font-size:10px;font-weight:600;">pre-restore snapshot enabled</span>
+                  <span style="padding:2px 8px;background:#7c3aed20;color:#7c3aed;border-radius:4px;font-size:10px;font-weight:600;">integrity ✓</span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:11px;color:#64748b;">Total time</div>
+                <div style="font-size:18px;font-weight:700;color:#0f172a;">~45 seconds</div>
+                <div style="font-size:10px;color:#94a3b8;">stop 4s + restore 30s + boot 11s</div>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">SOURCE BACKUP</h3><button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button></div>
+                <table style="width:100%;font-size:11px;">
+                  <tr><td style="padding:2px 0;color:#64748b;width:30%;">Snapshot</td><td style="font-family:monospace;font-weight:600;">nightly-data-#148</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Source</td><td>nightly-data-backup schedule</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Taken</td><td style="font-family:monospace;">2026-07-10 02:00 UTC</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Size</td><td style="font-family:monospace;">12.4 GB · zstd</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Integrity</td><td style="color:#16a34a;font-weight:600;">✓ SHA-256 verified</td></tr>
+                </table>
+              </div>
+
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">TARGET</h3><button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button></div>
+                <table style="width:100%;font-size:11px;">
+                  <tr><td style="padding:2px 0;color:#64748b;width:30%;">Mode</td><td style="font-weight:600;color:#1d4ed8;">In-place replace</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Resource</td><td style="font-family:monospace;font-weight:600;">web-server-01 (VM)</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Node</td><td style="font-family:monospace;">node-3</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Overwrites</td><td>boot disk only</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Pre-restore snap</td><td style="color:#16a34a;font-weight:600;">snap-prerestore-2026-07-10</td></tr>
+                </table>
+              </div>
+
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;grid-column:span 2;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">OPTIONS</h3><button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button></div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:11px;">
+                  <div style="padding:8px 12px;background:#16a34a10;border-radius:5px;color:#166534;">✓ Stop resource before restore</div>
+                  <div style="padding:8px 12px;background:#16a34a10;border-radius:5px;color:#166534;">✓ Start resource after restore</div>
+                  <div style="padding:8px 12px;background:#16a34a10;border-radius:5px;color:#166534;">✓ Pre-restore snapshot</div>
+                  <div style="padding:8px 12px;background:#fef3c7;border-radius:5px;color:#92400e;">⚠ Restore into new disk (keeps current)</div>
+                  <div style="padding:8px 12px;background:#fef3c7;border-radius:5px;color:#92400e;">⚠ Restore NIC config (overwrites IPs)</div>
+                  <div style="padding:8px 12px;background:#16a34a10;border-radius:5px;color:#166534;">✓ Notify on completion</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="padding:14px 16px;background:#dc262615;border:1px solid #fecaca;border-radius:8px;display:flex;align-items:flex-start;gap:12px;margin-top:14px;">
+              <div style="font-size:18px;">⚠</div>
+              <div>
+                <div style="font-size:12px;font-weight:700;color:#991b1b;margin-bottom:4px;">Destructive operation — confirm before proceeding</div>
+                <div style="font-size:11px;color:#7f1d1d;line-height:1.5;">This will overwrite web-server-01 with the 2-hour-old snapshot. Any data written after 02:00 UTC will be lost (≈ ~30 MB of recent log files, 1 unsaved form). The pre-restore snapshot gives you an escape hatch — you can roll back via this same wizard.</div>
+                <label style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:11px;color:#475569;cursor:pointer;">
+                  <input type="checkbox" style="accent-color:#dc2626;"/> I understand the current state will be replaced.
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="width:280px;padding:28px 24px;border-left:1px solid #e2e8f0;background:#ffffff;overflow-y:auto;">
+            <div style="padding:14px;background:#16a34a10;border:1px solid #bbf7d0;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#16a34a;letter-spacing:0.06em;margin-bottom:6px;">PROCEDURE</div>
+              <ol style="margin:0;padding-left:18px;font-size:11px;color:#166534;line-height:1.7;">
+                <li>stop web-server-01</li>
+                <li>snapshot as snap-prerestore</li>
+                <li>zfs send/recv into boot disk</li>
+                <li>verify boot sector</li>
+                <li>start web-server-01</li>
+                <li>notify admin</li>
+              </ol>
+            </div>
+            <div style="padding:14px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;font-size:11px;color:#475569;line-height:1.5;">
+              <div style="font-weight:700;color:#1d4ed8;letter-spacing:0.06em;font-size:10px;margin-bottom:6px;">DURING RESTORE</div>
+              The web-server-01 entry on this page will show <span style="padding:2px 6px;background:#fef3c7;color:#92400e;border-radius:3px;font-size:10px;font-weight:600;font-family:monospace;">RESTORING</span> with live progress. A live event is emitted to the logs feed.
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:9px 16px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">← Back to Target</button>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <button style="padding:9px 16px;font-size:12px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">Dry-run preview</button>
+            <button style="padding:11px 26px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#ffffff;cursor:pointer;box-shadow:0 1px 3px rgba(29,78,216,0.4);">⟳ Restore web-server-01 now</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>
