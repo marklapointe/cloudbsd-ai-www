@@ -9262,6 +9262,16 @@ grep -rE 'class="[^"]*\b(bg-|text-|p-[0-9]|m-[0-9]|w-[0-9]|h-[0-9]|flex|grid|rou
     - All 9 list views now support all 3 density modes (Cozy | Compact | Extra)
   - T94g (NEW 2026-07-09): ✅ Empty-state canonical SVGs
 
+  - T94i (NEW 2026-07-09): Click-to-copy pattern:
+    - Removed 5 Copy buttons + 5 IPv4/IPv6 labels from `diagrams/components/16-ips-modal.svg`
+    - Modal width: 640→480px (free up space)
+    - Each row becomes clickable: cursor:pointer + hover bg + title="Click to copy X"
+    - Out-of-the-way toast at bottom-center: "✓ Copied 10.0.10.40 to clipboard" (fades 2.5s)
+    - Pattern documented in `ui-index.md` §21 with toast spec, Angular impl hooks
+    - Apply same pattern to: VM/Container/Jail/Volume/Node detail panels (ulid/IPv4/MAC), webhooks (URL), audit log (action target)
+    - Do NOT apply to: recovery codes (security), API token full strings (security), password fields
+
+
   - T95 (NEW 2026-07-09): Auth flow UI mockups:
     - `diagrams/screens/51-login.svg` (3.8 KB) — PAM auth form
     - `diagrams/screens/52-two-factor-setup.svg` (32.8 KB) — TOTP setup w/ QR code

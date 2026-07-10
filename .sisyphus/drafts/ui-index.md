@@ -479,4 +479,96 @@ Combined with `cdk-virtual-scroll-viewport` (mandatory at >200 rows per §19.5),
 
 `SettingsService` exposes `density$: Observable<'cozy'|'compact'|'extra'>` which all list components consume via `@if`/`@switch` template syntax. Persisted in `localStorage` key `cloudbsd.density.v1`. Cross-tab sync via `BroadcastChannel('cloudbsd-settings')`. Migration path: existing users default to Cozy on first load after upgrade.
 
+## 21. Click-to-copy pattern (added 2026-07-09)
+
+**No Copy buttons. The row itself is the copy target.** When a row's content is a copyable value (IP, ID, hostname, ULID, hash, secret), clicking anywhere on the row copies its primary value to the paste buffer. A small bottom-center toast confirms — out of the way, dismisses automatically.
+
+### Where applied
+
+The pattern fits anywhere a row's "primary value" is a discrete, copy-paste-ready string. Implemented first on the **IPs modal** (`diagrams/components/16-ips-modal.svg`). Apply same pattern wherever per-row copy made sense:
+
+- IPs modal (IP addresses)
+- VM/Container/Jail/Volume/Node detail panels (ulid, IPv4, MAC)
+- Webhooks detail (URL)
+- Audit log rows (action target)
+- API key rows (token prefix only — full token never clickable)
+- Plugin detail (manifest URL, manifest hash)
+
+Do NOT apply to:
+- Recovery codes (2FA security — use explicit Download/Regenerate buttons)
+- API token full strings (security — never auto-copyable)
+- Passwords / secrets displayed as asterisks (use Clipboard with confirmation prompt)
+
+### How it works
+
+```
+┌──────────────────────────────────────────────────┐
+│  ●  10.0.10.40                  vtnet0   global  │  ← row, whole row clickable
+│  ●  2001:db8::28                vtnet0   global  │     cursor:pointer
+│  ●  fe80::ff:fe40:5678          vtnet0   link    │     hover bg:#f8fafc
+│  ●  fd00:1234:5678::1           epair0a  site    │     title="Click to copy X"
+└──────────────────────────────────────────────────┘
+                ↓ click any row ↓
+        ┌──────────────────────────────┐
+        │ ✓ Copied 10.0.10.40 to       │  ← toast at bottom-center
+        │   clipboard                  │     fades after 2500ms
+        └──────────────────────────────┘
+```
+
+### Toast specification
+
+| Property | Value |
+|---|---|
+| Position | bottom: 24px; left: 50%; transform: translateX(-50%) |
+| Background | #0f172a (slate-900) |
+| Text color | #ffffff |
+| Border radius | 6px |
+| Padding | 7px 14px |
+| Font | 11px |
+| Inner code | monospace, bg #1e293b, padding 1px 6px, color #10b981 |
+| Check icon | ✓ in #10b981 |
+| Box shadow | 0 6px 20px rgba(0,0,0,0.3) |
+| Z-index | above page chrome, below modals (so modal copy toasts appear above modals? no — inside modal space) |
+| Animation | slide up 200ms ease-out, dwell 2300ms, fade out 300ms |
+| Stacking | max 3 visible; newest at top; older queue or push |
+| Dismissable | auto only (no × button — too noisy; clicks anywhere dismiss) |
+
+### Why this is better than Copy buttons
+
+1. **Faster**: no mouse travel to a small button. Click target is whole row (60px+ tall).
+2. **Less noise**: 5 buttons per row create visual clutter. One row, one action, zero buttons.
+3. **Familiar**: file explorers (macOS Finder, Windows Explorer) already use row-click + tooltip pattern.
+4. **Discoverable**: cursor:pointer + hover background + title attribute = implicit affordance.
+5. **Free up space**: removing 5 buttons per row + 32px IPv4/IPv6 badge width = ~70px gained → modal width 640→480px, fits more rows.
+
+### IP modal-specific notes
+
+- **No IPv4/IPv6 labels**: address shape is self-evident (`.`/`::` distinguishes). Saves 32px per row + cognitive load.
+- **Scope column kept** (`global`/`link`/`site`) — useful info; not derivable from the address alone.
+- **Interface column kept** (`vtnet0`/`epair0a`) — useful for ops.
+- **Removed 5 `Copy` buttons** (one per row). Removed 5 `IPv4`/`IPv6` badges. Removed redundant chevron-style right alignment.
+- **Modal width**: 640px → 480px (centers better on a 1280px viewport, leaves more breathing room).
+- **Filter input**: still there; copy respects the filtered view (clicking a row copies only what's visible).
+
+### Implementation hooks (Angular)
+
+```ts
+// In IpAddressesModal component:
+@HostListener('click', ['$event']) onRowClick(ev: MouseEvent) {
+  const row = (ev.target as HTMLElement).closest('[data-copy]');
+  if (!row) return;
+  const value = row.getAttribute('data-copy')!;
+  navigator.clipboard.writeText(value).then(() => {
+    this.toast.show(`Copied ${value} to clipboard`, 'success', 2500);
+  });
+}
+
+// template:
+// <div data-copy="10.0.10.40" title="Click to copy 10.0.10.40" style="cursor:pointer;">
+//   ...
+// </div>
+```
+
+Avoid `<button>` semantics for clickable rows here — keyboard accessibility wants `Enter`/`Space` activation. Use `[role="button"] tabindex="0"` + `(keydown.enter)` handler for full A11y.
+
 
