@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
-  <title>CloudBSD Admin — Cluster</title>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Admin — Cluster (list view, sidecar open on node-03)</title>
+  <desc>Cluster page presented as flat list of 6 nodes with click-row → sidecar (T94m). List view + sidecar pattern per ui-index §22. Recent cluster events moved to Logs page (§23).</desc>
   <foreignObject x="0" y="0" width="1280" height="800">
     <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:13px;box-sizing:border-box;overflow:hidden;">
       <div style="height:56px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;padding:0 16px;box-sizing:border-box;">
@@ -8,21 +9,8 @@
         <span style="font-weight:700;font-size:17px;margin-left:8px;color:#0f172a;">CloudBSD Admin</span>
         <span style="margin-left:10px;padding:2px 8px;font-size:11px;border-radius:4px;background:#f1f5f9;color:#475569;">cloudbsd-node-01.local</span>
         <div style="margin-left:auto;display:flex;align-items:center;gap:12px;font-size:12px;color:#64748b;">
-          <select style="padding:4px 8px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;">
-            <option>Browser TZ</option>
-            <option selected="selected">UTC</option>
-            <option>America/Montreal</option>
-            <option>America/New_York</option>
-            <option>America/Los_Angeles</option>
-            <option>Europe/Berlin</option>
-            <option>Europe/London</option>
-            <option>Asia/Tokyo</option>
-            <option>Asia/Shanghai</option>
-            <option>Australia/Sydney</option>
-          </select>
-          <button style="position:relative;width:30px;height:30px;border-radius:50%;background:#f1f5f9;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;border:0;color:#475569;">&#x2407;
-            <span style="position:absolute;top:0;right:0;min-width:18px;height:18px;border-radius:9px;background:#ef4444;color:#ffffff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 5px;">17</span>
-          </button>
+          <select style="padding:4px 8px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;"><option>Browser TZ</option><option selected="selected">UTC</option><option>America/Montreal</option><option>Europe/Berlin</option></select>
+          <button style="position:relative;width:30px;height:30px;border-radius:50%;background:#f1f5f9;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;border:0;color:#475569;">&#x2407;<span style="position:absolute;top:0;right:0;min-width:18px;height:18px;border-radius:9px;background:#ef4444;color:#ffffff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 5px;">17</span></button>
           <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;">M</div>
         </div>
       </div>
@@ -47,58 +35,177 @@
             <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Status</span></a>
             <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>About</span></a>
           </nav>
-          <div style="margin-top:auto;padding:14px 10px;border-top:1px solid #f1f5f9;font-size:11px;color:#94a3b8;">
-            <div>Host: cloudbsd-node-01</div>
-            <div>Uptime: 14d 02:11</div>
-          </div>
+          <div style="margin-top:auto;padding:14px 10px;border-top:1px solid #f1f5f9;font-size:11px;color:#94a3b8;"><div>Host: cloudbsd-node-01</div><div>Uptime: 14d 02:11</div></div>
         </aside>
-        <main style="flex:1;overflow-y:auto;padding:16px 20px;box-sizing:border-box;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-            <div><h1 style="font-size:24px;font-weight:700;margin:0;">Cluster</h1><p style="font-size:13px;color:#64748b;margin:4px 0 0;">6 nodes · Replication, failover, jobs</p></div>
-            <div style="display:flex;gap:8px;align-items:center;">
-              
-              <button style="padding:6px 14px;font-size:12px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;">Refresh</button>
-              <button style="padding:6px 14px;font-size:12px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;">Export</button>
+        <main style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
+        <div style="background:#ffffff;border-bottom:1px solid #e2e8f0;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+          <div>
+            <h1 style="font-size:24px;font-weight:700;margin:0;color:#0f172a;">Cluster</h1>
+            <p style="font-size:13px;color:#64748b;margin:4px 0 0;">6 nodes · 1 master · 5 workers · <span style="color:#b91c1c;font-weight:600;">1 offline</span> · replication, failover, jobs</p>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;font-size:12px;">
+            <a style="display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;text-decoration:none;font-weight:600;">View cluster events in logs →</a>
+            <button style="padding:6px 14px;font-size:12px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;">Refresh</button>
+            <button style="padding:6px 14px;font-size:12px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;">Export</button>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:14px 20px;background:#f1f5f9;flex-shrink:0;">
+          <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:11px 13px;">
+            <div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">Nodes</div>
+            <div style="font-size:22px;font-weight:700;margin-top:2px;">6</div>
+            <div style="font-size:10px;color:#dc2626;margin-top:2px;font-weight:600;">1 offline</div>
+          </div>
+          <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:11px 13px;">
+            <div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">CPU avg (5 online)</div>
+            <div style="font-size:22px;font-weight:700;color:#2563eb;margin-top:2px;">27%</div>
+            <div style="font-size:10px;color:#64748b;margin-top:2px;">peak 88% node-02</div>
+          </div>
+          <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:11px 13px;">
+            <div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">MEM avg (5 online)</div>
+            <div style="font-size:22px;font-weight:700;color:#9333ea;margin-top:2px;">45%</div>
+            <div style="font-size:10px;color:#64748b;margin-top:2px;">peak 76% disk node-02</div>
+          </div>
+          <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:11px 13px;">
+            <div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">Jobs running</div>
+            <div style="font-size:22px;font-weight:700;margin-top:2px;">12</div>
+            <div style="font-size:10px;color:#64748b;margin-top:2px;">41 completed 24h</div>
+          </div>
+        </div>
+        <div style="background:#ffffff;border-bottom:1px solid #e2e8f0;padding:9px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0;">
+          <div style="flex:1;display:flex;align-items:center;gap:6px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:5px;padding:5px 10px;">
+            <span style="color:#94a3b8;font-size:12px;">⌕</span>
+            <span style="color:#94a3b8;font-size:11px;">Search hostname, role, rack…</span>
+          </div>
+          <div style="display:flex;gap:4px;font-size:11px;">
+            <span style="padding:3px 9px;border-radius:4px;background:#f1f5f9;color:#475569;font-weight:600;">All 6</span>
+            <span style="padding:3px 9px;border-radius:4px;background:#ffffff;border:1px solid #e2e8f0;color:#475569;">Master 1</span>
+            <span style="padding:3px 9px;border-radius:4px;background:#ffffff;border:1px solid #e2e8f0;color:#475569;">Workers 5</span>
+            <span style="padding:3px 9px;border-radius:4px;background:#ffffff;border:1px solid #e2e8f0;color:#dc2626;">Offline 1</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:#64748b;">
+            <span>Density</span>
+            <span style="padding:2px 7px;border-radius:3px;background:#2563eb;color:#ffffff;font-weight:600;">Cozy</span>
+            <span style="padding:2px 7px;border-radius:3px;background:#ffffff;border:1px solid #e2e8f0;color:#94a3b8;">Compact</span>
+          </div>
+        </div>
+        <div style="flex:1;display:flex;min-height:0;">
+          <div style="flex:1;background:#ffffff;display:flex;flex-direction:column;border-right:1px solid #e2e8f0;min-width:0;">
+            <div style="display:flex;align-items:center;background:#f8fafc;border-bottom:1px solid #e2e8f0;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;font-weight:700;color:#64748b;height:32px;flex-shrink:0;">
+              <span style="width:170px;padding:0 12px;">Hostname</span>
+              <span style="width:70px;padding:0 8px;">Role</span>
+              <span style="width:80px;padding:0 8px;">Status</span>
+              <span style="width:54px;padding:0 8px;">Rack</span>
+              <span style="width:140px;padding:0 8px;">CPU</span>
+              <span style="width:140px;padding:0 8px;">MEM</span>
+              <span style="flex:1;padding:0 8px;min-width:80px;">Uptime · Last hb</span>
+              <span style="width:24px;"></span>
+            </div>
+            <div style="display:flex;flex-direction:column;overflow-y:auto;flex:1;">
+              <!-- node-01 master -->
+              <div style="display:flex;align-items:center;border-bottom:1px solid #f1f5f9;height:34px;font-size:11px;cursor:pointer;">
+                <span style="width:170px;padding:0 12px;font-family:monospace;font-weight:600;color:#0f172a;">cloudbsd-node-01</span>
+                <span style="width:70px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#dbeafe;color:#1d4ed8;">MASTER</span></span>
+                <span style="width:80px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#dcfce7;color:#059669;">● healthy</span></span>
+                <span style="width:54px;padding:0 8px;color:#475569;">A1</span>
+                <span style="width:140px;padding:0 8px;"><span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;"><span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:18%;background:#3b82f6;"></span></span><span style="font-family:monospace;color:#475569;width:48px;text-align:right;">18%</span></span></span>
+                <span style="width:140px;padding:0 8px;"><span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;"><span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:51%;background:#a855f7;"></span></span><span style="font-family:monospace;color:#475569;width:48px;text-align:right;">51%</span></span></span>
+                <span style="flex:1;padding:0 8px;font-family:monospace;color:#475569;min-width:80px;"><span style="font-family:monospace;color:#475569;">14d 02:11</span> · <span style="font-family:monospace;color:#94a3b8;">2s ago</span></span>
+                <span style="width:24px;text-align:center;color:#cbd5e1;">›</span>
+              </div>
+              <!-- node-02 worker -->
+              <div style="display:flex;align-items:center;border-bottom:1px solid #f1f5f9;height:34px;font-size:11px;cursor:pointer;">
+                <span style="width:170px;padding:0 12px;font-family:monospace;font-weight:600;color:#0f172a;">cloudbsd-node-02</span>
+                <span style="width:70px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#f1f5f9;color:#475569;">WORKER</span></span>
+                <span style="width:80px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#dcfce7;color:#059669;">● healthy</span></span>
+                <span style="width:54px;padding:0 8px;color:#475569;">A2</span>
+                <span style="width:140px;padding:0 8px;"><span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;"><span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:42%;background:#3b82f6;"></span></span><span style="font-family:monospace;color:#475569;width:48px;text-align:right;">42%</span></span></span>
+                <span style="width:140px;padding:0 8px;"><span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;"><span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:64%;background:#a855f7;"></span></span><span style="font-family:monospace;color:#475569;width:48px;text-align:right;">64%</span></span></span>
+                <span style="flex:1;padding:0 8px;font-family:monospace;color:#475569;min-width:80px;"><span style="font-family:monospace;color:#475569;">22d 06:00</span> · <span style="font-family:monospace;color:#94a3b8;">1s ago</span></span>
+                <span style="width:24px;text-align:center;color:#cbd5e1;">›</span>
+              </div>
+              <!-- node-03 worker [SELECTED] -->
+              <div style="display:flex;align-items:center;border-bottom:1px solid #f1f5f9;height:34px;font-size:11px;cursor:pointer;background:#eff6ff;border-left:3px solid #2563eb;">
+                <span style="width:170px;padding:0 12px;font-family:monospace;font-weight:700;color:#1d4ed8;">cloudbsd-node-03</span>
+                <span style="width:70px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#f1f5f9;color:#475569;">WORKER</span></span>
+                <span style="width:80px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#dcfce7;color:#059669;">● healthy</span></span>
+                <span style="width:54px;padding:0 8px;color:#475569;">B1</span>
+                <span style="width:140px;padding:0 8px;"><span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;"><span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:28%;background:#3b82f6;"></span></span><span style="font-family:monospace;color:#475569;width:48px;text-align:right;">28%</span></span></span>
+                <span style="width:140px;padding:0 8px;"><span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;"><span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:38%;background:#a855f7;"></span></span><span style="font-family:monospace;color:#475569;width:48px;text-align:right;">38%</span></span></span>
+                <span style="flex:1;padding:0 8px;font-family:monospace;color:#475569;min-width:80px;"><span style="font-family:monospace;color:#475569;">14d 02:11</span> · <span style="font-family:monospace;color:#94a3b8;">3s ago</span></span>
+                <span style="width:24px;text-align:center;color:#1d4ed8;font-weight:700;">›</span>
+              </div>
+              <!-- node-04 worker healthy -->
+              <div style="display:flex;align-items:center;border-bottom:1px solid #f1f5f9;height:34px;font-size:11px;cursor:pointer;">
+                <span style="width:170px;padding:0 12px;font-family:monospace;font-weight:600;color:#0f172a;">cloudbsd-node-04</span>
+                <span style="width:70px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#f1f5f9;color:#475569;">WORKER</span></span>
+                <span style="width:80px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#dcfce7;color:#059669;">● healthy</span></span>
+                <span style="width:54px;padding:0 8px;color:#475569;">B2</span>
+                <span style="width:140px;padding:0 8px;"><span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;"><span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:12%;background:#3b82f6;"></span></span><span style="font-family:monospace;color:#475569;width:48px;text-align:right;">12%</span></span></span>
+                <span style="width:140px;padding:0 8px;"><span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;"><span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:22%;background:#a855f7;"></span></span><span style="font-family:monospace;color:#475569;width:48px;text-align:right;">22%</span></span></span>
+                <span style="flex:1;padding:0 8px;font-family:monospace;color:#475569;min-width:80px;"><span style="font-family:monospace;color:#475569;">6d 03:24</span> · <span style="font-family:monospace;color:#94a3b8;">2s ago</span></span>
+                <span style="width:24px;text-align:center;color:#cbd5e1;">›</span>
+              </div>
+              <!-- node-05 worker OFFLINE -->
+              <div style="display:flex;align-items:center;border-bottom:1px solid #f1f5f9;height:34px;font-size:11px;cursor:pointer;background:#fef2f2;">
+                <span style="width:170px;padding:0 12px;font-family:monospace;font-weight:600;color:#b91c1c;">cloudbsd-node-05</span>
+                <span style="width:70px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#f1f5f9;color:#475569;">WORKER</span></span>
+                <span style="width:80px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#fee2e2;color:#b91c1c;">✕ OFFLINE</span></span>
+                <span style="width:54px;padding:0 8px;color:#94a3b8;">C1</span>
+                <span style="width:140px;padding:0 8px;color:#94a3b8;font-size:10px;font-style:italic;">—</span>
+                <span style="width:140px;padding:0 8px;color:#94a3b8;font-size:10px;font-style:italic;">—</span>
+                <span style="flex:1;padding:0 8px;font-family:monospace;color:#475569;min-width:80px;"><span style="font-family:monospace;color:#94a3b8;">14d 02:11</span> · <span style="font-family:monospace;color:#b91c1c;font-weight:600;">4h ago</span></span>
+                <span style="width:24px;text-align:center;color:#cbd5e1;">›</span>
+              </div>
+              <!-- node-06 worker healthy -->
+              <div style="display:flex;align-items:center;border-bottom:1px solid #f1f5f9;height:34px;font-size:11px;cursor:pointer;">
+                <span style="width:170px;padding:0 12px;font-family:monospace;font-weight:600;color:#0f172a;">cloudbsd-node-06</span>
+                <span style="width:70px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#f1f5f9;color:#475569;">WORKER</span></span>
+                <span style="width:80px;padding:0 8px;"><span style="padding:2px 7px;border-radius:9999px;font-size:9px;font-weight:600;background:#dcfce7;color:#059669;">● healthy</span></span>
+                <span style="width:54px;padding:0 8px;color:#475569;">C2</span>
+                <span style="width:140px;padding:0 8px;"><span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;"><span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:36%;background:#3b82f6;"></span></span><span style="font-family:monospace;color:#475569;width:48px;text-align:right;">36%</span></span></span>
+                <span style="width:140px;padding:0 8px;"><span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;"><span style="width:60px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><span style="display:block;height:100%;width:48%;background:#a855f7;"></span></span><span style="font-family:monospace;color:#475569;width:48px;text-align:right;">48%</span></span></span>
+                <span style="flex:1;padding:0 8px;font-family:monospace;color:#475569;min-width:80px;"><span style="font-family:monospace;color:#475569;">14d 02:11</span> · <span style="font-family:monospace;color:#94a3b8;">2s ago</span></span>
+                <span style="width:24px;text-align:center;color:#cbd5e1;">›</span>
+              </div>
+            </div>
+            <div style="padding:8px 16px;border-top:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#64748b;background:#f8fafc;flex-shrink:0;">
+              <span>1–6 of 6 nodes</span>
+              <div style="display:flex;align-items:center;gap:6px;"><span>Per page</span><span style="padding:2px 7px;border:1px solid #cbd5e1;border-radius:3px;background:#ffffff;color:#0f172a;font-family:monospace;">25</span><span style="padding:1px 6px;color:#cbd5e1;">‹</span><span style="padding:1px 6px;color:#cbd5e1;">›</span></div>
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px;">
-            <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:14px;"><div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">Nodes</div><div style="font-size:26px;font-weight:700;margin-top:4px;">6</div><div style="font-size:11px;color:#dc2626;margin-top:4px;">1 offline</div></div>
-            <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:14px;"><div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">CPU avg</div><div style="font-size:26px;font-weight:700;color:#2563eb;margin-top:4px;">22%</div></div>
-            <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:14px;"><div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">MEM avg</div><div style="font-size:26px;font-weight:700;color:#9333ea;margin-top:4px;">37%</div></div>
-            <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:14px;"><div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">Jobs running</div><div style="font-size:26px;font-weight:700;margin-top:4px;">12</div></div>
+          <!-- ════ SIDECAR ════ -->
+          <div style="width:380px;background:#ffffff;display:flex;flex-direction:column;border-left:1px solid #e2e8f0;box-shadow:-2px 0 8px rgba(15,23,42,0.04);flex-shrink:0;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid #e2e8f0;background:#f8fafc;flex-shrink:0;">
+              <div>
+                <div style="display:flex;align-items:center;gap:6px;"><span style="font-family:monospace;font-size:13px;font-weight:700;color:#1d4ed8;">cloudbsd-node-03</span><span style="font-size:9px;padding:1px 6px;border-radius:3px;background:#f1f5f9;color:#475569;font-weight:600;">WORKER</span></div>
+                <div style="font-size:10px;color:#64748b;margin-top:1px;">rack B1 · joined 2025-08-14</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:4px;">
+                <button style="background:transparent;border:0;color:#64748b;font-size:14px;cursor:pointer;padding:2px 6px;border-radius:3px;" title="Open in full panel">↗</button>
+                <button style="background:transparent;border:0;color:#64748b;font-size:18px;cursor:pointer;padding:0 6px;line-height:1;" title="Close sidecar (Esc)">×</button>
+              </div>
+            </div>
+            <div style="display:flex;border-bottom:1px solid #e2e8f0;font-size:11px;font-weight:600;flex-shrink:0;overflow-x:auto;">
+              <span style="padding:8px 14px;color:#1d4ed8;border-bottom:2px solid #2563eb;white-space:nowrap;">Overview</span>
+              <span style="padding:8px 14px;color:#64748b;white-space:nowrap;">Network</span>
+              <span style="padding:8px 14px;color:#64748b;white-space:nowrap;">VMs <span style="background:#f1f5f9;color:#475569;padding:1px 5px;border-radius:3px;font-family:monospace;font-size:9px;">18</span></span>
+              <span style="padding:8px 14px;color:#64748b;white-space:nowrap;">Logs</span>
+              <span style="padding:8px 14px;color:#64748b;white-space:nowrap;">Settings</span>
+            </div>
+            <div style="flex:1;overflow-y:auto;padding:14px 16px;">
+              <div style="margin-bottom:14px;"><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.05em;font-weight:700;color:#94a3b8;margin-bottom:5px;">Identity</div><div style="display:grid;grid-template-columns:90px 1fr;gap:5px 10px;font-size:11px;"><span style="color:#64748b;">Hostname</span><span style="color:#0f172a;font-family:monospace;cursor:pointer;" title="Click to copy">cloudbsd-node-03</span><span style="color:#64748b;">ulid</span><span style="color:#0f172a;font-family:monospace;cursor:pointer;font-size:10px;" title="Click to copy">01HXYZ8C9RT…M4ZF7QX2K</span><span style="color:#64748b;">Role</span><span style="color:#0f172a;">worker</span><span style="color:#64748b;">Rack / U</span><span style="color:#0f172a;">B1 · U18</span><span style="color:#64748b;">Joined</span><span style="color:#0f172a;">2025-08-14 (204d)</span><span style="color:#64748b;">Term</span><span style="color:#0f172a;font-family:monospace;">7 (election 14)</span></div></div>
+              <div style="margin-bottom:14px;"><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.05em;font-weight:700;color:#94a3b8;margin-bottom:5px;">Hardware</div><div style="display:grid;grid-template-columns:90px 1fr;gap:5px 10px;font-size:11px;"><span style="color:#64748b;">CPU</span><span style="color:#0f172a;">AMD EPYC 7402P · 24c/48t</span><span style="color:#64748b;">RAM</span><span style="color:#0f172a;">64 GB DDR4 ECC</span><span style="color:#64748b;">Disks</span><span style="color:#0f172a;">2× 480 GB NVMe · 4× 4 TB HDD</span><span style="color:#64748b;">NIC</span><span style="color:#0f172a;">2× 10 GbE LACP (lagg0)</span><span style="color:#64748b;">GPU</span><span style="color:#0f172a;">4× (1× A100-MIG, 2× A5000, 1× T4)</span></div></div>
+              <div style="margin-bottom:14px;"><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.05em;font-weight:700;color:#94a3b8;margin-bottom:5px;">Cluster state</div><div style="display:grid;grid-template-columns:90px 1fr;gap:5px 10px;font-size:11px;"><span style="color:#64748b;">Heartbeat</span><span style="color:#059669;font-weight:600;">3s ago (ok)</span><span style="color:#64748b;">Replication</span><span style="color:#059669;font-weight:600;">● in-sync · lag 0 ms</span><span style="color:#64748b;">Peer set</span><span style="color:#0f172a;font-family:monospace;font-size:10px;">node-01,02,04,06</span><span style="color:#64748b;">Votes</span><span style="color:#0f172a;">self:1 · cast-for:node-01</span></div></div>
+              <div style="margin-bottom:14px;"><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.05em;font-weight:700;color:#94a3b8;margin-bottom:5px;">Workload</div><div style="border:1px solid #e2e8f0;border-radius:5px;overflow:hidden;"><div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-bottom:1px solid #f1f5f9;font-size:11px;"><span style="color:#475569;">VMs</span><span style="font-family:monospace;font-weight:600;">8 (running)</span></div><div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-bottom:1px solid #f1f5f9;font-size:11px;"><span style="color:#475569;">Containers</span><span style="font-family:monospace;font-weight:600;">7</span></div><div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-bottom:1px solid #f1f5f9;font-size:11px;"><span style="color:#475569;">Jails</span><span style="font-family:monospace;font-weight:600;">3</span></div><div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;font-size:11px;"><span style="color:#475569;">Jobs</span><span style="font-family:monospace;font-weight:600;">3 active</span></div></div></div>
+            </div>
+            <div style="display:flex;gap:6px;padding:11px 16px;border-top:1px solid #e2e8f0;background:#f8fafc;flex-shrink:0;">
+              <button style="flex:1;padding:6px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;font-size:11px;font-weight:600;">Drain</button>
+              <button style="flex:1;padding:6px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;font-size:11px;font-weight:600;">Rejoin</button>
+              <button style="flex:1.4;padding:6px;border:1px solid #2563eb;border-radius:4px;background:#2563eb;color:#ffffff;font-size:11px;font-weight:600;">Promote to master</button>
+            </div>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;">
-          <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;border-left:4px solid #10b981;padding:14px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;"><span style="font-weight:700;color:#0f172a;">cloudbsd-node-01</span><span style="font-size:9px;padding:2px 6px;border-radius:3px;background:#10b981;color:#ffffff;font-weight:600;">master</span></div><div style="font-size:10px;color:#64748b;">rack A1</div>
-            <div style="margin-top:8px;display:flex;flex-direction:column;gap:3px;"><div><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:1px;"><span style="color:#64748b;">CPU</span><span style="font-weight:600;">18%</span></div><div style="height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:18%;height:100%;background:#3b82f6;"></div></div></div><div><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:1px;"><span style="color:#64748b;">MEM</span><span style="font-weight:600;">51%</span></div><div style="height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:51%;height:100%;background:#a855f7;"></div></div></div><div><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:1px;"><span style="color:#64748b;">Disk</span><span style="font-weight:600;">27%</span></div><div style="height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:27%;height:100%;background:#f59e0b;"></div></div></div></div><div style="font-size:10px;color:#94a3b8;margin-top:6px;">uptime: 14d 02:11</div>
-          </div>
-          <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;border-left:4px solid #10b981;padding:14px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;"><span style="font-weight:700;color:#0f172a;">node-02</span><span style="font-size:9px;padding:2px 6px;border-radius:3px;background:#10b981;color:#ffffff;font-weight:600;">worker</span></div><div style="font-size:10px;color:#64748b;">rack A2</div>
-            <div style="margin-top:8px;display:flex;flex-direction:column;gap:3px;"><div><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:1px;"><span style="color:#64748b;">CPU</span><span style="font-weight:600;">42%</span></div><div style="height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:42%;height:100%;background:#3b82f6;"></div></div></div><div><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:1px;"><span style="color:#64748b;">MEM</span><span style="font-weight:600;">64%</span></div><div style="height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:64%;height:100%;background:#a855f7;"></div></div></div><div><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:1px;"><span style="color:#64748b;">Disk</span><span style="font-weight:600;">76%</span></div><div style="height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:76%;height:100%;background:#f59e0b;"></div></div></div></div><div style="font-size:10px;color:#94a3b8;margin-top:6px;">uptime: 22d 06:00</div>
-          </div>
-          <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;border-left:4px solid #10b981;padding:14px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;"><span style="font-weight:700;color:#0f172a;">node-03</span><span style="font-size:9px;padding:2px 6px;border-radius:3px;background:#10b981;color:#ffffff;font-weight:600;">worker</span></div><div style="font-size:10px;color:#64748b;">rack B1</div>
-            <div style="margin-top:8px;display:flex;flex-direction:column;gap:3px;"><div><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:1px;"><span style="color:#64748b;">CPU</span><span style="font-weight:600;">28%</span></div><div style="height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:28%;height:100%;background:#3b82f6;"></div></div></div><div><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:1px;"><span style="color:#64748b;">MEM</span><span style="font-weight:600;">38%</span></div><div style="height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:38%;height:100%;background:#a855f7;"></div></div></div><div><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:1px;"><span style="color:#64748b;">Disk</span><span style="font-weight:600;">41%</span></div><div style="height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:41%;height:100%;background:#f59e0b;"></div></div></div></div><div style="font-size:10px;color:#94a3b8;margin-top:6px;">uptime: 14d 02:11</div>
-          </div>
-          <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;border-left:4px solid #10b981;padding:14px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;"><span style="font-weight:700;color:#0f172a;">node-04</span><span style="font-size:9px;padding:2px 6px;border-radius:3px;background:#10b981;color:#ffffff;font-weight:600;">worker</span></div><div style="font-size:10px;color:#64748b;">rack B2</div>
-            <div style="margin-top:8px;display:flex;flex-direction:column;gap:3px;"><div><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:1px;"><span style="color:#64748b;">CPU</span><span style="font-weight:600;">12%</span></div><div style="height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:12%;height:100%;background:#3b82f6;"></div></div></div><div><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:1px;"><span style="color:#64748b;">MEM</span><span style="font-weight:600;">22%</span></div><div style="height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:22%;height:100%;background:#a855f7;"></div></div></div><div><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:1px;"><span style="color:#64748b;">Disk</span><span style="font-weight:600;">19%</span></div><div style="height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:19%;height:100%;background:#f59e0b;"></div></div></div></div><div style="font-size:10px;color:#94a3b8;margin-top:6px;">uptime: 6d 03:24</div>
-          </div>
-          <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;border-left:4px solid #ef4444;padding:14px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;"><span style="font-weight:700;color:#0f172a;">node-05</span><span style="font-size:9px;padding:2px 6px;border-radius:3px;background:#ef4444;color:#ffffff;font-weight:600;">worker</span></div><div style="font-size:10px;color:#64748b;">rack C1</div>
-            <div style="margin-top:8px;color:#dc2626;font-weight:600;font-size:12px;">● OFFLINE</div><div style="font-size:10px;color:#64748b;margin-top:4px;">last seen 4h ago</div>
-          </div>
-          <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;border-left:4px solid #10b981;padding:14px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;"><span style="font-weight:700;color:#0f172a;">node-06</span><span style="font-size:9px;padding:2px 6px;border-radius:3px;background:#10b981;color:#ffffff;font-weight:600;">worker</span></div><div style="font-size:10px;color:#64748b;">rack C2</div>
-            <div style="margin-top:8px;display:flex;flex-direction:column;gap:3px;"><div><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:1px;"><span style="color:#64748b;">CPU</span><span style="font-weight:600;">36%</span></div><div style="height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:36%;height:100%;background:#3b82f6;"></div></div></div><div><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:1px;"><span style="color:#64748b;">MEM</span><span style="font-weight:600;">48%</span></div><div style="height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:48%;height:100%;background:#a855f7;"></div></div></div><div><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:1px;"><span style="color:#64748b;">Disk</span><span style="font-weight:600;">55%</span></div><div style="height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:55%;height:100%;background:#f59e0b;"></div></div></div></div><div style="font-size:10px;color:#94a3b8;margin-top:6px;">uptime: 14d 02:11</div>
-          </div>
-          </div>
-          <div style="background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;padding:14px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;"><h3 style="font-size:13px;font-weight:700;color:#0f172a;margin:0;">Recent Cluster Events</h3><a style="font-size:11px;color:#2563eb;text-decoration:none;">View all</a></div>
-            <div style="font-size:11px;color:#475569;">12:14:22 ● <b>node-04</b> marked healthy after 3 retries</div>
-            <div style="font-size:11px;color:#475569;margin-top:4px;">11:48:01 ● replication <b>tank/data → node-02</b> completed (2.1 GB)</div>
-            <div style="font-size:11px;color:#475569;margin-top:4px;">10:33:18 <span style="color:#f59e0b;">●</span> <b>node-05</b> lost heartbeat (2 retries)</div>
-            <div style="font-size:11px;color:#475569;margin-top:4px;">09:48:22 ● backup snapshot <b>daily</b> replicated to offsite</div>
-            <div style="font-size:11px;color:#475569;margin-top:4px;">09:14:00 ● systemd timer <b>fstrim</b> ran on 3 nodes</div>
-            <div style="font-size:11px;color:#475569;margin-top:4px;">08:42:11 ● <b>node-06</b> joined cluster</div>
-            <div style="margin-top:10px;padding-top:8px;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8;">Add node — available on backend: see <code style="background:#f1f5f9;padding:1px 6px;border-radius:3px;font-family:monospace;">cluster join</code> in CLI</div>
-          </div>
-
-        </main>
+        </div>
+      </main>
       </div>
     </div>
   </foreignObject>
