@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 720" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Settings Backup Config</title>
+  <foreignObject x="0" y="0" width="1280" height="720">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:720px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+      
+<div style="display:flex;width:1280px;height:720px;">
+  <div style="width:280px;background:#0f172a;color:#cbd5e1;padding:24px 18px;box-sizing:border-box;border-right:1px solid #1e293b;">
+    <div style="display:inline-block;padding:6px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;letter-spacing:0.04em;margin-bottom:8px;">CloudBSD</div>
+    <h3 style="margin:0 0 22px;font-size:13px;font-weight:600;color:#ffffff;">Settings</h3>
+    <div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">General</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">Account</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">Security</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">Appearance</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">API Keys</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">Webhooks</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">Notifications</div><div style="padding:9px 12px;border-radius:5px;background:#1e40af;margin-bottom:3px;font-size:12px;font-weight:700;color:#ffffff;">Backup config</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">Network</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">About</div>
+  </div>
+  <div style="flex:1;overflow:auto;background:#f1f5f9;">
+<div style="padding:34px 48px;">
+  <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:22px;">
+    <div>
+      <h2 style="margin:0;font-size:20px;font-weight:700;">Backup configuration</h2>
+      <p style="margin:4px 0 0;color:#64748b;font-size:13px;">Schedule, retention, offsite target</p>
+    </div>
+    <button style="padding:9px 18px;font-size:12px;font-weight:600;border:none;border-radius:6px;background:#1d4ed8;color:#ffffff;">Save</button>
+  </div>
+
+  <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:24px;margin-bottom:14px;">
+    <h4 style="margin:0 0 14px;font-size:12px;font-weight:700;color:#1d4ed8;text-transform:uppercase;letter-spacing:0.06em;">Default schedule</h4>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;">
+      <div>
+        <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Cron expression</div>
+        <input type="text" value="0 2 * * *" style="width:100%;padding:9px 12px;font-size:13px;font-family:monospace;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;box-sizing:border-box;" />
+        <div style="font-size:10px;color:#94a3b8;margin-top:4px;">Every day at 02:00 UTC</div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Compression</div>
+        <select style="width:100%;padding:9px 12px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;"><option>zstd-3 (recommended)</option><option>zstd-9 (slow)</option><option>gzip-6</option><option>none</option></select>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Encryption</div>
+        <select style="width:100%;padding:9px 12px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;"><option>AES-256-GCM (recommended)</option><option>ChaCha20-Poly1305</option><option>none (insecure)</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:24px;margin-bottom:14px;">
+    <h4 style="margin:0 0 14px;font-size:12px;font-weight:700;color:#1d4ed8;text-transform:uppercase;letter-spacing:0.06em;">Retention policies</h4>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+
+      <div style="padding:14px;background:#f8fafc;border-radius:6px;">
+        <div style="font-size:11px;color:#64748b;text-transform:uppercase;">Hourly</div>
+        <div style="font-size:24px;font-weight:700;color:#0f172a;margin:2px 0;">24</div>
+        <input type="text" value="24" style="width:60%;padding:4px 6px;font-size:11px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#0f172a;display:inline-block;"/>
+        <span style="font-size:11px;color:#64748b;"> copies</span>
+        <div style="font-size:10px;color:#64748b;margin-top:6px;">auto-prune</div>
+      </div>
+      <div style="padding:14px;background:#f8fafc;border-radius:6px;">
+        <div style="font-size:11px;color:#64748b;text-transform:uppercase;">Daily</div>
+        <div style="font-size:24px;font-weight:700;color:#0f172a;margin:2px 0;">30</div>
+        <input type="text" value="30" style="width:60%;padding:4px 6px;font-size:11px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#0f172a;display:inline-block;"/>
+        <span style="font-size:11px;color:#64748b;"> copies</span>
+        <div style="font-size:10px;color:#64748b;margin-top:6px;">auto-prune</div>
+      </div>
+      <div style="padding:14px;background:#f8fafc;border-radius:6px;">
+        <div style="font-size:11px;color:#64748b;text-transform:uppercase;">Weekly</div>
+        <div style="font-size:24px;font-weight:700;color:#0f172a;margin:2px 0;">12</div>
+        <input type="text" value="12" style="width:60%;padding:4px 6px;font-size:11px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#0f172a;display:inline-block;"/>
+        <span style="font-size:11px;color:#64748b;"> copies</span>
+        <div style="font-size:10px;color:#64748b;margin-top:6px;">keep 12sundays</div>
+      </div>
+      <div style="padding:14px;background:#f8fafc;border-radius:6px;">
+        <div style="font-size:11px;color:#64748b;text-transform:uppercase;">Yearly</div>
+        <div style="font-size:24px;font-weight:700;color:#0f172a;margin:2px 0;">5</div>
+        <input type="text" value="5" style="width:60%;padding:4px 6px;font-size:11px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#0f172a;display:inline-block;"/>
+        <span style="font-size:11px;color:#64748b;"> copies</span>
+        <div style="font-size:10px;color:#64748b;margin-top:6px;">keep forever</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:24px;">
+    <h4 style="margin:0 0 14px;font-size:12px;font-weight:700;color:#1d4ed8;text-transform:uppercase;letter-spacing:0.06em;">Offsite target</h4>
+    <div style="display:flex;gap:10px;margin-bottom:12px;">
+
+      <div style="flex:1;padding:10px 12px;background:#f8fafc;border:1px solid #1d4ed8;border-radius:5px;background:#eff6ff;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:12px;font-weight:600;color:#1d4ed8;">Backblaze B2</div>
+          <span style="font-size:9px;padding:1px 6px;background:#10b98115;color:#10b981;border-radius:3px;font-weight:700;">ON</span>
+        </div>
+        <div style="font-family:monospace;font-size:10px;color:#475569;margin-top:4px;word-break:break-all;">b2://prod-backups-cloudbsd/</div>
+      </div>
+      <div style="flex:1;padding:10px 12px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:5px;background:#f8fafc;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:12px;font-weight:600;color:#0f172a;">AWS S3</div>
+          <span style="font-size:9px;padding:1px 6px;background:#94a3b815;color:#94a3b8;border-radius:3px;font-weight:700;">OFF</span>
+        </div>
+        <div style="font-family:monospace;font-size:10px;color:#475569;margin-top:4px;word-break:break-all;">s3://cloudbsd-backups/</div>
+      </div>
+      <div style="flex:1;padding:10px 12px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:5px;background:#f8fafc;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:12px;font-weight:600;color:#0f172a;">rsync.net</div>
+          <span style="font-size:9px;padding:1px 6px;background:#94a3b815;color:#94a3b8;border-radius:3px;font-weight:700;">OFF</span>
+        </div>
+        <div style="font-family:monospace;font-size:10px;color:#475569;margin-top:4px;word-break:break-all;">ssh://usw.rsync.net/cloudbsd/</div>
+      </div>
+      <div style="flex:1;padding:10px 12px;background:#f8fafc;border:1px solid #1d4ed8;border-radius:5px;background:#eff6ff;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:12px;font-weight:600;color:#1d4ed8;">local NAS</div>
+          <span style="font-size:9px;padding:1px 6px;background:#10b98115;color:#10b981;border-radius:3px;font-weight:700;">ON</span>
+        </div>
+        <div style="font-family:monospace;font-size:10px;color:#475569;margin-top:4px;word-break:break-all;">/mnt/nfs02/backups/</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+    </div>
+  </foreignObject>
+</svg>

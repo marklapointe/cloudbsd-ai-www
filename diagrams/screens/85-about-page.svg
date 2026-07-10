@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 720" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD About</title>
+  <foreignObject x="0" y="0" width="1280" height="720">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:720px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+      
+<div style="display:flex;width:1280px;height:720px;">
+  <div style="width:280px;background:#0f172a;color:#cbd5e1;padding:24px 18px;box-sizing:border-box;border-right:1px solid #1e293b;">
+    <div style="display:inline-block;padding:6px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;letter-spacing:0.04em;margin-bottom:8px;">CloudBSD</div>
+    <h3 style="margin:0 0 22px;font-size:13px;font-weight:600;color:#ffffff;">Settings</h3>
+    <div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">General</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">Account</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">Security</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">Appearance</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">API Keys</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">Webhooks</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">Notifications</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">Backup config</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">Network</div><div style="padding:9px 12px;border-radius:5px;background:#1e40af;margin-bottom:3px;font-size:12px;font-weight:700;color:#ffffff;">About</div>
+  </div>
+  <div style="flex:1;overflow:auto;background:#f1f5f9;">
+<div style="padding:34px 48px;">
+  <div style="margin-bottom:22px;">
+    <h2 style="margin:0;font-size:20px;font-weight:700;">About CloudBSD</h2>
+    <p style="margin:4px 0 0;color:#64748b;font-size:13px;">Version, license, credits, links</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+    <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:24px;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
+        <div style="width:80px;height:80px;border-radius:14px;background:linear-gradient(135deg,#0ea5e9,#1e40af);display:flex;align-items:center;justify-content:center;color:#ffffff;font-weight:800;font-size:18px;">CBS</div>
+        <div>
+          <h3 style="margin:0;font-size:20px;font-weight:800;color:#0f172a;">CloudBSD v1.4.3</h3>
+          <p style="margin:2px 0;font-size:13px;color:#64748b;">"Steady Skink" · Released 2026-05-12</p>
+          <div style="display:flex;gap:6px;margin-top:4px;">
+            <span style="font-size:10px;padding:2px 7px;background:#d1fae5;color:#065f46;border-radius:3px;font-weight:700;">STABLE</span>
+            <span style="font-size:10px;padding:2px 7px;background:#dbeafe;color:#1d4ed8;border-radius:3px;font-weight:700;">FreeBSD</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="font-size:11px;color:#475569;line-height:1.6;">
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f8fafc;"><span>Install date:</span><span style="color:#0f172a;font-family:monospace;">2024-08-12</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f8fafc;"><span>Uptime:</span><span style="color:#0f172a;font-family:monospace;">14d 02h</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f8fafc;"><span>Latest commit:</span><span style="color:#0f172a;font-family:monospace;">a3517e3</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;"><span>License:</span><span style="color:#0f172a;">Apache-2.0</span></div>
+      </div>
+
+      <div style="margin-top:14px;display:flex;gap:8px;">
+        <button style="flex:1;padding:8px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;">Changelog</button>
+        <button style="flex:1;padding:8px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;">Check for updates</button>
+        <button style="flex:1;padding:8px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;">Download CLI</button>
+      </div>
+    </div>
+
+    <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:24px;">
+      <h4 style="margin:0 0 12px;font-size:13px;font-weight:700;">Runtime stats</h4>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:11px;color:#475569;">
+        <div style="display:flex;justify-content:space-between;"><span>Memory (resident):</span><strong style="color:#0f172a;font-family:monospace;">412 MB</strong></div>
+        <div style="display:flex;justify-content:space-between;"><span>Memory (heap):</span><strong style="color:#0f172a;font-family:monospace;">128 MB</strong></div>
+        <div style="display:flex;justify-content:space-between;"><span>Database size:</span><strong style="color:#0f172a;font-family:monospace;">14 MB</strong></div>
+        <div style="display:flex;justify-content:space-between;"><span>Plugins loaded:</span><strong style="color:#0f172a;">14</strong></div>
+        <div style="display:flex;justify-content:space-between;"><span>WebSocket conns:</span><strong style="color:#0f172a;">7</strong></div>
+        <div style="display:flex;justify-content:space-between;"><span>Active sessions:</span><strong style="color:#0f172a;">3</strong></div>
+        <div style="display:flex;justify-content:space-between;"><span>API uptime:</span><strong style="color:#0f172a;font-family:monospace;">14d 02h</strong></div>
+        <div style="display:flex;justify-content:space-between;"><span>API requests/sec:</span><strong style="color:#0f172a;font-family:monospace;">42</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:24px;margin-top:14px;">
+    <h4 style="margin:0 0 12px;font-size:13px;font-weight:700;">Credits</h4>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;font-size:11px;">
+      <div>
+        <strong style="color:#0f172a;">Project lead</strong>
+        <div style="color:#475569;margin-top:3px;">@marklapointe</div>
+      </div>
+      <div>
+        <strong style="color:#0f172a;">Architecture &amp; security</strong>
+        <div style="color:#475569;margin-top:3px;">@cloudbsd/core (4 contributors)</div>
+      </div>
+      <div>
+        <strong style="color:#0f172a;">Frontend (Angular)</strong>
+        <div style="color:#475569;margin-top:3px;">@cloudbsd/ui (8 contributors)</div>
+      </div>
+      <div>
+        <strong style="color:#0f172a;">Plugins</strong>
+        <div style="color:#475569;margin-top:3px;">@cloudbsd/plugin-system</div>
+      </div>
+      <div>
+        <strong style="color:#0f172a;">Documentation</strong>
+        <div style="color:#475569;margin-top:3px;">@cloudbsd/docs (12 contributors)</div>
+      </div>
+      <div>
+        <strong style="color:#0f172a;">Acknowledgements</strong>
+        <div style="color:#475569;margin-top:3px;">FreeBSD, bhyve, ZFS, OpenZFS, FreeBSD Foundation</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+    </div>
+  </foreignObject>
+</svg>

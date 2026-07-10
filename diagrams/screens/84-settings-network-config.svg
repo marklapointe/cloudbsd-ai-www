@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 720" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Settings Network Config</title>
+  <foreignObject x="0" y="0" width="1280" height="720">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:720px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+      
+<div style="display:flex;width:1280px;height:720px;">
+  <div style="width:280px;background:#0f172a;color:#cbd5e1;padding:24px 18px;box-sizing:border-box;border-right:1px solid #1e293b;">
+    <div style="display:inline-block;padding:6px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;letter-spacing:0.04em;margin-bottom:8px;">CloudBSD</div>
+    <h3 style="margin:0 0 22px;font-size:13px;font-weight:600;color:#ffffff;">Settings</h3>
+    <div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">General</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">Account</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">Security</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">Appearance</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">API Keys</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">Webhooks</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">Notifications</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">Backup config</div><div style="padding:9px 12px;border-radius:5px;background:#1e40af;margin-bottom:3px;font-size:12px;font-weight:700;color:#ffffff;">Network</div><div style="padding:9px 12px;border-radius:5px;background:transparent;margin-bottom:3px;font-size:12px;font-weight:500;color:#cbd5e1;">About</div>
+  </div>
+  <div style="flex:1;overflow:auto;background:#f1f5f9;">
+<div style="padding:34px 48px;">
+  <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:22px;">
+    <div>
+      <h2 style="margin:0;font-size:20px;font-weight:700;">Network configuration</h2>
+      <p style="margin:4px 0 0;color:#64748b;font-size:13px;">Cluster IP, DNS, NTP, BGP</p>
+    </div>
+  </div>
+
+  <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:24px;margin-bottom:14px;">
+    <h4 style="margin:0 0 14px;font-size:12px;font-weight:700;color:#1d4ed8;text-transform:uppercase;">Cluster addressing</h4>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+      <div>
+        <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Cluster VIP (CARP)</div>
+        <input type="text" value="10.0.10.50" style="width:100%;padding:9px 12px;font-size:13px;font-family:monospace;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;box-sizing:border-box;" />
+        <div style="font-size:10px;color:#94a3b8;margin-top:4px;">Floating IP for cluster — advertised by master</div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Subnet mask</div>
+        <select style="width:100%;padding:9px 12px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;"><option>/24 (255.255.255.0)</option><option>/23 (255.255.254.0)</option><option>/22</option></select>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:14px;">
+
+      <div style="padding:11px 12px;background:#f8fafc;border-radius:5px;">
+        <div style="display:flex;justify-content:space-between;">
+          <div style="font-family:monospace;font-size:13px;font-weight:600;color:#0f172a;">node-01</div>
+          <span style="font-size:10px;background:#1d4ed815;color:#1d4ed8;padding:1px 6px;border-radius:3px;font-weight:700;">MASTER</span>
+        </div>
+        <div style="font-family:monospace;font-size:11px;color:#475569;margin-top:3px;">10.0.10.42 · bge0</div>
+      </div>
+      <div style="padding:11px 12px;background:#f8fafc;border-radius:5px;">
+        <div style="display:flex;justify-content:space-between;">
+          <div style="font-family:monospace;font-size:13px;font-weight:600;color:#0f172a;">node-02</div>
+          <span style="font-size:10px;background:#1d4ed815;color:#1d4ed8;padding:1px 6px;border-radius:3px;font-weight:700;">BACKUP</span>
+        </div>
+        <div style="font-family:monospace;font-size:11px;color:#475569;margin-top:3px;">10.0.10.43 · bge0</div>
+      </div>
+      <div style="padding:11px 12px;background:#f8fafc;border-radius:5px;">
+        <div style="display:flex;justify-content:space-between;">
+          <div style="font-family:monospace;font-size:13px;font-weight:600;color:#0f172a;">node-03</div>
+          <span style="font-size:10px;background:#1d4ed815;color:#1d4ed8;padding:1px 6px;border-radius:3px;font-weight:700;">WORKER</span>
+        </div>
+        <div style="font-family:monospace;font-size:11px;color:#475569;margin-top:3px;">10.0.10.44 · bge0</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:24px;margin-bottom:14px;">
+    <h4 style="margin:0 0 14px;font-size:12px;font-weight:700;color:#1d4ed8;text-transform:uppercase;">DNS &amp; NTP</h4>
+    <div style="margin-bottom:12px;">
+      <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Upstream DNS</div>
+      <div style="display:flex;gap:8px;">
+        <input type="text" value="1.1.1.1" style="flex:1;padding:8px 10px;font-size:12px;font-family:monospace;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#0f172a;" />
+        <input type="text" value="8.8.8.8" style="flex:1;padding:8px 10px;font-size:12px;font-family:monospace;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#0f172a;" />
+        <input type="text" value="9.9.9.9" style="flex:1;padding:8px 10px;font-size:12px;font-family:monospace;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#0f172a;" />
+      </div>
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Internal DNS domain</div>
+      <input type="text" value="cluster.local" style="width:100%;padding:9px 12px;font-size:13px;font-family:monospace;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;box-sizing:border-box;" />
+    </div>
+  </div>
+
+  <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:24px;">
+    <h4 style="margin:0 0 14px;font-size:12px;font-weight:700;color:#1d4ed8;text-transform:uppercase;">BGP peering (optional)</h4>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <span style="font-size:11px;color:#475569;">BGP enabled:</span>
+      <span style="display:inline-block;padding:4px 10px;background:#d1fae5;color:#065f46;border-radius:4px;font-weight:700;font-size:11px;">TRUE</span>
+    </div>
+    <div style="font-size:11px;color:#475569;font-family:monospace;background:#0f172a;color:#cbd5e1;padding:12px 14px;border-radius:5px;line-height:1.6;">
+      <div>router-id: 10.0.10.50</div>
+      <div>as-number: 64512</div>
+      <div>peers:</div>
+      <div>  - ip: 10.0.99.1</div>
+      <div>    as: 64512</div>
+      <div>    description: upstream (Cloudflare)</div>
+      <div>    state: <span style="color:#10b981;">established</span> (uptime: 14d 02h)</div>
+      <div>    prefixes-learned: 412</div>
+      <div>    prefixes-advertised: 18</div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+    </div>
+  </foreignObject>
+</svg>

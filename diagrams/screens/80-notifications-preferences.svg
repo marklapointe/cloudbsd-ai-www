@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 720" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Notifications Preferences</title>
+  <foreignObject x="0" y="0" width="1280" height="720">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:720px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+      
+<div style="padding:34px 48px;height:100%;box-sizing:border-box;">
+  <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:24px;">
+    <div>
+      <h2 style="margin:0;font-size:18px;font-weight:700;">Notifications</h2>
+      <p style="margin:4px 0 0;color:#64748b;font-size:12px;">Inbox rules, channels, severity thresholds, escalation</p>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px;">
+    <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:14px;text-align:center;">
+      <div style="font-size:10px;color:#64748b;text-transform:uppercase;">Channels active</div>
+      <div style="font-size:24px;font-weight:700;color:#1d4ed8;margin-top:4px;">4</div>
+      <div style="font-size:10px;color:#64748b;">Inbox, Email, Slack, Webhook</div>
+    </div>
+    <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:14px;text-align:center;">
+      <div style="font-size:10px;color:#64748b;text-transform:uppercase;">Rules</div>
+      <div style="font-size:24px;font-weight:700;color:#0f172a;margin-top:4px;">28</div>
+      <div style="font-size:10px;color:#64748b;">22 active, 6 paused</div>
+    </div>
+    <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:14px;text-align:center;">
+      <div style="font-size:10px;color:#64748b;text-transform:uppercase;">Alerts last 7d</div>
+      <div style="font-size:24px;font-weight:700;color:#f59e0b;margin-top:4px;">187</div>
+      <div style="font-size:10px;color:#475569;">3 error · 12 warn · 172 info</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+    <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:18px;">
+      <h4 style="margin:0 0 12px;font-size:13px;font-weight:700;">Channels</h4>
+
+      <div style="padding:10px 12px;background:#f8fafc;border-radius:6px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:12px;font-weight:600;color:#0f172a;">Inbox</div>
+          <div style="font-size:10px;color:#64748b;">Built-in notification center</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:10px;color:#64748b;">12 of 14</span>
+          <span style="display:inline-block;padding:2px 7px;background:#10b98115;color:#10b981;border-radius:3px;font-size:9px;font-weight:700;">ENABLED</span>
+        </div>
+      </div>
+      <div style="padding:10px 12px;background:#f8fafc;border-radius:6px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:12px;font-weight:600;color:#0f172a;">Email</div>
+          <div style="font-size:10px;color:#64748b;">[email protected]</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:10px;color:#64748b;">all</span>
+          <span style="display:inline-block;padding:2px 7px;background:#10b98115;color:#10b981;border-radius:3px;font-size:9px;font-weight:700;">ENABLED</span>
+        </div>
+      </div>
+      <div style="padding:10px 12px;background:#f8fafc;border-radius:6px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:12px;font-weight:600;color:#0f172a;">Slack ops</div>
+          <div style="font-size:10px;color:#64748b;">#cloudbsd-alerts</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:10px;color:#64748b;">84 of 84</span>
+          <span style="display:inline-block;padding:2px 7px;background:#10b98115;color:#10b981;border-radius:3px;font-size:9px;font-weight:700;">ENABLED</span>
+        </div>
+      </div>
+      <div style="padding:10px 12px;background:#f8fafc;border-radius:6px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:12px;font-weight:600;color:#0f172a;">Webhook</div>
+          <div style="font-size:10px;color:#64748b;">alertmanager.cloudbsd.lan</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:10px;color:#64748b;">12 of 14</span>
+          <span style="display:inline-block;padding:2px 7px;background:#10b98115;color:#10b981;border-radius:3px;font-size:9px;font-weight:700;">ENABLED</span>
+        </div>
+      </div>
+      <div style="padding:10px 12px;background:#f8fafc;border-radius:6px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:12px;font-weight:600;color:#0f172a;">SMS via Twilio</div>
+          <div style="font-size:10px;color:#64748b;">+1 (514) 555-0142</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:10px;color:#64748b;">disabled</span>
+          <span style="display:inline-block;padding:2px 7px;background:#94a3b815;color:#94a3b8;border-radius:3px;font-size:9px;font-weight:700;">DISABLED</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:18px;">
+      <h4 style="margin:0 0 12px;font-size:13px;font-weight:700;">Severity thresholds</h4>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+
+        <div style="padding:9px 12px;background:#f8fafc;border-radius:6px;display:flex;align-items:center;gap:10px;">
+          <span style="color:#3b82f6;font-size:14px;">●</span>
+          <span style="font-size:11px;color:#0f172a;flex:1;">INFO → Slack, Email</span>
+          <button style="padding:3px 8px;font-size:9px;border:1px solid #cbd5e1;border-radius:3px;background:#ffffff;color:#475569;">Edit</button>
+        </div>
+        <div style="padding:9px 12px;background:#f8fafc;border-radius:6px;display:flex;align-items:center;gap:10px;">
+          <span style="color:#d97706;font-size:14px;">●</span>
+          <span style="font-size:11px;color:#0f172a;flex:1;">WARN → Slack, Email, Webhook, SMS-on-hours</span>
+          <button style="padding:3px 8px;font-size:9px;border:1px solid #cbd5e1;border-radius:3px;background:#ffffff;color:#475569;">Edit</button>
+        </div>
+        <div style="padding:9px 12px;background:#f8fafc;border-radius:6px;display:flex;align-items:center;gap:10px;">
+          <span style="color:#ef4444;font-size:14px;">●</span>
+          <span style="font-size:11px;color:#0f172a;flex:1;">ERROR → All channels immediately</span>
+          <button style="padding:3px 8px;font-size:9px;border:1px solid #cbd5e1;border-radius:3px;background:#ffffff;color:#475569;">Edit</button>
+        </div>
+        <div style="padding:9px 12px;background:#f8fafc;border-radius:6px;display:flex;align-items:center;gap:10px;">
+          <span style="color:#991b1b;font-size:14px;">●</span>
+          <span style="font-size:11px;color:#0f172a;flex:1;">CRITICAL → Bypass quiet hours, page on-call</span>
+          <button style="padding:3px 8px;font-size:9px;border:1px solid #cbd5e1;border-radius:3px;background:#ffffff;color:#475569;">Edit</button>
+        </div>
+        <div style="padding:9px 12px;background:#f8fafc;border-radius:6px;display:flex;align-items:center;gap:10px;">
+          <span style="color:#64748b;font-size:14px;">●</span>
+          <span style="font-size:11px;color:#0f172a;flex:1;">Quiet hours 22:00 - 07:00 local</span>
+          <button style="padding:3px 8px;font-size:9px;border:1px solid #cbd5e1;border-radius:3px;background:#ffffff;color:#475569;">Edit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:18px;margin-top:14px;">
+    <h4 style="margin:0 0 12px;font-size:13px;font-weight:700;">Sample rules</h4>
+    <table style="width:100%;font-size:12px;border-collapse:collapse;">
+      <thead>
+        <tr style="border-bottom:2px solid #e2e8f0;text-align:left;font-size:10px;color:#64748b;text-transform:uppercase;">
+          <th style="padding:6px;">Rule name</th>
+          <th style="padding:6px;">Condition</th>
+          <th style="padding:6px;">Severity</th>
+          <th style="padding:6px;">Channels</th>
+          <th style="padding:6px;">Cooldown</th>
+          <th style="padding:6px;">State</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr style="border-bottom:1px solid #f8fafc;">
+          <td style="padding:8px 6px;font-weight:600;color:#0f172a;">VM crash</td>
+          <td style="padding:8px 6px;font-family:monospace;font-size:11px;color:#475569;">vm.crash fired</td>
+          <td style="padding:8px 6px;"><span style="display:inline-block;padding:1px 7px;font-size:10px;background:#dc262615;color:#dc2626;border-radius:3px;font-weight:700;">ERROR</span></td>
+          <td style="padding:8px 6px;font-size:11px;color:#475569;">All + page</td>
+          <td style="padding:8px 6px;font-family:monospace;font-size:11px;color:#64748b;">5 min</td>
+          <td style="padding:8px 6px;"><span style="font-size:10px;padding:2px 7px;background:#10b98115;color:#10b981;border-radius:3px;font-weight:700;">ACTIVE</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f8fafc;">
+          <td style="padding:8px 6px;font-weight:600;color:#0f172a;">Disk full</td>
+          <td style="padding:8px 6px;font-family:monospace;font-size:11px;color:#475569;">tank/* >= 95% used for 60s</td>
+          <td style="padding:8px 6px;"><span style="display:inline-block;padding:1px 7px;font-size:10px;background:#d9770615;color:#d97706;border-radius:3px;font-weight:700;">WARN</span></td>
+          <td style="padding:8px 6px;font-size:11px;color:#475569;">Slack, Email</td>
+          <td style="padding:8px 6px;font-family:monospace;font-size:11px;color:#64748b;">30 min</td>
+          <td style="padding:8px 6px;"><span style="font-size:10px;padding:2px 7px;background:#10b98115;color:#10b981;border-radius:3px;font-weight:700;">ACTIVE</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f8fafc;">
+          <td style="padding:8px 6px;font-weight:600;color:#0f172a;">Cert expiry</td>
+          <td style="padding:8px 6px;font-family:monospace;font-size:11px;color:#475569;">cert expires in 30d</td>
+          <td style="padding:8px 6px;"><span style="display:inline-block;padding:1px 7px;font-size:10px;background:#d9770615;color:#d97706;border-radius:3px;font-weight:700;">WARN</span></td>
+          <td style="padding:8px 6px;font-size:11px;color:#475569;">Email</td>
+          <td style="padding:8px 6px;font-family:monospace;font-size:11px;color:#64748b;">24 h</td>
+          <td style="padding:8px 6px;"><span style="font-size:10px;padding:2px 7px;background:#10b98115;color:#10b981;border-radius:3px;font-weight:700;">ACTIVE</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f8fafc;">
+          <td style="padding:8px 6px;font-weight:600;color:#0f172a;">Auth fail</td>
+          <td style="padding:8px 6px;font-family:monospace;font-size:11px;color:#475569;">>= 3 fails from same IP in 5 min</td>
+          <td style="padding:8px 6px;"><span style="display:inline-block;padding:1px 7px;font-size:10px;background:#d9770615;color:#d97706;border-radius:3px;font-weight:700;">WARN</span></td>
+          <td style="padding:8px 6px;font-size:11px;color:#475569;">Slack</td>
+          <td style="padding:8px 6px;font-family:monospace;font-size:11px;color:#64748b;">1 h</td>
+          <td style="padding:8px 6px;"><span style="font-size:10px;padding:2px 7px;background:#10b98115;color:#10b981;border-radius:3px;font-weight:700;">ACTIVE</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f8fafc;">
+          <td style="padding:8px 6px;font-weight:600;color:#0f172a;">Backup failed</td>
+          <td style="padding:8px 6px;font-family:monospace;font-size:11px;color:#475569;">backup.completed == failed</td>
+          <td style="padding:8px 6px;"><span style="display:inline-block;padding:1px 7px;font-size:10px;background:#dc262615;color:#dc2626;border-radius:3px;font-weight:700;">ERROR</span></td>
+          <td style="padding:8px 6px;font-size:11px;color:#475569;">Slack, Email, Page</td>
+          <td style="padding:8px 6px;font-family:monospace;font-size:11px;color:#64748b;">—</td>
+          <td style="padding:8px 6px;"><span style="font-size:10px;padding:2px 7px;background:#10b98115;color:#10b981;border-radius:3px;font-weight:700;">ACTIVE</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f8fafc;">
+          <td style="padding:8px 6px;font-weight:600;color:#0f172a;">Scrub paused</td>
+          <td style="padding:8px 6px;font-family:monospace;font-size:11px;color:#475569;">zfs.scrub paused for 24h</td>
+          <td style="padding:8px 6px;"><span style="display:inline-block;padding:1px 7px;font-size:10px;background:#d9770615;color:#d97706;border-radius:3px;font-weight:700;">WARN</span></td>
+          <td style="padding:8px 6px;font-size:11px;color:#475569;">Email</td>
+          <td style="padding:8px 6px;font-family:monospace;font-size:11px;color:#64748b;">—</td>
+          <td style="padding:8px 6px;"><span style="font-size:10px;padding:2px 7px;background:#10b98115;color:#10b981;border-radius:3px;font-weight:700;">ACTIVE</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top:14px;text-align:center;">
+      <button style="padding:7px 14px;font-size:11px;border:1px dashed #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;">+ Add rule</button>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </foreignObject>
+</svg>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 720" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD VM Create Wizard</title>
+  <foreignObject x="0" y="0" width="1280" height="720">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:720px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+      
+<div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+  <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+      <h2 style="margin:0;font-size:15px;font-weight:600;">Create virtual machine</h2>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;font-size:11px;color:#64748b;">
+      Step 2 of 5 · ~3 min remaining
+      <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">✕ Cancel</button>
+    </div>
+  </div>
+
+  <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+    <div style="display:flex;gap:0;align-items:center;">
+
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;">
+        <div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">1</div>
+        <span style="font-size:11px;font-weight:500;color:#475569">1. Template</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #1d4ed8;">
+        <div style="width:20px;height:20px;border-radius:50%;background:#1d4ed8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">2</div>
+        <span style="font-size:11px;font-weight:700;color:#0f172a">2. Identity</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;">
+        <div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">3</div>
+        <span style="font-size:11px;font-weight:500;color:#475569">3. Resources</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;">
+        <div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">4</div>
+        <span style="font-size:11px;font-weight:500;color:#475569">4. Storage + Network</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;">
+        <div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">5</div>
+        <span style="font-size:11px;font-weight:500;color:#475569">5. Review</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="flex:1;padding:24px 60px;overflow-y:auto;">
+    <h3 style="margin:0 0 18px;font-size:15px;font-weight:700;">Identity &amp; metadata</h3>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+      <div>
+        <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">VM name *</div>
+        <input type="text" value="mastodon-prod" placeholder="my-vm-name" style="width:100%;padding:9px 12px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;box-sizing:border-box;" />
+        <div style="font-size:10px;color:#94a3b8;margin-top:4px;">Lowercase, letters/digits/hyphens. ULID auto-generated.</div>
+
+        <div style="font-size:11px;font-weight:600;color:#475569;margin:14px 0 6px;">OS template</div>
+        <select style="width:100%;padding:9px 12px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;"><option>debian-12.6.0-amd64-netinst.iso</option><option>freebsd-14.2-RELEASE-amd64-disc1.iso</option><option>ubuntu-22.04.4-live-server-amd64.iso</option></select>
+
+        <div style="font-size:11px;font-weight:600;color:#475569;margin:14px 0 6px;">Description</div>
+        <textarea style="width:100%;padding:9px 12px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;box-sizing:border-box;height:90px;font-family:inherit;resize:vertical;">Production Mastodon instance for the cluster. Hosts 4 users. Daily backups via schedules.</textarea>
+
+        <div style="font-size:11px;font-weight:600;color:#475569;margin:14px 0 6px;">Tags</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span style="padding:4px 10px;background:#dbeafe;color:#1d4ed8;border-radius:9999px;font-size:11px;display:inline-flex;align-items:center;gap:4px;">production ✕</span>
+          <span style="padding:4px 10px;background:#dbeafe;color:#1d4ed8;border-radius:9999px;font-size:11px;display:inline-flex;align-items:center;gap:4px;">mastodon ✕</span>
+          <input type="text" placeholder="+ tag" style="border:none;outline:none;background:transparent;font-size:11px;color:#475569;width:60px;" />
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Generated ULID</div>
+        <div style="display:flex;gap:6px;align-items:center;padding:8px 12px;background:#f8fafc;border-radius:6px;font-family:monospace;font-size:11px;color:#1d4ed8;">
+          <code style="flex:1;">01J8X2H3F9K2M8N7P4Q5R6S7T8V</code>
+          <button style="border:none;background:transparent;color:#475569;font-size:11px;">↻</button>
+        </div>
+
+        <div style="font-size:11px;font-weight:600;color:#475569;margin:14px 0 6px;">Owner</div>
+        <select style="width:100%;padding:9px 12px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;"><option>admin (admin@cloudbsd.local)</option><option>mlapointe</option><option>deployer</option></select>
+
+        <div style="font-size:11px;font-weight:600;color:#475569;margin:14px 0 6px;">Auto-start</div>
+        <div style="display:flex;gap:14px;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <input type="checkbox" checked="checked" />
+            <span style="font-size:12px;color:#475569;">Boot on next node-01 master promotion</span>
+          </div>
+        </div>
+
+        <div style="font-size:11px;font-weight:600;color:#475569;margin:14px 0 6px;">Node affinity</div>
+        <div style="display:flex;gap:10px;">
+          <div style="flex:1;padding:9px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;text-align:center;font-size:11px;color:#475569;">— any node</div>
+          <div style="flex:1;padding:9px;border:1px solid #1d4ed8;border-radius:5px;background:#eff6ff;text-align:center;font-size:11px;color:#1d4ed8;font-weight:600;">node-01 only</div>
+          <div style="flex:1;padding:9px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;text-align:center;font-size:11px;color:#475569;">node-02 backup</div>
+        </div>
+
+        <div style="margin-top:18px;padding:12px;background:#fef3c7;border-radius:6px;font-size:11px;color:#92400e;line-height:1.5;">
+          <strong>⚠</strong> Pinning to node-01 prevents automatic failover. Consider using "any node" unless you have a specific reason.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:18px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;">
+    <button style="padding:10px 18px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">← Back</button>
+    <div style="display:flex;gap:10px;align-items:center;font-size:10px;color:#64748b;">
+      <div>Auto-save: on · 12s ago · 0 conflicts</div>
+      <button style="padding:10px 18px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:#1d4ed8;color:#ffffff;">Next: Resources →</button>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </foreignObject>
+</svg>

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 720" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Plugin Detail Page</title>
+  <foreignObject x="0" y="0" width="1280" height="720">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:720px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+      
+<div style="padding:24px 32px;height:100%;box-sizing:border-box;">
+  <div style="display:flex;align-items:start;gap:18px;margin-bottom:18px;">
+    <div style="width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,#0ea5e9,#1e40af);display:flex;align-items:center;justify-content:center;color:#ffffff;font-size:24px;font-weight:700;">gh</div>
+    <div style="flex:1;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <h2 style="margin:0;font-size:18px;font-weight:700;">github-mirrors</h2>
+        <span style="font-size:10px;padding:2px 8px;background:#d1fae5;color:#065f46;border-radius:9999px;font-weight:700;">ENABLED</span>
+        <span style="font-size:10px;padding:2px 8px;background:#dbeafe;color:#1d4ed8;border-radius:9999px;font-weight:700;">v1.4.2</span>
+        <span style="font-size:10px;color:#64748b;font-family:monospace;">@cloudbsd/plugin-github-mirrors</span>
+      </div>
+      <p style="margin:6px 0 8px;font-size:12px;color:#475569;max-width:760px;line-height:1.5;">Mirror public GitHub repos to local cluster for offline access and reduced latency. Hooks into git daemon to serve mirrored repos over both SSH and HTTPS. Caches Git LFS objects.</p>
+      <div style="display:flex;gap:14px;font-size:11px;color:#475569;">
+        <span><strong style="color:#1d4ed8;">82</strong> installs</span>
+        <span><strong style="color:#1d4ed8;">★ 4.8</strong> rating (24 reviews)</span>
+        <span>Signed by <strong style="color:#0f172a;">@cloudbsd</strong></span>
+        <span>Manifest v2</span>
+        <span>License: <strong style="color:#0f172a;">Apache-2.0</strong></span>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button style="padding:8px 14px;font-size:12px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;">View manifest</button>
+      <button style="padding:8px 14px;font-size:12px;font-weight:600;border:1px solid #fecaca;border-radius:5px;background:#fef2f2;color:#b91c1c;">Disable</button>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:14px;">
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:18px;">
+        <h4 style="margin:0 0 12px;font-size:13px;font-weight:700;">Recent activity</h4>
+        <table style="width:100%;font-size:12px;border-collapse:collapse;">
+          <thead><tr style="border-bottom:2px solid #e2e8f0;text-align:left;font-size:10px;color:#64748b;text-transform:uppercase;"><th style="padding:6px;">Time</th><th style="padding:6px;">Severity</th><th style="padding:6px;">Event</th><th style="padding:6px;">Detail</th></tr></thead>
+          <tbody>
+
+            <tr style="border-bottom:1px solid #f8fafc;">
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#64748b;">17:30:12</td>
+              <td style="padding:7px 6px;"><span style="display:inline-block;padding:1px 6px;font-size:9px;background:#64748b15;color:#64748b;border-radius:3px;font-weight:700;">INFO</span></td>
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#0f172a;">synced</td>
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#1d4ed8;">kubernetes/kubernetes (refresh)</td>
+            </tr>
+            <tr style="border-bottom:1px solid #f8fafc;">
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#64748b;">17:18:42</td>
+              <td style="padding:7px 6px;"><span style="display:inline-block;padding:1px 6px;font-size:9px;background:#64748b15;color:#64748b;border-radius:3px;font-weight:700;">INFO</span></td>
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#0f172a;">synced</td>
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#1d4ed8;">freebsd/freebsd-src (refresh)</td>
+            </tr>
+            <tr style="border-bottom:1px solid #f8fafc;">
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#64748b;">17:08:22</td>
+              <td style="padding:7px 6px;"><span style="display:inline-block;padding:1px 6px;font-size:9px;background:#64748b15;color:#64748b;border-radius:3px;font-weight:700;">INFO</span></td>
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#0f172a;">synced</td>
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#1d4ed8;">torvalds/linux (refresh)</td>
+            </tr>
+            <tr style="border-bottom:1px solid #f8fafc;">
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#64748b;">16:48:02</td>
+              <td style="padding:7px 6px;"><span style="display:inline-block;padding:1px 6px;font-size:9px;background:#d9770615;color:#d97706;border-radius:3px;font-weight:700;">WARN</span></td>
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#0f172a;">latency</td>
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#1d4ed8;">task #47 latency 60s+ (threshold exceeded)</td>
+            </tr>
+            <tr style="border-bottom:1px solid #f8fafc;">
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#64748b;">16:32:18</td>
+              <td style="padding:7px 6px;"><span style="display:inline-block;padding:1px 6px;font-size:9px;background:#64748b15;color:#64748b;border-radius:3px;font-weight:700;">INFO</span></td>
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#0f172a;">synced</td>
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#1d4ed8;">kubernetes-sigs/kustomize</td>
+            </tr>
+            <tr style="border-bottom:1px solid #f8fafc;">
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#64748b;">16:08:32</td>
+              <td style="padding:7px 6px;"><span style="display:inline-block;padding:1px 6px;font-size:9px;background:#64748b15;color:#64748b;border-radius:3px;font-weight:700;">INFO</span></td>
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#0f172a;">synced</td>
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#1d4ed8;">prometheus/prometheus</td>
+            </tr>
+            <tr style="border-bottom:1px solid #f8fafc;">
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#64748b;">15:48:02</td>
+              <td style="padding:7px 6px;"><span style="display:inline-block;padding:1px 6px;font-size:9px;background:#64748b15;color:#64748b;border-radius:3px;font-weight:700;">INFO</span></td>
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#0f172a;">synced</td>
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#1d4ed8;">freebsd/freebsd-ports</td>
+            </tr>
+            <tr style="border-bottom:1px solid #f8fafc;">
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#64748b;">15:32:18</td>
+              <td style="padding:7px 6px;"><span style="display:inline-block;padding:1px 6px;font-size:9px;background:#64748b15;color:#64748b;border-radius:3px;font-weight:700;">INFO</span></td>
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#0f172a;">synced</td>
+              <td style="padding:7px 6px;font-family:monospace;font-size:11px;color:#1d4ed8;">openebs/zfs</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top:8px;font-size:10px;color:#94a3b8;text-align:center;">842 sync events in 7 days</div>
+      </div>
+
+      <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:18px;">
+        <h4 style="margin:0 0 12px;font-size:13px;font-weight:700;">Permissions requested</h4>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+
+          <div style="padding:8px 12px;background:#f8fafc;border-radius:5px;font-size:11px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <code style="color:#1d4ed8;font-weight:600;">network.outbound</code>
+              <span style="font-size:9px;padding:1px 6px;background:#10b98115;color:#10b981;border-radius:3px;font-weight:700;">GRANTED</span>
+            </div>
+            <div style="font-size:10px;color:#64748b;margin-top:3px;">github.com:443 (HTTPS)</div>
+          </div>
+          <div style="padding:8px 12px;background:#f8fafc;border-radius:5px;font-size:11px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <code style="color:#1d4ed8;font-weight:600;">filesystem.read</code>
+              <span style="font-size:9px;padding:1px 6px;background:#10b98115;color:#10b981;border-radius:3px;font-weight:700;">GRANTED</span>
+            </div>
+            <div style="font-size:10px;color:#64748b;margin-top:3px;">/var/cache/github-mirrors</div>
+          </div>
+          <div style="padding:8px 12px;background:#f8fafc;border-radius:5px;font-size:11px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <code style="color:#1d4ed8;font-weight:600;">filesystem.write</code>
+              <span style="font-size:9px;padding:1px 6px;background:#10b98115;color:#10b981;border-radius:3px;font-weight:700;">GRANTED</span>
+            </div>
+            <div style="font-size:10px;color:#64748b;margin-top:3px;">/var/cache/github-mirrors</div>
+          </div>
+          <div style="padding:8px 12px;background:#f8fafc;border-radius:5px;font-size:11px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <code style="color:#1d4ed8;font-weight:600;">vm.read</code>
+              <span style="font-size:9px;padding:1px 6px;background:#94a3b815;color:#94a3b8;border-radius:3px;font-weight:700;">DECLINED</span>
+            </div>
+            <div style="font-size:10px;color:#64748b;margin-top:3px;">none requested</div>
+          </div>
+          <div style="padding:8px 12px;background:#f8fafc;border-radius:5px;font-size:11px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <code style="color:#1d4ed8;font-weight:600;">schedules.invoke</code>
+              <span style="font-size:9px;padding:1px 6px;background:#10b98115;color:#10b981;border-radius:3px;font-weight:700;">GRANTED</span>
+            </div>
+            <div style="font-size:10px;color:#64748b;margin-top:3px;">schedule.sync-mirror (cron 30min)</div>
+          </div>
+          <div style="padding:8px 12px;background:#f8fafc;border-radius:5px;font-size:11px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <code style="color:#1d4ed8;font-weight:600;">notifications.publish</code>
+              <span style="font-size:9px;padding:1px 6px;background:#10b98115;color:#10b981;border-radius:3px;font-weight:700;">GRANTED</span>
+            </div>
+            <div style="font-size:10px;color:#64748b;margin-top:3px;">low+ severity to Inbox</div>
+          </div>
+          <div style="padding:8px 12px;background:#f8fafc;border-radius:5px;font-size:11px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <code style="color:#1d4ed8;font-weight:600;">plugin.lifecycle</code>
+              <span style="font-size:9px;padding:1px 6px;background:#10b98115;color:#10b981;border-radius:3px;font-weight:700;">GRANTED</span>
+            </div>
+            <div style="font-size:10px;color:#64748b;margin-top:3px;">self-restart on update</div>
+          </div>
+          <div style="padding:8px 12px;background:#f8fafc;border-radius:5px;font-size:11px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <code style="color:#1d4ed8;font-weight:600;">ssh.key.read</code>
+              <span style="font-size:9px;padding:1px 6px;background:#94a3b815;color:#94a3b8;border-radius:3px;font-weight:700;">DECLINED</span>
+            </div>
+            <div style="font-size:10px;color:#64748b;margin-top:3px;">github.com deploy keys</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:18px;">
+        <h4 style="margin:0 0 10px;font-size:13px;font-weight:700;">Stats (7d)</h4>
+        <div style="display:flex;flex-direction:column;gap:7px;font-size:11px;color:#475569;">
+          <div style="display:flex;justify-content:space-between;"><span>Syncs:</span><strong style="color:#0f172a;">842</strong></div>
+          <div style="display:flex;justify-content:space-between;"><span>Repos mirrored:</span><strong style="color:#0f172a;">14</strong></div>
+          <div style="display:flex;justify-content:space-between;"><span>Data transferred:</span><strong style="color:#0f172a;">412 GB</strong></div>
+          <div style="display:flex;justify-content:space-between;"><span>Avg duration:</span><strong style="color:#0f172a;">12.4s</strong></div>
+          <div style="display:flex;justify-content:space-between;"><span>p99 duration:</span><strong style="color:#f59e0b;">82s</strong></div>
+          <div style="display:flex;justify-content:space-between;"><span>Failures:</span><strong style="color:#ef4444;">2</strong></div>
+        </div>
+      </div>
+
+      <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:14px;font-size:11px;color:#92400e;">
+        <strong>Update available:</strong> v1.4.4 fixes p99 latency spike. Click <em>Update</em> to roll forward (no downtime, ~30s).
+      </div>
+
+      <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:18px;">
+        <h4 style="margin:0 0 10px;font-size:13px;font-weight:700;">Configuration</h4>
+        <div style="font-size:11px;color:#475569;line-height:1.7;font-family:monospace;background:#f8fafc;padding:10px;border-radius:5px;max-height:220px;overflow:auto;">
+          <div>sources: 14</div>
+          <div>cache_size: 100 GB</div>
+          <div>sync_schedule: "*/30 * * * *"</div>
+          <div>retry: <span style="color:#1d4ed8;">max=3</span></div>
+          <div>mirror_format: bare</div>
+          <div>lfs: enabled</div>
+          <div>webhook_secret: <span style="color:#10b981;">****</span></div>
+          <div>auth: github_app</div>
+          <div>app_id: <span style="color:#0f172a;">482910</span></div>
+          <div>last_updated: 2026-04-15T14:32Z</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </foreignObject>
+</svg>

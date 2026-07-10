@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 720" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Help / Docs</title>
+  <foreignObject x="0" y="0" width="1280" height="720">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:720px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+      
+<div style="display:flex;height:100%;background:#f1f5f9;">
+  <div style="width:240px;background:#ffffff;border-right:1px solid #e2e8f0;padding:20px 18px;box-sizing:border-box;overflow-y:auto;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:18px;">
+      <span style="display:inline-block;padding:4px 8px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:4px;color:#ffffff;font-weight:700;font-size:10px;">Docs</span>
+      <span style="font-size:11px;color:#475569;">v1.4.3</span>
+    </div>
+    <input type="text" placeholder="Search docs..." style="width:100%;padding:6px 10px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px;box-sizing:border-box;margin-bottom:14px;" />
+    <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Getting started</div>
+    <div style="font-size:11px;color:#334155;line-height:2.2;">
+      <div>▶ Installation</div>
+      <div>▶ First run</div>
+      <div>▶ Concepts</div>
+      <div style="color:#1d4ed8;font-weight:600;background:#eff6ff;padding:2px 8px;border-radius:3px;">▶ Architecture</div>
+      <div>▶ Clustering</div>
+    </div>
+    <div style="font-size:11px;font-weight:600;color:#475569;margin:14px 0 6px;">VM</div>
+    <div style="font-size:11px;color:#334155;line-height:2.2;">
+      <div>▶ Create VM</div>
+      <div>▶ Snapshots</div>
+      <div>▶ Backups</div>
+      <div>▶ Console</div>
+      <div>▶ PCIe passthrough</div>
+    </div>
+    <div style="font-size:11px;font-weight:600;color:#475569;margin:14px 0 6px;">Plugin</div>
+    <div style="font-size:11px;color:#334155;line-height:2.2;">
+      <div>▶ Plugin manifest v2</div>
+      <div>▶ Permissions</div>
+      <div>▶ Lifecycle</div>
+      <div>▶ Marketplace</div>
+    </div>
+  </div>
+
+  <div style="flex:1;padding:32px 48px;overflow-y:auto;">
+    <div style="display:flex;justify-content:space-between;align-items:start;">
+      <div>
+        <div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;">Getting started › Concepts</div>
+        <h1 style="margin:6px 0 4px;font-size:24px;font-weight:800;color:#0f172a;">Architecture</h1>
+        <p style="margin:0;color:#64748b;font-size:13px;">Last updated 2026-07-04 · 12 min read · for ops engineers</p>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button style="padding:6px 12px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;">Edit page</button>
+        <button style="padding:6px 12px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;">Print</button>
+      </div>
+    </div>
+
+    <div style="margin-top:18px;font-size:13px;color:#0f172a;line-height:1.65;max-width:780px;">
+      <p>CloudBSD is a FreeBSD-native virtualization control plane. It manages virtual machines (bhyve), OCI containers, FreeBSD jails, ZFS datasets, snapshots, and replication through a cluster-aware API and web UI.</p>
+
+      <h2 style="margin:24px 0 10px;font-size:18px;font-weight:700;color:#0f172a;border-bottom:1px solid #e2e8f0;padding-bottom:6px;">Core components</h2>
+
+      <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:18px;margin-bottom:14px;">
+        <div style="margin-bottom:14px;">
+          <h3 style="margin:0;font-size:14px;font-weight:700;color:#1d4ed8;">⚡ Control plane (cloudbsd-server)</h3>
+          <p style="margin:6px 0;font-size:12px;color:#475569;">Node.js 24 + Express 5 process that runs on every cluster node. Exposes the HTTP API (port 3001), serves the SPA, and arbitrates CARP-elected leader status.</p>
+        </div>
+        <div style="margin-bottom:14px;">
+          <h3 style="margin:0;font-size:14px;font-weight:700;color:#1d4ed8;">⌖ Storage layer (ZFS)</h3>
+          <p style="margin:6px 0;font-size:12px;color:#475569;">A ZFS pool named <code style="color:#1d4ed8;">tank</code> is the substrate for all VMs, containers, jails, datasets, snapshots. Replication is zfs send/receive over the LAN with 30s default sync interval.</p>
+        </div>
+        <div>
+          <h3 style="margin:0;font-size:14px;font-weight:700;color:#1d4ed8;">⦿ Cluster fabric (CARP)</h3>
+          <p style="margin:6px 0;font-size:12px;color:#475569;">Common Address Redundancy Protocol arbitrates one master per cluster. Demotion triggers automatic VM migration to remaining node with zero downtime.</p>
+        </div>
+      </div>
+
+      <h2 style="margin:24px 0 10px;font-size:18px;font-weight:700;border-bottom:1px solid #e2e8f0;padding-bottom:6px;">Request lifecycle (VM create)</h2>
+      <pre style="background:#0f172a;color:#a0a0a0;padding:14px;border-radius:6px;font-size:11px;line-height:1.5;overflow-x:auto;">POST /api/vms
+  → auth: PAM verify (admin, MFA factor 2 OK)
+  → permission check: cluster.vm.write (granted)
+  → zfs create: tank/vms/jellyfin (12 GB quota)
+  → bhyve launch: 8 vCPU + 16 GB RAM + 1 NIC
+  → plugins notify: health-check, prometheus-exporter
+  → audit: 2 events (vm.create + ipmlementation)
+  → response 201 with VM details
+Total: 4.2s p50, 8.8s p99</pre>
+
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px;margin:14px 0;font-size:12px;color:#1e40af;">
+        <strong>Related</strong>: <a style="color:#1d4ed8;text-decoration:none;">Clustering guide</a> · <a style="color:#1d4ed8;text-decoration:none;">Storage architecture</a> · <a style="color:#1d4ed8;text-decoration:none;">Plugin manifest spec</a>
+      </div>
+
+      <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:14px;margin:14px 0;font-size:12px;color:#92400e;">
+        <strong>Was this helpful?</strong>
+        <span style="margin-left:12px;">
+          <button style="padding:4px 10px;font-size:11px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;">✓ Yes</button>
+          <button style="padding:4px 10px;font-size:11px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;margin-left:4px;">✗ No</button>
+          <button style="padding:4px 10px;font-size:11px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;margin-left:4px;">✍ Suggest edit</button>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </foreignObject>
+</svg>

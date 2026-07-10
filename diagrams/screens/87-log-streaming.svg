@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 720" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Log Streaming View</title>
+  <foreignObject x="0" y="0" width="1280" height="720">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:720px;background:#0f172a;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+      
+<div style="display:flex;flex-direction:column;height:100%;background:#0f172a;color:#cbd5e1;">
+  <div style="padding:10px 16px;background:#0a0f1a;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <span style="display:inline-block;padding:4px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:4px;color:#ffffff;font-weight:700;font-size:10px;">CloudBSD</span>
+      <span style="font-size:12px;font-weight:600;color:#ffffff;">Logs</span>
+      <span style="font-size:10px;background:#dc262615;color:#dc2626;padding:2px 6px;border-radius:3px;font-weight:700;">● LIVE</span>
+      <span style="font-size:10px;color:#64748b;">12,420 events buffered · streaming at 42/s</span>
+    </div>
+    <div style="display:flex;gap:6px;">
+      <button style="padding:4px 10px;font-size:10px;border:1px solid #334155;border-radius:4px;background:#1e293b;color:#cbd5e1;">⏸ Pause</button>
+      <button style="padding:4px 10px;font-size:10px;border:1px solid #334155;border-radius:4px;background:#1e293b;color:#cbd5e1;">Clear</button>
+      <button style="padding:4px 10px;font-size:10px;border:1px solid #334155;border-radius:4px;background:#1e293b;color:#cbd5e1;">Export</button>
+    </div>
+  </div>
+
+  <div style="padding:8px 16px;background:#1e293b;border-bottom:1px solid #334155;display:flex;gap:8px;align-items:center;font-size:11px;">
+    <input type="text" placeholder="Filter (regex or substring)..." value="(error|warn|node)" style="flex:1;padding:5px 8px;font-size:11px;font-family:monospace;background:#0f172a;border:1px solid #334155;border-radius:4px;color:#cbd5e1;" />
+    <select style="padding:5px 8px;font-size:11px;background:#0f172a;border:1px solid #334155;border-radius:4px;color:#cbd5e1;"><option>all modules</option><option>vm.bhyve</option><option>zfs.scrub</option><option>auth.pam</option><option>plugin</option></select>
+    <select style="padding:5px 8px;font-size:11px;background:#0f172a;border:1px solid #334155;border-radius:4px;color:#cbd5e1;"><option>all severities</option><option>ERROR+</option><option>WARN+</option><option>INFO+</option></select>
+    <select style="padding:5px 8px;font-size:11px;background:#0f172a;border:1px solid #334155;border-radius:4px;color:#cbd5e1;"><option>cluster-wide</option><option>node-01</option><option>node-02</option><option>node-03</option></select>
+    <span style="font-size:11px;color:#94a3b8;padding:5px 8px;">matched: 142</span>
+  </div>
+
+  <div style="flex:1;overflow-y:auto;padding:10px 16px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;line-height:1.6;">
+<div><span style="color:#64748b;">17:32:18.422</span> <span style="color:#f87171;font-weight:700;">ERROR</span> <span style="color:#38bdf8;">vm.bhyve</span> <span style="color:#cbd5e1;">VM 'jellyfin' failed to start: out of memory (bhyve maxmem=8G, requested=10G)</span></div>
+<div><span style="color:#64748b;">17:32:14.018</span> <span style="color:#f87171;font-weight:700;">ERROR</span> <span style="color:#38bdf8;">auth.pam</span> <span style="color:#cbd5e1;">Failed: user=root ip=10.0.99.42 reason='account locked (3 fails)'</span></div>
+<div><span style="color:#64748b;">17:31:42.118</span> <span style="color:#fbbf24;font-weight:700;">WARN </span> <span style="color:#38bdf8;">plugin</span> <span style="color:#cbd5e1;">github-mirrors task #47 latency 60.2s (threshold 60s) — spike detected</span></div>
+<div><span style="color:#64748b;">17:30:48.221</span> <span style="color:#fbbf24;font-weight:700;">WARN </span> <span style="color:#38bdf8;">zfs.scrub</span> <span style="color:#cbd5e1;">scrub paused on tank/vms: checksum error 1.2e-4 (threshold 1e-5)</span></div>
+<div><span style="color:#64748b;">17:30:32.117</span> <span style="color:#94a3b8;font-weight:700;">INFO </span> <span style="color:#38bdf8;">task.sched</span> <span style="color:#cbd5e1;">task #42 'daily-tank-data' enqueued for 2026-07-08 02:00 UTC</span></div>
+<div><span style="color:#64748b;">17:30:18.044</span> <span style="color:#94a3b8;font-weight:700;">INFO </span> <span style="color:#38bdf8;">net.bgp</span> <span style="color:#cbd5e1;">BGP neighbor 10.0.99.1 state=established uptime=14d02h</span></div>
+<div><span style="color:#64748b;">17:30:00.001</span> <span style="color:#94a3b8;font-weight:700;">INFO </span> <span style="color:#38bdf8;">api.req</span> <span style="color:#cbd5e1;">GET /api/vms?page=1&amp;limit=50 200 18ms user=admin</span></div>
+<div><span style="color:#64748b;">17:29:48.331</span> <span style="color:#94a3b8;font-weight:700;">INFO </span> <span style="color:#38bdf8;">node.heartbeat</span> <span style="color:#cbd5e1;">node-02 rtt=8ms load=0.42 mem=62% disk=2.4GB/s</span></div>
+<div><span style="color:#64748b;">17:29:32.012</span> <span style="color:#94a3b8;font-weight:700;">INFO </span> <span style="color:#38bdf8;">vm.bhyve</span> <span style="color:#cbd5e1;">snapshot created mastodon@snap-2026-07-07 (12 GB)</span></div>
+<div><span style="color:#64748b;">17:29:18.722</span> <span style="color:#94a3b8;font-weight:700;">INFO </span> <span style="color:#38bdf8;">volume.zfs</span> <span style="color:#cbd5e1;">zfs receive tank/replicated complete (41.2 GB, 4m18s)</span></div>
+<div><span style="color:#64748b;">17:28:48.114</span> <span style="color:#94a3b8;font-weight:700;">INFO </span> <span style="color:#38bdf8;">audit</span> <span style="color:#cbd5e1;">user=admin action=settings.update target=theme</span></div>
+<div><span style="color:#64748b;">17:28:32.001</span> <span style="color:#94a3b8;font-weight:700;">INFO </span> <span style="color:#38bdf8;">jail.ezjail</span> <span style="color:#cbd5e1;">jail 'mqtt-broker' restarted (graceful 2.1s)</span></div>
+<div><span style="color:#64748b;">17:28:18.842</span> <span style="color:#fbbf24;font-weight:700;">WARN </span> <span style="color:#38bdf8;">container</span> <span style="color:#cbd5e1;">container 'postgres-16' health check failed (3rd in 5 min)</span></div>
+<div><span style="color:#64748b;">17:28:02.111</span> <span style="color:#94a3b8;font-weight:700;">INFO </span> <span style="color:#38bdf8;">tls.cert</span> <span style="color:#cbd5e1;">certificate 'cloudbsd-admin' renewed (89 days remaining)</span></div>
+<div><span style="color:#64748b;">17:27:48.422</span> <span style="color:#94a3b8;font-weight:700;">INFO </span> <span style="color:#38bdf8;">kernel</span> <span style="color:#cbd5e1;">carp demote: node-03 demoted to backup (preempt_count 0)</span></div>
+<div><span style="color:#64748b;">17:27:18.044</span> <span style="color:#94a3b8;font-weight:700;">INFO </span> <span style="color:#38bdf8;">smtp</span> <span style="color:#cbd5e1;">notification sent: backup.jellyfin.failed@10.0.10.22 200 1.2s</span></div>
+<div><span style="color:#64748b;">17:26:48.001</span> <span style="color:#94a3b8;font-weight:700;">INFO </span> <span style="color:#38bdf8;">audit</span> <span style="color:#cbd5e1;">user=mlapointe action=vm.view target=jellyfin</span></div>
+
+    <div style="display:flex;align-items:center;gap:6px;color:#94a3b8;margin-top:8px;">
+      <span>… live tail</span>
+      <span style="background:#cbd5e1;color:#0f172a;width:8px;height:14px;display:inline-block;animation:blink 1s steps(1) infinite;"></span>
+    </div>
+  </div>
+
+  <div style="padding:6px 16px;background:#0a0f1a;border-top:1px solid #1e293b;font-size:10px;color:#64748b;display:flex;justify-content:space-between;">
+    <span>Showing 142 of 12,420 · filter: "(error|warn|node)" (case-insensitive)</span>
+    <span>buffer 256 MB · retention 14 days · auto-scroll: ON</span>
+  </div>
+</div>
+
+    </div>
+  </foreignObject>
+</svg>
