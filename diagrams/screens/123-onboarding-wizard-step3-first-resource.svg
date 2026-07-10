@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Onboarding Wizard — Step 3 of 4 — First resource</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">Your first resource</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Onboarding · 3 of 4</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:11px;color:#64748b;">
+            <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">Skip tour</button>
+          </div>
+        </div>
+
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">1. Welcome</span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">2. Cluster basics</span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #1d4ed8;background:#1d4ed810;"><div style="width:20px;height:20px;border-radius:50%;background:#1d4ed8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">3</div><span style="font-size:11px;font-weight:600;color:#1d4ed8;">First resource</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">4</div><span style="font-size:11px;color:#475569;">Done</span></div>
+          </div>
+        </div>
+
+        <div style="flex:1;display:flex;background:#f1f5f9;overflow:hidden;">
+          <div style="flex:1;padding:32px 40px;overflow-y:auto;">
+            <h1 style="margin:0 0 8px;font-size:26px;font-weight:700;color:#0f172a;">Pick what to create first</h1>
+            <p style="margin:0 0 28px;font-size:14px;color:#475569;max-width:680px;line-height:1.55;">All resource types use the same wizard pattern. Hover any option to see what it provisions.</p>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <label style="padding:18px;background:#1d4ed810;border:2px solid #1d4ed8;border-radius:10px;cursor:pointer;">
+                <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
+                  <div style="width:48px;height:48px;border-radius:10px;background:#1d4ed8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:24px;">▣</div>
+                  <div><div style="font-size:16px;font-weight:700;color:#1d4ed8;">Virtual Machine</div><div style="font-size:11px;color:#1e3a8a;font-weight:600;">RECOMMENDED</div></div>
+                </div>
+                <div style="font-size:12px;color:#475569;line-height:1.5;">Provisioned via QEMU/KVM. Pick an ISO template + identity + resources. Boots in ~45 s.</div>
+              </label>
+
+              <label style="padding:18px;background:#ffffff;border:1px solid #cbd5e1;border-radius:10px;cursor:pointer;">
+                <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
+                  <div style="width:48px;height:48px;border-radius:10px;background:#0d9488;color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:24px;">⬚</div>
+                  <div><div style="font-size:16px;font-weight:700;color:#0f172a;">Container</div><div style="font-size:11px;color:#64748b;">OCI / Podman-compatible</div></div>
+                </div>
+                <div style="font-size:12px;color:#475569;line-height:1.5;">Pull from Docker Hub / GitHub Container Registry / CloudBSD local. Boots in ~12 s.</div>
+              </label>
+
+              <label style="padding:18px;background:#ffffff;border:1px solid #cbd5e1;border-radius:10px;cursor:pointer;">
+                <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
+                  <div style="width:48px;height:48px;border-radius:10px;background:#7c2d12;color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:24px;">⛓</div>
+                  <div><div style="font-size:16px;font-weight:700;color:#0f172a;">FreeBSD Jail</div><div style="font-size:11px;color:#64748b;">Native FreeBSD container</div></div>
+                </div>
+                <div style="font-size:12px;color:#475569;line-height:1.5;">Shares host kernel. VNET networking, ZFS dataset, rctl limits. Boots in ~3 s.</div>
+              </label>
+
+              <label style="padding:18px;background:#ffffff;border:1px solid #cbd5e1;border-radius:10px;cursor:pointer;">
+                <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
+                  <div style="width:48px;height:48px;border-radius:10px;background:#0d9488;color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:24px;">🗄</div>
+                  <div><div style="font-size:16px;font-weight:700;color:#0f172a;">ZFS Dataset</div><div style="font-size:11px;color:#64748b;">Volume (create only)</div></div>
+                </div>
+                <div style="font-size:12px;color:#475569;line-height:1.5;">A ZFS dataset for storing data. Pick a parent + quota + compression + snapshot policy.</div>
+              </label>
+
+              <label style="padding:18px;background:#ffffff;border:1px solid #cbd5e1;border-radius:10px;cursor:pointer;">
+                <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
+                  <div style="width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,#0ea5e9,#1d4ed8);color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:24px;">🌐</div>
+                  <div><div style="font-size:16px;font-weight:700;color:#0f172a;">IP Pool</div><div style="font-size:11px;color:#64748b;">Subnet</div></div>
+                </div>
+                <div style="font-size:12px;color:#475569;line-height:1.5;">Define a new subnet for handing out dual-stack IPs. Pick CIDR + gateway + DHCP range.</div>
+              </label>
+
+              <label style="padding:18px;background:#ffffff;border:1px solid #cbd5e1;border-radius:10px;cursor:pointer;">
+                <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
+                  <div style="width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#1e40af);color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:24px;">🧩</div>
+                  <div><div style="font-size:16px;font-weight:700;color:#0f172a;">Node</div><div style="font-size:11px;color:#64748b;">Add hardware to cluster</div></div>
+                </div>
+                <div style="font-size:12px;color:#475569;line-height:1.5;">Register a physical server. Manual setup / auto-detect (mDNS) / join-token.</div>
+              </label>
+            </div>
+
+            <div style="margin-top:18px;padding:14px 18px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;display:flex;align-items:center;gap:14px;">
+              <input type="checkbox" style="accent-color:#1d4ed8;width:18px;height:18px;"/>
+              <div style="flex:1;">
+                <div style="font-size:12px;font-weight:600;color:#0f172a;">Don't show me this on next login</div>
+                <div style="font-size:11px;color:#475569;line-height:1.4;">You can always create resources from the sidebar. Re-enable this tour in Settings → Help.</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="width:280px;padding:28px 24px;border-left:1px solid #e2e8f0;background:#ffffff;overflow-y:auto;">
+            <div style="padding:14px;background:#1d4ed810;border:1px solid #bfdbfe;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#1d4ed8;letter-spacing:0.06em;margin-bottom:6px;">PICKED</div>
+              <div style="font-size:14px;color:#1e3a8a;font-weight:700;">Virtual Machine</div>
+              <div style="font-size:11px;color:#475569;margin-top:4px;">QEMU/KVM · 5-step wizard · ~45 s</div>
+            </div>
+            <div style="padding:14px;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;">
+              <div style="font-size:11px;font-weight:700;color:#92400e;letter-spacing:0.06em;margin-bottom:6px;">PRO TIP</div>
+              <div style="font-size:11px;color:#78350f;line-height:1.5;">For tinkering, pick <strong>Container</strong> (seconds to boot) or <strong>Jail</strong> (3 s boot). VMs are best for full OS workloads.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:9px 16px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">← Cluster basics</button>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:11px;color:#94a3b8;">A VM wizard will open in 60 s</span>
+            <button style="padding:10px 22px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:linear-gradient(135deg,#1d4ed8,#0d9488);color:#ffffff;">Create VM →</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>

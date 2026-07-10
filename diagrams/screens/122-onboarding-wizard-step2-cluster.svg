@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Onboarding Wizard — Step 2 of 4 — Cluster basics</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">Cluster basics</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Onboarding · 2 of 4</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:11px;color:#64748b;">
+            <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">Skip tour</button>
+          </div>
+        </div>
+
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">1. Welcome</span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #1d4ed8;background:#1d4ed810;"><div style="width:20px;height:20px;border-radius:50%;background:#1d4ed8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">2</div><span style="font-size:11px;font-weight:600;color:#1d4ed8;">Cluster basics</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">3</div><span style="font-size:11px;color:#475569;">First resource</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">4</div><span style="font-size:11px;color:#475569;">Done</span></div>
+          </div>
+        </div>
+
+        <div style="flex:1;display:flex;background:#f1f5f9;overflow:hidden;">
+          <div style="flex:1;padding:32px 40px;overflow-y:auto;">
+            <h1 style="margin:0 0 8px;font-size:26px;font-weight:700;color:#0f172a;">How the cluster is laid out</h1>
+            <p style="margin:0 0 28px;font-size:14px;color:#64748b;max-width:680px;line-height:1.55;">You have <strong style="color:#0f172a;">1 master + 5 workers</strong> wired together. The master runs the control plane + schedules workloads. Workers run the workloads themselves.</p>
+
+            <!-- Cluster diagram -->
+            <div style="padding:24px;background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);border-radius:12px;margin-bottom:24px;position:relative;min-height:240px;">
+              <div style="font-size:11px;font-weight:700;color:#60a5fa;letter-spacing:0.08em;margin-bottom:14px;">CLUSTER TOPOLOGY</div>
+              <div style="position:relative;display:flex;justify-content:space-between;align-items:center;height:180px;">
+                <!-- Master in center -->
+                <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#7c3aed);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#ffffff;box-shadow:0 0 30px rgba(168,85,247,0.5);">
+                  <div style="font-size:32px;">★</div>
+                  <div style="font-size:11px;font-weight:700;">Master</div>
+                  <div style="font-size:10px;color:#fff;opacity:0.8;">node-1</div>
+                </div>
+                <!-- Workers around -->
+                <div style="position:absolute;left:5%;top:50%;transform:translate(0,-50%);width:74px;height:74px;border-radius:50%;background:#1e40af;color:#ffffff;display:flex;flex-direction:column;align-items:center;justify-content:center;"><div style="font-size:24px;">▣</div><div style="font-size:10px;font-weight:700;">node-2</div></div>
+                <div style="position:absolute;left:22%;top:15%;width:74px;height:74px;border-radius:50%;background:#1e40af;color:#ffffff;display:flex;flex-direction:column;align-items:center;justify-content:center;"><div style="font-size:24px;">▣</div><div style="font-size:10px;font-weight:700;">node-3</div></div>
+                <div style="position:absolute;right:22%;top:15%;width:74px;height:74px;border-radius:50%;background:#1e40af;color:#ffffff;display:flex;flex-direction:column;align-items:center;justify-content:center;"><div style="font-size:24px;">▣</div><div style="font-size:10px;font-weight:700;">node-4</div></div>
+                <div style="position:absolute;right:5%;top:50%;transform:translate(0,-50%);width:74px;height:74px;border-radius:50%;background:#1e40af;color:#ffffff;display:flex;flex-direction:column;align-items:center;justify-content:center;"><div style="font-size:24px;">▣</div><div style="font-size:10px;font-weight:700;">node-5</div></div>
+                <div style="position:absolute;left:50%;top:75%;transform:translate(-50%,0);width:74px;height:74px;border-radius:50%;background:#dc2626;color:#ffffff;display:flex;flex-direction:column;align-items:center;justify-content:center;"><div style="font-size:24px;">⚠</div><div style="font-size:10px;font-weight:700;">node-6</div></div>
+                <!-- Connection lines (dotted) -->
+                <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="50%" cy="50%" r="120" fill="none" stroke="#475569" stroke-width="1" stroke-dasharray="2,4"/>
+                </svg>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:#64748b;margin-top:14px;">
+                <span>5 healthy workers</span>
+                <span style="color:#dc2626;">1 offline: node-6</span>
+                <span>Latency: 0.3 ms avg</span>
+              </div>
+            </div>
+
+            <!-- Three concept cards -->
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;">
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;border-top:3px solid #a855f7;">
+                <div style="font-size:18px;color:#7c3aed;margin-bottom:6px;">★</div>
+                <div style="font-size:13px;font-weight:700;color:#0f172a;margin-bottom:4px;">Master</div>
+                <div style="font-size:11px;color:#475569;line-height:1.5;">Runs the API + scheduler + UI. Single point of failure — protect it.</div>
+              </div>
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;border-top:3px solid #1e40af;">
+                <div style="font-size:18px;color:#1e40af;margin-bottom:6px;">▣</div>
+                <div style="font-size:13px;font-weight:700;color:#0f172a;margin-bottom:4px;">Worker</div>
+                <div style="font-size:11px;color:#475569;line-height:1.5;">Runs VMs / containers / jails. Lose 1 → workloads migrate.</div>
+              </div>
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;border-top:3px solid #0d9488;">
+                <div style="font-size:18px;color:#0d9488;margin-bottom:6px;">⌽</div>
+                <div style="font-size:13px;font-weight:700;color:#0f172a;margin-bottom:4px;">Replication</div>
+                <div style="font-size:11px;color:#475569;line-height:1.5;">ZFS snapshots + pglogical for DBs replicate across nodes.</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="width:280px;padding:28px 24px;border-left:1px solid #e2e8f0;background:#ffffff;overflow-y:auto;">
+            <div style="padding:14px;background:#1e293b;border-radius:8px;color:#94a3b8;font-size:12px;line-height:1.5;">
+              <div style="font-size:11px;font-weight:700;color:#60a5fa;letter-spacing:0.06em;margin-bottom:8px;">WHY THIS MATTERS</div>
+              When a worker fails, the master detects the loss within 30 s and migrates VMs to other workers. The admin UI shows this as a live event in the logs feed. Migration target = "node with most free RAM" by default — configurable in <code style="font-family:monospace;background:#0f172a;padding:1px 5px;border-radius:3px;color:#a5f3fc;">cluster/preferences.yaml</code>.
+            </div>
+            <div style="margin-top:16px;padding:14px;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;">
+              <div style="font-size:11px;font-weight:700;color:#92400e;letter-spacing:0.06em;margin-bottom:6px;">CHECK YOURSELF</div>
+              <div style="font-size:11px;color:#78350f;line-height:1.5;">How many VMs run on <code style="font-family:monospace;background:#fef9c3;padding:1px 5px;border-radius:3px;">node-3</code> right now? What's its CPU saturation?</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:9px 16px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">← Welcome</button>
+          <button style="padding:10px 22px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:#1d4ed8;color:#ffffff;">First resource →</button>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>

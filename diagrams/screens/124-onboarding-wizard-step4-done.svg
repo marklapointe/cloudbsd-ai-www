@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Onboarding Wizard — Step 4 of 4 — Done</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">All set</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Onboarding · 4 of 4</span>
+          </div>
+        </div>
+
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">1. Welcome</span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">2. Cluster basics</span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;color:#475569;">3. First resource</span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #16a34a;background:#16a34a10;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">✓</div><span style="font-size:11px;font-weight:600;color:#16a34a;">Done</span></div>
+          </div>
+        </div>
+
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0f172a 0%,#064e3b 100%);overflow:hidden;">
+          <div style="text-align:center;max-width:760px;padding:40px;">
+            <div style="display:inline-block;padding:24px;border-radius:50%;background:rgba(16,185,129,0.2);margin-bottom:24px;">
+              <div style="font-size:60px;color:#10b981;">✓</div>
+            </div>
+            <h1 style="margin:0 0 16px;font-size:46px;font-weight:800;color:#ffffff;letter-spacing:-0.02em;">You're ready</h1>
+            <p style="margin:0 0 32px;font-size:17px;color:#a7f3d0;line-height:1.55;">You learned: cluster topology, resource types, and how to provision one. Bookmark anything in the help icon in the top bar.</p>
+            <div style="padding:24px;background:rgba(15,23,42,0.6);border:1px solid #334155;border-radius:12px;margin-bottom:32px;text-align:left;">
+              <div style="font-size:11px;font-weight:700;color:#10b981;letter-spacing:0.08em;margin-bottom:14px;">RECOMMENDED NEXT STEPS</div>
+              <div style="font-size:13px;color:#cbd5e1;line-height:2;">
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #334155;">
+                  <span><span style="color:#10b981;">①</span> &#160; Set up 2FA for your admin account</span>
+                  <span style="font-size:11px;color:#64748b;">~2 min</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #334155;">
+                  <span><span style="color:#10b981;">②</span> &#160; Read the wire-protocol tour (1-pager overview)</span>
+                  <span style="font-size:11px;color:#64748b;">~3 min</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #334155;">
+                  <span><span style="color:#10b981;">③</span> &#160; Provision a small staging VM</span>
+                  <span style="font-size:11px;color:#64748b;">~5 min</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #334155;">
+                  <span><span style="color:#10b981;">④</span> &#160; Configure snapshot + backup policy</span>
+                  <span style="font-size:11px;color:#64748b;">~5 min</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;">
+                  <span><span style="color:#10b981;">⑤</span> &#160; Invite a teammate</span>
+                  <span style="font-size:11px;color:#64748b;">~1 min</span>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;gap:14px;justify-content:center;">
+              <button style="padding:14px 28px;font-size:14px;font-weight:600;border:1px solid #475569;border-radius:8px;background:transparent;color:#cbd5e1;cursor:pointer;">Replay tour later</button>
+              <button style="padding:14px 36px;font-size:15px;font-weight:600;border:none;border-radius:8px;background:#ffffff;color:#064e3b;cursor:pointer;">Take me to dashboard →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>

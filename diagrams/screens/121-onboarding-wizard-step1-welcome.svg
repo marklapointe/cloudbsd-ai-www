@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Onboarding Wizard — Step 1 of 4 — Welcome</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">Welcome to CloudBSD</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Onboarding · 1 of 4</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:11px;color:#64748b;">
+            <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">Skip tour</button>
+          </div>
+        </div>
+
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #1d4ed8;background:#1d4ed810;"><div style="width:20px;height:20px;border-radius:50%;background:#1d4ed8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">1</div><span style="font-size:11px;font-weight:600;color:#1d4ed8;">Welcome</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">2</div><span style="font-size:11px;color:#475569;">Cluster basics</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">3</div><span style="font-size:11px;color:#475569;">First resource</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">—</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">4</div><span style="font-size:11px;color:#475569;">Done</span></div>
+          </div>
+        </div>
+
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);overflow:hidden;">
+          <div style="text-align:center;max-width:720px;padding:40px;">
+            <div style="display:inline-block;padding:20px 28px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:18px;margin-bottom:32px;box-shadow:0 20px 50px rgba(14,165,233,0.3);">
+              <div style="font-size:60px;color:#ffffff;font-weight:900;letter-spacing:-0.04em;">C</div>
+            </div>
+            <h1 style="margin:0 0 16px;font-size:48px;font-weight:800;color:#ffffff;letter-spacing:-0.02em;line-height:1.05;">Welcome, admin</h1>
+            <p style="margin:0 0 32px;font-size:18px;color:#94a3b8;line-height:1.5;">You're looking at 1 cluster, 6 nodes, and a fresh CloudBSD Admin shell. Let's take 3 minutes to orient you.</p>
+            <div style="display:inline-block;padding:18px 30px;background:#1e293b;border:1px solid #334155;border-radius:10px;margin-bottom:32px;text-align:left;">
+              <div style="font-size:11px;font-weight:700;color:#60a5fa;letter-spacing:0.08em;margin-bottom:8px;">WHAT WE'LL COVER</div>
+              <div style="font-size:14px;color:#cbd5e1;line-height:1.8;">
+                <div style="display:flex;align-items:center;gap:10px;"><span style="color:#22d3ee;">①</span> Cluster topology + how nodes talk</div>
+                <div style="display:flex;align-items:center;gap:10px;"><span style="color:#22d3ee;">②</span> Resource model: VMs, containers, jails, volumes, networks</div>
+                <div style="display:flex;align-items:center;gap:10px;"><span style="color:#22d3ee;">③</span> Provisioning your first resource</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:14px;justify-content:center;">
+              <button style="padding:14px 32px;font-size:15px;font-weight:600;border:1px solid #475569;border-radius:8px;background:#1e293b;color:#cbd5e1;cursor:pointer;">Maybe later</button>
+              <button style="padding:14px 36px;font-size:15px;font-weight:600;border:none;border-radius:8px;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;cursor:pointer;box-shadow:0 6px 24px rgba(14,165,233,0.4);">Take the tour →</button>
+            </div>
+            <div style="margin-top:24px;font-size:11px;color:#64748b;">Lasts ~3 minutes. You can replay it from Settings → Help → Re-run tour.</div>
+          </div>
+        </div>
+
+        <div style="padding:14px 32px;background:#0f172a;border-top:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:11px;color:#64748b;">Step 1 — Welcome</div>
+          <button style="padding:10px 22px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:#1d4ed8;color:#ffffff;">Continue →</button>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>
