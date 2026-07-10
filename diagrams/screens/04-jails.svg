@@ -89,6 +89,29 @@
             </table>
           </div>
 
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-top:1px solid #e2e8f0;background:#f8fafc;font-size:10px;color:#64748b;font-weight:500;">
+          <span>Showing <b style="color:#0f172a;">1-50</b> of <b style="color:#0f172a;">48</b></span>
+          <div style="display:flex;gap:12px;align-items:center;">
+            <div style="display:flex;gap:4px;align-items:center;">
+              <button style="padding:3px 8px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#94a3b8;cursor:default;">‹</button>
+              <button style="padding:3px 9px;border:1px solid #2563eb;border-radius:4px;background:#2563eb;color:#ffffff;font-weight:600;">1</button>
+              <button style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;">2</button>
+              <button style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;">3</button>
+              <button style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;">4</button>
+              <button style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;">5</button>
+              <button style="padding:3px 8px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;">›</button>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center;">Per page:
+              <select style="font-size:10px;border:1px solid #cbd5e1;border-radius:3px;padding:2px 4px;background:#ffffff;color:#475569;">
+                <option>25</option>
+                <option selected="selected">50</option>
+                <option>100</option>
+                <option>200</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
         </main>
       </div>
     </div>

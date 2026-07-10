@@ -9250,6 +9250,35 @@ grep -rE 'class="[^"]*\b(bg-|text-|p-[0-9]|m-[0-9]|w-[0-9]|h-[0-9]|flex|grid|rou
     - Implementation: T94d extended to 3-state enum 'cozy' | 'compact' | 'extra'
     - Persisted in localStorage `cloudbsd.density.v1` (new users default to Cozy)
     - Cross-tab sync via `BroadcastChannel('cloudbsd-settings')`
+  - T94f (NEW 2026-07-09): ✅ Extra-compact extended to all 9 list views (234 KB total):
+    - `34-extra-compact-list-container.svg` (33.2 KB)
+    - `35-extra-compact-list-jail.svg` (33.3 KB)
+    - `36-extra-compact-list-volume.svg` (36.7 KB)
+    - `37-extra-compact-list-user.svg` (30.4 KB)
+    - `38-extra-compact-list-log.svg` (26.5 KB)
+    - `39-extra-compact-list-notification.svg` (26.3 KB)
+    - `40-extra-compact-list-audit-log.svg` (28.1 KB)
+    - `41-extra-compact-list-history.svg` (25.5 KB)
+    - All 9 list views now support all 3 density modes (Cozy | Compact | Extra)
+  - T94g (NEW 2026-07-09): ✅ Empty-state canonical SVGs
+
+  - T94h (NEW 2026-07-09): ✅ Per-page selector + pagination footer added to 4 list screens (was missing):
+    - `diagrams/screens/03-containers.svg` (84 total, 50/page, 5-page nav)
+    - `diagrams/screens/04-jails.svg` (48 total, 50/page, 1-page nav)
+    - `diagrams/screens/08-users.svg` (24 total, 24/page, 1-page nav)
+    - `diagrams/screens/09-logs.svg` (18.0K buffered, 200/page, 90-page nav)
+    - Pattern matches existing 02-vms.svg footer (Per-page select with 25/50/100/200 options, prev/next buttons, page numbers 1-5)
+    - All 4 SVGs validated XML-clean (9 variants, 25.7 KB total):
+    - `42-empty-list-vm.svg` — no VMs exist (clean state)
+    - `43-empty-list-container.svg` — filtered to zero
+    - `44-empty-list-jail.svg` — loader error
+    - `45-empty-list-volume.svg` — all archived
+    - `46-empty-list-user.svg` — no permission
+    - `47-empty-list-log.svg` — empty buffer
+    - `48-empty-list-notification.svg` — all caught up (success state)
+    - `49-empty-list-audit-log.svg` — first-time (clean)
+    - `50-empty-list-history.svg` — service offline
+    - Rules added to `ui-index.md §20.5`: tone-by-trigger, 3-action cap, identical across density modes, persistent container header
   - **Acceptance**: User can toggle Cozy/Compact; choice persists across sessions; all 8 list views respect setting.
 
 ### Deferred (out of Wave 11 scope)

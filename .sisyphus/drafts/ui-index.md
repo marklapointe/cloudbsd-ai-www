@@ -412,18 +412,58 @@ Per-user preference persisted via `SettingsService.density$` signal. Default = C
 
 ### Canonical example SVGs
 
-| File | Pattern | Tier |
-|---|---|---|
-| `diagrams/components/24-compact-list-vm.svg` | VMs in Compact | 1 of 2 |
-| `diagrams/components/25-compact-list-container.svg` | Containers in Compact | n/a |
-| `diagrams/components/26-compact-list-jail.svg` | Jails in Compact | n/a |
-| `diagrams/components/27-compact-list-volume.svg` | Volumes in Compact | n/a |
-| `diagrams/components/28-compact-list-user.svg` | Users in Compact | n/a |
-| `diagrams/components/29-compact-list-log.svg` | Logs in Compact | n/a |
-| `diagrams/components/30-compact-list-notification.svg` | Notifications in Compact | n/a |
-| `diagrams/components/31-compact-list-audit-log.svg` | Audit Log in Compact | n/a |
-| `diagrams/components/32-compact-list-history.svg` | History in Compact | n/a |
-| `diagrams/components/33-extra-compact-list-vm.svg` | VMs in Extra-Compact (3-way toggle) | 2 of 2 |
+#### Compact tier (~28px rows, 20 visible)
+
+| File | Subject |
+|---|---|
+| `diagrams/components/24-compact-list-vm.svg` | VMs canonical |
+| `diagrams/components/25-compact-list-container.svg` | Containers |
+| `diagrams/components/26-compact-list-jail.svg` | Jails |
+| `diagrams/components/27-compact-list-volume.svg` | Volumes |
+| `diagrams/components/28-compact-list-user.svg` | Users |
+| `diagrams/components/29-compact-list-log.svg` | Logs |
+| `diagrams/components/30-compact-list-notification.svg` | Notifications |
+| `diagrams/components/31-compact-list-audit-log.svg` | Audit Log |
+| `diagrams/components/32-compact-list-history.svg` | History |
+
+#### Extra-compact tier (~20px rows, 30 visible, monospace)
+
+| File | Subject |
+|---|---|
+| `diagrams/components/33-extra-compact-list-vm.svg` | VMs (3-way toggle canonical) |
+| `diagrams/components/34-extra-compact-list-container.svg` | Containers |
+| `diagrams/components/35-extra-compact-list-jail.svg` | Jails |
+| `diagrams/components/36-extra-compact-list-volume.svg` | Volumes |
+| `diagrams/components/37-extra-compact-list-user.svg` | Users |
+| `diagrams/components/38-extra-compact-list-log.svg` | Logs |
+| `diagrams/components/39-extra-compact-list-notification.svg` | Notifications |
+| `diagrams/components/40-extra-compact-list-audit-log.svg` | Audit Log |
+| `diagrams/components/41-extra-compact-list-history.svg` | History |
+
+### Empty-state canonical SVGs (one per list view)
+
+When data is missing, errored, or filtered to nothing — every list view shows a contextual empty-state. Added 2026-07-09:
+
+| File | Trigger | Icon | Primary action |
+|---|---|---|---|
+| `diagrams/components/42-empty-list-vm.svg` | No VMs exist (clean state) | ◻ square | Create VM |
+| `diagrams/components/43-empty-list-container.svg` | Filtered to zero | ⌗ search | Clear filter |
+| `diagrams/components/44-empty-list-jail.svg` | Loader error | ⚠ warning | Retry |
+| `diagrams/components/45-empty-list-volume.svg` | All archived | ❘ heart | Show archived |
+| `diagrams/components/46-empty-list-user.svg` | No permission | 🔒 lock | Request access |
+| `diagrams/components/47-empty-list-log.svg` | Empty buffer | ⌖ target | Start live tail |
+| `diagrams/components/48-empty-list-notification.svg` | All caught up | ✔ success check | View history |
+| `diagrams/components/49-empty-list-audit-log.svg` | First-time (clean) | ❖ diamond | Generate test |
+| `diagrams/components/50-empty-list-history.svg` | Service offline | ⦢ dashed circle | Retry now |
+
+### Empty-state pattern rules
+
+1. **Tone matches trigger**: clean/positive state (caught-up, no-permission) gets ✿ neutral; error/loading gets ⚠ ✗ amber/red; success-empty gets ✓ green
+2. **3 actions max**: primary + secondary + ghost (or 3 secondary). Action labels imperative ("Create VM", not "VMs page")
+3. **Icon is large (80×80)** in muted color (#94a3b8) — readable but not alarming
+4. **Body 13px; heading 18px bold** — heading states WHAT, body states WHY and gives context (e.g. "13 datasets exist but archived")
+5. **Container has same `<header>`** as the populated list view — same selector, same filter input — so user knows where they are
+6. **Persistent across density modes**: empty state is identical in Cozy/Compact/Extra-compact (it's not a list row, so density toggle doesn't affect it)
 
 ### Performance note
 

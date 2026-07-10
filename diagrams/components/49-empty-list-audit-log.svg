@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 560" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Admin — Empty State (Audit log is empty)</title>
+  <foreignObject x="0" y="0" width="1280" height="560">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:560px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;padding:14px 18px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div><div style="display:flex;align-items:center;gap:10px;">
+          <h3 style="margin:0;font-size:16px;font-weight:700;color:#0f172a;">Audit Log</h3>
+          <div style="display:inline-flex;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;font-size:11px;"><div style="padding:3px 9px;color:#64748b;">Cozy</div><div style="padding:3px 9px;color:#ffffff;background:#1d4ed8;font-weight:600;">Compact</div><div style="padding:3px 9px;color:#64748b;border-left:1px solid #cbd5e1;">Extra</div></div>
+        </div></div>
+        <input type="text" placeholder="Filter audit log..." style="width:240px;padding:4px 8px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#0f172a;"/>
+      </div>
+      <div style="background:#ffffff;border-radius:6px;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;min-height:380px;padding:40px;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:18px;max-width:480px;text-align:center;">
+          <div style="width:80px;height:80px;border-radius:50%;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:42px;color:#94a3b8;">❖</div>
+          <div>
+            <h2 style="margin:0 0 6px 0;font-size:18px;font-weight:700;color:#0f172a;">Audit log is empty</h2>
+            <p style="margin:0;font-size:13px;color:#64748b;line-height:1.5;">Once any admin action occurs (login, settings change, VM action), entries are recorded here. This log is tamper-evident.</p>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
+            <button style="padding:7px 14px;font-size:12px;font-weight:600;border:1px solid #1d4ed8;border-radius:5px;background:#1d4ed8;color:#ffffff;cursor:pointer;">Generate test entry</button><button style="padding:7px 14px;font-size:12px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;cursor:pointer;">View audit policy</button><button style="padding:7px 14px;font-size:12px;border:none;background:transparent;color:#64748b;cursor:pointer;text-decoration:underline;">Export schema</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

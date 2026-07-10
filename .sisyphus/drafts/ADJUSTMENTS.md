@@ -227,7 +227,7 @@ This table documents every screen adjustment made during the React → Angular m
 - **Original screens**: 11 React screens
 - **New screens**: 42 Angular screens (rows 1-42: 14 React→Angular + 1 System Mgmt landing rewrite + 6 System Mgmt sub-screens + 5 detail-panel entry routes + 4 modal entry routes + 12 misc plugins/errors/help/pages)
 - **SVG screen mockups on disk**: 24 (`diagrams/screens/` = 16 canonical + 7 system sub-screens + 1 plugins page)
-- **SVG component mockups on disk**: 18 (`diagrams/components/` = 3 existing + 5 detail panels + 10 density variants: 1 Cozy baseline + 9 Compact variants + 1 Extra-compact variant × VMs/Containers/Jails/Volumes/Users/Logs/Notifications/Audit/History/VMs3)
+- **SVG component mockups on disk**: 36 (`diagrams/components/` = 3 existing + 5 detail panels + 19 density variants: 9 Compact + 9 Extra-compact + 1 Cozy baseline canonical VM + 9 empty-state variants × VMs/Containers/Jails/Volumes/Users/Logs/Notifications/Audit/History)
 - **SVG modal mockups on disk**: 4 (`diagrams/modals/` = backup-create, plugin-install, plugin-detail, theme-import)
 - **Original components**: 11 React components
 - **New components**: 17 Angular components (11 migrated + 6 new)
