@@ -9233,9 +9233,23 @@ grep -rE 'class="[^"]*\b(bg-|text-|p-[0-9]|m-[0-9]|w-[0-9]|h-[0-9]|flex|grid|rou
   Power-user "Compact" mode for list views (~28px rows vs ~50-60px Cozy).
   Per `.sisyphus/drafts/ui-index.md` §20.5 (added 2026-07-09).
   - T94a: ✅ `diagrams/components/24-compact-list-vm.svg` AUTHORED (24.4 KB, 20 rows visible) — canonical example
-  - T94b: Apply Compact density SVG variant for: Containers (`24-compact-list-container.svg`), Jails (`24-compact-list-jail.svg`), Volumes (`24-compact-list-volume.svg`), Users (`24-compact-list-user.svg`), Logs (`24-compact-list-log.svg`), Notifications, Audit Log, History.
+  - T94b: ✅ Compact density SVG variant AUTHORED for 8 more list views (2026-07-09):
+    - `25-compact-list-container.svg` (27.8 KB)
+    - `26-compact-list-jail.svg` (23.2 KB)
+    - `27-compact-list-volume.svg` (24.4 KB)
+    - `28-compact-list-user.svg` (21.6 KB)
+    - `29-compact-list-log.svg` (19.4 KB)
+    - `30-compact-list-notification.svg` (18.2 KB)
+    - `31-compact-list-audit-log.svg` (20.0 KB)
+    - `32-compact-list-history.svg` (18.4 KB)
   - T94c: Settings > Appearance > List density toggle (Cozy | Compact) with persistence.
   - T94d: Angular `SettingsService.density$` signal drives all list components.
+  - T94e (NEW 2026-07-09): Add **Extra-compact** density tier (~20px rows, 30 visible, monospace everywhere, power-user monitoring dashboards):
+    - Spec: `.sisyphus/drafts/ui-index.md` §20.5 (three-mode table updated)
+    - Canonical example SVG: `diagrams/components/33-extra-compact-list-vm.svg` (30.5 KB, 30 rows visible, 3-way toggle Cozy|Compact|Extra)
+    - Implementation: T94d extended to 3-state enum 'cozy' | 'compact' | 'extra'
+    - Persisted in localStorage `cloudbsd.density.v1` (new users default to Cozy)
+    - Cross-tab sync via `BroadcastChannel('cloudbsd-settings')`
   - **Acceptance**: User can toggle Cozy/Compact; choice persists across sessions; all 8 list views respect setting.
 
 ### Deferred (out of Wave 11 scope)

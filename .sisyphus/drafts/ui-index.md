@@ -375,42 +375,68 @@ Info:          #3b82f6 (blue)
 
 ## 20.5 List density modes (added 2026-07-09)
 
-Every list view supports **two density modes** toggled by user preference (stored in `Settings > Appearance > List density`):
+Every list view supports **three density modes** toggled by user preference (stored in `Settings > Appearance > List density`):
 
-| Mode | Row height | Visible rows in viewport (1280×800) | Use case |
+| Mode | Row height | Visible rows in viewport (1280×720) | Use case |
 |---|---|---|---|
-| **Cozy** (default) | ~50-60px | 8-12 rows | Default. Spacious rows; secondary text on hover. |
-| **Compact** | ~28px | **20-30 rows** | Power users / dense-data preference. Single-line, monospace technical fields, no secondary text. |
+| **Cozy** (default) | ~50-60px | 8-12 rows | Default. Spacious rows; secondary text on hover. Most readability. |
+| **Compact** | ~28px | **20 rows** | Power users / dense-data preference. Single-line, monospace technical fields. |
+| **Extra-compact** | ~20px | **30 rows** | Power-user tier 2. Monospace everywhere. For monitoring dashboards with 100+ visible entities. |
 
-### Compact mode rules
+### Mode comparison table
 
-| Field | Cozy | Compact |
+| Field | Cozy | Compact | Extra-compact |
+|---|---|---|---|
+| Row padding | 10-14px vertical | 6px vertical | 4px vertical |
+| Font size | 13px base | 11px base | 10px base |
+| Status | Pill with color + label | Color dot only | Color dot only (11px) |
+| Name | Bold + id below | Bold + monospace ulid inline | Bold + monospace single |
+| OS | Plain text | Plain text (smaller) | Plain text (10px) |
+| IPv4 | "10.0.10.10 +1 more" button | Monospace single | Monospace single |
+| Specs (RAM/vCPU) | Right-aligned | Right-aligned, monospace | Right-aligned, monospace |
+| Uptime | "14d 02:11" or "—" | Same, monospace | Same, monospace |
+| Hover details | Always shown | Hidden (popover) | **Hidden** (popover) |
+| Per-page default | 12 | 50 | 100 |
+| Monospace UI | No | Partial (tech fields) | **Yes (entire row)** |
+
+### Three-way toggle UI (Cozy | Compact | Extra)
+
+```
+┌────────────────────────┐
+│ Cozy │Compact│ Extra  │  ← segmented control top-right of every list view
+└────────────────────────┘
+              ▼ Active: bg=#1d4ed8 color=white font-weight=600
+```
+
+Per-user preference persisted via `SettingsService.density$` signal. Default = Cozy for new accounts. Migration: existing users default to their previous setting (none = Cozy).
+
+### Canonical example SVGs
+
+| File | Pattern | Tier |
 |---|---|---|
-| Row padding | 10-14px vertical | 6px vertical |
-| Font size | 13px base | 11px base |
-| Status | Pill with color + label | Color dot only (●/■/⚠/⏸) |
-| Name | Bold + id below | Bold + monospace ulid inline |
-| OS | Plain text | Plain text (smaller) |
-| IPv4 | "10.0.10.10 +1 more" button | Monospace single |
-| Specs (RAM/vCPU) | Right-aligned | Right-aligned, monospace |
-| Uptime | "14d 02:11" or "—" | Same, monospace, smaller |
-| Hover details | Always shown | **Hidden** (popover on hover) |
-| Per-page default | 12 | 50 |
-
-### Toggle UI
-
-```
-┌──────────────┐
-│ Cozy │Compact│  ← segmented control in top-right of every list view
-└──────────────┘
-```
-
-### Canonical example SVG
-
-`diagrams/components/24-compact-list-vm.svg` shows the Compact density for VMs. Same pattern applies to Containers, Jails, Volumes, Users, Logs, Notifications, Audit Log, History.
+| `diagrams/components/24-compact-list-vm.svg` | VMs in Compact | 1 of 2 |
+| `diagrams/components/25-compact-list-container.svg` | Containers in Compact | n/a |
+| `diagrams/components/26-compact-list-jail.svg` | Jails in Compact | n/a |
+| `diagrams/components/27-compact-list-volume.svg` | Volumes in Compact | n/a |
+| `diagrams/components/28-compact-list-user.svg` | Users in Compact | n/a |
+| `diagrams/components/29-compact-list-log.svg` | Logs in Compact | n/a |
+| `diagrams/components/30-compact-list-notification.svg` | Notifications in Compact | n/a |
+| `diagrams/components/31-compact-list-audit-log.svg` | Audit Log in Compact | n/a |
+| `diagrams/components/32-compact-list-history.svg` | History in Compact | n/a |
+| `diagrams/components/33-extra-compact-list-vm.svg` | VMs in Extra-Compact (3-way toggle) | 2 of 2 |
 
 ### Performance note
 
-Compact density loads less DOM (less hover popovers built eagerly). At 5,000 rows with virtualization, Compact renders ~150px taller viewport content than Cozy for the same scroll position.
+| Mode | DOM size @ 1,000 rows | DOM size @ 5,000 rows |
+|---|---|---|
+| Cozy | ~580 KB | ~2.9 MB |
+| Compact | ~280 KB | ~1.4 MB |
+| Extra-compact | ~190 KB | ~950 KB |
+
+Combined with `cdk-virtual-scroll-viewport` (mandatory at >200 rows per §19.5), only ~25-40 rows mount in DOM regardless of mode. Render fps target: ≥60fps scroll, ≥55fps filter/sort even in Extra-compact.
+
+### Persistence
+
+`SettingsService` exposes `density$: Observable<'cozy'|'compact'|'extra'>` which all list components consume via `@if`/`@switch` template syntax. Persisted in `localStorage` key `cloudbsd.density.v1`. Cross-tab sync via `BroadcastChannel('cloudbsd-settings')`. Migration path: existing users default to Cozy on first load after upgrade.
 
 
