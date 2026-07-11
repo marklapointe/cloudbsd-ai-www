@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD First-Login Setup Wizard — Step 4 of 4 — Recovery codes</title>
+  <desc>Recovery codes issuance for first-login setup. 10 unique one-time codes printed in a grid with download (PDF), copy-all, and regenerate (invalidates prior) actions. User confirms they have saved them before progressing to the dashboard. (2026-07-10)</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">First login · Recovery codes</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Step 4 of 4</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:11px;color:#64748b;">
+            <span style="display:inline-flex;align-items:center;gap:5px;">
+              <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#16a34a;"></span>
+              3 of 4 complete
+            </span>
+            <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">Skip</button>
+          </div>
+        </div>
+
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">&#x2713;</div><span style="font-size:11px;color:#475569;">1. Verify</span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">&#8212;</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">&#x2713;</div><span style="font-size:11px;color:#475569;">2. Secure</span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">&#8212;</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">&#x2713;</div><span style="font-size:11px;color:#475569;">3. Tell us</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">&#8212;</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #f59e0b;background:#fef3c7;">
+              <div style="width:20px;height:20px;border-radius:50%;background:#f59e0b;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">4</div>
+              <span style="font-size:11px;font-weight:600;color:#92400e;">Recovery codes</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:1;display:flex;background:#f1f5f9;overflow:hidden;">
+          <div style="flex:1;padding:32px 40px;overflow-y:auto;">
+
+            <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">
+              <div style="width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,#f59e0b,#dc2626);color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:22px;">&#x1F511;</div>
+              <div>
+                <h1 style="margin:0;font-size:22px;font-weight:700;color:#0f172a;">Save these 10 recovery codes</h1>
+                <p style="margin:4px 0 0;font-size:12px;color:#64748b;">Use one if you lose access to both your password and your authenticator app. Each code works exactly once.</p>
+              </div>
+            </div>
+
+<!-- WARN callout -->
+<div style="margin-bottom:16px;padding:12px 16px;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;display:flex;align-items:flex-start;gap:10px;">
+  <div style="font-size:16px;color:#b45309;">&#9888;</div>
+  <div>
+    <div style="font-size:12px;font-weight:700;color:#92400e;margin-bottom:2px;">These codes are shown ONCE &#8212; right now.</div>
+    <div style="font-size:11px;color:#78350f;line-height:1.5;">After you finish setup, only their first 4 characters remain visible. They cannot be re-displayed. Save them in a password manager (1Password, Bitwarden, KeePass) or print this page NOW. The cluster admin cannot reset these for you.</div>
+  </div>
+</div>
+
+<!-- Codes grid -->
+<div style="padding:20px;background:linear-gradient(135deg,#fefce8,#fef3c7);border:2px dashed #92400e;border-radius:10px;margin-bottom:14px;">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font-family:monospace;font-size:14px;line-height:1.5;">
+    <div style="padding:8px 12px;background:#ffffff;border-radius:4px;font-weight:700;color:#0f172a;display:flex;justify-content:space-between;"><span>abandoned-bagel-r7</span><span style="color:#cbd5e1;font-weight:400;font-size:11px;">01</span></div>
+    <div style="padding:8px 12px;background:#ffffff;border-radius:4px;font-weight:700;color:#0f172a;display:flex;justify-content:space-between;"><span>spilled-coffee-92</span><span style="color:#cbd5e1;font-weight:400;font-size:11px;">02</span></div>
+    <div style="padding:8px 12px;background:#ffffff;border-radius:4px;font-weight:700;color:#0f172a;display:flex;justify-content:space-between;"><span>mocking-jay-fan-3</span><span style="color:#cbd5e1;font-weight:400;font-size:11px;">03</span></div>
+    <div style="padding:8px 12px;background:#ffffff;border-radius:4px;font-weight:700;color:#0f172a;display:flex;justify-content:space-between;"><span>azure-meadow-77</span><span style="color:#cbd5e1;font-weight:400;font-size:11px;">04</span></div>
+    <div style="padding:8px 12px;background:#ffffff;border-radius:4px;font-weight:700;color:#0f172a;display:flex;justify-content:space-between;"><span>untitled-doc-31</span><span style="color:#cbd5e1;font-weight:400;font-size:11px;">05</span></div>
+    <div style="padding:8px 12px;background:#ffffff;border-radius:4px;font-weight:700;color:#0f172a;display:flex;justify-content:space-between;"><span>cumulus-river-08</span><span style="color:#cbd5e1;font-weight:400;font-size:11px;">06</span></div>
+    <div style="padding:8px 12px;background:#ffffff;border-radius:4px;font-weight:700;color:#0f172a;display:flex;justify-content:space-between;"><span>marble-stone-19</span><span style="color:#cbd5e1;font-weight:400;font-size:11px;">07</span></div>
+    <div style="padding:8px 12px;background:#ffffff;border-radius:4px;font-weight:700;color:#0f172a;display:flex;justify-content:space-between;"><span>laptop-keyboard-c</span><span style="color:#cbd5e1;font-weight:400;font-size:11px;">08</span></div>
+    <div style="padding:8px 12px;background:#ffffff;border-radius:4px;font-weight:700;color:#0f172a;display:flex;justify-content:space-between;"><span>tuna-sandwich-46</span><span style="color:#cbd5e1;font-weight:400;font-size:11px;">09</span></div>
+    <div style="padding:8px 12px;background:#ffffff;border-radius:4px;font-weight:700;color:#0f172a;display:flex;justify-content:space-between;"><span>velvet-curtain-d2</span><span style="color:#cbd5e1;font-weight:400;font-size:11px;">10</span></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid #d9770640;">
+    <span style="font-size:11px;font-weight:600;color:#92400e;font-family:monospace;">2026-07-10 14:22 UTC · mlapointe@cloudbsd</span>
+    <div style="display:flex;gap:8px;">
+      <button style="padding:6px 14px;font-size:11px;border:1px solid #92400e;border-radius:4px;background:#ffffff;color:#92400e;font-weight:700;cursor:pointer;">&#x2B07; Download .pdf</button>
+      <button style="padding:6px 14px;font-size:11px;border:1px solid #92400e;border-radius:4px;background:#ffffff;color:#92400e;font-weight:700;cursor:pointer;">&#x2398; Copy all</button>
+      <button style="padding:6px 14px;font-size:11px;border:1px dashed #d97706;border-radius:4px;background:#ffffff;color:#d97706;font-weight:700;cursor:pointer;">Regenerate (invalidates prior)</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm checkbox -->
+<div style="padding:14px 18px;background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;display:flex;align-items:center;gap:12px;">
+  <input type="checkbox" id="confirm-saved" style="width:18px;height:18px;cursor:pointer;accent-color:#16a34a;" />
+  <label for="confirm-saved" style="font-size:12px;color:#334155;line-height:1.45;cursor:pointer;">
+    <strong style="color:#0f172a;">I have saved these codes somewhere I trust</strong> &#8212; I understand they will not be shown in full again.
+  </label>
+</div>
+
+<!-- Account recovery narrative -->
+<div style="margin-top:18px;padding:14px;background:#ecfdf5;border:1px solid #6ee7b7;border-radius:8px;font-size:11px;color:#065f46;line-height:1.55;">
+  <strong style="color:#064e3b;">Recovery codes &#8596; password reset</strong>: if you lose BOTH password AND authenticator, you can use a recovery code to log in and reset everything (within the timing window set by your cluster admin). The code consumes one slot &#8212; you have 10 total, so use them wisely. With 3 left, the system will warn you to regenerate.
+</div>
+
+          </div>
+
+          <div style="width:280px;padding:28px 24px;border-left:1px solid #e2e8f0;background:#ffffff;overflow-y:auto;">
+            <div style="padding:14px;background:#16a34a10;border:1px solid #bbf7d0;border-radius:8px;margin-bottom:14px;">
+              <div style="font-size:11px;font-weight:700;color:#16a34a;letter-spacing:0.06em;margin-bottom:8px;">SECURITY PROGRESS</div>
+              <table style="width:100%;font-size:11px;color:#166534;">
+                <tr><td style="padding:3px 0;">Profile</td><td style="text-align:right;font-weight:700;color:#16a34a;">&#x2713; verified</td></tr>
+                <tr><td style="padding:3px 0;">2FA (TOTP)</td><td style="text-align:right;font-weight:700;color:#16a34a;">&#x2713; enabled</td></tr>
+                <tr><td style="padding:3px 0;">Recovery codes</td><td style="text-align:right;font-weight:700;color:#16a34a;">&#x2713; 10 issued</td></tr>
+                <tr><td style="padding:3px 0;">Dashboard prefs</td><td style="text-align:right;font-weight:700;color:#16a34a;">&#x2713; saved</td></tr>
+              </table>
+            </div>
+
+            <div style="padding:14px;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;margin-bottom:14px;">
+              <div style="font-size:11px;font-weight:700;color:#92400e;letter-spacing:0.06em;margin-bottom:6px;">WHAT COUNTS AS &quot;TRUSTED&quot;</div>
+              <div style="font-size:11px;color:#78350f;line-height:1.5;">
+                A password manager, a sealed envelope in a safe, a printed page in a fireproof box. The codes bypass everything &#8212; treat them with the same care as your password.
+              </div>
+            </div>
+
+            <div style="padding:14px;background:#f1f5f9;border-radius:8px;">
+              <div style="font-size:11px;font-weight:700;color:#475569;letter-spacing:0.06em;margin-bottom:6px;">POST-SETUP</div>
+              <div style="font-size:11px;color:#64748b;line-height:1.5;">After you click &quot;Finish setup&quot;, we drop you on the dashboard. The recovery codes remain accessible (last 4 chars only) under <strong>Settings &#8594; My account &#8594; Recovery codes</strong>; regenerate any time.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:9px 16px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">&#x2190; Back to Tell us</button>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span style="font-size:10px;color:#94a3b8;">requires: confirm-saved checkbox</span>
+            <button style="padding:9px 22px;font-size:13px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#64748b;cursor:not-allowed;" disabled="disabled">Finish setup &#8594; Dashboard</button>
+            <button style="padding:11px 28px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:linear-gradient(135deg,#16a34a,#0d9488);color:#ffffff;cursor:pointer;box-shadow:0 1px 3px rgba(22,163,74,0.4);">&#x2713; Finish setup &#8594; Dashboard</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>
