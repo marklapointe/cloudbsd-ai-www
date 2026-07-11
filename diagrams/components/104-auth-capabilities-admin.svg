@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Admin — Auth Capabilities (admin view)</title>
+  <desc>Server-side preflight response. Shows the 4 layers of auth capability resolution: Layer 3 (API live), Layer 2 (cloudbsd.yaml), Layer 1 (defaults), Layer 0 (recovery). Login UI marches forward through this cascade and renders only the rows that resolved to ENABLED at the highest-priority layer. (Wave 12a mockup · 2026-07-10)</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:13px;box-sizing:border-box;overflow:hidden;">
+<div style="background:#ffffff;border-bottom:1px solid #e2e8f0;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;">
+  <div>
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;font-weight:700;">Settings &#183; Authentication</div>
+    <h1 style="margin:4px 0 0;font-size:22px;font-weight:700;color:#0f172a;">Auth capabilities &#183; preflight</h1>
+  </div>
+  <span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;font-size:10px;font-weight:600;background:#16a34a10;border:1px solid #bbf7d0;border-radius:9999px;color:#166534;font-family:monospace;"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#16a34a;"></span>live &#183; 2s ago</span>
+</div>
+
+<div style="padding:18px 22px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+
+<!-- LEFT: cascade resolution map -->
+<div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden;">
+  <div style="padding:12px 16px;background:#f8fafc;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;">
+    <div style="font-size:13px;font-weight:700;color:#0f172a;">Cascade resolution (highest wins)</div>
+    <span style="font-size:10px;color:#64748b;font-family:monospace;">GET /api/auth/capabilities</span>
+  </div>
+  <div style="padding:14px 16px;">
+
+<div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;">
+  <div style="flex:0 0 70px;display:flex;flex-direction:column;align-items:center;">
+    <div style="width:36px;height:36px;border-radius:50%;background:#1d4ed8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">3</div>
+    <div style="font-size:10px;font-weight:700;color:#1d4ed8;text-align:center;margin-top:4px;">API live</div>
+  </div>
+  <div style="flex:1;border:1px solid #1d4ed840;border-radius:6px;padding:8px 12px;background:#1d4ed808;">
+    <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:600;color:#1d4ed8;">
+      <span>3 sources reachable</span>
+      <span style="color:#16a34a;font-size:10px;font-weight:700;">&#x2713; USED</span>
+    </div>
+    <div style="font-family:monospace;font-size:10px;color:#475569;line-height:1.6;margin-top:4px;">GET /api/auth/capabilities&#8230; 200<br/>ldap: <strong>ENABLED</strong> &#183; 2fa: <strong>ENABLED</strong> &#183; sshkey: <strong>ENABLED</strong> &#183; saml: DISABLED</div>
+  </div>
+</div>
+
+<div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;">
+  <div style="flex:0 0 70px;display:flex;flex-direction:column;align-items:center;">
+    <div style="width:36px;height:36px;border-radius:50%;background:#cbd5e1;color:#475569;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">2</div>
+    <div style="font-size:10px;font-weight:700;color:#64748b;text-align:center;margin-top:4px;">cloudbsd.yaml</div>
+  </div>
+  <div style="flex:1;border:1px solid #e2e8f0;border-radius:6px;padding:8px 12px;background:#f8fafc;">
+    <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:600;color:#475569;">
+      <span>/etc/cloudbsd.yaml &#183; 8 keys</span>
+      <span style="color:#94a3b8;font-size:10px;">skipped (layer 3 already answered)</span>
+    </div>
+    <div style="font-family:monospace;font-size:10px;color:#94a3b8;line-height:1.5;margin-top:4px;">auth.<em>methods</em>=[password,2fa,sshkey,ldap,saml]&#8230;</div>
+  </div>
+</div>
+
+<div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;">
+  <div style="flex:0 0 70px;display:flex;flex-direction:column;align-items:center;">
+    <div style="width:36px;height:36px;border-radius:50%;background:#cbd5e1;color:#475569;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">1</div>
+    <div style="font-size:10px;font-weight:700;color:#64748b;text-align:center;margin-top:4px;">defaults</div>
+  </div>
+  <div style="flex:1;border:1px solid #e2e8f0;border-radius:6px;padding:8px 12px;background:#f8fafc;">
+    <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:600;color:#475569;">
+      <span>5 built-in defaults</span>
+      <span style="color:#94a3b8;font-size:10px;">skipped</span>
+    </div>
+  </div>
+</div>
+
+<div style="display:flex;align-items:flex-start;gap:14px;">
+  <div style="flex:0 0 70px;display:flex;flex-direction:column;align-items:center;">
+    <div style="width:36px;height:36px;border-radius:50%;background:#fee2e2;color:#dc2626;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">0</div>
+    <div style="font-size:10px;font-weight:700;color:#dc2626;text-align:center;margin-top:4px;">recovery</div>
+  </div>
+  <div style="flex:1;border:1px solid #fecaca;border-radius:6px;padding:8px 12px;background:#fef2f2;">
+    <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:600;color:#dc2626;">
+      <span>password + recovery codes only</span>
+      <span style="color:#dc2626;font-size:10px;font-weight:700;">HELD IN RESERVE</span>
+    </div>
+    <div style="font-size:10px;color:#7f1d1d;line-height:1.5;margin-top:4px;">Activated ONLY if layers 1-3 all timeout or 503. UI never blocks the admin on it.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+<!-- RIGHT: rendered login form preview (what the LOGIN page saw) -->
+<div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden;">
+  <div style="padding:12px 16px;background:#f8fafc;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;">
+    <div style="font-size:13px;font-weight:700;color:#0f172a;">Login UI receives</div>
+    <span style="font-size:10px;color:#64748b;font-family:monospace;">march-forward, never block</span>
+  </div>
+  <div style="padding:14px 16px;">
+<table style="width:100%;font-size:12px;border-collapse:collapse;">
+<thead><tr style="background:#f1f5f9;">
+<th style="text-align:left;padding:6px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;color:#475569;font-weight:700;">Method</th>
+<th style="text-align:left;padding:6px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;color:#475569;font-weight:700;">State</th>
+<th style="text-align:left;padding:6px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;color:#475569;font-weight:700;">UI affordance</th>
+</tr></thead>
+<tbody>
+<tr><td style="padding:6px 10px;font-family:monospace;color:#0f172a;">password</td><td style="padding:6px 10px;"><span style="color:#16a34a;font-weight:700;">ENABLED (always)</span></td><td style="padding:6px 10px;color:#475569;">Username + Password field</td></tr>
+<tr><td style="padding:6px 10px;font-family:monospace;color:#0f172a;">2fa (TOTP)</td><td style="padding:6px 10px;"><span style="color:#16a34a;font-weight:700;">ENABLED</span></td><td style="padding:6px 10px;color:#475569;">6-digit code field after password verify</td></tr>
+<tr><td style="padding:6px 10px;font-family:monospace;color:#0f172a;">recovery codes</td><td style="padding:6px 10px;"><span style="color:#16a34a;font-weight:700;">ENABLED (always)</span></td><td style="padding:6px 10px;color:#475569;">'Use a recovery code instead' link</td></tr>
+<tr><td style="padding:6px 10px;font-family:monospace;color:#0f172a;">ssh key</td><td style="padding:6px 10px;"><span style="color:#16a34a;font-weight:700;">ENABLED</span></td><td style="padding:6px 10px;color:#475569;">'Use SSH key' button &#183; opens key selector</td></tr>
+<tr><td style="padding:6px 10px;font-family:monospace;color:#0f172a;">ldap</td><td style="padding:6px 10px;"><span style="color:#16a34a;font-weight:700;">ENABLED</span></td><td style="padding:6px 10px;color:#475569;">'Sign in with LDAP (corp.example)' button</td></tr>
+<tr><td style="padding:6px 10px;font-family:monospace;color:#0f172a;">saml</td><td style="padding:6px 10px;"><span style="color:#94a3b8;font-weight:700;">DISABLED</span></td><td style="padding:6px 10px;color:#94a3b8;">not shown in login UI</td></tr>
+<tr><td style="padding:6px 10px;font-family:monospace;color:#0f172a;">oauth (google/github)</td><td style="padding:6px 10px;"><span style="color:#94a3b8;font-weight:700;">DISABLED</span></td><td style="padding:6px 10px;color:#94a3b8;">not shown in login UI</td></tr>
+</tbody>
+</table>
+<div style="margin-top:14px;padding:10px 12px;background:#1d4ed808;border:1px solid #1d4ed840;border-radius:6px;font-size:11px;color:#1e3a8a;line-height:1.5;">
+  <strong>Disabling 2FA on the cluster</strong>: removes the 2FA UI affordance on next refresh. Existing sessions are invalidated. Frontend never has to guess.
+</div>
+  </div>
+</div>
+
+</div>
+
+<!-- FOOTER note -->
+<div style="padding:14px 22px;background:#0f172a;color:#94a3b8;font-family:monospace;font-size:11px;">
+  Wave 12a &#183; the login UI never waits on this endpoint. It renders immediately. As each row arrives it lights up. Rows that take &#62; 1.2s to resolve drop to the next layer (lazy auth method reveal).
+</div>
+
+    </div>
+  </foreignObject>
+</svg>

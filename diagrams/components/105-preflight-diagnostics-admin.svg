@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Admin — Preflight Diagnostics</title>
+  <desc>Admin-side preflight diagnostics view. Surfaces the same data the login page saw but on the admin side, so an admin can debug why a particular login mechanism isn't working. Live check + latency per capability + 3-second polling. (Wave 12a mockup · 2026-07-10)</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:13px;box-sizing:border-box;overflow:hidden;">
+
+<div style="background:#ffffff;border-bottom:1px solid #e2e8f0;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;">
+  <div>
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;font-weight:700;">Settings &#183; Authentication &#183; Diagnostics</div>
+    <h1 style="margin:4px 0 0;font-size:22px;font-weight:700;color:#0f172a;">Preflight diagnostics</h1>
+  </div>
+  <div style="display:flex;gap:14px;align-items:center;">
+    <span style="font-family:monospace;font-size:11px;color:#475569;">re-check in <span style="color:#0f172a;font-weight:700;">3s</span></span>
+    <button style="padding:6px 12px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;font-weight:600;cursor:pointer;">Run now</button>
+    <span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;font-size:10px;font-weight:600;background:#16a34a10;border:1px solid #bbf7d0;border-radius:9999px;color:#166534;font-family:monospace;"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#16a34a;"></span>live &#183; 2s ago</span>
+  </div>
+</div>
+
+<!-- Summary stat tiles -->
+<div style="padding:16px 22px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+  <div style="background:#ffffff;padding:14px;border-radius:8px;border:1px solid #e2e8f0;">
+    <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;">OK</div>
+    <div style="font-size:24px;font-weight:700;color:#16a34a;margin-top:4px;">11</div>
+    <div style="font-size:10px;color:#64748b;margin-top:2px;">of 14 checks</div>
+  </div>
+  <div style="background:#ffffff;padding:14px;border-radius:8px;border:1px solid #e2e8f0;">
+    <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;">Degraded</div>
+    <div style="font-size:24px;font-weight:700;color:#d97706;margin-top:4px;">2</div>
+    <div style="font-size:10px;color:#64748b;margin-top:2px;">2FA / SAML fallback</div>
+  </div>
+  <div style="background:#ffffff;padding:14px;border-radius:8px;border:1px solid #e2e8f0;">
+    <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;">Hard fail</div>
+    <div style="font-size:24px;font-weight:700;color:#dc2626;margin-top:4px;">1</div>
+    <div style="font-size:10px;color:#64748b;margin-top:2px;">API auth backend</div>
+  </div>
+  <div style="background:#ffffff;padding:14px;border-radius:8px;border:1px solid #e2e8f0;">
+    <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;">Avg latency</div>
+    <div style="font-size:24px;font-weight:700;color:#0f172a;margin-top:4px;">112<span style="font-size:11px;color:#64748b;font-weight:500;"> ms</span></div>
+    <div style="font-size:10px;color:#64748b;margin-top:2px;">p99: 480 ms &#183; SLA: 300 ms</div>
+  </div>
+</div>
+
+<!-- Detailed check table -->
+<div style="margin:0 22px;background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden;">
+  <div style="padding:12px 16px;background:#f8fafc;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;">
+    <div style="font-size:13px;font-weight:700;color:#0f172a;">Live checks</div>
+    <span style="font-size:10px;color:#64748b;font-family:monospace;">14 entries &#183; updates every 3s</span>
+  </div>
+  <table style="width:100%;border-collapse:collapse;font-size:12px;">
+<thead><tr style="background:#f1f5f9;">
+<th style="text-align:left;padding:8px 14px;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;color:#475569;font-weight:700;width:18%;">Capability</th>
+<th style="text-align:left;padding:8px 14px;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;color:#475569;font-weight:700;width:14%;">Layer</th>
+<th style="text-align:left;padding:8px 14px;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;color:#475569;font-weight:700;width:14%;">State</th>
+<th style="text-align:left;padding:8px 14px;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;color:#475569;font-weight:700;width:14%;">Latency</th>
+<th style="text-align:left;padding:8px 14px;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;color:#475569;font-weight:700;width:14%;">Last OK</th>
+<th style="text-align:left;padding:8px 14px;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;color:#475569;font-weight:700;width:26%;">Detail</th>
+</tr></thead>
+<tbody>
+<tr><td style="padding:8px 14px;font-family:monospace;">password</td><td style="padding:8px 14px;color:#475569;">L0 recovery</td><td style="padding:8px 14px;"><span style="color:#16a34a;font-weight:700;">&#x25CF; OK</span></td><td style="padding:8px 14px;font-family:monospace;color:#0f172a;">11 ms</td><td style="padding:8px 14px;font-family:monospace;color:#475569;">2s ago</td><td style="padding:8px 14px;color:#475569;">always on</td></tr>
+<tr style="background:#f8fafc;"><td style="padding:8px 14px;font-family:monospace;">recovery codes</td><td style="padding:8px 14px;color:#475569;">L0 recovery</td><td style="padding:8px 14px;"><span style="color:#16a34a;font-weight:700;">&#x25CF; OK</span></td><td style="padding:8px 14px;font-family:monospace;color:#0f172a;">14 ms</td><td style="padding:8px 14px;font-family:monospace;color:#475569;">2s ago</td><td style="padding:8px 14px;color:#475569;">always on</td></tr>
+<tr><td style="padding:8px 14px;font-family:monospace;">2fa (TOTP)</td><td style="padding:8px 14px;color:#475569;">L3 API</td><td style="padding:8px 14px;"><span style="color:#d97706;font-weight:700;">&#x25D0; DEGRADED</span></td><td style="padding:8px 14px;font-family:monospace;color:#0f172a;">340 ms</td><td style="padding:8px 14px;font-family:monospace;color:#475569;">58s ago</td><td style="padding:8px 14px;color:#92400e;">latency &gt; 300ms SLA &#183; serving from cache</td></tr>
+<tr style="background:#f8fafc;"><td style="padding:8px 14px;font-family:monospace;">ssh key</td><td style="padding:8px 14px;color:#475569;">L3 API</td><td style="padding:8px 14px;"><span style="color:#16a34a;font-weight:700;">&#x25CF; OK</span></td><td style="padding:8px 14px;font-family:monospace;color:#0f172a;">92 ms</td><td style="padding:8px 14px;font-family:monospace;color:#475569;">2s ago</td><td style="padding:8px 14px;color:#475569;">/etc/ssh/keys.d/*.pub</td></tr>
+<tr><td style="padding:8px 14px;font-family:monospace;">ldap</td><td style="padding:8px 14px;color:#475569;">L3 API &#8594; L2 yaml</td><td style="padding:8px 14px;"><span style="color:#16a34a;font-weight:700;">&#x25CF; OK</span></td><td style="padding:8px 14px;font-family:monospace;color:#0f172a;">108 ms</td><td style="padding:8px 14px;font-family:monospace;color:#475569;">2s ago</td><td style="padding:8px 14px;color:#475569;">ldap://corp.example &#183; reachable</td></tr>
+<tr style="background:#f8fafc;"><td style="padding:8px 14px;font-family:monospace;">saml / oauth</td><td style="padding:8px 14px;color:#475569;">L2 yaml</td><td style="padding:8px 14px;"><span style="color:#d97706;font-weight:700;">&#x25D0; DEGRADED</span></td><td style="padding:8px 14px;font-family:monospace;color:#0f172a;">440 ms</td><td style="padding:8px 14px;font-family:monospace;color:#475569;">1m 12s ago</td><td style="padding:8px 14px;color:#92400e;">idp.example.com &#183; clock skew 2.4s &#183; replay cache stale</td></tr>
+<tr><td style="padding:8px 14px;font-family:monospace;">API auth backend</td><td style="padding:8px 14px;color:#475569;">L3 API</td><td style="padding:8px 14px;"><span style="color:#dc2626;font-weight:700;">&#x2716; HARD FAIL</span></td><td style="padding:8px 14px;font-family:monospace;color:#dc2626;">timeout (3000ms)</td><td style="padding:8px 14px;font-family:monospace;color:#475569;">5m 14s ago</td><td style="padding:8px 14px;color:#7f1d1d;">503 from /api/auth/capabilities &#183; auth-api pod 0/3 healthy</td></tr>
+</tbody>
+</table>
+
+<!-- Action row -->
+<div style="padding:14px 16px;background:#fef2f2;border-top:2px solid #fecaca;display:flex;align-items:center;gap:14px;">
+  <span style="font-size:18px;color:#dc2626;">&#9888;</span>
+  <div style="flex:1;">
+    <div style="font-size:12px;font-weight:700;color:#991b1b;">One hard failure &#8212; recovery layer taking over</div>
+    <div style="font-size:11px;color:#7f1d1d;line-height:1.4;">The login UI is currently serving password + recovery-codes only (Layer 0). Users without a code can't authenticate until the API backend is restarted.</div>
+  </div>
+  <button style="padding:8px 14px;font-size:11px;border:1px solid #dc2626;border-radius:5px;background:#ffffff;color:#dc2626;font-weight:700;cursor:pointer;">Restart auth-api</button>
+  <button style="padding:8px 14px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;cursor:pointer;">Open runbook</button>
+</div>
+
+</div>
+
+    </div>
+  </foreignObject>
+</svg>
