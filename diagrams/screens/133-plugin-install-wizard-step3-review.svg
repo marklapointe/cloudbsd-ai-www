@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Plugin Install Wizard — Step 3 of 3 — Review</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">Install plugin</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Step 3 &#x2014; Review</span>
+          </div>
+          <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">&#x2715; Cancel</button>
+        </div>
+
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">&#x2713;</div><span style="font-size:11px;color:#475569;">1. Source <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">&#x2014;</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">&#x2713;</div><span style="font-size:11px;color:#475569;">2. Permissions <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">&#x2014;</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #16a34a;background:#16a34a10;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">3</div><span style="font-size:11px;font-weight:600;color:#16a34a;">Review</span></div>
+            <div style="flex:1;"></div>
+            <span style="font-size:10px;color:#16a34a;">ready to install</span>
+          </div>
+        </div>
+
+        <div style="flex:1;display:flex;background:#f1f5f9;overflow:hidden;">
+          <div style="flex:1;padding:28px 40px;overflow-y:auto;">
+
+            <div style="padding:22px;background:linear-gradient(135deg,#7c3aed10,#1d4ed810);border:1px solid #c4b5fd;border-radius:10px;margin-bottom:20px;display:flex;align-items:center;gap:18px;">
+              <div style="width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#1d4ed8);color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:30px;">&#x1F916;</div>
+              <div style="flex:1;">
+                <h1 style="margin:0 0 4px;font-size:22px;font-weight:700;color:#0f172a;font-family:monospace;">ai-bridge-mcp v0.4.1</h1>
+                <div style="display:flex;align-items:center;gap:14px;font-size:12px;color:#475569;">
+                  <span><strong style="color:#7c3aed;">cloudbsd-official</strong> &#xB7; signed + SBOM</span>
+                  <span style="color:#cbd5e1;">&#xB7;</span>
+                  <span>MCP server enabled</span>
+                </div>
+                <div style="display:flex;gap:6px;margin-top:6px;">
+                  <span style="padding:2px 8px;background:#7c3aed20;color:#7c3aed;border-radius:4px;font-size:10px;font-weight:600;">MCP</span>
+                  <span style="padding:2px 8px;background:#dcfce7;color:#16a34a;border-radius:4px;font-size:10px;font-weight:600;">sandboxed</span>
+                  <span style="padding:2px 8px;background:#fef3c7;color:#92400e;border-radius:4px;font-size:10px;font-weight:600;">shell:exec &#x2713;</span>
+                  <span style="padding:2px 8px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-size:10px;font-weight:600;">6 permissions</span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:11px;color:#64748b;">Install size</div>
+                <div style="font-size:18px;font-weight:700;color:#0f172a;">~24 MB</div>
+                <div style="font-size:10px;color:#94a3b8;">Python 3.11 runtime included</div>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">SOURCE</h3><button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button></div>
+                <table style="width:100%;font-size:11px;">
+                  <tr><td style="padding:2px 0;color:#64748b;width:30%;">Registry</td><td>CloudBSD Plugin Registry</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Publisher</td><td>cloudbsd-official</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Version</td><td style="font-family:monospace;font-weight:700;">0.4.1</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Signature</td><td style="color:#16a34a;font-weight:600;">&#x2713; ed25519 verified</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">SBOM</td><td style="color:#16a34a;font-weight:600;">&#x2713; 187 packages</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Update channel</td><td>stable</td></tr>
+                </table>
+              </div>
+
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">MCP SURFACE</h3><button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button></div>
+                <table style="width:100%;font-size:11px;">
+                  <tr><td style="padding:2px 0;color:#64748b;width:35%;">Transport</td><td>stdio or http+sse</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Roles</td><td style="font-family:monospace;font-size:10px;">agent, orchestrator</td></tr>
+                  <tr><td style="padding:3px 0;color:#64748b;">Tools</td><td style="font-family:monospace;font-size:10px;color:#475569;">5 (vm.list, vm.start, vm.stop, container.run, logs.query)</td></tr>
+                  <tr><td style="padding:3px 0;color:#64748b;">Resources</td><td style="font-family:monospace;font-size:10px;color:#475569;">2 URIs</td></tr>
+                  <tr><td style="padding:3px 0;color:#64748b;">Prompts</td><td style="font-family:monospace;font-size:10px;color:#475569;">3 templates</td></tr>
+                </table>
+              </div>
+
+              <div style="padding:16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;grid-column:span 2;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">PERMISSIONS (6)</h3><button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button></div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:11px;">
+                  <div style="padding:6px 10px;background:#dcfce7;border-radius:4px;color:#16a34a;font-family:monospace;">&#x2713; users:read</div>
+                  <div style="padding:6px 10px;background:#fef3c7;border-radius:4px;color:#92400e;font-family:monospace;">&#x2713; vms:read, vms:control</div>
+                  <div style="padding:6px 10px;background:#fef3c7;border-radius:4px;color:#92400e;font-family:monospace;">&#x2713; containers:read, containers:control</div>
+                  <div style="padding:6px 10px;background:#dcfce7;border-radius:4px;color:#16a34a;font-family:monospace;">&#x2713; logs:read</div>
+                  <div style="padding:6px 10px;background:#fef2f2;border:1px solid #fecaca;border-radius:4px;color:#dc2626;font-family:monospace;font-weight:700;">&#x2713; shell:exec</div>
+                  <div style="padding:6px 10px;background:#fef3c7;border-radius:4px;color:#92400e;font-family:monospace;">&#x2713; network:egress</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Stack snippet -->
+            <div style="padding:14px 16px;background:#1e293b;border-radius:8px;margin-top:14px;">
+              <div style="font-size:11px;font-weight:700;color:#94a3b8;letter-spacing:0.06em;margin-bottom:8px;">install + activate</div>
+              <code style="font-family:monospace;font-size:12px;color:#a5f3fc;line-height:1.65;display:block;">cloudbsd plugin install ai-bridge-mcp --version 0.4.1 --approve shell:exec --approve network:egress
+cloudbsd plugin enable ai-bridge-mcp
+systemctl status cloudbsd-plugin-ai-bridge-mcp
+curl http://node-1:7700/mcp/v1/tools/list  &#x23; discover agent tools</code>
+            </div>
+
+          </div>
+
+          <div style="width:280px;padding:28px 24px;border-left:1px solid #e2e8f0;background:#ffffff;overflow-y:auto;">
+            <div style="padding:14px;background:#16a34a10;border:1px solid #bbf7d0;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#16a34a;letter-spacing:0.06em;margin-bottom:6px;">POST-INSTALL</div>
+              <ol style="margin:0;padding-left:18px;font-size:11px;color:#166534;line-height:1.7;">
+                <li>jail created &#x2192; sandbox</li>
+                <li>plugin service enabled</li>
+                <li>MCP tools registered</li>
+                <li>sidebar &#x2014; 'Agent chat' pane appears</li>
+                <li>audit log entry written</li>
+              </ol>
+            </div>
+            <div style="padding:14px;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;font-size:11px;color:#78350f;line-height:1.5;">
+              <div style="font-weight:700;color:#92400e;letter-spacing:0.06em;font-size:10px;margin-bottom:6px;">UNDO</div>
+              <code style="font-family:monospace;background:#fef9c3;padding:2px 6px;border-radius:3px;">cloudbsd plugin disable ai-bridge-mcp</code><br/>
+              <code style="font-family:monospace;background:#fef9c3;padding:2px 6px;border-radius:3px;">cloudbsd plugin uninstall ai-bridge-mcp</code>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:9px 16px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">&#x2190; Back to Permissions</button>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <button style="padding:9px 16px;font-size:12px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">Save as draft</button>
+            <button style="padding:11px 26px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:linear-gradient(135deg,#7c3aed,#1d4ed8);color:#ffffff;cursor:pointer;box-shadow:0 1px 3px rgba(124,58,237,0.4);">+ Install + enable ai-bridge-mcp</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>

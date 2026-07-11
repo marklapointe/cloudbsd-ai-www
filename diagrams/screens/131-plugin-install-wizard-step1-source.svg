@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Plugin Install Wizard — Step 1 of 3 — Source (generic, MCP-aware migration pending)</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">Install plugin</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Step 1 — Source</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-size:11px;color:#64748b;">
+            Step 1 of 3 · ~2 min remaining
+            <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">&#x2715; Cancel</button>
+          </div>
+        </div>
+
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #1d4ed8;background:#1d4ed810;"><div style="width:20px;height:20px;border-radius:50%;background:#1d4ed8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">1</div><span style="font-size:11px;font-weight:600;color:#1d4ed8;">Source</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">&#x2014;</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">2</div><span style="font-size:11px;color:#475569;">Permissions</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">&#x2014;</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">3</div><span style="font-size:11px;color:#475569;">Review</span></div>
+            <div style="flex:1;"></div>
+            <span style="font-size:10px;color:#94a3b8;">0 of 3 complete</span>
+          </div>
+        </div>
+
+        <div style="flex:1;display:flex;background:#f1f5f9;overflow:hidden;">
+          <div style="flex:1;padding:28px 40px;overflow-y:auto;">
+            <h1 style="margin:0 0 4px;font-size:22px;font-weight:700;color:#0f172a;">Where does the plugin come from?</h1>
+            <p style="margin:0 0 24px;font-size:13px;color:#64748b;max-width:680px;line-height:1.55;">Pick a registry or drop a tarball. CloudBSD plugins can also wrap external MCP servers — when the plugin declares an MCP entry-point, the admin UI adds a chat pane.</p>
+
+            <!-- Source type -->
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:18px;">
+              <label style="padding:14px;background:#1d4ed810;border:2px solid #1d4ed8;border-radius:8px;cursor:pointer;">
+                <div style="font-size:18px;color:#1d4ed8;margin-bottom:4px;">&#x1F4E6;</div>
+                <div style="font-size:12px;font-weight:700;color:#1d4ed8;">Selected &#xB7; Registry</div>
+                <div style="font-size:10px;color:#1e3a8a;margin-top:2px;">Trusted &#xB7; signed by CloudBSD</div>
+              </label>
+              <label style="padding:14px;background:#ffffff;border:1px solid #cbd5e1;border-radius:8px;cursor:pointer;">
+                <div style="font-size:18px;color:#0f172a;margin-bottom:4px;">&#x1F517;</div>
+                <div style="font-size:12px;font-weight:700;color:#0f172a;">URL</div>
+                <div style="font-size:10px;color:#64748b;margin-top:2px;">HTTPS tarball</div>
+              </label>
+              <label style="padding:14px;background:#ffffff;border:1px solid #cbd5e1;border-radius:8px;cursor:pointer;">
+                <div style="font-size:18px;color:#0f172a;margin-bottom:4px;">&#x1F4C1;</div>
+                <div style="font-size:12px;font-weight:700;color:#0f172a;">Upload tarball</div>
+                <div style="font-size:10px;color:#64748b;margin-top:2px;">.tar.gz from disk</div>
+              </label>
+            </div>
+
+            <!-- Browse registry -->
+            <h2 style="margin:0 0 12px;font-size:14px;font-weight:700;color:#0f172a;text-transform:uppercase;letter-spacing:0.06em;">Browse CloudBSD Plugin Registry</h2>
+            <div style="padding:18px;background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:18px;">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+                <input placeholder="Search plugins &#x2026;" style="flex:1;padding:10px 14px;border:1px solid #cbd5e1;border-radius:6px;font-size:13px;"/>
+                <select style="padding:10px 14px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;font-size:12px;">
+                  <option>All categories</option>
+                  <option>Monitoring</option>
+                  <option>Storage</option>
+                  <option>Networking</option>
+                  <option>Auth</option>
+                  <option>AI / MCP</option>
+                </select>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+                <label style="padding:12px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;cursor:pointer;">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                    <div style="width:32px;height:32px;border-radius:6px;background:#7c3aed;color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:14px;">&#x1F4CA;</div>
+                    <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#0f172a;">prom-exporter</div><div style="font-size:10px;color:#64748b;">v2.1.4 &#xB7; monitoring</div></div>
+                  </div>
+                  <div style="font-size:11px;color:#475569;line-height:1.4;">Exports Prometheus metrics for the cluster.</div>
+                </label>
+                <label style="padding:12px;background:#1d4ed810;border:2px solid #1d4ed8;border-radius:8px;cursor:pointer;">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                    <div style="width:32px;height:32px;border-radius:6px;background:linear-gradient(135deg,#7c3aed,#1d4ed8);color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:14px;">&#x1F916;</div>
+                    <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#1d4ed8;">Selected &#xB7; ai-bridge-mcp</div><div style="font-size:10px;color:#1d4ed8;">v0.4.1 &#xB7; AI / MCP</div></div>
+                  </div>
+                  <div style="font-size:11px;color:#475569;line-height:1.4;">Wraps the cluster as an MCP server.</div>
+                </label>
+                <label style="padding:12px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;cursor:pointer;">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                    <div style="width:32px;height:32px;border-radius:6px;background:#0d9488;color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:14px;">&#x1F50E;</div>
+                    <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#0f172a;">snapshot-browser</div><div style="font-size:10px;color:#64748b;">v1.3.0 &#xB7; storage</div></div>
+                  </div>
+                  <div style="font-size:11px;color:#475569;line-height:1.4;">Browse + restore snapshots via UI.</div>
+                </label>
+              </div>
+              <div style="text-align:center;margin-top:12px;font-size:11px;color:#64748b;">Showing 3 of 18 &#xB7; <a style="color:#1d4ed8;text-decoration:underline;cursor:pointer;">View all</a></div>
+            </div>
+          </div>
+
+          <div style="width:280px;padding:28px 24px;border-left:1px solid #e2e8f0;background:#ffffff;overflow-y:auto;">
+            <div style="padding:14px;background:#1d4ed810;border:1px solid #bfdbfe;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#1d4ed8;letter-spacing:0.06em;margin-bottom:6px;">SELECTED</div>
+              <div style="font-size:13px;color:#1e3a8a;font-weight:700;font-family:monospace;">ai-bridge-mcp v0.4.1</div>
+              <div style="font-size:11px;color:#475569;margin-top:6px;">AI / MCP &#xB7; signed by cloudbsd-official</div>
+            </div>
+            <div style="padding:14px;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;margin-bottom:12px;">
+              <div style="font-size:11px;font-weight:700;color:#92400e;letter-spacing:0.06em;margin-bottom:6px;">MCP-AWARE</div>
+              <div style="font-size:11px;color:#78350f;line-height:1.5;">Plugin declares an MCP entry-point. When enabled, the cluster becomes an MCP server with tools, resources, and prompt templates. <strong>Plan separately.</strong></div>
+            </div>
+            <div style="font-family:monospace;font-size:10px;color:#475569;background:#1e293b;padding:10px;border-radius:6px;line-height:1.6;color:#a5f3fc;background:#0f172a;color:#a5f3fc;">
+$ ai-bridge-mcp serve<br/>
+$ ai-bridge-mcp discover</div>
+          </div>
+        </div>
+
+        <div style="padding:14px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:9px 16px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;" disabled="disabled">&#x2190; Back</button>
+          <button style="padding:10px 22px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:#1d4ed8;color:#ffffff;">Next &#x2192; Permissions</button>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>

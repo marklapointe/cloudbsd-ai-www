@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Plugin Install Wizard — Step 2 of 3 — Permissions</title>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+      <div style="display:flex;flex-direction:column;height:100%;background:#f1f5f9;">
+        <div style="padding:18px 32px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="display:inline-block;padding:5px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;">CloudBSD</span>
+            <h2 style="margin:0;font-size:15px;font-weight:600;">Install plugin</h2>
+            <span style="color:#94a3b8;">/</span>
+            <span style="font-size:12px;color:#475569;">Step 2 — Permissions</span>
+          </div>
+          <button style="padding:6px 12px;font-size:11px;border:none;border-radius:4px;background:transparent;color:#64748b;">&#x2715; Cancel</button>
+        </div>
+
+        <div style="padding:0 32px 14px;background:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <div style="display:flex;gap:0;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#16a34a;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">&#x2713;</div><span style="font-size:11px;color:#475569;">1. Source <button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;margin-left:4px;">edit</button></span></div>
+            <div style="display:flex;align-items:center;color:#16a34a;font-size:11px;padding:0 4px;">&#x2014;</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid #1d4ed8;background:#1d4ed810;"><div style="width:20px;height:20px;border-radius:50%;background:#1d4ed8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">2</div><span style="font-size:11px;font-weight:600;color:#1d4ed8;">Permissions</span></div>
+            <div style="display:flex;align-items:center;color:#cbd5e1;font-size:11px;padding:0 4px;">&#x2014;</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:2px solid transparent;"><div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">3</div><span style="font-size:11px;color:#475569;">Review</span></div>
+            <div style="flex:1;"></div>
+            <span style="font-size:10px;color:#16a34a;">1 of 3 complete</span>
+          </div>
+        </div>
+
+        <div style="flex:1;display:flex;background:#f1f5f9;overflow:hidden;">
+          <div style="flex:1;padding:28px 40px;overflow-y:auto;">
+
+            <h1 style="margin:0 0 4px;font-size:22px;font-weight:700;color:#0f172a;">What does <span style="font-family:monospace;color:#7c3aed;">ai-bridge-mcp</span> need?</h1>
+            <p style="margin:0 0 24px;font-size:13px;color:#64748b;max-width:680px;line-height:1.55;">The plugin manifest is signed by cloudbsd-official and declares these capabilities. Approve the ones you want.</p>
+
+            <!-- Plugin metadata -->
+            <div style="padding:18px;background:linear-gradient(135deg,#7c3aed10,#1d4ed810);border:1px solid #c4b5fd;border-radius:10px;margin-bottom:18px;display:flex;align-items:center;gap:14px;">
+              <div style="width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#1d4ed8);color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:24px;">&#x1F916;</div>
+              <div style="flex:1;">
+                <div style="font-size:16px;font-weight:700;color:#0f172a;font-family:monospace;">ai-bridge-mcp v0.4.1</div>
+                <div style="font-size:11px;color:#5b21b6;margin-top:2px;">CloudBSD AI Bridge &#x2014; exposes cluster as MCP server</div>
+                <div style="display:flex;gap:6px;margin-top:6px;">
+                  <span style="padding:2px 8px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-size:10px;font-weight:600;">cloudbsd-official</span>
+                  <span style="padding:2px 8px;background:#7c3aed20;color:#7c3aed;border-radius:4px;font-size:10px;font-weight:600;">signed &#x2713;</span>
+                  <span style="padding:2px 8px;background:#16a34a20;color:#16a34a;border-radius:4px;font-size:10px;font-weight:600;">SBOM verified</span>
+                  <span style="padding:2px 8px;background:#fef3c7;color:#92400e;border-radius:4px;font-size:10px;font-weight:600;">SHELL access requested</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Manifest view -->
+            <h2 style="margin:0 0 12px;font-size:14px;font-weight:700;color:#0f172a;text-transform:uppercase;letter-spacing:0.06em;">Manifest (from <code style="font-family:monospace;">plugin.yaml</code>, signed by registry)</h2>
+            <pre style="margin:0 0 18px;padding:14px;background:#0f172a;color:#a5f3fc;border-radius:8px;font-family:monospace;font-size:11px;line-height:1.65;border:1px solid #334155;overflow-x:auto;">apiVersion: cloudbsd/v1
+kind: Plugin
+metadata:
+  name: ai-bridge-mcp
+  version: 0.4.1
+  publisher: cloudbsd-official
+  description: Exposes the cluster as an MCP server for AI agents
+spec:
+  entryPoint: /usr/libexec/cloudbsd-plugins/ai-bridge
+  # MCP-aware: when this field is set, the admin UI adds an
+  # "agent chat" pane and registers tools via tools/list.
+  mcp:
+    transport: stdio | http+sse
+    requiredRoles: [agent, orchestrator]
+    exposes:
+      - tools:    vm.list, vm.start, vm.stop, container.run, logs.query
+      - resources: cluster://snapshot/{id}, node://{name}/metrics
+      - prompts:  troubleshoot-vm, migrate-workload, summarize-logs
+  requiredPermissions:
+    - users:read            # for agent identity scoping
+    - vms:read, vms:control
+    - containers:read, containers:control
+    - logs:read             # only logs the user is allowed to see
+    - shell:exec            # &#x26;#xA0; shell is REQUIRED to run agent commands
+    - network:egress       # outbound HTTPS, scoped to *.anthropic.com
+  sandbox:
+    enabled: true           # seccomp + jails + cgroups
+    allowNetworks: [&#x27;anthropic.com&#x27;, &#x27;openai.com&#x27;]</pre>
+
+            <!-- Permission matrix -->
+            <div style="padding:18px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">
+              <div style="font-size:13px;font-weight:700;color:#0f172a;margin-bottom:14px;">Approve these permissions</div>
+              <table style="width:100%;font-size:12px;border-collapse:collapse;">
+                <thead><tr style="background:#f8fafc;">
+                  <th style="padding:8px;text-align:left;font-size:10px;font-weight:700;color:#64748b;letter-spacing:0.06em;width:30px;"></th>
+                  <th style="padding:8px;text-align:left;font-size:10px;font-weight:700;color:#64748b;letter-spacing:0.06em;">SCOPE</th>
+                  <th style="padding:8px;text-align:left;font-size:10px;font-weight:700;color:#64748b;letter-spacing:0.06em;">USED FOR</th>
+                  <th style="padding:8px;text-align:right;font-size:10px;font-weight:700;color:#64748b;letter-spacing:0.06em;">RISK</th>
+                </tr></thead>
+                <tbody>
+                  <tr style="border-top:1px solid #e2e8f0;"><td style="padding:8px;"><input type="checkbox" checked="checked" style="accent-color:#1d4ed8;"/></td><td style="padding:8px;font-family:monospace;font-weight:600;">users:read</td><td style="padding:8px;font-size:11px;color:#475569;">agent identity scoping</td><td style="padding:8px;text-align:right;"><span style="padding:2px 7px;background:#16a34a20;color:#16a34a;border-radius:3px;font-size:10px;font-weight:700;">low</span></td></tr>
+                  <tr style="border-top:1px solid #e2e8f0;"><td style="padding:8px;"><input type="checkbox" checked="checked" style="accent-color:#1d4ed8;"/></td><td style="padding:8px;font-family:monospace;font-weight:600;">vms:read, vms:control</td><td style="padding:8px;font-size:11px;color:#475569;">list / start / stop on agent demand</td><td style="padding:8px;text-align:right;"><span style="padding:2px 7px;background:#d9770620;color:#d97706;border-radius:3px;font-size:10px;font-weight:700;">med</span></td></tr>
+                  <tr style="border-top:1px solid #e2e8f0;"><td style="padding:8px;"><input type="checkbox" checked="checked" style="accent-color:#1d4ed8;"/></td><td style="padding:8px;font-family:monospace;font-weight:600;">containers:read, containers:control</td><td style="padding:8px;font-size:11px;color:#475569;">agent-driven container ops</td><td style="padding:8px;text-align:right;"><span style="padding:2px 7px;background:#d9770620;color:#d97706;border-radius:3px;font-size:10px;font-weight:700;">med</span></td></tr>
+                  <tr style="border-top:1px solid #e2e8f0;"><td style="padding:8px;"><input type="checkbox" checked="checked" style="accent-color:#1d4ed8;"/></td><td style="padding:8px;font-family:monospace;font-weight:600;">logs:read</td><td style="padding:8px;font-size:11px;color:#475569;">scoped to current user</td><td style="padding:8px;text-align:right;"><span style="padding:2px 7px;background:#16a34a20;color:#16a34a;border-radius:3px;font-size:10px;font-weight:700;">low</span></td></tr>
+                  <tr style="border-top:1px solid #e2e8f0;"><td style="padding:8px;"><input type="checkbox" checked="checked" style="accent-color:#dc2626;"/></td><td style="padding:8px;font-family:monospace;font-weight:600;color:#dc2626;">shell:exec</td><td style="padding:8px;font-size:11px;color:#475569;">run agent-spawned shell commands (jailed)</td><td style="padding:8px;text-align:right;"><span style="padding:2px 7px;background:#dc262620;color:#dc2626;border-radius:3px;font-size:10px;font-weight:700;">high</span></td></tr>
+                  <tr style="border-top:1px solid #e2e8f0;"><td style="padding:8px;"><input type="checkbox" checked="checked" style="accent-color:#1d4ed8;"/></td><td style="padding:8px;font-family:monospace;font-weight:600;">network:egress (anthropic.com, openai.com)</td><td style="padding:8px;font-size:11px;color:#475569;">outbound to AI provider APIs</td><td style="padding:8px;text-align:right;"><span style="padding:2px 7px;background:#d9770620;color:#d97706;border-radius:3px;font-size:10px;font-weight:700;">med</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+          <div style="width:280px;padding:28px 24px;border-left:1px solid #e2e8f0;background:#ffffff;overflow-y:auto;">
+            <div style="padding:14px;background:#dcfce7;border:1px solid #86efac;border-radius:8px;margin-bottom:16px;">
+              <div style="font-size:11px;font-weight:700;color:#16a34a;letter-spacing:0.06em;margin-bottom:6px;">SANDBOXED &#x2713;</div>
+              <div style="font-size:11px;color:#166534;line-height:1.5;">Runs inside a FreeBSD jail. Cannot escape into the host. Network restricted.</div>
+            </div>
+            <div style="padding:14px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;">
+              <div style="font-size:11px;font-weight:700;color:#dc2626;letter-spacing:0.06em;margin-bottom:6px;">SHELL ACCESS</div>
+              <div style="font-size:11px;color:#7f1d1d;line-height:1.5;">Granted. Sandbox constrains damage but shell is still elevated. Disable if you don't trust the publisher.</div>
+              <button style="margin-top:8px;padding:5px 12px;font-size:11px;border:1px solid #dc2626;border-radius:4px;background:#ffffff;color:#dc2626;font-weight:600;">Revoke shell access</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 32px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <button style="padding:9px 16px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">&#x2190; Back to Source</button>
+          <button style="padding:10px 22px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:#1d4ed8;color:#ffffff;">Next &#x2192; Review</button>
+        </div>
+      </div>
+
+    </div>
+  </foreignObject>
+</svg>
