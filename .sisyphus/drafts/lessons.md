@@ -230,3 +230,14 @@ Containers / Jails / Logs / Settings. Sibling mockups:
 `101-node-vms-tab-content.svg`, `102-node-containers-tab-content.svg`,
 `103-node-jails-tab-content.svg`. **Rule #6 of Canonical Methodology.**
 
+### 7. Lead with the browser-native option (2026-07-10)
+Rule when proposing a "how does X work on a web UI" mechanic:
+FIRST ask whether the browser has native support for the same
+crypto. WebAuthn / PassKeys is the browser-native answer for
+asymmetric auth &mdash; don't invent a terminal-paste-signature
+flow on top of HTTPS. Reserve CLI / headless flows for the
+CLI tool (docs/cli/cloudbsd-login.md), NOT a screenshot in the
+Admin UI. **Lesson**: 'never tell a user to paste a crypto
+signature in a textarea when the browser can do it in one
+click.'
+

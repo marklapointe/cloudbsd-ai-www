@@ -446,4 +446,50 @@ HTTPS. Browser never sees the private key (default path).
 The login screen's "Sign in with SSH key" affordance is a
 LINK, not a 1-click action. We don't pretend otherwise &mdash;
 the sub-modal is the explicit 2-step UI.
+## 2026-07-10 — Pivot: terminal SSH paste -> browser-native PassKey
+
+User feedback (rejection of prior §2.30 / §31 / 05-ssh-key-login):
+"that is fucking stupid".
+
+What I had before:
+- A sub-modal titled "Sign in with SSH key"
+- The modal contained: nonce block, the literal `ssh-keygen
+  -Y sign` command, a "paste the SSH2 signature block here"
+  textarea, an error state, a "verify signature" button.
+
+Why it was wrong:
+- Not 1-click. Web UIs must be 1-click.
+- Not everyone has a terminal handy.
+- Pasting signature blocks is a developer-only flow and hostile
+  to non-developer admins.
+- The browser already has native support for the exact same
+  crypto &mdash; it's called WebAuthn / PassKeys. Touch ID, Windows
+  Hello, YubiKey, 1Password, iCloud Keychain &mdash; all the way
+  the SSH-key pattern wanted to go, but with native ergonomics.
+
+### Corrected design
+- Login UI uses WebAuthn / PassKeys (single click).
+- Server-side wire format unchanged &mdash; the cluster trusts
+  both PassKey public keys AND SSH public keys as
+  interchangeable asymmetric credentials.
+- Headless / CLI SSH-key login stays as `cloudbsd login`
+  (terminal tool) for CI / Ansible / Terraform / power users.
+  Not part of the Admin UI.
+
+### Changes
+- `diagrams/modals/05-ssh-key-login.svg` renamed to
+  `diagrams/modals/05-passkey-login.svg`, content rewritten to
+  show only the 1-click WebAuthn flow + the browser's native
+  sheet at the bottom (Mac Touch ID style).
+- `WIRE_PROTOCOL.md §2.30` rewritten. Same endpoint shapes
+  (challenge + signature), different protocol name on the
+  client (WebAuthn) vs the SSH wire format reserved for the
+  CLI. Server unchanged.
+- `ui-index.md §31` rewritten with the corrected approach
+  + explicit note that the headless CLI path is documented but
+  NOT rendered in the Admin UI screenshots.
+- 12-login.svg and 51-login.svg get the new affordance label
+  in the patch that follows this row.
+
+### Honcho retro conclusion recorded.
 

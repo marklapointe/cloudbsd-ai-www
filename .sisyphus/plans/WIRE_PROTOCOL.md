@@ -1772,112 +1772,135 @@ Server emits `kind: 'error'` for:
 Client logs + retries only auth failures (after re-login);
 all others are fatal for that connection.
 
-## §2.30 — SSH-key authentication (challenge + signature)
+## §2.30 — PassKey / SSH-key authentication
 
-User concern (2026-07-10): "how is one logging into a web ui with
-a ssh key?" — answer below, plus the dedicated mockup.
+User retro (2026-07-10): the terminal-paste-signature flow I
+proposed earlier is "fucking stupid" because it forces every
+admin through a developer-only UX. The right answer is browser
+native.
 
-### Pattern
+### Corrected approach
 
-SSH-key authentication over HTTP is the server-issued-challenge
-shape — same as SSH 2 itself on the wire, but emitting JSON over
-HTTPS. The browser never sees a private key.
+The browser UI uses **WebAuthn / PassKeys** (browser-native,
+single-click via Touch ID / Windows Hello / YubiKey /
+1Password / iCloud Keychain). Server-side, the SSH-key wire
+format is preserved for **headless / CLI use only** &mdash;
+nothing in the browser makes the user paste a signature.
 
-### Required for the user
+The cryptographer's view: a PassKey and an SSH key are
+interchangeable asymmetric credentials. The browser hides the
+challenge/response dance behind a native sheet. Cluster doesn't
+care which one you enrolled &mdash; both produce the same kind of
+session cookie on success.
 
-1. The user has a public key enrolled in the cluster (any of
-   `~/.ssh/id_ed25519.pub`, `id_ecdsa.pub`, `id_rsa.pub`, or an
-   upload done in Settings → My Account → SSH keys).
-2. The user must be able to RUN `ssh-keygen -Y sign` somewhere
-   (their laptop terminal, by default). A browser-side fallback
-   is provided for keys uploaded as raw private key (NOT
-   recommended for shared workstations).
+### Browser UI flow (PassKey / security key) &mdash; the only path admin UI exposes
+
+```
+User lands on /login
+         |
+         v
+Types username, clicks "Use Touch ID / security key"
+         |
+         v
+Browser shows NATIVE sheet (Touch ID / Windows Hello / YubiKey)
+         |
+         v
+Browser performs WebAuthn ceremony locally
+  navigator.credentials.get({
+    publicKey: {
+      challenge: <server-issued random>,
+      allowCredentials: <this user's passkeys>,
+      userVerification: "required"
+    }
+  })
+         |
+         v
+Browser POSTs the assertion to /api/auth/webauthn/verify
+         |
+         v
+Server verifies signature with stored passkey public key
+         |
+         v
+303 -> /dashboard + Set-Cookie cloudbsd_session
+```
+
+Single click. No terminal. No paste. No signature.
 
 ### Endpoints
 
-#### `POST /api/auth/ssh/init`
+#### `POST /api/auth/webauthn/init`
 ```jsonc
 // request
 { "username": "mlapointe" }
-
-// response 200
+// response
 {
-  "session_id": "uuid4",
-  "nonce":     "cloudbsd-<base64(sha256(random))>",
-  "fingerprint":"SHA256:qrvM3...jk",
-  "key_type":  "ssh-ed25519",
-  "expires_at":"2026-07-10T14:23:05Z"   // 5 min TTL
+  "challenge": "<random 32B base64url>",
+  "rpId":     "prod-cluster.cloudbsd.local",
+  "allowCredentials": [
+    { "id": "<base64url credential id>", "transports": ["internal","usb","nfc","ble"] }
+  ],
+  "userVerification": "required",
+  "expires_in": 60
 }
 ```
 
-Rate limit: `5/min per (username, ip)`.
+#### `POST /api/auth/webauthn/verify`
+Standard WebAuthn `PublicKeyCredential` JSON &mdash; the full
+`{id, rawId, type, response: {clientDataJSON, authenticatorData, signature, userHandle}, ...}`.
+Server validates with the stored credential.
 
-#### `POST /api/auth/ssh/verify`
-```jsonc
-// request
-{
-  "session_id": "uuid4",
-  "signature":  "<full SSH2 signature block, base64 armored>"
-}
+### Headless SSH-key login (CLI / automation) &mdash; not in the browser UI
 
-// response 200
-{ "redirect": "/dashboard",
-  "cookie":    "cloudbsd_session=<opaq>; HttpOnly; Secure; SameSite=Strict" }
+Used by:
+- CI runners
+- Migration scripts
+- Headless Ansible / Terraform providers
+- Power users with a terminal
 
-// response 401
-{ "code": "bad_signature",
-  "message": "Signature did not verify against enrolled public key." }
-
-// response 410
-{ "code": "nonce_expired" }
+Endpoint:
+```
+POST /api/auth/ssh/verify    (unchanged from prior revision)
+{ session_id, signature }
 ```
 
-On 200 the server issues the same session cookie as
-`/api/auth/login`. RBAC and cluster-join checks run identically.
-
-### Wire-mechanics of the signature
-
+Where the user runs:
 ```
-ssh-keygen -Y sign     -f ~/.ssh/id_ed25519     -n cloudbsd-<nonce> \      # a literal string the user pastes
-    -s cloudbsd-nonce.session # or just copy the whole command from the UI
+cloudbsd login --user mlapointe --nonce-file /tmp/n
 ```
 
-The signature is the standard SSH2 signature: the SSH client
-signs the SHA-256 of the nonce with the private key. The server
-re-derives the SHA-256 of the stored nonce and calls
-`sshkey_verify()` against the user's enrolled public key.
+The CLI tool handles the terminal mechanics FOR them, then prints a one-time SSO redirect URL or copies a token to clipboard. The CLI invokes `ssh-keygen -Y sign` internally and posts. Users never touch signature blocks or paste back.
 
-### Browser-side fallback (opt-in)
+This path is documented in `docs/cli/cloudbsd-login.md` and is NOT a screenshot in the Admin UI.
 
-For users who cannot open a terminal:
-- In Settings → My Account → SSH keys, they may upload a private
-  key (PEM, age-encrypted at rest with a passphrase).
-- At login time the browser loads the key via Web Crypto
-  (`crypto.subtle.importKey('pkcs8', ..., 'Ed25519', true, ['sign'])`).
-- Sign happens locally with `crypto.subtle.sign('Ed25519', ..., encodedNonce)`.
-- The resulting `ArrayBuffer` is base64-armored and submitted.
+### Browser-side fallback: SSH key imported by the user
 
-This path is gated behind an explicit "Save to browser" toggle.
-It is not the default — the default is paste-signed-by-terminal.
+For kiosks or shared workstations where the user cannot bring
+their own device:
+- In Settings &rarr; My Account &rarr; SSH keys, the user may
+  "Trust this browser" for an enrolled SSH public key.
+- Browser imports the matching private key (PEM, age-encrypted
+  with a passphrase) into IndexedDB.
+- Login uses `crypto.subtle.sign('Ed25519', ...)` locally.
+- Consent screen required at import time.
+- Cleared when the user clicks "Forget this browser".
 
-### UI surface
+This path is opt-in only and shows a clear warning that the
+key is leaving the user's own device.
 
-- The login screen (12-login / 51-login) shows a small
-  **"Sign in with SSH key"** affordance.
-- Clicking opens the SSH-key sub-modal (see
-  `diagrams/modals/05-ssh-key-login.svg` for the full pattern).
-- The modal contains: pre-flight state ("is 2nd-factor known",
-  expiry, the literal command copy-paste, paste-signature box,
-  Verify button). On 200 → 302 → /dashboard.
+### Why the UI does NOT show the terminal flow
 
-### Threat-model notes
+- 90%+ of admins are not SSH power users.
+- The browser already does it better (WebAuthn).
+- Pasting signature blocks into textareas is hostile UX.
+- WebAuthn is portable: works in every modern browser, every
+  OS, every device category.
+- The shape of the assertion (challenge + signature) is identical
+  so server-side one endpoint covers both.
 
-- Browser never sees the private key (default path).
-- Server never has the private key.
-- Nonce is single-use; replay rejected via `(session_id, nonce)`
-  memo table (Redis, 5 min TTL).
-- Constant-time signature verify (libsodium / boringssl).
-- Rate-limited by username+IP for both endpoints.
-- 2FA is REQUIRED if the user has it enrolled; SSH key alone
-  is not sufficient for the admin role. (Design decision, not a
-  wire concern.)
+### Wave 12a plan
+
+The CLI tool (`cloudbsd login`) is built **last** &mdash; it is
+a convenience, not a critical path. Headless flows that need it
+today can use the existing password + recovery-codes path
+(which always works, even when the rest fails &mdash; see
+`ui-index.md §26 capability cascade`).

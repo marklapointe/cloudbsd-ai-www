@@ -25,7 +25,7 @@
     <div style="height:14px;"></div>
     <div style="display:flex;justify-content:space-between;">
       <a style="font-size:12px;color:#1d4ed8;text-decoration:none;cursor:pointer;">Forgot password?</a>
-      <a style="font-size:12px;color:#64748b;text-decoration:none;cursor:pointer;">Use SSH key &#x2192;</a>
+      <a style="font-size:12px;color:#1d4ed8;text-decoration:none;cursor:pointer;font-weight:600;">Use Touch ID / security key &#x2192;</a>
     </div>
     <div style="margin-top:22px;padding-top:18px;border-top:1px solid #e2e8f0;text-align:center;">
       <p style="margin:0 0 8px;font-size:11px;color:#64748b;">Or sign in with</p>

@@ -1212,68 +1212,61 @@ GPUs / Network / VMs / Containers / Jails / Logs / Settings.
 > ✅ ACCEPTED: header text "Virtual machines on this node (8) ·
 > 8 of 8 running" inside a tab named "VMs".
 
-## §31 — SSH key login (challenge + signature) (2026-07-10)
+## §31 — Browser-native login (PassKeys first) (2026-07-10)
 
-User concern: "how is one logging into a web ui with a ssh key?"
+User feedback (rejected the prior version): "that is fucking
+stupid" about the terminal-paste-signature flow. Pivoting.
 
-### Answer (canonical)
+### The right answer
 
-The web UI logs you in with an SSH key the SAME way SSH itself
-logs you in &mdash; server-issued nonce + client-side signature. The
-browser never sees the private key.
+The cluster trusts **WebAuthn / PassKeys** as the default
+second-factor (and standalone) login for the browser UI. The
+SSH-key wire format is preserved server-side for **CLI and
+headless use** &mdash; not for the browser.
 
 ```
-User clicks "Sign in with SSH key"
-           |
-           v
-POST /api/auth/ssh/init    {username}
-           |
-           v
-Server returns {session_id, nonce, fingerprint, expires_at}
-           |
-           v
-UI shows the literal `ssh-keygen -Y sign` command (copy button)
-User runs it in a terminal
-           |
-           v
-User pastes the SSH2 signature block back into the form
-           |
-           v
-POST /api/auth/ssh/verify  {session_id, signature}
-           |
-           v
-Server verifies with the user's stored public key,
-issues the standard session cookie
-302 -> /dashboard
+User clicks "Use Touch ID / security key"
+         |
+         v
+Browser shows NATIVE sheet (Touch ID / Windows Hello / YubiKey
+                              / 1Password / iCloud Keychain)
+         |
+         v
+Browser does navigator.credentials.get({...})
+         |
+         v
+Server verifies, issues same session cookie
+         |
+         v
+303 -> /dashboard
 ```
 
+Single click. No terminal. No paste.
+
+Mockup: `diagrams/modals/05-passkey-login.svg`.
 Spec: `WIRE_PROTOCOL.md §2.30`.
-Mockup: `diagrams/modals/05-ssh-key-login.svg`.
 
-### Key constraints
+### What the affordance label is
 
-- **Default**: paste-signed-by-terminal. Browser-side fallback
-  only when the user explicitly opts in (Settings &rarr; My
-  Account &rarr; SSH keys &rarr; "Save to this browser").
-- 2FA is REQUIRED if enrolled; signature alone is not
-  enough for admin role.
-- Constant-time signature verify (libsodium / boringssl).
-- Nonce is single-use; replay rejected via
-  `(session_id, nonce)` Redis memo with 5 min TTL.
-- Rate-limited by `(username, ip)`: 5/min init, 5/min verify.
-
-### Browser-side fallback (opt-in)
-
-Users can save a key to the browser (in Settings). At login
-time, the page imports it via
-`crypto.subtle.importKey('pkcs8', ..., 'Ed25519', true, ['sign'])`,
-signs the nonce locally, and submits the same signature
-shape. NOT the default &mdash; only for users without terminal
-access (e.g. front-desk kiosks).
+On the login screen: **"Use Touch ID / security key"** with a
+small helper line: "one tap on this device, or plug your
+YubiKey." Below it a collapsible **"Other ways to sign in"**
+discloses the fallbacks (password + TOTP, recovery code, the
+headless CLI path &mdash; which goes to `docs/cli/cloudbsd-login.md`,
+not the admin UI).
 
 ### Honest defaults
 
-The login screen's "Sign in with SSH key" affordance is a
-LINK, not a 1-click path. Anyone who clicks it gets a 2-step
-sub-modal. We do not pretend SSH-key login is a single click
-because it isn't.
+- The UI never invents UX that doesn't exist.
+- It never tells the user "paste a signature here."
+- The headless CLI path exists for the audience that wants it,
+  but the screenshot mocks don't render it &mdash; it would be
+  misleading to show a terminal-only flow above a one-click
+  button.
+
+### Why not both side-by-side?
+
+Because the user (correctly) read the first mockup and felt
+they were being told to type SSH in a web form. We don't show
+that affordance anymore. The CLI flow is documented, not on
+the login screen.

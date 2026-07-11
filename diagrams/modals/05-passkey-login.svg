@@ -1,113 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
-  <title>CloudBSD Component Reference — SSH Key Login (sub-modal)</title>
-  <desc>Modal opened from the login page's 'Sign in with SSH key' link. Step 1 of 2: shows the server-issued nonce, the literal ssh-keygen command, a copy-to-clipboard button, and the paste-signature-here textarea. Confirming completes the loop (server verifies, issues session cookie, redirects to /dashboard). (2026-07-10)</desc>
+  <title>CloudBSD Component Reference — PassKey Login (WebAuthn, native browser sheet)</title>
+  <desc>PassKey (WebAuthn) login UX. Single click on the login screen triggers the browser's native authenticator sheet (Touch ID / Windows Hello / YubiKey / 1Password / iCloud Keychain). No terminal, no cut-and-paste. The SSH-key wire format is preserved server-side for headless use only. (2026-07-10)</desc>
   <foreignObject x="0" y="0" width="1280" height="800">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:rgba(15,23,42,0.55);color:#0f172a;font-size:13px;box-sizing:border-box;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:13px;box-sizing:border-box;overflow:hidden;display:flex;align-items:center;justify-content:center;">
 
-<!-- Dim page below (the login screen) -->
-<div style="position:absolute;inset:0;background:#f1f5f9;opacity:0.45;"></div>
+<!-- Same login card layout as 51-login, but the affordance now triggers WebAuthn. -->
+<div style="width:440px;background:#ffffff;border-radius:10px;border:1px solid #e2e8f0;box-shadow:0 10px 30px rgba(15,23,42,0.08);padding:32px;box-sizing:border-box;">
+  <div style="text-align:center;margin-bottom:24px;">
+    <div style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:8px;color:#ffffff;font-weight:700;font-size:14px;letter-spacing:0.04em;">CloudBSD</div>
+    <h1 style="margin:14px 0 4px;font-size:20px;font-weight:700;color:#0f172a;">Sign in to prod-cluster</h1>
+    <p style="margin:0;font-size:12px;color:#64748b;">for cluster: <strong style="font-family:monospace;color:#0f172a;">prod-cluster.cloudbsd.local</strong></p>
+  </div>
 
-<!-- Modal -->
-<div style="position:relative;width:680px;background:#ffffff;border-radius:12px;box-shadow:0 25px 50px rgba(0,0,0,0.35);border:1px solid #e2e8f0;overflow:hidden;">
+  <!-- Username field (just a label and a single textbox; password is gone) -->
+  <div style="margin-bottom:16px;">
+    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;">Username</label>
+    <input value="mlapointe" style="width:100%;padding:11px 12px;font-size:13px;font-family:monospace;border:1px solid #cbd5e1;border-radius:6px;box-sizing:border-box;background:#f8fafc;color:#475569;" />
+  </div>
 
-<!-- Header -->
-<div style="padding:16px 20px;border-bottom:1px solid #e2e8f0;background:linear-gradient(180deg,#f8fafc,#ffffff);display:flex;align-items:center;justify-content:space-between;">
-  <div style="display:flex;align-items:center;gap:10px;">
-    <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#0f172a,#1e293b);color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;font-family:monospace;">&#9099;</div>
-    <div>
-      <h2 style="margin:0;font-size:15px;font-weight:700;color:#0f172a;">Sign in with SSH key</h2>
-      <div style="font-size:11px;color:#64748b;margin-top:1px;">Challenge-based auth &#183; your private key never leaves your machine</div>
+  <!-- The ONE BUTTON that does it all. Single click -> browser native sheet. -->
+  <button style="width:100%;padding:13px;background:linear-gradient(135deg,#1d4ed8,#0d9488);color:#ffffff;border:0;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;">
+    <span style="font-size:18px;">&#x1F511;</span>
+    Use Touch ID / security key
+  </button>
+
+  <div style="text-align:center;font-size:11px;color:#64748b;margin-bottom:14px;">one tap on this device, or plug your YubiKey</div>
+
+  <!-- Fallback line (collapsed by default) -->
+  <details style="font-size:11px;color:#475569;">
+    <summary style="cursor:pointer;color:#1d4ed8;font-weight:600;padding:6px 0;">Other ways to sign in</summary>
+    <div style="padding:8px 0 4px;">
+      <a style="display:block;color:#334155;padding:5px 0;text-decoration:none;cursor:pointer;">&#128274; Use password + TOTP code</a>
+      <a style="display:block;color:#334155;padding:5px 0;text-decoration:none;cursor:pointer;">&#128236; Use a recovery code</a>
+      <a style="display:block;color:#334155;padding:5px 0;text-decoration:none;cursor:pointer;">&#128188; Headless: ssh-keygen (CLI only)</a>
     </div>
-  </div>
-  <button style="width:32px;height:32px;border-radius:6px;background:transparent;border:0;color:#64748b;font-size:16px;cursor:pointer;">&#10005;</button>
-</div>
+  </details>
 
-<!-- Identity row -->
-<div style="padding:14px 20px;background:#f1f5f9;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:14px;font-size:12px;">
-  <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">ML</div>
-  <div style="flex:1;">
-    <div style="font-weight:700;color:#0f172a;">mlapointe <span style="color:#64748b;font-weight:500;">&#183; UID 1014 &#183; admin (group 0001)</span></div>
-    <div style="font-size:11px;color:#475569;font-family:monospace;">3 enrolled SSH public keys &#183; using <strong>id_ed25519</strong> &#183; fingerprint SHA256:qrvM3&#8230;jk</div>
-  </div>
-  <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;font-size:10px;font-weight:600;background:#16a34a10;border:1px solid #bbf7d0;border-radius:9999px;color:#166534;font-family:monospace;"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#16a34a;"></span>live</span>
-</div>
-
-<!-- Body -->
-<div style="padding:18px 20px;">
-
-<!-- STEP 1: nonce + command -->
-<div style="margin-bottom:14px;">
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-    <div style="width:24px;height:24px;border-radius:50%;background:#1d4ed8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">1</div>
-    <h3 style="margin:0;font-size:13px;font-weight:700;color:#0f172a;">Run this in a terminal that has your key</h3>
-    <span style="margin-left:auto;font-family:monospace;font-size:10px;color:#94a3b8;">expires in 04:38</span>
-  </div>
-
-  <div style="padding:8px 12px;background:#fef3c7;border:1px solid #fde68a;border-radius:6px;margin-bottom:10px;display:flex;align-items:flex-start;gap:8px;font-size:11px;color:#78350f;line-height:1.5;">
-    <span style="color:#b45309;font-weight:700;">&#9888;</span>
-    <span>If your account has 2FA enabled, you'll be asked for the 6-digit code right after this step &#8212; the signature alone is not enough.</span>
-  </div>
-
-  <!-- Nonce row -->
-  <div style="display:flex;align-items:stretch;gap:8px;margin-bottom:10px;">
-    <div style="flex:0 0 88px;font-size:10px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.05em;display:flex;align-items:center;padding-top:6px;">nonce</div>
-    <div style="flex:1;display:flex;gap:6px;">
-      <code id="nonce-block" style="flex:1;display:block;padding:8px 12px;background:#0f172a;color:#a7f3d0;border-radius:6px;font-family:monospace;font-size:12px;font-weight:600;line-height:1.5;word-break:break-all;cursor:pointer;" title="click to copy">cloudbsd-eyJrZXkiOiJlZDI1NTE5Iiwibm9uY2UiOiJhYjljZGYxZS4uLiIsImV4cCI6MTcyMDYwNzM4NSwic2lkIjoic2Vzc18xMjM0NTYifQ==</code>
-      <button style="padding:0 14px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;font-size:11px;font-weight:600;cursor:pointer;">copy nonce</button>
+  <!-- "What happens next" inline hint -->
+  <div style="margin-top:18px;padding:12px 14px;background:#1d4ed808;border:1px solid #1d4ed840;border-radius:8px;display:flex;align-items:center;gap:10px;">
+    <div style="font-size:18px;color:#1d4ed8;">i</div>
+    <div style="font-size:11px;color:#1e3a8a;line-height:1.5;">
+      Your browser will show a sheet asking you to verify.
+      Touch ID on Mac &#183; Windows Hello on Windows &#183; YubiKey &#183; 1Password &#183; iCloud Keychain &#8212; whichever this device is set up with.
     </div>
   </div>
 
-  <!-- Command row -->
-  <div style="display:flex;align-items:stretch;gap:8px;margin-bottom:6px;">
-    <div style="flex:0 0 88px;font-size:10px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.05em;display:flex;align-items:flex-start;padding-top:6px;">then run</div>
-    <div style="flex:1;display:flex;gap:6px;">
-      <code style="flex:1;display:block;padding:8px 12px;background:#0f172a;color:#fde68a;border-radius:6px;font-family:monospace;font-size:11px;line-height:1.55;word-break:break-all;cursor:pointer;" title="click to copy">ssh-keygen -Y sign -f ~/.ssh/id_ed25519 -n cloudbsd-eyJrZXk... -s /tmp/cbsd.session</code>
-      <button style="padding:0 14px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;font-size:11px;font-weight:600;cursor:pointer;">copy cmd</button>
+</div>
+
+<!-- Native browser sheet (drawn as overlay, simulating what WebKit/Chromium shows). -->
+<div style="position:absolute;left:50%;bottom:48px;transform:translateX(-50%);width:380px;background:#ffffff;border-radius:14px;border:1px solid #e2e8f0;box-shadow:0 24px 60px rgba(0,0,0,0.32);padding:14px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;">
+  <div style="font-size:11px;color:#64748b;margin-bottom:6px;">cloudbsd.local wants to verify</div>
+  <div style="font-size:14px;font-weight:700;color:#0f172a;margin-bottom:10px;">prod-cluster.cloudbsd.local</div>
+  <div style="border-top:1px solid #e2e8f0;padding-top:10px;display:flex;align-items:center;gap:10px;">
+    <div style="width:32px;height:32px;border-radius:6px;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;">C</div>
+    <div style="flex:1;">
+      <div style="font-size:12px;color:#0f172a;font-weight:600;">mlapointe's PassKey</div>
+      <div style="font-size:10px;color:#64748b;font-family:monospace;">SHA256:qrvM3...jk &#183; iCloud Keychain</div>
     </div>
-  </div>
-
-  <div style="font-size:10px;color:#94a3b8;margin-top:6px;padding-left:96px;line-height:1.5;">
-    Paste the resulting <code style="background:#f1f5f9;padding:1px 4px;border-radius:3px;font-family:monospace;">-----BEGIN SSH2 SIGNATURE-----</code> block into the box below.
+    <button style="font-size:11px;color:#1d4ed8;background:transparent;border:0;font-weight:600;cursor:pointer;">Cancel</button>
   </div>
 </div>
-
-<!-- STEP 2: paste signature -->
-<div style="margin-bottom:6px;">
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-    <div style="width:24px;height:24px;border-radius:50%;background:#1d4ed8;color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">2</div>
-    <h3 style="margin:0;font-size:13px;font-weight:700;color:#0f172a;">Paste the signature here</h3>
-  </div>
-  <textarea rows="5" style="width:100%;padding:10px 12px;background:#0f172a;color:#a7f3d0;border:1px solid #1d4ed8;border-radius:6px;font-family:monospace;font-size:11px;line-height:1.5;box-sizing:border-box;resize:vertical;" placeholder="-----BEGIN SSH2 SIGNATURE-----
-AAAAG3NrZXlzaWQAAAAGnM69cy1lZGlucDI1NTE5LXNza............AAAAm
-mlapointe@lapointe-laptop
------END SSH2 SIGNATURE-----"></textarea>
-</div>
-
-<!-- Inline error / waiting state -->
-<div style="margin-top:10px;padding:8px 12px;background:#fef2f2;border:1px solid #fecaca;border-radius:6px;font-size:11px;color:#7f1d1d;display:flex;align-items:center;gap:8px;">
-  <span style="font-weight:700;color:#dc2626;">&#9888;</span>
-  <span>Verification failed: signature does not match enrolled public key. Did you use the right key, or has the nonce expired (expires in 04:38)?</span>
-</div>
-
-<!-- Browser-side alternative -->
-<div style="margin-top:14px;padding:10px 14px;background:#f1f5f9;border:1px dashed #cbd5e1;border-radius:6px;font-size:11px;color:#475569;line-height:1.55;">
-  <strong>Can't open a terminal?</strong> Use a key you've previously imported into this browser (Settings &#8594; My Account &#8594; SSH keys). The browser will sign locally with <code style="background:#ffffff;padding:1px 4px;border-radius:3px;font-family:monospace;">crypto.subtle.sign('Ed25519', ...)</code>. <a style="color:#1d4ed8;cursor:pointer;font-weight:600;">Sign in browser-side &#8594;</a>
-</div>
-
-</div>
-
-<!-- Footer -->
-<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-top:1px solid #e2e8f0;background:#f8fafc;">
-  <span style="font-size:10px;color:#94a3b8;font-family:monospace;">session_id = uuid:123456<br/>src_ip = 10.0.5.42</span>
-  <div style="display:flex;gap:8px;">
-    <button style="padding:8px 14px;font-size:12px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;font-weight:600;cursor:pointer;">Cancel</button>
-    <button style="padding:9px 22px;font-size:13px;font-weight:600;border:0;border-radius:6px;background:linear-gradient(135deg,#1d4ed8,#0d9488);color:#ffffff;cursor:pointer;">Verify signature &#8594;</button>
-  </div>
-</div>
-
-</div>
-<!-- /modal -->
 
     </div>
   </foreignObject>
