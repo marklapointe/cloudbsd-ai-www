@@ -1772,3 +1772,112 @@ Server emits `kind: 'error'` for:
 Client logs + retries only auth failures (after re-login);
 all others are fatal for that connection.
 
+## §2.30 — SSH-key authentication (challenge + signature)
+
+User concern (2026-07-10): "how is one logging into a web ui with
+a ssh key?" — answer below, plus the dedicated mockup.
+
+### Pattern
+
+SSH-key authentication over HTTP is the server-issued-challenge
+shape — same as SSH 2 itself on the wire, but emitting JSON over
+HTTPS. The browser never sees a private key.
+
+### Required for the user
+
+1. The user has a public key enrolled in the cluster (any of
+   `~/.ssh/id_ed25519.pub`, `id_ecdsa.pub`, `id_rsa.pub`, or an
+   upload done in Settings → My Account → SSH keys).
+2. The user must be able to RUN `ssh-keygen -Y sign` somewhere
+   (their laptop terminal, by default). A browser-side fallback
+   is provided for keys uploaded as raw private key (NOT
+   recommended for shared workstations).
+
+### Endpoints
+
+#### `POST /api/auth/ssh/init`
+```jsonc
+// request
+{ "username": "mlapointe" }
+
+// response 200
+{
+  "session_id": "uuid4",
+  "nonce":     "cloudbsd-<base64(sha256(random))>",
+  "fingerprint":"SHA256:qrvM3...jk",
+  "key_type":  "ssh-ed25519",
+  "expires_at":"2026-07-10T14:23:05Z"   // 5 min TTL
+}
+```
+
+Rate limit: `5/min per (username, ip)`.
+
+#### `POST /api/auth/ssh/verify`
+```jsonc
+// request
+{
+  "session_id": "uuid4",
+  "signature":  "<full SSH2 signature block, base64 armored>"
+}
+
+// response 200
+{ "redirect": "/dashboard",
+  "cookie":    "cloudbsd_session=<opaq>; HttpOnly; Secure; SameSite=Strict" }
+
+// response 401
+{ "code": "bad_signature",
+  "message": "Signature did not verify against enrolled public key." }
+
+// response 410
+{ "code": "nonce_expired" }
+```
+
+On 200 the server issues the same session cookie as
+`/api/auth/login`. RBAC and cluster-join checks run identically.
+
+### Wire-mechanics of the signature
+
+```
+ssh-keygen -Y sign     -f ~/.ssh/id_ed25519     -n cloudbsd-<nonce> \      # a literal string the user pastes
+    -s cloudbsd-nonce.session # or just copy the whole command from the UI
+```
+
+The signature is the standard SSH2 signature: the SSH client
+signs the SHA-256 of the nonce with the private key. The server
+re-derives the SHA-256 of the stored nonce and calls
+`sshkey_verify()` against the user's enrolled public key.
+
+### Browser-side fallback (opt-in)
+
+For users who cannot open a terminal:
+- In Settings → My Account → SSH keys, they may upload a private
+  key (PEM, age-encrypted at rest with a passphrase).
+- At login time the browser loads the key via Web Crypto
+  (`crypto.subtle.importKey('pkcs8', ..., 'Ed25519', true, ['sign'])`).
+- Sign happens locally with `crypto.subtle.sign('Ed25519', ..., encodedNonce)`.
+- The resulting `ArrayBuffer` is base64-armored and submitted.
+
+This path is gated behind an explicit "Save to browser" toggle.
+It is not the default — the default is paste-signed-by-terminal.
+
+### UI surface
+
+- The login screen (12-login / 51-login) shows a small
+  **"Sign in with SSH key"** affordance.
+- Clicking opens the SSH-key sub-modal (see
+  `diagrams/modals/05-ssh-key-login.svg` for the full pattern).
+- The modal contains: pre-flight state ("is 2nd-factor known",
+  expiry, the literal command copy-paste, paste-signature box,
+  Verify button). On 200 → 302 → /dashboard.
+
+### Threat-model notes
+
+- Browser never sees the private key (default path).
+- Server never has the private key.
+- Nonce is single-use; replay rejected via `(session_id, nonce)`
+  memo table (Redis, 5 min TTL).
+- Constant-time signature verify (libsodium / boringssl).
+- Rate-limited by username+IP for both endpoints.
+- 2FA is REQUIRED if the user has it enrolled; SSH key alone
+  is not sufficient for the admin role. (Design decision, not a
+  wire concern.)

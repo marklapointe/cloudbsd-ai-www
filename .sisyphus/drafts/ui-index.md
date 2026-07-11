@@ -1212,3 +1212,68 @@ GPUs / Network / VMs / Containers / Jails / Logs / Settings.
 > ✅ ACCEPTED: header text "Virtual machines on this node (8) ·
 > 8 of 8 running" inside a tab named "VMs".
 
+## §31 — SSH key login (challenge + signature) (2026-07-10)
+
+User concern: "how is one logging into a web ui with a ssh key?"
+
+### Answer (canonical)
+
+The web UI logs you in with an SSH key the SAME way SSH itself
+logs you in &mdash; server-issued nonce + client-side signature. The
+browser never sees the private key.
+
+```
+User clicks "Sign in with SSH key"
+           |
+           v
+POST /api/auth/ssh/init    {username}
+           |
+           v
+Server returns {session_id, nonce, fingerprint, expires_at}
+           |
+           v
+UI shows the literal `ssh-keygen -Y sign` command (copy button)
+User runs it in a terminal
+           |
+           v
+User pastes the SSH2 signature block back into the form
+           |
+           v
+POST /api/auth/ssh/verify  {session_id, signature}
+           |
+           v
+Server verifies with the user's stored public key,
+issues the standard session cookie
+302 -> /dashboard
+```
+
+Spec: `WIRE_PROTOCOL.md §2.30`.
+Mockup: `diagrams/modals/05-ssh-key-login.svg`.
+
+### Key constraints
+
+- **Default**: paste-signed-by-terminal. Browser-side fallback
+  only when the user explicitly opts in (Settings &rarr; My
+  Account &rarr; SSH keys &rarr; "Save to this browser").
+- 2FA is REQUIRED if enrolled; signature alone is not
+  enough for admin role.
+- Constant-time signature verify (libsodium / boringssl).
+- Nonce is single-use; replay rejected via
+  `(session_id, nonce)` Redis memo with 5 min TTL.
+- Rate-limited by `(username, ip)`: 5/min init, 5/min verify.
+
+### Browser-side fallback (opt-in)
+
+Users can save a key to the browser (in Settings). At login
+time, the page imports it via
+`crypto.subtle.importKey('pkcs8', ..., 'Ed25519', true, ['sign'])`,
+signs the nonce locally, and submits the same signature
+shape. NOT the default &mdash; only for users without terminal
+access (e.g. front-desk kiosks).
+
+### Honest defaults
+
+The login screen's "Sign in with SSH key" affordance is a
+LINK, not a 1-click path. Anyone who clicks it gets a 2-step
+sub-modal. We do not pretend SSH-key login is a single click
+because it isn't.

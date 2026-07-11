@@ -417,4 +417,33 @@ updated!!"
 - Rule #6 (canonical methodology #6 of ui-index §30): a view
   named one workload type shows only that type.
 - T82c is now DONE — Waves 10 row completed by the patches.
+## 2026-07-10 — SSH-key login mechanics (challenge + signature)
+
+User feedback: "how is one logging into a web ui with a ssh key?"
+
+### Decision
+Login UI uses server-issued-challenge + client-side-signs pattern,
+identical in shape to SSH 2 on the wire but emitting JSON over
+HTTPS. Browser never sees the private key (default path).
+
+### Specs added
+- `WIRE_PROTOCOL.md §2.30` &mdash; full endpoint contract for
+  `POST /api/auth/ssh/init` and `POST /api/auth/ssh/verify`.
+  Includes threat model: single-use nonces, constant-time verify,
+  Redis replay table, rate limits, 2FA interaction.
+- `ui-index.md §31` &mdash; canonical answer + ASCII diagram +
+  link to the sub-modal mockup + browser-side fallback caveat.
+
+### Mockup
+- `diagrams/modals/05-ssh-key-login.svg` (10 KB) &mdash; the
+  sub-modal opened from the login screen. Shows: identity row,
+  nonce block (click-to-copy), literal `ssh-keygen -Y sign`
+  command (click-to-copy), signature paste textarea, error
+  state ("signature did not match"), browser-side fallback
+  callout, footer with session_id + source IP.
+
+### Honest note
+The login screen's "Sign in with SSH key" affordance is a
+LINK, not a 1-click action. We don't pretend otherwise &mdash;
+the sub-modal is the explicit 2-step UI.
 
