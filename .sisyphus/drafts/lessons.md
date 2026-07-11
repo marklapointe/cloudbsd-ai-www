@@ -173,3 +173,60 @@ print(f'VALID: {fp}')
 **Honcho peers updated**: `prometheus` peer has 5 additional conclusions (search: "SVG XML entity validation HTML entities") documenting this rule.
 
 ---
+
+## 2026-07-10 — Live-data UX triad (do NOT re-instate these anti-patterns)
+
+User directive (after live-data sweep):
+"stuff like 'see Network tab or per-VM Disks' should not exist.
+it is sloppy. Also remove the refresh and 'view' json buttons.
+we should have messaging being pushed to each user that will
+update the views and the data being displayed."
+
+### Triad of bad UX
+
+1. **Refresh button** = implies data is stale, admin must poke it.
+   Wrong. Backend pushes events; UI patches in place.
+
+2. **View JSON button** = implies the UI is incomplete and admin
+   should debug via the raw payload.
+   Wrong. The wire-protocol is an implementation detail; admin
+   never sees JSON shapes.
+
+3. **"see X tab / page / section" hint** = implies the data
+   needed is somewhere else and you must leave this view.
+   Wrong. If the data is relevant to the current context,
+   inline it. If it's not relevant, don't show the row at all.
+
+### Rules (canonical)
+
+- Every view that shows changing data gets a `● live` indicator
+  (green dot + label, optionally `Xs ago` timestamp)
+- No manual refresh. No `View JSON`. No `View raw`. No `Reload`.
+- No 'see X tab' navigation hints. Inline the data or remove
+  the row.
+- Every list / table / card / tab panel / detail panel receives
+  updates via a stream subscription (see wire-protocol §2.29)
+- The view-only paradigm + push-messaging are two sides of
+  the same rule: admin never writes, UI never waits.
+
+### Visual recipes (canonical)
+
+- **SMALL** (toolbar / narrow) → `● live`
+  `<span ... ><span dot/> live</span>`
+- **MEDIUM** (page header) → `● live · 2s ago`
+- **LARGE** (hero card / data tile) → `● LIVE · pushed 2s ago`
+
+### 6. VMs / Containers / Jails separation (2026-07-10)
+A view named one workload type (e.g. "VMs", "Containers", "Jails") must
+show ONLY that type — no rows / no counts / no aggregate "3 of 8 VMs" of
+the others. Valid places for cross-type aggregates are: (a) the
+dashboard recent-activity feed (events are typed), (b) the cluster
+summary box at cluster level, (c) the node Overview tab workload
+composition (cluster-level rollup at the host), (d) the Network Map
+topology (visual graph with distinct colours + VM/CT/JAIL pill labels).
+A node detail panel now has 9 tabs so each workload type has its own
+filtered view at host level: Overview / ZFS / GPUs / Network / VMs /
+Containers / Jails / Logs / Settings. Sibling mockups:
+`101-node-vms-tab-content.svg`, `102-node-containers-tab-content.svg`,
+`103-node-jails-tab-content.svg`. **Rule #6 of Canonical Methodology.**
+

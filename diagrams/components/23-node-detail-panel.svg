@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
   <title>CloudBSD Admin — Node Detail Panel (cloudbsd-node-01)</title>
-  <desc>Cluster nodes list (left) + selected node detail panel (right). 7 tabs: Overview, ZFS, GPUs, Network, VMs, Logs, Settings. View-only.</desc>
+  <desc>Cluster nodes list (left) + selected node detail panel (right). 9 tabs: Overview, ZFS, GPUs, Network, VMs, Containers, Jails, Logs, Settings. View-only.</desc>
   <foreignObject x="0" y="0" width="1280" height="800">
     <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#f1f5f9;color:#0f172a;font-size:13px;box-sizing:border-box;overflow:hidden;display:flex;">
       <aside style="width:224px;background:#ffffff;border-right:1px solid #e2e8f0;padding:14px 10px;box-sizing:border-box;flex-shrink:0;overflow-y:auto;">
@@ -85,6 +85,8 @@
             <div style="padding:10px 16px;font-size:12px;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;">GPUs</div>
             <div style="padding:10px 16px;font-size:12px;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;">Network</div>
             <div style="padding:10px 16px;font-size:12px;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;">VMs</div>
+            <div style="padding:10px 16px;font-size:12px;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;">Containers</div>
+            <div style="padding:10px 16px;font-size:12px;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;">Jails</div>
             <div style="padding:10px 16px;font-size:12px;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;">Logs</div>
             <div style="padding:10px 16px;font-size:12px;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;">Settings</div>
           </nav>
