@@ -312,3 +312,55 @@ Plan (`.sisyphus/plans/angular-migration.md`), Wire Protocol (`WIRE_PROTOCOL.md`
 - Toolbar patches (Gap B) from 73f308a
 These edits are bookkeeping; the SVGs themselves are the source of truth per user directive.
 
+
+## 2026-07-10 — NIC editor flow (7ed48c5, 8b51ece)
+
+User directive 2026-07-10:
+'I am looking at component 100-node-network-tab, I would like the
+ability to goto an editing page or modal for the network
+interfaces, if there isn't already an editing page/modeal, we
+need one.'
+
+User chose '3 separate modals' (vs tabbed modal or inline edit).
+
+### Patched file
+- diagrams/components/100-node-network-tab-content.svg — added 3 contextual Edit buttons + 1 view-only tag
+
+### 3 new modals (diagrams/modals/)
+
+| File | Open from | Concern |
+|---|---|---|
+| 32-edit-interfaces.svg | Physical interfaces header `✎ Edit interfaces` | Per-iface role / MTU / on-off + add new PCI iface |
+| 33-edit-lacp.svg | LACP status header `✎ Edit bond` | Bond protocol + hash policy + LACP rate + primary + members + live Before/After preview |
+| 34-edit-ips.svg | Cluster IPs header `✎ Edit IPs` | Add/edit/delete IP + purpose + bonded-to + VLAN + enabled + default gateway |
+
+Pattern principle: SEPARATION of concerns. Three modals leaves
+room to grow (e.g., BGP peer editor next to IP editor later
+without bloating one modal). Each modal targets a single
+PATCH endpoint:
+
+- PATCH /api/nodes/{id}/ifaces       → 32-edit-interfaces
+- PATCH /api/nodes/{id}/bonds/{name} → 33-edit-lacp
+- PATCH /api/nodes/{id}/addresses    → 34-edit-ips
+
+### Visual pattern (contextual edits in tab content)
+Edit affordance lives in the SECTION HEADER (right-aligned
+small caps button), not the global tab toolbar. Why:
+tabs have many sections; per-section editing is more
+discoverable than 'Edit anything' → choose action. Pattern
+will repeat in other tab-content mockups (98-zfs, 99-gpus,
+101-vms may want per-section edits).
+
+### Live preview pattern (33-edit-lacp)
+Right rail shows side-by-side BEFORE vs AFTER cards. Common
+in network config tooling (Cisco IOS, pfSense) — admin sees
+the differential without scrolling to /etc/rc.conf preview.
+
+### Safety scaffolding (every modal)
+- amber/red disconnect warning at top (network changes drop
+  admin session)
+- `/etc/rc.conf` preview block at bottom (proves the wire-
+  protocol command will actually work)
+- 'unsaved changes' MODIFIED pill in footer
+- save-as-draft option (cancel without lose)
+

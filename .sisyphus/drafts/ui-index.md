@@ -1052,3 +1052,34 @@ Plugin install wizard (131-133) is generic + MCP-aware.
 Full reframe deferred — Honcho lesson 'Plugins as MCP agents'
 captured.
 
+
+## §28 — Contextual edit modal pattern (2026-07-10)
+
+When a tab-content detail view contains multiple independent
+concerns, each with its own edit semantics, do NOT pile them
+into a single modal. Use a per-section Edit button that opens
+a focused modal.
+
+### Why per-section, not global
+- Per-section edit button on the right of the section header
+  keeps the affordance discoverable inline with what it edits
+- Modal size stays bounded — admins don't have to scroll past
+  unrelated fields
+- Each modal targets a single backend PATCH endpoint
+- Each modal can carry its own warning (e.g., disconnects)
+
+### Layout recipe
+1. Section header: title (left) + edit button (right) + view-only tag (where applicable)
+2. Edit modal: header (with resource ID) + safety warning + edit form + preview or undo + footer with 'unsaved' badge
+
+### Reference implementations
+- 100-node-network-tab-content.svg → 32 / 33 / 34 modals
+
+### Other tab-content mockups that may want per-section edit
+- 98-node-zfs (datasets, scrub schedule, replication targets)
+- 99-node-gpus (driver, GPU assignment)
+- 101-node-vms (running VMs list, schedulable resources)
+- 90-vm-network (NICs, IP aliases)
+- 92-container-network (port mappings, networks)
+- 94-jail-network (VNET, IPs, allow flags)
+

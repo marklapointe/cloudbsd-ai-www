@@ -1603,3 +1603,66 @@ Each version documented in `CHANGELOG.md` with migration path.
 11. **All string fields have maxLength, arrays have maxItems, numbers have range constraints**
 12. **Schema versioning enables graceful fallback when versions mismatch** (see §7)
 8. Go backend MUST reject requests missing any required header with `400 BAD_REQUEST` and problem type `https://errors.cloudbsd.org/protocol/missing-header`
+### §2.28 — Node network editing endpoints (proposed 2026-07-10)
+
+Companion to the NIC editor modals (32, 33, 34).
+
+#### GET /api/nodes/{id}/ifaces
+Returns all physical + virtual interfaces for the node.
+```json
+[
+  {
+    "name": "lagg0",
+    "driver": "lagg",
+    "kind": "bond",
+    "speedMbps": 10000,
+    "mtu": 1500,
+    "mac": "52:54:00:1a:2b:3c",
+    "members": ["igb0", "igb1"],
+    "enabled": true,
+    "role": "primary",
+    "bondProto": "lacp"
+  },
+  {
+    "name": "igb1",
+    "driver": "igb",
+    "kind": "physical",
+    "speedMbps": 1000,
+    "mtu": 1500,
+    "mac": "52:54:00:1a:2b:41",
+    "enabled": false,
+    "role": "available"
+  }
+]
+```
+
+#### PATCH /api/nodes/{id}/ifaces
+Body: array of iface patches (MTU, role, enabled, member-of bond).
+Validation: cannot disable the only active member of a bond.
+Side-effects: re-handshake lagg (3-7 s admin disconnect).
+
+#### PATCH /api/nodes/{id}/bonds/{name}
+Body:
+```json
+{
+  "proto": "lacp",
+  "hashPolicy": "l3+l4",
+  "lacpRate": "fast",
+  "primary": "igb0",
+  "members": ["igb0", "igb1"],
+  "mtu": 1500
+}
+```
+Validation: members must exist + be available; at most one
+primary; switch must support chosen protocol.
+
+#### PATCH /api/nodes/{id}/addresses
+Body: array of address patches (cidr, purpose, bonded-to, vlan, enabled).
+Validation: cidr not already in use; CTDB pub change triggers 30-60 s cluster failover.
+Side-effects: rebind via ifconfig reload; admin session drops if
+admin IP changed.
+
+### GET /api/nodes/{id}/bond — single bond (read)
+Returns bond config + current hash / member state for live
+preview. Used by 33-edit-lacp.svg right rail "Before" card.
+
