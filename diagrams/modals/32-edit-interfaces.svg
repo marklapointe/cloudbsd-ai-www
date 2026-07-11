@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Admin — Edit Node Interfaces Modal</title>
+  <desc>Modal over node detail Network tab. 4 ifaces editable: rename + role (master/member/unused/IPMI) + MTU + driver bind + enable/disable. PATCH /api/nodes/{id}/ifaces.</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:rgba(15,23,42,0.55);color:#0f172a;font-size:13px;box-sizing:border-box;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+      <div style="background:#ffffff;border-radius:12px;box-shadow:0 25px 50px rgba(0,0,0,0.4);width:880px;display:flex;flex-direction:column;overflow:hidden;max-height:780px;">
+        <header style="padding:16px 20px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:8px;background:#0ea5e9;color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;">&#x1F5A7;</div><h2 style="margin:0;font-size:16px;font-weight:700;color:#0f172a;">Edit node interfaces</h2><span style="font-family:monospace;font-size:11px;color:#475569;padding:3px 8px;background:#f1f5f9;border-radius:4px;">cloudbsd-node-01</span></div>
+          <button style="width:28px;height:28px;border-radius:50%;background:#f1f5f9;border:0;cursor:pointer;font-size:14px;color:#64748b;">&#x2715;</button>
+        </header>
+        <div style="padding:18px 20px;flex:1;overflow-y:auto;">
+
+          <div style="padding:12px 14px;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px;">
+            <div style="font-size:14px;">&#x26A0;</div>
+            <div style="flex:1;">
+              <div style="font-size:12px;font-weight:700;color:#92400e;margin-bottom:2px;">Network changes briefly disconnect this admin session</div>
+              <div style="font-size:11px;color:#78350f;line-height:1.5;">Renaming a slave member or shifting IPs forces the bond to re-handshake (~3-7 s). SSH fallback over the IPMI channel recommended for emergency recovery.</div>
+            </div>
+          </div>
+
+          <table style="width:100%;font-size:12px;border-collapse:collapse;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;">
+            <thead><tr style="background:#f8fafc;">
+              <th style="padding:10px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748b;letter-spacing:0.06em;width:14%;">IFACE</th>
+              <th style="padding:10px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748b;letter-spacing:0.06em;width:14%;">DRIVER</th>
+              <th style="padding:10px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748b;letter-spacing:0.06em;width:11%;">SPEED</th>
+              <th style="padding:10px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748b;letter-spacing:0.06em;width:9%;">MTU</th>
+              <th style="padding:10px 12px;text-align:left;font-size:10px;font-weight:700;color:#64748b;letter-spacing:0.06em;width:30%;">ROLE</th>
+              <th style="padding:10px 12px;text-align:center;font-size:10px;font-weight:700;color:#64748b;letter-spacing:0.06em;width:8%;">ON</th>
+              <th style="padding:10px 12px;text-align:right;font-size:10px;font-weight:700;color:#64748b;letter-spacing:0.06em;width:14%;">ACTIONS</th>
+            </tr></thead>
+            <tbody>
+              <!-- lagg0 master -->
+              <tr style="background:#1d4ed810;border-top:2px solid #1d4ed8;">
+                <td style="padding:10px 12px;font-family:monospace;font-weight:700;color:#1d4ed8;">lagg0</td>
+                <td style="padding:10px 12px;font-family:monospace;font-size:11px;color:#475569;">lagg (LACP)</td>
+                <td style="padding:10px 12px;font-family:monospace;font-size:11px;">2&#xD7; 10 GbE</td>
+                <td style="padding:10px 12px;"><input value="1500" style="width:60px;padding:4px 6px;font-family:monospace;font-size:12px;border:1px solid #1d4ed8;border-radius:4px;text-align:center;"/></td>
+                <td style="padding:10px 12px;">
+                  <span style="padding:3px 8px;background:#1d4ed8;color:#ffffff;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.04em;">MASTER</span>
+                  <span style="font-size:11px;color:#475569;margin-left:4px;">aggregate</span>
+                </td>
+                <td style="padding:10px 12px;text-align:center;"><input type="checkbox" checked="checked" style="accent-color:#16a34a;width:32px;height:18px;"/></td>
+                <td style="padding:10px 12px;text-align:right;font-size:11px;color:#475569;font-style:italic;">edit in Bond tab</td>
+              </tr>
+              <!-- igb0 member -->
+              <tr style="background:#ffffff;border-top:1px solid #e2e8f0;">
+                <td style="padding:10px 12px;font-family:monospace;font-weight:700;">igb0</td>
+                <td style="padding:10px 12px;font-family:monospace;font-size:11px;color:#475569;">igb</td>
+                <td style="padding:10px 12px;font-family:monospace;font-size:11px;">1 GbE</td>
+                <td style="padding:10px 12px;"><input value="1500" style="width:60px;padding:4px 6px;font-family:monospace;font-size:12px;border:1px solid #cbd5e1;border-radius:4px;text-align:center;"/></td>
+                <td style="padding:10px 12px;">
+                  <span style="padding:3px 8px;background:#16a34a20;color:#16a34a;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.04em;">MEMBER</span>
+                  <span style="font-size:11px;color:#475569;margin-left:4px;">of lagg0</span>
+                </td>
+                <td style="padding:10px 12px;text-align:center;"><input type="checkbox" checked="checked" style="accent-color:#16a34a;width:32px;height:18px;"/></td>
+                <td style="padding:10px 12px;text-align:right;">
+                  <button style="padding:4px 8px;font-size:10px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;">Remove</button>
+                </td>
+              </tr>
+              <!-- igb1 unused -->
+              <tr style="background:#f8fafc;border-top:1px solid #e2e8f0;">
+                <td style="padding:10px 12px;font-family:monospace;font-weight:700;">igb1</td>
+                <td style="padding:10px 12px;font-family:monospace;font-size:11px;color:#475569;">igb</td>
+                <td style="padding:10px 12px;font-family:monospace;font-size:11px;">1 GbE</td>
+                <td style="padding:10px 12px;"><input value="1500" style="width:60px;padding:4px 6px;font-family:monospace;font-size:12px;border:1px solid #cbd5e1;border-radius:4px;text-align:center;"/></td>
+                <td style="padding:10px 12px;">
+                  <span style="padding:3px 8px;background:#94a3b820;color:#475569;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.04em;">UNUSED</span>
+                  <span style="font-size:11px;color:#475569;margin-left:4px;">available</span>
+                </td>
+                <td style="padding:10px 12px;text-align:center;"><input type="checkbox" style="accent-color:#94a3b8;width:32px;height:18px;"/></td>
+                <td style="padding:10px 12px;text-align:right;">
+                  <button style="padding:4px 8px;font-size:10px;border:1px solid #16a34a;border-radius:4px;background:#ffffff;color:#16a34a;">Add to lagg0</button>
+                </td>
+              </tr>
+              <!-- ipmi0 mgmt -->
+              <tr style="background:#fef3c7;border-top:1px solid #e2e8f0;">
+                <td style="padding:10px 12px;font-family:monospace;font-weight:700;">ipmi0</td>
+                <td style="padding:10px 12px;font-family:monospace;font-size:11px;color:#475569;">ipmi</td>
+                <td style="padding:10px 12px;font-family:monospace;font-size:11px;">100 MbE</td>
+                <td style="padding:10px 12px;"><input value="1500" style="width:60px;padding:4px 6px;font-family:monospace;font-size:12px;border:1px solid #cbd5e1;border-radius:4px;text-align:center;"/></td>
+                <td style="padding:10px 12px;">
+                  <span style="padding:3px 8px;background:#f59e0b20;color:#92400e;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.04em;">IPMI</span>
+                  <span style="font-size:11px;color:#475569;margin-left:4px;">management only</span>
+                </td>
+                <td style="padding:10px 12px;text-align:center;"><input type="checkbox" checked="checked" disabled="disabled" style="accent-color:#94a3b8;width:32px;height:18px;opacity:0.5;"/></td>
+                <td style="padding:10px 12px;text-align:right;font-size:11px;color:#64748b;font-style:italic;">read-only</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;">
+            <div style="padding:14px;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:8px;display:flex;align-items:center;gap:12px;">
+              <div style="font-size:20px;color:#1d4ed8;">&#x2795;</div>
+              <div style="flex:1;">
+                <div style="font-size:12px;font-weight:700;color:#0f172a;">Add physical interface</div>
+                <div style="font-size:11px;color:#475569;line-height:1.4;">Requires PCI slot. Detected but unconfigured ifaces appear here.</div>
+              </div>
+              <button style="padding:6px 14px;font-size:11px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">Discover</button>
+            </div>
+            <div style="padding:14px;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:8px;display:flex;align-items:center;gap:12px;">
+              <div style="font-size:20px;color:#7c3aed;">&#x1F500;</div>
+              <div style="flex:1;">
+                <div style="font-size:12px;font-weight:700;color:#0f172a;">Create new bond</div>
+                <div style="font-size:11px;color:#475569;line-height:1.4;">Open the Bond tab. Up to 4 bonds per node allowed.</div>
+              </div>
+              <button disabled="disabled" style="padding:6px 14px;font-size:11px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#cbd5e1;">Bond tab &#x2192;</button>
+            </div>
+          </div>
+
+          <div style="padding:14px 16px;background:#1e293b;border-radius:6px;margin-top:14px;">
+            <div style="font-size:11px;font-weight:700;color:#94a3b8;letter-spacing:0.06em;margin-bottom:6px;">/etc/rc.conf preview (post-save)</div>
+            <code style="font-family:monospace;font-size:11px;color:#a5f3fc;line-height:1.6;display:block;white-space:pre-wrap;">cloned_interfaces=&quot;lagg0&quot;
+ifconfig_igb0=&quot;up&quot;
+ifconfig_igb1=&quot;down&quot;
+ifconfig_lagg0=&quot;laggproto lacp laggport igb0 laggid 1 up&quot;</code>
+          </div>
+
+        </div>
+
+        <footer style="padding:14px 20px;border-top:1px solid #e2e8f0;background:#f8fafc;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:#64748b;"><span>2 unsaved changes</span><span style="padding:2px 7px;background:#fef3c7;color:#92400e;border-radius:9999px;font-weight:700;font-size:10px;">MODIFIED</span></div>
+          <div style="display:flex;gap:10px;">
+            <button style="padding:8px 14px;font-size:12px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#475569;">Cancel</button>
+            <button style="padding:9px 22px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:#1d4ed8;color:#ffffff;cursor:pointer;">Save interfaces</button>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </foreignObject>
+</svg>
