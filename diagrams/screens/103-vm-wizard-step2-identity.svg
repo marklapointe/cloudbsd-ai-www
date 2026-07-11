@@ -73,7 +73,7 @@
         </div>
 
         <div style="font-size:11px;font-weight:600;color:#475569;margin:14px 0 6px;">Owner</div>
-        <select style="width:100%;padding:9px 12px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;"><option>admin (admin@cloudbsd.local)</option><option>mlapointe</option><option>deployer</option></select>
+        <select style="width:100%;padding:9px 12px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;"><option>admin (admin@example.lan)</option><option>mlapointe</option><option>deployer</option></select>
 
         <div style="font-size:11px;font-weight:600;color:#475569;margin:14px 0 6px;">Auto-start</div>
         <div style="display:flex;gap:14px;">

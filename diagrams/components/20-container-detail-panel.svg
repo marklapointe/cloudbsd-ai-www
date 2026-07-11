@@ -100,7 +100,7 @@
               <div style="display:grid;grid-template-columns:1fr 2fr;gap:6px 16px;font-size:12px;"><span style="color:#64748b;">uptime</span><span style="color:#334155;">18d 04:32</span><span style="color:#64748b;">restart count</span><span style="color:#334155;">0</span><span style="color:#64748b;">restart policy</span><span style="font-family:monospace;color:#334155;">unless-stopped</span></div>
             </div>
           </div>
-          <footer style="padding:10px 18px;background:#ffffff;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8;display:flex;justify-content:space-between;"><span>GET /api/containers/ulid-01HQK9F2K7RT4 — application/vnd.cloudbsd+container+json</span><span>view-only · no write endpoints</span></footer>
+          <span style="display:inline-flex;align-items:center;gap:5px;padding:2px 8px;font-size:10px;font-weight:600;background:#47556910;border:1px solid #cbd5e1;border-radius:9999px;color:#475569;font-family:monospace;">view-only</span>
         </section>
       </main>
     </div>

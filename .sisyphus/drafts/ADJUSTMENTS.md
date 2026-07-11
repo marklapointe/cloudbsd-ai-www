@@ -516,3 +516,45 @@ match `>\s*[⟳↻↺]?\s*Refresh<` not just `>Refresh<`.
 Every diagrams/*.svg checked: 0 Refresh buttons, 0 View JSON
 buttons. 15 files validated strict, 0 warnings, 0 fatals.
 
+
+## 2026-07-10 — CloudBSD / Revytech brand scrub (184 + 12 = 194 replacements)
+
+User directive: "cloudbsd doesn't have any services yet,
+possibly never, so don't include cloudbsd/revytech servers
+for anything that isn't about getting the product."
+
+### What got scrubbed (mechanized python pass)
+| Pattern | Replaced with | Count |
+|---------|---------------|-------|
+| `*.cloudbsd.lan` / `*.cloudbsd.local` | `*.corp.lan` / `*.lan` | ~80 (across VMs/Containers/Jails/Network/VMs-of-Node/etc) |
+| `cloudbsd-node-NN` | `prod-node-NN` | ~50 (across Node detail panels, master/worker node labels, event/notification service references) |
+| `@cloudbsd.local` / `@cloudbsd.org` | `@example.lan` | ~30 (across login, account, password-reset, first-login, owner fields) |
+| `ntp.cloudbsd.local` etc. | `ntp.lan` etc. | ~6 (NTP wizard bulk paste, passkey cluster id, log examples) |
+| `${vault:kv/cloudbsd/...}` | `${vault:kv/myapp/...}` | ~12 (env-vars tab, secret references) |
+| `https://community.cloudbsd.io/...` | `https://themes.example.com/...` | 4 (theme import URLs) |
+
+Total: **194 replacements across 67 SVG files**.
+
+### What we explicitly KEEPED
+- "CloudBSD Admin" wordmark / product name (about pages, signup)
+- SVG artifact titles `<title>CloudBSD Admin — ...</title>`
+- `cloudbsd-admin` cert subject (the panel's service identifier, not a hosted endpoint)
+- `cloudbsd-agent@1.4.2` version label (software name)
+- `revytech` BYLINE on community-contributed theme credits
+- "About / Try-CloudBSD" copy in product-acquisition contexts
+
+### Plan & lessons update
+- `angular-migration.md` Canonical Methodology: added Rule #7
+  (no cloudbsd/revytech as customer service/hostname).
+- `lessons.md`: added rule #9 (CloudBSD/Revytech are NOT
+  service operators).
+- Audit grep committed to lessons.md for verifying future
+  mockups don't regress.
+
+### Validation
+- `grep -rE "cloudbsd\.(lan|local|net|io|com|tc|org|cloud|dev)"
+  diagrams/` with the allowlist filter returns empty.
+- 65 of 67 SVG files still parse cleanly with
+  `xml.etree.ElementTree.parse`. 2 pre-existing parse errors
+  (18-add-node-dialog.svg, 68-monitoring-dashboard.svg) are
+  unrelated to this scrub.

@@ -73,7 +73,7 @@
                   <span style="font-size:11px;color:#64748b;width:60px;">Gateway</span>
                   <input value="10.0.5.1" style="flex:1;height:28px;border:1px solid #cbd5e1;border-radius:4px;padding:0 8px;font-family:monospace;font-size:12px;"/>
                 </div>
-                <div style="font-size:10px;color:#94a3b8;">Resolves to: <code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">dns-resolver-01.cloudbsd.lan → 10.0.5.21</code></div>
+                <div style="font-size:10px;color:#94a3b8;">Resolves to: <code style="font-family:monospace;background:#f1f5f9;padding:1px 5px;border-radius:3px;">dns-resolver-01.corp.lan → 10.0.5.21</code></div>
               </div>
 
               <div style="padding:14px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;">

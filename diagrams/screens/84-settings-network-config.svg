@@ -63,12 +63,101 @@
 
   <div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:24px;margin-bottom:14px;">
     <h4 style="margin:0 0 14px;font-size:12px;font-weight:700;color:#1d4ed8;text-transform:uppercase;">DNS &amp; NTP</h4>
-    <div style="margin-bottom:12px;">
-      <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Upstream DNS</div>
-      <div style="display:flex;gap:8px;">
-        <input type="text" value="1.1.1.1" style="flex:1;padding:8px 10px;font-size:12px;font-family:monospace;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#0f172a;" />
-        <input type="text" value="8.8.8.8" style="flex:1;padding:8px 10px;font-size:12px;font-family:monospace;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#0f172a;" />
-        <input type="text" value="9.9.9.9" style="flex:1;padding:8px 10px;font-size:12px;font-family:monospace;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#0f172a;" />
+        <div style="margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:8px;">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#475569;">Upstream DNS resolvers</div>
+          <div style="font-size:10px;color:#64748b;margin-top:3px;">Pick from public providers (anycast IP4 + IP6, DoH/DoT enabled). We'll probe each in step 3 of the wizard and pick the fastest.</div>
+        </div>
+        <span style="font-size:10px;color:#1d4ed8;font-weight:600;cursor:pointer;">+ Resolve custom host &#x2192;</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;">
+
+        <!-- Cloudflare -->
+        <label style="display:block;border:1px solid #1d4ed8;border-radius:6px;padding:8px 10px;background:#eff6ff;cursor:pointer;box-shadow:0 0 0 1px #1d4ed8 inset;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
+            <span style="font-size:11px;font-weight:700;color:#0f172a;">Cloudflare</span>
+            <input type="checkbox" checked="checked" style="margin:0;accent-color:#2563eb;"/>
+          </div>
+          <div style="font-family:monospace;font-size:10px;color:#0f172a;line-height:1.55;">
+            <div>1.1.1.1 <span style="color:#94a3b8;">&#183;</span> 1.0.0.1</div>
+            <div style="color:#1e3a8a;">2606:4700:4700::1111</div>
+          </div>
+          <div style="font-size:9px;color:#1e40af;margin-top:4px;letter-spacing:0.04em;">DoH &#183; DoT &#183; DNSSEC</div>
+        </label>
+
+        <!-- Google -->
+        <label style="display:block;border:1px solid #1d4ed8;border-radius:6px;padding:8px 10px;background:#eff6ff;cursor:pointer;box-shadow:0 0 0 1px #1d4ed8 inset;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
+            <span style="font-size:11px;font-weight:700;color:#0f172a;">Google</span>
+            <input type="checkbox" checked="checked" style="margin:0;accent-color:#2563eb;"/>
+          </div>
+          <div style="font-family:monospace;font-size:10px;color:#0f172a;line-height:1.55;">
+            <div>8.8.8.8 <span style="color:#94a3b8;">&#183;</span> 8.8.4.4</div>
+            <div style="color:#1e3a8a;">2001:4860:4860::8888</div>
+          </div>
+          <div style="font-size:9px;color:#1e40af;margin-top:4px;letter-spacing:0.04em;">DoH &#183; DoT &#183; DNSSEC &#183; anycast</div>
+        </label>
+
+        <!-- Quad9 -->
+        <label style="display:block;border:1px solid #1d4ed8;border-radius:6px;padding:8px 10px;background:#eff6ff;cursor:pointer;box-shadow:0 0 0 1px #1d4ed8 inset;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
+            <span style="font-size:11px;font-weight:700;color:#0f172a;">Quad9</span>
+            <input type="checkbox" checked="checked" style="margin:0;accent-color:#2563eb;"/>
+          </div>
+          <div style="font-family:monospace;font-size:10px;color:#0f172a;line-height:1.55;">
+            <div>9.9.9.9 <span style="color:#94a3b8;">&#183;</span> 149.112.112.112</div>
+            <div style="color:#1e3a8a;">2620:fe::fe</div>
+          </div>
+          <div style="font-size:9px;color:#1e40af;margin-top:4px;letter-spacing:0.04em;">DoH &#183; DoT &#183; DNSSEC &#183; block-malware</div>
+        </label>
+
+        <!-- OpenDNS -->
+        <label style="display:block;border:1px solid #cbd5e1;border-radius:6px;padding:8px 10px;background:#ffffff;cursor:pointer;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
+            <span style="font-size:11px;font-weight:700;color:#0f172a;">OpenDNS</span>
+            <input type="checkbox" style="margin:0;accent-color:#2563eb;"/>
+          </div>
+          <div style="font-family:monospace;font-size:10px;color:#0f172a;line-height:1.55;">
+            <div>208.67.222.222 <span style="color:#94a3b8;">&#183;</span> 208.67.220.220</div>
+            <div style="color:#94a3b8;">2620:119:35::35</div>
+          </div>
+          <div style="font-size:9px;color:#475569;margin-top:4px;letter-spacing:0.04em;">DoH &#183; DNSSEC &#183; Cisco</div>
+        </label>
+
+        <!-- DNS.SB -->
+        <label style="display:block;border:1px solid #cbd5e1;border-radius:6px;padding:8px 10px;background:#ffffff;cursor:pointer;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
+            <span style="font-size:11px;font-weight:700;color:#0f172a;">DNS.SB</span>
+            <input type="checkbox" style="margin:0;accent-color:#2563eb;"/>
+          </div>
+          <div style="font-family:monospace;font-size:10px;color:#0f172a;line-height:1.55;">
+            <div>185.184.222.222 <span style="color:#94a3b8;">&#183;</span> 185.184.223.223</div>
+            <div style="color:#1e3a8a;">2a09::</div>
+          </div>
+          <div style="font-size:9px;color:#475569;margin-top:4px;letter-spacing:0.04em;">DoH &#183; DoT &#183; DNSSEC &#183; privacy</div>
+        </label>
+
+        <!-- AdGuard DNS (alt) -->
+        <label style="display:block;border:1px solid #cbd5e1;border-radius:6px;padding:8px 10px;background:#ffffff;cursor:pointer;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
+            <span style="font-size:11px;font-weight:700;color:#0f172a;">AdGuard</span>
+            <input type="checkbox" style="margin:0;accent-color:#2563eb;"/>
+          </div>
+          <div style="font-family:monospace;font-size:10px;color:#0f172a;line-height:1.55;">
+            <div>94.140.14.14 <span style="color:#94a3b8;">&#183;</span> 94.140.15.15</div>
+            <div style="color:#1e3a8a;">2a10:50c0::ad1:ff</div>
+          </div>
+          <div style="font-size:9px;color:#475569;margin-top:4px;letter-spacing:0.04em;">DoH &#183; DoT &#183; DNSSEC &#183; block-ads</div>
+        </label>
+
+      </div>
+
+      <!-- Selected resolvers summary (will read 6 IPv4 + 6 IPv6 active) -->
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-radius:5px;background:#f8fafc;border:1px dashed #cbd5e1;font-size:10px;color:#475569;">
+        <span><span style="color:#0f172a;font-weight:700;">3 providers selected</span> &#183; 6 IPv4 + 6 IPv6 endpoints active &#183; cluster will round-robin per query</span>
+        <span style="color:#1d4ed8;font-weight:600;cursor:pointer;">Configure split-horizon / DNSSEC keys &#x2192;</span>
       </div>
     </div>
     <div>

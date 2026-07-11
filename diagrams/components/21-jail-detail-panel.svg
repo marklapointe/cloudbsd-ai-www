@@ -102,7 +102,7 @@
               <div style="display:grid;grid-template-columns:1fr 2fr;gap:6px 16px;font-size:12px;"><span style="color:#64748b;">uptime</span><span style="color:#334155;">47d 14:08</span><span style="color:#64748b;">state</span><span style="color:#10b981;font-weight:600;">active</span></div>
             </div>
           </div>
-          <footer style="padding:10px 18px;background:#ffffff;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8;display:flex;justify-content:space-between;"><span>GET /api/jails/12 — application/vnd.cloudbsd+jail+json</span><span>view-only · no write endpoints</span></footer>
+          <span style="display:inline-flex;align-items:center;gap:5px;padding:2px 8px;font-size:10px;font-weight:600;background:#47556910;border:1px solid #cbd5e1;border-radius:9999px;color:#475569;font-family:monospace;">view-only</span>
         </section>
       </main>
     </div>

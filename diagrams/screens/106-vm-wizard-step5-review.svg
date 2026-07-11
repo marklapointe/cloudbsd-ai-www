@@ -201,7 +201,7 @@
 
             <div style="padding:14px;background:#16a34a10;border:1px solid #bbf7d0;border-radius:8px;">
               <div style="font-size:11px;font-weight:700;color:#16a34a;letter-spacing:0.06em;margin-bottom:6px;">READY TO CREATE</div>
-              <div style="font-size:11px;color:#166534;line-height:1.5;">Estimated time to provision: <strong>~45 seconds</strong>. VM will be accessible via <code style="font-family:monospace;background:#dcfce7;padding:1px 5px;border-radius:3px;">https://node-3.cloudbsd.local:8006</code> after start.</div>
+              <div style="font-size:11px;color:#166534;line-height:1.5;">Estimated time to provision: <strong>~45 seconds</strong>. VM will be accessible via <code style="font-family:monospace;background:#dcfce7;padding:1px 5px;border-radius:3px;">https://node-3.lan:8006</code> after start.</div>
             </div>
           </div>
         </div>

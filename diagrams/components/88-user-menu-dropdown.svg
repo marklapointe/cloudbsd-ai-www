@@ -8,7 +8,7 @@
       <div style="height:56px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;padding:0 16px;box-sizing:border-box;">
         <div style="width:32px;height:32px;border-radius:6px;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;">C</div>
         <span style="font-weight:700;font-size:17px;margin-left:8px;color:#0f172a;">CloudBSD Admin</span>
-        <span style="margin-left:10px;padding:2px 8px;font-size:11px;border-radius:4px;background:#f1f5f9;color:#475569;">cloudbsd-node-01.local</span>
+        <span style="margin-left:10px;padding:2px 8px;font-size:11px;border-radius:4px;background:#f1f5f9;color:#475569;">prod-node-01.local</span>
         <span style="margin-left:auto;font-size:11px;color:#94a3b8;">— chrome right side: TZ · Bell · Avatar —</span>
         <!-- Active avatar (clicked state: ring + slight scale) -->
         <div style="margin-left:auto;display:flex;align-items:center;gap:12px;font-size:12px;color:#64748b;">
@@ -35,7 +35,7 @@
           </div>
           <div style="display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:10px;color:#64748b;margin-top:8px;">
             <span>ulid</span><span style="font-family:monospace;color:#475569;cursor:pointer;" title="Click to copy">01HF9XK2R7N…T8YMQC4VE</span>
-            <span>email</span><span style="color:#475569;">mark@cloudbsd.org</span>
+            <span>email</span><span style="color:#475569;">mark@example.lan</span>
             <span>auth</span><span style="color:#0f172a;font-weight:600;">Password + TOTP</span><span></span><span style="display:inline-flex;align-items:center;gap:3px;padding:0 5px;border-radius:9999px;background:#dcfce7;color:#059669;font-size:9px;font-weight:700;align-self:center;">2FA</span>
             <span>session</span><span style="color:#475569;">4h 12m · expires in 19d</span>
             <span>ip</span><span style="font-family:monospace;color:#475569;">10.0.10.42<span style="color:#94a3b8;font-family:-apple-system,sans-serif;margin-left:4px;">· this device</span></span>

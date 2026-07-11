@@ -67,7 +67,7 @@
       <div style="padding:10px 12px;background:#f8fafc;border-radius:6px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
         <div>
           <div style="font-size:12px;font-weight:600;color:#0f172a;">Webhook</div>
-          <div style="font-size:10px;color:#64748b;">alertmanager.cloudbsd.lan</div>
+          <div style="font-size:10px;color:#64748b;">alertmanager.corp.lan</div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
           <span style="font-size:10px;color:#64748b;">12 of 14</span>

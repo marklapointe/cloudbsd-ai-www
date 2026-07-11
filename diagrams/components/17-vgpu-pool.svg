@@ -10,20 +10,99 @@
           <div style="font-size:11px;color:#64748b;margin-top:2px;">12 physical GPUs · 3 nodes · 304 GB total VRAM · 22 vGPU allocations</div>
         </div>
         <div style="display:flex;gap:8px;align-items:center;font-size:11px;">
-          <span style="color:#64748b;">vGPU profiles:</span>
-          <span style="padding:1px 5px;border-radius:3px;background:#f1f5f9;color:#475569;font-family:monospace;">■ whole</span>
-          <span style="padding:1px 5px;border-radius:3px;background:#f1f5f9;color:#475569;font-family:monospace;">½ slice 1/2</span>
-          <span style="padding:1px 5px;border-radius:3px;background:#f1f5f9;color:#475569;font-family:monospace;">⅓ slice 1/3</span>
-          <span style="padding:1px 5px;border-radius:3px;background:#f1f5f9;color:#475569;font-family:monospace;">¼ slice 1/4</span>
-          <span style="padding:1px 5px;border-radius:3px;background:#f1f5f9;color:#7c3aed;font-family:monospace;">MIG 1g.5gb</span>
-          
+          <span style="color:#64748b;font-size:11px;">Showing 9 of 12 cards</span>
+          <button style="display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;font-size:11px;font-weight:600;cursor:pointer;">⚙ Filters <span style="display:inline-flex;align-items:center;justify-content:center;background:#1d4ed8;color:#ffffff;border-radius:9999px;font-size:9px;font-weight:700;padding:0 5px;">2</span> <span style="color:#64748b;font-size:10px;">▾</span></button>
+          <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;font-size:10px;font-weight:600;background:#16a34a10;border:1px solid #bbf7d0;border-radius:9999px;color:#166534;font-family:monospace;"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#16a34a;"></span>live &#183; 2s ago</span>
+        </div>
+      </div>
+
+      <!-- Active filters strip (same shape as 17-vgpu-pool-list) -->
+      <div style="display:flex;align-items:center;gap:8px;font-size:11px;margin:-6px 0 10px;">
+        <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;background:#ffffff;border:1px solid #cbd5e1;border-radius:9999px;color:#334155;">Allocation: <strong style="color:#0f172a;">Allocated</strong> <span style="color:#94a3b8;cursor:pointer;font-weight:700;">×</span></span>
+        <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;background:#ffffff;border:1px solid #cbd5e1;border-radius:9999px;color:#334155;">Model: <strong style="color:#0f172a;">T4</strong> <span style="color:#94a3b8;cursor:pointer;font-weight:700;">×</span></span>
+        <span style="color:#1d4ed8;cursor:pointer;font-weight:600;text-decoration:underline;">Clear all</span>
+      </div>
+
+      <!-- Filter popover (open, anchored to the Filters button on the right).
+           SAME facets and SAME data as 17-vgpu-pool-list.svg — single source of truth
+           server-side via GET /api/gpus. Includes the "vGPU profile type" facet
+           that used to live in the header. -->
+      <div style="position:relative;">
+        <div style="position:absolute;top:0;right:0;width:380px;background:#ffffff;border:1px solid #cbd5e1;border-radius:8px;box-shadow:0 12px 32px rgba(15,23,42,0.18);font-size:12px;z-index:5;">
+
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid #e2e8f0;background:#f8fafc;border-radius:8px 8px 0 0;">
+            <div style="font-weight:700;color:#0f172a;">Filters</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:10px;color:#64748b;">
+              <span style="display:inline-flex;align-items:center;gap:4px;padding:2px 7px;background:#1d4ed810;border:1px solid #1d4ed840;border-radius:9999px;color:#1d4ed8;font-weight:700;">2 active</span>
+              <span style="cursor:pointer;color:#64748b;font-size:14px;">×</span>
+            </div>
+          </div>
+
+          <!-- Allocation state -->
+          <div style="padding:12px 14px;border-bottom:1px solid #f1f5f9;">
+            <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.05em;font-weight:700;color:#475569;margin-bottom:8px;">Allocation state</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+              <label style="display:flex;align-items:center;gap:6px;padding:5px 8px;border:1px solid #e2e8f0;border-radius:4px;cursor:pointer;font-size:11px;color:#475569;"><input type="radio" name="alloc-state-pool" style="accent-color:#1d4ed8;" /><span>Any <span style="color:#94a3b8;">(12)</span></span></label>
+              <label style="display:flex;align-items:center;gap:6px;padding:5px 8px;border:1px solid #1d4ed8;background:#1d4ed810;border-radius:4px;cursor:pointer;font-size:11px;color:#1d4ed8;font-weight:700;"><input type="radio" name="alloc-state-pool" checked="checked" style="accent-color:#1d4ed8;" /><span>Allocated <span style="color:#1d4ed8;">(8)</span></span></label>
+              <label style="display:flex;align-items:center;gap:6px;padding:5px 8px;border:1px solid #e2e8f0;border-radius:4px;cursor:pointer;font-size:11px;color:#475569;"><input type="radio" name="alloc-state-pool" style="accent-color:#1d4ed8;" /><span>Idle <span style="color:#94a3b8;">(3)</span></span></label>
+              <label style="display:flex;align-items:center;gap:6px;padding:5px 8px;border:1px solid #e2e8f0;border-radius:4px;cursor:pointer;font-size:11px;color:#cbd5e1;cursor:not-allowed;"><input type="radio" name="alloc-state-pool" disabled="disabled" style="accent-color:#1d4ed8;" /><span>Suspended <span style="color:#cbd5e1;">(0)</span></span></label>
+            </div>
+          </div>
+
+          <!-- Node -->
+          <div style="padding:10px 14px;border-bottom:1px solid #f1f5f9;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.05em;font-weight:700;color:#475569;">Node</div>
+              <span style="font-size:10px;color:#94a3b8;">3 of 3 in pool</span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;">
+              <label style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;background:#ffffff;border:1px solid #cbd5e1;border-radius:9999px;font-size:11px;color:#334155;cursor:pointer;"><input type="checkbox" style="accent-color:#1d4ed8;" /><span style="font-family:monospace;">node-01</span><span style="color:#94a3b8;">(4)</span></label>
+              <label style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;background:#ffffff;border:1px solid #cbd5e1;border-radius:9999px;font-size:11px;color:#334155;cursor:pointer;"><input type="checkbox" style="accent-color:#1d4ed8;" /><span style="font-family:monospace;">node-02</span><span style="color:#94a3b8;">(4)</span></label>
+              <label style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;background:#ffffff;border:1px solid #cbd5e1;border-radius:9999px;font-size:11px;color:#334155;cursor:pointer;"><input type="checkbox" style="accent-color:#1d4ed8;" /><span style="font-family:monospace;">node-03</span><span style="color:#94a3b8;">(4)</span></label>
+            </div>
+          </div>
+
+          <!-- Model -->
+          <div style="padding:10px 14px;border-bottom:1px solid #f1f5f9;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.05em;font-weight:700;color:#475569;">Model</div>
+              <span style="font-size:10px;color:#94a3b8;">3 of 4 in pool (filtered)</span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;">
+              <label style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;background:#1d4ed810;border:1px solid #1d4ed8;border-radius:9999px;font-size:11px;color:#1d4ed8;font-weight:700;cursor:pointer;"><input type="checkbox" checked="checked" style="accent-color:#1d4ed8;" /><span>NVIDIA T4</span><span style="color:#1d4ed8;">(5)</span></label>
+              <label style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;background:#ffffff;border:1px solid #cbd5e1;border-radius:9999px;font-size:11px;color:#cbd5e1;cursor:not-allowed;"><input type="checkbox" disabled="disabled" style="accent-color:#1d4ed8;" /><span>RTX A4000</span><span style="color:#cbd5e1;">(0 hidden)</span></label>
+              <label style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;background:#ffffff;border:1px solid #cbd5e1;border-radius:9999px;font-size:11px;color:#334155;cursor:pointer;"><input type="checkbox" style="accent-color:#1d4ed8;" /><span>RTX A5000</span><span style="color:#94a3b8;">(2)</span></label>
+              <label style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;background:#ffffff;border:1px solid #cbd5e1;border-radius:9999px;font-size:11px;color:#334155;cursor:pointer;"><input type="checkbox" style="accent-color:#1d4ed8;" /><span>A100-40GB-MIG</span><span style="color:#94a3b8;">(1)</span></label>
+            </div>
+          </div>
+
+          <!-- vGPU Profile (new facet — was in the header before) -->
+          <div style="padding:10px 14px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.05em;font-weight:700;color:#475569;">vGPU profile</div>
+              <span style="font-size:10px;color:#94a3b8;">4 of 4 in pool</span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;">
+              <label style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;background:#ffffff;border:1px solid #cbd5e1;border-radius:9999px;font-size:11px;color:#334155;cursor:pointer;"><input type="checkbox" style="accent-color:#1d4ed8;" /><span style="font-family:monospace;">whole</span><span style="color:#94a3b8;">(4)</span></label>
+              <label style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;background:#ffffff;border:1px solid #cbd5e1;border-radius:9999px;font-size:11px;color:#334155;cursor:pointer;"><input type="checkbox" style="accent-color:#1d4ed8;" /><span style="font-family:monospace;">½ slice 1/2</span><span style="color:#94a3b8;">(3)</span></label>
+              <label style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;background:#ffffff;border:1px solid #cbd5e1;border-radius:9999px;font-size:11px;color:#334155;cursor:pointer;"><input type="checkbox" style="accent-color:#1d4ed8;" /><span style="font-family:monospace;">⅓ slice 1/3</span><span style="color:#94a3b8;">(2)</span></label>
+              <label style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;background:#ffffff;border:1px solid #cbd5e1;border-radius:9999px;font-size:11px;color:#334155;cursor:pointer;"><input type="checkbox" style="accent-color:#1d4ed8;" /><span style="font-family:monospace;">MIG 1g.5gb</span><span style="color:#94a3b8;">(1)</span></label>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid #e2e8f0;background:#f8fafc;border-radius:0 0 8px 8px;">
+            <div style="display:flex;gap:6px;">
+              <button style="padding:6px 12px;font-size:11px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;color:#475569;font-weight:600;cursor:pointer;">Reset all</button>
+              <button style="padding:6px 14px;font-size:11px;border:0;border-radius:4px;background:linear-gradient(135deg,#1d4ed8,#0d9488);color:#ffffff;font-weight:700;cursor:pointer;">Apply</button>
+            </div>
+          </div>
         </div>
       </div>
       <!-- ════════════════════════════════════════════════════════════ -->
-      <!-- NODE 1: cloudbsd-node-01 (master)                               -->
+      <!-- NODE 1: prod-node-01 (master)                               -->
       <!-- ════════════════════════════════════════════════════════════ -->
       <div style="display:flex;align-items:center;gap:8px;margin:8px 0 6px;">
-        <span style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;">cloudbsd-node-01</span>
+        <span style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;">prod-node-01</span>
         <span style="padding:1px 5px;border-radius:3px;font-size:9px;background:#dbeafe;color:#1d4ed8;font-weight:600;">MASTER</span>
         <span style="font-size:10px;color:#64748b;">4 GPUs · 72 GB VRAM · 8 allocations</span>
         <div style="flex:1;height:1px;background:#e2e8f0;margin-left:6px;"></div>
@@ -102,10 +181,10 @@
         </div>
       </div>
       <!-- ════════════════════════════════════════════════════════════ -->
-      <!-- NODE 2: cloudbsd-node-02 (worker)                               -->
+      <!-- NODE 2: prod-node-02 (worker)                               -->
       <!-- ════════════════════════════════════════════════════════════ -->
       <div style="display:flex;align-items:center;gap:8px;margin:8px 0 6px;">
-        <span style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;">cloudbsd-node-02</span>
+        <span style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;">prod-node-02</span>
         <span style="padding:1px 5px;border-radius:3px;font-size:9px;background:#f1f5f9;color:#475569;font-weight:600;">WORKER</span>
         <span style="font-size:10px;color:#64748b;">4 GPUs · 96 GB VRAM · 7 allocations</span>
         <div style="flex:1;height:1px;background:#e2e8f0;margin-left:6px;"></div>
@@ -184,10 +263,10 @@
         </div>
       </div>
       <!-- ════════════════════════════════════════════════════════════ -->
-      <!-- NODE 3: cloudbsd-node-03 (worker) — also has A100 MIG            -->
+      <!-- NODE 3: prod-node-03 (worker) — also has A100 MIG            -->
       <!-- ════════════════════════════════════════════════════════════ -->
       <div style="display:flex;align-items:center;gap:8px;margin:8px 0 6px;">
-        <span style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;">cloudbsd-node-03</span>
+        <span style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;">prod-node-03</span>
         <span style="padding:1px 5px;border-radius:3px;font-size:9px;background:#f1f5f9;color:#475569;font-weight:600;">WORKER</span>
         <span style="font-size:10px;color:#64748b;">4 GPUs · 136 GB VRAM · 7 allocations · <span style="color:#7c3aed;font-weight:600;">incl. 1× A100 MIG</span></span>
         <div style="flex:1;height:1px;background:#e2e8f0;margin-left:6px;"></div>

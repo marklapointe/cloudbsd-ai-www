@@ -44,7 +44,7 @@
                 </div>
                 <div style="display:flex;gap:6px;margin-top:6px;">
                   <span style="padding:2px 8px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-size:10px;font-weight:600;">DHCP on (12h lease)</span>
-                  <span style="padding:2px 8px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-size:10px;font-weight:600;">cloudbsd.lan</span>
+                  <span style="padding:2px 8px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-size:10px;font-weight:600;">corp.lan</span>
                   <span style="padding:2px 8px;background:#16a34a20;color:#16a34a;border-radius:4px;font-size:10px;font-weight:600;">150 free addresses</span>
                 </div>
               </div>
@@ -62,7 +62,7 @@
                   <tr><td style="padding:2px 0;color:#64748b;width:35%;">Pool name</td><td style="font-family:monospace;font-weight:600;">prod-vlan-10</td></tr>
                   <tr><td style="padding:2px 0;color:#64748b;">VLAN</td><td style="font-family:monospace;">10 (Production)</td></tr>
                   <tr><td style="padding:2px 0;color:#64748b;">Family</td><td>IPv4 + IPv6 (dual-stack)</td></tr>
-                  <tr><td style="padding:2px 0;color:#64748b;">Domain</td><td style="font-family:monospace;">cloudbsd.lan</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Domain</td><td style="font-family:monospace;">corp.lan</td></tr>
                 </table>
               </div>
 
@@ -104,7 +104,7 @@
   option-data: {
     routers: ["10.0.10.1"]
     domain-name-servers: ["10.0.0.53", "1.1.1.1"]
-    domain-search: ["cloudbsd.lan"]
+    domain-search: ["corp.lan"]
   }
   valid-lifetime: 43200
   reservation: [{ hw-address: "00:c0:bf:01:de:ad", ip-address: "10.0.10.50", hostname: "apc-pdu-01" }]

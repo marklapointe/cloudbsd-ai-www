@@ -74,6 +74,36 @@
    The left sidebar + breadcrumb are the only legitimate
    navigation surfaces. *(New 2026-07-10.)*
 
+### Rule #7 — No cloudbsd or revytech as customer service/hostname
+
+> **New 2026-07-10 per user directive** "cloudbsd doesn't have any
+> services yet, possibly never, so don't include cloudbsd/revytech
+> servers for anything that isn't about getting the product."
+
+**Banned in customer-facing mockups, sample inputs, default form
+values, log lines, and example hostnames:** any value that
+implies CloudBSD or Revytech operates a service the customer is
+configured to call. Specifically:
+
+| Pattern | Replacement | Where it shows up |
+|---------|-------------|-------------------|
+| `ntp.cloudbsd.local`, `dns.cloudbsd.local`, `update.cloudbsd.io`, `community.cloudbsd.io`, `www.cloudbsd.io` | `ntp.lan`, `dns.lan`, `update.lan`, `themes.example.com`, `www.example.com` | NTP/DNS wizard, theme import, update server, log lines |
+| `*.cloudbsd.lan`, `*.cloudbsd.local` | `*.corp.lan`, `*.lan` | Default hostnames, FQDNs, search domains |
+| `cloudbsd-node-NN` | `prod-node-NN` | Example node names in detail panels, logs, dropdowns |
+| `@cloudbsd.local`, `@cloudbsd.org` | `@example.lan` | Sample login / contact / owner emails |
+| `${vault:kv/cloudbsd/...}` | `${vault:kv/myapp/...}` | Vault path examples in env-vars / secrets |
+| `prod-cluster.cloudbsd.local` (relying-party ID) | `prod-cluster.lan` | WebAuthn passkey login cluster identifier |
+
+**Allowed exceptions** (these describe the product itself,
+not a service the customer calls):
+
+- "CloudBSD Admin" wordmark / logo
+- SVG artifact titles `<title>CloudBSD Admin — XYZ</title>`
+- `cloudbsd-admin` cert name (it's the panel's service identifier, not a hosted endpoint)
+- `cloudbsd-agent@1.4.2` version label (it's the agent software name)
+- About / Try-CloudBSD / signup / signup-flow copy (product acquisition)
+- Theme author `revytech` BYLINE in credits-only areas (acknowledged as community contributor)
+
 ### Carrying these rules forward
 
 - Every new SVG mockup must include the live indicator where

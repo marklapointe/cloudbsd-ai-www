@@ -33,7 +33,7 @@
               <span style="font-family:monospace;background:#ffffff;padding:4px 8px;border:1px solid #e2e8f0;border-radius:4px;width:60px;">Key ID</span>
               <input value="42" style="width:60px;padding:4px 8px;font-family:monospace;font-size:12px;border:1px solid #cbd5e1;border-radius:4px;"/>
               <span style="font-family:monospace;background:#ffffff;padding:4px 8px;border:1px solid #e2e8f0;border-radius:4px;">Secret</span>
-              <input value="${vault:kv/cloudbsd/ntp-key}" style="flex:1;padding:4px 8px;font-family:monospace;font-size:11px;border:1px solid #cbd5e1;border-radius:4px;color:#1d4ed8;"/>
+              <input value="${vault:kv/myapp/ntp-key}" style="flex:1;padding:4px 8px;font-family:monospace;font-size:11px;border:1px solid #cbd5e1;border-radius:4px;color:#1d4ed8;"/>
             </div>
           </div>
 

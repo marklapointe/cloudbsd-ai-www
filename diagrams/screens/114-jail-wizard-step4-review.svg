@@ -69,7 +69,7 @@
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><h3 style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.06em;margin:0;">IDENTITY</h3><button style="font-size:10px;color:#1d4ed8;background:transparent;border:none;cursor:pointer;text-decoration:underline;">edit</button></div>
                 <table style="width:100%;font-size:11px;">
                   <tr><td style="padding:2px 0;color:#64748b;width:30%;">Name</td><td style="font-family:monospace;font-weight:600;">dns-resolver-01</td></tr>
-                  <tr><td style="padding:2px 0;color:#64748b;">Hostname</td><td style="font-family:monospace;">dns-resolver-01.cloudbsd.lan</td></tr>
+                  <tr><td style="padding:2px 0;color:#64748b;">Hostname</td><td style="font-family:monospace;">dns-resolver-01.corp.lan</td></tr>
                   <tr><td style="padding:2px 0;color:#64748b;">Owner</td><td>admin</td></tr>
                   <tr><td style="padding:2px 0;color:#64748b;">DevFS</td><td>ruleset 4</td></tr>
                 </table>
@@ -112,7 +112,7 @@
               <div>
                 <div style="font-size:12px;font-weight:700;color:#312e81;margin-bottom:4px;">/etc/jail.conf will be updated</div>
                 <pre style="margin:0;font-family:monospace;font-size:11px;color:#1e1b4b;background:#fff;padding:10px;border-radius:6px;border:1px solid #c7d2fe;line-height:1.55;overflow-x:auto;">dns-resolver-01 {
-  host.hostname   = "dns-resolver-01.cloudbsd.lan";
+  host.hostname   = "dns-resolver-01.corp.lan";
   path            = "/tank/jails/dns-resolver-01";
   interface       = "epair0b";
   ip4             = "10.0.5.21/24";

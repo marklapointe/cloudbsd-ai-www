@@ -50,13 +50,13 @@
               </div>
               <div>
                 <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Hostname</div>
-                <input value="web-nginx-01.cloudbsd.lan" style="width:100%;height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 12px;font-family:monospace;font-size:12px;"/>
+                <input value="web-nginx-01.corp.lan" style="width:100%;height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 12px;font-family:monospace;font-size:12px;"/>
                 <div style="font-size:10px;color:#94a3b8;margin-top:4px;">Defaults to container name</div>
               </div>
               <div>
                 <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Owner</div>
                 <select style="width:100%;height:36px;border:1px solid #cbd5e1;border-radius:5px;padding:0 12px;font-size:12px;background:#ffffff;">
-                  <option selected="selected">admin (admin@cloudbsd.local)</option>
+                  <option selected="selected">admin (admin@example.lan)</option>
                   <option>mlapointe</option>
                   <option>sysops-team</option>
                 </select>
@@ -132,7 +132,7 @@
                 <tbody>
                   <tr>
                     <td style="padding:6px;"><input value="NGINX_HOST" style="width:100%;height:30px;border:1px solid #cbd5e1;border-radius:4px;padding:0 8px;font-family:monospace;font-size:12px;"/></td>
-                    <td style="padding:6px;"><input value="web-nginx-01.cloudbsd.lan" style="width:100%;height:30px;border:1px solid #cbd5e1;border-radius:4px;padding:0 8px;font-family:monospace;font-size:12px;"/></td>
+                    <td style="padding:6px;"><input value="web-nginx-01.corp.lan" style="width:100%;height:30px;border:1px solid #cbd5e1;border-radius:4px;padding:0 8px;font-family:monospace;font-size:12px;"/></td>
                     <td style="padding:6px;font-size:10px;color:#94a3b8;">literal</td>
                     <td style="padding:6px;"><button style="background:transparent;border:none;color:#dc2626;cursor:pointer;">✕</button></td>
                   </tr>
@@ -144,7 +144,7 @@
                   </tr>
                   <tr>
                     <td style="padding:6px;"><input value="DB_PASSWORD" style="width:100%;height:30px;border:1px solid #cbd5e1;border-radius:4px;padding:0 8px;font-family:monospace;font-size:12px;"/></td>
-                    <td style="padding:6px;"><input value="${vault:kv/cloudbsd/db#password}" style="width:100%;height:30px;border:1px solid #cbd5e1;border-radius:4px;padding:0 8px;font-family:monospace;font-size:12px;color:#1d4ed8;"/></td>
+                    <td style="padding:6px;"><input value="${vault:kv/myapp/db#password}" style="width:100%;height:30px;border:1px solid #cbd5e1;border-radius:4px;padding:0 8px;font-family:monospace;font-size:12px;color:#1d4ed8;"/></td>
                     <td style="padding:6px;font-size:10px;color:#1d4ed8;font-weight:600;">vault</td>
                     <td style="padding:6px;"><button style="background:transparent;border:none;color:#dc2626;cursor:pointer;">✕</button></td>
                   </tr>

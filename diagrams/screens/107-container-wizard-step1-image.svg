@@ -66,7 +66,7 @@
                   <option>GitHub Container Registry (ghcr.io)</option>
                   <option>GitLab Registry (registry.gitlab.com)</option>
                   <option>Quay.io</option>
-                  <option>CloudBSD Local (registry.cloudbsd.local)</option>
+                  <option>CloudBSD Local (registry.lan)</option>
                   <option>Custom…</option>
                 </select>
                 <div style="font-size:10px;color:#94a3b8;margin-top:4px;">Authenticated via backend config</div>

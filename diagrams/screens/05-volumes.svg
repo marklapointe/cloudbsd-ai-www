@@ -7,7 +7,7 @@
       <div style="height:56px;background:#ffffff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;padding:0 16px;box-sizing:border-box;">
         <div style="width:32px;height:32px;border-radius:6px;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;">C</div>
         <span style="font-weight:700;font-size:17px;margin-left:8px;color:#0f172a;">CloudBSD Admin</span>
-        <span style="margin-left:10px;padding:2px 8px;font-size:11px;border-radius:4px;background:#f1f5f9;color:#475569;">cloudbsd-node-01.local</span>
+        <span style="margin-left:10px;padding:2px 8px;font-size:11px;border-radius:4px;background:#f1f5f9;color:#475569;">prod-node-01.local</span>
         <div style="margin-left:auto;display:flex;align-items:center;gap:12px;font-size:12px;color:#64748b;">
           <select style="padding:4px 8px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;"><option>Browser TZ</option><option selected="selected">UTC</option><option>America/Montreal</option><option>Europe/Berlin</option></select>
           <button style="position:relative;width:30px;height:30px;border-radius:50%;background:#f1f5f9;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;border:0;color:#475569;">&#x2407;<span style="position:absolute;top:0;right:0;min-width:18px;height:18px;border-radius:9px;background:#ef4444;color:#ffffff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 5px;">17</span></button>
@@ -35,7 +35,7 @@
             <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Status</span></a>
             <a style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>About</span></a>
           </nav>
-          <div style="margin-top:auto;padding:14px 10px;border-top:1px solid #f1f5f9;font-size:11px;color:#94a3b8;"><div>Host: cloudbsd-node-01</div><div>Uptime: 14d 02:11</div></div>
+          <div style="margin-top:auto;padding:14px 10px;border-top:1px solid #f1f5f9;font-size:11px;color:#94a3b8;"><div>Host: prod-node-01</div><div>Uptime: 14d 02:11</div></div>
         </aside>
         <main style="flex:1;overflow-y:auto;padding:16px 20px;box-sizing:border-box;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
@@ -117,7 +117,7 @@
                   <td style="padding:6px 8px;text-align:right;">245</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:27%;height:100%;background:#10b981;"></div></div><span style="font-size:10px;color:#475569;">27%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">/mnt/tank/data</td>
-                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">cloudbsd-node-01</span></td>
+                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">prod-node-01</span></td>
                   <td style="padding:6px 8px;font-size:10px;">zstd-3</td>
                   <td style="padding:6px 8px;font-size:10px;">aes-256-gcm</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#d1fae5;color:#065f46;">healthy</span></td>
@@ -130,7 +130,7 @@
                   <td style="padding:6px 8px;text-align:right;">3.2 TB</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:80%;height:100%;background:#f59e0b;"></div></div><span style="font-size:10px;color:#dc2626;">80%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">/mnt/tank/media</td>
-                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">cloudbsd-node-01</span></td>
+                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">prod-node-01</span></td>
                   <td style="padding:6px 8px;font-size:10px;">off</td>
                   <td style="padding:6px 8px;font-size:10px;">aes-256-gcm</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#d1fae5;color:#065f46;">watch</span></td>
@@ -143,7 +143,7 @@
                   <td style="padding:6px 8px;text-align:right;">412</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:27%;height:100%;background:#10b981;"></div></div><span style="font-size:10px;color:#475569;">27%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">/mnt/tank/backups</td>
-                  <td style="padding:6px 8px;"><span title="cloudbsd-node-01, cloudbsd-node-02" style="font-size:10px;color:#475569;cursor:help;">2 hosts</span></td>
+                  <td style="padding:6px 8px;"><span title="prod-node-01, prod-node-02" style="font-size:10px;color:#475569;cursor:help;">2 hosts</span></td>
                   <td style="padding:6px 8px;font-size:10px;">zstd-9</td>
                   <td style="padding:6px 8px;font-size:10px;">aes-256-gcm</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#d1fae5;color:#065f46;">healthy</span></td>
@@ -156,7 +156,7 @@
                   <td style="padding:6px 8px;text-align:right;">612</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:76%;height:100%;background:#f59e0b;"></div></div><span style="font-size:10px;color:#475569;">76%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">/mnt/tank/vms</td>
-                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">cloudbsd-node-01</span></td>
+                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">prod-node-01</span></td>
                   <td style="padding:6px 8px;font-size:10px;">off</td>
                   <td style="padding:6px 8px;font-size:10px;">aes-256-gcm</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#d1fae5;color:#065f46;">watch</span></td>
@@ -169,7 +169,7 @@
                   <td style="padding:6px 8px;text-align:right;">84</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:42%;height:100%;background:#10b981;"></div></div><span style="font-size:10px;color:#475569;">42%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">/mnt/tank/apps</td>
-                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">cloudbsd-node-01</span></td>
+                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">prod-node-01</span></td>
                   <td style="padding:6px 8px;font-size:10px;">lz4</td>
                   <td style="padding:6px 8px;font-size:10px;">aes-256-gcm</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#d1fae5;color:#065f46;">healthy</span></td>
@@ -182,7 +182,7 @@
                   <td style="padding:6px 8px;text-align:right;">12</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:18%;height:100%;background:#10b981;"></div></div><span style="font-size:10px;color:#475569;">18%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">/dev/da0</td>
-                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">cloudbsd-node-01</span></td>
+                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">prod-node-01</span></td>
                   <td style="padding:6px 8px;font-size:10px;">off</td>
                   <td style="padding:6px 8px;font-size:10px;">none</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#d1fae5;color:#065f46;">healthy</span></td>
@@ -195,7 +195,7 @@
                   <td style="padding:6px 8px;text-align:right;">6.4 TB</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:80%;height:100%;background:#f59e0b;"></div></div><span style="font-size:10px;color:#dc2626;">80%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">/mnt/vault</td>
-                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">cloudbsd-node-02</span></td>
+                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">prod-node-02</span></td>
                   <td style="padding:6px 8px;font-size:10px;">zstd-9</td>
                   <td style="padding:6px 8px;font-size:10px;">aes-256-gcm</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#d1fae5;color:#065f46;">healthy</span></td>
@@ -208,7 +208,7 @@
                   <td style="padding:6px 8px;text-align:right;">—</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:0%;height:100%;background:#10b981;"></div></div><span style="font-size:10px;color:#475569;">0%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">/mnt/nfs</td>
-                  <td style="padding:6px 8px;"><span title="cloudbsd-node-01, cloudbsd-node-02" style="font-size:10px;color:#475569;cursor:help;">2 hosts</span></td>
+                  <td style="padding:6px 8px;"><span title="prod-node-01, prod-node-02" style="font-size:10px;color:#475569;cursor:help;">2 hosts</span></td>
                   <td style="padding:6px 8px;font-size:10px;">—</td>
                   <td style="padding:6px 8px;font-size:10px;">—</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#d1fae5;color:#065f46;">healthy</span></td>
@@ -221,7 +221,7 @@
                   <td style="padding:6px 8px;text-align:right;">412</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:82%;height:100%;background:#f59e0b;"></div></div><span style="font-size:10px;color:#dc2626;">82%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">/dev/iscsi0</td>
-                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">cloudbsd-node-02</span></td>
+                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">prod-node-02</span></td>
                   <td style="padding:6px 8px;font-size:10px;">—</td>
                   <td style="padding:6px 8px;font-size:10px;">—</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#d1fae5;color:#065f46;">watch</span></td>
@@ -234,7 +234,7 @@
                   <td style="padding:6px 8px;text-align:right;">88</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:9%;height:100%;background:#10b981;"></div></div><span style="font-size:10px;color:#475569;">9%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">hidden</td>
-                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">cloudbsd-node-01</span></td>
+                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">prod-node-01</span></td>
                   <td style="padding:6px 8px;font-size:10px;">zstd-9</td>
                   <td style="padding:6px 8px;font-size:10px;">aes-256-gcm</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#d1fae5;color:#065f46;">healthy</span></td>
@@ -247,7 +247,7 @@
                   <td style="padding:6px 8px;text-align:right;">980</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:81%;height:100%;background:#f59e0b;"></div></div><span style="font-size:10px;color:#dc2626;">81%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">/mnt/tank/nextcloud</td>
-                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">cloudbsd-node-01</span></td>
+                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">prod-node-01</span></td>
                   <td style="padding:6px 8px;font-size:10px;">off</td>
                   <td style="padding:6px 8px;font-size:10px;">aes-256-gcm</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#d1fae5;color:#065f46;">watch</span></td>
@@ -260,7 +260,7 @@
                   <td style="padding:6px 8px;text-align:right;">28</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:56%;height:100%;background:#10b981;"></div></div><span style="font-size:10px;color:#475569;">56%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">/usr/local/jails</td>
-                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">cloudbsd-node-01</span></td>
+                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">prod-node-01</span></td>
                   <td style="padding:6px 8px;font-size:10px;">lz4</td>
                   <td style="padding:6px 8px;font-size:10px;">aes-256-gcm</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#d1fae5;color:#065f46;">healthy</span></td>
@@ -273,7 +273,7 @@
                   <td style="padding:6px 8px;text-align:right;">1.6 TB</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:80%;height:100%;background:#f59e0b;"></div></div><span style="font-size:10px;color:#dc2626;">80%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">/mnt/tank/photos</td>
-                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">cloudbsd-node-01</span></td>
+                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">prod-node-01</span></td>
                   <td style="padding:6px 8px;font-size:10px;">zstd-3</td>
                   <td style="padding:6px 8px;font-size:10px;">aes-256-gcm</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#d1fae5;color:#065f46;">healthy</span></td>
@@ -286,7 +286,7 @@
                   <td style="padding:6px 8px;text-align:right;">18</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:56%;height:100%;background:#94a3b8;"></div></div><span style="font-size:10px;color:#475569;">56%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">/</td>
-                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">cloudbsd-node-01</span></td>
+                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">prod-node-01</span></td>
                   <td style="padding:6px 8px;font-size:10px;">lz4</td>
                   <td style="padding:6px 8px;font-size:10px;">aes-256-gcm</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#e2e8f0;color:#64748b;">healthy</span></td>
@@ -299,7 +299,7 @@
                   <td style="padding:6px 8px;text-align:right;">32</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:6%;height:100%;background:#94a3b8;"></div></div><span style="font-size:10px;color:#475569;">6%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">/boot/efi</td>
-                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">cloudbsd-node-01</span></td>
+                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">prod-node-01</span></td>
                   <td style="padding:6px 8px;font-size:10px;">none</td>
                   <td style="padding:6px 8px;font-size:10px;">none</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#e2e8f0;color:#64748b;">healthy</span></td>
@@ -312,7 +312,7 @@
                   <td style="padding:6px 8px;text-align:right;">2</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:12%;height:100%;background:#94a3b8;"></div></div><span style="font-size:10px;color:#475569;">12%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">[SWAP]</td>
-                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">cloudbsd-node-01</span></td>
+                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">prod-node-01</span></td>
                   <td style="padding:6px 8px;font-size:10px;">none</td>
                   <td style="padding:6px 8px;font-size:10px;">none</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#e2e8f0;color:#64748b;">healthy</span></td>
@@ -325,7 +325,7 @@
                   <td style="padding:6px 8px;text-align:right;">1</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:25%;height:100%;background:#94a3b8;"></div></div><span style="font-size:10px;color:#475569;">25%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">/boot</td>
-                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">cloudbsd-node-01</span></td>
+                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">prod-node-01</span></td>
                   <td style="padding:6px 8px;font-size:10px;">lz4</td>
                   <td style="padding:6px 8px;font-size:10px;">aes-256-gcm</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#e2e8f0;color:#64748b;">healthy</span></td>
@@ -338,7 +338,7 @@
                   <td style="padding:6px 8px;text-align:right;">0</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:0%;height:100%;background:#94a3b8;"></div></div><span style="font-size:10px;color:#475569;">0%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">/recovery</td>
-                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">cloudbsd-node-01</span></td>
+                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">prod-node-01</span></td>
                   <td style="padding:6px 8px;font-size:10px;">off</td>
                   <td style="padding:6px 8px;font-size:10px;">aes-256-gcm</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#e2e8f0;color:#64748b;">healthy</span></td>
@@ -351,7 +351,7 @@
                   <td style="padding:6px 8px;text-align:right;">19</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:59%;height:100%;background:#94a3b8;"></div></div><span style="font-size:10px;color:#475569;">59%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">/</td>
-                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">cloudbsd-node-02</span></td>
+                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">prod-node-02</span></td>
                   <td style="padding:6px 8px;font-size:10px;">lz4</td>
                   <td style="padding:6px 8px;font-size:10px;">aes-256-gcm</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#e2e8f0;color:#64748b;">healthy</span></td>
@@ -364,7 +364,7 @@
                   <td style="padding:6px 8px;text-align:right;">32</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:6%;height:100%;background:#94a3b8;"></div></div><span style="font-size:10px;color:#475569;">6%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">/boot/efi</td>
-                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">cloudbsd-node-02</span></td>
+                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">prod-node-02</span></td>
                   <td style="padding:6px 8px;font-size:10px;">none</td>
                   <td style="padding:6px 8px;font-size:10px;">none</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#e2e8f0;color:#64748b;">healthy</span></td>
@@ -377,7 +377,7 @@
                   <td style="padding:6px 8px;text-align:right;">3</td>
                   <td style="padding:6px 8px;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:60px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;"><div style="width:18%;height:100%;background:#94a3b8;"></div></div><span style="font-size:10px;color:#475569;">18%</span></div></td>
                   <td style="padding:6px 8px;font-family:monospace;font-size:10px;color:#64748b;">[SWAP]</td>
-                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">cloudbsd-node-02</span></td>
+                  <td style="padding:6px 8px;"><span style="font-size:10px;color:#475569;">prod-node-02</span></td>
                   <td style="padding:6px 8px;font-size:10px;">none</td>
                   <td style="padding:6px 8px;font-size:10px;">none</td>
                   <td style="padding:6px 8px;"><span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#e2e8f0;color:#64748b;">healthy</span></td>

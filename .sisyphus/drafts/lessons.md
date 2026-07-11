@@ -253,3 +253,34 @@ components'). The fix was a follow-up commit. Pattern-set:
 '[⟳|↻|↺] Refresh' or `[⟳|↻|↺]\s*Refresh`. ALWAYS grep BEFORE
 declaring a sweep complete.
 
+### 9. CloudBSD / Revytech are NOT service operators (2026-07-10)
+Per user directive "cloudbsd doesn't have any services yet,
+possibly never, so don't include cloudbsd/revytech servers
+for anything that isn't about getting the product."
+
+When authoring SVG mockups with example data, never put
+`*.cloudbsd.lan`, `*.cloudbsd.local`, `*.cloudbsd.io`, 
+`*.cloudbsd.net`, `@cloudbsd.X`, `${vault:kv/cloudbsd/...}`,
+or `cloudbsd-node-NN` as if CloudBSD or Revytech was
+operating those services. The product is sold to customers
+who have their OWN cluster, their OWN domain, their OWN
+nodes. Defaults & sample data must reflect a customer
+deployment (`prod-node-01`, `corp.lan`, `admin@example.lan`),
+not a fictional Revytech hosting environment.
+
+**Allowed** (these describe the product itself, not a
+service the customer calls):
+- 'CloudBSD Admin' wordmark / product name on about/signup pages
+- SVG artifact titles `<title>CloudBSD Admin — ...</title>`
+- `cloudbsd-admin` cert subject (panel's own service id)
+- `cloudbsd-agent@1.X` version label (software name)
+- `revytech` author byline on community-contributed themes
+
+**Mechanized scrub**: 194 replacements across 67 SVG
+files in a single python pass (regex with `\b` word
+boundaries). Audit grep:
+`grep -rE "cloudbsd\.(lan|local|net|io|com|tc|org|cloud|dev)"
+diagrams/ | grep -v 'CloudBSD Admin|cloudbsd-admin[^@.]|cloudbsd-agent|cloudbsd-node'`
+should return empty. See `Rule #7` in the Canonical
+Methodology block of `angular-migration.md`.
+

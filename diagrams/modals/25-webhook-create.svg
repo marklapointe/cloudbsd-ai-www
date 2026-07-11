@@ -18,7 +18,7 @@
 
           <div style="margin-bottom:14px;">
             <label style="display:block;font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;">URL <span style="color:#dc2626;">*</span></label>
-            <input value="https://alerts.example.com/cloudbsd/inbound" style="width:100%;padding:8px 10px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;box-sizing:border-box;font-family:monospace;"/>
+            <input value="https://alerts.example.com/webhook/inbound" style="width:100%;padding:8px 10px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;box-sizing:border-box;font-family:monospace;"/>
             <div style="font-size:10px;color:#94a3b8;margin-top:3px;">HTTPS only. Verified against the cluster CA.</div>
           </div>
 
@@ -52,7 +52,7 @@
           <div style="margin-bottom:14px;">
             <label style="display:block;font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;">Custom headers (optional)</label>
             <textarea rows="2" style="width:100%;padding:8px 10px;font-size:11px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#0f172a;box-sizing:border-box;font-family:monospace;resize:vertical;">X-Source: cloudbsd-admin
-X-Pager-Token: ${vault:kv/cloudbsd/pager#token}</textarea>
+X-Pager-Token: ${vault:kv/myapp/pager#token}</textarea>
           </div>
 
           <label style="display:flex;justify-content:space-between;align-items:center;gap:14px;font-size:12px;color:#475569;cursor:pointer;padding:10px 12px;background:#f1f5f9;border-radius:6px;">

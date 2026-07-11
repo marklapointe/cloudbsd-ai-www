@@ -47,7 +47,7 @@
           </div>
         </div>
         <footer style="padding:12px 20px;border-top:1px solid #e2e8f0;background:#f8fafc;display:flex;align-items:center;justify-content:space-between;">
-          <div style="font-size:10px;color:#94a3b8;">registry: community.cloudbsd.io · last sync 02:14 UTC</div>
+          <div style="font-size:10px;color:#94a3b8;">registry: themes.example.com · last sync 02:14 UTC</div>
           <div style="display:flex;gap:6px;">
             <button style="padding:8px 16px;font-size:12px;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#334155;">Cancel</button>
           </div>

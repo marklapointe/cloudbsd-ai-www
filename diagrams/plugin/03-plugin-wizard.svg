@@ -75,7 +75,7 @@
 <!-- LEFT: plugin-defined form -->
 <div style="flex:1;padding:24px 32px;overflow-y:auto;">
   <h1 style="margin:0 0 4px;font-size:20px;font-weight:700;color:#0f172a;">Advertise subnet routes</h1>
-  <p style="margin:0 0 18px;font-size:12px;color:#64748b;line-height:1.55;">Pick the IPs/CIDRs this exit node will advertise on the tailnet. Each must be present on cloudbsd-node-01. Plugin validates against <code style="background:#f1f5f9;padding:1px 5px;border-radius:3px;">tailscale exit-node list --approvers=auto</code>.</p>
+  <p style="margin:0 0 18px;font-size:12px;color:#64748b;line-height:1.55;">Pick the IPs/CIDRs this exit node will advertise on the tailnet. Each must be present on prod-node-01. Plugin validates against <code style="background:#f1f5f9;padding:1px 5px;border-radius:3px;">tailscale exit-node list --approvers=auto</code>.</p>
 
   <label style="display:block;font-size:10px;text-transform:uppercase;letter-spacing:0.04em;font-weight:700;color:#475569;margin-bottom:5px;">Subnet routes (one per line)</label>
   <textarea rows="4" style="width:100%;padding:10px;font-size:12px;font-family:monospace;border:1px solid #cbd5e1;border-radius:5px;box-sizing:border-box;resize:vertical;line-height:1.5;">10.0.5.0/24
@@ -105,7 +105,7 @@ fd7a:115c:a1e0::/48</textarea>
   <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.05em;font-weight:700;color:#475569;margin-bottom:6px;">What changes</div>
   <ul style="font-size:11px;color:#475569;line-height:1.5;margin:0;padding-left:18px;">
     <li>4 routes added to tailnet</li>
-    <li>node advertises as <code style="background:#ede9fe;padding:1px 4px;border-radius:3px;">cloudbsd-node-01</code></li>
+    <li>node advertises as <code style="background:#ede9fe;padding:1px 4px;border-radius:3px;">prod-node-01</code></li>
     <li>Jails using <code style="background:#ede9fe;padding:1px 4px;border-radius:3px;">100.64.0.0/10</code> get free routing</li>
   </ul>
 
@@ -131,7 +131,7 @@ fd7a:115c:a1e0::/48</textarea>
 <!-- /outer -->
 
 <!-- Caption (component reference labelled) -->
-<div style="position:absolute;left:16px;bottom:12px;font-size:10px;color:#94a3b8;background:#0f172a;padding:6px 10px;border-radius:5px;font-family:monospace;">component: plugin/03-plugin-wizard.svg (plugin wizard via mcp.exposes)</div>
+
 
     </div>
   </foreignObject>

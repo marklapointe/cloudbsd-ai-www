@@ -38,7 +38,7 @@
                 <tr><td style="padding:8px 0;color:#64748b;">UID</td><td style="font-family:monospace;color:#475569;">1014</td></tr>
                 <tr><td style="padding:8px 0;color:#64748b;">Group</td><td style="font-family:monospace;">admin (0001)</td></tr>
                 <tr><td style="padding:8px 0;color:#64748b;">Display name</td><td><input value="Matthew Lapointe" style="width:100%;padding:6px 10px;border:1px solid #cbd5e1;border-radius:5px;font-size:13px;"/></td></tr>
-                <tr><td style="padding:8px 0;color:#64748b;">Email</td><td><input value="mlapointe@cloudbsd.local" style="width:100%;padding:6px 10px;border:1px solid #cbd5e1;border-radius:5px;font-size:13px;font-family:monospace;"/></td></tr>
+                <tr><td style="padding:8px 0;color:#64748b;">Email</td><td><input value="alex.kim@example.lan" style="width:100%;padding:6px 10px;border:1px solid #cbd5e1;border-radius:5px;font-size:13px;font-family:monospace;"/></td></tr>
                 <tr><td style="padding:8px 0;color:#64748b;">Phone</td><td><input value="+1 514-555-0184" style="width:100%;padding:6px 10px;border:1px solid #cbd5e1;border-radius:5px;font-size:13px;font-family:monospace;"/></td></tr>
                 <tr><td style="padding:8px 0;color:#64748b;">Timezone</td><td><select style="width:100%;padding:6px 10px;border:1px solid #cbd5e1;border-radius:5px;font-size:13px;background:#ffffff;"><option>America/Montreal</option><option>UTC</option></select></td></tr>
                 <tr><td style="padding:8px 0;color:#64748b;">Preferred language</td><td><select style="width:100%;padding:6px 10px;border:1px solid #cbd5e1;border-radius:5px;font-size:13px;background:#ffffff;"><option>English (US)</option><option>Français (CA)</option></select></td></tr>
