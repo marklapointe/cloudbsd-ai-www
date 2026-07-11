@@ -241,3 +241,15 @@ Admin UI. **Lesson**: 'never tell a user to paste a crypto
 signature in a textarea when the browser can do it in one
 click.'
 
+### 8. Sweep anti-patterns with PATTERN-sets, not bare-text (2026-07-10)
+Lesson learned on the live-data sweep: when sweeping an
+anti-pattern like 'Refresh' across many SVG files, match on
+PATTERN-SETS that include the unicode-prefix variants. My
+first sweep replaced `>Refresh<` (bare text) on 7 page-level
+screens, but missed `>↻ Refresh<` (rotation-arrow prefix) on
+12 tab-content mocks + the vgpu-pool list. The user
+correctly called this out ('I still see refresh buttons on
+components'). The fix was a follow-up commit. Pattern-set:
+'[⟳|↻|↺] Refresh' or `[⟳|↻|↺]\s*Refresh`. ALWAYS grep BEFORE
+declaring a sweep complete.
+

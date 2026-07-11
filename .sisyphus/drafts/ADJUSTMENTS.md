@@ -492,4 +492,27 @@ Why it was wrong:
   in the patch that follows this row.
 
 ### Honcho retro conclusion recorded.
+## 2026-07-10 — Live-data sweep part 2 (pattern-set fix)
+
+User caught my incomplete sweep: 'I still see refresh buttons
+on components.' The first sweep (a9b38ae) handled bare
+`>Refresh<` text but missed `↻ Refresh` (rotation-arrow prefix)
+on the 12 tab-content mocks + the vgpu-pool list, plus one
+`View JSON` button on the plugin-detail modal.
+
+### What got caught this round
+- 13 files with `↻ Refresh` button removed:
+  diagrams/components/{17,90,91,92,93,94,95,96,97,98,99,100,101}-*.svg
+- 1 file with `View JSON` button removed:
+  diagrams/modals/22-plugin-detail.svg
+
+### Rule going forward
+Lesson recorded in lessons.md rule #8: grep BEFORE declaring a
+sweep complete; use pattern-sets that include unicode-prefix
+variants. Specifically when sweeping Refresh-style anti-patterns,
+match `>\s*[⟳↻↺]?\s*Refresh<` not just `>Refresh<`.
+
+### Final post-sweep state
+Every diagrams/*.svg checked: 0 Refresh buttons, 0 View JSON
+buttons. 15 files validated strict, 0 warnings, 0 fatals.
 

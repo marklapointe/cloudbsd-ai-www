@@ -13,7 +13,7 @@
         <div style="display:flex;gap:8px;align-items:center;font-size:11px;">
           <span style="padding:2px 8px;border-radius:4px;background:#dbeafe;color:#1d4ed8;font-weight:600;">LIST VIEW</span>
           <span style="font-size:10px;color:#94a3b8;font-style:italic;">panel view disabled: 12 GPUs &gt; 10</span>
-          <button style="padding:5px 12px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;font-size:11px;font-weight:600;">↻ Refresh</button>
+          
           <button style="padding:5px 12px;border:1px solid #2563eb;border-radius:5px;background:#2563eb;color:#ffffff;font-size:11px;font-weight:600;">+ Allocate vGPU</button>
         </div>
       </div>
