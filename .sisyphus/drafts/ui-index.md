@@ -1153,3 +1153,62 @@ The only legitimate navigation is the LEFT sidebar menu and
 top breadcrumb. Tab strips within a detail page are still
 internal to that view, not cross-references to other pages.
 
+## §30 — VMs / Containers / Jails separation (rule #6, 2026-07-10)
+
+User directive: "why are containers listed in a VMs view?
+they should have separate views, VMs, containers, and Jails."
+
+### Rule (canonical)
+
+A view or tab named one workload type (e.g. "VMs", "Containers",
+"Jails") must show ONLY that type — no rows, no summary counts,
+no aggregate of the others.
+
+### Where cross-type aggregates STILL belong
+
+Cross-type aggregates are legitimate in:
+- **Dashboard** (01-dashboard.svg): recent-activity feed with
+  typed event pills (vm / container / jail / job).
+- **Cluster summary** (07-cluster.svg, 67-cluster-overview.svg):
+  per-cluster workload box.
+- **Node Overview tab** (23-node-detail-panel.svg, Overview
+  tab): per-host workload composition.
+- **Network Map topology** (06-network-map.svg): visual graph
+  with distinct VM / CT / JAIL pills + colour-bordered cards.
+
+These are aggregate-summary contexts by construction. They
+label each type distinctly.
+
+### Where NOT to mix
+
+- Any page-level list view (02-vms, 03-containers, 04-jails)
+- Any detail panel (19-vm, 20-container, 21-jail, 22-volume,
+  23-node)
+- Any tab content of a detail panel (90-101 node/vm/container/
+  jail/volume tabs)
+- Any component reference mockup
+- Any wizard preview that targets one type
+- Any empty-state pattern for one type
+
+### Implementation
+
+Every workload type has a dedicated **page** AND a dedicated
+**node-detail tab**:
+- VMs page + node-detail "VMs" tab → `101-node-vms-tab-content`
+- Containers page + node-detail "Containers" tab →
+  `102-node-containers-tab-content`
+- Jails page + node-detail "Jails" tab →
+  `103-node-jails-tab-content`
+
+The node-detail panel tab strip is now 9 tabs: Overview / ZFS /
+GPUs / Network / VMs / Containers / Jails / Logs / Settings.
+
+### Anti-pattern (regression detector)
+
+> ❌ REJECTED: header text like
+> "Workload on cloudbsd-node-01 (8 VMs · 7 containers · 3 jails
+> · 3 jobs)" inside a tab named "VMs".
+>
+> ✅ ACCEPTED: header text "Virtual machines on this node (8) ·
+> 8 of 8 running" inside a tab named "VMs".
+

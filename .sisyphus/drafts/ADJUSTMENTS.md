@@ -391,4 +391,30 @@ updated!!"
 - 101-node-vms-tab-content.svg has "see Network tab or per-VM
   Disks" hint to inline
 - Possibly more 'see X tab' hints; needs sweep
+## 2026-07-10 — VMs/Containers/Jails separation (rule #6) + 19-SVG live-data sweep complete
+
+### Decisions
+- 101-node-vms-tab-content patched: removed the mixed-type
+  workload summary ('8 VMs · 7 containers · 3 jails') and the
+  'see Network tab or per-VM Disks' hint. Pure-VM-only.
+- 102-node-containers-tab-content and 103-node-jails-tab-content
+  authored as new siblings (containers 7, jails 3).
+- 23-node-detail-panel tab strip extended 7 → 9 tabs
+  (Containers + Jails inserted between VMs and Logs).
+- Live-data sweep across 19 SVGs: 7 Refresh buttons → live pill,
+  12 View JSON buttons → live pill. Plus 2 page-level headers
+  (02-vms, 05-volumes) gained the live pill.
+
+### Files committed
+- `cc056c5` ui(node): enforce VMs/Containers/Jails separation
+- `a9b38ae` ui(push): live-data sweep across 19 SVGs + plan canon
+- `9fcc69d` ui(push): add live pill to VM/Volume page-level list
+- `angular-migration.md` updated (canonical methodology,
+  T82a status note, new T82c row, tab strip at line ~2341)
+- `ui-index.md` §30 added (rule #6 canonical doc)
+
+### Reframing
+- Rule #6 (canonical methodology #6 of ui-index §30): a view
+  named one workload type shows only that type.
+- T82c is now DONE — Waves 10 row completed by the patches.
 

@@ -2338,7 +2338,7 @@ Error states with remediation:
 ```
 [ cloudbsd-node-01 ] [Online \u25CF] [Master] [Edit] [Drain] [Remove]
 
-  Overview | Disks (ZFS) | GPUs | Network | VMs | Logs | Settings
+  Overview | Disks (ZFS) | GPUs | Network | VMs | Containers | Jails | Logs | Settings
   ----------
 
   Overview tab:
@@ -9183,11 +9183,17 @@ grep -rE 'class="[^"]*\b(bg-|text-|p-[0-9]|m-[0-9]|w-[0-9]|h-[0-9]|flex|grid|rou
 - [x] 82. **Node detail side panel + GET /api/nodes/{id} endpoint** ✅ DONE (T82a + T82b)
 
   **Status as of 2026-07-07**:
-  - [x] **T82a**: `diagrams/components/23-node-detail-panel.svg` **AUTHORED** (13.8 KB, XML-validated). Shows "cloudbsd-node-01" (master) with 7 tabs: Overview (ACTIVE) / ZFS / GPUs / Network / VMs / Logs / Settings. Left side: Cluster nodes list (3 cards, MASTER/WORKER badges, heartbeat age, CPU%/MEM%). Right side: detail panel with Identity (id/hostname/role), Hardware (CPU/RAM/Disk/GPU per 17-vgpu-pool), Load (CPU% with load avg / MEM / Disk / Net), Health (uptime/temperature/agent version).
+  - [x] **T82a**: `diagrams/components/23-node-detail-panel.svg` **AUTHORED** (13.8 KB, XML-validated). Shows "cloudbsd-node-01" (master) with 9 tabs (updated 2026-07-10 for VMs/Containers/Jails separation rule #6): Overview (ACTIVE) / ZFS / GPUs / Network / VMs / Containers / Jails / Logs / Settings. Left side: Cluster nodes list (3 cards, MASTER/WORKER badges, heartbeat age, CPU%/MEM%). Right side: detail panel with Identity (id/hostname/role), Hardware (CPU/RAM/Disk/GPU per 17-vgpu-pool), Load (CPU% with load avg / MEM / Disk / Net), Health (uptime/temperature/agent version).
   - [x] **T82b**: Wire-protocol §2.26 "Node detail (single)" **AUTHORED** (6 `what` headers: `nodes.get` / `.zfs.list` / `.gpus.list` / `.network.list` / `.vms.list` / `.logs.list`).
+  - [x] **T82c**: VMs / Containers / Jails separation at host level (`rule #6`)
+    - `diagrams/components/101-node-vms-tab-content.svg` — VMs-only. WORKLOAD summary stripped (mixed-type count now lives on the node Overview tab).
+    - `diagrams/components/102-node-containers-tab-content.svg` — podman containers on this node (7 rows: 5 running, 2 stopped CRIU-state). Runtime: podman 5.4.1.
+    - `diagrams/components/103-node-jails-tab-content.svg` — FreeBSD jails on this node (3 rows: 2 running, 1 frozen). VNET epair pair + allow flags + rctl.
+    - Node detail panel tab strip extended 7 → 9 tabs (Containers + Jails inserted between VMs and Logs).
+    - Files commit: `cc056c5`.
 
-  **Parallelization**: Wave 10
-  **Commit**: T82a done; T82b pending
+  **Parallelization**: Wave 10 + Wave 12a (live-data paradigm)
+  **Commit**: T82a + T82b + T82c all done
 
 ---
 
