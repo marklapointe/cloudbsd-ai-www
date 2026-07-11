@@ -1270,3 +1270,94 @@ Because the user (correctly) read the first mockup and felt
 they were being told to type SSH in a web form. We don't show
 that affordance anymore. The CLI flow is documented, not on
 the login screen.
+
+
+## 32 — Capability-driven action presentation — added 2026-07-10
+
+**Rule (canonical)**: Every action button in the CloudBSD
+Admin UI is gated by a pre-flight check that returns
+`viable: true | false`. The UI:
+
+- **HIDES** the action entirely if a *blocker* check fails.
+  The user does not see the option; the failure is reported
+  only on the cluster diagnostics page
+  (`92-auth-capabilities-admin.svg`,
+  `93-preflight-diagnostics-admin.svg`).
+- **SHOWS WITH a ⚠ badge** if *warnings* exist but
+  `viable: true`. Clicking opens the standard
+  describe-then-confirm modal which re-runs pre-flight
+  live, lists the warnings, and asks the user to acknowledge.
+- **SHOWS plain** if everything passes.
+
+### Why hide instead of disable?
+
+Two patterns are common:
+
+| Pattern | Verdict |
+|---------|---------|
+| Greyed-out button with tooltip "Can't: not enough disk" | Discouraged — invites repeated attempts with no progress, often ignored |
+| Hidden button + diagnostics page explains why | Chosen — fewer failed click-throughs, single source of truth |
+
+A user who NEEDS that capability (e.g. an admin who must
+free disk) opens the cluster diagnostics page, sees
+"pre-flight on `vm.restore-snapshot` failed for `jellyfin`:
+disk free 240 GB < snapshot size 480 GB", acts on it, then
+the action becomes available. The action button literally
+appears after the cluster state changes that unblock it.
+
+### Pre-flight cache invalidation (data flow)
+
+```
+User views page -> UI calls preflight.check (per action)
+                  <- response with ttlMs + checks[]
+Server streams events -> relevant StreamEvent topic arrives
+                          -> client drops cached preflight,
+                             re-asks if action menu is open
+```
+
+### SVG visual patterns (use as templates)
+
+| Idiom | Recipe |
+|-------|--------|
+| Action menu with hidden action | The action is genuinely absent — no greyed-out stub. The menu renders only viable actions. The diagnostics link is the floor below. |
+| Action menu with ⚠ warning | The button name includes a small ⚠ pill on the left; clicking opens the confirm modal that re-runs pre-flight and lists warnings. |
+| Confirm modal with re-run pre-flight | Above the description text, a thin "Re-run pre-flight" link; below it, the dynamic warnings list, then the Confirm. |
+| Diagnostics page (92 / 93 admin) | A sortable table of every failing check in the cluster: cluster-wide, by resource, by action, by check name. Cluster admins drill-down here. |
+
+### Anti-patterns (must NEVER reappear)
+
+- Render an action button that the user then has to retry
+  with a different input. Pre-flight is THE check; the form
+  is NOT the first check.
+- Show "not enough disk" inline in a form field as if the
+  disk is the user's responsibility — present it as a
+  pre-flight failure that the system will resolve when the
+  cluster state changes.
+- Repeat the same check on every click (no client-side
+  caching) — pre-flight must be cheap (<= 50 ms P95) so it
+  is callable per (resource, action) on page load.
+- Disable a "delete X" button instead of hiding it
+  defensively when the resource has live workloads — DELETE
+  on a live workload is the kind of action that MUST be
+  forced through the describe-then-confirm modal (not
+  silently absent — the user needs to drain first then
+  delete).
+
+### Implementation pointers (where this lives in code)
+
+- Backend: `preflight/registry.py` — declarative YAML of
+  every action's checks, callable as
+  `await registry.check(resource, action, ctx)`.
+- Backend: `routes/preflight.py` exposes
+  `POST /api/<resource>/<id>/<action>/preflight`
+- Frontend: `services/preflight.service.ts` caches
+  responses keyed by (resource, action) and listens to the
+  StreamEvent bus to drop them on invalidating topics.
+- Frontend: `<app-action-menu [resource] [actions]>`
+  component re-renders when its preflight$ observable
+  emits a new `(viable, warnings)` tuple.
+- Tests (100% coverage gate): `preflight/*.spec.ts`
+  enforces that every registered action in
+  §2.32 has at least one test for each blocker and one for
+  the warning path.
+

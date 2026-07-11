@@ -558,3 +558,66 @@ Total: **194 replacements across 67 SVG files**.
   `xml.etree.ElementTree.parse`. 2 pre-existing parse errors
   (18-add-node-dialog.svg, 68-monitoring-dashboard.svg) are
   unrelated to this scrub.
+
+
+## 2026-07-10 -- Rule #8: pre-flight viability before action presentation
+
+User insight (paraphrased): "while looking at 'Edit LACP bond'
+i couldn't help but think, do we know if these interfaces can
+be bonded? like is there room on the pci bus? what could go
+wrong? we need to check and to know if something can be done
+before presenting to the user. like what other things do we
+need to check for the viability of an action?"
+
+### What was added
+- Plan: `Rule #8` in Canonical Methodology (after Rule #7).
+- Wire-protocol:
+  - section 2.31 -- Action viability (per-action pre-flight)
+    endpoint shape, response contract, client cache &
+    invalidation by StreamEvent topics.
+  - section 2.32 -- Action viability matrix (every action in
+    the system grouped by domain, each with its pre-flight
+    checks split into blockers vs. warnings).
+- Ui-index: section 32 -- Capability-driven action
+  presentation (visual recipes, anti-patterns).
+- Lessons: rule #10.
+- Patterns: hidden-when-blocked vs warning-when-warning;
+  client cache TTL with StreamEvent invalidation;
+  plugin-owned `preflight_checks.yaml` as part of the
+  manifest.
+
+### Tasks added (Wave 12b -- capability / preflight)
+- T125: backend `preflight/registry.py` -- declarative YAML
+  loading of section 2.32 matrix
+- T126: backend `routes/preflight.py` -- exposes the
+  `POST /api/<resource>/<id>/<action>/preflight` endpoint
+- T127-T130: backend pre-flight implementations for
+  each major domain (network, vm/container/jail, volume,
+  node, backup, auth, system, plugin)
+- T131: plugin manifest validation rejects plugins
+  without a valid `preflight_checks.yaml`
+- T132: frontend `services/preflight.service.ts` -- caching
+  + invalidation by StreamEvent
+- T133: `<app-action-menu>` Angular 20 component reads
+  preflight observables, hides blocked / shows warning
+- T134: describe-then-confirm modal (section 28) re-runs
+  pre-flight on open, lists warnings
+- T135: diagnostics page (companion to 92/93) lists every
+  failing pre-flight cluster-wide with remediation hints
+- T136: per-action unit tests (100% coverage gate) -- every
+  blocker + every warning path
+- T137: end-to-end tests with Playwright for the 6 visible
+  hide/show/warning action menus
+- T138: retrofit old mockups that showed actions without
+  pre-flight notes (Edit LACP, Live migrate, Mount volume,
+  Enable plugin, Rotate API key, Update system, Add node)
+- T139-T140: stub/reserved
+
+### Audit point
+Existing dashboards / modals that show action affordances
+without pre-flight annotations (`Edit LACP bond`, `Live
+migrate VM`, `Mount volume`, `Update system`, `Enable plugin`,
+`Rotate API key`, `Add node to cluster`) all need a retrofit
+pass. T138 covers them; QA scenario per mockup adds
+"no pre-flight badge -- fail".
+

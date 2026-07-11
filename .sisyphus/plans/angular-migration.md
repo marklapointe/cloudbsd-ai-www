@@ -104,6 +104,49 @@ not a service the customer calls):
 - About / Try-CloudBSD / signup / signup-flow copy (product acquisition)
 - Theme author `revytech` BYLINE in credits-only areas (acknowledged as community contributor)
 
+
+### Rule #8 — Pre-flight capability check before action presentation
+
+> **New 2026-07-10 per user insight** "while looking at 'Edit LACP bond' i couldn't help but think, do we know if these interfaces can be bonded? like is there room on the pci bus? what could go wrong? we need to check and to know if something can be done before presenting to the user."
+
+**Every action, before the user sees it as an option, must be
+checked for viability.** This is a hard rule, not a nice-to-have.
+
+**Banned in mockups AND in shipped UI**: presenting an action
+button that the backend will then reject. Examples that
+violated this rule and were retroactively scrubbed:
+
+- `Edit LACP bond` shown for two NICs that aren't even on the
+  same PCI bus (no bonding possible)
+- `Live migrate VM` for a target node that's overloaded
+- `Mount volume` for a VM that uses a different storage bus
+- `Update system` without free space for rollback image
+- `Enable plugin` without signature verification or missing
+  capability grant
+- `Rotate API key` while sessions/integrations still use it
+
+**The shape of an action-ready UI**:
+1. The UI calls
+   `POST /api/<resource>/<id>/<action>/preflight` (see
+   `WIRE_PROTOCOL.md §2.31`).
+2. The backend returns a `viable: true|false` plus a list of
+   named checks with status and detail.
+3. If `viable: false` AND at least one **blocker** check
+   failed, the action button is **HIDDEN** from the menu (not
+   greyed out, not shown with a tooltip — just absent).
+4. If `viable: true` BUT some **warning** checks failed, the
+   action button shows with a ⚠ badge. The confirm modal
+   (per Rule #1 view-only / describe-then-confirm) re-runs
+   pre-flight at click-time and lists the warnings for the
+   user to acknowledge.
+
+**Per-action viability matrix** is in `WIRE_PROTOCOL.md §2.32`.
+
+**Rule #8 caches capability responses**: result valid for ≤ 30 s
+on the client OR until a relevant `StreamEvent` arrives that
+invalidates the cached result (e.g. `vm.memory.updated`,
+`nic.link.state.changed`).
+
 ### Carrying these rules forward
 
 - Every new SVG mockup must include the live indicator where

@@ -284,3 +284,53 @@ diagrams/ | grep -v 'CloudBSD Admin|cloudbsd-admin[^@.]|cloudbsd-agent|cloudbsd-
 should return empty. See `Rule #7` in the Canonical
 Methodology block of `angular-migration.md`.
 
+
+
+### 10. Pre-flight viability BEFORE presenting actions (2026-07-10)
+
+User insight: "while looking at 'Edit LACP bond' i couldn't
+help but think, do we know if these interfaces can be bonded?
+like is there room on the pci bus? what could go wrong? we
+need to check and to know if something can be done before
+presenting to the user."
+
+Lesson: every "do X" action button must be backed by a
+server-side pre-flight that returns `viable: true | false`
+PLUS a list of named checks (each with `severity`,
+`message`, optional `remediation`). UI behavior is driven by
+the result:
+
+| Pre-flight result | UI behavior |
+|---|---|
+| viable=true, no warnings | Plain action button |
+| viable=true, with warnings | Action button with warning badge; confirm modal lists warnings |
+| viable=false (>=1 blocker) | Action button is HIDDEN (not grey); diagnostics page lists what would unblock |
+
+Why hide vs grey: greyed-out buttons become click-fatigue;
+hidden buttons force the user to the diagnostics page which
+is the same page an admin would visit anyway.
+
+Implementation pairs (Rule #8 + WIRE_PROTOCOL section 2.31):
+
+- `POST /api/<resource>/<id>/<action>/preflight`
+- Client cache by `(resource, action)` for <= ttlMs
+- Cache invalidated by relevant StreamEvent topics
+  (section 2.31 invalidation table)
+- Plugin manifest declares `preflight_checks.yaml` per action
+- Manifest validation rejects plugins without it
+
+Concrete listing of every action and its checks is in
+WIRE_PROTOCOL section 2.32 (the viability matrix). Examples
+that were retrofitted after this rule:
+
+- `Edit LACP bond`: pci-bus-bandwidth + switch-partner checks
+- `Live migrate VM`: target-resources + shared-storage + network-bandwidth
+- `Enable plugin`: manifest-signed + dependencies-satisfied + capability-scope
+- `Rotate API key`: active-integrations warning
+- `Update system`: free-space-for-rollback + target-release-reachable
+- `Add node`: same-cluster-id + same-product-version + agent-compatible
+
+Audit grep: `grep -rE "Edit LACP bond|live migrate|Mount volume"`
+diagrams/` -- every OLD mockup that showed the action button
+WITHOUT a pre-flight note has been retroactively flagged for
+re-design (T125-T140 covers the retrofit).

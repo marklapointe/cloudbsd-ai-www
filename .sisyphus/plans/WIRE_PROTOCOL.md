@@ -1007,6 +1007,245 @@ MIME types: `application/vnd.cloudbsd+node*`. Shapes against `data-structures.md
 
 ---
 
+
+### 2.31 — Action viability (per-action pre-flight) — added 2026-07-10
+
+> Distinct from §2.17 (deployment-level pre-flight check used
+> during install/upgrade/health). §2.31 is the
+> **action-level** pre-flight: "may I run this action on this
+> resource right now?" It's called per (resource, action) pair
+> before the UI renders the action button.
+
+**Endpoint**:
+```
+POST /api/<resource>/<id>/<action>/preflight
+Content-Type: application/vnd.cloudbsd+envelope
+```
+With envelope `what` header value `<resource>.<action>.preflight`
+(snake-case verb form, e.g. `network.bond.lacp.preflight`,
+`vm.migrate.live.preflight`).
+
+**Request**:
+```json
+{ "mime": "application/vnd.cloudbsd+envelope",
+  "headers": [
+    { "name": "who", "value": "admin@example.lan" },
+    { "name": "what", "value": "network.bond.lacp.preflight" },
+    { "name": "where", "value": "node_detail_panel@tabs.network" }
+  ],
+  "payload": [
+    { "mime": "application/vnd.cloudbsd+preflight.request",
+      "kind": "preflight.request",
+      "data": {
+        "resource": { "type": "network-bond", "id": "bond0" },
+        "action": "edit-lacp"
+      }
+    }
+  ]
+}
+```
+
+**Response**:
+```json
+{ "mime": "application/vnd.cloudbsd+preflight.result",
+  "kind": "preflight.result",
+  "data": {
+    "viable": false,
+    "blockers": [
+      { "id": "pci-bus-bandwidth",
+        "message": "Both NICs must be on the same PCI bus with sufficient lanes.",
+        "detail": "ixl0 on bus 0000:01, ixl1 on bus 0000:82 (different NUMA nodes, separated by the chip's UPI link)",
+        "remediation": "Move ixl1 to a slot on the same CPU complex or use a software bridge instead." },
+      { "id": "switch-partner",
+        "message": "No LACP partner detected.",
+        "detail": "Upstream switch port eth1/47 does not advertise LACP BPDUs",
+        "remediation": "Configure the upstream switch port as a trunk with channel-group mode active." }
+    ],
+    "warnings": [
+      { "id": "running-workloads",
+        "message": "2 VMs (nextcloud, mastodon) are using these interfaces as the bridge uplink. Bonding will cause a 30-60s outage.",
+        "impact": "outage_seconds", "expectedRange": [30, 60] }
+    ],
+    "checks": [
+      { "id": "nic-speed-match", "status": "PASS",
+        "message": "Both interfaces 10 Gbps full-duplex" },
+      { "id": "nic-driver", "status": "PASS",
+        "message": "ixl 1.0.0 supports LACP" },
+      { "id": "pci-bus-bandwidth", "status": "FAIL",
+        "message": "Different NUMA nodes" },
+      { "id": "switch-partner", "status": "FAIL",
+        "message": "No LACP partner on upstream" },
+      { "id": "cluster-quorum", "status": "PASS",
+        "message": "Cluster has 3 active members, quorum ok" }
+    ],
+    "ttlMs": 30000,
+    "fetchedAt": "2026-07-10T16:32:18Z"
+  }
+}
+```
+
+**Contract**:
+- `viable: true`  ⇒ no blockers; warnings may still exist.
+- `viable: false` ⇒ at least one entry in `blockers[]`.
+- `blockers[].remediation` is **actionable text** — never
+  just "blocked". Tells the user what would unblock it.
+- `ttlMs` is the **client cache validity window**. Client
+  may reuse this response for ≤ `ttlMs` without re-asking,
+  unless an invalidating `StreamEvent` arrives first.
+
+**Client caching & invalidation**:
+Cache key = `(resource.type, resource.id, action)`. Cached
+value is dropped early when any of these StreamEvent topics
+fire (§2.29 + data-structures.md §6):
+
+| Resource | Invalidating StreamEvent topics |
+|---|---|
+| nic / bond | `nic.link.state.changed`, `nic.speed.changed`, `nic.pci-bus.changed`, `bond.member.changed`, `switch.partner.changed` |
+| vm | `vm.state.changed`, `vm.resource.changed`, `vm.workload.migrated`, `node.heartbeat.lost` |
+| container | `container.state.changed`, `container.resource.changed` |
+| jail | `jail.state.changed`, `jail.workload.migrated` |
+| volume | `volume.zfs.changed`, `volume.health.changed`, `pool.scrub.started`, `pool.scrub.ended` |
+| node | `node.heartbeat.lost`, `node.drain.started`, `node.roles.changed` |
+| plugin | `plugin.installed`, `plugin.uninstalled`, `plugin.capabilities.changed` |
+| user/session | `session.revoked`, `api-key.rotated`, `user.role.changed` |
+
+**UI behavior (binding to Rule #1 + Rule #8 together)**:
+- Action menu is rebuilt on every pre-flight response + every
+  invalidating StreamEvent.
+- Hidden action ⇒ user does not know the option exists; the
+  unanswered case is "why can't I edit this bond?" — answered
+  by clicking the *nearby* diagnostics widget which links to
+  `92 / 93` (the diagnostics / preflight admin page that
+  lists every failed pre-flight in the cluster).
+- ⚠ action ⇒ confirm modal says "The following warnings will
+  apply: … Acknowledge to proceed."
+
+
+### 2.32 — Action viability matrix — added 2026-07-10
+
+> Definitive list of every action, the pre-flight checks it
+> needs, and which checks are blockers vs. warnings. Backend
+> implements these as a `preflight.yaml` registry (§2.32.1
+> below); `viability-check.ts` (T125) consumes it client-side.
+
+#### 2.32.1 — Network actions
+
+| Action | Resource | Pre-flight checks (blockers `■`, warnings `⚠`) |
+|--------|----------|------------------------------------------------|
+| `Edit LACP bond`           | bond | ■ nic-speed-match, ■ nic-driver-supports-lacp, ■ pci-bus-bandwidth, ■ switch-partner, ⚠ running-workloads-on-uplink |
+| `Edit static interface`    | nic  | ■ ip-not-in-use-on-subnet, ■ subnet-has-free-address, ⚠ active-streams-on-interface |
+| `Add a new bond`           | node | ■ enough-free-nics, ■ permissions, ■ cluster-quorum |
+| `Delete bond/interface`    | nic  | ■ not-in-use-by-workloads, ■ role-is-not-primary |
+| `Add bridge`               | node | ■ permissions, ■ vlan-id-available, ■ cluster-quorum |
+| `Update DHCP range`        | subnet | ⚠ reservations-out-of-range |
+| `Change DNS upstream`      | cluster | ⚠ apply-window (cluster-wide), ■ resolvers-reachable |
+
+#### 2.32.2 — VM actions
+
+| Action | Pre-flight checks |
+|--------|-------------------|
+| `Create VM` | ■ target-node-resources, ■ image-available, ■ network-pool-configured, ■ user-permission, ⚠ data-disk-large |
+| `Live migrate VM`         | ■ vm-state-running, ■ target-node-healthy, ■ shared-storage-or-rdma, ■ target-resources, ■ network-bandwidth-sufficient, ■ cpu-pinning-compatible, ⚠ vm-non-undoable-secs |
+| `Cold migrate VM`         | ■ target-node-healthy, ■ shared-storage-compatible, ■ target-resources |
+| `Snapshot VM`             | ■ pool-disk-space, ■ dataset-writable, ⚠ snapshot-count-near-limit |
+| `Restore snapshot to new VM` | ■ snapshot-exists, ■ template-compatible, ■ name-unique |
+| `Restore snapshot in place`| ■ vm-stopped, ■ encryption-match |
+| `Edit VM hardware (stopped)` | ■ vm-stopped, ■ hardware-supported |
+| `Hot-add disk/RAM/CPU`    | ■ hotplug-supported-by-guest, ■ bus-has-free-slot |
+| `Start VM`                | ■ vm-stopped, ■ target-node-resources, ■ image-attached |
+| `Reboot VM` (soft)        | ■ guest-agent-responsive |
+| `Force-stop VM`           | ⚠ vm-write-loss-risk |
+| `Delete VM`               | ■ user-confirmed, ■ not-required-as-cert-renewal-source |
+
+#### 2.32.3 — Container actions
+
+| Action | Pre-flight checks |
+|--------|-------------------|
+| `Create container`        | ■ image-available, ■ target-node-resources, ■ network-pool-configured, ⚠ image-trust-not-verified |
+| `Live migrate container`  | ■ target-node-healthy, ■ target-resources |
+| `Snapshot container`      | (same as VM) |
+| `Edit env-vars`           | ■ container-stopped (or hot-reload-capable), ⚠ restart-required |
+| `Delete container`        | ■ no-dependent-services |
+
+#### 2.32.4 — Jail actions
+
+| Action | Pre-flight checks |
+|--------|-------------------|
+| `Create jail`             | ■ base-jail-available, ■ network-pool-configured |
+| `Snapshot jail`           | ■ pool-disk-space, ■ jail-stopped (or snapshot-capable) |
+
+#### 2.32.5 — Volume actions
+
+| Action | Pre-flight checks |
+|--------|-------------------|
+| `Create dataset`          | ■ parent-pool-writable, ■ name-unique, ■ quota-reasonable |
+| `Attach to VM`            | ■ volume-and-vm-bus-compatible, ■ device-name-free |
+| `Run scrub`               | ■ pool-not-currently-scrubbing, ■ io-resource-available |
+| `Delete dataset`          | ■ user-confirmed, ■ no-children-with-data, ⚠ snapshots-will-be-purged |
+
+#### 2.32.6 — Node actions
+
+| Action | Pre-flight checks |
+|--------|-------------------|
+| `Add node to cluster`     | ■ mdn-discoverable-or-ip-reachable, ■ credentials-valid, ■ same-cluster-id, ■ same-product-version, ■ agent-version-compatible, ⚠ version-newer (offer upgrade first) |
+| `Remove node`             | ■ node-drained, ■ quorum-preserved, ■ user-confirmed |
+| `Drain node`              | ■ workloads-migratable, ■ migration-target-has-resources |
+| `Update agent`            | ■ node-online, ■ free-space-for-rollback, ■ target-release-reachable |
+| `Reboot node`             | ■ workloads-migrated-or-stopped, ■ cluster-quorum-preserved |
+
+#### 2.32.7 — Backup actions
+
+| Action | Pre-flight checks |
+|--------|-------------------|
+| `Run backup now`          | ■ target-reachable, ■ quota-available, ■ snapshot-retainable, ⚠ bandwidth-contention |
+| `Restore backup`          | ■ backup-exists, ■ target-writable, ■ compatible-version, ⚠ will-overwrite-current-data |
+| `Edit backup schedule`    | ■ schedule-parses, ⚠ next-run-too-close |
+
+#### 2.32.8 — Auth / user actions
+
+| Action | Pre-flight checks |
+|--------|-------------------|
+| `Rotate API key`          | ■ caller-has-permission, ⚠ active-integrations-using-this-key, ⚠ last-credential-may-break-agents |
+| `Delete user`             | ■ not-last-admin, ■ no-active-sessions, ■ caller-has-permission |
+| `Reset MFA for user`      | ■ caller-has-permission, ⚠ forces-reenrollment |
+| `Disable MFA globally`    | ■ caller-is-super-admin, ■ additional-mitigations-present, ⚠ weakens-auth-posture |
+
+#### 2.32.9 — System actions
+
+| Action | Pre-flight checks |
+|--------|-------------------|
+| `Update system`           | ■ free-space-≥-2x-release-size, ■ target-release-reachable, ■ rollback-slot-free, ■ quorum-preserved, ⚠ reboot-required |
+| `Rollback system`         | ■ previous-image-available, ■ migrations-since-upgrade-reversible, ⚠ may-lose-some-data |
+| `Enable plugin`           | ■ plugin-manifest-signed, ■ dependencies-satisfied, ■ capability-scope-in-policy, ■ not-already-enabled, ⚠ grants-additional-permissions |
+| `Disable plugin`          | ■ not-required-by-other-plugin |
+| `Update theme`            | ■ theme-manifest-valid, ⚠ dark/light-mode-compatibility |
+
+#### 2.32.10 — Plugin-defined actions
+
+Every plugin MAY add its own actions. Per the plugin
+contract (T90), each plugin action MUST include a
+`preflight_checks.yaml` in its manifest. Format:
+
+```yaml
+action: github-mirrors.sync
+checks:
+  - id: target-reachable
+    type: network
+    severity: blocker
+  - id: github-token-present
+    type: credential
+    severity: blocker
+  - id: throughput-acceptable
+    type: metric
+    severity: warning
+```
+
+Backend refuses to register any plugin whose
+`preflight_checks.yaml` is malformed; this is part of the
+plugin manifest validation step (T93).
+
+---
+
 ## 3. Mock implementation in the UI
 
 The Angular app's `web-new/src/app/mocks/` directory MUST implement this exact protocol against in-memory data so the future Go backend is a drop-in replacement.
