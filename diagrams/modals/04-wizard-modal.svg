@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 800" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Component Reference — Wizard Modal (step 2 of 4)</title>
+  <desc>Component reference: multi-step wizard rendered inside a modal overlay (not a full-page wizard). Modal-sized chrome, 4-step indicator, single-column form, sticky footer with Back/Next. Used by 23-user-create, 24-api-key-create, 26-ntp-server-add, 27-backup-schedule. (2026-07-10)</desc>
+  <foreignObject x="0" y="0" width="1280" height="800">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:800px;background:#0f172a80;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+
+<!-- Dim background page (showing that the modal is over a real screen) -->
+<div style="position:absolute;inset:0;background:#f1f5f9;opacity:0.45;">
+  <div style="padding:60px 40px;">
+    <div style="height:12px;background:#cbd5e1;border-radius:3px;margin-bottom:10px;width:35%;"></div>
+    <div style="height:12px;background:#cbd5e1;border-radius:3px;margin-bottom:10px;width:55%;"></div>
+    <div style="height:12px;background:#cbd5e1;border-radius:3px;margin-bottom:10px;width:45%;"></div>
+    <div style="height:140px;background:#cbd5e1;border-radius:5px;margin:20px 0;"></div>
+    <div style="height:12px;background:#cbd5e1;border-radius:3px;margin-bottom:10px;width:50%;"></div>
+    <div style="height:12px;background:#cbd5e1;border-radius:3px;margin-bottom:10px;width:40%;"></div>
+  </div>
+</div>
+
+<!-- Frost scrim -->
+<div style="position:absolute;inset:0;background:radial-gradient(circle,#47556940,transparent 70%);"></div>
+
+<!-- Modal box -->
+<div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:720px;background:#ffffff;border-radius:10px;box-shadow:0 25px 50px rgba(0,0,0,0.25);border:1px solid #e2e8f0;overflow:hidden;">
+
+<!-- Modal header -->
+<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid #e2e8f0;background:linear-gradient(180deg,#f8fafc,#ffffff);">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span style="display:inline-block;width:6px;height:24px;border-radius:3px;background:linear-gradient(180deg,#0ea5e9,#1e40af);"></span>
+    <h2 style="margin:0;font-size:14px;font-weight:700;color:#0f172a;">Add NTP server</h2>
+    <span style="font-size:11px;color:#64748b;">step 2 of 4</span>
+  </div>
+  <button style="padding:6px 10px;border:none;border-radius:4px;background:transparent;color:#64748b;font-size:16px;cursor:pointer;">✕</button>
+</div>
+
+<!-- Step indicator (compact horizontal pills, not full numbered circles) -->
+<div style="padding:10px 20px;background:#f8fafc;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:6px;font-size:10px;color:#475569;">
+  <div style="display:flex;align-items:center;gap:5px;padding:3px 9px;border-radius:9999px;background:#16a34a15;color:#16a34a;font-weight:600;">
+    <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#16a34a;color:#ffffff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;">&#x2713;</span>
+    Source
+  </div>
+  <span style="color:#cbd5e1;">—</span>
+  <div style="display:flex;align-items:center;gap:5px;padding:3px 9px;border-radius:9999px;background:#1d4ed815;color:#1d4ed8;font-weight:600;border:1px solid #1d4ed840;">
+    <span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#1d4ed8;color:#ffffff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;">2</span>
+    Server
+  </div>
+  <span style="color:#cbd5e1;">—</span>
+  <div style="padding:3px 9px;border-radius:9999px;color:#94a3b8;">3 Test reachability</div>
+  <span style="color:#cbd5e1;">—</span>
+  <div style="padding:3px 9px;border-radius:9999px;color:#94a3b8;">4 Review</div>
+  <span style="flex:1;"></span>
+  <span style="font-size:10px;color:#64748b;font-family:monospace;">~30s left</span>
+</div>
+
+<!-- Body -->
+<div style="padding:18px 22px;">
+
+<h3 style="margin:0 0 4px;font-size:14px;font-weight:700;color:#0f172a;">Server address</h3>
+<p style="margin:0 0 14px;font-size:11px;color:#64748b;line-height:1.5;">Provide one or more NTP peers. Use pool addresses for redundancy. We'll resolve, probe (NTPv4), and let you pick up to 4 in step 3.</p>
+
+<label style="display:block;font-size:10px;text-transform:uppercase;letter-spacing:0.04em;font-weight:700;color:#475569;margin-bottom:5px;">Hostname or IP</label>
+<div style="display:flex;gap:8px;margin-bottom:6px;">
+  <input type="text" value="time.cloudflare.com" style="flex:1;padding:8px 10px;font-size:12px;font-family:monospace;border:1px solid #cbd5e1;border-radius:5px;" />
+  <button style="padding:8px 14px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;font-weight:600;cursor:pointer;">+ Add peer</button>
+</div>
+<div style="font-size:10px;color:#94a3b8;margin-bottom:14px;">Or paste a comma-separated list — we'll split and probe each.</div>
+
+<!-- Bulk add text area -->
+<label style="display:block;font-size:10px;text-transform:uppercase;letter-spacing:0.04em;font-weight:700;color:#475569;margin-bottom:5px;">Bulk paste</label>
+<textarea rows="2" style="width:100%;padding:8px 10px;font-size:11px;font-family:monospace;border:1px solid #cbd5e1;border-radius:5px;box-sizing:border-box;resize:vertical;">time.cloudflare.com
+pool.ntp.org
+ntp.cloudbsd.local</textarea>
+
+<!-- Validation hint -->
+<div style="margin-top:10px;padding:8px 10px;background:#ecfdf5;border:1px solid #6ee7b7;border-radius:5px;display:flex;align-items:center;gap:8px;font-size:11px;color:#047857;">
+  <span style="font-weight:700;color:#059669;">&#x2713;</span>
+  <span>3 entries parsed — 2 valid hostnames + 1 intranet (will only be probed from cluster-wide zone).</span>
+</div>
+
+</div>
+
+<!-- Footer -->
+<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 22px;border-top:1px solid #e2e8f0;background:#f8fafc;">
+  <button style="padding:8px 16px;font-size:12px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;font-weight:600;cursor:pointer;">&#x2190; Back</button>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <span style="font-size:10px;color:#94a3b8;">autosaves</span>
+    <button style="padding:8px 16px;font-size:12px;border:0;border-radius:5px;background:linear-gradient(135deg,#0ea5e9,#1e40af);color:#ffffff;font-weight:600;cursor:pointer;">Next: Test reachability &#x2192;</button>
+  </div>
+</div>
+
+</div>
+<!-- /modal -->
+
+<!-- Caption (component reference labelled) -->
+<div style="position:absolute;left:16px;bottom:16px;font-size:10px;color:#94a3b8;background:#0f172a;padding:6px 10px;border-radius:5px;font-family:monospace;">component: modals/04-wizard-modal.svg (step 2 of 4)</div>
+
+    </div>
+  </foreignObject>
+</svg>
