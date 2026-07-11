@@ -240,3 +240,75 @@ This table documents every screen adjustment made during the React → Angular m
 - **Logs**: plain text → JSONL structured
 - **Auth**: JWT → PAM
 - **Distribution**: npm install → FreeBSD port + package
+## 2026-07-10 — Wizards + admin modals batch (ea4f4a7..9bed3a6)
+
+### Wizard SVGs added (29 files, 8 wizard sets)
+
+| # | File | Wizard | Steps |
+|---|---|---|---|
+| 102-106 | vm-wizard-step{1-5}.svg | VM create | 5 |
+| 107-110 | container-wizard-step{1-4}.svg | Container create | 4 |
+| 111-114 | jail-wizard-step{1-4}.svg | FreeBSD jail create | 4 |
+| 115-117 | volume-wizard-step{1-3}.svg | ZFS volume create | 3 |
+| 118-120 | network-wizard-step{1-3}.svg | IP pool create | 3 |
+| 121-124 | onboarding-wizard-step{1-4}.svg | First-login tour | 4 |
+| 125-127 | restore-wizard-step{1-3}.svg | Restore from backup | 3 |
+| 131-133 | plugin-install-wizard-step{1-3}.svg | Plugin install | 3 (MCP-aware) |
+
+Wizard 86-vm-create-wizard.svg RENAMED to 103-vm-wizard-step2-identity.svg
+(first VM wizard step moved to 102, total VM set renumbered).
+
+### Modals added (9 files)
+
+| File | Type |
+|---|---|
+| 23-user-create.svg | Add user |
+| 24-api-key-create.svg | Personal Access Token |
+| 25-webhook-create.svg | Outbound webhook |
+| 26-ntp-server-add.svg | NTP server |
+| 27-backup-schedule.svg | Cron schedule (separate from instant 19-backup-create) |
+| 28-recovery-codes.svg | One-time recovery codes |
+| 29-cluster-join-token.svg | Generate join token |
+| 30-join-token-result.svg | Token result (shown once) |
+| 31-manual-snapshot.svg | Take snapshot of single resource |
+
+### Wizard system template locked
+
+- Top bar: gradient C logo + title + substep indicator (e.g., "Step 2 of 4") + Skip/X
+- Step indicator: 5 (or 3/4) circles, completed = green checkmark + edit link
+- Body: left = work area, right (280 px) = summary rail
+- Right rail standard: SELECTED/PICKED panel + WARNING/INFO callout + command preview
+- Bottom bar: Back (or disabled) + Save as draft (optional) + Next/Create gradient button
+- Each "review" step shows the actual underlying command (zfs create, jail -c, kea-dhcp4.conf stanza, /etc/jail.conf stanza, plugin install + activate, etc.)
+
+### MCP plugin reframe — kept options open
+
+Plugin install wizard (131-133) authored as generic CloudBSD plugin manifest with MCP-aware section, NOT as pure MCP. Honcho lesson captured 2026-07-09. Reframe is deferred; existing files have an mcp.exposes block in their YAML example so shape is there.
+
+### Manual snapshot modal (31)
+
+Picks "Online" (ZFS snapshot of running VM, requires guest agent) vs "Quiesced" (freeze guest FS first). Memory state checkbox adds ~8 GB for instant resume after rollback.
+
+### Backup schedule modal (27) — distinct from 19-backup-create
+
+19-backup-create.svg = INSTANT backup (one-off)
+27-backup-schedule.svg = CRON-backed schedule (recurring, retention, targets)
+Both are valid and distinct user flows.
+
+### TOTP wiring — INCOMPLETE
+
+First-login wizard step 2 (129) shows 2FA enrollment but doesn't ship the actual TOTP enrollment flow. Backend endpoint exists (Wave 12a captcha-aware login), but the matching admin UI enrollment modal (a sibling of 28-recovery-codes but for the initial setup path) is not yet authored. Mark as TODO.
+
+### Components still pending
+
+- 03-plugin-wizard.svg (component reference)
+- 04-wizard-modal.svg (component reference)
+
+### Documentation drags
+
+Plan (`.sisyphus/plans/angular-migration.md`), Wire Protocol (`WIRE_PROTOCOL.md`), and UI Index (`ui-index.md`) all need entries for:
+- Each new wizard set (28 files)
+- 9 new admin/modals
+- Toolbar patches (Gap B) from 73f308a
+These edits are bookkeeping; the SVGs themselves are the source of truth per user directive.
+

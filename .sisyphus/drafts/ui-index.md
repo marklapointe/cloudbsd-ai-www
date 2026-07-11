@@ -1007,3 +1007,48 @@ export class LoginComponent {
 - `.sisyphus/plans/angular-migration.md` Wave 12a (T110-T124)
 - 401 handling policy: `ui-index.md §25`
 - Cascade resolution diagram: see `.sisyphus/drafts/lessons.md` (added 2026-07-09)
+
+## §27 — Wizard system canonicalization (2026-07-10)
+
+After authoring 8 distinct wizard sets (29 SVG files), a stable
+visual chrome has crystallized:
+
+### Universal wizard layout
+1. Top bar: gradient C logo + title + substep indicator + Skip/X
+2. Step indicator row: numbered circles (active = filled solid, completed = green checkmark + 'edit' link, future = outlined)
+3. Body: split into left work area + 280px right sidebar
+4. Right sidebar: SELECTED/PICKED summary + WARNING callout + command preview / undo
+5. Bottom bar: Back (or disabled) / Save as draft (last step only) / Next or gradient Create
+
+### Wizard length by complexity
+- **5-step wizards**: VM create (102-106) — most complex (template / identity / resources / storage+network / review)
+- **4-step wizards**: Container (107-110), Jail (111-114), First-login (128-130), Onboarding (121-124)
+- **3-step wizards**: Volume (115-117), Network (118-120), Restore (125-127), Plugin install (131-133)
+- **2-step**: Backup create (planned) — split between target schedule (cron) and review
+
+### Wizard kinds distinguished
+- **Resource create**: VM, Container, Jail, Volume, Network — diffs in that each has its OS-specific concepts
+- **Setup**: Onboarding (first-login tour), First-login (account hardening) — different audience, less form-like
+- **Recovery**: Restore from backup, manual snapshot — operator-action flow
+- **Plugin install**: special — shows YAML manifest with permissions matrix
+- **Backup create (one-off)**: instant (modal), Backup create (recurring): full-page wizard with cron + retention
+
+### Command preview pattern
+Every review step shows the actual underlying command in a
+terminal-styled dark block:
+- VM: `qm create ...` or equivalent
+- Container: (depends on runtime)
+- Jail: `/etc/jail.conf` stanza
+- Volume: `zfs create -o ...`
+- Network: `kea-dhcp4.conf` excerpt
+- Plugin: `cloudbsd plugin install ...`
+- Restore: `zfs send/recv` calls
+
+This is unique — admin sees exactly what wire-protocol command
+gets executed at commit time.
+
+### MCP agent reframe — pending
+Plugin install wizard (131-133) is generic + MCP-aware.
+Full reframe deferred — Honcho lesson 'Plugins as MCP agents'
+captured.
+
