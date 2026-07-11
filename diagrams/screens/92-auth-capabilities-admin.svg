@@ -9,7 +9,7 @@
     <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;font-weight:700;">Settings &#183; Authentication</div>
     <h1 style="margin:4px 0 0;font-size:22px;font-weight:700;color:#0f172a;">Auth capabilities &#183; preflight</h1>
   </div>
-  <span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;font-size:10px;font-weight:600;background:#16a34a10;border:1px solid #bbf7d0;border-radius:9999px;color:#166534;font-family:monospace;"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#16a34a;"></span>live &#183; 2s ago</span>
+  <a style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;font-size:11px;font-weight:600;border:1px solid #cbd5e1;border-radius:6px;background:#ffffff;color:#1d4ed8;text-decoration:none;cursor:pointer;"><span>&#128269;</span> Open preflight diagnostics &#8594;</a><span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;font-size:10px;font-weight:600;background:#16a34a10;border:1px solid #bbf7d0;border-radius:9999px;color:#166534;font-family:monospace;"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#16a34a;"></span>live &#183; 2s ago</span>
 </div>
 
 <div style="padding:18px 22px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
