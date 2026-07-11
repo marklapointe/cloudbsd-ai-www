@@ -57,7 +57,7 @@
             <div><h1 style="font-size:24px;font-weight:700;margin:0;">Status</h1><p style="font-size:13px;color:#64748b;margin:4px 0 0;">Backend health · Plugin status · Build info</p></div>
             <div style="display:flex;gap:8px;align-items:center;">
               
-              <button style="padding:6px 14px;font-size:12px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;">Refresh</button>
+              <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;font-size:10px;font-weight:600;letter-spacing:0.04em;background:#16a34a10;border:1px solid #bbf7d0;border-radius:9999px;color:#166534;font-family:monospace;"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#16a34a;"></span>live &#183; 2s ago</span>
             </div>
           </div>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px;">

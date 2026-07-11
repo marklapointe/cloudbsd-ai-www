@@ -48,7 +48,7 @@
 
             
             <a style="display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;text-decoration:none;font-weight:600;">View cluster events in logs →</a>
-            <button style="padding:6px 14px;font-size:12px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;">Refresh</button>
+            <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;font-size:10px;font-weight:600;letter-spacing:0.04em;background:#16a34a10;border:1px solid #bbf7d0;border-radius:9999px;color:#166534;font-family:monospace;"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#16a34a;"></span>live &#183; 2s ago</span>
             <button style="padding:6px 14px;font-size:12px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;">Export</button>
           </div>
         </div>

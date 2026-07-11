@@ -1666,3 +1666,109 @@ admin IP changed.
 Returns bond config + current hash / member state for live
 preview. Used by 33-edit-lacp.svg right rail "Before" card.
 
+
+### §2.29 — Stream transport (push messaging, added 2026-07-10)
+
+User directive: "we should have messaging being pushed to each
+user that will update the views and the data being displayed."
+
+Canonical rule: every view is a passive receiver of pushed
+events. NO Refresh / View JSON / "see X tab" affordances.
+
+#### Transport
+
+- **Endpoint**: `wss://<host>/api/stream`
+- **Auth**: WebSocket upgrade requires valid session cookie +
+  short-lived JWT signed by `/api/auth/stream-token` (60 s TTL).
+- **Encoding**: JSON text frames (single message per frame).
+- **Heartbeat**: server-sent every 30 s with `kind: 'heartbeat'`;
+  client considers the connection dead if no frame in 90 s and
+  reconnects with `resumeFrom` set to the last-seen event id.
+- **Reconnect**: exponential backoff, max 30 s. After 5 fails
+  in a row, show a top banner ("Reconnecting...") with manual
+  reconnect button.
+- **No SSE fallback in v1**: pure WebSocket. Per-page polling
+  fallback is forbidden (the views look broken if the data
+  stops updating).
+
+#### Connection lifecycle
+
+```
+client → server:  WebSocket upgrade w/ session cookie + JWT
+server → client:  HTTP 101 Switching Protocols
+client → server:  { "type": "subscribe", "topics": [...], "resumeFrom": "..." }
+server → client:  { "type": "ack", "topic": "...", "accepted": true }
+server → client:  { "type": "event", "event": <StreamEvent> }
+server → client:  { "type": "event", ... }  (steady-state)
+                  // every 30 s:
+server → client:  { "type": "heartbeat", "ts": 1752184712345 }
+```
+
+#### Subscribe shape (canonical)
+
+```json
+{
+  "type": "subscribe",
+  "topics": [
+    "cluster.local.health",
+    "node.cloudbsd-node-01.metrics.cpu",
+    "node.cloudbsd-node-01.metrics.mem",
+    "vm.web-server-01.state",
+    "vm.web-server-01.metrics.cpu",
+    "audit.event.live",
+    "logs.cloudbsd-node-01.warn"
+  ],
+  "resumeFrom": "01HXYZ..."
+}
+```
+
+#### Event shape (canonical, references data-structures §6)
+
+```json
+{
+  "type": "event",
+  "event": {
+    "id": "01HYZABC...",
+    "topic": "node.cloudbsd-node-01.metrics.cpu",
+    "kind": "delta",
+    "ts": 1752184712345,
+    "payload": {
+      "pctUser": 42.1,
+      "pctSystem": 7.2,
+      "pctIoWait": 1.4
+    },
+    "stateHash": "f3c8..."
+  }
+}
+```
+
+#### Topic hierarchy (canonical)
+
+See `data-structures.md §6` for the full topic table. Topics are
+hierarchical dot-separated; subscribe uses prefix match by
+default. Wildcard subscriptions (`node.*`) require admin role.
+
+#### Topic ACLs (canonical)
+
+| Topic prefix | Required role |
+|---|---|
+| `cluster.*`, `audit.event.live` | admin (operator+ for audit) |
+| `node.*`, `logs.*` | viewer+ (same role as current REST) |
+| `vm.*`, `container.*`, `jail.*` | scoped to user (multi-tenant) |
+| `plugin.*`, `network.*`, `alert.*` | viewer+ |
+| `*.console` (VNC frames) | requires separate VNC JWT |
+
+Wildcards require explicit `subscribe:wildcard` grant. Default
+deny for cross-tenant prefixes.
+
+#### Connection-level errors
+
+Server emits `kind: 'error'` for:
+- 'auth-failed' — close 4401
+- 'quota-exceeded' — close 4429 (too many subscriptions)
+- 'parse-error' — frame cannot be parsed as JSON
+- 'topic-forbidden' — subscribe included privileged topic
+
+Client logs + retries only auth failures (after re-login);
+all others are fatal for that connection.
+

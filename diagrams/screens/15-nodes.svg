@@ -182,7 +182,7 @@
             </table>
             <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid #e2e8f0;background:#f8fafc;font-size:11px;color:#64748b;">
               <span>Showing <b style="color:#0f172a;">6</b> nodes · 1 offline (node-05, last seen 4h ago)</span>
-              <button style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:4px;background:#ffffff;">Refresh</button>
+              <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;font-size:10px;font-weight:600;letter-spacing:0.04em;background:#16a34a10;border:1px solid #bbf7d0;border-radius:9999px;color:#166534;font-family:monospace;"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#16a34a;"></span>live</span>
             </div>
           </div>
         </main>

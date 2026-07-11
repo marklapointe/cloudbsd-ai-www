@@ -364,3 +364,31 @@ the differential without scrolling to /etc/rc.conf preview.
 - 'unsaved changes' MODIFIED pill in footer
 - save-as-draft option (cancel without lose)
 
+
+## 2026-07-10 — Live-data UX pivot (push messaging canonicalized)
+
+User directive: refresh/view-json are sloppy. live data should
+be pushed to each user. follow-up: "make sure the plans are
+updated!!"
+
+### Plans updated
+- `.sisyphus/plans/angular-migration.md` — T243 already marked
+  DONE for refresh/view-only/export removal. Strengthened the
+  rule into a 5-rule canonical methodology.
+- `.sisyphus/plans/WIRE_PROTOCOL.md` — new §2.29 Stream
+  transport (WebSocket framing, topic ACL, reconnect) with full
+  subscribe / event shape.
+- `.sisyphus/drafts/data-structures.md` — new §6 StreamEvent
+  + topic table (~25 canonical topics).
+- `.sisyphus/drafts/ui-index.md` — new §29 with the 3-size
+  live-indicator recipes (SMALL/MEDIUM/LARGE) and the
+  anti-pattern list (must NEVER reappear).
+- `.sisyphus/drafts/lessons.md` — append "Live-data UX triad":
+  Refresh=stale, View JSON=incomplete, see-X-tab=sloppy.
+
+### Pending SVG work (separate commit, awaiting go-ahead)
+- 25 SVG files have Refresh + View JSON to remove
+- 101-node-vms-tab-content.svg has "see Network tab or per-VM
+  Disks" hint to inline
+- Possibly more 'see X tab' hints; needs sweep
+

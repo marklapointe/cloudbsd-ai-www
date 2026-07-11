@@ -672,3 +672,120 @@ Implementation tasks (new):
 - T256-T280 covering the additions above
 
 Total: 19 data structures, 25+ implementation tasks.
+
+---
+
+## §6 — StreamEvent (push messaging envelope, added 2026-07-10)
+
+User directive: "we should have messaging being pushed to each
+user that will update the views and the data being displayed."
+
+Every CloudBSD Admin view is a passive receiver of StreamEvents.
+There is no `Refresh` button in the UX; the backend pushes
+events over a single multiplexed WebSocket connection per user.
+
+### StreamEvent (canonical)
+
+```ts
+type EpochMs = number;  // see §1 Universal changes
+
+type StreamTopic = string;
+  // Hierarchical dot-separated topic, e.g.:
+  //   "node.cloudbsd-node-01.metrics.cpu"
+  //   "vm.web-server-01.state"
+  //   "cluster.7.health"
+  //   "audit.event.live"
+  //   "logs.global.tail"
+  // Match is prefix-match: subs "node.cloudbsd-node-01" receives
+  // all child events. Wildcards ("node.*", "logs.*") require
+  // explicit subscribe (admin-only by default).
+
+type StreamEventId = ULID;  // monotonic, dedupable
+
+type StreamEventKind =
+  | 'snapshot'      // full state for the topic (response to subscribe)
+  | 'delta'         // partial update, must merge with current client state
+  | 'replace'       // full replacement of the topic state
+  | 'delete'        // resource removed
+  | 'create'        // resource created (initial state in payload)
+  | 'audit'         // audit-log event (immutable, append-only)
+  | 'heartbeat'     // keepalive, sent every 30 s; payload = server ts
+  | 'error';        // stream error (auth, quota, parse)
+
+interface StreamEvent<P = unknown> {
+  id:     StreamEventId;     // ULID, monotonically increasing server-side
+  topic:  StreamTopic;       // fully-qualified dot-separated
+  kind:   StreamEventKind;
+  ts:     EpochMs;           // server time of event creation
+  expiresAt?: EpochMs;       // optional TTL (e.g., status ticks)
+  payload: P;
+  // correlation / causation for chain debugging
+  causedBy?: StreamEventId;
+  // For 'delta'/'replace', server includes a CRDT-friendly hash so
+  // clients can detect divergence and re-snapshot:
+  stateHash?: string;
+}
+```
+
+### Topic conventions (canonical)
+
+| Top-level | Pattern | Update cadence |
+|---|---|---|
+| `cluster.{id}.health` | summary | 1 s |
+| `cluster.{id}.events` | audit/event append | event-driven |
+| `node.{id}.metrics.{kind}` | cpu, mem, disk, io, net, temp | 1 s |
+| `node.{id}.state` | online/offline/draining | event-driven |
+| `vm.{id}.state` | stopped/running/paused/migrated | event-driven |
+| `vm.{id}.metrics.{kind}` | cpu/mem/net/disk/iops | 2 s |
+| `vm.{id}.console` | VNC frames (separate wss path, see plan) | 30 fps |
+| `container.{id}.state` | created/running/exited | event-driven |
+| `container.{id}.metrics.{kind}` | cpu/mem/net | 2 s |
+| `jail.{id}.state` | stopped/starting/running | event-driven |
+| `volume.{id}.metrics.{kind}` | capacity/IOPS/quota | 5 s |
+| `volume.{id}.scrub.{schedId}.progress` | % complete + ETA | 1 s |
+| `network.{poolId}.leases` | DHCP lease table | event-driven |
+| `network.{poolId}.utilization.{kind}` | % free / total | 5 s |
+| `plugin.{id}.state` | registered/disabled/error | event-driven |
+| `plugin.{id}.mcp.tools` | tool list + schemas | event-driven |
+| `alert.{id}.state` | firing/resolved/silenced | event-driven |
+| `audit.event.live` | append-only log | event-driven |
+| `logs.{source}.{level}` | live tail | event-driven |
+| `task.{schedId}.progress` | backup/scrub/etc. % | 1 s |
+
+### Subscription lifecycle
+
+```ts
+interface StreamSubscribe {
+  topics: StreamTopic[];   // may include wildcards for admin
+  resumeFrom?: StreamEventId;  // resume after reconnect
+  windowMs?: number;       // rolling buffer window, default 60s
+}
+
+interface StreamSubscriptionAck {
+  topic: StreamTopic;
+  accepted: boolean;
+  reason?: string;         // if !accepted, e.g. 'permission denied'
+}
+```
+
+### Wire framing (wire-protocol §2.29)
+
+- Transport: WebSocket only (wss://) — no SSE fallback in v1.
+  Single connection per user (multiplexed). Heartbeats every 30 s.
+- Initial: client sends StreamSubscribe. Server responds with
+  N×StreamSubscriptionAck + 1×StreamEvent per topic.
+- Steady state: server emits StreamEvent. Client merges into
+  the SignalStore / Angular service backing the view.
+- Reconnect: client sends StreamSubscribe with `resumeFrom =
+  last-seen-event-id`. Server replays buffered events newer
+  than that ULID, or sends full snapshot if buffer has expired.
+
+### Cardinality budget
+
+- A single node detail view subscribes to ~6 topics
+  (state + 4 metrics + events).
+- The whole admin shell subscribes to ~25 baseline topics
+  (cluster + nodes sidebar + active resource) at most.
+- Per-page on-demand subscriptions add as needed (e.g.,
+  VM detail: +12 topics for that one VM).
+

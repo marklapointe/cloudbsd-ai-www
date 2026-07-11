@@ -1083,3 +1083,73 @@ a focused modal.
 - 92-container-network (port mappings, networks)
 - 94-jail-network (VNET, IPs, allow flags)
 
+
+## §29 — Live-data view paradigm (2026-07-10)
+
+User directive (and follow-up):
+"make sure the plans are updated!!"
+
+### Rule (canonical)
+
+Every CloudBSD Admin view that shows data is a PASSIVE RECEIVER
+of pushed events. The admin NEVER:
+- clicks Refresh (data is pushed)
+- clicks View JSON (no debug surface)
+- reads 'see X tab' hints (data is inlined or absent)
+
+### Visual recipes
+
+**Small** — toolbar / narrow spaces
+```html
+<span style="display:inline-flex;align-items:center;gap:5px;
+              padding:4px 9px;font-size:10px;font-weight:600;
+              letter-spacing:0.04em;background:#16a34a10;
+              border:1px solid #bbf7d0;border-radius:9999px;
+              color:#166534;font-family:monospace;">
+  <span style="display:inline-block;width:7px;height:7px;
+               border-radius:50%;background:#16a34a;"></span>
+  live
+</span>
+```
+
+**Medium** — page header
+```html
+<span ... style="font-size:11px;font-weight:600;...">
+  ●  live · 2s ago
+</span>
+```
+
+**Large** — hero card / data tile
+```html
+<span ... style="font-size:12px;font-weight:700;letter-spacing:0.06em;">
+  ●  LIVE · pushed 2s ago
+</span>
+```
+
+The live indicator's relative timestamp is OPTIONAL but
+recommended for medium+ — gives the admin instant sense of
+"is this still updating?"
+
+### Anti-patterns (must NEVER reappear)
+
+- `<button>↻ Refresh</button>` → replaces with `● live`
+- `<button>View JSON</button>` → deletes entirely
+- `<button>Reload</button>` → deletes
+- "see Network tab or per-VM Disks" → inline the data or remove the row
+- "View-only resource catalog. Click a row to view details." →
+  make the click affordance obvious (chevron icon, row hover)
+- "go to Logs →" → inline a feed or remove the hint
+- "see Logs" / "View in logs" link → inline a mini feed if relevant
+
+### What this means for future SVGs
+
+When a tab-content detail view shows multiple fields, do NOT
+include navigation hints. Inline the data:
+- 'show running VMs on this node' → render the count + click-list in this view
+- 'X is configured in Network tab' → include the X in the current view
+- 'Y logs are in Logs menu' → include a 5-row recent-activity feed
+
+The only legitimate navigation is the LEFT sidebar menu and
+top breadcrumb. Tab strips within a detail page are still
+internal to that view, not cross-references to other pages.
+

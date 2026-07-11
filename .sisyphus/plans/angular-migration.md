@@ -31,7 +31,59 @@
 
 ---
 
-## Context
+## Canonical Methodology (rules every wave must honor)
+
+> **These rules are non-negotiable.** Any wave that violates them must be re-planned before execution.
+> Strengthened and added 2026-07-10 per user directive "make sure the plans are updated!!"
+
+### Five-rule methodology
+
+1. **View-only by default.** Frontend is a passive receiver. Every
+   "write" is routed through a backend action exposed via the
+   plugin system (`application/vnd.cloudbsd+<action>` MIME +
+   `X-CloudBSD-Who/What/Why/Where` headers). The admin sees a
+   description of what would happen + a Confirm button, never
+   inline edit affordances on data rows.
+   *(Original T243 — Refresh / View-only / Export removal — DONE.)*
+
+2. **Frost-out session modal on auth failure.** When the session
+   validation fails OR the admin role drops below the requirement
+   for the current view, the UI fades to gray and shows the
+   frost-out modal. NO dedicated /401, /session-expired, /invalid
+   screen (we return the user to /login instead — verified
+   2026-07-09).
+
+3. **Plugin-extensible.** New menu items, pages, modals, wizards
+   come from the backend template manifest — no frontend
+   redeploy. The plugin renderer is Angular 20 + the
+   `plugin-contract.md` shape.
+
+4. **Live-data paradigm — no Refresh, no View JSON.** Every view
+   that shows changing data is a PASSIVE RECEIVER of pushed
+   StreamEvents (`wss://<host>/api/stream`). No `↻ Refresh`,
+   no `View JSON`, no `Reload`, no `Update from server`. The
+   wire-protocol spec is at §2.29 and event envelope is at
+   `data-structures.md §6 StreamEvent`. Every view displays
+   a `● live` indicator with optional `Xs ago` (recipes at
+   `ui-index.md §29`). *(New 2026-07-10.)*
+
+5. **No sloppy navigation hints in body text.** Phrases like
+   "see Network tab or per-VM Disks", "go to Logs →", "View in
+   detail" are FORBIDDEN in mockups. If a data point belongs
+   in the current view, INLINE it. If not, REMOVE the row.
+   The left sidebar + breadcrumb are the only legitimate
+   navigation surfaces. *(New 2026-07-10.)*
+
+### Carrying these rules forward
+
+- Every new SVG mockup must include the live indicator where
+  data changes.
+- Every new wizard/modal must have its `cbsd.stream.subscribe`
+  calls enumerated in §2.29 topics.
+- Any "view JSON", "see X tab", or "Refresh" appearing in a
+  mockup or in API design is a regression — block the PR.
+
+
 
 ### Original Request
 "Examine codebase, plan for Angular migration. Check Honcho MCP services for diagram and UI/UX guidelines." Followed by scope expansions: view-only UI, replace backend entirely, modular auth with PAM, frost-out modal, plugin system, custom MIME types + headers, OpenAPI spec, Playwright visual inspections.
