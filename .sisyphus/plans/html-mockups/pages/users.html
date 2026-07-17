@@ -57,14 +57,14 @@
   <div><h1>Users</h1><p class="sub">Control-plane identities</p></div>
   <div class="actions"><button type="button" class="btn btn-primary" data-open-modal="m-create-user">+ Create user</button><button type="button" class="btn" data-open-modal="m-api-key">API key</button></div>
 </div>
-<div class="filter-bar">
-  <input type="search" placeholder="Filter users…"/>
-  <button type="button" class="chip active">All</button><button type="button" class="chip">Admin</button><button type="button" class="chip">Operator</button><button type="button" class="chip">Auditor</button>
+<div class="filter-bar" data-filter-bar="1">
+  <input type="search" placeholder="Filter users…  (press /)" autocomplete="off"/>
+  <button type="button" class="chip active" data-chip="all">All</button><button type="button" class="chip" data-chip="admin">Admin</button><button type="button" class="chip" data-chip="operator">Operator</button><button type="button" class="chip" data-chip="auditor">Auditor</button>
 </div>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>User</th><th>Role</th><th>2FA</th><th>Last active</th><th>Actions</th></tr></thead>
-    <tbody><tr><td>mlapointe</td><td>Admin</td><td>TOTP</td><td>now</td><td><button type="button" class="btn-link" data-open-modal="m-edit-user">Edit</button></td></tr><tr><td>ops-alice</td><td>Operator</td><td>Passkey</td><td>2h ago</td><td><button type="button" class="btn-link" data-open-modal="m-edit-user">Edit</button> · <button type="button" class="btn-link danger" data-open-modal="m-disable-user">Disable</button></td></tr><tr><td>audit-bob</td><td>Auditor</td><td>—</td><td>1d ago</td><td><button type="button" class="btn-link" data-open-modal="m-edit-user">Edit</button> · <button type="button" class="btn-link danger" data-open-modal="m-disable-user">Disable</button></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="mlapointe admin totp now edit"><td>mlapointe</td><td>Admin</td><td>TOTP</td><td>now</td><td><button type="button" class="btn-link" data-open-modal="m-edit-user">Edit</button></td></tr><tr data-status="unknown" data-filter="ops-alice operator passkey 2h ago edit · disable"><td>ops-alice</td><td>Operator</td><td>Passkey</td><td>2h ago</td><td><button type="button" class="btn-link" data-open-modal="m-edit-user">Edit</button> · <button type="button" class="btn-link danger" data-open-modal="m-disable-user">Disable</button></td></tr><tr data-status="unknown" data-filter="audit-bob auditor — 1d ago edit · disable"><td>audit-bob</td><td>Auditor</td><td>—</td><td>1d ago</td><td><button type="button" class="btn-link" data-open-modal="m-edit-user">Edit</button> · <button type="button" class="btn-link danger" data-open-modal="m-disable-user">Disable</button></td></tr></tbody>
   </table>
 </div>
       <p class="mock-note">HTML mockup · tabs + modals filled · MCP = plugins · .sisyphus/plans/html-mockups/</p>

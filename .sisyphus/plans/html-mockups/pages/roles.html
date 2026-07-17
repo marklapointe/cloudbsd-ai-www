@@ -58,9 +58,9 @@
   <div class="actions"><button type="button" class="btn btn-primary" data-open-modal="m-create-role">+ Role</button></div>
 </div>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Role</th><th>Users</th><th>Capabilities</th><th>Actions</th></tr></thead>
-    <tbody><tr><td>Admin</td><td>2</td><td>all</td><td><button type="button" class="btn-link" data-open-modal="m-create-role">Edit</button></td></tr><tr><td>Operator</td><td>5</td><td>workload:write, hosts:drain</td><td><button type="button" class="btn-link" data-open-modal="m-create-role">Edit</button></td></tr><tr><td>Auditor</td><td>1</td><td>*:read</td><td><button type="button" class="btn-link" data-open-modal="m-create-role">Edit</button></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="admin 2 all edit"><td>Admin</td><td>2</td><td>all</td><td><button type="button" class="btn-link" data-open-modal="m-create-role">Edit</button></td></tr><tr data-status="unknown" data-filter="operator 5 workload:write, hosts:drain edit"><td>Operator</td><td>5</td><td>workload:write, hosts:drain</td><td><button type="button" class="btn-link" data-open-modal="m-create-role">Edit</button></td></tr><tr data-status="unknown" data-filter="auditor 1 *:read edit"><td>Auditor</td><td>1</td><td>*:read</td><td><button type="button" class="btn-link" data-open-modal="m-create-role">Edit</button></td></tr></tbody>
   </table>
 </div>
       <p class="mock-note">HTML mockup · tabs + modals filled · MCP = plugins · .sisyphus/plans/html-mockups/</p>

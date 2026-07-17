@@ -61,21 +61,21 @@
   <div class="tabs"><button type="button" class="active" data-tab="overview">Overview</button><button type="button" class="" data-tab="snapshots">Snapshots</button><button type="button" class="" data-tab="scrubs">Scrubs</button><button type="button" class="" data-tab="permissions">Permissions</button></div>
   <div class="panel" data-panel="overview"><div class="card card-pad"><dl class="kv"><dt>Pool</dt><dd>tank</dd><dt>Compression</dt><dd>lz4</dd><dt>Atime</dt><dd>off</dd><dt>Used</dt><dd>120 GB</dd><dt>Avail</dt><dd>2.1 TB</dd></dl></div></div><div class="panel" data-panel="snapshots" hidden>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Snapshot</th><th>Created</th><th>Used</th><th>Actions</th></tr></thead>
-    <tbody><tr><td>@2026-07-15</td><td>2026-07-15 02:00</td><td>2.1 GB</td><td><button type="button" class="btn-link" data-open-modal="m-clone-dataset">Clone</button> · <button type="button" class="btn-link danger" data-open-modal="m-delete-snapshot">Delete</button></td></tr><tr><td>@2026-07-14</td><td>2026-07-14 02:00</td><td>1.8 GB</td><td><button type="button" class="btn-link danger" data-open-modal="m-delete-snapshot">Delete</button></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="@2026-07-15 2026-07-15 02:00 2.1 gb clone · delete"><td>@2026-07-15</td><td>2026-07-15 02:00</td><td>2.1 GB</td><td><button type="button" class="btn-link" data-open-modal="m-clone-dataset">Clone</button> · <button type="button" class="btn-link danger" data-open-modal="m-delete-snapshot">Delete</button></td></tr><tr data-status="unknown" data-filter="@2026-07-14 2026-07-14 02:00 1.8 gb delete"><td>@2026-07-14</td><td>2026-07-14 02:00</td><td>1.8 GB</td><td><button type="button" class="btn-link danger" data-open-modal="m-delete-snapshot">Delete</button></td></tr></tbody>
   </table>
 </div><div style="margin-top:10px"><button type="button" class="btn btn-primary" data-open-modal="m-snapshot">+ Snapshot</button></div></div><div class="panel" data-panel="scrubs" hidden>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Started</th><th>Errors</th><th>Status</th></tr></thead>
-    <tbody><tr><td>14d ago</td><td>0</td><td>Finished</td></tr><tr><td>—</td><td>—</td><td>Due</td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="14d ago 0 finished"><td>14d ago</td><td>0</td><td>Finished</td></tr><tr data-status="unknown" data-filter="— — due"><td>—</td><td>—</td><td>Due</td></tr></tbody>
   </table>
 </div></div><div class="panel" data-panel="permissions" hidden>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Principal</th><th>Access</th></tr></thead>
-    <tbody><tr><td>cluster-admin</td><td>full</td></tr><tr><td>ops-alice</td><td>snapshot</td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="cluster-admin full"><td>cluster-admin</td><td>full</td></tr><tr data-status="unknown" data-filter="ops-alice snapshot"><td>ops-alice</td><td>snapshot</td></tr></tbody>
   </table>
 </div></div>
 </div>

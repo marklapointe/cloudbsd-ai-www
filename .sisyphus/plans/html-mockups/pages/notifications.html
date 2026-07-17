@@ -61,9 +61,9 @@
   <div class="tabs"><button type="button" class="active" data-tab="inbox">Inbox</button><button type="button" class="" data-tab="prefs">Delivery prefs</button></div>
   <div class="panel" data-panel="inbox">
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th></th><th>Message</th><th>When</th><th></th></tr></thead>
-    <tbody><tr><td>●</td><td>Backup nightly completed (backup/nightly)</td><td>12m ago</td><td><button type="button" class="btn-link" data-open-modal="m-mark-read">Dismiss</button></td></tr><tr><td>●</td><td>Agent update available on prod-node-03</td><td>1h ago</td><td><button type="button" class="btn-link" data-open-modal="m-update-apply">Apply</button> · <button type="button" class="btn-link" data-open-modal="m-mark-read">Dismiss</button></td></tr><tr><td></td><td>User ops-alice created API key</td><td>1d ago</td><td></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="● backup nightly completed (backup/nightly) 12m ago dismiss"><td>●</td><td>Backup nightly completed (backup/nightly)</td><td>12m ago</td><td><button type="button" class="btn-link" data-open-modal="m-mark-read">Dismiss</button></td></tr><tr data-status="unknown" data-filter="● agent update available on prod-node-03 1h ago apply · dismiss"><td>●</td><td>Agent update available on prod-node-03</td><td>1h ago</td><td><button type="button" class="btn-link" data-open-modal="m-update-apply">Apply</button> · <button type="button" class="btn-link" data-open-modal="m-mark-read">Dismiss</button></td></tr><tr data-status="unknown" data-filter="user ops-alice created api key 1d ago"><td></td><td>User ops-alice created API key</td><td>1d ago</td><td></td></tr></tbody>
   </table>
 </div></div><div class="panel" data-panel="prefs" hidden>
 <div class="card card-pad" style="max-width:520px">

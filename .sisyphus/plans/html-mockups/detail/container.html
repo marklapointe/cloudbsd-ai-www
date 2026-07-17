@@ -61,15 +61,15 @@
   <div class="tabs"><button type="button" class="active" data-tab="overview">Overview</button><button type="button" class="" data-tab="network">Network</button><button type="button" class="" data-tab="logs">Logs</button><button type="button" class="" data-tab="events">Events</button></div>
   <div class="panel" data-panel="overview"><div class="card card-pad"><dl class="kv"><dt>Image</dt><dd>redis:7</dd><dt>Restart</dt><dd>unless-stopped</dd><dt>Ports</dt><dd>6379/tcp</dd><dt>Host</dt><dd>prod-node-01</dd></dl></div></div><div class="panel" data-panel="network" hidden>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Network</th><th>IP</th></tr></thead>
-    <tbody><tr><td>vm-public</td><td>10.0.10.40</td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="vm-public 10.0.10.40"><td>vm-public</td><td>10.0.10.40</td></tr></tbody>
   </table>
 </div></div><div class="panel" data-panel="logs" hidden><div class="card card-pad mono" style="background:#0f172a;color:#86efac;min-height:160px">1:M 02:11:00 Ready to accept connections</div></div><div class="panel" data-panel="events" hidden>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Time</th><th>Event</th></tr></thead>
-    <tbody><tr><td>02:00</td><td>start</td></tr><tr><td>Yesterday</td><td>image pull</td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="02:00 start"><td>02:00</td><td>start</td></tr><tr data-status="unknown" data-filter="yesterday image pull"><td>Yesterday</td><td>image pull</td></tr></tbody>
   </table>
 </div></div>
 </div>

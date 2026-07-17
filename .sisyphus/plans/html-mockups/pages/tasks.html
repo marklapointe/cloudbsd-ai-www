@@ -57,14 +57,14 @@
   <div><h1>Tasks</h1><p class="sub">Global long-running ops · stream-backed</p></div>
   <div class="actions"></div>
 </div>
-<div class="filter-bar">
-  <input type="search" placeholder="Filter tasks…"/>
-  <button type="button" class="chip active">All</button><button type="button" class="chip">Running</button><button type="button" class="chip">OK</button><button type="button" class="chip">Failed</button>
+<div class="filter-bar" data-filter-bar="1">
+  <input type="search" placeholder="Filter tasks…  (press /)" autocomplete="off"/>
+  <button type="button" class="chip active" data-chip="all">All</button><button type="button" class="chip" data-chip="running">Running</button><button type="button" class="chip" data-chip="ok">OK</button><button type="button" class="chip" data-chip="failed">Failed</button>
 </div>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>State</th><th>Task</th><th>Target</th><th>Started</th><th>Duration</th><th>Actions</th></tr></thead>
-    <tbody><tr><td><span class="status-warn">◐</span></td><td>ZFS send backup/nightly</td><td>backup</td><td>00:15</td><td>41m</td><td><button type="button" class="btn-link" data-open-modal="m-confirm-generic">View</button> · <button type="button" class="btn-link danger" data-open-modal="m-cancel-task">Cancel</button></td></tr><tr><td><span class="status-ok">●</span></td><td>VM migrate jellyfin</td><td>prod-node-02</td><td>1h ago</td><td>12m</td><td><button type="button" class="btn-link" data-open-modal="m-confirm-generic">View</button></td></tr><tr><td><span class="status-err">✕</span></td><td>Snapshot win11-sandbox</td><td>prod-node-03</td><td>3h ago</td><td>12s</td><td><button type="button" class="btn-link" data-open-modal="m-confirm-generic">View</button> · <button type="button" class="btn-link" data-open-modal="m-snapshot">Retry</button></td></tr></tbody>
+    <tbody><tr data-status="warn maint running" data-filter="◐ zfs send backup/nightly backup 00:15 41m view · cancel"><td><span class="status-warn">◐</span></td><td>ZFS send backup/nightly</td><td>backup</td><td>00:15</td><td>41m</td><td><button type="button" class="btn-link" data-open-modal="m-confirm-generic">View</button> · <button type="button" class="btn-link danger" data-open-modal="m-cancel-task">Cancel</button></td></tr><tr data-status="run ok ready" data-filter="● vm migrate jellyfin prod-node-02 1h ago 12m view"><td><span class="status-ok">●</span></td><td>VM migrate jellyfin</td><td>prod-node-02</td><td>1h ago</td><td>12m</td><td><button type="button" class="btn-link" data-open-modal="m-confirm-generic">View</button></td></tr><tr data-status="error" data-filter="✕ snapshot win11-sandbox prod-node-03 3h ago 12s view · retry"><td><span class="status-err">✕</span></td><td>Snapshot win11-sandbox</td><td>prod-node-03</td><td>3h ago</td><td>12s</td><td><button type="button" class="btn-link" data-open-modal="m-confirm-generic">View</button> · <button type="button" class="btn-link" data-open-modal="m-snapshot">Retry</button></td></tr></tbody>
   </table>
 </div>
       <p class="mock-note">HTML mockup · tabs + modals filled · MCP = plugins · .sisyphus/plans/html-mockups/</p>

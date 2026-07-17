@@ -65,15 +65,15 @@
   <div class="actions"><button type="button" class="btn btn-primary" data-open-modal="m-backup-policy">+ Policy</button><a class="btn" href="../wizards/restore.html">Restore wizard</a></div>
 </div>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Policy</th><th>Schedule</th><th>Last run</th><th>Status</th><th>Actions</th></tr></thead>
-    <tbody><tr><td>nightly-zfs</td><td>0 2 * * *</td><td>today 02:00</td><td><span class="status-ok">OK</span></td><td><button type="button" class="btn-link" data-open-modal="m-backup-run">Run</button> · <button type="button" class="btn-link" data-open-modal="m-backup-policy">Edit</button></td></tr><tr><td>weekly-full</td><td>0 3 * * 0</td><td>Sun 03:00</td><td><span class="status-ok">OK</span></td><td><button type="button" class="btn-link" data-open-modal="m-backup-run">Run</button> · <button type="button" class="btn-link" data-open-modal="m-backup-policy">Edit</button></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="nightly-zfs 0 2 * * * today 02:00 ok run · edit"><td>nightly-zfs</td><td>0 2 * * *</td><td>today 02:00</td><td><span class="status-ok">OK</span></td><td><button type="button" class="btn-link" data-open-modal="m-backup-run">Run</button> · <button type="button" class="btn-link" data-open-modal="m-backup-policy">Edit</button></td></tr><tr data-status="unknown" data-filter="weekly-full 0 3 * * 0 sun 03:00 ok run · edit"><td>weekly-full</td><td>0 3 * * 0</td><td>Sun 03:00</td><td><span class="status-ok">OK</span></td><td><button type="button" class="btn-link" data-open-modal="m-backup-run">Run</button> · <button type="button" class="btn-link" data-open-modal="m-backup-policy">Edit</button></td></tr></tbody>
   </table>
 </div><div style="margin-top:12px;font-weight:700">Recent runs</div>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Started</th><th>Policy</th><th>Duration</th><th>Result</th></tr></thead>
-    <tbody><tr><td>today 02:00</td><td>nightly-zfs</td><td>41m</td><td>OK</td></tr><tr><td>yesterday 02:00</td><td>nightly-zfs</td><td>38m</td><td>OK</td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="today 02:00 nightly-zfs 41m ok"><td>today 02:00</td><td>nightly-zfs</td><td>41m</td><td>OK</td></tr><tr data-status="unknown" data-filter="yesterday 02:00 nightly-zfs 38m ok"><td>yesterday 02:00</td><td>nightly-zfs</td><td>38m</td><td>OK</td></tr></tbody>
   </table>
 </div></div><div class="panel" data-panel="updates" hidden>
 <div class="page-head">
@@ -81,9 +81,9 @@
   <div class="actions"><button type="button" class="btn" data-open-modal="m-confirm-generic">Check now</button></div>
 </div>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Component</th><th>Current</th><th>Available</th><th>Host</th><th>Actions</th></tr></thead>
-    <tbody><tr><td>Agent</td><td>14.2-p2</td><td>14.2-p3</td><td>prod-node-03</td><td><button type="button" class="btn-link" data-open-modal="m-update-apply">Apply</button></td></tr><tr><td>Agent</td><td>14.2-p2</td><td>—</td><td>prod-node-01</td><td>Up to date</td></tr><tr><td>MCP: honcho</td><td>3.0.0</td><td>—</td><td>cluster</td><td>—</td></tr><tr><td>FreeBSD base</td><td>14.2</td><td>14.2-p1 advisory</td><td>all</td><td><button type="button" class="btn-link" data-open-modal="m-confirm-generic">Details</button></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="agent 14.2-p2 14.2-p3 prod-node-03 apply"><td>Agent</td><td>14.2-p2</td><td>14.2-p3</td><td>prod-node-03</td><td><button type="button" class="btn-link" data-open-modal="m-update-apply">Apply</button></td></tr><tr data-status="unknown" data-filter="agent 14.2-p2 — prod-node-01 up to date"><td>Agent</td><td>14.2-p2</td><td>—</td><td>prod-node-01</td><td>Up to date</td></tr><tr data-status="unknown" data-filter="mcp: honcho 3.0.0 — cluster —"><td>MCP: honcho</td><td>3.0.0</td><td>—</td><td>cluster</td><td>—</td></tr><tr data-status="unknown" data-filter="freebsd base 14.2 14.2-p1 advisory all details"><td>FreeBSD base</td><td>14.2</td><td>14.2-p1 advisory</td><td>all</td><td><button type="button" class="btn-link" data-open-modal="m-confirm-generic">Details</button></td></tr></tbody>
   </table>
 </div></div><div class="panel" data-panel="diagnostics" hidden>
 <div class="page-head">
@@ -91,9 +91,9 @@
   <div class="actions"></div>
 </div><div class="stats"><div class="stat"><div class="label">Backend</div><div class="value">UP</div></div><div class="stat"><div class="label">Stream</div><div class="value">OK</div></div><div class="stat"><div class="label">MCP</div><div class="value">3/4</div></div><div class="stat"><div class="label">Preflight</div><div class="value">OK</div></div></div>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Check</th><th>Result</th><th>Detail</th><th>Actions</th></tr></thead>
-    <tbody><tr><td>Auth methods</td><td>OK</td><td>password, TOTP, passkey</td><td>—</td></tr><tr><td>Preflight service</td><td>OK</td><td>latency 12ms</td><td><button type="button" class="btn-link" data-open-modal="m-confirm-generic">Run suite</button></td></tr><tr><td>CARP VIP</td><td>OK</td><td>10.0.0.10 master node-01</td><td>—</td></tr><tr><td>MCP honcho</td><td>OK</td><td>30 tools</td><td><button type="button" class="btn-link" data-open-modal="m-mcp-probe">Probe</button></td></tr><tr><td>MCP operant</td><td>Off</td><td>disabled</td><td><button type="button" class="btn-link" data-open-modal="m-mcp-enable">Enable</button></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="auth methods ok password, totp, passkey —"><td>Auth methods</td><td>OK</td><td>password, TOTP, passkey</td><td>—</td></tr><tr data-status="unknown" data-filter="preflight service ok latency 12ms run suite"><td>Preflight service</td><td>OK</td><td>latency 12ms</td><td><button type="button" class="btn-link" data-open-modal="m-confirm-generic">Run suite</button></td></tr><tr data-status="unknown" data-filter="carp vip ok 10.0.0.10 master node-01 —"><td>CARP VIP</td><td>OK</td><td>10.0.0.10 master node-01</td><td>—</td></tr><tr data-status="unknown" data-filter="mcp honcho ok 30 tools probe"><td>MCP honcho</td><td>OK</td><td>30 tools</td><td><button type="button" class="btn-link" data-open-modal="m-mcp-probe">Probe</button></td></tr><tr data-status="unknown" data-filter="mcp operant off disabled enable"><td>MCP operant</td><td>Off</td><td>disabled</td><td><button type="button" class="btn-link" data-open-modal="m-mcp-enable">Enable</button></td></tr></tbody>
   </table>
 </div></div><div class="panel" data-panel="exports" hidden>
 <div class="page-head">
@@ -101,9 +101,9 @@
   <div class="actions"><button type="button" class="btn btn-primary" data-open-modal="m-export-bundle">Generate support bundle</button></div>
 </div>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Bundle</th><th>Created</th><th>Size</th><th>Actions</th></tr></thead>
-    <tbody><tr><td>support-2026-07-15.tar.enc</td><td>yesterday</td><td>48 MB</td><td><button type="button" class="btn-link" data-open-modal="m-confirm-generic">Download</button></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="support-2026-07-15.tar.enc yesterday 48 mb download"><td>support-2026-07-15.tar.enc</td><td>yesterday</td><td>48 MB</td><td><button type="button" class="btn-link" data-open-modal="m-confirm-generic">Download</button></td></tr></tbody>
   </table>
 </div></div><div class="panel" data-panel="maintenance" hidden>
 <div class="page-head">

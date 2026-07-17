@@ -57,14 +57,14 @@
   <div><h1>Jails</h1><p class="sub">FreeBSD jails</p></div>
   <div class="actions"><a class="btn btn-primary" href="../wizards/jail-create.html">+ Create jail</a></div>
 </div><div class="stats"><div class="stat"><div class="label">Total</div><div class="value">12</div></div><div class="stat"><div class="label">Running</div><div class="value">11</div></div><div class="stat"><div class="label">Stopped</div><div class="value">1</div></div></div>
-<div class="filter-bar">
-  <input type="search" placeholder="Filter jails…"/>
-  <button type="button" class="chip active">All</button><button type="button" class="chip">Running</button><button type="button" class="chip">Stopped</button>
+<div class="filter-bar" data-filter-bar="1">
+  <input type="search" placeholder="Filter jails…  (press /)" autocomplete="off"/>
+  <button type="button" class="chip active" data-chip="all">All</button><button type="button" class="chip" data-chip="running">Running</button><button type="button" class="chip" data-chip="stopped">Stopped</button>
 </div>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Status</th><th>Name</th><th>Release</th><th>Host</th><th>IPs</th><th>Actions</th></tr></thead>
-    <tbody><tr><td><span class="status-ok">●</span></td><td><a href="../detail/jail.html">pkg-mirror</a></td><td>14.2-RELEASE</td><td>prod-node-01</td><td>10.0.20.10</td><td><a class="btn-link" href="../detail/jail.html">View</a> · <button type="button" class="btn-link" data-open-modal="m-stop-jail">Stop</button> · <button type="button" class="btn-link" data-open-modal="m-confirm-generic">Shell</button></td></tr><tr><td><span class="status-ok">●</span></td><td>dns-ns1</td><td>14.2-RELEASE</td><td>prod-node-02</td><td>10.0.20.53</td><td><button type="button" class="btn-link" data-open-modal="m-stop-jail">Stop</button></td></tr></tbody>
+    <tbody><tr data-status="run ok ready" data-filter="● pkg-mirror 14.2-release prod-node-01 10.0.20.10 view · stop · shell"><td><span class="status-ok">●</span></td><td><a href="../detail/jail.html">pkg-mirror</a></td><td>14.2-RELEASE</td><td>prod-node-01</td><td>10.0.20.10</td><td><a class="btn-link" href="../detail/jail.html">View</a> · <button type="button" class="btn-link" data-open-modal="m-stop-jail">Stop</button> · <button type="button" class="btn-link" data-open-modal="m-confirm-generic">Shell</button></td></tr><tr data-status="run ok ready" data-filter="● dns-ns1 14.2-release prod-node-02 10.0.20.53 stop"><td><span class="status-ok">●</span></td><td>dns-ns1</td><td>14.2-RELEASE</td><td>prod-node-02</td><td>10.0.20.53</td><td><button type="button" class="btn-link" data-open-modal="m-stop-jail">Stop</button></td></tr></tbody>
   </table>
 </div>
       <p class="mock-note">HTML mockup · tabs + modals filled · MCP = plugins · .sisyphus/plans/html-mockups/</p>

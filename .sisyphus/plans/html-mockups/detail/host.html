@@ -69,36 +69,36 @@
   <dl class="kv"><dt>Agent</dt><dd>14.2-p2</dd><dt>OS</dt><dd>FreeBSD 14.2-RELEASE</dd><dt>Uptime</dt><dd>14d 02:11</dd><dt>Status</dt><dd>Ready</dd></dl>
 </div></div><div class="panel" data-panel="network" hidden>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Interface</th><th>Type</th><th>Speed</th><th>IPs</th><th>Actions</th></tr></thead>
-    <tbody><tr><td>igb0</td><td>physical</td><td>10G</td><td>10.0.0.11/24</td><td><button type="button" class="btn-link" data-open-modal="m-edit-ips">Edit</button></td></tr><tr><td>igb1</td><td>physical</td><td>10G</td><td>—</td><td><button type="button" class="btn-link" data-open-modal="m-edit-ips">Edit</button></td></tr><tr><td>lagg0</td><td>LACP</td><td>20G</td><td>10.0.0.11/24</td><td><button type="button" class="btn-link" data-open-modal="m-edit-lacp">Edit LACP</button></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="igb0 physical 10g 10.0.0.11/24 edit"><td>igb0</td><td>physical</td><td>10G</td><td>10.0.0.11/24</td><td><button type="button" class="btn-link" data-open-modal="m-edit-ips">Edit</button></td></tr><tr data-status="unknown" data-filter="igb1 physical 10g — edit"><td>igb1</td><td>physical</td><td>10G</td><td>—</td><td><button type="button" class="btn-link" data-open-modal="m-edit-ips">Edit</button></td></tr><tr data-status="unknown" data-filter="lagg0 lacp 20g 10.0.0.11/24 edit lacp"><td>lagg0</td><td>LACP</td><td>20G</td><td>10.0.0.11/24</td><td><button type="button" class="btn-link" data-open-modal="m-edit-lacp">Edit LACP</button></td></tr></tbody>
   </table>
 </div></div><div class="panel" data-panel="storage" hidden>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Pool</th><th>Health</th><th>Used</th><th>Actions</th></tr></thead>
-    <tbody><tr><td>tank</td><td>ONLINE</td><td>4.2T / 8T</td><td><button type="button" class="btn-link" data-open-modal="m-scrub">Scrub</button></td></tr><tr><td>boot</td><td>ONLINE</td><td>12G / 100G</td><td>—</td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="tank online 4.2t / 8t scrub"><td>tank</td><td>ONLINE</td><td>4.2T / 8T</td><td><button type="button" class="btn-link" data-open-modal="m-scrub">Scrub</button></td></tr><tr data-status="unknown" data-filter="boot online 12g / 100g —"><td>boot</td><td>ONLINE</td><td>12G / 100G</td><td>—</td></tr></tbody>
   </table>
 </div></div><div class="panel" data-panel="gpus" hidden>
 <div class="card card-pad">
   <p>No GPU pools on this host. <span class="pill">feature-flag gpu.pools=false</span></p>
 </div></div><div class="panel" data-panel="vms" hidden>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>VM</th><th>Status</th><th>Actions</th></tr></thead>
-    <tbody><tr><td><a href="vm.html">nextcloud</a></td><td>Run</td><td><button type="button" class="btn-link" data-open-modal="m-stop-vm">Stop</button></td></tr><tr><td>gitlab-ci</td><td>Run</td><td><button type="button" class="btn-link" data-open-modal="m-stop-vm">Stop</button></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="nextcloud run stop"><td><a href="vm.html">nextcloud</a></td><td>Run</td><td><button type="button" class="btn-link" data-open-modal="m-stop-vm">Stop</button></td></tr><tr data-status="unknown" data-filter="gitlab-ci run stop"><td>gitlab-ci</td><td>Run</td><td><button type="button" class="btn-link" data-open-modal="m-stop-vm">Stop</button></td></tr></tbody>
   </table>
 </div></div><div class="panel" data-panel="containers" hidden>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Container</th><th>Status</th><th>Actions</th></tr></thead>
-    <tbody><tr><td>redis-cache</td><td>Run</td><td><button type="button" class="btn-link" data-open-modal="m-stop-container">Stop</button></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="redis-cache run stop"><td>redis-cache</td><td>Run</td><td><button type="button" class="btn-link" data-open-modal="m-stop-container">Stop</button></td></tr></tbody>
   </table>
 </div></div><div class="panel" data-panel="jails" hidden>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Jail</th><th>Status</th><th>Actions</th></tr></thead>
-    <tbody><tr><td>pkg-mirror</td><td>Run</td><td><button type="button" class="btn-link" data-open-modal="m-stop-jail">Stop</button></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="pkg-mirror run stop"><td>pkg-mirror</td><td>Run</td><td><button type="button" class="btn-link" data-open-modal="m-stop-jail">Stop</button></td></tr></tbody>
   </table>
 </div></div>
 </div>

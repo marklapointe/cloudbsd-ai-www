@@ -72,15 +72,15 @@
   <div class="tabs"><button type="button" class="active" data-tab="jobs">Cluster jobs</button><button type="button" class="" data-tab="events">Events</button><button type="button" class="" data-tab="replication">Replication</button></div>
   <div class="panel" data-panel="jobs">
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Job</th><th>State</th><th>Started</th><th>Detail</th><th>Actions</th></tr></thead>
-    <tbody><tr><td>replication-sync</td><td><span class="status-ok">OK</span></td><td>02:00 UTC</td><td>lag 0s</td><td>—</td></tr><tr><td>cert-rotate</td><td><span class="status-warn">Queued</span></td><td>—</td><td>Sunday window</td><td><button type="button" class="btn-link" data-open-modal="m-confirm-generic">Run now</button></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="replication-sync ok 02:00 utc lag 0s —"><td>replication-sync</td><td><span class="status-ok">OK</span></td><td>02:00 UTC</td><td>lag 0s</td><td>—</td></tr><tr data-status="unknown" data-filter="cert-rotate queued — sunday window run now"><td>cert-rotate</td><td><span class="status-warn">Queued</span></td><td>—</td><td>Sunday window</td><td><button type="button" class="btn-link" data-open-modal="m-confirm-generic">Run now</button></td></tr></tbody>
   </table>
 </div></div><div class="panel" data-panel="events" hidden>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Time</th><th>Event</th><th>Detail</th></tr></thead>
-    <tbody><tr><td>01:12</td><td>quorum.ok</td><td>3 voters</td></tr><tr><td>00:40</td><td>vip.master</td><td>prod-node-01</td></tr><tr><td>Yesterday</td><td>node.joined</td><td>prod-node-05</td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="01:12 quorum.ok 3 voters"><td>01:12</td><td>quorum.ok</td><td>3 voters</td></tr><tr data-status="unknown" data-filter="00:40 vip.master prod-node-01"><td>00:40</td><td>vip.master</td><td>prod-node-01</td></tr><tr data-status="unknown" data-filter="yesterday node.joined prod-node-05"><td>Yesterday</td><td>node.joined</td><td>prod-node-05</td></tr></tbody>
   </table>
 </div></div><div class="panel" data-panel="replication" hidden>
 <div class="card card-pad">

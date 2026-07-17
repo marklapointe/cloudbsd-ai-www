@@ -5,6 +5,7 @@ Run: python3 generate.py
 """
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -83,24 +84,40 @@ def stats(items: list[tuple[str, str]]) -> str:
 
 def filter_bar(placeholder: str, chips: list[str]) -> str:
     chip_html = "".join(
-        f'<button type="button" class="chip{" active" if i == 0 else ""}">{c}</button>'
+        f'<button type="button" class="chip{" active" if i == 0 else ""}" data-chip="{c.lower()}">{c}</button>'
         for i, c in enumerate(chips)
     )
     return f"""
-<div class="filter-bar">
-  <input type="search" placeholder="{placeholder}"/>
+<div class="filter-bar" data-filter-bar="1">
+  <input type="search" placeholder="{placeholder}  (press /)" autocomplete="off"/>
   {chip_html}
 </div>"""
 
 
 def table(headers: list[str], rows: list[list[str]]) -> str:
     th = "".join(f"<th>{h}</th>" for h in headers)
-    trs = "".join("<tr>" + "".join(f"<td>{c}</td>" for c in row) + "</tr>" for row in rows)
+    trs = []
+    for row in rows:
+        # Build filter text from plain bits of cells (strip tags lightly)
+        plain = " ".join(re.sub(r"<[^>]+>", " ", c) for c in row)
+        plain = " ".join(plain.split()).lower().replace('"', "")
+        status = "unknown"
+        first = row[0] if row else ""
+        if "status-ok" in first or "● Run" in first or "● Ready" in first or "● OK" in first:
+            status = "run ok ready"
+        elif "status-off" in first or "○ Stop" in first or "○ Off" in first:
+            status = "stop off"
+        elif "status-err" in first or "✕" in first:
+            status = "error"
+        elif "status-warn" in first or "Maint" in first or "Running" in first:
+            status = "warn maint running"
+        tds = "".join(f"<td>{c}</td>" for c in row)
+        trs.append(f'<tr data-status="{status}" data-filter="{plain}">{tds}</tr>')
     return f"""
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr>{th}</tr></thead>
-    <tbody>{trs}</tbody>
+    <tbody>{"".join(trs)}</tbody>
   </table>
 </div>"""
 
@@ -743,7 +760,7 @@ def pages() -> dict[str, tuple[str, str, str]]:
         "vms.html", "Virtual Machines",
         page_head(
             "Virtual Machines",
-            '47 VMs across 5 hosts · <span class="live">● live</span>',
+            '47 VMs across 5 hosts · <span class="live">● live</span> · <span data-live-ago>2s ago</span>',
             btn("+ Create VM", primary=True, href="../wizards/vm-create.html")
             + btn("Snapshot…", modal="m-snapshot"),
         )
@@ -1833,17 +1850,20 @@ def wizards() -> dict[str, tuple[str, str]]:
         page_head("Create virtual machine", "5-step wizard", "")
         + tabs([
             ("template", "1 Template", field("Template / ISO", '<select><option>FreeBSD-14.2 ISO</option><option>ubuntu-24.04-cloudimg</option></select>')
-             + f'<div class="actions" style="justify-content:flex-end">{btn("Next →", primary=True)}</div>'),
-            ("identity", "2 Identity", field("Name", '<input value="nextcloud-02"/>')
-             + field("Description", '<textarea>Secondary Nextcloud</textarea>')),
+             + f'<div class="actions" style="justify-content:flex-end"><button type="button" class="btn btn-primary" data-wiz-next>Next →</button></div>'),
+            ("identity", "2 Identity", field("Name", '<input value="nextcloud-02" id="wiz-vm-name"/>')
+             + field("Description", '<textarea>Secondary Nextcloud</textarea>')
+             + f'<div class="actions" style="justify-content:flex-end"><button type="button" class="btn" data-wiz-back>← Back</button> <button type="button" class="btn btn-primary" data-wiz-next>Next →</button></div>'),
             ("resources", "3 Resources", field("vCPU", '<input value="4"/>') + field("RAM (GB)", '<input value="8"/>')
-             + field("Host", '<select><option>Automatic</option><option>prod-node-01</option></select>')),
+             + field("Host", '<select><option>Automatic</option><option>prod-node-01</option></select>')
+             + f'<div class="actions" style="justify-content:flex-end"><button type="button" class="btn" data-wiz-back>← Back</button> <button type="button" class="btn btn-primary" data-wiz-next>Next →</button></div>'),
             ("storage", "4 Storage / net", field("Disk GB", '<input value="120"/>')
-             + field("Network", '<select><option>vm-public</option></select>')),
+             + field("Network", '<select><option>vm-public</option></select>')
+             + f'<div class="actions" style="justify-content:flex-end"><button type="button" class="btn" data-wiz-back>← Back</button> <button type="button" class="btn btn-primary" data-wiz-next>Next →</button></div>'),
             ("review", "5 Review", f"""
 <div class="card card-pad">{kv([("Name", "nextcloud-02"), ("vCPU/RAM", "4 / 8 GB"), ("Disk", "120 GB"), ("Network", "vm-public")])}
-<div class="alert alert-ok">Preflight: capacity OK</div>
-{btn("Create VM", primary=True, modal="m-confirm-generic")}
+<div class="alert alert-ok">Preflight: capacity OK · click Create to simulate submit</div>
+<div class="actions" style="justify-content:flex-end"><button type="button" class="btn" data-wiz-back>← Back</button> {btn("Create VM", primary=True, modal="m-confirm-generic")}</div>
 </div>"""),
         ]),
     )

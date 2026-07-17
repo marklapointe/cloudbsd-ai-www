@@ -105,9 +105,9 @@
   </div>
   
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>URL</th><th>Events</th><th>Actions</th></tr></thead>
-    <tbody><tr><td>https://hooks.example.lan/cb</td><td>task.failed, host.offline</td><td><button type="button" class="btn-link" data-open-modal="m-webhook">Edit</button> · <button type="button" class="btn-link danger" data-open-modal="m-confirm-generic">Delete</button></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="https://hooks.example.lan/cb task.failed, host.offline edit · delete"><td>https://hooks.example.lan/cb</td><td>task.failed, host.offline</td><td><button type="button" class="btn-link" data-open-modal="m-webhook">Edit</button> · <button type="button" class="btn-link danger" data-open-modal="m-confirm-generic">Delete</button></td></tr></tbody>
   </table>
 </div>
   <div style="margin-top:16px">

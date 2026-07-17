@@ -57,14 +57,14 @@
   <div><h1>Hosts</h1><p class="sub">Inventory · drain · maintenance · agent (not Cluster services)</p></div>
   <div class="actions"><button type="button" class="btn btn-primary" data-open-modal="m-add-host">+ Add host</button><button type="button" class="btn" data-open-modal="m-join-token">Join token</button></div>
 </div><div class="stats"><div class="stat"><div class="label">Hosts</div><div class="value">5</div></div><div class="stat"><div class="label">Ready</div><div class="value">4</div></div><div class="stat"><div class="label">Maintenance</div><div class="value">1</div></div><div class="stat"><div class="label">Agent</div><div class="value">14.2</div></div></div>
-<div class="filter-bar">
-  <input type="search" placeholder="Filter hosts…"/>
-  <button type="button" class="chip active">All</button><button type="button" class="chip">Ready</button><button type="button" class="chip">Maintenance</button><button type="button" class="chip">Offline</button>
+<div class="filter-bar" data-filter-bar="1">
+  <input type="search" placeholder="Filter hosts…  (press /)" autocomplete="off"/>
+  <button type="button" class="chip active" data-chip="all">All</button><button type="button" class="chip" data-chip="ready">Ready</button><button type="button" class="chip" data-chip="maintenance">Maintenance</button><button type="button" class="chip" data-chip="offline">Offline</button>
 </div>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Status</th><th>Name</th><th>CPU</th><th>Memory</th><th>VMs</th><th>Agent</th><th>Actions</th></tr></thead>
-    <tbody><tr><td><span class="status-ok">● Ready</span></td><td><a href="../detail/host.html">prod-node-01</a></td><td>62%</td><td>71%</td><td>12</td><td>14.2-p2</td><td><a class="btn-link" href="../detail/host.html">View</a> · <button type="button" class="btn-link" data-open-modal="m-drain-host">Drain</button> · <button type="button" class="btn-link" data-open-modal="m-maint-host">Maintenance</button></td></tr><tr><td><span class="status-ok">● Ready</span></td><td>prod-node-02</td><td>48%</td><td>55%</td><td>10</td><td>14.2-p2</td><td><button type="button" class="btn-link" data-open-modal="m-drain-host">Drain</button></td></tr><tr><td><span class="status-warn">◐ Maint</span></td><td>prod-node-03</td><td>12%</td><td>30%</td><td>4</td><td>14.1</td><td><button type="button" class="btn-link" data-open-modal="m-exit-maint">Exit maint</button> · <button type="button" class="btn-link" data-open-modal="m-update-apply">Update</button></td></tr></tbody>
+    <tbody><tr data-status="run ok ready" data-filter="● ready prod-node-01 62% 71% 12 14.2-p2 view · drain · maintenance"><td><span class="status-ok">● Ready</span></td><td><a href="../detail/host.html">prod-node-01</a></td><td>62%</td><td>71%</td><td>12</td><td>14.2-p2</td><td><a class="btn-link" href="../detail/host.html">View</a> · <button type="button" class="btn-link" data-open-modal="m-drain-host">Drain</button> · <button type="button" class="btn-link" data-open-modal="m-maint-host">Maintenance</button></td></tr><tr data-status="run ok ready" data-filter="● ready prod-node-02 48% 55% 10 14.2-p2 drain"><td><span class="status-ok">● Ready</span></td><td>prod-node-02</td><td>48%</td><td>55%</td><td>10</td><td>14.2-p2</td><td><button type="button" class="btn-link" data-open-modal="m-drain-host">Drain</button></td></tr><tr data-status="warn maint running" data-filter="◐ maint prod-node-03 12% 30% 4 14.1 exit maint · update"><td><span class="status-warn">◐ Maint</span></td><td>prod-node-03</td><td>12%</td><td>30%</td><td>4</td><td>14.1</td><td><button type="button" class="btn-link" data-open-modal="m-exit-maint">Exit maint</button> · <button type="button" class="btn-link" data-open-modal="m-update-apply">Update</button></td></tr></tbody>
   </table>
 </div>
       <p class="mock-note">HTML mockup · tabs + modals filled · MCP = plugins · .sisyphus/plans/html-mockups/</p>

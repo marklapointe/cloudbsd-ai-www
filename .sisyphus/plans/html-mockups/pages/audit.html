@@ -57,14 +57,14 @@
   <div><h1>Audit</h1><p class="sub">Compliance trail · Observe</p></div>
   <div class="actions"><button type="button" class="btn" data-open-modal="m-export-bundle">Export</button></div>
 </div>
-<div class="filter-bar">
-  <input type="search" placeholder="Filter audit…"/>
-  <button type="button" class="chip active">All</button><button type="button" class="chip">Auth</button><button type="button" class="chip">Mutations</button><button type="button" class="chip">Admin</button>
+<div class="filter-bar" data-filter-bar="1">
+  <input type="search" placeholder="Filter audit…  (press /)" autocomplete="off"/>
+  <button type="button" class="chip active" data-chip="all">All</button><button type="button" class="chip" data-chip="auth">Auth</button><button type="button" class="chip" data-chip="mutations">Mutations</button><button type="button" class="chip" data-chip="admin">Admin</button>
 </div>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Time</th><th>Actor</th><th>Action</th><th>Target</th><th>Result</th></tr></thead>
-    <tbody><tr><td>02:10:01</td><td>mlapointe</td><td>vm.stop</td><td>nextcloud</td><td>OK</td></tr><tr><td>01:55:12</td><td>ops-alice</td><td>host.drain</td><td>prod-node-03</td><td>OK</td></tr><tr><td>01:40:00</td><td>system</td><td>backup.run</td><td>nightly</td><td>OK</td></tr><tr><td>00:12:44</td><td>unknown</td><td>auth.fail</td><td>api</td><td>DENY</td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="02:10:01 mlapointe vm.stop nextcloud ok"><td>02:10:01</td><td>mlapointe</td><td>vm.stop</td><td>nextcloud</td><td>OK</td></tr><tr data-status="unknown" data-filter="01:55:12 ops-alice host.drain prod-node-03 ok"><td>01:55:12</td><td>ops-alice</td><td>host.drain</td><td>prod-node-03</td><td>OK</td></tr><tr data-status="unknown" data-filter="01:40:00 system backup.run nightly ok"><td>01:40:00</td><td>system</td><td>backup.run</td><td>nightly</td><td>OK</td></tr><tr data-status="unknown" data-filter="00:12:44 unknown auth.fail api deny"><td>00:12:44</td><td>unknown</td><td>auth.fail</td><td>api</td><td>DENY</td></tr></tbody>
   </table>
 </div>
       <p class="mock-note">HTML mockup · tabs + modals filled · MCP = plugins · .sisyphus/plans/html-mockups/</p>

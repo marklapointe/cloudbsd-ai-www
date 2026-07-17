@@ -71,21 +71,21 @@
   </div>
 </div></div><div class="panel" data-panel="disks" hidden>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Disk</th><th>Dataset</th><th>Size</th><th>Actions</th></tr></thead>
-    <tbody><tr><td>disk0</td><td>tank/vms/nextcloud</td><td>120 GB</td><td><button type="button" class="btn-link" data-open-modal="m-snapshot">Snapshot</button> · <button type="button" class="btn-link" data-open-modal="m-confirm-generic">Resize</button></td></tr><tr><td>disk1</td><td>tank/vms/nextcloud-data</td><td>500 GB</td><td><button type="button" class="btn-link" data-open-modal="m-snapshot">Snapshot</button></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="disk0 tank/vms/nextcloud 120 gb snapshot · resize"><td>disk0</td><td>tank/vms/nextcloud</td><td>120 GB</td><td><button type="button" class="btn-link" data-open-modal="m-snapshot">Snapshot</button> · <button type="button" class="btn-link" data-open-modal="m-confirm-generic">Resize</button></td></tr><tr data-status="unknown" data-filter="disk1 tank/vms/nextcloud-data 500 gb snapshot"><td>disk1</td><td>tank/vms/nextcloud-data</td><td>500 GB</td><td><button type="button" class="btn-link" data-open-modal="m-snapshot">Snapshot</button></td></tr></tbody>
   </table>
 </div></div><div class="panel" data-panel="network" hidden>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>NIC</th><th>Network</th><th>MAC</th><th>IP</th><th>Actions</th></tr></thead>
-    <tbody><tr><td>vtnet0</td><td>vm-public</td><td>58:9c:fc:0a:10:15</td><td>10.0.10.21</td><td><button type="button" class="btn-link" data-open-modal="m-edit-ips">Edit IPs</button></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="vtnet0 vm-public 58:9c:fc:0a:10:15 10.0.10.21 edit ips"><td>vtnet0</td><td>vm-public</td><td>58:9c:fc:0a:10:15</td><td>10.0.10.21</td><td><button type="button" class="btn-link" data-open-modal="m-edit-ips">Edit IPs</button></td></tr></tbody>
   </table>
 </div></div><div class="panel" data-panel="snapshots" hidden>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Snapshot</th><th>Created</th><th>Used</th><th>Actions</th></tr></thead>
-    <tbody><tr><td>@2026-07-15</td><td>2026-07-15 02:00</td><td>2.1 GB</td><td><button type="button" class="btn-link" data-open-modal="m-clone-dataset">Clone</button> · <button type="button" class="btn-link danger" data-open-modal="m-delete-snapshot">Delete</button></td></tr><tr><td>@2026-07-14</td><td>2026-07-14 02:00</td><td>1.8 GB</td><td><button type="button" class="btn-link danger" data-open-modal="m-delete-snapshot">Delete</button></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="@2026-07-15 2026-07-15 02:00 2.1 gb clone · delete"><td>@2026-07-15</td><td>2026-07-15 02:00</td><td>2.1 GB</td><td><button type="button" class="btn-link" data-open-modal="m-clone-dataset">Clone</button> · <button type="button" class="btn-link danger" data-open-modal="m-delete-snapshot">Delete</button></td></tr><tr data-status="unknown" data-filter="@2026-07-14 2026-07-14 02:00 1.8 gb delete"><td>@2026-07-14</td><td>2026-07-14 02:00</td><td>1.8 GB</td><td><button type="button" class="btn-link danger" data-open-modal="m-delete-snapshot">Delete</button></td></tr></tbody>
   </table>
 </div><div style="margin-top:10px"><button type="button" class="btn btn-primary" data-open-modal="m-snapshot">+ Snapshot</button></div></div><div class="panel" data-panel="metrics" hidden>
 <div class="card card-pad metric-bars">
@@ -95,9 +95,9 @@
   <div class="row"><label>Net</label><div class="bar"><i style="width:15%"></i></div><span>12 Mbps</span></div>
 </div></div><div class="panel" data-panel="events" hidden>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Time</th><th>Event</th><th>Detail</th></tr></thead>
-    <tbody><tr><td>02:10</td><td>vm.stop requested</td><td>mlapointe</td></tr><tr><td>Yesterday</td><td>snapshot</td><td>@2026-07-15</td></tr><tr><td>Jul 10</td><td>migrate</td><td>node-02 → node-01</td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="02:10 vm.stop requested mlapointe"><td>02:10</td><td>vm.stop requested</td><td>mlapointe</td></tr><tr data-status="unknown" data-filter="yesterday snapshot @2026-07-15"><td>Yesterday</td><td>snapshot</td><td>@2026-07-15</td></tr><tr data-status="unknown" data-filter="jul 10 migrate node-02 → node-01"><td>Jul 10</td><td>migrate</td><td>node-02 → node-01</td></tr></tbody>
   </table>
 </div></div>
 </div>

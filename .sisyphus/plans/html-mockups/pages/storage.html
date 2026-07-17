@@ -60,26 +60,26 @@
 <div data-tabs>
   <div class="tabs"><button type="button" class="active" data-tab="datasets">Datasets</button><button type="button" class="" data-tab="snapshots">Snapshots</button><button type="button" class="" data-tab="scrubs">Scrubs</button></div>
   <div class="panel" data-panel="datasets">
-<div class="filter-bar">
-  <input type="search" placeholder="Filter datasets…"/>
-  <button type="button" class="chip active">All</button><button type="button" class="chip">VMs</button><button type="button" class="chip">Jails</button><button type="button" class="chip">System</button>
+<div class="filter-bar" data-filter-bar="1">
+  <input type="search" placeholder="Filter datasets…  (press /)" autocomplete="off"/>
+  <button type="button" class="chip active" data-chip="all">All</button><button type="button" class="chip" data-chip="vms">VMs</button><button type="button" class="chip" data-chip="jails">Jails</button><button type="button" class="chip" data-chip="system">System</button>
 </div>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Name</th><th>Pool</th><th>Used</th><th>Avail</th><th>Compression</th><th>Actions</th></tr></thead>
-    <tbody><tr><td><a href="../detail/volume.html">tank/vms/nextcloud</a></td><td>tank</td><td>120 GB</td><td>2.1 TB</td><td>lz4</td><td><a class="btn-link" href="../detail/volume.html">View</a> · <button type="button" class="btn-link" data-open-modal="m-snapshot">Snapshot</button> · <button type="button" class="btn-link" data-open-modal="m-clone-dataset">Clone</button></td></tr><tr><td>tank/jails</td><td>tank</td><td>80 GB</td><td>2.1 TB</td><td>lz4</td><td><button type="button" class="btn-link" data-open-modal="m-snapshot">Snapshot</button></td></tr><tr><td>backup/nightly</td><td>backup</td><td>4.2 TB</td><td>8 TB</td><td>zstd</td><td><button type="button" class="btn-link" data-open-modal="m-scrub">Scrub</button></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="tank/vms/nextcloud tank 120 gb 2.1 tb lz4 view · snapshot · clone"><td><a href="../detail/volume.html">tank/vms/nextcloud</a></td><td>tank</td><td>120 GB</td><td>2.1 TB</td><td>lz4</td><td><a class="btn-link" href="../detail/volume.html">View</a> · <button type="button" class="btn-link" data-open-modal="m-snapshot">Snapshot</button> · <button type="button" class="btn-link" data-open-modal="m-clone-dataset">Clone</button></td></tr><tr data-status="unknown" data-filter="tank/jails tank 80 gb 2.1 tb lz4 snapshot"><td>tank/jails</td><td>tank</td><td>80 GB</td><td>2.1 TB</td><td>lz4</td><td><button type="button" class="btn-link" data-open-modal="m-snapshot">Snapshot</button></td></tr><tr data-status="unknown" data-filter="backup/nightly backup 4.2 tb 8 tb zstd scrub"><td>backup/nightly</td><td>backup</td><td>4.2 TB</td><td>8 TB</td><td>zstd</td><td><button type="button" class="btn-link" data-open-modal="m-scrub">Scrub</button></td></tr></tbody>
   </table>
 </div></div><div class="panel" data-panel="snapshots" hidden>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Snapshot</th><th>Dataset</th><th>Created</th><th>Used</th><th>Actions</th></tr></thead>
-    <tbody><tr><td>nextcloud@2026-07-15</td><td>tank/vms/nextcloud</td><td>2026-07-15 02:00</td><td>2.1 GB</td><td><button type="button" class="btn-link" data-open-modal="m-clone-dataset">Clone</button> · <button type="button" class="btn-link danger" data-open-modal="m-delete-snapshot">Delete</button></td></tr><tr><td>nextcloud@2026-07-14</td><td>tank/vms/nextcloud</td><td>2026-07-14 02:00</td><td>1.8 GB</td><td><button type="button" class="btn-link danger" data-open-modal="m-delete-snapshot">Delete</button></td></tr><tr><td>jails@weekly</td><td>tank/jails</td><td>2026-07-13</td><td>400 MB</td><td><button type="button" class="btn-link danger" data-open-modal="m-delete-snapshot">Delete</button></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="nextcloud@2026-07-15 tank/vms/nextcloud 2026-07-15 02:00 2.1 gb clone · delete"><td>nextcloud@2026-07-15</td><td>tank/vms/nextcloud</td><td>2026-07-15 02:00</td><td>2.1 GB</td><td><button type="button" class="btn-link" data-open-modal="m-clone-dataset">Clone</button> · <button type="button" class="btn-link danger" data-open-modal="m-delete-snapshot">Delete</button></td></tr><tr data-status="unknown" data-filter="nextcloud@2026-07-14 tank/vms/nextcloud 2026-07-14 02:00 1.8 gb delete"><td>nextcloud@2026-07-14</td><td>tank/vms/nextcloud</td><td>2026-07-14 02:00</td><td>1.8 GB</td><td><button type="button" class="btn-link danger" data-open-modal="m-delete-snapshot">Delete</button></td></tr><tr data-status="unknown" data-filter="jails@weekly tank/jails 2026-07-13 400 mb delete"><td>jails@weekly</td><td>tank/jails</td><td>2026-07-13</td><td>400 MB</td><td><button type="button" class="btn-link danger" data-open-modal="m-delete-snapshot">Delete</button></td></tr></tbody>
   </table>
 </div></div><div class="panel" data-panel="scrubs" hidden>
 <div class="card">
-  <table class="res">
+  <table class="res" data-interactive="1">
     <thead><tr><th>Pool</th><th>Last scrub</th><th>Errors</th><th>Status</th><th>Actions</th></tr></thead>
-    <tbody><tr><td>tank</td><td>14d ago</td><td>0</td><td><span class="pill warn">Due</span></td><td><button type="button" class="btn-link" data-open-modal="m-scrub">Start scrub</button></td></tr><tr><td>backup</td><td>2d ago</td><td>0</td><td><span class="pill ok">OK</span></td><td><button type="button" class="btn-link" data-open-modal="m-scrub">Start scrub</button></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="tank 14d ago 0 due start scrub"><td>tank</td><td>14d ago</td><td>0</td><td><span class="pill warn">Due</span></td><td><button type="button" class="btn-link" data-open-modal="m-scrub">Start scrub</button></td></tr><tr data-status="unknown" data-filter="backup 2d ago 0 ok start scrub"><td>backup</td><td>2d ago</td><td>0</td><td><span class="pill ok">OK</span></td><td><button type="button" class="btn-link" data-open-modal="m-scrub">Start scrub</button></td></tr></tbody>
   </table>
 </div><div class="alert alert-info" style="margin-top:12px">Scrubs are scheduled under Settings → Storage defaults; run ad-hoc here.</div></div>
 </div>
