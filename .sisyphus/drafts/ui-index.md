@@ -1,3 +1,5 @@
+> **Product authority:** `docs/migration/README.md` · rules: `docs/migration/rules.md` · IA: `docs/migration/product-ia-esxi-vsphere-2026-07-16.md`. This file is **visual order only** (columns, tabs, chrome).
+
 # CloudBSD Admin — Complete UI Standard Index
 
 > 2026-07-07. Every menu item, every panel, every column, every button follows

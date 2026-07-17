@@ -1,3 +1,5 @@
+> **Snapshot** — living IA is `docs/migration/product-ia-esxi-vsphere-2026-07-16.md`.
+
 # CloudBSD Admin — Product Information Architecture
 
 > **Date**: 2026-07-16  
