@@ -622,13 +622,22 @@ def common_modals() -> str:
         primary="Send",
     ))
 
-    # frost-out demo (not hidden by default when opened)
+    # Frost-out is a product pattern (Rule #2) — demo only; never show on load.
+    # Keep hidden; open via Settings → Advanced “Simulate frost-out” or live-indicator demo.
     m.append("""
-<div class="frost" id="m-frost" hidden>
-  <div class="modal">
-    <div class="modal-h"><h2>Session expired</h2></div>
-    <div class="modal-b"><p>Your session is no longer valid. Sign in again to continue.</p></div>
-    <div class="modal-f"><a class="btn btn-primary" href="login.html">Sign in</a></div>
+<div class="frost" id="m-frost" hidden aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-frost-title">
+    <div class="modal-h"><h2 id="m-frost-title">Session expired</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+      <p>Your session is no longer valid. Sign in again to continue.</p>
+      <p style="font-size:12px;color:var(--muted);margin:8px 0 0">Demo only — frost-out is Rule #2 (auth failure → blur → /login). Not a real expired session.</p>
+    </div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Dismiss demo</button>
+      <a class="btn btn-primary" href="login.html">Sign in</a>
+    </div>
   </div>
 </div>""")
 
@@ -1836,8 +1845,8 @@ def modals_gallery() -> dict[str, tuple[str, str]]:
             body = (
                 page_head(title, blurb + f" · modal id <code class='inline'>{mid}</code>",
                           btn("Open modal", primary=True, modal=mid))
-                + f'<p style="font-size:12px;color:var(--muted)">Click the button or wait — auto-open on load for gallery.</p>'
-                + f'<script>document.addEventListener("DOMContentLoaded",function(){{var m=document.getElementById("{mid}");if(m)m.hidden=false;}});</script>'
+                + f'<p style="font-size:12px;color:var(--muted)">Gallery page — click <strong>Open modal</strong> to preview. '
+                f'(Session expired frost is a demo of Rule #2, not a real expiry.)</p>'
             )
         out[fname] = (title, body)
     return out

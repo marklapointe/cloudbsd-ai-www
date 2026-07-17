@@ -292,6 +292,13 @@
       toast("Modal " + id + " not found", "err");
       return;
     }
+    /* ensure every other overlay stays hidden (defense against CSS fights) */
+    qsa(".modal-backdrop, .frost").forEach(function (el) {
+      if (el !== m) {
+        el.hidden = true;
+        el.setAttribute("aria-hidden", "true");
+      }
+    });
     ctx.modalId = id;
     ctx.row = source ? source.closest("tr") : null;
     ctx.name = null;
@@ -314,6 +321,7 @@
     }
 
     m.hidden = false;
+    m.removeAttribute("aria-hidden");
     document.body.classList.add("modal-open");
     m.classList.add("modal-enter");
     setTimeout(function () { m.classList.remove("modal-enter"); }, 200);
@@ -343,10 +351,22 @@
     var m = el && el.closest ? el.closest(".modal-backdrop, .frost") : el;
     if (!m) return;
     m.hidden = true;
+    m.setAttribute("aria-hidden", "true");
     if (ctx.row) ctx.row.classList.remove("row-context");
     if (!qs(".modal-backdrop:not([hidden]), .frost:not([hidden])")) {
       document.body.classList.remove("modal-open");
     }
+  }
+
+  /* On load: force-hide every overlay (fixes CSS display:flex overriding [hidden]) */
+  qsa(".modal-backdrop, .frost").forEach(function (el) {
+    el.hidden = true;
+    el.setAttribute("aria-hidden", "true");
+  });
+  /* Optional auto-open: <body data-auto-open="m-stop-vm"> for gallery pages only */
+  var auto = document.body.getAttribute("data-auto-open");
+  if (auto && qs("#" + auto)) {
+    setTimeout(function () { openModal(auto); }, 50);
   }
 
   function setRowStatus(tr, kind, label) {

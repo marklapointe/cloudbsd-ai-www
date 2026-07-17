@@ -56,7 +56,7 @@
 <div class="page-head">
   <div><h1>AddHostDialog</h1><p class="sub">Join host wizard-ish · modal id <code class='inline'>m-add-host</code></p></div>
   <div class="actions"><button type="button" class="btn btn-primary" data-open-modal="m-add-host">Open modal</button></div>
-</div><p style="font-size:12px;color:var(--muted)">Click the button or wait — auto-open on load for gallery.</p><script>document.addEventListener("DOMContentLoaded",function(){var m=document.getElementById("m-add-host");if(m)m.hidden=false;});</script>
+</div><p style="font-size:12px;color:var(--muted)">Gallery page — click <strong>Open modal</strong> to preview. (Session expired frost is a demo of Rule #2, not a real expiry.)</p>
       <p class="mock-note">HTML mockup · tabs + modals filled · MCP = plugins · .sisyphus/plans/html-mockups/</p>
     </main>
   </div>
@@ -864,11 +864,19 @@ fe80::1/64</textarea></div><div class="alert alert-warn">Preflight: changing man
   </div>
 </div>
 
-<div class="frost" id="m-frost" hidden>
-  <div class="modal">
-    <div class="modal-h"><h2>Session expired</h2></div>
-    <div class="modal-b"><p>Your session is no longer valid. Sign in again to continue.</p></div>
-    <div class="modal-f"><a class="btn btn-primary" href="../pages/login.html">Sign in</a></div>
+<div class="frost" id="m-frost" hidden aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-frost-title">
+    <div class="modal-h"><h2 id="m-frost-title">Session expired</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+      <p>Your session is no longer valid. Sign in again to continue.</p>
+      <p style="font-size:12px;color:var(--muted);margin:8px 0 0">Demo only — frost-out is Rule #2 (auth failure → blur → /login). Not a real expired session.</p>
+    </div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Dismiss demo</button>
+      <a class="btn btn-primary" href="../pages/login.html">Sign in</a>
+    </div>
   </div>
 </div>
 <script src="../assets/mockup.js"></script>
