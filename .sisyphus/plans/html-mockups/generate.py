@@ -26,6 +26,7 @@ NAV = [
     ("Access", [
         ("users", "Users", "users.html"),
         ("roles", "Roles", "roles.html"),
+        ("api-keys", "API keys", "api-keys.html"),
     ]),
     ("Observe", [
         ("logs", "Logs", "logs.html"),
@@ -378,11 +379,64 @@ def common_modals() -> str:
     ))
     m.append(modal(
         "m-api-key", "Create API key",
-        field("Name", '<input value="ci-deploy"/>')
-        + field("Owner", '<select><option>mlapointe (personal)</option><option>Service: ci</option></select>')
+        field("Name", '<input value="ci-snapshot"/>')
+        + field("Kind", '<select><option>Service / CI key</option><option>Personal access token</option></select>')
+        + field("Owner", '<select><option>Service: gha-ci</option><option>mlapointe (personal)</option></select>')
         + field("Expires", '<select><option>90 days</option><option>1 year</option><option>Never</option></select>')
-        + '<div class="alert alert-warn">Secret is shown once after create. Store it in a vault.</div>',
-        primary="Create key",
+        + """
+        <div style="font-size:12px;font-weight:700;margin:12px 0 8px">Scopes (deny by default)</div>
+        <div class="alert alert-info" style="margin-bottom:10px">
+          Each row: <strong>resource type</strong> × <strong>actions</strong> × <strong>domain</strong> (all / list / pattern / tag).
+          Intersected with the principal’s role. Product IA §3.2a.
+        </div>
+        <div class="card" style="margin-bottom:10px;overflow:auto">
+          <table class="res">
+            <thead><tr><th>Resource</th><th>Actions</th><th>Domain</th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                <td><select style="font-size:12px;padding:4px"><option selected>vm</option><option>jail</option><option>container</option><option>volume</option><option>network</option><option>task</option></select></td>
+                <td style="font-size:11px">
+                  <label style="margin-right:6px"><input type="checkbox" checked/> read</label>
+                  <label style="margin-right:6px"><input type="checkbox" checked/> snapshot.create</label>
+                  <label style="margin-right:6px"><input type="checkbox" checked/> snapshot.revert</label>
+                  <label style="margin-right:6px"><input type="checkbox"/> snapshot.delete</label>
+                  <label style="margin-right:6px"><input type="checkbox"/> power</label>
+                  <label style="margin-right:6px"><input type="checkbox"/> create</label>
+                  <label style="margin-right:6px"><input type="checkbox"/> delete</label>
+                </td>
+                <td>
+                  <select style="font-size:12px;padding:4px;margin-bottom:4px"><option>pattern</option><option>tag</option><option>list</option><option>all</option></select>
+                  <input value="ci-*" placeholder="ci-* or tag=ci" style="width:100%;padding:4px 6px;font-size:11px;border:1px solid #cbd5e1;border-radius:4px"/>
+                </td>
+                <td><button type="button" class="btn-link danger">×</button></td>
+              </tr>
+              <tr>
+                <td><select style="font-size:12px;padding:4px"><option selected>task</option></select></td>
+                <td style="font-size:11px"><label><input type="checkbox" checked/> read</label></td>
+                <td><select style="font-size:12px;padding:4px"><option selected>all</option></select></td>
+                <td><button type="button" class="btn-link danger">×</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button type="button" class="btn" style="margin-bottom:10px">+ Add scope row</button>
+        <div class="card card-pad mono" style="font-size:11px;background:#f8fafc;margin-bottom:10px">
+          Summary: <strong>vm</strong> [read, snapshot.create, snapshot.revert] @ pattern <code>ci-*</code><br/>
+          + <strong>task</strong> [read] @ all
+        </div>
+        """
+        + '<div class="alert alert-warn">Secret is shown once after create. Store it in a vault. Key cannot exceed creator role.</div>',
+        primary="Create key", wide=True,
+    ))
+    m.append(modal(
+        "m-snapshot-revert", "Revert to snapshot",
+        """
+        <p>Revert <strong>ci-runner-01</strong> to snapshot <strong>@pre-deploy-2026-07-16</strong>?</p>
+        <div class="alert alert-warn">In-place revert requires VM stopped (or cold revert). Current disk state after snapshot will be discarded unless you snapshot first.</div>
+        <div class="alert alert-ok">Preflight: snapshot exists · encryption match · pool healthy</div>
+        """
+        + field("Mode", '<select><option>In-place rollback</option><option>Clone to new VM then swap</option></select>'),
+        primary="Revert to snapshot", danger=True, wide=True,
     ))
     m.append(modal(
         "m-backup-policy", "Backup policy",
@@ -1026,8 +1080,63 @@ def pages() -> dict[str, tuple[str, str, str]]:
                 ["Admin", "2", "all", link("Edit", modal="m-create-role")],
                 ["Operator", "5", "workload:write, hosts:drain", link("Edit", modal="m-create-role")],
                 ["Auditor", "1", "*:read", link("Edit", modal="m-create-role")],
+                ["CI Snapshot", "0 service", "vm:snapshot.* @ tag ci · task:read", link("Edit", modal="m-create-role")],
             ],
         ),
+    )
+
+    out["api-keys"] = (
+        "api-keys.html", "API keys",
+        page_head(
+            "API keys",
+            "Service / CI keys with <strong>scopes</strong> (resource × actions × domain) · product IA §3.2a",
+            btn("+ Create key", primary=True, modal="m-api-key"),
+        )
+        + """
+<div class="alert alert-info">
+  <strong>Scopes required.</strong> Keys are deny-by-default. Grant only the resource types and verbs needed
+  (e.g. CI: <code class="inline">vm</code> snapshot.create + snapshot.revert on pattern <code class="inline">ci-*</code>).
+  Personal tokens live under <a href="account.html#tokens">My Account → API tokens</a> with the same model.
+</div>
+"""
+        + stats([("Keys", "4"), ("Service", "3"), ("Personal", "1"), ("Expiring &lt;30d", "1")])
+        + filter_bar("Filter keys…", ["All", "Service", "Personal", "Expired"])
+        + table(
+            ["Name", "Kind", "Owner", "Scope summary", "Expires", "Last used", "Actions"],
+            [
+                ["ci-snapshot", "Service", "gha-ci",
+                 '<span class="mono" style="font-size:11px">vm: read, snapshot.create, snapshot.revert @ pattern ci-*</span>',
+                 "90d", "12m ago",
+                 acts(link("Edit", modal="m-api-key"), link("Rotate", modal="m-api-key"), link("Revoke", modal="m-confirm-generic", danger=True))],
+                ["ci-full-stack", "Service", "gha-ci",
+                 '<span class="mono" style="font-size:11px">vm,jail,container: create,update,delete,power @ tag env=ci</span>',
+                 "1y", "2h ago",
+                 acts(link("Edit", modal="m-api-key"), link("Revoke", modal="m-confirm-generic", danger=True))],
+                ["backup-agent", "Service", "system",
+                 '<span class="mono" style="font-size:11px">volume: snapshot.*, read · system: backups @ all</span>',
+                 "Never", "02:00",
+                 acts(link("Edit", modal="m-api-key"), link("Revoke", modal="m-confirm-generic", danger=True))],
+                ["laptop-dev", "Personal", "mlapointe",
+                 '<span class="mono" style="font-size:11px">*:read @ all</span>',
+                 "2026-09-01", "now",
+                 acts(link("Edit", modal="m-api-key"), link("Revoke", modal="m-confirm-generic", danger=True))],
+            ],
+        )
+        + """
+<div class="card card-pad" style="margin-top:14px">
+  <div style="font-weight:700;margin-bottom:8px">CI template · snapshot only</div>
+  <p style="margin:0 0 8px;font-size:12px;color:var(--muted)">
+    Pipeline may snapshot before deploy and revert on failure — cannot create/delete VMs or touch non-ci names.
+  </p>
+  <pre class="mono" style="margin:0;font-size:11px;background:#f8fafc;padding:12px;border-radius:8px;overflow:auto">scopes:
+  - resource: vm
+    actions: [read, snapshot.create, snapshot.revert]
+    domain: { mode: pattern, value: "ci-*" }
+  - resource: task
+    actions: [read]
+    domain: { mode: all }</pre>
+</div>
+""",
     )
 
     out["logs"] = (
@@ -1424,14 +1533,23 @@ def pages() -> dict[str, tuple[str, str, str]]:
 </div>"""
     acc_tokens = f"""
 <div class="card card-pad">
-  <div style="display:flex;justify-content:space-between;margin-bottom:10px">
-    <strong>Personal API tokens</strong>
+  <div style="display:flex;justify-content:space-between;margin-bottom:10px;align-items:center;flex-wrap:wrap;gap:8px">
+    <div>
+      <strong>Personal API tokens</strong>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px">Same scope model as Access → API keys · cannot exceed your role</div>
+    </div>
     {btn("+ Token", primary=True, modal="m-api-key")}
   </div>
-  {table(["Name", "Created", "Expires", "Actions"], [
-      ["laptop-dev", "2026-06-01", "2026-09-01", link("Revoke", modal="m-confirm-generic", danger=True)],
-      ["ci-readonly", "2026-05-12", "Never", link("Revoke", modal="m-confirm-generic", danger=True)],
+  {table(["Name", "Scope summary", "Created", "Expires", "Actions"], [
+      ["laptop-dev", '<span class="mono" style="font-size:11px">*:read @ all</span>', "2026-06-01", "2026-09-01",
+       acts(link("Edit scopes", modal="m-api-key"), link("Revoke", modal="m-confirm-generic", danger=True))],
+      ["homelab-snaps", '<span class="mono" style="font-size:11px">vm: snapshot.create,snapshot.revert @ list nextcloud,jellyfin</span>',
+       "2026-05-12", "Never",
+       acts(link("Edit scopes", modal="m-api-key"), link("Revoke", modal="m-confirm-generic", danger=True))],
   ])}
+  <p style="font-size:12px;color:var(--muted);margin:12px 0 0">
+    Service/CI keys: <a href="api-keys.html">Access → API keys</a>
+  </p>
 </div>"""
 
     out["account"] = (
@@ -1538,11 +1656,19 @@ def detail_pages() -> dict[str, tuple[str, str, str]]:
     vm_snaps = table(
         ["Snapshot", "Created", "Used", "Actions"],
         [
+            ["@pre-deploy-2026-07-16", "2026-07-16 01:00", "180 MB",
+             acts(link("Revert", modal="m-snapshot-revert", danger=True),
+                  link("Clone", modal="m-clone-dataset"),
+                  link("Delete", modal="m-delete-snapshot", danger=True))],
             ["@2026-07-15", "2026-07-15 02:00", "2.1 GB",
-             acts(link("Clone", modal="m-clone-dataset"), link("Delete", modal="m-delete-snapshot", danger=True))],
-            ["@2026-07-14", "2026-07-14 02:00", "1.8 GB", link("Delete", modal="m-delete-snapshot", danger=True)],
+             acts(link("Revert", modal="m-snapshot-revert", danger=True),
+                  link("Clone", modal="m-clone-dataset"),
+                  link("Delete", modal="m-delete-snapshot", danger=True))],
+            ["@2026-07-14", "2026-07-14 02:00", "1.8 GB",
+             acts(link("Revert", modal="m-snapshot-revert", danger=True),
+                  link("Delete", modal="m-delete-snapshot", danger=True))],
         ],
-    ) + f'<div style="margin-top:10px">{btn("+ Snapshot", primary=True, modal="m-snapshot")}</div>'
+    ) + f'<div style="margin-top:10px">{btn("+ Snapshot", primary=True, modal="m-snapshot")} <span style="font-size:12px;color:var(--muted);margin-left:8px">Revert is a separate API-key action: snapshot.revert</span></div>'
     vm_metrics = """
 <div class="card card-pad metric-bars">
   <div class="row"><label>CPU</label><div class="bar"><i style="width:42%"></i></div><span>42%</span></div>
@@ -2072,7 +2198,7 @@ def main() -> None:
         elif key == "account":
             section = "Auth & shell"
             active = None
-        elif key in ("users", "roles", "logs", "notifications", "audit"):
+        elif key in ("users", "roles", "api-keys", "logs", "notifications", "audit"):
             section = "Access & Observe"
         elif key == "console":
             section = "Workload"

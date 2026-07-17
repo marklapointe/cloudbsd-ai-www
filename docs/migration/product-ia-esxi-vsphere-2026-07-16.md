@@ -118,6 +118,107 @@ Sign out
 
 **My Account is not Admin Settings.** Personal 2FA, theme, and personal API keys live under the avatar menu (or `/account/*`), never mixed with cluster VIP / NTP.
 
+### 3.2a API keys and scopes (required)
+
+API keys are **not** “full admin unless we remember to restrict them.”  
+Every key has an explicit **scope document** evaluated on every wire action (same axis as RBAC + Rule #8 preflight).
+
+#### Two homes (do not merge)
+
+| Kind | Surface | Typical use |
+|------|---------|-------------|
+| **Personal access token** | My Account → API tokens | Human operator automation under their identity |
+| **Service / CI key** | Access → API keys | Pipelines, agents, Terraform — owned by a service principal or admin-created bot user |
+
+Both use the **same scope model**. Service keys may not broaden beyond what the creating admin can grant.
+
+#### Scope model (v1)
+
+A key is authorized only when **all** of these match:
+
+1. **Resource type** — what kind of object (system-facing inventory first)  
+2. **Actions** — what verbs on that type  
+3. **Domain** — which instances (all of type, or a bound set)
+
+```
+scope entry = {
+  resource:  vm | jail | container | volume | network | host | cluster | task | library | system | mcp | …
+  actions:   [ read | create | update | delete | power | migrate | console
+               | snapshot.create | snapshot.delete | snapshot.revert
+               | backup | attach | … ]
+  domain:    { mode: all | list | pattern | tag }
+             // list:    ids / names
+             // pattern: name globs e.g. ci-*, tank/vms/ci/*
+             // tag:     resources labeled e.g. env=ci
+}
+```
+
+**Deny by default.** Missing resource type or action ⇒ 403.  
+**Intersect with user/role:** key cannot exceed the principal’s role capabilities.
+
+#### System resources (start here)
+
+| Type | Example actions | Notes |
+|------|-----------------|--------|
+| **vm** | read, create, update, delete, power, migrate, console, **snapshot.create**, **snapshot.delete**, **snapshot.revert** | Core CI + day-2 |
+| **jail** | read, create, update, delete, power, snapshot.* | FreeBSD-native |
+| **container** | read, create, update, delete, power, logs | OCI |
+| **volume** | read, create, update, delete, snapshot.*, clone, scrub | ZFS datasets |
+| **network** | read, create, update, delete, attach | Bridges/VLANs/pools |
+| **host** | read, drain, maintenance | Usually not on CI keys |
+| **cluster** | read | Membership/VIP — rarely on CI |
+| **task** | read, cancel | See job status for long ops |
+| **library** | read, upload | ISO/template pull for create |
+| **system** | backups, updates, diagnostics, exports | Admin-only keys |
+| **mcp** | read, register, invoke | Separate from hypervisor CRUD |
+
+#### Domain binding (CI pattern)
+
+| Domain mode | Meaning | Example |
+|-------------|---------|---------|
+| **all** | Every object of that type the principal can see | Break-glass / platform CI |
+| **list** | Explicit IDs/names | `nextcloud`, `ci-runner-01` |
+| **pattern** | Name or ZFS path glob | `ci-*`, `tank/vms/ci/*` |
+| **tag** | Label selector | `pipeline=gha`, `env=staging` |
+
+**CI snapshot-only key (recommended template):**
+
+| Resource | Actions | Domain |
+|----------|---------|--------|
+| vm | `read`, `snapshot.create`, `snapshot.revert`, `snapshot.delete` | pattern `ci-*` **or** tag `ci=true` |
+| task | `read` | all (or tasks spawned by this key) |
+| — | no create/delete/power/migrate/console | — |
+
+That lets a pipeline snapshot before deploy and **revert** on failure without the ability to destroy the VM or touch prod inventory.
+
+#### Snapshots (yes — first-class)
+
+Snapshots are **not** an afterthought:
+
+| Surface | Coverage |
+|---------|----------|
+| VM detail → Snapshots tab | list, create, delete, clone, **revert/rollback** |
+| Volume/dataset detail → Snapshots | ZFS snapshots on storage |
+| Storage → Snapshots (cluster view) | cross-dataset list |
+| Confirm + Rule #8 preflight | pool space, VM state for in-place revert, etc. |
+| Tasks | long snapshot/send/revert jobs |
+| **API key actions** | `snapshot.create` / `snapshot.delete` / `snapshot.revert` as separate grants |
+
+**Revert** (rollback to snapshot) is a distinct capability from create — grant it deliberately (CI often wants create+revert; rarely wants delete of arbitrary snaps).
+
+#### UI requirements
+
+- Create/edit key wizard: name, expiry, owner, **scope builder** (resource × actions × domain), review JSON/summary  
+- Key list columns: name, owner, expiry, **scope summary** (e.g. `vm:snapshot* @ ci-*`), last used  
+- Key detail: full scope table, rotate, revoke  
+- Audit: every API call logs key id + matched scope entry + target resource  
+
+#### Non-goals (v1)
+
+- OAuth2 delegated third-party app marketplace  
+- Per-field attribute ACLs  
+- Impersonation of other users without an explicit admin scope  
+
 ### 3.3 Cluster vs Hosts
 
 | Surface | Purpose | Must not |
@@ -268,7 +369,7 @@ React `Settings.tsx` is still **license + language/TZ + demo/SSL/CORS** — not 
 | Host inventory, health, maintenance/drain | Partial (Hosts/Nodes) |
 | VM inventory, power, console | Partial (lists + console mock; thin React VMs page) |
 | Create from template / ISO library | Wizards exist; **need content library screen** |
-| Snapshots / rollback | Detail tabs; need job UX |
+| Snapshots / rollback | **First-class**: VM + volume tabs, Storage list, preflight, Tasks; API scopes `snapshot.create|delete|revert` (§3.2a) |
 | ZFS storage | Strong direction |
 | Virtual networking + host NICs | Scattered — unify per §3.4 |
 | Live migrate / evacuate | Mentioned; productize |
@@ -285,7 +386,7 @@ React `Settings.tsx` is still **license + language/TZ + demo/SSL/CORS** — not 
 | HA / failover policy | CARP mock only — not VM HA |
 | Affinity / placement | Missing |
 | Resource pools / quotas | Missing |
-| RBAC roles | Missing as product |
+| RBAC roles | Roles + **API key scopes** (§3.2a) — implement with Access |
 | Content library | Missing |
 | Distributed switch analog | Not modeled |
 | Storage policies / replication intent | ZFS send/receive tasks only |

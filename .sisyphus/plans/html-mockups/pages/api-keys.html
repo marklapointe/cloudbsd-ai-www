@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>CloudBSD Admin — DensityService</title>
+  <title>CloudBSD Admin — API keys</title>
   <link rel="stylesheet" href="../assets/mockup.css"/>
 </head>
-<body data-nav="">
+<body data-nav="api-keys">
 <div class="app">
   <header class="header">
     <div class="logo">C</div>
@@ -17,55 +17,75 @@
       <span class="live">● live</span>
       <button type="button" class="btn-link" data-open-modal="m-mark-read" title="Notifications">🔔 2</button>
       <select style="padding:3px 6px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px"><option>UTC</option></select>
-      <a class="avatar" href="../pages/account.html" title="My Account">M</a>
+      <a class="avatar" href="account.html" title="My Account">M</a>
     </div>
   </header>
   <div class="body">
     <aside class="sidebar"><div class="nav-group">Workload</div><nav>
-<a href="../pages/dashboard.html" data-id="dashboard"><span>Dashboard</span></a>
-<a href="../pages/vms.html" data-id="vms"><span>Virtual Machines</span></a>
-<a href="../pages/containers.html" data-id="containers"><span>Containers</span></a>
-<a href="../pages/jails.html" data-id="jails"><span>Jails</span></a>
-<a href="../pages/storage.html" data-id="storage"><span>Storage</span></a>
-<a href="../pages/networks.html" data-id="networks"><span>Networks</span></a>
-<a href="../pages/hosts.html" data-id="hosts"><span>Hosts</span></a>
-<a href="../pages/cluster.html" data-id="cluster"><span>Cluster</span></a>
-<a href="../pages/tasks.html" data-id="tasks"><span>Tasks</span></a>
-<a href="../pages/library.html" data-id="library"><span>Library</span></a>
+<a href="dashboard.html" data-id="dashboard"><span>Dashboard</span></a>
+<a href="vms.html" data-id="vms"><span>Virtual Machines</span></a>
+<a href="containers.html" data-id="containers"><span>Containers</span></a>
+<a href="jails.html" data-id="jails"><span>Jails</span></a>
+<a href="storage.html" data-id="storage"><span>Storage</span></a>
+<a href="networks.html" data-id="networks"><span>Networks</span></a>
+<a href="hosts.html" data-id="hosts"><span>Hosts</span></a>
+<a href="cluster.html" data-id="cluster"><span>Cluster</span></a>
+<a href="tasks.html" data-id="tasks"><span>Tasks</span></a>
+<a href="library.html" data-id="library"><span>Library</span></a>
 </nav>
 <div class="nav-group">Access</div><nav>
-<a href="../pages/users.html" data-id="users"><span>Users</span></a>
-<a href="../pages/roles.html" data-id="roles"><span>Roles</span></a>
-<a href="../pages/api-keys.html" data-id="api-keys"><span>API keys</span></a>
+<a href="users.html" data-id="users"><span>Users</span></a>
+<a href="roles.html" data-id="roles"><span>Roles</span></a>
+<a href="api-keys.html" data-id="api-keys" class="active"><span>API keys</span></a>
 </nav>
 <div class="nav-group">Observe</div><nav>
-<a href="../pages/logs.html" data-id="logs"><span>Logs</span></a>
-<a href="../pages/notifications.html" data-id="notifications"><span>Notifications</span></a>
-<a href="../pages/audit.html" data-id="audit"><span>Audit</span></a>
+<a href="logs.html" data-id="logs"><span>Logs</span></a>
+<a href="notifications.html" data-id="notifications"><span>Notifications</span></a>
+<a href="audit.html" data-id="audit"><span>Audit</span></a>
 </nav>
 <div class="nav-group">Configure</div><nav>
-<a href="../pages/settings.html" data-id="settings"><span>Settings</span></a>
-<a href="../pages/mcp.html" data-id="mcp"><span>MCP</span></a>
+<a href="settings.html" data-id="settings"><span>Settings</span></a>
+<a href="mcp.html" data-id="mcp"><span>MCP</span></a>
 </nav>
 <div class="nav-group">Operate</div><nav>
-<a href="../pages/system.html" data-id="system"><span>System</span></a>
-<a href="../pages/about.html" data-id="about"><span>About</span></a>
+<a href="system.html" data-id="system"><span>System</span></a>
+<a href="about.html" data-id="about"><span>About</span></a>
 </nav>
 <div class="sidebar-footer"><div>Host: prod-node-01</div><div>Uptime: 14d 02:11</div></div></aside>
     <main class="content">
 
 <div class="page-head">
-  <div><h1>DensityService</h1><p class="sub">CSS vars</p></div>
-  <div class="actions"></div>
+  <div><h1>API keys</h1><p class="sub">Service / CI keys with <strong>scopes</strong> (resource × actions × domain) · product IA §3.2a</p></div>
+  <div class="actions"><button type="button" class="btn btn-primary" data-open-modal="m-api-key">+ Create key</button></div>
 </div>
-<div class="actions" style="margin-bottom:12px">
-  <button type="button" class="chip active" data-density="cozy">Cozy</button>
-  <button type="button" class="chip" data-density="compact">Compact</button>
-  <button type="button" class="chip" data-density="extra">Extra</button>
+<div class="alert alert-info">
+  <strong>Scopes required.</strong> Keys are deny-by-default. Grant only the resource types and verbs needed
+  (e.g. CI: <code class="inline">vm</code> snapshot.create + snapshot.revert on pattern <code class="inline">ci-*</code>).
+  Personal tokens live under <a href="account.html#tokens">My Account → API tokens</a> with the same model.
 </div>
-<div class="card" data-density-target>
-  <table class="res"><thead><tr><th>Name</th><th>Host</th></tr></thead>
-  <tbody><tr><td>nextcloud</td><td>prod-node-01</td></tr><tr><td>jellyfin</td><td>prod-node-02</td></tr></tbody></table>
+<div class="stats"><div class="stat"><div class="label">Keys</div><div class="value">4</div></div><div class="stat"><div class="label">Service</div><div class="value">3</div></div><div class="stat"><div class="label">Personal</div><div class="value">1</div></div><div class="stat"><div class="label">Expiring &lt;30d</div><div class="value">1</div></div></div>
+<div class="filter-bar" data-filter-bar="1">
+  <input type="search" placeholder="Filter keys…  (press /)" autocomplete="off"/>
+  <button type="button" class="chip active" data-chip="all">All</button><button type="button" class="chip" data-chip="service">Service</button><button type="button" class="chip" data-chip="personal">Personal</button><button type="button" class="chip" data-chip="expired">Expired</button>
+</div>
+<div class="card">
+  <table class="res" data-interactive="1">
+    <thead><tr><th>Name</th><th>Kind</th><th>Owner</th><th>Scope summary</th><th>Expires</th><th>Last used</th><th>Actions</th></tr></thead>
+    <tbody><tr data-status="unknown" data-filter="ci-snapshot service gha-ci vm: read, snapshot.create, snapshot.revert @ pattern ci-* 90d 12m ago edit · rotate · revoke"><td>ci-snapshot</td><td>Service</td><td>gha-ci</td><td><span class="mono" style="font-size:11px">vm: read, snapshot.create, snapshot.revert @ pattern ci-*</span></td><td>90d</td><td>12m ago</td><td><button type="button" class="btn-link" data-open-modal="m-api-key">Edit</button> · <button type="button" class="btn-link" data-open-modal="m-api-key">Rotate</button> · <button type="button" class="btn-link danger" data-open-modal="m-confirm-generic">Revoke</button></td></tr><tr data-status="unknown" data-filter="ci-full-stack service gha-ci vm,jail,container: create,update,delete,power @ tag env=ci 1y 2h ago edit · revoke"><td>ci-full-stack</td><td>Service</td><td>gha-ci</td><td><span class="mono" style="font-size:11px">vm,jail,container: create,update,delete,power @ tag env=ci</span></td><td>1y</td><td>2h ago</td><td><button type="button" class="btn-link" data-open-modal="m-api-key">Edit</button> · <button type="button" class="btn-link danger" data-open-modal="m-confirm-generic">Revoke</button></td></tr><tr data-status="unknown" data-filter="backup-agent service system volume: snapshot.*, read · system: backups @ all never 02:00 edit · revoke"><td>backup-agent</td><td>Service</td><td>system</td><td><span class="mono" style="font-size:11px">volume: snapshot.*, read · system: backups @ all</span></td><td>Never</td><td>02:00</td><td><button type="button" class="btn-link" data-open-modal="m-api-key">Edit</button> · <button type="button" class="btn-link danger" data-open-modal="m-confirm-generic">Revoke</button></td></tr><tr data-status="unknown" data-filter="laptop-dev personal mlapointe *:read @ all 2026-09-01 now edit · revoke"><td>laptop-dev</td><td>Personal</td><td>mlapointe</td><td><span class="mono" style="font-size:11px">*:read @ all</span></td><td>2026-09-01</td><td>now</td><td><button type="button" class="btn-link" data-open-modal="m-api-key">Edit</button> · <button type="button" class="btn-link danger" data-open-modal="m-confirm-generic">Revoke</button></td></tr></tbody>
+  </table>
+</div>
+<div class="card card-pad" style="margin-top:14px">
+  <div style="font-weight:700;margin-bottom:8px">CI template · snapshot only</div>
+  <p style="margin:0 0 8px;font-size:12px;color:var(--muted)">
+    Pipeline may snapshot before deploy and revert on failure — cannot create/delete VMs or touch non-ci names.
+  </p>
+  <pre class="mono" style="margin:0;font-size:11px;background:#f8fafc;padding:12px;border-radius:8px;overflow:auto">scopes:
+  - resource: vm
+    actions: [read, snapshot.create, snapshot.revert]
+    domain: { mode: pattern, value: "ci-*" }
+  - resource: task
+    actions: [read]
+    domain: { mode: all }</pre>
 </div>
 
       <p class="mock-note">HTML mockup · tabs + modals filled · MCP = plugins · .sisyphus/plans/html-mockups/</p>

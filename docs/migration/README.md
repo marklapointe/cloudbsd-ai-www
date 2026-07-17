@@ -139,6 +139,8 @@ Spine detail: product IA §5 and §7.
 | Networks | `/networks` (+ map view) |
 | Tasks | `/tasks` |
 | **MCP** | `/mcp` only (was Plugins — MCP **is** the plugin system) |
+| **API keys** | Access → `/access/api-keys` (service/CI); Account → `/account/tokens` (personal) — both **scoped** (resource × action × domain); see product IA §3.2a |
+| **Snapshots** | VM/volume detail + Storage; actions include create / delete / **revert**; grant via API key scopes |
 
 ---
 

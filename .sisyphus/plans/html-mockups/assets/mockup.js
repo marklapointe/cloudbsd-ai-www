@@ -506,7 +506,10 @@
         toast("Role saved", "ok");
       },
       "m-api-key": function () {
-        toast("API key created · secret shown once (demo)", "ok");
+        toast("API key created with scopes · secret shown once (demo)", "ok");
+      },
+      "m-snapshot-revert": function () {
+        toast("Revert to snapshot started · task queued", "info");
       },
       "m-backup-policy": function () {
         toast("Backup policy saved", "ok");

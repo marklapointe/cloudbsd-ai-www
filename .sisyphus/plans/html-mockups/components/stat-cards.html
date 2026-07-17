@@ -36,6 +36,7 @@
 <div class="nav-group">Access</div><nav>
 <a href="../pages/users.html" data-id="users"><span>Users</span></a>
 <a href="../pages/roles.html" data-id="roles"><span>Roles</span></a>
+<a href="../pages/api-keys.html" data-id="api-keys"><span>API keys</span></a>
 </nav>
 <div class="nav-group">Observe</div><nav>
 <a href="../pages/logs.html" data-id="logs"><span>Logs</span></a>
@@ -365,15 +366,74 @@ storage.snapshot:write
 </div>
 
 <div class="modal-backdrop" id="m-api-key" hidden>
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-api-key-title">
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="m-api-key-title">
     <div class="modal-h">
       <h2 id="m-api-key-title">Create API key</h2>
       <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
     </div>
-    <div class="modal-b"><div class="field"><label>Name</label><input value="ci-deploy"/></div><div class="field"><label>Owner</label><select><option>mlapointe (personal)</option><option>Service: ci</option></select></div><div class="field"><label>Expires</label><select><option>90 days</option><option>1 year</option><option>Never</option></select></div><div class="alert alert-warn">Secret is shown once after create. Store it in a vault.</div></div>
+    <div class="modal-b"><div class="field"><label>Name</label><input value="ci-snapshot"/></div><div class="field"><label>Kind</label><select><option>Service / CI key</option><option>Personal access token</option></select></div><div class="field"><label>Owner</label><select><option>Service: gha-ci</option><option>mlapointe (personal)</option></select></div><div class="field"><label>Expires</label><select><option>90 days</option><option>1 year</option><option>Never</option></select></div>
+        <div style="font-size:12px;font-weight:700;margin:12px 0 8px">Scopes (deny by default)</div>
+        <div class="alert alert-info" style="margin-bottom:10px">
+          Each row: <strong>resource type</strong> × <strong>actions</strong> × <strong>domain</strong> (all / list / pattern / tag).
+          Intersected with the principal’s role. Product IA §3.2a.
+        </div>
+        <div class="card" style="margin-bottom:10px;overflow:auto">
+          <table class="res">
+            <thead><tr><th>Resource</th><th>Actions</th><th>Domain</th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                <td><select style="font-size:12px;padding:4px"><option selected>vm</option><option>jail</option><option>container</option><option>volume</option><option>network</option><option>task</option></select></td>
+                <td style="font-size:11px">
+                  <label style="margin-right:6px"><input type="checkbox" checked/> read</label>
+                  <label style="margin-right:6px"><input type="checkbox" checked/> snapshot.create</label>
+                  <label style="margin-right:6px"><input type="checkbox" checked/> snapshot.revert</label>
+                  <label style="margin-right:6px"><input type="checkbox"/> snapshot.delete</label>
+                  <label style="margin-right:6px"><input type="checkbox"/> power</label>
+                  <label style="margin-right:6px"><input type="checkbox"/> create</label>
+                  <label style="margin-right:6px"><input type="checkbox"/> delete</label>
+                </td>
+                <td>
+                  <select style="font-size:12px;padding:4px;margin-bottom:4px"><option>pattern</option><option>tag</option><option>list</option><option>all</option></select>
+                  <input value="ci-*" placeholder="ci-* or tag=ci" style="width:100%;padding:4px 6px;font-size:11px;border:1px solid #cbd5e1;border-radius:4px"/>
+                </td>
+                <td><button type="button" class="btn-link danger">×</button></td>
+              </tr>
+              <tr>
+                <td><select style="font-size:12px;padding:4px"><option selected>task</option></select></td>
+                <td style="font-size:11px"><label><input type="checkbox" checked/> read</label></td>
+                <td><select style="font-size:12px;padding:4px"><option selected>all</option></select></td>
+                <td><button type="button" class="btn-link danger">×</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button type="button" class="btn" style="margin-bottom:10px">+ Add scope row</button>
+        <div class="card card-pad mono" style="font-size:11px;background:#f8fafc;margin-bottom:10px">
+          Summary: <strong>vm</strong> [read, snapshot.create, snapshot.revert] @ pattern <code>ci-*</code><br/>
+          + <strong>task</strong> [read] @ all
+        </div>
+        <div class="alert alert-warn">Secret is shown once after create. Store it in a vault. Key cannot exceed creator role.</div></div>
     <div class="modal-f">
       <button type="button" class="btn" data-close-modal>Cancel</button>
       <button type="button" class="btn btn-primary" data-close-modal>Create key</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-snapshot-revert" hidden>
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="m-snapshot-revert-title">
+    <div class="modal-h">
+      <h2 id="m-snapshot-revert-title">Revert to snapshot</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Revert <strong>ci-runner-01</strong> to snapshot <strong>@pre-deploy-2026-07-16</strong>?</p>
+        <div class="alert alert-warn">In-place revert requires VM stopped (or cold revert). Current disk state after snapshot will be discarded unless you snapshot first.</div>
+        <div class="alert alert-ok">Preflight: snapshot exists · encryption match · pool healthy</div>
+        <div class="field"><label>Mode</label><select><option>In-place rollback</option><option>Clone to new VM then swap</option></select></div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-danger" data-close-modal>Revert to snapshot</button>
     </div>
   </div>
 </div>

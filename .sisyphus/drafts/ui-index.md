@@ -147,6 +147,9 @@ Configure
   Settings                (system configuration only — see §8.1)
   MCP                     (MCP servers = the plugin/extension system)
 
+# Access also: API keys (scoped service/CI keys — product IA §3.2a)
+# Account → API tokens use the same scope model (personal)
+
 Operate
   System                  (Backups, Updates, Diagnostics, Exports, Maintenance)
   About                   (versions, license, support)

@@ -311,8 +311,11 @@ Use this as the **only** allowed component inventory for v1 coding waves. Anythi
 - [ ] Detail shells: VM, Container, Jail, Volume, Host  
 - [ ] Console (noVNC)  
 - [ ] Users, Roles (or Users tabs)  
+- [ ] **API keys** (Access) + personal tokens (Account) with **scope builder**  
+      (resource type × actions × domain: all / list / pattern / tag)  
+- [ ] Snapshot actions on VM/volume detail: create, delete, **revert**; Task tracking  
 - [ ] Logs, Notifications, Audit  
-- [ ] Account shell (profile/security/appearance/prefs/tokens)  
+- [ ] Account shell (profile/security/appearance/prefs/tokens **with scopes**)  
 - [ ] Settings shell (cluster/auth/host/net/storage/integrations/licensing)  
 - [ ] System shell (backups/updates/diagnostics/exports/maintenance)  
 - [ ] **MCP** registry list + server detail + add wizard (HTTP/SSE/stdio)  
