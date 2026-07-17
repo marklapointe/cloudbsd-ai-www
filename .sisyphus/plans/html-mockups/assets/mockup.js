@@ -358,16 +358,11 @@
     }
   }
 
-  /* On load: force-hide every overlay (fixes CSS display:flex overriding [hidden]) */
+  /* On load: force-hide every overlay (never leave dialogs blocking the page) */
   qsa(".modal-backdrop, .frost").forEach(function (el) {
     el.hidden = true;
     el.setAttribute("aria-hidden", "true");
   });
-  /* Optional auto-open: <body data-auto-open="m-stop-vm"> for gallery pages only */
-  var auto = document.body.getAttribute("data-auto-open");
-  if (auto && qs("#" + auto)) {
-    setTimeout(function () { openModal(auto); }, 50);
-  }
 
   function setRowStatus(tr, kind, label) {
     if (!tr) return;

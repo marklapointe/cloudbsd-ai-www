@@ -622,24 +622,8 @@ def common_modals() -> str:
         primary="Send",
     ))
 
-    # Frost-out is a product pattern (Rule #2) — demo only; never show on load.
-    # Keep hidden; open via Settings → Advanced “Simulate frost-out” or live-indicator demo.
-    m.append("""
-<div class="frost" id="m-frost" hidden aria-hidden="true">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-frost-title">
-    <div class="modal-h"><h2 id="m-frost-title">Session expired</h2>
-      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
-    </div>
-    <div class="modal-b">
-      <p>Your session is no longer valid. Sign in again to continue.</p>
-      <p style="font-size:12px;color:var(--muted);margin:8px 0 0">Demo only — frost-out is Rule #2 (auth failure → blur → /login). Not a real expired session.</p>
-    </div>
-    <div class="modal-f">
-      <button type="button" class="btn" data-close-modal>Dismiss demo</button>
-      <a class="btn btn-primary" href="login.html">Sign in</a>
-    </div>
-  </div>
-</div>""")
+    # Session expired is a *page* (pages/session-expired.html), not a blocking
+    # overlay injected on every shell page. Do not re-add m-frost here.
 
     return "\n".join(m)
 
@@ -687,9 +671,10 @@ def shell(
         side = sidebar_html(active, rel="pages")
 
     modals = common_modals() if include_modals else ""
-    # frost link path for non-pages
     if depth != "pages":
+        # login links inside any remaining modal copy
         modals = modals.replace('href="login.html"', 'href="../pages/login.html"')
+        modals = modals.replace('href="session-expired.html"', 'href="../pages/session-expired.html"')
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -1179,7 +1164,10 @@ def pages() -> dict[str, tuple[str, str, str]]:
   {field("Admin rate limit", '<input value="120/min"/>')}
   {field("Error display", '<select><option>Operator detail</option><option>Generic only</option></select>')}
   {btn("Save", primary=True, modal="m-save-settings")}
-  <div style="margin-top:16px">{btn("Simulate frost-out", danger=True, modal="m-frost")}</div>
+  <div style="margin-top:16px">
+    <a class="btn" href="session-expired.html">View session-expired page</a>
+    <span style="font-size:12px;color:var(--muted);margin-left:8px">Rule #2 demo — normal page, not a blocking overlay</span>
+  </div>
 </div>"""
 
     out["settings"] = (
@@ -1497,6 +1485,29 @@ root@nextcloud:~ #
 """,
         )
 
+    # Session expired — dedicated page (Rule #2), not a blocking frost overlay on every screen
+    out["session-expired"] = (
+        "session-expired.html",
+        "Session expired",
+        """
+<div class="card card-pad" style="max-width:480px;margin:48px auto;text-align:center">
+  <div style="width:48px;height:48px;border-radius:50%;background:#fef3c7;color:#92400e;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:22px;font-weight:700">!</div>
+  <h1 style="margin:0 0 8px;font-size:22px">Session expired</h1>
+  <p style="color:var(--muted);margin:0 0 16px;line-height:1.5">
+    Your session is no longer valid. Sign in again to continue managing this cluster.
+  </p>
+  <div class="alert alert-info" style="text-align:left;margin-bottom:16px">
+    <strong>Product rule #2</strong> — on real auth/session failure the app frosts the UI and returns the operator to
+    <code class="inline">/login</code>. This mock is a <em>page</em> so planners can review the copy and layout without a global blocking overlay.
+  </div>
+  <div class="actions" style="justify-content:center">
+    <a class="btn btn-primary" href="login.html">Sign in</a>
+    <a class="btn" href="dashboard.html">Back to mockups</a>
+  </div>
+</div>
+""",
+    )
+
     return out
 
 
@@ -1737,7 +1748,8 @@ def components() -> dict[str, tuple[str, str]]:
         "LiveIndicatorComponent",
         page_head("LiveIndicatorComponent", "Stream primary", "")
         + '<div class="card card-pad"><p><span class="live">● live</span> · updated 2s ago</p>'
-        + f'<p style="font-size:12px;color:var(--muted)">Demo frost-out: {link("Expire session", modal="m-frost")}</p></div>',
+        + '<p style="font-size:12px;color:var(--muted)">Session expiry is a page, not a modal: '
+        '<a href="../pages/session-expired.html">session-expired.html</a></p></div>',
     )
     c["capability-menu.html"] = (
         "CapabilityActionMenu",
@@ -1795,7 +1807,7 @@ def modals_gallery() -> dict[str, tuple[str, str]]:
     """Standalone modal gallery pages — each shows one modal open."""
     specs = [
         ("confirm-action.html", "ConfirmActionModal", "m-stop-vm", "Primary mutation confirm"),
-        ("frost-out.html", "FrostOutModal", "m-frost", "Session expiry frost"),
+
         ("add-host.html", "AddHostDialog", "m-add-host", "Join host wizard-ish"),
         ("create-user.html", "CreateUserModal", "m-create-user", "Access"),
         ("api-key-create.html", "CreateApiKeyModal", "m-api-key", "API key"),
@@ -1846,7 +1858,7 @@ def modals_gallery() -> dict[str, tuple[str, str]]:
                 page_head(title, blurb + f" · modal id <code class='inline'>{mid}</code>",
                           btn("Open modal", primary=True, modal=mid))
                 + f'<p style="font-size:12px;color:var(--muted)">Gallery page — click <strong>Open modal</strong> to preview. '
-                f'(Session expired frost is a demo of Rule #2, not a real expiry.)</p>'
+                f'</p>'
             )
         out[fname] = (title, body)
     return out
@@ -2050,9 +2062,9 @@ def main() -> None:
 
     for key, (fname, title, body) in pages().items():
         active = key
-        if key.startswith("error-"):
+        if key.startswith("error-") or key == "session-expired":
             active = "dashboard"
-            section = "Errors"
+            section = "Errors" if key.startswith("error-") else "Auth & shell"
         elif key in ("mcp", "mcp-detail", "settings", "system", "system-diagnostics", "about"):
             section = "Configure & Operate"
             active = {"mcp": "mcp", "mcp-detail": "mcp", "settings": "settings",

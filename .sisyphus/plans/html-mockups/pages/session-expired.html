@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>CloudBSD Admin — FrostOutModal</title>
+  <title>CloudBSD Admin — Session expired</title>
   <link rel="stylesheet" href="../assets/mockup.css"/>
 </head>
-<body data-nav="">
+<body data-nav="dashboard">
 <div class="app">
   <header class="header">
     <div class="logo">C</div>
@@ -17,46 +17,58 @@
       <span class="live">● live</span>
       <button type="button" class="btn-link" data-open-modal="m-mark-read" title="Notifications">🔔 2</button>
       <select style="padding:3px 6px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px"><option>UTC</option></select>
-      <a class="avatar" href="../pages/account.html" title="My Account">M</a>
+      <a class="avatar" href="account.html" title="My Account">M</a>
     </div>
   </header>
   <div class="body">
     <aside class="sidebar"><div class="nav-group">Workload</div><nav>
-<a href="../pages/dashboard.html" data-id="dashboard"><span>Dashboard</span></a>
-<a href="../pages/vms.html" data-id="vms"><span>Virtual Machines</span></a>
-<a href="../pages/containers.html" data-id="containers"><span>Containers</span></a>
-<a href="../pages/jails.html" data-id="jails"><span>Jails</span></a>
-<a href="../pages/storage.html" data-id="storage"><span>Storage</span></a>
-<a href="../pages/networks.html" data-id="networks"><span>Networks</span></a>
-<a href="../pages/hosts.html" data-id="hosts"><span>Hosts</span></a>
-<a href="../pages/cluster.html" data-id="cluster"><span>Cluster</span></a>
-<a href="../pages/tasks.html" data-id="tasks"><span>Tasks</span></a>
-<a href="../pages/library.html" data-id="library"><span>Library</span></a>
+<a href="dashboard.html" data-id="dashboard" class="active"><span>Dashboard</span></a>
+<a href="vms.html" data-id="vms"><span>Virtual Machines</span></a>
+<a href="containers.html" data-id="containers"><span>Containers</span></a>
+<a href="jails.html" data-id="jails"><span>Jails</span></a>
+<a href="storage.html" data-id="storage"><span>Storage</span></a>
+<a href="networks.html" data-id="networks"><span>Networks</span></a>
+<a href="hosts.html" data-id="hosts"><span>Hosts</span></a>
+<a href="cluster.html" data-id="cluster"><span>Cluster</span></a>
+<a href="tasks.html" data-id="tasks"><span>Tasks</span></a>
+<a href="library.html" data-id="library"><span>Library</span></a>
 </nav>
 <div class="nav-group">Access</div><nav>
-<a href="../pages/users.html" data-id="users"><span>Users</span></a>
-<a href="../pages/roles.html" data-id="roles"><span>Roles</span></a>
+<a href="users.html" data-id="users"><span>Users</span></a>
+<a href="roles.html" data-id="roles"><span>Roles</span></a>
 </nav>
 <div class="nav-group">Observe</div><nav>
-<a href="../pages/logs.html" data-id="logs"><span>Logs</span></a>
-<a href="../pages/notifications.html" data-id="notifications"><span>Notifications</span></a>
-<a href="../pages/audit.html" data-id="audit"><span>Audit</span></a>
+<a href="logs.html" data-id="logs"><span>Logs</span></a>
+<a href="notifications.html" data-id="notifications"><span>Notifications</span></a>
+<a href="audit.html" data-id="audit"><span>Audit</span></a>
 </nav>
 <div class="nav-group">Configure</div><nav>
-<a href="../pages/settings.html" data-id="settings"><span>Settings</span></a>
-<a href="../pages/mcp.html" data-id="mcp"><span>MCP</span></a>
+<a href="settings.html" data-id="settings"><span>Settings</span></a>
+<a href="mcp.html" data-id="mcp"><span>MCP</span></a>
 </nav>
 <div class="nav-group">Operate</div><nav>
-<a href="../pages/system.html" data-id="system"><span>System</span></a>
-<a href="../pages/about.html" data-id="about"><span>About</span></a>
+<a href="system.html" data-id="system"><span>System</span></a>
+<a href="about.html" data-id="about"><span>About</span></a>
 </nav>
 <div class="sidebar-footer"><div>Host: prod-node-01</div><div>Uptime: 14d 02:11</div></div></aside>
     <main class="content">
 
-<div class="page-head">
-  <div><h1>FrostOutModal</h1><p class="sub">Session expiry frost · modal id <code class='inline'>m-frost</code></p></div>
-  <div class="actions"><button type="button" class="btn btn-primary" data-open-modal="m-frost">Open modal</button></div>
-</div><p style="font-size:12px;color:var(--muted)">Gallery page — click <strong>Open modal</strong> to preview. (Session expired frost is a demo of Rule #2, not a real expiry.)</p>
+<div class="card card-pad" style="max-width:480px;margin:48px auto;text-align:center">
+  <div style="width:48px;height:48px;border-radius:50%;background:#fef3c7;color:#92400e;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:22px;font-weight:700">!</div>
+  <h1 style="margin:0 0 8px;font-size:22px">Session expired</h1>
+  <p style="color:var(--muted);margin:0 0 16px;line-height:1.5">
+    Your session is no longer valid. Sign in again to continue managing this cluster.
+  </p>
+  <div class="alert alert-info" style="text-align:left;margin-bottom:16px">
+    <strong>Product rule #2</strong> — on real auth/session failure the app frosts the UI and returns the operator to
+    <code class="inline">/login</code>. This mock is a <em>page</em> so planners can review the copy and layout without a global blocking overlay.
+  </div>
+  <div class="actions" style="justify-content:center">
+    <a class="btn btn-primary" href="login.html">Sign in</a>
+    <a class="btn" href="dashboard.html">Back to mockups</a>
+  </div>
+</div>
+
       <p class="mock-note">HTML mockup · tabs + modals filled · MCP = plugins · .sisyphus/plans/html-mockups/</p>
     </main>
   </div>
@@ -860,22 +872,6 @@ fe80::1/64</textarea></div><div class="alert alert-warn">Preflight: changing man
     <div class="modal-f">
       <button type="button" class="btn" data-close-modal>Cancel</button>
       <button type="button" class="btn btn-primary" data-close-modal>Send</button>
-    </div>
-  </div>
-</div>
-
-<div class="frost" id="m-frost" hidden aria-hidden="true">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-frost-title">
-    <div class="modal-h"><h2 id="m-frost-title">Session expired</h2>
-      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
-    </div>
-    <div class="modal-b">
-      <p>Your session is no longer valid. Sign in again to continue.</p>
-      <p style="font-size:12px;color:var(--muted);margin:8px 0 0">Demo only — frost-out is Rule #2 (auth failure → blur → /login). Not a real expired session.</p>
-    </div>
-    <div class="modal-f">
-      <button type="button" class="btn" data-close-modal>Dismiss demo</button>
-      <a class="btn btn-primary" href="../pages/login.html">Sign in</a>
     </div>
   </div>
 </div>
