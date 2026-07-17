@@ -55,12 +55,41 @@
     <main class="content">
 
 <div class="page-head">
-  <div><h1>Content Library</h1><p class="sub">ISOs · templates · cloud images</p></div>
-  <div class="actions"><button type="button" class="btn btn-primary" data-open-modal="m-library-upload">+ Upload</button></div>
+  <div><h1>Content Library</h1><p class="sub">Base jails · repositories · ISOs · images · templates</p></div>
+  <div class="actions"><button type="button" class="btn" data-open-modal="m-library-upload">+ Upload</button><button type="button" class="btn btn-primary" data-open-modal="m-repo-add">+ Repository</button><button type="button" class="btn" data-open-modal="m-base-sync">Fetch base</button></div>
 </div>
 <div data-tabs>
-  <div class="tabs"><button type="button" class="active" data-tab="isos">ISOs</button><button type="button" class="" data-tab="images">Images</button><button type="button" class="" data-tab="templates">Templates</button></div>
-  <div class="panel" data-panel="isos">
+  <div class="tabs"><button type="button" class="active" data-tab="bases">Base jails</button><button type="button" class="" data-tab="repos">Repositories</button><button type="button" class="" data-tab="isos">ISOs</button><button type="button" class="" data-tab="images">Images</button><button type="button" class="" data-tab="templates">Templates</button></div>
+  <div class="panel" data-panel="bases">
+<div class="page-head">
+  <div><h1>Base jails</h1><p class="sub">Cached FreeBSD bases for jail create · product IA §6.4</p></div>
+  <div class="actions"><button type="button" class="btn btn-primary" data-open-modal="m-base-sync">Fetch base…</button><button type="button" class="btn" data-open-modal="m-repo-add">Manage repos</button></div>
+</div>
+<div class="filter-bar" data-filter-bar="1">
+  <input type="search" placeholder="Filter bases…  (press /)" autocomplete="off"/>
+  <button type="button" class="chip active" data-chip="all">All</button><button type="button" class="chip" data-chip="14.2">14.2</button><button type="button" class="chip" data-chip="14.1">14.1</button><button type="button" class="chip" data-chip="amd64">amd64</button><button type="button" class="chip" data-chip="aarch64">aarch64</button>
+</div>
+<div class="card">
+  <table class="res" data-interactive="1">
+    <thead><tr><th>Base</th><th>Release</th><th>Arch</th><th>Components</th><th>Size</th><th>Source repo</th><th>Jails</th><th>Actions</th></tr></thead>
+    <tbody><tr data-status="unknown" data-filter="14.2-release-amd64 14.2-release amd64 base,lib32 320 mb corp-freebsd-mirror 5 use · re-sync · delete"><td>14.2-RELEASE-amd64</td><td>14.2-RELEASE</td><td>amd64</td><td>base,lib32</td><td>320 MB</td><td>corp-freebsd-mirror</td><td>5</td><td><a class="btn-link" href="../wizards/jail-create.html">Use</a> · <button type="button" class="btn-link" data-open-modal="m-base-sync">Re-sync</button> · <button type="button" class="btn-link danger" data-open-modal="m-library-delete">Delete</button></td></tr><tr data-status="unknown" data-filter="14.2-release-aarch64 14.2-release aarch64 base 290 mb freebsd-official 1 use · re-sync"><td>14.2-RELEASE-aarch64</td><td>14.2-RELEASE</td><td>aarch64</td><td>base</td><td>290 MB</td><td>freebsd-official</td><td>1</td><td><a class="btn-link" href="../wizards/jail-create.html">Use</a> · <button type="button" class="btn-link" data-open-modal="m-base-sync">Re-sync</button></td></tr><tr data-status="unknown" data-filter="14.1-release-amd64 14.1-release amd64 base,lib32 318 mb corp-freebsd-mirror 2 use · delete"><td>14.1-RELEASE-amd64</td><td>14.1-RELEASE</td><td>amd64</td><td>base,lib32</td><td>318 MB</td><td>corp-freebsd-mirror</td><td>2</td><td><a class="btn-link" href="../wizards/jail-create.html">Use</a> · <button type="button" class="btn-link danger" data-open-modal="m-library-delete">Delete</button></td></tr></tbody>
+  </table>
+</div><p style="font-size:12px;color:var(--muted);margin-top:10px">Jail wizard only lists <strong>ready</strong> bases. Missing release → Fetch from a repository (no freeform URL on the wizard).</p></div><div class="panel" data-panel="repos" hidden>
+<div class="page-head">
+  <div><h1>Repositories</h1><p class="sub">HTTPS sources for base jails (and future library pull)</p></div>
+  <div class="actions"><button type="button" class="btn btn-primary" data-open-modal="m-repo-add">+ Add repository</button><button type="button" class="btn" data-open-modal="m-repo-test">Test default</button></div>
+</div>
+<div class="alert alert-info">
+  Configurable mirrors with <strong>auth methods</strong>: none, HTTP Basic, Bearer, API key header, client cert (mTLS).
+  Path templates expand <code class="inline">${RELEASE}</code> / <code class="inline">${ARCH}</code> / <code class="inline">${COMPONENT}</code>.
+</div>
+
+<div class="card">
+  <table class="res" data-interactive="1">
+    <thead><tr><th>Status</th><th>Name</th><th>Base URL</th><th>Auth</th><th>TLS</th><th>Priority</th><th>Last probe</th><th>Actions</th></tr></thead>
+    <tbody><tr data-status="run ok ready" data-filter="● ok corp-freebsd-mirror https://mirror.example.lan/freebsd basic verify 10 4s ago edit · test · fetch base · disable"><td><span class="status-ok">● OK</span></td><td>corp-freebsd-mirror</td><td><span class="mono" style="font-size:11px">https://mirror.example.lan/freebsd</span></td><td>Basic</td><td>verify</td><td>10</td><td>4s ago</td><td><button type="button" class="btn-link" data-open-modal="m-repo-add">Edit</button> · <button type="button" class="btn-link" data-open-modal="m-repo-test">Test</button> · <button type="button" class="btn-link" data-open-modal="m-base-sync">Fetch base</button> · <button type="button" class="btn-link danger" data-open-modal="m-confirm-generic">Disable</button></td></tr><tr data-status="run ok ready" data-filter="● ok freebsd-official https://download.freebsd.org none verify 100 1h ago edit · test · fetch base"><td><span class="status-ok">● OK</span></td><td>freebsd-official</td><td><span class="mono" style="font-size:11px">https://download.freebsd.org</span></td><td>None</td><td>verify</td><td>100</td><td>1h ago</td><td><button type="button" class="btn-link" data-open-modal="m-repo-add">Edit</button> · <button type="button" class="btn-link" data-open-modal="m-repo-test">Test</button> · <button type="button" class="btn-link" data-open-modal="m-base-sync">Fetch base</button></td></tr><tr data-status="warn maint running" data-filter="◐ auth artifactory-freebsd https://artifactory.example.lan/freebsd api key header custom ca 20 fail 401 edit · test"><td><span class="status-warn">◐ Auth</span></td><td>artifactory-freebsd</td><td><span class="mono" style="font-size:11px">https://artifactory.example.lan/freebsd</span></td><td>API key header</td><td>custom CA</td><td>20</td><td>fail 401</td><td><button type="button" class="btn-link" data-open-modal="m-repo-add">Edit</button> · <button type="button" class="btn-link" data-open-modal="m-repo-test">Test</button></td></tr><tr data-status="stop off" data-filter="○ off airgap-mtls https://airgap.example.lan/rel mtls verify 5 — edit · enable"><td><span class="status-off">○ Off</span></td><td>airgap-mtls</td><td><span class="mono" style="font-size:11px">https://airgap.example.lan/rel</span></td><td>mTLS</td><td>verify</td><td>5</td><td>—</td><td><button type="button" class="btn-link" data-open-modal="m-repo-add">Edit</button> · <button type="button" class="btn-link" data-open-modal="m-confirm-generic">Enable</button></td></tr></tbody>
+  </table>
+</div></div><div class="panel" data-panel="isos" hidden>
 <div class="card">
   <table class="res" data-interactive="1">
     <thead><tr><th>Name</th><th>Size</th><th>Used by</th><th>Actions</th></tr></thead>
@@ -76,7 +105,7 @@
 <div class="card">
   <table class="res" data-interactive="1">
     <thead><tr><th>Name</th><th>Size</th><th>Used by</th><th>Actions</th></tr></thead>
-    <tbody><tr data-status="unknown" data-filter="jail-base-14.2 320 mb 5 jails use · delete"><td>jail-base-14.2</td><td>320 MB</td><td>5 jails</td><td><a class="btn-link" href="../wizards/jail-create.html">Use</a> · <button type="button" class="btn-link danger" data-open-modal="m-library-delete">Delete</button></td></tr></tbody>
+    <tbody><tr data-status="unknown" data-filter="thin-pkg-mirror custom layer 2 jails use · delete"><td>thin-pkg-mirror</td><td>custom layer</td><td>2 jails</td><td><a class="btn-link" href="../wizards/jail-create.html">Use</a> · <button type="button" class="btn-link danger" data-open-modal="m-library-delete">Delete</button></td></tr></tbody>
   </table>
 </div></div>
 </div>
@@ -852,6 +881,89 @@ fe80::1/64</textarea></div><div class="alert alert-warn">Preflight: changing man
     <div class="modal-f">
       <button type="button" class="btn" data-close-modal>Cancel</button>
       <button type="button" class="btn btn-danger" data-close-modal>Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-repo-add" hidden>
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="m-repo-add-title">
+    <div class="modal-h">
+      <h2 id="m-repo-add-title">Add repository</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><div class="field"><label>Name</label><input value="corp-freebsd-mirror"/></div><div class="field"><label>Kind</label><select><option>FreeBSD release mirror</option><option>Generic HTTPS</option></select></div><div class="field"><label>Base URL</label><input class="mono" value="https://mirror.example.lan/freebsd"/></div><div class="field"><label>Path template</label><select><option selected>/releases/${ABI}/${ARCH}/${RELEASE}/${COMPONENT}.txz</option><option>/pub/FreeBSD/releases/${ARCH}/${RELEASE}/${COMPONENT}.txz</option><option>/artifactory/freebsd/${RELEASE}/${ARCH}/${COMPONENT}.txz</option></select></div>
+        <div style="font-size:12px;font-weight:700;margin:10px 0 8px">HTTPS authentication</div>
+        <div class="scope-domain-tabs" data-repo-auth-mode style="margin-bottom:10px">
+          <button type="button" class="chip" data-repo-auth="none">None</button>
+          <button type="button" class="chip active" data-repo-auth="basic">Basic</button>
+          <button type="button" class="chip" data-repo-auth="bearer">Bearer</button>
+          <button type="button" class="chip" data-repo-auth="header">API key header</button>
+          <button type="button" class="chip" data-repo-auth="mtls">Client cert</button>
+        </div>
+        <div data-repo-auth-panel="none" hidden>
+          <div class="alert alert-info">Public mirror — no credentials.</div>
+        </div>
+        <div data-repo-auth-panel="basic">
+          <div class="field"><label>Username</label><input value="svc-cloudbsd"/></div><div class="field"><label>Password</label><input type="password" value="••••••••"/></div>
+        </div>
+        <div data-repo-auth-panel="bearer" hidden>
+          <div class="field"><label>Bearer token</label><input type="password" placeholder="Token (stored server-side)"/></div>
+        </div>
+        <div data-repo-auth-panel="header" hidden>
+          <div class="field"><label>Header name</label><select><option>Authorization</option><option>X-Api-Key</option><option>X-JFrog-Art-Api</option></select></div><div class="field"><label>Secret value</label><input type="password"/></div>
+        </div>
+        <div data-repo-auth-panel="mtls" hidden>
+          <div class="field"><label>Client certificate</label><input type="file" accept=".pem,.crt,.p12"/></div><div class="field"><label>Client key</label><input type="file" accept=".pem,.key"/></div><div class="field"><label>Key passphrase</label><input type="password" placeholder="Optional"/></div>
+        </div>
+        <div class="field"><label>TLS</label><select><option>Verify system CAs</option><option>Custom CA bundle</option><option>Insecure (debug only)</option></select></div><div class="field"><label>Priority</label><input type="number" value="10"/></div><div class="alert alert-info">Test probes MANIFEST / base.txz HEAD before enable. Secrets never re-echoed after save. Product IA §6.4.</div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Test &amp; save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-repo-test" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-repo-test-title">
+    <div class="modal-h">
+      <h2 id="m-repo-test-title">Test repository</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Probe <strong>corp-freebsd-mirror</strong>…</p>
+        <div class="card card-pad mono" style="background:#0f172a;color:#86efac;min-height:100px">
+          TLS: OK · peer CN=mirror.example.lan<br/>
+          HEAD …/14.2-RELEASE/amd64/MANIFEST → 200 · 42ms<br/>
+          Auth: basic · accepted
+        </div>
+        <div class="alert alert-ok" style="margin-top:10px">Repository healthy — safe to enable.</div>
+        </div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Close</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Done</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-base-sync" hidden>
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="m-base-sync-title">
+    <div class="modal-h">
+      <h2 id="m-base-sync-title">Fetch base jail</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><div class="field"><label>Repository</label><select><option>corp-freebsd-mirror (default)</option><option>freebsd-official</option><option>airgap-usb-cache</option></select></div><div class="field"><label>Release</label><select><option>14.2-RELEASE</option><option>14.1-RELEASE</option><option>13.4-RELEASE</option></select></div><div class="field"><label>Arch</label><select><option>amd64</option><option>aarch64</option></select></div>
+        <div style="font-size:12px;font-weight:700;margin:8px 0">Components</div>
+        <div class="cap-checks card card-pad" style="margin-bottom:10px">
+          <label><input type="checkbox" checked/> base</label>
+          <label><input type="checkbox" checked/> lib32</label>
+          <label><input type="checkbox"/> src</label>
+          <label><input type="checkbox"/> kernel</label>
+          <label><input type="checkbox" checked/> MANIFEST (always for verify)</label>
+        </div>
+        <div class="field"><label>Store as</label><input class="mono" value="tank/library/bases/14.2-RELEASE-amd64"/></div><div class="alert alert-info">Creates a Task with stream progress. Jail wizard lists the base when complete.</div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Start fetch</button>
     </div>
   </div>
 </div>

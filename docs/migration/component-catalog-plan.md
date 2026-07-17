@@ -316,6 +316,8 @@ Use this as the **only** allowed component inventory for v1 coding waves. Anythi
 - [ ] **Selectable-only** role capabilities + resource domain pickers  
       (catalog checklists / multi-select inventory — **no freeform capability text**)  
 - [ ] Snapshot actions on VM/volume detail: create, delete, **revert**; Task tracking  
+- [ ] **Library**: Base jails cache + **Repositories** (HTTPS auth: none/basic/bearer/header/mTLS)  
+- [ ] Jail create: select cached base (fetch-from-repo if missing); no freeform base URL  
 - [ ] Logs, Notifications, Audit  
 - [ ] Account shell (profile/security/appearance/prefs/tokens **with scopes**)  
 - [ ] Settings shell (cluster/auth/host/net/storage/integrations/licensing)  

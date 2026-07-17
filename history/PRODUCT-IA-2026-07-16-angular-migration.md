@@ -403,7 +403,7 @@ React `Settings.tsx` is still **license + language/TZ + demo/SSL/CORS** — not 
 | Affinity / placement | Missing |
 | Resource pools / quotas | Missing |
 | RBAC roles | Roles + **API key scopes** (§3.2a) — implement with Access |
-| Content library | Missing |
+| Content library | Library spine + **base-jail repos** (§6.4) — implement |
 | Distributed switch analog | Not modeled |
 | Storage policies / replication intent | ZFS send/receive tasks only |
 | Tags / folders | Tags in model; no folder UX |
@@ -416,6 +416,69 @@ React `Settings.tsx` is still **license + language/TZ + demo/SSL/CORS** — not 
 - bhyve + containers on one control plane  
 - PAM / host-native auth  
 - CARP, pf, if_bridge as real nouns in UI  
+- **Configurable base-jail repositories** (not hard-coded FreeBSD.org only) — §6.4  
+
+### 6.4 Base jails & content repositories (required)
+
+Jail create must not depend on a single hard-coded download URL or a free-typed path.
+Operators configure **repositories**; the control plane **fetches and caches** base jail artifacts (and related sets) for selected FreeBSD releases.
+
+#### Homes
+
+| Surface | Purpose |
+|---------|---------|
+| **Library → Base jails** | Cached bases on cluster storage (release, arch, size, last sync, used by N jails) |
+| **Library → Repositories** | Remote sources used to obtain bases (and optionally ISOs/templates later) |
+| **Jail create wizard → Base** | **Selectable** list of ready bases (and “fetch from repo…” if missing) — no freeform URL |
+
+#### Repository model
+
+```
+repo = {
+  id, name, enabled, priority,
+  kind: freebsd-release | generic-https | oci-optional-later,
+  base_url,                    // https://…
+  path_template,               // e.g. /releases/${ABI}/${ARCH}/${RELEASE}/base.txz
+  releases: [ selectable from probe or pinned list ],
+  arches: [ amd64, aarch64, … ],
+  auth: { method, … },         // see below — secrets server-side only
+  tls: { verify: true | custom-ca | insecure-debug },
+  proxy: optional,
+  last_probe, health
+}
+```
+
+**Path templates** use known variables (`RELEASE`, `ARCH`, `ABI`, `COMPONENT` ∈ base|lib32|src|kernel|MANIFEST) so private mirrors and official FreeBSD layouts both work without freeform per-jail URLs.
+
+#### HTTPS authentication (configurable per repo)
+
+| Method | When | UI fields (secret never re-echoed) |
+|--------|------|-------------------------------------|
+| **None** | Public FreeBSD mirrors | — |
+| **HTTP Basic** | Private mirrors | username + password |
+| **Bearer token** | CI/Artifactory-style | token |
+| **API key header** | Custom gateways | header name (selectable presets + custom) + secret value |
+| **Client certificate (mTLS)** | Hardened enterprise mirrors | client cert + key (+ optional passphrase); upload or host path allowlist |
+| **Netrc / machine identity** | Host-local agent fetch | “use agent netrc for this host” (advanced) |
+
+Probe/test connection **before** enable: HEAD/GET MANIFEST or small object; show latency, TLS peer, HTTP status. Failures quarantine the repo (same spirit as MCP health).
+
+#### Operator flows
+
+1. **Add repository** → URL + path template + auth + TLS → **Test** → Save  
+2. **Sync base** → pick repo + release + arch + components → Task (stream progress) → appears under Library → Base jails  
+3. **Create jail** → choose base from **cached list** (filter by release/arch); if missing, “Fetch…” opens sync with repo preselected  
+4. **Default repo** per cluster (Settings or Library) for auto-suggest on wizard  
+
+#### Non-goals (v1)
+
+- Building bases from source on the host as the primary path  
+- Freeform `curl | tar` paste boxes in the jail wizard  
+- Storing repo passwords in browser localStorage or mock “show secret” after save  
+
+#### API key scopes (related)
+
+Grant separately: `library.read`, `library.repo.manage`, `library.base.sync` — CI may sync bases without full jail create, or create jails only from already-cached bases.
 
 ---
 

@@ -511,6 +511,15 @@
       "m-snapshot-revert": function () {
         toast("Revert to snapshot started · task queued", "info");
       },
+      "m-repo-add": function () {
+        toast("Repository saved · probe OK", "ok");
+      },
+      "m-repo-test": function () {
+        toast("Repository probe OK", "ok");
+      },
+      "m-base-sync": function () {
+        toast("Base fetch started · see Tasks", "info");
+      },
       "m-backup-policy": function () {
         toast("Backup policy saved", "ok");
       },
@@ -792,6 +801,21 @@
         toast("Domain: " + mode, "info");
         return;
       }
+    }
+    /* Repo HTTPS auth method chips */
+    var authBtn = e.target.closest("[data-repo-auth]");
+    if (authBtn) {
+      e.preventDefault();
+      var mwrap = authBtn.closest(".modal-b") || document;
+      var am = authBtn.getAttribute("data-repo-auth");
+      qsa("[data-repo-auth]", mwrap).forEach(function (b) {
+        b.classList.toggle("active", b === authBtn);
+      });
+      qsa("[data-repo-auth-panel]", mwrap).forEach(function (p) {
+        p.hidden = p.getAttribute("data-repo-auth-panel") !== am;
+      });
+      toast("Auth: " + am, "info");
+      return;
     }
     var allBtn = e.target.closest("[data-cap-row-all]");
     if (allBtn) {

@@ -746,6 +746,81 @@ def common_modals() -> str:
         primary="Delete", danger=True,
     ))
     m.append(modal(
+        "m-repo-add", "Add repository",
+        field("Name", '<input value="corp-freebsd-mirror"/>')
+        + field("Kind", '<select><option>FreeBSD release mirror</option><option>Generic HTTPS</option></select>')
+        + field("Base URL", '<input class="mono" value="https://mirror.example.lan/freebsd"/>')
+        + field(
+            "Path template",
+            '<select>'
+            '<option selected>/releases/${ABI}/${ARCH}/${RELEASE}/${COMPONENT}.txz</option>'
+            '<option>/pub/FreeBSD/releases/${ARCH}/${RELEASE}/${COMPONENT}.txz</option>'
+            '<option>/artifactory/freebsd/${RELEASE}/${ARCH}/${COMPONENT}.txz</option>'
+            '</select>',
+        )
+        + """
+        <div style="font-size:12px;font-weight:700;margin:10px 0 8px">HTTPS authentication</div>
+        <div class="scope-domain-tabs" data-repo-auth-mode style="margin-bottom:10px">
+          <button type="button" class="chip" data-repo-auth="none">None</button>
+          <button type="button" class="chip active" data-repo-auth="basic">Basic</button>
+          <button type="button" class="chip" data-repo-auth="bearer">Bearer</button>
+          <button type="button" class="chip" data-repo-auth="header">API key header</button>
+          <button type="button" class="chip" data-repo-auth="mtls">Client cert</button>
+        </div>
+        <div data-repo-auth-panel="none" hidden>
+          <div class="alert alert-info">Public mirror — no credentials.</div>
+        </div>
+        <div data-repo-auth-panel="basic">
+          """ + field("Username", '<input value="svc-cloudbsd"/>') + field("Password", '<input type="password" value="••••••••"/>') + """
+        </div>
+        <div data-repo-auth-panel="bearer" hidden>
+          """ + field("Bearer token", '<input type="password" placeholder="Token (stored server-side)"/>') + """
+        </div>
+        <div data-repo-auth-panel="header" hidden>
+          """ + field("Header name", '<select><option>Authorization</option><option>X-Api-Key</option><option>X-JFrog-Art-Api</option></select>') + field("Secret value", '<input type="password"/>') + """
+        </div>
+        <div data-repo-auth-panel="mtls" hidden>
+          """ + field("Client certificate", '<input type="file" accept=".pem,.crt,.p12"/>') + field("Client key", '<input type="file" accept=".pem,.key"/>') + field("Key passphrase", '<input type="password" placeholder="Optional"/>') + """
+        </div>
+        """
+        + field("TLS", '<select><option>Verify system CAs</option><option>Custom CA bundle</option><option>Insecure (debug only)</option></select>')
+        + field("Priority", '<input type="number" value="10"/>')
+        + '<div class="alert alert-info">Test probes MANIFEST / base.txz HEAD before enable. Secrets never re-echoed after save. Product IA §6.4.</div>',
+        primary="Test &amp; save", wide=True,
+    ))
+    m.append(modal(
+        "m-repo-test", "Test repository",
+        """
+        <p>Probe <strong>corp-freebsd-mirror</strong>…</p>
+        <div class="card card-pad mono" style="background:#0f172a;color:#86efac;min-height:100px">
+          TLS: OK · peer CN=mirror.example.lan<br/>
+          HEAD …/14.2-RELEASE/amd64/MANIFEST → 200 · 42ms<br/>
+          Auth: basic · accepted
+        </div>
+        <div class="alert alert-ok" style="margin-top:10px">Repository healthy — safe to enable.</div>
+        """,
+        primary="Done", cancel="Close",
+    ))
+    m.append(modal(
+        "m-base-sync", "Fetch base jail",
+        field("Repository", '<select><option>corp-freebsd-mirror (default)</option><option>freebsd-official</option><option>airgap-usb-cache</option></select>')
+        + field("Release", '<select><option>14.2-RELEASE</option><option>14.1-RELEASE</option><option>13.4-RELEASE</option></select>')
+        + field("Arch", '<select><option>amd64</option><option>aarch64</option></select>')
+        + """
+        <div style="font-size:12px;font-weight:700;margin:8px 0">Components</div>
+        <div class="cap-checks card card-pad" style="margin-bottom:10px">
+          <label><input type="checkbox" checked/> base</label>
+          <label><input type="checkbox" checked/> lib32</label>
+          <label><input type="checkbox"/> src</label>
+          <label><input type="checkbox"/> kernel</label>
+          <label><input type="checkbox" checked/> MANIFEST (always for verify)</label>
+        </div>
+        """
+        + field("Store as", '<input class="mono" value="tank/library/bases/14.2-RELEASE-amd64"/>')
+        + '<div class="alert alert-info">Creates a Task with stream progress. Jail wizard lists the base when complete.</div>',
+        primary="Start fetch", wide=True,
+    ))
+    m.append(modal(
         "m-scrub", "Start ZFS scrub",
         """
         <p>Start scrub on pool <strong>tank</strong>?</p>
@@ -1166,11 +1241,67 @@ def pages() -> dict[str, tuple[str, str, str]]:
         ),
     )
 
+    lib_bases = (
+        page_head("Base jails", "Cached FreeBSD bases for jail create · product IA §6.4",
+                  btn("Fetch base…", primary=True, modal="m-base-sync")
+                  + btn("Manage repos", modal="m-repo-add"))
+        + filter_bar("Filter bases…", ["All", "14.2", "14.1", "amd64", "aarch64"])
+        + table(
+            ["Base", "Release", "Arch", "Components", "Size", "Source repo", "Jails", "Actions"],
+            [
+                ["14.2-RELEASE-amd64", "14.2-RELEASE", "amd64", "base,lib32", "320 MB", "corp-freebsd-mirror", "5",
+                 acts(link("Use", href="../wizards/jail-create.html"), link("Re-sync", modal="m-base-sync"),
+                      link("Delete", modal="m-library-delete", danger=True))],
+                ["14.2-RELEASE-aarch64", "14.2-RELEASE", "aarch64", "base", "290 MB", "freebsd-official", "1",
+                 acts(link("Use", href="../wizards/jail-create.html"), link("Re-sync", modal="m-base-sync"))],
+                ["14.1-RELEASE-amd64", "14.1-RELEASE", "amd64", "base,lib32", "318 MB", "corp-freebsd-mirror", "2",
+                 acts(link("Use", href="../wizards/jail-create.html"), link("Delete", modal="m-library-delete", danger=True))],
+            ],
+        )
+        + '<p style="font-size:12px;color:var(--muted);margin-top:10px">Jail wizard only lists <strong>ready</strong> bases. Missing release → Fetch from a repository (no freeform URL on the wizard).</p>'
+    )
+    lib_repos = (
+        page_head("Repositories", "HTTPS sources for base jails (and future library pull)",
+                  btn("+ Add repository", primary=True, modal="m-repo-add")
+                  + btn("Test default", modal="m-repo-test"))
+        + """
+<div class="alert alert-info">
+  Configurable mirrors with <strong>auth methods</strong>: none, HTTP Basic, Bearer, API key header, client cert (mTLS).
+  Path templates expand <code class="inline">${RELEASE}</code> / <code class="inline">${ARCH}</code> / <code class="inline">${COMPONENT}</code>.
+</div>
+"""
+        + table(
+            ["Status", "Name", "Base URL", "Auth", "TLS", "Priority", "Last probe", "Actions"],
+            [
+                ['<span class="status-ok">● OK</span>', "corp-freebsd-mirror",
+                 '<span class="mono" style="font-size:11px">https://mirror.example.lan/freebsd</span>',
+                 "Basic", "verify", "10", "4s ago",
+                 acts(link("Edit", modal="m-repo-add"), link("Test", modal="m-repo-test"),
+                      link("Fetch base", modal="m-base-sync"), link("Disable", modal="m-confirm-generic", danger=True))],
+                ['<span class="status-ok">● OK</span>', "freebsd-official",
+                 '<span class="mono" style="font-size:11px">https://download.freebsd.org</span>',
+                 "None", "verify", "100", "1h ago",
+                 acts(link("Edit", modal="m-repo-add"), link("Test", modal="m-repo-test"), link("Fetch base", modal="m-base-sync"))],
+                ['<span class="status-warn">◐ Auth</span>', "artifactory-freebsd",
+                 '<span class="mono" style="font-size:11px">https://artifactory.example.lan/freebsd</span>',
+                 "API key header", "custom CA", "20", "fail 401",
+                 acts(link("Edit", modal="m-repo-add"), link("Test", modal="m-repo-test"))],
+                ['<span class="status-off">○ Off</span>', "airgap-mtls",
+                 '<span class="mono" style="font-size:11px">https://airgap.example.lan/rel</span>',
+                 "mTLS", "verify", "5", "—",
+                 acts(link("Edit", modal="m-repo-add"), link("Enable", modal="m-confirm-generic"))],
+            ],
+        )
+    )
     out["library"] = (
         "library.html", "Library",
-        page_head("Content Library", "ISOs · templates · cloud images",
-                  btn("+ Upload", primary=True, modal="m-library-upload"))
+        page_head("Content Library", "Base jails · repositories · ISOs · images · templates",
+                  btn("+ Upload", modal="m-library-upload")
+                  + btn("+ Repository", primary=True, modal="m-repo-add")
+                  + btn("Fetch base", modal="m-base-sync"))
         + tabs([
+            ("bases", "Base jails", lib_bases),
+            ("repos", "Repositories", lib_repos),
             ("isos", "ISOs", table(
                 ["Name", "Size", "Used by", "Actions"],
                 [["FreeBSD-14.2-RELEASE-amd64-disc1.iso", "1.2 GB", "3 VMs",
@@ -1183,7 +1314,7 @@ def pages() -> dict[str, tuple[str, str, str]]:
             )),
             ("templates", "Templates", table(
                 ["Name", "Size", "Used by", "Actions"],
-                [["jail-base-14.2", "320 MB", "5 jails",
+                [["thin-pkg-mirror", "custom layer", "2 jails",
                   acts(link("Use", href="../wizards/jail-create.html"), link("Delete", modal="m-library-delete", danger=True))]],
             )),
         ]),
@@ -2072,6 +2203,8 @@ def modals_gallery() -> dict[str, tuple[str, str]]:
         ("add-host.html", "AddHostDialog", "m-add-host", "Join host wizard-ish"),
         ("create-user.html", "CreateUserModal", "m-create-user", "Access"),
         ("api-key-create.html", "CreateApiKeyModal", "m-api-key", "API key"),
+        ("repo-add.html", "AddRepositoryModal", "m-repo-add", "Base jail HTTPS repo"),
+        ("base-sync.html", "FetchBaseJailModal", "m-base-sync", "Sync base from repo"),
         ("backup-create.html", "BackupCreateModal", "m-backup-policy", "Backup policy"),
         ("snapshot.html", "ManualSnapshotModal", "m-snapshot", "Snapshot"),
         ("migrate-vm.html", "MigrateVmModal", "m-migrate-vm", "Live migrate"),
@@ -2180,12 +2313,47 @@ def wizards() -> dict[str, tuple[str, str]]:
     )
     w["jail-create.html"] = (
         "Create jail",
-        page_head("Create jail", "Template → review", "")
+        page_head("Create jail", "Select cached base → identity → resources → review · IA §6.4", "")
         + tabs([
-            ("template", "1 Template", field("Release", '<select><option>14.2-RELEASE</option></select>')),
-            ("identity", "2 Identity", field("Name", '<input value="pkg-mirror-2"/>')),
-            ("resources", "3 Resources", field("IP", '<input value="10.0.20.11"/>')),
-            ("review", "4 Review", btn("Create", primary=True, modal="m-confirm-generic")),
+            ("base", "1 Base",
+             """
+<div class="ui-rule-banner">Pick a <strong>cached base</strong> from the library. No freeform download URL.</div>
+"""
+             + field("Base", """
+<select>
+  <option selected>14.2-RELEASE-amd64 · base,lib32 · corp-freebsd-mirror · ready</option>
+  <option>14.2-RELEASE-aarch64 · base · freebsd-official · ready</option>
+  <option>14.1-RELEASE-amd64 · base,lib32 · corp-freebsd-mirror · ready</option>
+</select>
+""")
+             + f'<p style="font-size:12px;color:var(--muted)">Need another release? '
+             f'{link("Fetch base from repository…", modal="m-base-sync")} · '
+             f'<a href="../pages/library.html#repos">Manage repositories</a></p>'
+             + f'<div class="actions" style="justify-content:flex-end;margin-top:12px">'
+             f'<button type="button" class="btn btn-primary" data-wiz-next>Next →</button></div>'),
+            ("identity", "2 Identity",
+             field("Name", '<input value="pkg-mirror-2"/>')
+             + field("Hostname", '<input value="pkg-mirror-2.local"/>')
+             + f'<div class="actions" style="justify-content:flex-end">'
+             f'<button type="button" class="btn" data-wiz-back>← Back</button> '
+             f'<button type="button" class="btn btn-primary" data-wiz-next>Next →</button></div>'),
+            ("resources", "3 Resources",
+             field("IP", '<input value="10.0.20.11"/>')
+             + field("Host", '<select><option>Automatic</option><option>prod-node-01</option></select>')
+             + f'<div class="actions" style="justify-content:flex-end">'
+             f'<button type="button" class="btn" data-wiz-back>← Back</button> '
+             f'<button type="button" class="btn btn-primary" data-wiz-next>Next →</button></div>'),
+            ("review", "4 Review",
+             f"""
+<div class="card card-pad">
+  {kv([("Base", "14.2-RELEASE-amd64 (cached)"), ("Repo source", "corp-freebsd-mirror"),
+       ("Name", "pkg-mirror-2"), ("IP", "10.0.20.11")])}
+  <div class="alert alert-ok">Preflight: base present · host capacity OK</div>
+  <div class="actions" style="justify-content:flex-end">
+    <button type="button" class="btn" data-wiz-back>← Back</button>
+    {btn("Create jail", primary=True, modal="m-confirm-generic")}
+  </div>
+</div>"""),
         ]),
     )
     w["volume-create.html"] = (

@@ -846,6 +846,89 @@ fe80::1/64</textarea></div><div class="alert alert-warn">Preflight: changing man
   </div>
 </div>
 
+<div class="modal-backdrop" id="m-repo-add" hidden>
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="m-repo-add-title">
+    <div class="modal-h">
+      <h2 id="m-repo-add-title">Add repository</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><div class="field"><label>Name</label><input value="corp-freebsd-mirror"/></div><div class="field"><label>Kind</label><select><option>FreeBSD release mirror</option><option>Generic HTTPS</option></select></div><div class="field"><label>Base URL</label><input class="mono" value="https://mirror.example.lan/freebsd"/></div><div class="field"><label>Path template</label><select><option selected>/releases/${ABI}/${ARCH}/${RELEASE}/${COMPONENT}.txz</option><option>/pub/FreeBSD/releases/${ARCH}/${RELEASE}/${COMPONENT}.txz</option><option>/artifactory/freebsd/${RELEASE}/${ARCH}/${COMPONENT}.txz</option></select></div>
+        <div style="font-size:12px;font-weight:700;margin:10px 0 8px">HTTPS authentication</div>
+        <div class="scope-domain-tabs" data-repo-auth-mode style="margin-bottom:10px">
+          <button type="button" class="chip" data-repo-auth="none">None</button>
+          <button type="button" class="chip active" data-repo-auth="basic">Basic</button>
+          <button type="button" class="chip" data-repo-auth="bearer">Bearer</button>
+          <button type="button" class="chip" data-repo-auth="header">API key header</button>
+          <button type="button" class="chip" data-repo-auth="mtls">Client cert</button>
+        </div>
+        <div data-repo-auth-panel="none" hidden>
+          <div class="alert alert-info">Public mirror — no credentials.</div>
+        </div>
+        <div data-repo-auth-panel="basic">
+          <div class="field"><label>Username</label><input value="svc-cloudbsd"/></div><div class="field"><label>Password</label><input type="password" value="••••••••"/></div>
+        </div>
+        <div data-repo-auth-panel="bearer" hidden>
+          <div class="field"><label>Bearer token</label><input type="password" placeholder="Token (stored server-side)"/></div>
+        </div>
+        <div data-repo-auth-panel="header" hidden>
+          <div class="field"><label>Header name</label><select><option>Authorization</option><option>X-Api-Key</option><option>X-JFrog-Art-Api</option></select></div><div class="field"><label>Secret value</label><input type="password"/></div>
+        </div>
+        <div data-repo-auth-panel="mtls" hidden>
+          <div class="field"><label>Client certificate</label><input type="file" accept=".pem,.crt,.p12"/></div><div class="field"><label>Client key</label><input type="file" accept=".pem,.key"/></div><div class="field"><label>Key passphrase</label><input type="password" placeholder="Optional"/></div>
+        </div>
+        <div class="field"><label>TLS</label><select><option>Verify system CAs</option><option>Custom CA bundle</option><option>Insecure (debug only)</option></select></div><div class="field"><label>Priority</label><input type="number" value="10"/></div><div class="alert alert-info">Test probes MANIFEST / base.txz HEAD before enable. Secrets never re-echoed after save. Product IA §6.4.</div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Test &amp; save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-repo-test" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-repo-test-title">
+    <div class="modal-h">
+      <h2 id="m-repo-test-title">Test repository</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Probe <strong>corp-freebsd-mirror</strong>…</p>
+        <div class="card card-pad mono" style="background:#0f172a;color:#86efac;min-height:100px">
+          TLS: OK · peer CN=mirror.example.lan<br/>
+          HEAD …/14.2-RELEASE/amd64/MANIFEST → 200 · 42ms<br/>
+          Auth: basic · accepted
+        </div>
+        <div class="alert alert-ok" style="margin-top:10px">Repository healthy — safe to enable.</div>
+        </div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Close</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Done</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-base-sync" hidden>
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="m-base-sync-title">
+    <div class="modal-h">
+      <h2 id="m-base-sync-title">Fetch base jail</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><div class="field"><label>Repository</label><select><option>corp-freebsd-mirror (default)</option><option>freebsd-official</option><option>airgap-usb-cache</option></select></div><div class="field"><label>Release</label><select><option>14.2-RELEASE</option><option>14.1-RELEASE</option><option>13.4-RELEASE</option></select></div><div class="field"><label>Arch</label><select><option>amd64</option><option>aarch64</option></select></div>
+        <div style="font-size:12px;font-weight:700;margin:8px 0">Components</div>
+        <div class="cap-checks card card-pad" style="margin-bottom:10px">
+          <label><input type="checkbox" checked/> base</label>
+          <label><input type="checkbox" checked/> lib32</label>
+          <label><input type="checkbox"/> src</label>
+          <label><input type="checkbox"/> kernel</label>
+          <label><input type="checkbox" checked/> MANIFEST (always for verify)</label>
+        </div>
+        <div class="field"><label>Store as</label><input class="mono" value="tank/library/bases/14.2-RELEASE-amd64"/></div><div class="alert alert-info">Creates a Task with stream progress. Jail wizard lists the base when complete.</div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Start fetch</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-backdrop" id="m-scrub" hidden>
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-scrub-title">
     <div class="modal-h">
