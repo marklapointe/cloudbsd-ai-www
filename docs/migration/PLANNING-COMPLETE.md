@@ -49,7 +49,11 @@
 5. Prefer shared `ResourceTable` / `EmptyState` / density CSS over per-resource forks.  
 6. Management UX: describe → preflight → confirm → execute; view-only is a role.  
 7. **MCP is the plugin system** — implement Configure → MCP (`/mcp`), not a separate Plugins product.  
-8. Target FreeBSD; no Linux-only assumptions; git author Mark LaPointe \<mark@cloudbsd.org\>.
+8. **API keys with scopes** (resource × action × domain); snapshots include **revert** as separate grant — plan Rule #10 / IA §3.2a.  
+9. **Selectable catalogs only** for roles/resources/scopes — no freeform capability text — plan Rule #11.  
+10. **Base jails via HTTPS repositories** (auth methods, path templates, cached bases) — plan Rule #12 / IA §6.4.  
+11. Target FreeBSD; no Linux-only assumptions; git author Mark LaPointe \<mark@cloudbsd.org\>.  
+12. Read **Canonical Methodology** in `.sisyphus/plans/angular-migration.md` (Rules #1–#12).
 
 ### Suggested first implementation PR stack
 
@@ -78,10 +82,12 @@
 - Audit under Observe  
 - Network Map as view on Networks  
 - Tasks page mandatory  
-- Content Library (ISOs/templates) is spine (150-spine-library)  
+- Content Library is spine: ISOs/templates **plus Base jails + Repositories** (IA §6.4)  
 - Hosts vs Cluster split as IA  
 - Account vs Settings vs System split as IA  
 - **MCP is the plugin system** — Configure → MCP (`/mcp`); no separate Plugins product  
+- API keys always scoped; roles/scopes use selectable catalogs only  
+- Jail create uses cached bases from configured repos (not freeform URLs)  
 
 ---
 

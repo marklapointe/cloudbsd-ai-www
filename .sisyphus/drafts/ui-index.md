@@ -1080,7 +1080,38 @@ Legacy plugin registry/install mocks (`17-plugins`, `81`, `131–133`) are **SUP
 | `161-mcp-server-detail.svg` | Tools, health, config (secrets masked) |
 | `162-mcp-add-wizard.svg` | Add HTTP / SSE / stdio server |
 
-Product IA §3.5. Catalog: S18 → MCP.
+Product IA §3.5. Catalog: S18 → MCP. Plan: **angular-migration Rule #3**.
+
+### API keys, scopes, snapshots (2026-07-16 — plan Rule #10)
+
+- **Access → API keys** (service/CI) and **Account → API tokens** (personal).
+- Every key has **scopes**: resource type × actions × domain (all / list / tag / pattern).
+- System resources first: vm, jail, container, volume, network, host, …
+- Snapshot actions are first-class and **split**: `snapshot.create`,
+  `snapshot.delete`, `snapshot.revert` (CI often wants create+revert only).
+- Domain **list** = multi-select inventory; **tag** = existing tags;
+  **pattern** = preset/glob with live match preview.
+- Deny by default; cannot exceed principal role.
+- HTML: `html-mockups/pages/api-keys.html`; VM detail Snapshots → Revert.
+- Canonical: product IA §3.2a; **angular-migration Rule #10**.
+
+### Selectable catalogs only (2026-07-16 — plan Rule #11)
+
+**Forbidden:** freeform textareas for role capabilities or resource name lists
+in create/edit scopes.
+
+**Required:** capability matrix / checkboxes from server catalog; searchable
+multi-select for inventory and tags. Plan: **angular-migration Rule #11**.
+
+### Base jails & HTTPS repositories (2026-07-16 — plan Rule #12)
+
+- **Library → Repositories**: HTTPS sources with auth
+  (none | basic | bearer | API key header | mTLS), path templates, TLS policy, probe.
+- **Library → Base jails**: cached bases after fetch Task.
+- **Jail create**: select **cached base** only; “Fetch from repo…” if missing —
+  no freeform base URL on the wizard.
+- HTML: Library tabs Base jails + Repositories; jail wizard step 1.
+- Canonical: product IA §6.4; **angular-migration Rule #12**.
 
 
 ## §28 — Contextual edit modal pattern (2026-07-10)

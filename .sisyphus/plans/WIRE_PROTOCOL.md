@@ -2152,3 +2152,60 @@ a convenience, not a critical path. Headless flows that need it
 today can use the existing password + recovery-codes path
 (which always works, even when the rest fails &mdash; see
 `ui-index.md §26 capability cascade`).
+
+---
+
+## §2.33 — API key scopes & library base-jail repositories (2026-07-16)
+
+> Canonical product rules: `angular-migration.md` **Rules #10–#12** and
+> `docs/migration/product-ia-esxi-vsphere-2026-07-16.md` §3.2a / §6.4.
+
+### API keys
+
+- Every key carries a **scope document** (array of entries).
+- Entry shape:
+
+```json
+{
+  "resource": "vm",
+  "actions": ["read", "snapshot.create", "snapshot.revert"],
+  "domain": { "mode": "pattern", "value": "ci-*" }
+}
+```
+
+- `domain.mode`: `all` | `list` | `tag` | `pattern`
+  - `list`: `{ "mode": "list", "ids": ["…"] }` from inventory multi-select (never freeform paste-only).
+  - `tag`: `{ "mode": "tag", "tags": ["ci=true"] }` from known tags.
+  - `pattern`: `{ "mode": "pattern", "value": "ci-*" }` only after server returns non-empty preview matches.
+- Authorization: deny by default; match resource type + action + domain; **intersect** with principal role.
+- Snapshot verbs are **separate**: `snapshot.create`, `snapshot.delete`, `snapshot.revert`.
+- Wire: send key as bearer/API header per existing auth; server attaches `X-CloudBSD-Who` = key principal.
+- Suggested endpoints (implement with Access / Account surfaces):
+
+| Method | Path | Notes |
+|--------|------|-------|
+| GET/POST | `/api/access/api-keys` | Service keys |
+| GET/PATCH/DELETE | `/api/access/api-keys/{id}` | Incl. scope replace |
+| POST | `/api/access/api-keys/{id}/rotate` | Rule #8 preflight |
+| GET/POST | `/api/account/tokens` | Personal tokens |
+| POST | `/api/access/api-keys/preview-domain` | Pattern/tag match preview for UI |
+
+### Library repositories & base jails
+
+| Method | Path | Notes |
+|--------|------|-------|
+| GET/POST | `/api/library/repos` | HTTPS repo config (auth secrets write-only) |
+| POST | `/api/library/repos/{id}/probe` | Test connection (TLS + MANIFEST/HEAD) |
+| GET | `/api/library/bases` | Cached bases |
+| POST | `/api/library/bases/sync` | Body: repo, release, arch, components → **Task** |
+| GET | `/api/library/bases/{id}` | Detail |
+
+Auth methods on repo: `none` | `basic` | `bearer` | `header` | `mtls`.  
+Path templates expand `${RELEASE}`, `${ARCH}`, `${ABI}`, `${COMPONENT}`.  
+Jail create API accepts **base_id** (cached) only — not a raw URL.
+
+### Stream topics (suggested)
+
+- `library.repo.health`, `library.base.sync.progress`, `library.base.ready`
+- `api-key.created`, `api-key.rotated`, `api-key.revoked` (in addition to existing `api-key.rotated`)
+

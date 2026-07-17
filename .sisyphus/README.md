@@ -9,12 +9,15 @@ Tracked and untracked planning artifacts for CloudBSD Admin.
 
 | Need | File |
 |------|------|
-| Product IA | `drafts/product-ia-esxi-vsphere-2026-07-16.md` or `docs/migration/…` |
-| UI order rules | `drafts/ui-index.md` |
-| Execution plan | `plans/angular-migration.md` |
+| Product IA | `docs/migration/product-ia-esxi-vsphere-2026-07-16.md` (canonical) · `drafts/` mirror |
+| UI order rules | `drafts/ui-index.md` (incl. Rules #10–12 notes) |
+| Execution plan + **Canonical Methodology** | `plans/angular-migration.md` (**Rules #1–#12**) |
 | Wire protocol | `plans/WIRE_PROTOCOL.md` |
+| Component catalog | `docs/migration/component-catalog-plan.md` |
+| HTML mockup kit | `plans/html-mockups/` |
 | Data models | `drafts/data-structures.md` |
 | Screen deltas | `drafts/ADJUSTMENTS.md` |
+| Planning handoff | `docs/migration/PLANNING-COMPLETE.md` |
 
 ## Layout
 

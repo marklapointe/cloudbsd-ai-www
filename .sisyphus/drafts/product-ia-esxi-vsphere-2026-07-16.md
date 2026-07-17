@@ -25,7 +25,7 @@ CloudBSD Admin is the **control plane for a FreeBSD-based hypervisor stack** int
 | Isolation | (containers elsewhere) | **Jails** + OCI containers |
 | Storage | VMFS / vSAN | **ZFS** (datasets, snapshots, scrub, send/receive) |
 | Cluster | vCenter | Multi-node + CARP VIP, join tokens, drain |
-| Client | vSphere Client | This Angular admin UI + plugin-extensible backend |
+| Client | vSphere Client | This Angular admin UI + **MCP-extensible** backend |
 | Auth | SSO / AD / local | PAM + PassKey / TOTP / LDAP / SAML |
 
 **Product center of value**: inventory and operate VMs, jails, containers, ZFS volumes, hosts (nodes), networking, and cluster health on FreeBSD — with full day-2 ops (create, power, migrate, snapshot, backup, update), not a theme browser.
@@ -90,7 +90,7 @@ Observe
 
 Configure
   Settings                   # System configuration only (see §4)
-  Plugins                    # One home only (not also buried in Settings)
+  MCP                        # MCP is the plugin system (registry of MCP servers)
 
 Operate
   System                     # Backups, Updates, Diagnostics, Exports, Maintenance
@@ -99,6 +99,7 @@ Operate
 # REMOVED from primary sidebar:
 #   Status as separate item  → merge into System → Diagnostics / Dashboard health
 #   Nodes AND Cluster both as host lists → Hosts = inventory; Cluster = cluster services
+#   Plugins as a separate concept  → MCP (servers + tools + install)
 ```
 
 Footer (sidebar): connected host display name + uptime (no geolocation).
@@ -116,6 +117,123 @@ Sign out
 ```
 
 **My Account is not Admin Settings.** Personal 2FA, theme, and personal API keys live under the avatar menu (or `/account/*`), never mixed with cluster VIP / NTP.
+
+### 3.2a API keys and scopes (required)
+
+API keys are **not** “full admin unless we remember to restrict them.”  
+Every key has an explicit **scope document** evaluated on every wire action (same axis as RBAC + Rule #8 preflight).
+
+#### Two homes (do not merge)
+
+| Kind | Surface | Typical use |
+|------|---------|-------------|
+| **Personal access token** | My Account → API tokens | Human operator automation under their identity |
+| **Service / CI key** | Access → API keys | Pipelines, agents, Terraform — owned by a service principal or admin-created bot user |
+
+Both use the **same scope model**. Service keys may not broaden beyond what the creating admin can grant.
+
+#### Scope model (v1)
+
+A key is authorized only when **all** of these match:
+
+1. **Resource type** — what kind of object (system-facing inventory first)  
+2. **Actions** — what verbs on that type  
+3. **Domain** — which instances (all of type, or a bound set)
+
+```
+scope entry = {
+  resource:  vm | jail | container | volume | network | host | cluster | task | library | system | mcp | …
+  actions:   [ read | create | update | delete | power | migrate | console
+               | snapshot.create | snapshot.delete | snapshot.revert
+               | backup | attach | … ]
+  domain:    { mode: all | list | pattern | tag }
+             // list:    ids / names
+             // pattern: name globs e.g. ci-*, tank/vms/ci/*
+             // tag:     resources labeled e.g. env=ci
+}
+```
+
+**Deny by default.** Missing resource type or action ⇒ 403.  
+**Intersect with user/role:** key cannot exceed the principal’s role capabilities.
+
+#### System resources (start here)
+
+| Type | Example actions | Notes |
+|------|-----------------|--------|
+| **vm** | read, create, update, delete, power, migrate, console, **snapshot.create**, **snapshot.delete**, **snapshot.revert** | Core CI + day-2 |
+| **jail** | read, create, update, delete, power, snapshot.* | FreeBSD-native |
+| **container** | read, create, update, delete, power, logs | OCI |
+| **volume** | read, create, update, delete, snapshot.*, clone, scrub | ZFS datasets |
+| **network** | read, create, update, delete, attach | Bridges/VLANs/pools |
+| **host** | read, drain, maintenance | Usually not on CI keys |
+| **cluster** | read | Membership/VIP — rarely on CI |
+| **task** | read, cancel | See job status for long ops |
+| **library** | read, upload | ISO/template pull for create |
+| **system** | backups, updates, diagnostics, exports | Admin-only keys |
+| **mcp** | read, register, invoke | Separate from hypervisor CRUD |
+
+#### Domain binding (CI pattern)
+
+| Domain mode | Meaning | Example |
+|-------------|---------|---------|
+| **all** | Every object of that type the principal can see | Break-glass / platform CI |
+| **list** | Explicit IDs/names | `nextcloud`, `ci-runner-01` |
+| **pattern** | Name or ZFS path glob | `ci-*`, `tank/vms/ci/*` |
+| **tag** | Label selector | `pipeline=gha`, `env=staging` |
+
+**CI snapshot-only key (recommended template):**
+
+| Resource | Actions | Domain |
+|----------|---------|--------|
+| vm | `read`, `snapshot.create`, `snapshot.revert`, `snapshot.delete` | pattern `ci-*` **or** tag `ci=true` |
+| task | `read` | all (or tasks spawned by this key) |
+| — | no create/delete/power/migrate/console | — |
+
+That lets a pipeline snapshot before deploy and **revert** on failure without the ability to destroy the VM or touch prod inventory.
+
+#### Snapshots (yes — first-class)
+
+Snapshots are **not** an afterthought:
+
+| Surface | Coverage |
+|---------|----------|
+| VM detail → Snapshots tab | list, create, delete, clone, **revert/rollback** |
+| Volume/dataset detail → Snapshots | ZFS snapshots on storage |
+| Storage → Snapshots (cluster view) | cross-dataset list |
+| Confirm + Rule #8 preflight | pool space, VM state for in-place revert, etc. |
+| Tasks | long snapshot/send/revert jobs |
+| **API key actions** | `snapshot.create` / `snapshot.delete` / `snapshot.revert` as separate grants |
+
+**Revert** (rollback to snapshot) is a distinct capability from create — grant it deliberately (CI often wants create+revert; rarely wants delete of arbitrary snaps).
+
+#### UI requirements
+
+- Create/edit key wizard: name, expiry, owner, **scope builder** (resource × actions × domain), review summary  
+- Key list columns: name, owner, expiry, **scope summary** (e.g. `vm:snapshot* @ 12 VMs`), last used  
+- Key detail: full scope table, rotate, revoke  
+- Audit: every API call logs key id + matched scope entry + target resource  
+
+#### UI: selectable only — no freeform capability strings
+
+Free-text boxes for roles/capabilities/resource names are **forbidden** in create/edit flows (typos become silent over- or under-privilege).
+
+| Field | Control |
+|-------|---------|
+| **Role capabilities** | Grouped checklist of known actions per resource type (from server catalog) |
+| **API key resource type** | Single-select from catalog (vm, jail, …) |
+| **API key actions** | Multi-select checkboxes for that type (only valid verbs shown) |
+| **Domain: all** | Radio / chip — no text |
+| **Domain: list** | **Searchable multi-select** of live inventory (VMs, jails, …); pick from list |
+| **Domain: tag** | Multi-select of **existing** tags (or create-tag flow elsewhere), not free CSV |
+| **Domain: pattern** | Prefer **preset patterns** from inventory prefixes + optional advanced glob with live **preview matches** (must show matching objects before save) |
+
+**Roles** use the same action catalog as keys (role = default capability set for humans; key scopes refine further).
+
+#### Non-goals (v1)
+
+- OAuth2 delegated third-party app marketplace  
+- Per-field attribute ACLs  
+- Impersonation of other users without an explicit admin scope  
 
 ### 3.3 Cluster vs Hosts
 
@@ -136,6 +254,22 @@ Node detail remains the place for per-host ZFS / NICs / GPUs / resident VMs.
 | Cluster addressing | **Settings → Networking** | Cluster VIP/CARP, upstream DNS/NTP defaults |
 
 NTP appears **once** (Settings → Host/cluster defaults or Networking), not in both General and Network.
+
+### 3.5 MCP = plugins (extension model)
+
+CloudBSD Admin does **not** maintain a parallel “plugin package” product next to MCP.
+**MCP servers are how the product is extended.**
+
+| Concern | Product surface |
+|---------|-----------------|
+| List / enable / disable servers | **MCP** list page |
+| Add server (HTTP/SSE/stdio) | **MCP → Add** wizard |
+| Probe health + list tools | **MCP → detail** |
+| Secrets (headers, env) | Stored server-side; UI never echoes full secrets |
+| Menu/pages from tools | Backend maps MCP tools → actions/manifest (replaces old plugin templates) |
+| Legacy “plugin” mocks (`17-plugins`, `131–133`) | **SUPERSEDED** by MCP registry mocks (`160-mcp-*`) |
+
+Transports (v1): **HTTP (streamable)**, **SSE**, **stdio** (agent-local / host sidecar).
 
 ---
 
@@ -183,14 +317,14 @@ React `Settings.tsx` is still **license + language/TZ + demo/SSL/CORS** — not 
 | Section | Contents |
 |---------|----------|
 | Backups | Policies **and** job runs (merge former Settings backup-config + System backups) |
-| Updates | Agent, plugins, FreeBSD patches |
-| Diagnostics | Auth capabilities, preflight, connection health (absorb Status) |
+| Updates | Agent, MCP server packages, FreeBSD patches |
+| Diagnostics | Auth capabilities, preflight, connection health, MCP health (absorb Status) |
 | Exports / support bundle | Config, logs, cluster state (not theme-library vanity exports as primary) |
 | Maintenance | Maintenance mode, drain all, emergency tools |
 
 **Single home rules**:
 
-- Plugins → `/plugins` only  
+- **MCP** → `/mcp` only (was “Plugins”; MCP **is** the extension/plugin model)  
 - About / license summary → `/about` (license **register** may stay under Settings → Licensing)  
 - Users → Access → Users (control-plane), not OS dump of `www`/`postgres` by default  
 
@@ -214,6 +348,7 @@ React `Settings.tsx` is still **license + language/TZ + demo/SSL/CORS** — not 
 | Tasks / Jobs | Global long-running ops |
 | Access: Users · Roles · API keys | Control-plane identities |
 | Settings (system) + Account (user) | §4 |
+| **MCP** (servers registry + add + detail) | Extension model — *was Plugins* |
 | System: Backups · Updates · Audit · Diagnostics | Ops hub |
 | About / License | Closed-source product surface |
 
@@ -250,7 +385,7 @@ React `Settings.tsx` is still **license + language/TZ + demo/SSL/CORS** — not 
 | Host inventory, health, maintenance/drain | Partial (Hosts/Nodes) |
 | VM inventory, power, console | Partial (lists + console mock; thin React VMs page) |
 | Create from template / ISO library | Wizards exist; **need content library screen** |
-| Snapshots / rollback | Detail tabs; need job UX |
+| Snapshots / rollback | **First-class**: VM + volume tabs, Storage list, preflight, Tasks; API scopes `snapshot.create|delete|revert` (§3.2a) |
 | ZFS storage | Strong direction |
 | Virtual networking + host NICs | Scattered — unify per §3.4 |
 | Live migrate / evacuate | Mentioned; productize |
@@ -267,8 +402,8 @@ React `Settings.tsx` is still **license + language/TZ + demo/SSL/CORS** — not 
 | HA / failover policy | CARP mock only — not VM HA |
 | Affinity / placement | Missing |
 | Resource pools / quotas | Missing |
-| RBAC roles | Missing as product |
-| Content library | Missing |
+| RBAC roles | Roles + **API key scopes** (§3.2a) — implement with Access |
+| Content library | Library spine + **base-jail repos** (§6.4) — implement |
 | Distributed switch analog | Not modeled |
 | Storage policies / replication intent | ZFS send/receive tasks only |
 | Tags / folders | Tags in model; no folder UX |
@@ -281,6 +416,69 @@ React `Settings.tsx` is still **license + language/TZ + demo/SSL/CORS** — not 
 - bhyve + containers on one control plane  
 - PAM / host-native auth  
 - CARP, pf, if_bridge as real nouns in UI  
+- **Configurable base-jail repositories** (not hard-coded FreeBSD.org only) — §6.4  
+
+### 6.4 Base jails & content repositories (required)
+
+Jail create must not depend on a single hard-coded download URL or a free-typed path.
+Operators configure **repositories**; the control plane **fetches and caches** base jail artifacts (and related sets) for selected FreeBSD releases.
+
+#### Homes
+
+| Surface | Purpose |
+|---------|---------|
+| **Library → Base jails** | Cached bases on cluster storage (release, arch, size, last sync, used by N jails) |
+| **Library → Repositories** | Remote sources used to obtain bases (and optionally ISOs/templates later) |
+| **Jail create wizard → Base** | **Selectable** list of ready bases (and “fetch from repo…” if missing) — no freeform URL |
+
+#### Repository model
+
+```
+repo = {
+  id, name, enabled, priority,
+  kind: freebsd-release | generic-https | oci-optional-later,
+  base_url,                    // https://…
+  path_template,               // e.g. /releases/${ABI}/${ARCH}/${RELEASE}/base.txz
+  releases: [ selectable from probe or pinned list ],
+  arches: [ amd64, aarch64, … ],
+  auth: { method, … },         // see below — secrets server-side only
+  tls: { verify: true | custom-ca | insecure-debug },
+  proxy: optional,
+  last_probe, health
+}
+```
+
+**Path templates** use known variables (`RELEASE`, `ARCH`, `ABI`, `COMPONENT` ∈ base|lib32|src|kernel|MANIFEST) so private mirrors and official FreeBSD layouts both work without freeform per-jail URLs.
+
+#### HTTPS authentication (configurable per repo)
+
+| Method | When | UI fields (secret never re-echoed) |
+|--------|------|-------------------------------------|
+| **None** | Public FreeBSD mirrors | — |
+| **HTTP Basic** | Private mirrors | username + password |
+| **Bearer token** | CI/Artifactory-style | token |
+| **API key header** | Custom gateways | header name (selectable presets + custom) + secret value |
+| **Client certificate (mTLS)** | Hardened enterprise mirrors | client cert + key (+ optional passphrase); upload or host path allowlist |
+| **Netrc / machine identity** | Host-local agent fetch | “use agent netrc for this host” (advanced) |
+
+Probe/test connection **before** enable: HEAD/GET MANIFEST or small object; show latency, TLS peer, HTTP status. Failures quarantine the repo (same spirit as MCP health).
+
+#### Operator flows
+
+1. **Add repository** → URL + path template + auth + TLS → **Test** → Save  
+2. **Sync base** → pick repo + release + arch + components → Task (stream progress) → appears under Library → Base jails  
+3. **Create jail** → choose base from **cached list** (filter by release/arch); if missing, “Fetch…” opens sync with repo preselected  
+4. **Default repo** per cluster (Settings or Library) for auto-suggest on wizard  
+
+#### Non-goals (v1)
+
+- Building bases from source on the host as the primary path  
+- Freeform `curl | tar` paste boxes in the jail wizard  
+- Storing repo passwords in browser localStorage or mock “show secret” after save  
+
+#### API key scopes (related)
+
+Grant separately: `library.read`, `library.repo.manage`, `library.base.sync` — CI may sync bases without full jail create, or create jails only from already-cached bases.
 
 ---
 

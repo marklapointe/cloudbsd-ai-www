@@ -71,12 +71,14 @@
    product IA reframes permanent view-only as incorrect for ESXi
    replacement. See `product-ia-esxi-vsphere-2026-07-16.md` §2.1.)*
 
-2. **Frost-out session modal on auth failure.** When the session
-   validation fails OR the admin role drops below the requirement
-   for the current view, the UI fades to gray and shows the
-   frost-out modal. NO dedicated /401, /session-expired, /invalid
-   screen (we return the user to /login instead — verified
-   2026-07-09).
+2. **Frost-out on auth/session failure → return to `/login`.**
+   When the session validation fails OR the admin role drops below
+   the requirement for the current view, the **live app** frosts the
+   UI and routes the operator to `/login` (no permanent stuck overlay).
+   Planning mockups may include a **non-blocking**
+   `session-expired.html` page for copy/layout review only — never
+   inject a global Session-expired blocker on every screen.
+   *(Clarified 2026-07-16: frost is runtime behavior, not a page-wide mock overlay.)*
 
 3. **MCP-extensible (MCP = plugins).** Product extensions are
    **registered MCP servers** (HTTP / SSE / stdio), not a separate
@@ -120,7 +122,79 @@
    second host table).
 5. **Users** = control-plane identities by default (not full OS account dump).
 
-Canonical doc: `.sisyphus/drafts/product-ia-esxi-vsphere-2026-07-16.md`.
+Canonical docs (keep in sync):
+- `docs/migration/product-ia-esxi-vsphere-2026-07-16.md` (tracked)
+- `.sisyphus/drafts/product-ia-esxi-vsphere-2026-07-16.md` (mirror)
+- Agent index: `docs/migration/README.md`
+- HTML mockups: `.sisyphus/plans/html-mockups/` (experiment kit)
+
+### Rule #10 — API keys require scopes (resource × action × domain) (2026-07-16)
+
+> Product requirement: keys are not ambient full-admin.
+
+1. **Two homes**: personal tokens under **My Account → API tokens**;
+   service/CI keys under **Access → API keys**. Same scope model.
+2. **Scope entry** = resource type + actions + domain:
+   - **Types (system resources first):** `vm`, `jail`, `container`,
+     `volume`, `network`, `host`, `cluster`, `task`, `library`,
+     `system`, `mcp`, …
+   - **Actions:** `read|create|update|delete|power|migrate|console`
+     plus **`snapshot.create` / `snapshot.delete` / `snapshot.revert`**
+     (revert is a separate grant from create).
+   - **Domain:** `all` | **list** (picked inventory) | **tag**
+     (existing tags) | **pattern** (preset/glob with **live match
+     preview** before save).
+3. **Deny by default.** Missing type/action ⇒ 403.
+4. **Intersect with principal role** — key cannot exceed creator/owner role.
+5. **CI snapshot-only template** (recommended):
+   `vm: [read, snapshot.create, snapshot.revert] @ pattern ci-*`
+   + `task: [read]`.
+6. **UI:** scope builder on create/edit; list shows scope summary;
+   audit logs key id + matched scope + target.
+7. **Snapshots are first-class** on VM/volume detail, Storage list,
+   Tasks, and preflight (Rule #8) — not an afterthought.
+
+Canonical: product IA **§3.2a**. Mockups:
+`html-mockups/pages/api-keys.html`, Account tokens tab, VM Snapshots **Revert**.
+
+### Rule #11 — Selectable catalogs only (no freeform roles/resources) (2026-07-16)
+
+> Freeform textboxes for capabilities or resource names are **forbidden**
+> in create/edit flows (typos become silent privilege bugs).
+
+| Field | Required control |
+|-------|------------------|
+| Role capabilities | Grouped **checklist/matrix** from server action catalog |
+| API key resource type | Single-select chips/list from catalog |
+| API key actions | Multi-select checkboxes for that type only |
+| Domain list | Searchable **multi-select of live inventory** |
+| Domain tag | Multi-select of **existing** tags |
+| Domain pattern | Inventory **presets** + optional advanced glob with **preview matches** (empty preview blocks save) |
+
+Roles and API keys share the **same action catalog**.  
+Canonical: product IA §3.2a “UI: selectable only”.  
+Mockups: Create role capability matrix; API key domain pickers.
+
+### Rule #12 — Base jails via configurable HTTPS repositories (2026-07-16)
+
+> Jail create must not hard-code a single FreeBSD.org URL or accept a
+> freeform download path on the wizard.
+
+1. **Library → Repositories**: named HTTPS sources with priority,
+   path templates (`${RELEASE}`, `${ARCH}`, `${COMPONENT}`), TLS policy.
+2. **HTTPS auth (per repo):** none | HTTP Basic | Bearer token |
+   API key header (named header) | client certificate (mTLS).
+   Secrets stored server-side only; never re-echo full secret after save.
+3. **Probe/Test** before enable (MANIFEST / HEAD); unhealthy repos quarantine.
+4. **Library → Base jails**: cached bases (release, arch, components, size,
+   source repo). Fetch/sync is a **Task** with stream progress.
+5. **Jail create wizard**: **select a ready cached base** only.
+   Missing release → “Fetch from repository…” (not a freeform URL box).
+6. API key scopes (when used): `library.read`, `library.repo.manage`,
+   `library.base.sync` distinct from jail CRUD.
+
+Canonical: product IA **§6.4**. Mockups: Library tabs Base jails +
+Repositories; modals add-repo / test / fetch-base; jail wizard step 1.
 
 ### Rule #7 — No cloudbsd or revytech as customer service/hostname
 
@@ -203,6 +277,31 @@ invalidates the cached result (e.g. `vm.memory.updated`,
   calls enumerated in §2.29 topics.
 - Any "view JSON", "see X tab", or "Refresh" appearing in a
   mockup or in API design is a regression — block the PR.
+- Any role/API-key UI with freeform capability text is a regression
+  (Rule #11) — block the PR.
+- Any jail create that requires a typed download URL is a regression
+  (Rule #12) — block the PR.
+- API keys without scopes are a regression (Rule #10) — block the PR.
+- Keep `docs/migration/*` and this plan’s Canonical Methodology in sync
+  when product IA changes; also update `html-mockups` when surfaces change.
+
+### Plan doc map (2026-07-16 product decisions)
+
+| Decision | Plan / docs location |
+|----------|----------------------|
+| Management UX, view-only role | Rule #1; product IA §2 |
+| Frost → login | Rule #2 |
+| MCP = plugins | Rule #3; product IA §3.5; `160-mcp-*` |
+| Live stream | Rule #4 |
+| No body-text nav | Rule #5 |
+| Sample hostnames | Rule #7 |
+| Preflight | Rule #8; `WIRE_PROTOCOL.md` §2.31–2.32 |
+| Account / Settings / System | Rule #9; product IA §3–4 |
+| **API key scopes + snapshots/revert** | **Rule #10**; product IA §3.2a |
+| **Selectable roles/resources** | **Rule #11**; product IA §3.2a UI |
+| **Base-jail HTTPS repos** | **Rule #12**; product IA §6.4 |
+| Component inventory | `docs/migration/component-catalog-plan.md` |
+| HTML walkthrough kit | `.sisyphus/plans/html-mockups/` |
 
 
 

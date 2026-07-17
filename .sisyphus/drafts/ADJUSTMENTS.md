@@ -37,6 +37,14 @@ Sidebar / Settings rules: `.sisyphus/drafts/ui-index.md` §8–§8.1
 | IA-14 | Mock SVGs Settings | 📐 IA | `11-settings` + `60–84` dual models non-canonical until redraw | Follow §8.1 |
 | IA-15 | Mermaid IA | ➕ ADDED | `diagrams/architecture/02-product-ia.md` | Track 1 conceptual diagrams |
 | IA-16 | SVG IA reference set | ➕ ADDED | `diagrams/screens/140-ia-shell-hosts.svg` … `144-ia-system-backups.svg` | Track 2 UI/UX for new sidebar + Account/Settings/System + Cluster services |
+| IA-17 | MCP | 🔄 CHANGED | MCP **is** plugins; Configure → MCP `/mcp`; legacy Plugins SUPERSEDED | Plan Rule #3; IA §3.5; mocks 160-mcp-* |
+| IA-18 | API keys | ➕ ADDED | Scopes: resource × action × domain; personal vs service keys; CI snapshot template | Plan Rule #10; IA §3.2a |
+| IA-19 | Snapshots | 🔄 CHANGED | First-class create/delete/**revert**; separate API grants | Plan Rule #10; VM/volume detail |
+| IA-20 | Roles / scope UI | 🔄 CHANGED | Capability matrix + multi-select inventory — **no freeform** capability text | Plan Rule #11 |
+| IA-21 | Base jails | ➕ ADDED | Configurable HTTPS repos (none/basic/bearer/header/mTLS); cached bases; jail wizard picks base only | Plan Rule #12; IA §6.4 |
+| IA-22 | Library | 🔄 CHANGED | Tabs: Base jails, Repositories, ISOs, images, templates | Plan Rule #12; html-mockups library |
+| IA-23 | Session expired | 🔄 CHANGED | Runtime frost→login; mock is **page** not global blocker | Plan Rule #2 clarified |
+| IA-24 | HTML mockups | ➕ ADDED | `.sisyphus/plans/html-mockups/` interactive kit | Walkthroughs before Angular |
 
 ---
 

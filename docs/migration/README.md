@@ -96,8 +96,11 @@ product-ia (2026-07-16)
 | #7 | No cloudbsd/revytech as customer service hostnames in mock data |
 | #8 | Preflight before presenting actions (hide blockers) |
 | #9 | Account vs Settings vs System; Hosts vs Cluster; Users = control-plane |
+| #10 | **API keys scoped** (resource × action × domain); snapshot.create/delete/**revert** split |
+| #11 | **Selectable catalogs only** — no freeform role/capability/resource-name boxes |
+| #12 | **Base jails via HTTPS repos** (auth methods, path templates, cached bases for jail create) |
 
-Full text: `angular-migration.md` “Canonical Methodology”.
+Full text: `.sisyphus/plans/angular-migration.md` “Canonical Methodology” (source of truth for implementers).
 
 ---
 
