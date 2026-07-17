@@ -12,10 +12,10 @@ This folder is the **only planning home**. Ignore scattered `.sisyphus` drafts u
 | # | Document | Role |
 |---|----------|------|
 | 1 | **[product-ia-esxi-vsphere-2026-07-16.md](./product-ia-esxi-vsphere-2026-07-16.md)** | What we build (IA, scopes, library repos, MCP) |
-| 2 | **[rules.md](./rules.md)** | Non-negotiable Rules #1–#12 |
+| 2 | **[rules.md](./rules.md)** | Non-negotiable Rules #1–#13 (incl. UI↔backend only) |
 | 3 | **[component-catalog-plan.md](./component-catalog-plan.md)** | KEEP/MERGE/ARCHIVE + Angular §7 checklist |
 | 4 | **[implementation.md](./implementation.md)** | Waves, PR stack, handoff |
-| 5 | **[../../.sisyphus/plans/WIRE_PROTOCOL.md](../../.sisyphus/plans/WIRE_PROTOCOL.md)** | Envelope, preflight, stream (when coding API) |
+| 5 | **[../../.sisyphus/plans/WIRE_PROTOCOL.md](../../.sisyphus/plans/WIRE_PROTOCOL.md)** | Envelope, preflight, stream (interim API contract; OpenAPI still TODO) |
 
 ### Visual & interactive
 
@@ -59,6 +59,8 @@ No Mermaid inside SVG. No Tailwind classes inside SVG foreignObject.
 
 **Planning: DONE.** Implementation starts at **W4** (Angular shell).  
 Details: [implementation.md](./implementation.md).
+
+**OpenAPI:** not in repo yet — backend must publish OpenAPI 3.1; until then WIRE_PROTOCOL is the interim contract. UI never talks past the backend (Rule #13).
 
 ---
 

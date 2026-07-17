@@ -2209,3 +2209,18 @@ Jail create API accepts **base_id** (cached) only — not a raw URL.
 - `library.repo.health`, `library.base.sync.progress`, `library.base.ready`
 - `api-key.created`, `api-key.rotated`, `api-key.revoked` (in addition to existing `api-key.rotated`)
 
+
+---
+
+## §2.34 — Client trust boundary & OpenAPI (2026-07-16)
+
+> Plan **Rule #13** (`docs/migration/rules.md`).
+
+1. **Browser clients** (Angular Admin UI) may only call the **Admin backend**:
+   - Same-origin HTTP under `/api/*` (and OpenAPI at `/api/openapi.json` when published)
+   - Stream: `wss://<host>/api/stream` (or equivalent backend URL)
+   - Static UI assets
+2. **No** browser-originated connections to databases, host SSH, bhyve, ZFS CLIs, or package registries.
+3. Resource operations are always **backend actions** (preflight + MIME + audit). The UI does not “drive” infrastructure APIs itself.
+4. **OpenAPI 3.1** is the durable REST contract the backend must serve; until it exists, this WIRE_PROTOCOL document is the interim source of truth for envelopes/actions/stream. OpenAPI generation must not introduce non-backend client paths.
+

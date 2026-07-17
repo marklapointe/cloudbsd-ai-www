@@ -30,6 +30,19 @@ CloudBSD Admin is the **control plane for a FreeBSD-based hypervisor stack** int
 
 **Product center of value**: inventory and operate VMs, jails, containers, ZFS volumes, hosts (nodes), networking, and cluster health on FreeBSD — with full day-2 ops (create, power, migrate, snapshot, backup, update), not a theme browser.
 
+### 1.1 Trust boundary (security)
+
+```
+Operator  ↔  Angular UI (browser)  ↔  Admin backend only
+                                        ↓
+                                 agents / FreeBSD / storage / MCP
+```
+
+- The UI is a **view + action client**. It never opens databases, SSH, or ZFS from the browser.  
+- The operator uses the product **only through the UI** — never by talking to Postgres/SQLite/Redis/hosts as part of the admin app flow.  
+- All resource I/O is **backend-mediated** (REST/actions + stream). **rules.md Rule #13**.  
+- **OpenAPI 3.1** is the target HTTP contract (backend-owned). Until published, **WIRE_PROTOCOL.md** is interim. No ad-hoc browser→infra endpoints.
+
 ---
 
 ## 2. Methodology corrections (2026-07-16)

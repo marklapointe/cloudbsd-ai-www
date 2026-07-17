@@ -83,6 +83,48 @@ Detail: product IA §3.2a UI rules.
 - Jail create: **select cached base only** (or Fetch from repo) — no freeform URL.
 - Detail: product IA §6.4; wire §2.33.
 
+## 13. Trust boundary — UI is a view only (security)
+
+> The Angular app is **not** a host agent, not a DB client, not a package
+> manager, and not a tunnel for the operator into infrastructure.
+
+### Allowed communication
+
+```
+Operator  ←→  Browser (Angular UI)  ←→  CloudBSD Admin backend
+                                          ↓
+                                   hosts / zfs / bhyve / jails / …
+                                   (only via backend + agents)
+```
+
+| Party | May talk to |
+|-------|-------------|
+| **User / operator** | **Only** the UI (browser pages) |
+| **Angular UI** | **Only** the Admin **backend** (`/api/*`, `wss://…/api/stream`, same-origin static assets) |
+| **Backend** | Host agents, FreeBSD tools, SQLite/Postgres **server-side**, MCP servers, configured HTTPS repos |
+
+### Forbidden (block the PR)
+
+- Browser → database (SQL, Mongo, Redis, etc.) — **ever**
+- Browser → host SSH, bhyve, zfs, jail, pf, raw sockets
+- Browser → third-party infra “for convenience” (direct S3, vault, etc.) except **backend-mediated** redirects if product-approved
+- Asking the operator to “run this against the DB” or paste connection strings into the UI that the **browser** then uses
+- Embedding credentials for infra in the frontend bundle
+- “Thick client” logic that mutates cluster state without a backend action + preflight + audit trail
+
+### How the UI talks about resources
+
+1. **Read**: HTTP GET/list or StreamEvent push from **backend** only.  
+2. **Mutate**: POST action (MIME + Who/What/Why/Where) → preflight → confirm → backend executes.  
+3. **Console**: noVNC/websocket **through backend/agent**, not a direct VM IP from the SPA.  
+4. **Secrets**: enter in UI forms; stored/used **only server-side**; never re-echo full secrets.
+
+### OpenAPI
+
+The backend **shall** expose OpenAPI 3.1 (`/api/openapi.json` or equivalent) as the HTTP contract the UI generates against.  
+Until that file exists, **WIRE_PROTOCOL.md** is the interim contract — not ad-hoc browser endpoints.  
+See [implementation.md](./implementation.md) § OpenAPI.
+
 ---
 
 ## PR blockers (quick)
@@ -100,3 +142,5 @@ Detail: product IA §3.2a UI rules.
 | Unscoped API keys | #10 |
 | Freeform capability / resource boxes | #11 |
 | Freeform jail base download URL | #12 |
+| Browser→DB / browser→host / user told to talk to infra | #13 |
+| UI mutating state without backend action | #13 |
