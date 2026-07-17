@@ -125,6 +125,51 @@ The backend **shall** expose OpenAPI 3.1 (`/api/openapi.json` or equivalent) as 
 Until that file exists, **WIRE_PROTOCOL.md** is the interim contract — not ad-hoc browser endpoints.  
 See [implementation.md](./implementation.md) § OpenAPI.
 
+## 14. Backend is the message gateway (authz fan-out)
+
+> The Admin **backend process** owns all messaging. Agents, host
+> tools, MCP, and internal buses **never** push raw events to browsers.
+> The UI is a passive consumer of **backend-issued** envelopes only.
+
+### Responsibilities (backend only)
+
+1. **Ingest** raw events from agents, ZFS, bhyve, jails, MCP, tasks, audit.  
+2. **Authenticate & authorize** every ingress and every egress:
+   - HTTP: valid session cookie **or** scoped API key on every request.  
+   - Stream: upgrade only with valid session + stream token; re-validate
+     session on subscribe, resume, and periodic heartbeat.  
+3. **Repackage** into the canonical envelope / `StreamEvent` (Who/What/Why/Where,
+   topic, id, ts, payload). Strip host-local paths, secrets, and other tenants’ data.  
+4. **Fan-out** only to **eligible** connections:
+   - Session still valid (not expired, not revoked, user not disabled).  
+   - Role + API-key scopes allow that topic/resource (Rules #8, #10).  
+   - Domain binding (list/tag/pattern) matches the event’s object.  
+5. **Drop / quarantine** if session invalid, scope fails, or principal is gone —
+   **no silent delivery**. Client gets disconnect or explicit `type: "error"` /
+   frost path (Rule #2), not leaked events.
+
+### Forbidden
+
+- Broadcasting the same raw agent bus to all WebSockets.  
+- Trusting the client’s `subscribe.topics` without server-side ACL filter
+  (client may *request*; server **accepts a subset** or rejects).  
+- Continuing to push after session revoke / role drop / key disable.  
+- Letting one user’s stream include another user’s private resources
+  (or unscoped cluster secrets).
+
+### Mental model
+
+```
+agents / tools  →  Backend (auth · filter · repackage · route)
+                         │
+         ┌───────────────┼───────────────┐
+         ▼               ▼               ▼
+    user A sockets   user B sockets   API key C
+    (allowed topics) (allowed topics) (scoped topics)
+```
+
+Wire detail: **WIRE_PROTOCOL §2.35**. Complements Rule #13 (UI never bypasses backend).
+
 ---
 
 ## PR blockers (quick)

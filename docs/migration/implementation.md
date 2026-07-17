@@ -65,6 +65,19 @@ User ↔ Browser (Angular) ↔ Backend only ↔ hosts/agents/storage
 - **No** database drivers, raw host tools, or “open this DB in the browser” flows.  
 - Rule **#13** in [rules.md](./rules.md).
 
+### Backend message gateway (mandatory)
+
+The **backend process** is the only party that:
+
+1. Ingests agent/host/MCP/task events  
+2. **Validates session or API key** on every HTTP and stream hop  
+3. **Repackages** into canonical envelopes / StreamEvents (strip secrets, foreign tenants)  
+4. **Fans out** only to connections whose principal may see that resource/topic  
+5. **Stops delivery** immediately on session revoke, expiry, user disable, or key revoke  
+
+Invalid session ⇒ no events, no action commits — not “best effort delivery.”  
+Rule **#14**; wire **§2.35**.
+
 ## OpenAPI / Swagger status
 
 | Item | Status |

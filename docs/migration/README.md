@@ -12,7 +12,7 @@ This folder is the **only planning home**. Ignore scattered `.sisyphus` drafts u
 | # | Document | Role |
 |---|----------|------|
 | 1 | **[product-ia-esxi-vsphere-2026-07-16.md](./product-ia-esxi-vsphere-2026-07-16.md)** | What we build (IA, scopes, library repos, MCP) |
-| 2 | **[rules.md](./rules.md)** | Non-negotiable Rules #1–#13 (incl. UI↔backend only) |
+| 2 | **[rules.md](./rules.md)** | Non-negotiable Rules #1–#14 (UI↔backend only; backend message gateway) |
 | 3 | **[component-catalog-plan.md](./component-catalog-plan.md)** | KEEP/MERGE/ARCHIVE + Angular §7 checklist |
 | 4 | **[implementation.md](./implementation.md)** | Waves, PR stack, handoff |
 | 5 | **[../../.sisyphus/plans/WIRE_PROTOCOL.md](../../.sisyphus/plans/WIRE_PROTOCOL.md)** | Envelope, preflight, stream (interim API contract; OpenAPI still TODO) |

@@ -2224,3 +2224,73 @@ Jail create API accepts **base_id** (cached) only — not a raw URL.
 3. Resource operations are always **backend actions** (preflight + MIME + audit). The UI does not “drive” infrastructure APIs itself.
 4. **OpenAPI 3.1** is the durable REST contract the backend must serve; until it exists, this WIRE_PROTOCOL document is the interim source of truth for envelopes/actions/stream. OpenAPI generation must not introduce non-backend client paths.
 
+
+---
+
+## §2.35 — Backend message gateway (repackage · authorize · fan-out) (2026-07-16)
+
+> Plan **Rule #14** (`docs/migration/rules.md`). Complements §2.29 stream transport and §2.34 client trust boundary.
+
+### Principle
+
+**No raw bus to the browser.** Host agents, discoverers, MCP, and internal queues speak **only to the Admin backend**. The backend:
+
+1. Authenticates the connection  
+2. Authorizes the topic/resource  
+3. Repackages into the canonical `StreamEvent` / action envelope  
+4. Delivers only to eligible sockets / HTTP responses  
+
+### HTTP path
+
+| Step | Requirement |
+|------|-------------|
+| Ingress | Every `/api/*` request carries session cookie **or** scoped API key |
+| Session | Lookup session; reject if missing, expired, revoked, or user disabled (`401` / frost path) |
+| Key | Resolve key; reject if revoked/expired; enforce **scope document** (Rule #10 / §2.33) |
+| Action | Run preflight (Rule #8); execute; audit with `X-CloudBSD-Who` = real principal |
+| Egress | Response body never includes secrets or other principals’ private objects |
+
+### Stream path (`wss://…/api/stream`)
+
+| Step | Requirement |
+|------|-------------|
+| Upgrade | Session cookie + short-lived stream JWT (see §2.29); reject bad/expired |
+| `subscribe` | Client may *request* topics; server **filters** to ACL-allowed set; reply `ack` with `acceptedTopics` and optional `rejectedTopics` |
+| Re-auth | On each subscribe/resume and at least every heartbeat interval, re-check session/key still valid |
+| Fan-out | For each event, compute recipient set = connections where principal may `read` that resource/topic **and** domain binding matches |
+| Revocation | On `session.revoked` / user disable / key revoke: **close sockets immediately**; do not drain remaining queue to that principal |
+| Repackage | Map agent payloads → `StreamEvent` (`id`, `topic`, `kind`, `ts`, `payload`, `stateHash`); strip host secrets, absolute agent-only paths unless role allows |
+
+### Subscribe ACL (server-side)
+
+```text
+requested = client.topics[]
+allowed   = filter(requested, principal.role ∩ principal.scopes ∩ resource.acl)
+if allowed empty and requested non-empty → reject or ack with empty acceptedTopics
+never echo events for topics not in allowed
+```
+
+### Multi-user correctness
+
+- Two admins may both receive `cluster.health` if both have scope.  
+- Operator scoped to `vm @ pattern ci-*` **must not** receive `vm.prod-db-01.*`.  
+- Auditor (read-only role) receives state events, never action-result channels that imply mutate rights they lack.  
+- System/task events fan out only to principals with `task:read` (or broader).
+
+### Failure modes (must not leak)
+
+| Condition | Backend behavior |
+|-----------|------------------|
+| Session expired mid-stream | Close WS; no further frames |
+| Role dropped below view requirement | Close or force re-auth; frost UI on next HTTP |
+| API key disabled | Close all streams for that key; 401 on HTTP |
+| Subscribe to forbidden topic | Omit from `acceptedTopics`; never send those events |
+| Agent sends noisy bus | Backend rate-limits and filters; browser never sees unfiltered bus |
+
+### Implementation notes
+
+- Prefer a single **gateway** module: `SessionRegistry`, `ScopeEvaluator`, `EventRouter`, `EnvelopeFactory`.  
+- Unit-test: “user A must not receive user B’s private subscription.”  
+- Integration-test: revoke session → zero subsequent frames to that socket.  
+- Metrics: `stream.delivered`, `stream.dropped_authz`, `stream.dropped_invalid_session`.
+
