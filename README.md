@@ -86,3 +86,20 @@ Example `config.json`:
 -   `/server`: Node.js backend source code.
 -   `/history`: Historical versions of the project prompts.
 -   `PROMPT.md`: Log of accomplishments and features.
+
+## Angular migration (planning)
+
+Branch: `feat/angular-migration`.
+
+**Start here:** [docs/migration/README.md](docs/migration/README.md) (agent plan index + authority order).
+
+| Doc | Purpose |
+|-----|---------|
+| [Migration index](docs/migration/README.md) | Read order, conflict rules, methodology cheat-sheet |
+| [Product IA (ESXi/vSphere)](docs/migration/product-ia-esxi-vsphere-2026-07-16.md) | Sidebar, Settings/Account/System, screen value matrix |
+| `.sisyphus/plans/angular-migration.md` | Full migration plan + methodology Rules #1–#9 |
+| `.sisyphus/drafts/ui-index.md` | Universal UI ordering rules |
+| `.sisyphus/plans/WIRE_PROTOCOL.md` | Wire protocol envelope + preflight |
+
+Target: FreeBSD control plane (bhyve, jails, OCI, ZFS) as ESXi replacement, Angular 20 frontend.
+

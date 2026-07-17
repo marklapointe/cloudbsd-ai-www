@@ -334,3 +334,25 @@ Audit grep: `grep -rE "Edit LACP bond|live migrate|Mount volume"`
 diagrams/` -- every OLD mockup that showed the action button
 WITHOUT a pre-flight note has been retroactively flagged for
 re-design (T125-T140 covers the retrofit).
+
+---
+
+## 2026-07-16: Product IA for FreeBSD ESXi / vSphere replacement
+
+**Context**: User directed examination of the Angular migration as a FreeBSD ESXi and eventual vSphere replacement; Settings/system/user areas lacked value; some screens did not make sense.
+
+**Mistakes / drift found**:
+1. Permanent "view-only" product stance contradicted create wizards and hypervisor ops.
+2. Two incompatible Settings mockup families (nested Appearance vs full-page Account+Network+Backup).
+3. Cluster and Nodes both presented host lists.
+4. Personal account security mixed with cluster VIP / NTP / backup policies.
+5. Planning weight on themes/MIME/density before product spine.
+
+**Canonical fix**:
+- `.sisyphus/drafts/product-ia-esxi-vsphere-2026-07-16.md` — product IA + value matrix
+- `ui-index.md` §8 / §8.1 / §15 / §16 updated
+- `plans/angular-migration.md` Rule #1 reframed; Rule #9 IA; Must Have/Must NOT updated
+- `ADJUSTMENTS.md` IA revision table 2026-07-16
+- `docs/migration/product-ia-esxi-vsphere-2026-07-16.md` + history snapshot
+
+**Rule for future agents**: Before adding Settings sections or sidebar items, read product IA §3–§4. Do not reintroduce dual Settings models or permanent product-wide view-only.

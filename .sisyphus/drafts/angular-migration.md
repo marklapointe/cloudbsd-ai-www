@@ -1,5 +1,13 @@
 # Draft: CloudBSD-Admin Angular Migration Plan
 
+> **HISTORICAL / NON-CANONICAL** — early interview draft.  
+> **Do not use for product decisions.**  
+> Canonical:
+> 1. `docs/migration/README.md` (agent index)
+> 2. `docs/migration/product-ia-esxi-vsphere-2026-07-16.md`
+> 3. `.sisyphus/plans/angular-migration.md`
+> 4. `.sisyphus/drafts/ui-index.md`
+
 ## User Requirements (confirmed)
 - Plan Angular migration for cloudbsd-admin web UI
 - Check Honcho MCP for diagram and UI/UX guidelines

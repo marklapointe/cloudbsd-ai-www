@@ -1,6 +1,8 @@
 # CloudBSD Admin — UI ↔ Backend Wire Protocol
 
-**Status**: Canonical wire protocol specification. UI mocks in `web-new/src/app/mocks/`
+**Status**: Canonical wire protocol specification. UI mocks in `web-new/src/app/mocks/`  
+**Product IA**: `.sisyphus/drafts/product-ia-esxi-vsphere-2026-07-16.md` (control-plane management UX; view-only is a role).  
+**Agent index**: `docs/migration/README.md`
 implement these exactly so the future Go backend (in `cloudbsd-admin-backend`) is a drop-in replacement.
 
 ---
@@ -1109,14 +1111,21 @@ fire (§2.29 + data-structures.md §6):
 | plugin | `plugin.installed`, `plugin.uninstalled`, `plugin.capabilities.changed` |
 | user/session | `session.revoked`, `api-key.rotated`, `user.role.changed` |
 
-**UI behavior (binding to Rule #1 + Rule #8 together)**:
+**UI behavior (binding to methodology Rule #1 + Rule #8 together)**:
+
+Rule #1 (2026-07-16): **management by default** — describe →
+preflight → confirm → execute. View-only is an **auditor role**,
+not a permanent product-wide hide of all actions. See
+`product-ia-esxi-vsphere-2026-07-16.md` §2.1 and
+`angular-migration.md` Rule #1.
+
 - Action menu is rebuilt on every pre-flight response + every
-  invalidating StreamEvent.
-- Hidden action ⇒ user does not know the option exists; the
+  invalidating StreamEvent (and omitted entirely for auditor role).
+- Hidden action (blocker) ⇒ user does not see the option; the
   unanswered case is "why can't I edit this bond?" — answered
-  by clicking the *nearby* diagnostics widget which links to
-  `92 / 93` (the diagnostics / preflight admin page that
-  lists every failed pre-flight in the cluster).
+  by the diagnostics widget linking to preflight diagnostics
+  screens (`92-auth-capabilities-admin` / `93-preflight-diagnostics-admin`)
+  under **System → Diagnostics**.
 - ⚠ action ⇒ confirm modal says "The following warnings will
   apply: … Acknowledge to proceed."
 

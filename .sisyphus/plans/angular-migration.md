@@ -1,33 +1,46 @@
-# CloudBSD Admin: React → Angular Migration (View-Only + Plugin System)
+# CloudBSD Admin: React → Angular Migration (Hypervisor Control Plane + Plugin System)
+
+> **Agent entry point**: [`docs/migration/README.md`](../../docs/migration/README.md)  
+> **Canonical product IA**: [`../drafts/product-ia-esxi-vsphere-2026-07-16.md`](../drafts/product-ia-esxi-vsphere-2026-07-16.md)  
+> **UI order rules**: [`../drafts/ui-index.md`](../drafts/ui-index.md)  
+> **Wire protocol**: [`WIRE_PROTOCOL.md`](./WIRE_PROTOCOL.md)  
+> **Conflict rule**: product IA (2026-07-16) wins over older body text / SVG mockups in this file.
 
 ## TL;DR
 
-> **Quick Summary**: Big-bang rewrite of the CloudBSD Admin frontend from React 19 to Angular 20 with a **plugin-extensible architecture**, **view-only UX** (writes hidden), **frost-out session modal**, **modular PAM-backed auth**, and a **new backend** that uses **CloudBSD-specific MIME types** (`application/vnd.cloudbsd+<action>`) with `X-CloudBSD-Who/What/Why/Where` headers. The backend can dynamically push new menu items, pages, modals, and wizards via a template manifest — no redeploy required.
+> **Quick Summary**: Big-bang rewrite of the CloudBSD Admin frontend from React 19 to Angular 20 as a **FreeBSD ESXi / eventual vSphere replacement control plane**: plugin-extensible architecture, **full management UX** (describe → preflight → confirm → execute; view-only is an **auditor role**, not the product default), **frost-out session modal**, **modular PAM-backed auth**, and a **new backend** that uses **CloudBSD-specific MIME types** (`application/vnd.cloudbsd+<action>`) with `X-CloudBSD-Who/What/Why/Where` headers. The backend can dynamically push new menu items, pages, modals, and wizards via a template manifest — no redeploy required.
+>
+> **Product IA (2026-07-16)**: Canonical information architecture, Settings/Account/System split, Hosts vs Cluster split, and screen keep/merge/defer matrix live in  
+> **`.sisyphus/drafts/product-ia-esxi-vsphere-2026-07-16.md`**.  
+> Visual ordering: **`.sisyphus/drafts/ui-index.md`** (sidebar §8 updated same date).  
+> Older mockups that mix Account into Settings or show Cluster as a second node table are **non-canonical** until redrawn.
 >
 > **Framework Override**: User has overridden the application_guidelines WEBUI default of "React is the primary frontend framework". Justification: *"angular is now something to be accepted because it is better in some cases"*. Angular 20 is the framework for this project. Documented in Honcho peer memory (`cloudbsd-admin-test-lessons`).
 >
 > **Deliverables**:
-> - **16 canonical screens** + **7 System Management sub-screens** (16-system-1-backups through 16-system-6-updates per T76 option C) + **1 plugins page** (17-plugins per T83) + **8 component mockups** (16-ips-modal, 17-vgpu-pool, 18-add-node-dialog + **5 detail panels: 19-vm, 20-container, 21-jail, 22-volume, 23-node per T78-T82**) + **3 modal mockups** (19-backup-create per T77, 20-plugin-install per T83, 21-theme-import per T84) + 5 interaction flow + 1 architecture (`diagrams/`)
+> - **Product spine screens** (Dashboard, VMs, Containers, Jails, Storage, Networks, Hosts, Cluster services, Tasks, Access, Account, Settings, System, About) + System sub-screens (Backups, Updates, Diagnostics, Exports, Audit) + plugins page + detail panels + wizards (`diagrams/`)
 > - OpenAPI 3.1 spec (`diagrams/openapi.yaml`)
 > - Plugin contract spec (`diagrams/plugin-contract.md`)
 > - Custom MIME-type + header registry (`diagrams/mime-registry.md`)
 > - Wire-protocol envelope spec (`.sisyphus/plans/WIRE_PROTOCOL.md` — `application/vnd.cloudbsd+envelope`)
 > - **Canonical data-structures spec** (`.sisyphus/drafts/data-structures.md` — UnitKind, Quantity, GPU/CPU/Network schemas)
 > - **Canonical UI standard index** (`.sisyphus/drafts/ui-index.md` — universal ordering rules)
-> - New PAM-auth backend (Node.js 24 + Express 5 + libpam)
-> - Angular 20 frontend with plugin template renderer + view-only pages
-> - Karma+Jasmine tests (**100% coverage gate** — user requirement, overrides 80% default)
+> - **Product IA** (`.sisyphus/drafts/product-ia-esxi-vsphere-2026-07-16.md`)
+> - New PAM-auth backend (Node.js 24 + Express 5 + libpam, or Go per later waves)
+> - Angular 20 frontend with plugin template renderer + management pages + RO role mode
+> - Karma+Jasmine tests (**critical-path 100%**; overall **≥80%** unless user reaffirms global 100%)
 > - Stress-test handoff document (`.sisyphus/drafts/STRESS_AGENT.md`) covering 8 chaos scenarios
 > - Unified ErrorHandlingService (no `window.alert()`)
 > - Rate limiting (login 5/15min, lists 600/min, WS 3000 events/min)
-> - VM console via noVNC + websockify (FreeBSD jail sidecar)
+> - VM console via **noVNC** + websockify (FreeBSD jail sidecar)
 > - Playwright visual regression suite + browser console error checks + 8h stability tests
 > - Frost-out session modal component
 > - Git branch `feat/angular-migration` with all artifacts pushed
 >
 > **Estimated Effort**: **XL** (~600-1200 hours; multi-week, multi-phase)
 > **Parallel Execution**: YES — 8 waves, peak 7 concurrent tasks
-> **Critical Path**: Phase 0 → Phase 1 (docs) → Phase 2 (backend core) → Phase 3 (frontend shell + plugin renderer) → Phase 4 (first page slice) → Phase 5 (visual regression + 100% coverage) → Phase 6 (cutover)
+> **Critical Path** (updated 2026-07-16):  
+> Phase 0 (docs/IA) → Phase 1 (Angular shell + auth + stream) → Phase 2 (backend core) → Phase 3 (product spine pages) → Phase 4 (Account/Settings/System split) → Phase 5 (Access + Tasks + Cluster services) → Phase 6 (regression + cutover)
 
 ---
 
@@ -38,13 +51,24 @@
 
 ### Five-rule methodology
 
-1. **View-only by default.** Frontend is a passive receiver. Every
-   "write" is routed through a backend action exposed via the
-   plugin system (`application/vnd.cloudbsd+<action>` MIME +
-   `X-CloudBSD-Who/What/Why/Where` headers). The admin sees a
-   description of what would happen + a Confirm button, never
-   inline edit affordances on data rows.
-   *(Original T243 — Refresh / View-only / Export removal — DONE.)*
+1. **Describe → preflight → confirm → execute (management by default).**
+   The product is a **full hypervisor control plane**, not a permanent
+   read-only dashboard. Every mutating action is still mediated:
+   - Backend action via plugin/MIME (`application/vnd.cloudbsd+<action>`)
+     + `X-CloudBSD-Who/What/Why/Where` headers
+   - Preflight viability (Rule #8) before the action is shown
+   - Confirm modal with a human-readable description of what will happen
+   - No silent inline edits on data rows without confirmation
+   
+   **View-only is a role** (auditor / RO token): hides mutating controls
+   but keeps live inventory. It is **not** the default admin product
+   stance. Create wizards, power ops, migrate, snapshot, backup, and
+   settings saves are first-class for authorized operators.
+   
+   *(Historical T243 removed decorative "View-only" badges / bulk
+   Refresh+Export chrome from resource pages — still good. 2026-07-16
+   product IA reframes permanent view-only as incorrect for ESXi
+   replacement. See `product-ia-esxi-vsphere-2026-07-16.md` §2.1.)*
 
 2. **Frost-out session modal on auth failure.** When the session
    validation fails OR the admin role drops below the requirement
@@ -65,7 +89,9 @@
    wire-protocol spec is at §2.29 and event envelope is at
    `data-structures.md §6 StreamEvent`. Every view displays
    a `● live` indicator with optional `Xs ago` (recipes at
-   `ui-index.md §29`). *(New 2026-07-10.)*
+   `ui-index.md §29`). A **small reconnect/sync control** is
+   allowed only when the stream is disconnected (not as a substitute
+   for live push). *(New 2026-07-10; reconnect clarification 2026-07-16.)*
 
 5. **No sloppy navigation hints in body text.** Phrases like
    "see Network tab or per-VM Disks", "go to Logs →", "View in
@@ -73,6 +99,23 @@
    in the current view, INLINE it. If not, REMOVE the row.
    The left sidebar + breadcrumb are the only legitimate
    navigation surfaces. *(New 2026-07-10.)*
+
+### Rule #9 — Product IA: Settings / Account / System split (2026-07-16)
+
+> Per product examination for FreeBSD ESXi/vSphere replacement.
+
+1. **My Account** (`/account/*`, avatar menu): profile, my security,
+   appearance, personal prefs, personal API tokens.
+2. **Settings** (`/settings/*`, admin): cluster identity, auth methods,
+   host/agent defaults, networking defaults, storage defaults,
+   integrations, licensing — **not** personal 2FA.
+3. **System** (`/system/*`, admin): backups (policies + runs), updates,
+   diagnostics, exports, maintenance.
+4. **Hosts** = host inventory; **Cluster** = cluster services (not a
+   second host table).
+5. **Users** = control-plane identities by default (not full OS account dump).
+
+Canonical doc: `.sisyphus/drafts/product-ia-esxi-vsphere-2026-07-16.md`.
 
 ### Rule #7 — No cloudbsd or revytech as customer service/hostname
 
@@ -464,21 +507,26 @@ Replace the entire CloudBSD Admin frontend (React 19 + Vite) and backend (Expres
 - [ ] Branch pushed to `origin/feat/angular-migration` with all planning artifacts.
 
 ### Must Have
-- 14 Angular pages with **view-only** UX (write controls hidden).
+- Product spine Angular pages with **full management UX** for authorized roles (describe → preflight → confirm → execute).
+- **View-only / auditor role** that can browse inventory without mutations.
+- Account vs Settings vs System IA per `product-ia-esxi-vsphere-2026-07-16.md`.
+- Hosts vs Cluster split (inventory vs cluster services).
 - 47-locale i18n via Angular `$localize` (XLIFF 1.2).
 - Frost-out modal on session validation failure.
 - Plugin template renderer that can render a page/modal/wizard from a JSON manifest.
 - New backend with PAM auth + service discovery.
 - `application/vnd.cloudbsd+*` MIME types + `X-CloudBSD-Who/What/Why/Where` headers.
-- Playwright visual regression for all 14 pages (desktop + mobile).
-- 80% test coverage gate.
+- Playwright visual regression for product spine pages (desktop + mobile).
+- ≥80% test coverage gate; 100% on auth, action preflight, and envelope parsing.
 - WCAG 2.1 Level AA compliance.
+- bhyve console via noVNC (not serial-only).
 
 ### Must NOT Have (Guardrails)
 - No React code in `/web-new` (full migration, no coexistence).
 - No SSR (SPA-only; `angular.json` `"ssr": false`).
 - No Angular Material / PrimeNG / component library (CDK + Tailwind only).
-- No backend write endpoints from the frontend (view-only).
+- No silent mutations without confirm + audit (actions still backend-mediated).
+- No permanent product-wide hide of all write UI (RO is a role).
 - No `localStorage.setItem('token')` (use HttpOnly cookie set by backend).
 - No new dependencies without Angular 20 + Signals compatibility.
 - No re-translation of any locale during migration.
@@ -490,6 +538,7 @@ Replace the entire CloudBSD Admin frontend (React 19 + Vite) and backend (Expres
 - No Co-authored-by trailers in commits.
 - No secrets in any Docker image.
 - No Linux-only assumptions (target = FreeBSD host).
+- No dual Settings models or Cluster-as-host-list regressions.
 
 ---
 

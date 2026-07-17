@@ -1,14 +1,40 @@
 # CloudBSD Admin — Screen Adjustments Table
 
-This table documents every screen adjustment made during the React → Angular migration planning phase. Adjustments are corrections to the original React screens based on user feedback, security review, view-only enforcement, and UX improvements.
+This table documents every screen adjustment made during the React → Angular migration planning phase. Adjustments are corrections to the original React screens based on user feedback, security review, product IA, and UX improvements.
 
 **Legend**:
 - ➕ ADDED — new screen/component
 - ❌ REMOVED — deleted from old version
 - 🔄 CHANGED — modified behavior/layout
-- ⚠️ VIEW-ONLY — write UI hidden (per user requirement)
+- ⚠️ VIEW-ONLY — write UI hidden for **auditor role** (not permanent product default as of 2026-07-16)
 - 🔒 ADMIN-ONLY — restricted to admin role
 - 🌐 i18n — translation considerations
+- 📐 IA — information architecture revision
+
+**Canonical product IA (2026-07-16)**:  
+`.sisyphus/drafts/product-ia-esxi-vsphere-2026-07-16.md`  
+Sidebar / Settings rules: `.sisyphus/drafts/ui-index.md` §8–§8.1
+
+---
+
+## IA Revision 2026-07-16 (FreeBSD ESXi / vSphere replacement)
+
+| # | Surface | Status | Adjustment | Rationale |
+|---|---------|--------|------------|-----------|
+| IA-1 | Product stance | 🔄 CHANGED | Full management UI; view-only is auditor role | Hypervisor replacement cannot be permanently RO |
+| IA-2 | My Account | ➕ ADDED | `/account/*` via avatar: profile, security, appearance, personal tokens | Split user prefs from system config |
+| IA-3 | Settings | 🔄 CHANGED | Admin system config only (cluster, auth methods, defaults, licensing) | Fix dual Settings models (11 vs 60–84) |
+| IA-4 | System | 🔄 CHANGED | Backups (policies+runs), Updates, Diagnostics, Exports, Maintenance | Single ops hub; merge backup config + runs |
+| IA-5 | Hosts vs Cluster | 🔄 CHANGED | Hosts = inventory; Cluster = HA/jobs/events only | Kill dual node tables |
+| IA-6 | Networks | 🔄 CHANGED | Networks inventory primary; Map is view mode | Topology ≠ IPAM |
+| IA-7 | Users | 🔄 CHANGED | Control-plane identities by default | Not OS dump of www/postgres |
+| IA-8 | Tasks | ➕ ADDED | Global job center | Long-running ops visibility |
+| IA-9 | Roles | ➕ ADDED | RBAC (may be Users sub-tab v1) | vSphere-class access |
+| IA-10 | Status page | 🔄 CHANGED | Absorb into System → Diagnostics | Reduce chrome |
+| IA-11 | Themes / density polish | 📐 IA | Deprioritize 15-theme gallery until spine ships | Value after ops |
+| IA-12 | Console | 🔄 CHANGED | noVNC for bhyve (not serial-only xterm) | ESXi parity for installs |
+| IA-13 | Coverage gate | 🔄 CHANGED | ≥80% overall; 100% auth/preflight/envelope | Unblock shipping |
+| IA-14 | Mock SVGs Settings | 📐 IA | `11-settings` + `60–84` dual models non-canonical until redraw | Follow §8.1 |
 
 ---
 

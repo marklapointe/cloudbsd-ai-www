@@ -13,10 +13,15 @@
 |------|-------|
 | Project repo | `git@github.com:cloudbsdorg/cloudbsd-admin-ui.git` (frontend) + `git@github.com:cloudbsdorg/cloudbsd-admin-backend.git` (backend) |
 | Branch | `feat/angular-migration` (will be merged to main post-stress) |
-| Plan | `.sisyphus/plans/angular-migration.md` |
+| **Agent plan index** | `docs/migration/README.md` |
+| Product IA | `docs/migration/product-ia-esxi-vsphere-2026-07-16.md` |
+| Execution plan | `.sisyphus/plans/angular-migration.md` |
+| UI order | `.sisyphus/drafts/ui-index.md` |
+| Wire protocol | `.sisyphus/plans/WIRE_PROTOCOL.md` |
 | Tests | `web-new/src/**/*.spec.ts`, `backend-new/src/**/*.spec.ts` |
 | CI | GitHub Actions (`.github/workflows/`) |
 | Honcho peer | `cloudbsd-admin-test-lessons` |
+| Honcho product session | `cloudbsd-admin-product-2026-07-15` |
 
 ## Required Machine Profile
 

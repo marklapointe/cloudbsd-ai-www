@@ -9,6 +9,12 @@
 >
 > **Constraint note**: The planner (prometheus) is markdown-only — SVGs cannot be written
 > directly. This document is the source-of-truth spec; the executor produces the SVGs.
+>
+> **IA update 2026-07-16**: Nav label is **System** under Operate (not "System Mgmt" in Admin
+> alone). Tabs should evolve toward: Backups (policies+runs), Exports, Diagnostics (absorb
+> Status), Audit, Updates, Maintenance. Stats tiles that count themes/locales are non-operational
+> — prefer capacity/ops metrics. Sidebar item list in § diagrams below is **historical**; use
+> `ui-index.md` §8 + `docs/migration/product-ia-esxi-vsphere-2026-07-16.md` §3–4 for nav.
 
 ---
 

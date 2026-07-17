@@ -3,6 +3,11 @@
 > 2026-07-07. Every menu item, every panel, every column, every button follows
 > these orders. Single source of truth. Updated to "index everything,
 > even menu items" per user feedback.
+>
+> **2026-07-16**: Sidebar §8 / Settings §8.1 / forbidden §16 updated for
+> FreeBSD ESXi/vSphere product IA. Agent entry: `docs/migration/README.md`.
+> Product IA: `docs/migration/product-ia-esxi-vsphere-2026-07-16.md`
+> (mirror: this directory `product-ia-esxi-vsphere-2026-07-16.md`).
 
 ## 1. Resource table column order (UNIVERSAL)
 
@@ -114,32 +119,59 @@ Top-to-bottom in a modal form:
 
 ## 8. Sidebar order (UNIVERSAL)
 
+> **Updated 2026-07-16** — product IA for FreeBSD ESXi/vSphere replacement.
+> Full rationale: `.sisyphus/drafts/product-ia-esxi-vsphere-2026-07-16.md`.
+
 ```
-Overview              (resource links)
+Workload
   Dashboard
   Virtual Machines
   Containers
   Jails
-  Volumes
-  Network Map
-  Cluster
-  Nodes
+  Storage                 (Volumes / ZFS; route may remain /volumes)
+  Networks                (inventory + IP pools; Map is a view mode)
+  Hosts                   (nodes / hosts — inventory only)
+  Cluster                 (HA, jobs, replication, events — NOT a host table)
+  Tasks                   (global long-running ops)
 
-Admin                  (admin tools)
-  Users
+Access
+  Users                   (control-plane identities; not OS service accounts by default)
+  Roles                   (RBAC; may be Users sub-tab in v1)
+
+Observe
   Logs
   Notifications
-  Settings
-  System Mgmt           (consolidated admin actions)
-  Status
-  About
+  Audit                   (compliance trail)
+
+Configure
+  Settings                (system configuration only — see §8.1)
+  Plugins                 (one home only)
+
+Operate
+  System                  (Backups, Updates, Diagnostics, Exports, Maintenance)
+  About                   (versions, license, support)
 ```
+
+**Removed from primary nav**: standalone Status (→ System → Diagnostics / Dashboard health);
+duplicate Nodes+Cluster host lists; Settings as dumping ground for Account/Backup/Plugins.
 
 Footer:
 ```
-Host: cloudbsd-node-01
+Host: prod-node-01
 Uptime: 14d 02:11
 ```
+
+### 8.1 Settings vs Account vs System (UNIVERSAL)
+
+| Surface | Route | Audience | Contents |
+|---------|-------|----------|----------|
+| **My Account** | `/account/*` (avatar menu) | All users | Profile, my 2FA/passkeys/sessions, appearance, locale/TZ, personal notification prefs, personal API tokens |
+| **Settings** | `/settings/*` | Admin | Cluster identity, auth methods, host/agent defaults, networking defaults, storage defaults, integrations, licensing, feature flags |
+| **System** | `/system/*` | Admin | Backups (policies + runs), Updates, Diagnostics, Exports/support bundle, Maintenance |
+
+**Banned**: mixing “change my password” with “cluster CARP VIP” on one Settings page;
+NTP listed under both General and Network; Plugins under Settings **and** top-level;
+Backup config only in Settings while runs live only under System — **one Backup product area under System**.
 
 ## 9. Header order (UNIVERSAL)
 
@@ -197,28 +229,11 @@ Notifications, logs, search results, etc. show:
 
 ## 15. Menu items (UNIVERSAL, per user feedback)
 
-**Top-level main menu (sidebar):**
+**Top-level main menu (sidebar):** see **§8** (2026-07-16 product IA).
 
-```
-[Overview group]
-  1. Dashboard
-  2. Virtual Machines
-  3. Containers
-  4. Jails
-  5. Volumes
-  6. Network Map
-  7. Cluster
-  8. Nodes
-
-[Admin group]
-  9. Users
-  10. Logs
-  11. Notifications
-  12. Settings
-  13. System Mgmt
-  14. Status
-  15. About
-```
+Legacy 15-item list (Dashboard…About with Nodes + System Mgmt + Status) is
+**superseded**. Implementers must use §8 groups: Workload · Access · Observe ·
+Configure · Operate.
 
 **Page sub-navigation** (tabs, when present):
 - Alphanumerical by ID, OR by frequency of use
@@ -241,23 +256,22 @@ Notifications, logs, search results, etc. show:
 2. Alphabetical / numerical after
 3. Custom groups last ("Custom filters...")
 
-**User menu** (avatar dropdown):
-1. Profile
-2. Preferences
-3. API tokens
-4. ---
-5. Sign out
+**User menu** (avatar dropdown) — routes to **My Account**, not Admin Settings:
 
-Note: NO "Keyboard shortcuts" menu item, NO shortcut hint chips beside other items. We have not defined any keyboard shortcuts for this app yet (per user 2026-07-09). When shortcuts are defined, re-introduce as a new item with hint chips, in a separate change.
+1. Profile → `/account/profile`
+2. Preferences → `/account/preferences` (appearance, density, locale, notification prefs)
+3. API tokens → `/account/api-tokens` (personal only)
+4. Help & docs
+5. About
+6. ---
+7. Sign out
+
+Note: NO "Keyboard shortcuts" menu item until shortcuts are defined (2026-07-09).
 
 Mockup: `diagrams/components/88-user-menu-dropdown.svg` (280px panel, anchored top-right under avatar bubble).
-- Identity grid: ulid (click-to-copy) · email · auth (Password + TOTP, with 2FA pill) · session (elapsed + expiry) · ip (with device label, NO geolocation per 2026-06 lessons)
-- Theme picker is a NATIVE `<select>` dropdown (12 themes + Custom…), not inline chips. Selected theme has a left-edge color swatch overlay + ▾ caret on right. "Browse all 12 →" link on the right opens the dedicated themes browser.
-- 5 menu items: Profile · Preferences · API tokens (count badge) · Help & docs · About
-- NO "Keyboard shortcuts" item, NO shortcut hint chips on other items — we have not defined any keyboard shortcuts yet (per user 2026-07-09). Add shortcuts and re-introduce the menu item + hint chips in a separate change.
+- Identity grid: ulid (click-to-copy) · email · auth (Password + TOTP, with 2FA pill) · session (elapsed + expiry) · ip (device label, NO geolocation)
+- Theme picker: native `<select>` for personal theme; full theme browser is polish (defer dense 15-theme gallery until after product spine)
 - Footer: Sign out in red
-
-Why dropdown for theme: 12+ themes don't fit inline chips (overflows 280px panel); user picks ONE at a time, not browse-and-compare; the dedicated Themes browser (66-themes-browser.svg) is the right place for visual comparison. Apply `cursor:pointer` to avatar in chrome wrapper.
 
 **Notifications menu** (bell dropdown):
 1. Notification list (last 10, grouped by date)
@@ -279,22 +293,26 @@ Mockup: `diagrams/components/89-notifications-menu-dropdown.svg` (380px panel, a
 
 ## 16. Forbidden patterns (BANNED)
 
-Per Honcho peer `cloudbsd-admin-test-lessons`:
+Per Honcho peer `cloudbsd-admin-test-lessons` + product IA 2026-07-16:
 - `window.alert()` / `window.confirm()` / `window.prompt()` — use ErrorModalService
-- "View-only" badge (redundant)
-- "Refresh" full button (use small icon)
-- "Export" full button (use /system > Exports)
+- "View-only" **badge** in page chrome (redundant). View-only is a **role**, not a product banner.
+- Permanent product-wide hide of all write controls (contradicts hypervisor replacement). Use RBAC.
+- Presenting actions without preflight viability (see plan Rule #8)
+- "Refresh" full button (use small reconnect/sync when stream is broken; live stream is primary)
+- "Export" full button on resource pages (use System → Exports / support bundle)
 - Geolocation (city, country) for users/hosts/IPs — subnet classification only
 - Git commit hash in About (closed-source)
 - Third-party libraries table (internal IP)
-- FreeBSD/FreeNAS references (it's CloudBSD)
-- "backend OK" in header (redundant with /status)
+- FreeBSD/FreeNAS references in customer copy (product name is CloudBSD)
+- "backend OK" in header (redundant with diagnostics)
 - Backend version in dashboard (only in /about)
 - ASCII diagrams (use Mermaid)
-- Tailwind in SVG without CSS (use inline styles)
+- Tailwind classes in SVG mockups (inline styles only)
 - Default global time-range toolbar (per-panel dropdowns)
-- Admin-only badge in page header (all admin pages are admin-only by definition)
-- Tailwind classes in SVG mockups
+- Admin-only badge in page header
+- Dual Settings models (11-settings nested vs 60–84 full page) — use §8.1 only
+- Cluster page as second host inventory table
+- OS service accounts (`www`, `postgres`) in default Users list without filter
 
 ## 17. Tab order (UNIVERSAL)
 

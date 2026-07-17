@@ -108,10 +108,11 @@ The SVGs render correctly in:
 ## Notes
 
 - All SVGs are 1280×800 unless noted (mobile is 375×812, components are 600×400).
-- All UI is view-only: no Start/Stop/Delete/Save buttons. Only Refresh/Filter/Export/View.
-- Admin-only sections are clearly marked with a lock icon or "Admin-only" badge.
-- Read-only mode is indicated by a yellow banner when applicable.
-- All realistic data: real VM names (nextcloud, jellyfin, mastodon, gitea), real log messages, real FreeBSD hosts.
+- **Product stance (2026-07-16)**: management console by default — create/power/confirm actions are valid. **View-only is an auditor role**, not a permanent product-wide hide of writes. Prefer describe → preflight → confirm patterns over decorative "View-only" banners.
+- Do not put bulk Refresh / Export chrome on resource pages (System → Exports / live stream instead).
+- Admin-only sections need no redundant "Admin-only" page header badge (ui-index §16).
+- Sample data: realistic FreeBSD/bhyve/ZFS names; no cloudbsd/revytech customer service hostnames (plan Rule #7).
+- **IA authority**: `docs/migration/README.md` → product IA + `ui-index.md` §8. Older dual Settings models and Cluster-as-host-list mockups are non-canonical until redrawn.
 
 ## Design Patterns Applied
 
@@ -198,3 +199,14 @@ Apply these patterns in this order (dependency-respecting):
 User: "where are we getting that info from?" - geolocation is an info leak.
 
 NO component/page/API response may include geolocation. Use only subnet classification (rfc1918, link-local, public, loopback) computed locally.
+
+---
+
+## Product IA (2026-07-16)
+
+Screen mockups must follow the canonical product information architecture:
+
+- **`.sisyphus/drafts/product-ia-esxi-vsphere-2026-07-16.md`**
+- **`.sisyphus/drafts/ui-index.md`** §8 (sidebar) and §8.1 (Settings vs Account vs System)
+
+Non-canonical until redrawn: dual Settings models (`11-settings` nested Appearance vs `60–84` full-page mix), Cluster page as a second host inventory table, permanent view-only banners on data pages.
