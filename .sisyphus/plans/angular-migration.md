@@ -78,10 +78,14 @@
    screen (we return the user to /login instead — verified
    2026-07-09).
 
-3. **Plugin-extensible.** New menu items, pages, modals, wizards
-   come from the backend template manifest — no frontend
-   redeploy. The plugin renderer is Angular 20 + the
-   `plugin-contract.md` shape.
+3. **MCP-extensible (MCP = plugins).** Product extensions are
+   **registered MCP servers** (HTTP / SSE / stdio), not a separate
+   legacy plugin package product. The admin UI surface is
+   **Configure → MCP** (`/mcp`): list, add, enable/disable, probe,
+   tool inventory. Backend may still project tools into menus/actions
+   via envelope/manifest; the operator mental model is **MCP registry**.
+   Legacy plugin mocks (`17-plugins`, install wizard 131–133) are
+   SUPERSEDED by `160-mcp-*`. See product IA §3.5.
 
 4. **Live-data paradigm — no Refresh, no View JSON.** Every view
    that shows changing data is a PASSIVE RECEIVER of pushed

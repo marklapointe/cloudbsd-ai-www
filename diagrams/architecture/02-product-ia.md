@@ -34,7 +34,7 @@ flowchart TB
 
   subgraph Configure
     SET[Settings]
-    P[Plugins]
+    MCP[MCP servers]
   end
 
   subgraph Operate
@@ -135,6 +135,7 @@ flowchart LR
   Shell --> Networks
   Shell --> Account
   Shell --> Settings
+  Shell --> MCP[MCP registry]
   Shell --> System
   VMs --> Console[noVNC console]
   System --> Backups
@@ -150,3 +151,7 @@ flowchart LR
 | [`../screens/142-ia-account-security.svg`](../screens/142-ia-account-security.svg) | My Account · Security |
 | [`../screens/143-ia-settings-cluster.svg`](../screens/143-ia-settings-cluster.svg) | Settings · Cluster identity |
 | [`../screens/144-ia-system-backups.svg`](../screens/144-ia-system-backups.svg) | System · Backups |
+| [`../screens/160-mcp-registry.svg`](../screens/160-mcp-registry.svg) | MCP registry (was Plugins) |
+| [`../screens/161-mcp-server-detail.svg`](../screens/161-mcp-server-detail.svg) | MCP server detail + tools |
+| [`../screens/162-mcp-add-wizard.svg`](../screens/162-mcp-add-wizard.svg) | Add MCP server wizard |
+| See also | [`04-mcp-as-plugins.md`](./04-mcp-as-plugins.md) |

@@ -17,9 +17,11 @@
 | Mermaid IA | [../../diagrams/architecture/02-product-ia.md](../../diagrams/architecture/02-product-ia.md) |
 | Mermaid catalog | [../../diagrams/architecture/03-component-catalog.md](../../diagrams/architecture/03-component-catalog.md) |
 | Mermaid system arch | [../../diagrams/architecture/01-system-architecture.md](../../diagrams/architecture/01-system-architecture.md) |
-| Mermaid flows | [../../diagrams/flows/](../../diagrams/flows/) `01`–`05` |
+| Mermaid flows | [../../diagrams/flows/](../../diagrams/flows/) `01`–`05` (`04` = MCP registration) |
+| Mermaid MCP model | [../../diagrams/architecture/04-mcp-as-plugins.md](../../diagrams/architecture/04-mcp-as-plugins.md) |
 | IA SVG examples | `diagrams/screens/140-ia-*.svg` … `144-ia-*.svg` |
 | Spine SVG set | `diagrams/screens/150-spine-*.svg` |
+| **MCP registry** (extension model; was Plugins) | `diagrams/screens/160-mcp-*.svg` + product IA §3.5 |
 | Execution plan | `.sisyphus/plans/angular-migration.md` (methodology updated) |
 | UI order | `.sisyphus/drafts/ui-index.md` §8 |
 
@@ -46,7 +48,8 @@
 4. Do **not** implement ARCHIVE/DEFER items from ARCHIVED.md.  
 5. Prefer shared `ResourceTable` / `EmptyState` / density CSS over per-resource forks.  
 6. Management UX: describe → preflight → confirm → execute; view-only is a role.  
-7. Target FreeBSD; no Linux-only assumptions; git author Mark LaPointe \<mark@cloudbsd.org\>.
+7. **MCP is the plugin system** — implement Configure → MCP (`/mcp`), not a separate Plugins product.  
+8. Target FreeBSD; no Linux-only assumptions; git author Mark LaPointe \<mark@cloudbsd.org\>.
 
 ### Suggested first implementation PR stack
 
@@ -78,6 +81,7 @@
 - Content Library (ISOs/templates) is spine (150-spine-library)  
 - Hosts vs Cluster split as IA  
 - Account vs Settings vs System split as IA  
+- **MCP is the plugin system** — Configure → MCP (`/mcp`); no separate Plugins product  
 
 ---
 

@@ -42,6 +42,10 @@
 | `83-settings-backup-config.svg` | MERGE-INTO | System · Backups |
 | `21-theme-import` (modal) | DEFER | — |
 | Plan T64 theme/customizer/error regen | CANCEL | Do not regenerate empty dirs for v1 |
+| `17-plugins.svg` | SUPERSEDED | **MCP is plugins** → `160-mcp-registry.svg` |
+| `81-plugin-detail-page.svg` | SUPERSEDED | → `161-mcp-server-detail.svg` |
+| `131–133` plugin install wizard | SUPERSEDED | → `162-mcp-add-wizard.svg` |
+| Modal `20-plugin-install`, `22-plugin-detail` | SUPERSEDED | MCP add/detail flows |
 
 ## Components
 
@@ -53,7 +57,7 @@
 
 ## Keep / refine (do not archive)
 
-Spine lists, detail panels `19–23`, tab contents `90–111`, add-host `18`, vGPU `17`, chrome menus `88–89`, wizards `102–134`, system backups/updates/exports/audit, plugins, console `78`, preflight `92–93`, IA set `140–144`, spine set `150-*`.
+Spine lists, detail panels `19–23`, tab contents `90–111`, add-host `18`, vGPU `17`, chrome menus `88–89`, wizards `102–134` (except plugin install 131–133), system backups/updates/exports/audit, **MCP** (`160–162`), console `78`, preflight `92–93`, IA set `140–144`, spine set `150-*`.
 
 ---
 

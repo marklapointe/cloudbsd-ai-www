@@ -90,7 +90,7 @@ product-ia (2026-07-16)
 |------|-----------|
 | #1 | **Management by default**: describe → preflight → confirm → execute. View-only = auditor role |
 | #2 | Frost-out on session/auth failure; return to `/login` |
-| #3 | Plugin-extensible pages/modals/wizards from backend manifest |
+| #3 | **MCP-extensible** — MCP servers are the plugin system; tools/actions from registered servers |
 | #4 | Live stream primary; no Refresh/View JSON chrome; small reconnect if socket dead |
 | #5 | No body-text nav hints; sidebar + breadcrumb only |
 | #7 | No cloudbsd/revytech as customer service hostnames in mock data |
@@ -128,7 +128,7 @@ Spine detail: product IA §5 and §7.
 | Cluster | `/cluster` (services, not host table) |
 | Networks | `/networks` (+ map view) |
 | Tasks | `/tasks` |
-| Plugins | `/plugins` only |
+| **MCP** | `/mcp` only (was Plugins — MCP **is** the plugin system) |
 
 ---
 

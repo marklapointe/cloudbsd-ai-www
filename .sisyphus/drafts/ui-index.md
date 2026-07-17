@@ -145,7 +145,7 @@ Observe
 
 Configure
   Settings                (system configuration only — see §8.1)
-  Plugins                 (one home only)
+  MCP                     (MCP servers = the plugin/extension system)
 
 Operate
   System                  (Backups, Updates, Diagnostics, Exports, Maintenance)
@@ -153,7 +153,8 @@ Operate
 ```
 
 **Removed from primary nav**: standalone Status (→ System → Diagnostics / Dashboard health);
-duplicate Nodes+Cluster host lists; Settings as dumping ground for Account/Backup/Plugins.
+duplicate Nodes+Cluster host lists; Settings as dumping ground for Account/Backup;
+separate **Plugins** label (rebranded/replaced by **MCP**).
 
 Footer:
 ```
@@ -170,7 +171,7 @@ Uptime: 14d 02:11
 | **System** | `/system/*` | Admin | Backups (policies + runs), Updates, Diagnostics, Exports/support bundle, Maintenance |
 
 **Banned**: mixing “change my password” with “cluster CARP VIP” on one Settings page;
-NTP listed under both General and Network; Plugins under Settings **and** top-level;
+NTP listed under both General and Network; MCP/Plugins under Settings **and** top-level;
 Backup config only in Settings while runs live only under System — **one Backup product area under System**.
 
 ## 9. Header order (UNIVERSAL)
@@ -361,7 +362,7 @@ Previous disabled when on first page. Next disabled when on last page.
 
 ## 19.5 List-view universal controls (added 2026-07-09 per scale review)
 
-**Every list view MUST include all of the following 5 controls**, applicable to: VMs, Containers, Jails, Volumes, Users, Logs, Notifications, Audit Log, History, Plugins, Tasks, Volumes (sub-tabs: Datasets/Snapshots/Scrubs), Nodes (VMs sub-tab):
+**Every list view MUST include all of the following 5 controls**, applicable to: VMs, Containers, Jails, Volumes, Users, Logs, Notifications, Audit Log, History, MCP servers, Tasks, Volumes (sub-tabs: Datasets/Snapshots/Scrubs), Nodes (VMs sub-tab):
 
 | # | Control | Pattern | Reason |
 |---|---|---|---|
@@ -1065,10 +1066,18 @@ terminal-styled dark block:
 This is unique — admin sees exactly what wire-protocol command
 gets executed at commit time.
 
-### MCP agent reframe — pending
-Plugin install wizard (131-133) is generic + MCP-aware.
-Full reframe deferred — Honcho lesson 'Plugins as MCP agents'
-captured.
+### MCP = plugins (2026-07-16 — reframe COMPLETE in planning)
+
+**MCP is the plugin system.** Sidebar label **MCP** (`/mcp`).  
+Legacy plugin registry/install mocks (`17-plugins`, `81`, `131–133`) are **SUPERSEDED** by:
+
+| Mock | Surface |
+|------|---------|
+| `160-mcp-registry.svg` | MCP server list (enable/disable/probe) |
+| `161-mcp-server-detail.svg` | Tools, health, config (secrets masked) |
+| `162-mcp-add-wizard.svg` | Add HTTP / SSE / stdio server |
+
+Product IA §3.5. Catalog: S18 → MCP.
 
 
 ## §28 — Contextual edit modal pattern (2026-07-10)

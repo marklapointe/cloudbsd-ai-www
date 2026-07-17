@@ -33,7 +33,7 @@
 <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;padding:12px 10px 6px;">Configure</div>
 <nav style="font-size:13px;">
 <a style="display:flex;align-items:center;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Settings</span></a>
-<a style="display:flex;align-items:center;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>Plugins</span></a>
+<a style="display:flex;align-items:center;padding:7px 12px;border-radius:6px;color:#334155;margin-bottom:2px;cursor:pointer;"><span>MCP</span></a>
 </nav>
 <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;padding:12px 10px 6px;">Operate</div>
 <nav style="font-size:13px;">

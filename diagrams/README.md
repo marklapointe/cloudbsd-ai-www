@@ -96,14 +96,20 @@ The SVGs render correctly in:
 ### Components (15), Errors (12), Notifications (5), Modals (6), Loading (4)
 - `components/`, `errors/`, `notifications/`, `modals/`, `loading/`
 
-### Variants (3), Mobile (3), Plugin (3)
-- `variants/`, `mobile/`, `plugin/`
+### Variants / Mobile / legacy plugin dir
+- `variants/`, `mobile/`, `plugin/` (legacy package mocks — SUPERSEDED by MCP screens)
 
 ### Themes (15), Customizer (8)
-- `themes/`, `customizer/`
+- `themes/`, `customizer/` — leave empty for v1 (see `ARCHIVED.md`)
 
-### Flows (5 Mermaid) + Architecture (1 Mermaid)
-- `flows/*.md`, `architecture/*.md`
+### Flows (Mermaid) + Architecture (Mermaid)
+- `flows/*.md` — includes MCP registration (`04-plugin-discovery-flow.md`)
+- `architecture/*.md` — product IA, catalog, system arch, **`04-mcp-as-plugins.md`**
+
+### MCP = plugins (canonical UI mocks)
+- `screens/160-mcp-registry.svg` — registry list
+- `screens/161-mcp-server-detail.svg` — tools + health
+- `screens/162-mcp-add-wizard.svg` — add HTTP/SSE/stdio server
 
 ## Notes
 
@@ -118,14 +124,16 @@ The SVGs render correctly in:
 
 Per Honcho peer memory (lessons-2026) and GoF/TAOCP principles:
 
-### Plugin System
+### MCP extension system (was “Plugin System”)
+
+**Product decision (2026-07-16):** MCP servers **are** the plugin system. Nav label **MCP** (`/mcp`). No separate Plugins product.
 
 | Concern | Pattern | Source |
 |---------|---------|--------|
-| Plugin discovery | **Template Method** (GoF) | shared `PluginLoader` base with `discover()`, `validate()`, `register()` steps; each plugin overrides only `entry()` |
-| Plugin manifest schema | JSON Schema with `$ref` reuse | per `dp-builder` |
-| Hot-reload race conditions | Observer + atomic check-then-act | per TAOCP Vol 1 Ch 2 (coroutines/synchronization) |
-| Plugin sandboxing | Capability tokens (not full process isolation) | per TAOCP Vol 1 §2.6 (subroutines with bounded state) |
+| MCP server registration | **Template Method** (GoF) | shared loader: `discover()` / `validate()` / `register()`; transport adapters (HTTP/SSE/stdio) override only connect/probe |
+| Server + tool schema | JSON Schema with `$ref` reuse | per `dp-builder` |
+| Hot-reload / re-probe races | Observer + atomic check-then-act | per TAOCP Vol 1 Ch 2 (coroutines/synchronization) |
+| Tool sandboxing | Capability tokens (not full process isolation) | per TAOCP Vol 1 §2.6 (subroutines with bounded state) |
 
 ### Global State + Streaming
 

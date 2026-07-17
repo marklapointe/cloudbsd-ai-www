@@ -25,7 +25,7 @@ CloudBSD Admin is the **control plane for a FreeBSD-based hypervisor stack** int
 | Isolation | (containers elsewhere) | **Jails** + OCI containers |
 | Storage | VMFS / vSAN | **ZFS** (datasets, snapshots, scrub, send/receive) |
 | Cluster | vCenter | Multi-node + CARP VIP, join tokens, drain |
-| Client | vSphere Client | This Angular admin UI + plugin-extensible backend |
+| Client | vSphere Client | This Angular admin UI + **MCP-extensible** backend |
 | Auth | SSO / AD / local | PAM + PassKey / TOTP / LDAP / SAML |
 
 **Product center of value**: inventory and operate VMs, jails, containers, ZFS volumes, hosts (nodes), networking, and cluster health on FreeBSD — with full day-2 ops (create, power, migrate, snapshot, backup, update), not a theme browser.
@@ -90,7 +90,7 @@ Observe
 
 Configure
   Settings                   # System configuration only (see §4)
-  Plugins                    # One home only (not also buried in Settings)
+  MCP                        # MCP is the plugin system (registry of MCP servers)
 
 Operate
   System                     # Backups, Updates, Diagnostics, Exports, Maintenance
@@ -99,6 +99,7 @@ Operate
 # REMOVED from primary sidebar:
 #   Status as separate item  → merge into System → Diagnostics / Dashboard health
 #   Nodes AND Cluster both as host lists → Hosts = inventory; Cluster = cluster services
+#   Plugins as a separate concept  → MCP (servers + tools + install)
 ```
 
 Footer (sidebar): connected host display name + uptime (no geolocation).
@@ -136,6 +137,22 @@ Node detail remains the place for per-host ZFS / NICs / GPUs / resident VMs.
 | Cluster addressing | **Settings → Networking** | Cluster VIP/CARP, upstream DNS/NTP defaults |
 
 NTP appears **once** (Settings → Host/cluster defaults or Networking), not in both General and Network.
+
+### 3.5 MCP = plugins (extension model)
+
+CloudBSD Admin does **not** maintain a parallel “plugin package” product next to MCP.
+**MCP servers are how the product is extended.**
+
+| Concern | Product surface |
+|---------|-----------------|
+| List / enable / disable servers | **MCP** list page |
+| Add server (HTTP/SSE/stdio) | **MCP → Add** wizard |
+| Probe health + list tools | **MCP → detail** |
+| Secrets (headers, env) | Stored server-side; UI never echoes full secrets |
+| Menu/pages from tools | Backend maps MCP tools → actions/manifest (replaces old plugin templates) |
+| Legacy “plugin” mocks (`17-plugins`, `131–133`) | **SUPERSEDED** by MCP registry mocks (`160-mcp-*`) |
+
+Transports (v1): **HTTP (streamable)**, **SSE**, **stdio** (agent-local / host sidecar).
 
 ---
 
@@ -183,14 +200,14 @@ React `Settings.tsx` is still **license + language/TZ + demo/SSL/CORS** — not 
 | Section | Contents |
 |---------|----------|
 | Backups | Policies **and** job runs (merge former Settings backup-config + System backups) |
-| Updates | Agent, plugins, FreeBSD patches |
-| Diagnostics | Auth capabilities, preflight, connection health (absorb Status) |
+| Updates | Agent, MCP server packages, FreeBSD patches |
+| Diagnostics | Auth capabilities, preflight, connection health, MCP health (absorb Status) |
 | Exports / support bundle | Config, logs, cluster state (not theme-library vanity exports as primary) |
 | Maintenance | Maintenance mode, drain all, emergency tools |
 
 **Single home rules**:
 
-- Plugins → `/plugins` only  
+- **MCP** → `/mcp` only (was “Plugins”; MCP **is** the extension/plugin model)  
 - About / license summary → `/about` (license **register** may stay under Settings → Licensing)  
 - Users → Access → Users (control-plane), not OS dump of `www`/`postgres` by default  
 
@@ -214,6 +231,7 @@ React `Settings.tsx` is still **license + language/TZ + demo/SSL/CORS** — not 
 | Tasks / Jobs | Global long-running ops |
 | Access: Users · Roles · API keys | Control-plane identities |
 | Settings (system) + Account (user) | §4 |
+| **MCP** (servers registry + add + detail) | Extension model — *was Plugins* |
 | System: Backups · Updates · Audit · Diagnostics | Ops hub |
 | About / License | Closed-source product surface |
 

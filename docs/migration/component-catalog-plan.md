@@ -93,7 +93,7 @@ flowchart TB
 
   subgraph configure [Configure]
     Settings[SettingsShell]
-    Plugins[PluginsPage]
+    MCP[McpRegistryPage]
   end
 
   subgraph account [My Account]
@@ -153,7 +153,7 @@ Legend: **KEEP** = implement + maintain mock · **REFINE** = keep concept, redra
 | S15 | `143-ia-settings-cluster.svg` + settings set | Settings shell | **KEEP** `143` pattern; **ARCHIVE** dual model `11-settings` |
 | S16 | `142-ia-account-security.svg` | My Account | **KEEP** `142` pattern |
 | S17 | `144-ia-system-backups.svg` + system tabs | System shell | **KEEP** `144`; retab System (see §5) |
-| S18 | `17-plugins.svg` / `81-plugin-detail-page.svg` | Plugins | **REFINE** — single home |
+| S18 | `160-mcp-registry.svg` / `161-mcp-server-detail.svg` / `162-mcp-add-wizard.svg` | **MCP** (was Plugins) | **KEEP** — MCP **is** the plugin system; legacy `17`/`81`/`131–133` SUPERSEDED |
 | S19 | `13-about.svg` / `85-about-page.svg` | About | **MERGE** → one About |
 | S20 | `12-login.svg` / `51-login.svg` | Login | **MERGE** → one Login (prefer richer auth) |
 | S21 | `78-vm-console-vnc.svg` | VM console | **KEEP** (noVNC) |
@@ -165,7 +165,7 @@ Legend: **KEEP** = implement + maintain mock · **REFINE** = keep concept, redra
 | Tab | Disposition | Notes |
 |-----|-------------|-------|
 | Backups | **KEEP** | Policies + runs (merge `83-settings-backup-config` into this) |
-| Updates | **KEEP** | Agent / plugins / FreeBSD (`16-system-6`, `76`, `77`) |
+| Updates | **KEEP** | Agent / MCP servers / FreeBSD (`16-system-6`, `76`, `77`) |
 | Diagnostics | **KEEP** | Absorb `14-status`, `92`, `93` |
 | Exports | **REFINE** | Support bundle; drop theme-library vanity as primary |
 | Audit | **MOVE** | Prefer Observe → Audit; System may deep-link |
@@ -194,7 +194,7 @@ Legend: **KEEP** = implement + maintain mock · **REFINE** = keep concept, redra
 | Volume 115–117 | **KEEP** |
 | Network 118–120 | **KEEP** (Networks product) |
 | Restore 125–127 | **KEEP** (ties to Backups) |
-| Plugin install 131–133 | **KEEP** |
+| Plugin install 131–133 | **SUPERSEDED** by `162-mcp-add-wizard` |
 | Theme import 21-modal | **DEFER** |
 
 ### 4.5 Low-value / ARCHIVE or DEFER
@@ -267,7 +267,7 @@ Legend: **KEEP** = implement + maintain mock · **REFINE** = keep concept, redra
 | `04-wizard-modal` | **KEEP** as WizardShell chrome |
 | `05-passkey-login`, `28-recovery-codes` | **KEEP** |
 | `19-backup-create`, `27-backup-schedule` | **KEEP** |
-| `20-plugin-install`, `22-plugin-detail` | **KEEP** |
+| `20-plugin-install`, `22-plugin-detail` | **SUPERSEDED** → MCP add/detail |
 | `23-user-create`, `24-api-key-create` | **KEEP** (Access) |
 | `25-webhook-create` | **KEEP** (Settings · Integrations) |
 | `26-ntp-server-add` | **KEEP** (Settings · Host defaults) |
@@ -315,7 +315,9 @@ Use this as the **only** allowed component inventory for v1 coding waves. Anythi
 - [ ] Account shell (profile/security/appearance/prefs/tokens)  
 - [ ] Settings shell (cluster/auth/host/net/storage/integrations/licensing)  
 - [ ] System shell (backups/updates/diagnostics/exports/maintenance)  
-- [ ] Plugins (+ install wizard)  
+- [ ] **MCP** registry list + server detail + add wizard (HTTP/SSE/stdio)  
+- [ ] MCP probe/health + tools inventory  
+- [ ] *(Legacy “Plugins” label removed — MCP is the extension model)*
 - [ ] About  
 - [ ] Login + first-login + onboarding (single path each)
 
