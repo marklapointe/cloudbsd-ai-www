@@ -204,9 +204,22 @@ NO component/page/API response may include geolocation. Use only subnet classifi
 
 ## Product IA (2026-07-16)
 
-Screen mockups must follow the canonical product information architecture:
+### Two tracks (Honcho / CloudBSD)
 
-- **`.sisyphus/drafts/product-ia-esxi-vsphere-2026-07-16.md`**
-- **`.sisyphus/drafts/ui-index.md`** §8 (sidebar) and §8.1 (Settings vs Account vs System)
+| Track | Format | Location |
+|-------|--------|----------|
+| Conceptual | Mermaid | `architecture/*.md`, `flows/*.md` |
+| UI / UX | SVG + foreignObject + inline styles | `screens/*.svg`, `components/*.svg` |
 
-Non-canonical until redrawn: dual Settings models (`11-settings` nested Appearance vs `60–84` full-page mix), Cluster page as a second host inventory table, permanent view-only banners on data pages.
+### Canonical IA artifacts
+
+- Prose: `docs/migration/product-ia-esxi-vsphere-2026-07-16.md`
+- Mermaid: [`architecture/02-product-ia.md`](architecture/02-product-ia.md)
+- SVG reference set (new IA):
+  - [`screens/140-ia-shell-hosts.svg`](screens/140-ia-shell-hosts.svg) — shell + Hosts
+  - [`screens/141-ia-cluster-services.svg`](screens/141-ia-cluster-services.svg) — Cluster services
+  - [`screens/142-ia-account-security.svg`](screens/142-ia-account-security.svg) — My Account
+  - [`screens/143-ia-settings-cluster.svg`](screens/143-ia-settings-cluster.svg) — Settings
+  - [`screens/144-ia-system-backups.svg`](screens/144-ia-system-backups.svg) — System · Backups
+
+Older screens (`01`–`17`, `60`–`84`, …) remain for historical content but are **non-canonical for nav/Settings** until redrawn.

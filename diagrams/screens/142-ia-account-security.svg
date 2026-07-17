@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Admin — My Account · Security (product IA 2026-07-16)</title>
+  <desc>Personal security under avatar menu; not mixed with system Settings.</desc>
+  <foreignObject x="0" y="0" width="1280" height="720">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:720px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+      <div style="display:flex;width:1280px;height:720px;">
+        <div style="width:280px;background:#0f172a;color:#cbd5e1;padding:24px 18px;box-sizing:border-box;border-right:1px solid #1e293b;">
+          <div style="display:inline-block;padding:6px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;letter-spacing:0.04em;margin-bottom:8px;">CloudBSD</div>
+          <h3 style="margin:0 0 2px;font-size:13px;font-weight:600;color:#ffffff;">My Account</h3>
+          <div style="font-size:10px;color:#64748b;margin-bottom:20px;">via avatar menu · not Admin Settings</div>
+          <div style="padding:9px 12px;border-radius:5px;margin-bottom:4px;"><div style="font-size:12px;font-weight:500;color:#cbd5e1;">Profile</div><div style="font-size:10px;color:#64748b;line-height:1.3;">Name, email, avatar</div></div><div style="padding:9px 12px;border-radius:5px;background:#1e40af;margin-bottom:4px;"><div style="font-size:12px;font-weight:700;color:#ffffff;">Security</div><div style="font-size:10px;color:#bfdbfe;line-height:1.3;">2FA, passkeys, sessions</div></div><div style="padding:9px 12px;border-radius:5px;margin-bottom:4px;"><div style="font-size:12px;font-weight:500;color:#cbd5e1;">Appearance</div><div style="font-size:10px;color:#64748b;line-height:1.3;">Theme, density</div></div><div style="padding:9px 12px;border-radius:5px;margin-bottom:4px;"><div style="font-size:12px;font-weight:500;color:#cbd5e1;">Preferences</div><div style="font-size:10px;color:#64748b;line-height:1.3;">Locale, timezone</div></div><div style="padding:9px 12px;border-radius:5px;margin-bottom:4px;"><div style="font-size:12px;font-weight:500;color:#cbd5e1;">API tokens</div><div style="font-size:10px;color:#64748b;line-height:1.3;">Personal access tokens</div></div>
+          <div style="margin-top:24px;padding-top:16px;border-top:1px solid #1e293b;font-size:11px;color:#64748b;">← Back to app shell</div>
+        </div>
+        <div style="flex:1;overflow:auto;background:#f1f5f9;padding:34px 48px;box-sizing:border-box;">
+          
+<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:20px;">
+  <div>
+    <h2 style="margin:0;font-size:20px;font-weight:700;">Security</h2>
+    <p style="margin:4px 0 0;color:#64748b;font-size:13px;">Your authentication methods and sessions · admin@example.lan</p>
+  </div>
+</div>
+<div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:20px;margin-bottom:14px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+    <h4 style="margin:0;font-size:13px;font-weight:600;">Two-factor authentication</h4>
+    <span style="font-size:10px;padding:3px 8px;background:#d1fae5;color:#065f46;border-radius:9999px;font-weight:700;">ENABLED</span>
+  </div>
+  <div style="font-size:12px;color:#475569;">Method: <strong>TOTP (RFC 6238)</strong> · Passkeys available</div>
+  <div style="margin-top:12px;display:flex;gap:8px;">
+    <button style="padding:6px 12px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;cursor:pointer;">Reconfigure</button>
+    <button style="padding:6px 12px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px;background:#ffffff;color:#475569;cursor:pointer;">Add passkey</button>
+  </div>
+</div>
+<div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:20px;margin-bottom:14px;">
+  <h4 style="margin:0 0 12px;font-size:13px;font-weight:600;">Active sessions</h4>
+  <div style="padding:10px 12px;background:#f8fafc;border:1px solid #d1fae5;border-radius:6px;margin-bottom:8px;font-size:12px;">
+    <strong>Chrome · this session</strong> · 10.0.10.42 · expires 28d
+  </div>
+  <div style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;font-size:12px;display:flex;justify-content:space-between;">
+    <span>Firefox · last active 2h ago</span>
+    <button style="padding:4px 10px;font-size:11px;border:1px solid #fecaca;border-radius:5px;background:#fef2f2;color:#b91c1c;cursor:pointer;">Revoke</button>
+  </div>
+</div>
+<div style="font-size:11px;color:#64748b;">Cluster-wide auth methods are configured under <strong>Settings → Authentication</strong> (admin).</div>
+
+        </div>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

@@ -305,13 +305,20 @@ Phase 6  — Visual regression, critical-path coverage, cutover
 | Artifact | Role after this revision |
 |----------|---------------------------|
 | **This file** | Product IA + value matrix + ESXi/vSphere map |
+| `diagrams/architecture/02-product-ia.md` | **Mermaid** conceptual IA (Track 1) |
+| `diagrams/screens/140-ia-*.svg` … `144-ia-*.svg` | **SVG** UI/UX examples for this IA (Track 2) |
 | `ui-index.md` | Visual ordering rules; sidebar/settings updated to match §3–4 |
 | `plans/angular-migration.md` | Execution plan; methodology Rule #1 reframed |
 | `ADJUSTMENTS.md` | Screen-level delta log; IA revision rows added |
 | `scale-review-2026-07-09.md` | Scale affordances (sort, virtualization) — still in force |
 | `WIRE_PROTOCOL.md` | Envelope + preflight — still in force |
 | `data-structures.md` | Quantity/UnitKind — still in force |
-| Mock SVGs | Update when implementing; dual Settings models are **non-canonical** |
+| Older mock SVGs (`01`–`17`, `60`–`84`) | Historical until redrawn; **prefer 140–144** for IA |
+
+### Diagram tracks (Honcho / CloudBSD)
+
+1. **Mermaid** — architecture, flows, IA structure (inline in `.md` under `diagrams/architecture/`, `diagrams/flows/`).  
+2. **SVG + foreignObject** — screen mockups only; all styles inline; committed under `diagrams/screens/`.
 
 ---
 

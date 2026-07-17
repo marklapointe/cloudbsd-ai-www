@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+  <title>CloudBSD Admin — Settings · Cluster identity (product IA 2026-07-16)</title>
+  <desc>Admin system Settings only — no personal 2FA or backup runs.</desc>
+  <foreignObject x="0" y="0" width="1280" height="720">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1280px;height:720px;background:#f1f5f9;color:#0f172a;font-size:12px;box-sizing:border-box;overflow:hidden;">
+      <div style="display:flex;width:1280px;height:720px;">
+        <div style="width:280px;background:#0f172a;color:#cbd5e1;padding:24px 18px;box-sizing:border-box;">
+          <div style="display:inline-block;padding:6px 10px;background:linear-gradient(135deg,#0ea5e9,#1e40af);border-radius:5px;color:#ffffff;font-weight:700;font-size:11px;margin-bottom:8px;">CloudBSD</div>
+          <h3 style="margin:0 0 2px;font-size:13px;font-weight:600;color:#ffffff;">Settings</h3>
+          <div style="font-size:10px;color:#64748b;margin-bottom:20px;">Admin · system configuration</div>
+          <div style="padding:9px 12px;border-radius:5px;background:#1e40af;margin-bottom:4px;"><div style="font-size:12px;font-weight:700;color:#ffffff;">Cluster identity</div><div style="font-size:10px;color:#bfdbfe;">Name, alert contact</div></div><div style="padding:9px 12px;border-radius:5px;margin-bottom:4px;"><div style="font-size:12px;font-weight:500;color:#cbd5e1;">Authentication</div><div style="font-size:10px;color:#64748b;">Methods, password policy</div></div><div style="padding:9px 12px;border-radius:5px;margin-bottom:4px;"><div style="font-size:12px;font-weight:500;color:#cbd5e1;">Host defaults</div><div style="font-size:10px;color:#64748b;">NTP, DNS, agent updates</div></div><div style="padding:9px 12px;border-radius:5px;margin-bottom:4px;"><div style="font-size:12px;font-weight:500;color:#cbd5e1;">Networking</div><div style="font-size:10px;color:#64748b;">VIP, IP pool defaults</div></div><div style="padding:9px 12px;border-radius:5px;margin-bottom:4px;"><div style="font-size:12px;font-weight:500;color:#cbd5e1;">Storage defaults</div><div style="font-size:10px;color:#64748b;">Snapshot / scrub policy</div></div><div style="padding:9px 12px;border-radius:5px;margin-bottom:4px;"><div style="font-size:12px;font-weight:500;color:#cbd5e1;">Integrations</div><div style="font-size:10px;color:#64748b;">Webhooks, exporters</div></div><div style="padding:9px 12px;border-radius:5px;margin-bottom:4px;"><div style="font-size:12px;font-weight:500;color:#cbd5e1;">Licensing</div><div style="font-size:10px;color:#64748b;">Key, entitlements</div></div>
+        </div>
+        <div style="flex:1;overflow:auto;padding:34px 48px;box-sizing:border-box;">
+          
+<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:20px;">
+  <div>
+    <h2 style="margin:0;font-size:20px;font-weight:700;">Cluster identity</h2>
+    <p style="margin:4px 0 0;color:#64748b;font-size:13px;">Name used in CARP ads, alerts, and ZFS dataset prefixes</p>
+  </div>
+  <button style="padding:10px 18px;font-size:13px;font-weight:600;border:none;border-radius:6px;background:#1d4ed8;color:#ffffff;cursor:pointer;">Save changes</button>
+</div>
+<div style="background:#ffffff;border-radius:8px;border:1px solid #e2e8f0;padding:24px;">
+  <div style="margin-bottom:16px;">
+    <div style="font-size:12px;font-weight:600;margin-bottom:6px;">Cluster name</div>
+    <input type="text" value="prod-cluster" style="width:100%;padding:9px 12px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;box-sizing:border-box;"/>
+  </div>
+  <div style="margin-bottom:16px;">
+    <div style="font-size:12px;font-weight:600;margin-bottom:6px;">Display name</div>
+    <input type="text" value="Production" style="width:100%;padding:9px 12px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;box-sizing:border-box;"/>
+  </div>
+  <div>
+    <div style="font-size:12px;font-weight:600;margin-bottom:6px;">Alert contact</div>
+    <input type="text" value="ops@example.lan" style="width:100%;padding:9px 12px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;box-sizing:border-box;"/>
+  </div>
+</div>
+<p style="margin-top:14px;font-size:11px;color:#64748b;">Personal 2FA and theme live under <strong>My Account</strong>. Backup jobs live under <strong>System → Backups</strong>.</p>
+
+        </div>
+      </div>
+    </div>
+  </foreignObject>
+</svg>

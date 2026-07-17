@@ -7,18 +7,45 @@ Use this file as the **entry point**. Prefer these paths over older plan prose w
 
 ---
 
+## Diagram convention (two tracks — never mix)
+
+Per Honcho session `zathrasask-plan-diagram-conventions-2026-06-08` and `lessons.md`:
+
+| Track | Format | Where | Use for |
+|-------|--------|-------|---------|
+| **1 Conceptual** | Mermaid in ` ```mermaid ` blocks | Markdown under `diagrams/architecture/`, `diagrams/flows/`, plans | Architecture, IA, sequence, state, ER |
+| **2 UI / UX mockups** | SVG + `<foreignObject>` + **inline styles only** | `diagrams/screens/*.svg`, `diagrams/components/*.svg` | Pixel layout of shell, pages, modals |
+
+- No Mermaid inside SVG files.  
+- No raw HTML mockups in markdown (GitHub strips styles).  
+- No Tailwind `class=` inside SVG foreignObject.  
+
+### Product IA diagrams (2026-07-16)
+
+| Track | Path |
+|-------|------|
+| Mermaid | [diagrams/architecture/02-product-ia.md](../../diagrams/architecture/02-product-ia.md) |
+| SVG shell + Hosts | [diagrams/screens/140-ia-shell-hosts.svg](../../diagrams/screens/140-ia-shell-hosts.svg) |
+| SVG Cluster services | [diagrams/screens/141-ia-cluster-services.svg](../../diagrams/screens/141-ia-cluster-services.svg) |
+| SVG My Account · Security | [diagrams/screens/142-ia-account-security.svg](../../diagrams/screens/142-ia-account-security.svg) |
+| SVG Settings · Cluster identity | [diagrams/screens/143-ia-settings-cluster.svg](../../diagrams/screens/143-ia-settings-cluster.svg) |
+| SVG System · Backups | [diagrams/screens/144-ia-system-backups.svg](../../diagrams/screens/144-ia-system-backups.svg) |
+
+Older screens (`01`–`17`, `60`–`84`, …) remain until redrawn; **140–144 are the IA reference set**.
+
 ## Read order (agents)
 
 | Order | Document | Why |
 |------:|----------|-----|
 | 1 | [product-ia-esxi-vsphere-2026-07-16.md](./product-ia-esxi-vsphere-2026-07-16.md) | **Canonical product IA** — sidebar, Settings/Account/System, keep/defer matrix |
-| 2 | [../../.sisyphus/drafts/ui-index.md](../../.sisyphus/drafts/ui-index.md) | Universal visual order (columns, tabs, chrome). Sidebar §8 matches product IA |
-| 3 | [../../.sisyphus/plans/angular-migration.md](../../.sisyphus/plans/angular-migration.md) | Execution plan, methodology Rules #1–#9, waves/tasks |
-| 4 | [../../.sisyphus/plans/WIRE_PROTOCOL.md](../../.sisyphus/plans/WIRE_PROTOCOL.md) | Envelope, actions, preflight §2.31–2.32, stream |
-| 5 | [../../.sisyphus/drafts/data-structures.md](../../.sisyphus/drafts/data-structures.md) | Quantity, UnitKind, resource schemas |
-| 6 | [../../.sisyphus/drafts/ADJUSTMENTS.md](../../.sisyphus/drafts/ADJUSTMENTS.md) | Screen deltas + 2026-07-16 IA revision table |
-| 7 | [../../.sisyphus/drafts/scale-review-2026-07-09.md](../../.sisyphus/drafts/scale-review-2026-07-09.md) | List scale (sort, virtualization, bulk) — *if present* |
-| 8 | [../../diagrams/README.md](../../diagrams/README.md) | SVG mockup conventions |
+| 2 | [diagrams/architecture/02-product-ia.md](../../diagrams/architecture/02-product-ia.md) | Mermaid IA (sidebar, settings split, action sequence) |
+| 3 | SVG set `140-ia-*` under `diagrams/screens/` | UI/UX examples for the same IA |
+| 4 | [../../.sisyphus/drafts/ui-index.md](../../.sisyphus/drafts/ui-index.md) | Universal visual order (columns, tabs, chrome). Sidebar §8 matches product IA |
+| 5 | [../../.sisyphus/plans/angular-migration.md](../../.sisyphus/plans/angular-migration.md) | Execution plan, methodology Rules #1–#9, waves/tasks |
+| 6 | [../../.sisyphus/plans/WIRE_PROTOCOL.md](../../.sisyphus/plans/WIRE_PROTOCOL.md) | Envelope, actions, preflight §2.31–2.32, stream |
+| 7 | [../../.sisyphus/drafts/data-structures.md](../../.sisyphus/drafts/data-structures.md) | Quantity, UnitKind, resource schemas |
+| 8 | [../../.sisyphus/drafts/ADJUSTMENTS.md](../../.sisyphus/drafts/ADJUSTMENTS.md) | Screen deltas + 2026-07-16 IA revision table |
+| 9 | [../../diagrams/README.md](../../diagrams/README.md) | SVG mockup conventions |
 
 Mirror copies:
 

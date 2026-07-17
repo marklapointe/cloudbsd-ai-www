@@ -35,6 +35,8 @@ Sidebar / Settings rules: `.sisyphus/drafts/ui-index.md` §8–§8.1
 | IA-12 | Console | 🔄 CHANGED | noVNC for bhyve (not serial-only xterm) | ESXi parity for installs |
 | IA-13 | Coverage gate | 🔄 CHANGED | ≥80% overall; 100% auth/preflight/envelope | Unblock shipping |
 | IA-14 | Mock SVGs Settings | 📐 IA | `11-settings` + `60–84` dual models non-canonical until redraw | Follow §8.1 |
+| IA-15 | Mermaid IA | ➕ ADDED | `diagrams/architecture/02-product-ia.md` | Track 1 conceptual diagrams |
+| IA-16 | SVG IA reference set | ➕ ADDED | `diagrams/screens/140-ia-shell-hosts.svg` … `144-ia-system-backups.svg` | Track 2 UI/UX for new sidebar + Account/Settings/System + Cluster services |
 
 ---
 
