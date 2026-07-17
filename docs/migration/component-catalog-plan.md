@@ -341,16 +341,16 @@ flowchart LR
   W4 --> W5[W5 Domain pages by spine order]
 ```
 
-| Wave | Work | Exit criteria |
-|------|------|----------------|
-| **W0** | Review/approve this catalog | User sign-off |
-| **W1** | Write `diagrams/ARCHIVED.md` listing ARCHIVE/DEFER files; stop regenerating them | List committed |
-| **W2** | Redraw spine list pages (01–10 family) to match `140` sidebar chrome; single Settings/Account/System | Diff against product IA |
-| **W3** | Mermaid: login, session frost-out, preflight action, plugin discovery (move drafts → `diagrams/flows/`) | Flows open in MD preview |
-| **W4** | **Implementation starts**: shell + shared components only | Storybook or app shell navigable |
-| **W5+** | Domain pages per §7.3 order | Per-page DoD from plan |
+| Wave | Work | Exit criteria | Status |
+|------|------|----------------|--------|
+| **W0** | Component catalog | Catalog committed | **DONE** 2026-07-16 |
+| **W1** | `diagrams/ARCHIVED.md` | List committed | **DONE** |
+| **W2** | Spine SVGs `150-spine-*` + IA `140-ia-*` | Chrome matches product IA | **DONE** |
+| **W3** | Mermaid flows + architecture | Under `diagrams/flows`, `architecture` | **DONE** |
+| **W4** | **Implementation**: shell + shared components | App shell navigable | **PENDING** |
+| **W5+** | Domain pages per §7.3 | Per-page DoD | **PENDING** |
 
-**No Angular feature work before W0 approval.**
+**Planning complete.** See [PLANNING-COMPLETE.md](./PLANNING-COMPLETE.md). Angular feature work starts at **W4**.
 
 ---
 

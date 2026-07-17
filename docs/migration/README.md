@@ -41,13 +41,17 @@ Older screens (`01`–`17`, `60`–`84`, …) remain until redrawn; **140–144 
 | 2 | [component-catalog-plan.md](./component-catalog-plan.md) | **Component/screen triage** — KEEP/MERGE/ARCHIVE; Angular module map; **approve before code** |
 | 3 | [diagrams/architecture/02-product-ia.md](../../diagrams/architecture/02-product-ia.md) | Mermaid IA (sidebar, settings split, action sequence) |
 | 4 | [diagrams/architecture/03-component-catalog.md](../../diagrams/architecture/03-component-catalog.md) | Mermaid catalog waves |
-| 5 | SVG set `140-ia-*` under `diagrams/screens/` | UI/UX examples for the same IA |
+| 5 | SVG `140-ia-*` + `150-spine-*` | UI/UX examples (IA chrome + spine pages) |
+| [PLANNING-COMPLETE.md](./PLANNING-COMPLETE.md) | Handoff: planning done, implementation entry |
 | 6 | [../../.sisyphus/drafts/ui-index.md](../../.sisyphus/drafts/ui-index.md) | Universal visual order (columns, tabs, chrome). Sidebar §8 matches product IA |
 | 7 | [../../.sisyphus/plans/angular-migration.md](../../.sisyphus/plans/angular-migration.md) | Execution plan, methodology Rules #1–#9, waves/tasks |
-| 6 | [../../.sisyphus/plans/WIRE_PROTOCOL.md](../../.sisyphus/plans/WIRE_PROTOCOL.md) | Envelope, actions, preflight §2.31–2.32, stream |
-| 7 | [../../.sisyphus/drafts/data-structures.md](../../.sisyphus/drafts/data-structures.md) | Quantity, UnitKind, resource schemas |
-| 8 | [../../.sisyphus/drafts/ADJUSTMENTS.md](../../.sisyphus/drafts/ADJUSTMENTS.md) | Screen deltas + 2026-07-16 IA revision table |
-| 9 | [../../diagrams/README.md](../../diagrams/README.md) | SVG mockup conventions |
+| 8 | [../../.sisyphus/plans/WIRE_PROTOCOL.md](../../.sisyphus/plans/WIRE_PROTOCOL.md) | Envelope, actions, preflight §2.31–2.32, stream |
+| 9 | [../../.sisyphus/drafts/data-structures.md](../../.sisyphus/drafts/data-structures.md) | Quantity, UnitKind, resource schemas |
+| 10 | [../../.sisyphus/drafts/ADJUSTMENTS.md](../../.sisyphus/drafts/ADJUSTMENTS.md) | Screen deltas + 2026-07-16 IA revision table |
+| 11 | [../../diagrams/README.md](../../diagrams/README.md) | SVG mockup conventions |
+
+**Planning status:** complete — [PLANNING-COMPLETE.md](./PLANNING-COMPLETE.md).  
+**Implementation starts at catalog wave W4** (shell + shared components). Do not implement ARCHIVE/DEFER items.
 
 Mirror copies:
 
@@ -59,9 +63,13 @@ Mirror copies:
 ## Authority when docs conflict
 
 ```
-product-ia (2026-07-16)  >  ui-index §8/§8.1/§16  >  angular-migration methodology Rules
-  >  ADJUSTMENTS IA table  >  individual SVG mockups  >  older plan body text
-  >  drafts/angular-migration.md (early draft — historical only)
+product-ia (2026-07-16)
+  > component-catalog-plan (KEEP/MERGE/ARCHIVE + Angular §7 checklist)
+  > ui-index §8/§8.1/§16
+  > angular-migration methodology Rules
+  > ADJUSTMENTS IA table
+  > SVG mockups (prefer 140–144; spine redraws)
+  > older plan body text / drafts/angular-migration.md (historical)
 ```
 
 **Do not treat as canonical for product direction:**

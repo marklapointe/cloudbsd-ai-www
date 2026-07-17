@@ -223,3 +223,8 @@ NO component/page/API response may include geolocation. Use only subnet classifi
   - [`screens/144-ia-system-backups.svg`](screens/144-ia-system-backups.svg) — System · Backups
 
 Older screens (`01`–`17`, `60`–`84`, …) remain for historical content but are **non-canonical for nav/Settings** until redrawn.
+
+### Spine planning set (2026-07-16 complete)
+
+`screens/150-spine-*.svg` — Dashboard, VMs, Storage, Networks, Tasks, Library, Users, System Diagnostics.  
+Archive map: [`ARCHIVED.md`](ARCHIVED.md). Flows: [`flows/`](flows/). Planning handoff: `docs/migration/PLANNING-COMPLETE.md`.
