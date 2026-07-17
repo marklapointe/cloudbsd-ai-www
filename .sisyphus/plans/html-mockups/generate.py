@@ -211,6 +211,144 @@ def kv(rows: list[tuple[str, str]]) -> str:
     return f'<dl class="kv">{items}</dl>'
 
 
+def pick_item(name: str, *, kind: str = "", meta: str = "", checked: bool = False, value: str | None = None) -> str:
+    val = value or name
+    ch = " checked" if checked else ""
+    kind_h = f'<span class="kind">{kind}</span>' if kind else ""
+    meta_h = f'<span class="meta">{meta}</span>' if meta else ""
+    return (
+        f'<label class="pick-item{" selected" if checked else ""}" data-pick-item>'
+        f'<input type="checkbox" value="{val}"{ch}/>'
+        f'{kind_h}<span>{name}</span>{meta_h}</label>'
+    )
+
+
+def resource_pick_list(items: list[tuple[str, str, str, bool]], title: str = "Available") -> str:
+    """items: (name, kind, meta, checked)"""
+    body = "".join(pick_item(n, kind=k, meta=m, checked=c) for n, k, m, c in items)
+    n_sel = sum(1 for *_, c in items if c)
+    return f"""
+<div class="pick-panel" data-pick-list>
+  <div class="pick-panel-h">
+    <span>{title}</span>
+    <input type="search" placeholder="Filter…" data-pick-filter autocomplete="off"/>
+    <span class="pick-count" data-pick-count>{n_sel} selected</span>
+  </div>
+  <div class="pick-list">{body}</div>
+</div>"""
+
+
+def capability_matrix() -> str:
+    """Selectable role/key capability matrix — no freeform strings."""
+    rows = [
+        ("vm", [
+            ("read", True), ("create", False), ("update", True), ("delete", False),
+            ("power", True), ("migrate", False), ("console", False),
+            ("snapshot.create", True), ("snapshot.revert", True), ("snapshot.delete", False),
+        ]),
+        ("jail", [
+            ("read", True), ("create", False), ("update", False), ("delete", False),
+            ("power", False), ("snapshot.create", False), ("snapshot.revert", False),
+        ]),
+        ("container", [
+            ("read", True), ("create", False), ("update", False), ("delete", False),
+            ("power", False), ("logs", False),
+        ]),
+        ("volume", [
+            ("read", True), ("create", False), ("update", False), ("delete", False),
+            ("snapshot.create", False), ("snapshot.revert", False), ("clone", False),
+        ]),
+        ("network", [("read", True), ("create", False), ("update", False), ("delete", False), ("attach", False)]),
+        ("host", [("read", True), ("drain", False), ("maintenance", False)]),
+        ("task", [("read", True), ("cancel", False)]),
+        ("system", [("backups", False), ("updates", False), ("diagnostics", False), ("exports", False)]),
+        ("mcp", [("read", False), ("register", False), ("invoke", False)]),
+    ]
+    trs = []
+    for rtype, acts in rows:
+        checks = "".join(
+            f'<label><input type="checkbox" data-cap="{rtype}.{a}"{" checked" if on else ""}/> {a}</label>'
+            for a, on in acts
+        )
+        trs.append(
+            f'<tr><td class="rtype">{rtype}</td>'
+            f'<td><div class="cap-checks">{checks}</div></td>'
+            f'<td><button type="button" class="btn-link" data-cap-row-all="{rtype}">All</button> · '
+            f'<button type="button" class="btn-link" data-cap-row-none="{rtype}">None</button></td></tr>'
+        )
+    return f"""
+<div class="ui-rule-banner">Capabilities are chosen from the server catalog — no freeform text.</div>
+<div class="cap-matrix" data-cap-matrix>
+  <table>
+    <thead><tr><th>Resource</th><th>Actions</th><th></th></tr></thead>
+    <tbody>{"".join(trs)}</tbody>
+  </table>
+</div>
+<p class="pick-count" style="margin:8px 0 0" data-cap-summary>12 capabilities selected</p>
+"""
+
+
+def domain_picker() -> str:
+    """Domain binding: all / list(pick) / tag(pick) / pattern(with preview)."""
+    inventory = [
+        ("nextcloud", "vm", "prod-node-01", False),
+        ("jellyfin", "vm", "prod-node-02", False),
+        ("ci-runner-01", "vm", "prod-node-02", True),
+        ("ci-runner-02", "vm", "prod-node-03", True),
+        ("ci-build", "vm", "prod-node-01", True),
+        ("gitlab-runner", "vm", "prod-node-02", False),
+        ("pkg-mirror", "jail", "prod-node-01", False),
+        ("redis-cache", "container", "prod-node-01", False),
+        ("tank/vms/nextcloud", "volume", "120 GB", False),
+        ("tank/vms/ci-runner-01", "volume", "40 GB", True),
+    ]
+    tags = [
+        ("ci=true", "tag", "14 objects", True),
+        ("env=staging", "tag", "8 objects", False),
+        ("env=prod", "tag", "22 objects", False),
+        ("pipeline=gha", "tag", "6 objects", False),
+        ("team=platform", "tag", "11 objects", False),
+    ]
+    return f"""
+<div class="ui-rule-banner">Domain is selected from inventory or known tags — not typed resource names.</div>
+<div class="scope-domain-tabs" data-domain-mode>
+  <button type="button" class="chip" data-domain="all">All of type</button>
+  <button type="button" class="chip active" data-domain="list">Pick resources</button>
+  <button type="button" class="chip" data-domain="tag">Pick tags</button>
+  <button type="button" class="chip" data-domain="pattern">Pattern + preview</button>
+</div>
+<div data-domain-panel="all" hidden>
+  <div class="alert alert-warn">Key may act on every object of the selected type the principal can see.</div>
+</div>
+<div data-domain-panel="list">
+  {resource_pick_list(inventory, "Inventory (multi-select)")}
+</div>
+<div data-domain-panel="tag" hidden>
+  {resource_pick_list(tags, "Existing tags")}
+</div>
+<div data-domain-panel="pattern" hidden>
+  <div class="field"><label>Preset prefix</label>
+    <select data-pattern-preset>
+      <option value="">— choose inventory prefix —</option>
+      <option value="ci-*" selected>ci-* (3 VMs match)</option>
+      <option value="tank/vms/ci-*">tank/vms/ci-*</option>
+      <option value="staging-*">staging-*</option>
+    </select>
+  </div>
+  <div class="field"><label>Advanced glob (optional)</label>
+    <input value="ci-*" data-pattern-input autocomplete="off"/>
+  </div>
+  <div class="card card-pad" style="font-size:12px">
+    <strong>Live preview</strong> — must match before save:
+    <ul style="margin:6px 0 0;padding-left:18px">
+      <li>ci-runner-01</li><li>ci-runner-02</li><li>ci-build</li>
+    </ul>
+    <span class="pick-count">3 matches · empty preview blocks save</span>
+  </div>
+</div>
+"""
+
+
 def write(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8")
@@ -372,9 +510,12 @@ def common_modals() -> str:
     ))
     m.append(modal(
         "m-create-role", "Create role",
-        field("Name", '<input placeholder="BackupOperator"/>')
-        + field("Capabilities", '<textarea>system.backups:write\nstorage.snapshot:write\n*:read</textarea>')
-        + '<div class="alert alert-info">v1 may ship Roles as Users sub-tabs.</div>',
+        field("Name", '<input placeholder="CI Snapshot" list="role-name-suggestions"/>'
+              '<datalist id="role-name-suggestions"><option value="Operator"/><option value="Auditor"/><option value="CI Snapshot"/><option value="BackupOperator"/></datalist>')
+        + field("Description", '<input placeholder="Optional short description"/>')
+        + '<div style="font-size:12px;font-weight:700;margin:4px 0 8px">Capabilities</div>'
+        + capability_matrix()
+        + '<div class="alert alert-info" style="margin-top:10px">Roles use the same action catalog as API keys. v1 may ship Roles as Users sub-tabs.</div>',
         primary="Create role", wide=True,
     ))
     m.append(modal(
@@ -384,48 +525,42 @@ def common_modals() -> str:
         + field("Owner", '<select><option>Service: gha-ci</option><option>mlapointe (personal)</option></select>')
         + field("Expires", '<select><option>90 days</option><option>1 year</option><option>Never</option></select>')
         + """
-        <div style="font-size:12px;font-weight:700;margin:12px 0 8px">Scopes (deny by default)</div>
-        <div class="alert alert-info" style="margin-bottom:10px">
-          Each row: <strong>resource type</strong> × <strong>actions</strong> × <strong>domain</strong> (all / list / pattern / tag).
-          Intersected with the principal’s role. Product IA §3.2a.
+        <div style="font-size:12px;font-weight:700;margin:12px 0 8px">1 · Resource type</div>
+        <div class="scope-domain-tabs" style="margin-bottom:12px">
+          <button type="button" class="chip active">vm</button>
+          <button type="button" class="chip">jail</button>
+          <button type="button" class="chip">container</button>
+          <button type="button" class="chip">volume</button>
+          <button type="button" class="chip">network</button>
+          <button type="button" class="chip">task</button>
+          <button type="button" class="chip">host</button>
+          <button type="button" class="chip">system</button>
         </div>
-        <div class="card" style="margin-bottom:10px;overflow:auto">
-          <table class="res">
-            <thead><tr><th>Resource</th><th>Actions</th><th>Domain</th><th></th></tr></thead>
-            <tbody>
-              <tr>
-                <td><select style="font-size:12px;padding:4px"><option selected>vm</option><option>jail</option><option>container</option><option>volume</option><option>network</option><option>task</option></select></td>
-                <td style="font-size:11px">
-                  <label style="margin-right:6px"><input type="checkbox" checked/> read</label>
-                  <label style="margin-right:6px"><input type="checkbox" checked/> snapshot.create</label>
-                  <label style="margin-right:6px"><input type="checkbox" checked/> snapshot.revert</label>
-                  <label style="margin-right:6px"><input type="checkbox"/> snapshot.delete</label>
-                  <label style="margin-right:6px"><input type="checkbox"/> power</label>
-                  <label style="margin-right:6px"><input type="checkbox"/> create</label>
-                  <label style="margin-right:6px"><input type="checkbox"/> delete</label>
-                </td>
-                <td>
-                  <select style="font-size:12px;padding:4px;margin-bottom:4px"><option>pattern</option><option>tag</option><option>list</option><option>all</option></select>
-                  <input value="ci-*" placeholder="ci-* or tag=ci" style="width:100%;padding:4px 6px;font-size:11px;border:1px solid #cbd5e1;border-radius:4px"/>
-                </td>
-                <td><button type="button" class="btn-link danger">×</button></td>
-              </tr>
-              <tr>
-                <td><select style="font-size:12px;padding:4px"><option selected>task</option></select></td>
-                <td style="font-size:11px"><label><input type="checkbox" checked/> read</label></td>
-                <td><select style="font-size:12px;padding:4px"><option selected>all</option></select></td>
-                <td><button type="button" class="btn-link danger">×</button></td>
-              </tr>
-            </tbody>
-          </table>
+        <div style="font-size:12px;font-weight:700;margin:0 0 8px">2 · Actions (vm)</div>
+        """
+        + """
+        <div class="cap-checks card card-pad" style="margin-bottom:12px" data-cap-matrix>
+          <label><input type="checkbox" checked data-cap="vm.read"/> read</label>
+          <label><input type="checkbox" data-cap="vm.create"/> create</label>
+          <label><input type="checkbox" data-cap="vm.update"/> update</label>
+          <label><input type="checkbox" data-cap="vm.delete"/> delete</label>
+          <label><input type="checkbox" data-cap="vm.power"/> power</label>
+          <label><input type="checkbox" data-cap="vm.migrate"/> migrate</label>
+          <label><input type="checkbox" data-cap="vm.console"/> console</label>
+          <label><input type="checkbox" checked data-cap="vm.snapshot.create"/> snapshot.create</label>
+          <label><input type="checkbox" checked data-cap="vm.snapshot.revert"/> snapshot.revert</label>
+          <label><input type="checkbox" data-cap="vm.snapshot.delete"/> snapshot.delete</label>
         </div>
-        <button type="button" class="btn" style="margin-bottom:10px">+ Add scope row</button>
-        <div class="card card-pad mono" style="font-size:11px;background:#f8fafc;margin-bottom:10px">
-          Summary: <strong>vm</strong> [read, snapshot.create, snapshot.revert] @ pattern <code>ci-*</code><br/>
-          + <strong>task</strong> [read] @ all
+        <div style="font-size:12px;font-weight:700;margin:0 0 8px">3 · Domain</div>
+        """
+        + domain_picker()
+        + """
+        <div class="card card-pad mono" style="font-size:11px;background:#f8fafc;margin:12px 0 10px" data-scope-summary>
+          Summary: <strong>vm</strong> [read, snapshot.create, snapshot.revert]
+          @ <strong>3 resources</strong> (ci-runner-01, ci-runner-02, ci-build)
         </div>
         """
-        + '<div class="alert alert-warn">Secret is shown once after create. Store it in a vault. Key cannot exceed creator role.</div>',
+        + '<div class="alert alert-warn">Secret shown once. Key cannot exceed creator role. No freeform capability strings.</div>',
         primary="Create key", wide=True,
     ))
     m.append(modal(

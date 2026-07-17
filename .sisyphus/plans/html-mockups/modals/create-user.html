@@ -355,9 +355,16 @@
       <h2 id="m-create-role-title">Create role</h2>
       <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
     </div>
-    <div class="modal-b"><div class="field"><label>Name</label><input placeholder="BackupOperator"/></div><div class="field"><label>Capabilities</label><textarea>system.backups:write
-storage.snapshot:write
-*:read</textarea></div><div class="alert alert-info">v1 may ship Roles as Users sub-tabs.</div></div>
+    <div class="modal-b"><div class="field"><label>Name</label><input placeholder="CI Snapshot" list="role-name-suggestions"/><datalist id="role-name-suggestions"><option value="Operator"/><option value="Auditor"/><option value="CI Snapshot"/><option value="BackupOperator"/></datalist></div><div class="field"><label>Description</label><input placeholder="Optional short description"/></div><div style="font-size:12px;font-weight:700;margin:4px 0 8px">Capabilities</div>
+<div class="ui-rule-banner">Capabilities are chosen from the server catalog — no freeform text.</div>
+<div class="cap-matrix" data-cap-matrix>
+  <table>
+    <thead><tr><th>Resource</th><th>Actions</th><th></th></tr></thead>
+    <tbody><tr><td class="rtype">vm</td><td><div class="cap-checks"><label><input type="checkbox" data-cap="vm.read" checked/> read</label><label><input type="checkbox" data-cap="vm.create"/> create</label><label><input type="checkbox" data-cap="vm.update" checked/> update</label><label><input type="checkbox" data-cap="vm.delete"/> delete</label><label><input type="checkbox" data-cap="vm.power" checked/> power</label><label><input type="checkbox" data-cap="vm.migrate"/> migrate</label><label><input type="checkbox" data-cap="vm.console"/> console</label><label><input type="checkbox" data-cap="vm.snapshot.create" checked/> snapshot.create</label><label><input type="checkbox" data-cap="vm.snapshot.revert" checked/> snapshot.revert</label><label><input type="checkbox" data-cap="vm.snapshot.delete"/> snapshot.delete</label></div></td><td><button type="button" class="btn-link" data-cap-row-all="vm">All</button> · <button type="button" class="btn-link" data-cap-row-none="vm">None</button></td></tr><tr><td class="rtype">jail</td><td><div class="cap-checks"><label><input type="checkbox" data-cap="jail.read" checked/> read</label><label><input type="checkbox" data-cap="jail.create"/> create</label><label><input type="checkbox" data-cap="jail.update"/> update</label><label><input type="checkbox" data-cap="jail.delete"/> delete</label><label><input type="checkbox" data-cap="jail.power"/> power</label><label><input type="checkbox" data-cap="jail.snapshot.create"/> snapshot.create</label><label><input type="checkbox" data-cap="jail.snapshot.revert"/> snapshot.revert</label></div></td><td><button type="button" class="btn-link" data-cap-row-all="jail">All</button> · <button type="button" class="btn-link" data-cap-row-none="jail">None</button></td></tr><tr><td class="rtype">container</td><td><div class="cap-checks"><label><input type="checkbox" data-cap="container.read" checked/> read</label><label><input type="checkbox" data-cap="container.create"/> create</label><label><input type="checkbox" data-cap="container.update"/> update</label><label><input type="checkbox" data-cap="container.delete"/> delete</label><label><input type="checkbox" data-cap="container.power"/> power</label><label><input type="checkbox" data-cap="container.logs"/> logs</label></div></td><td><button type="button" class="btn-link" data-cap-row-all="container">All</button> · <button type="button" class="btn-link" data-cap-row-none="container">None</button></td></tr><tr><td class="rtype">volume</td><td><div class="cap-checks"><label><input type="checkbox" data-cap="volume.read" checked/> read</label><label><input type="checkbox" data-cap="volume.create"/> create</label><label><input type="checkbox" data-cap="volume.update"/> update</label><label><input type="checkbox" data-cap="volume.delete"/> delete</label><label><input type="checkbox" data-cap="volume.snapshot.create"/> snapshot.create</label><label><input type="checkbox" data-cap="volume.snapshot.revert"/> snapshot.revert</label><label><input type="checkbox" data-cap="volume.clone"/> clone</label></div></td><td><button type="button" class="btn-link" data-cap-row-all="volume">All</button> · <button type="button" class="btn-link" data-cap-row-none="volume">None</button></td></tr><tr><td class="rtype">network</td><td><div class="cap-checks"><label><input type="checkbox" data-cap="network.read" checked/> read</label><label><input type="checkbox" data-cap="network.create"/> create</label><label><input type="checkbox" data-cap="network.update"/> update</label><label><input type="checkbox" data-cap="network.delete"/> delete</label><label><input type="checkbox" data-cap="network.attach"/> attach</label></div></td><td><button type="button" class="btn-link" data-cap-row-all="network">All</button> · <button type="button" class="btn-link" data-cap-row-none="network">None</button></td></tr><tr><td class="rtype">host</td><td><div class="cap-checks"><label><input type="checkbox" data-cap="host.read" checked/> read</label><label><input type="checkbox" data-cap="host.drain"/> drain</label><label><input type="checkbox" data-cap="host.maintenance"/> maintenance</label></div></td><td><button type="button" class="btn-link" data-cap-row-all="host">All</button> · <button type="button" class="btn-link" data-cap-row-none="host">None</button></td></tr><tr><td class="rtype">task</td><td><div class="cap-checks"><label><input type="checkbox" data-cap="task.read" checked/> read</label><label><input type="checkbox" data-cap="task.cancel"/> cancel</label></div></td><td><button type="button" class="btn-link" data-cap-row-all="task">All</button> · <button type="button" class="btn-link" data-cap-row-none="task">None</button></td></tr><tr><td class="rtype">system</td><td><div class="cap-checks"><label><input type="checkbox" data-cap="system.backups"/> backups</label><label><input type="checkbox" data-cap="system.updates"/> updates</label><label><input type="checkbox" data-cap="system.diagnostics"/> diagnostics</label><label><input type="checkbox" data-cap="system.exports"/> exports</label></div></td><td><button type="button" class="btn-link" data-cap-row-all="system">All</button> · <button type="button" class="btn-link" data-cap-row-none="system">None</button></td></tr><tr><td class="rtype">mcp</td><td><div class="cap-checks"><label><input type="checkbox" data-cap="mcp.read"/> read</label><label><input type="checkbox" data-cap="mcp.register"/> register</label><label><input type="checkbox" data-cap="mcp.invoke"/> invoke</label></div></td><td><button type="button" class="btn-link" data-cap-row-all="mcp">All</button> · <button type="button" class="btn-link" data-cap-row-none="mcp">None</button></td></tr></tbody>
+  </table>
+</div>
+<p class="pick-count" style="margin:8px 0 0" data-cap-summary>12 capabilities selected</p>
+<div class="alert alert-info" style="margin-top:10px">Roles use the same action catalog as API keys. v1 may ship Roles as Users sub-tabs.</div></div>
     <div class="modal-f">
       <button type="button" class="btn" data-close-modal>Cancel</button>
       <button type="button" class="btn btn-primary" data-close-modal>Create role</button>
@@ -372,47 +379,91 @@ storage.snapshot:write
       <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
     </div>
     <div class="modal-b"><div class="field"><label>Name</label><input value="ci-snapshot"/></div><div class="field"><label>Kind</label><select><option>Service / CI key</option><option>Personal access token</option></select></div><div class="field"><label>Owner</label><select><option>Service: gha-ci</option><option>mlapointe (personal)</option></select></div><div class="field"><label>Expires</label><select><option>90 days</option><option>1 year</option><option>Never</option></select></div>
-        <div style="font-size:12px;font-weight:700;margin:12px 0 8px">Scopes (deny by default)</div>
-        <div class="alert alert-info" style="margin-bottom:10px">
-          Each row: <strong>resource type</strong> × <strong>actions</strong> × <strong>domain</strong> (all / list / pattern / tag).
-          Intersected with the principal’s role. Product IA §3.2a.
+        <div style="font-size:12px;font-weight:700;margin:12px 0 8px">1 · Resource type</div>
+        <div class="scope-domain-tabs" style="margin-bottom:12px">
+          <button type="button" class="chip active">vm</button>
+          <button type="button" class="chip">jail</button>
+          <button type="button" class="chip">container</button>
+          <button type="button" class="chip">volume</button>
+          <button type="button" class="chip">network</button>
+          <button type="button" class="chip">task</button>
+          <button type="button" class="chip">host</button>
+          <button type="button" class="chip">system</button>
         </div>
-        <div class="card" style="margin-bottom:10px;overflow:auto">
-          <table class="res">
-            <thead><tr><th>Resource</th><th>Actions</th><th>Domain</th><th></th></tr></thead>
-            <tbody>
-              <tr>
-                <td><select style="font-size:12px;padding:4px"><option selected>vm</option><option>jail</option><option>container</option><option>volume</option><option>network</option><option>task</option></select></td>
-                <td style="font-size:11px">
-                  <label style="margin-right:6px"><input type="checkbox" checked/> read</label>
-                  <label style="margin-right:6px"><input type="checkbox" checked/> snapshot.create</label>
-                  <label style="margin-right:6px"><input type="checkbox" checked/> snapshot.revert</label>
-                  <label style="margin-right:6px"><input type="checkbox"/> snapshot.delete</label>
-                  <label style="margin-right:6px"><input type="checkbox"/> power</label>
-                  <label style="margin-right:6px"><input type="checkbox"/> create</label>
-                  <label style="margin-right:6px"><input type="checkbox"/> delete</label>
-                </td>
-                <td>
-                  <select style="font-size:12px;padding:4px;margin-bottom:4px"><option>pattern</option><option>tag</option><option>list</option><option>all</option></select>
-                  <input value="ci-*" placeholder="ci-* or tag=ci" style="width:100%;padding:4px 6px;font-size:11px;border:1px solid #cbd5e1;border-radius:4px"/>
-                </td>
-                <td><button type="button" class="btn-link danger">×</button></td>
-              </tr>
-              <tr>
-                <td><select style="font-size:12px;padding:4px"><option selected>task</option></select></td>
-                <td style="font-size:11px"><label><input type="checkbox" checked/> read</label></td>
-                <td><select style="font-size:12px;padding:4px"><option selected>all</option></select></td>
-                <td><button type="button" class="btn-link danger">×</button></td>
-              </tr>
-            </tbody>
-          </table>
+        <div style="font-size:12px;font-weight:700;margin:0 0 8px">2 · Actions (vm)</div>
+        
+        <div class="cap-checks card card-pad" style="margin-bottom:12px" data-cap-matrix>
+          <label><input type="checkbox" checked data-cap="vm.read"/> read</label>
+          <label><input type="checkbox" data-cap="vm.create"/> create</label>
+          <label><input type="checkbox" data-cap="vm.update"/> update</label>
+          <label><input type="checkbox" data-cap="vm.delete"/> delete</label>
+          <label><input type="checkbox" data-cap="vm.power"/> power</label>
+          <label><input type="checkbox" data-cap="vm.migrate"/> migrate</label>
+          <label><input type="checkbox" data-cap="vm.console"/> console</label>
+          <label><input type="checkbox" checked data-cap="vm.snapshot.create"/> snapshot.create</label>
+          <label><input type="checkbox" checked data-cap="vm.snapshot.revert"/> snapshot.revert</label>
+          <label><input type="checkbox" data-cap="vm.snapshot.delete"/> snapshot.delete</label>
         </div>
-        <button type="button" class="btn" style="margin-bottom:10px">+ Add scope row</button>
-        <div class="card card-pad mono" style="font-size:11px;background:#f8fafc;margin-bottom:10px">
-          Summary: <strong>vm</strong> [read, snapshot.create, snapshot.revert] @ pattern <code>ci-*</code><br/>
-          + <strong>task</strong> [read] @ all
+        <div style="font-size:12px;font-weight:700;margin:0 0 8px">3 · Domain</div>
+        
+<div class="ui-rule-banner">Domain is selected from inventory or known tags — not typed resource names.</div>
+<div class="scope-domain-tabs" data-domain-mode>
+  <button type="button" class="chip" data-domain="all">All of type</button>
+  <button type="button" class="chip active" data-domain="list">Pick resources</button>
+  <button type="button" class="chip" data-domain="tag">Pick tags</button>
+  <button type="button" class="chip" data-domain="pattern">Pattern + preview</button>
+</div>
+<div data-domain-panel="all" hidden>
+  <div class="alert alert-warn">Key may act on every object of the selected type the principal can see.</div>
+</div>
+<div data-domain-panel="list">
+  
+<div class="pick-panel" data-pick-list>
+  <div class="pick-panel-h">
+    <span>Inventory (multi-select)</span>
+    <input type="search" placeholder="Filter…" data-pick-filter autocomplete="off"/>
+    <span class="pick-count" data-pick-count>4 selected</span>
+  </div>
+  <div class="pick-list"><label class="pick-item" data-pick-item><input type="checkbox" value="nextcloud"/><span class="kind">vm</span><span>nextcloud</span><span class="meta">prod-node-01</span></label><label class="pick-item" data-pick-item><input type="checkbox" value="jellyfin"/><span class="kind">vm</span><span>jellyfin</span><span class="meta">prod-node-02</span></label><label class="pick-item selected" data-pick-item><input type="checkbox" value="ci-runner-01" checked/><span class="kind">vm</span><span>ci-runner-01</span><span class="meta">prod-node-02</span></label><label class="pick-item selected" data-pick-item><input type="checkbox" value="ci-runner-02" checked/><span class="kind">vm</span><span>ci-runner-02</span><span class="meta">prod-node-03</span></label><label class="pick-item selected" data-pick-item><input type="checkbox" value="ci-build" checked/><span class="kind">vm</span><span>ci-build</span><span class="meta">prod-node-01</span></label><label class="pick-item" data-pick-item><input type="checkbox" value="gitlab-runner"/><span class="kind">vm</span><span>gitlab-runner</span><span class="meta">prod-node-02</span></label><label class="pick-item" data-pick-item><input type="checkbox" value="pkg-mirror"/><span class="kind">jail</span><span>pkg-mirror</span><span class="meta">prod-node-01</span></label><label class="pick-item" data-pick-item><input type="checkbox" value="redis-cache"/><span class="kind">container</span><span>redis-cache</span><span class="meta">prod-node-01</span></label><label class="pick-item" data-pick-item><input type="checkbox" value="tank/vms/nextcloud"/><span class="kind">volume</span><span>tank/vms/nextcloud</span><span class="meta">120 GB</span></label><label class="pick-item selected" data-pick-item><input type="checkbox" value="tank/vms/ci-runner-01" checked/><span class="kind">volume</span><span>tank/vms/ci-runner-01</span><span class="meta">40 GB</span></label></div>
+</div>
+</div>
+<div data-domain-panel="tag" hidden>
+  
+<div class="pick-panel" data-pick-list>
+  <div class="pick-panel-h">
+    <span>Existing tags</span>
+    <input type="search" placeholder="Filter…" data-pick-filter autocomplete="off"/>
+    <span class="pick-count" data-pick-count>1 selected</span>
+  </div>
+  <div class="pick-list"><label class="pick-item selected" data-pick-item><input type="checkbox" value="ci=true" checked/><span class="kind">tag</span><span>ci=true</span><span class="meta">14 objects</span></label><label class="pick-item" data-pick-item><input type="checkbox" value="env=staging"/><span class="kind">tag</span><span>env=staging</span><span class="meta">8 objects</span></label><label class="pick-item" data-pick-item><input type="checkbox" value="env=prod"/><span class="kind">tag</span><span>env=prod</span><span class="meta">22 objects</span></label><label class="pick-item" data-pick-item><input type="checkbox" value="pipeline=gha"/><span class="kind">tag</span><span>pipeline=gha</span><span class="meta">6 objects</span></label><label class="pick-item" data-pick-item><input type="checkbox" value="team=platform"/><span class="kind">tag</span><span>team=platform</span><span class="meta">11 objects</span></label></div>
+</div>
+</div>
+<div data-domain-panel="pattern" hidden>
+  <div class="field"><label>Preset prefix</label>
+    <select data-pattern-preset>
+      <option value="">— choose inventory prefix —</option>
+      <option value="ci-*" selected>ci-* (3 VMs match)</option>
+      <option value="tank/vms/ci-*">tank/vms/ci-*</option>
+      <option value="staging-*">staging-*</option>
+    </select>
+  </div>
+  <div class="field"><label>Advanced glob (optional)</label>
+    <input value="ci-*" data-pattern-input autocomplete="off"/>
+  </div>
+  <div class="card card-pad" style="font-size:12px">
+    <strong>Live preview</strong> — must match before save:
+    <ul style="margin:6px 0 0;padding-left:18px">
+      <li>ci-runner-01</li><li>ci-runner-02</li><li>ci-build</li>
+    </ul>
+    <span class="pick-count">3 matches · empty preview blocks save</span>
+  </div>
+</div>
+
+        <div class="card card-pad mono" style="font-size:11px;background:#f8fafc;margin:12px 0 10px" data-scope-summary>
+          Summary: <strong>vm</strong> [read, snapshot.create, snapshot.revert]
+          @ <strong>3 resources</strong> (ci-runner-01, ci-runner-02, ci-build)
         </div>
-        <div class="alert alert-warn">Secret is shown once after create. Store it in a vault. Key cannot exceed creator role.</div></div>
+        <div class="alert alert-warn">Secret shown once. Key cannot exceed creator role. No freeform capability strings.</div></div>
     <div class="modal-f">
       <button type="button" class="btn" data-close-modal>Cancel</button>
       <button type="button" class="btn btn-primary" data-close-modal>Create key</button>

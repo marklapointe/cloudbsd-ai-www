@@ -313,6 +313,8 @@ Use this as the **only** allowed component inventory for v1 coding waves. Anythi
 - [ ] Users, Roles (or Users tabs)  
 - [ ] **API keys** (Access) + personal tokens (Account) with **scope builder**  
       (resource type × actions × domain: all / list / pattern / tag)  
+- [ ] **Selectable-only** role capabilities + resource domain pickers  
+      (catalog checklists / multi-select inventory — **no freeform capability text**)  
 - [ ] Snapshot actions on VM/volume detail: create, delete, **revert**; Task tracking  
 - [ ] Logs, Notifications, Audit  
 - [ ] Account shell (profile/security/appearance/prefs/tokens **with scopes**)  

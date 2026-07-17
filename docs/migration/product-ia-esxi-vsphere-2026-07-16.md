@@ -208,10 +208,26 @@ Snapshots are **not** an afterthought:
 
 #### UI requirements
 
-- Create/edit key wizard: name, expiry, owner, **scope builder** (resource × actions × domain), review JSON/summary  
-- Key list columns: name, owner, expiry, **scope summary** (e.g. `vm:snapshot* @ ci-*`), last used  
+- Create/edit key wizard: name, expiry, owner, **scope builder** (resource × actions × domain), review summary  
+- Key list columns: name, owner, expiry, **scope summary** (e.g. `vm:snapshot* @ 12 VMs`), last used  
 - Key detail: full scope table, rotate, revoke  
 - Audit: every API call logs key id + matched scope entry + target resource  
+
+#### UI: selectable only — no freeform capability strings
+
+Free-text boxes for roles/capabilities/resource names are **forbidden** in create/edit flows (typos become silent over- or under-privilege).
+
+| Field | Control |
+|-------|---------|
+| **Role capabilities** | Grouped checklist of known actions per resource type (from server catalog) |
+| **API key resource type** | Single-select from catalog (vm, jail, …) |
+| **API key actions** | Multi-select checkboxes for that type (only valid verbs shown) |
+| **Domain: all** | Radio / chip — no text |
+| **Domain: list** | **Searchable multi-select** of live inventory (VMs, jails, …); pick from list |
+| **Domain: tag** | Multi-select of **existing** tags (or create-tag flow elsewhere), not free CSV |
+| **Domain: pattern** | Prefer **preset patterns** from inventory prefixes + optional advanced glob with live **preview matches** (must show matching objects before save) |
+
+**Roles** use the same action catalog as keys (role = default capability set for humans; key scopes refine further).
 
 #### Non-goals (v1)
 

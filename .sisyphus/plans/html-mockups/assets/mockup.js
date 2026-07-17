@@ -709,6 +709,121 @@
     });
   });
 
+  /* ── Pick lists + capability matrix (no freeform scopes) ─ */
+  function refreshPickCount(panel) {
+    var n = qsa('input[type="checkbox"]:checked', panel).length;
+    var el = qs("[data-pick-count]", panel);
+    if (el) el.textContent = n + " selected";
+  }
+
+  function refreshCapSummary(root) {
+    var scope = root || document;
+    qsa("[data-cap-matrix]", scope).forEach(function (matrix) {
+      var n = qsa('input[type="checkbox"]:checked', matrix).length;
+      var sum = qs("[data-cap-summary]", matrix.closest(".modal-b") || matrix.parentElement);
+      if (sum) sum.textContent = n + " capabilities selected";
+    });
+    var summary = qs("[data-scope-summary]");
+    if (summary) {
+      var acts = qsa('.modal-b [data-cap]:checked, .modal-b [data-cap-matrix] input:checked')
+        .map(function (i) {
+          var d = i.getAttribute("data-cap") || "";
+          return d.indexOf(".") >= 0 ? d.split(".").slice(1).join(".") : (i.parentElement && i.parentElement.textContent || "").trim();
+        })
+        .filter(Boolean);
+      /* unique */
+      acts = acts.filter(function (v, i, a) { return a.indexOf(v) === i; });
+      var resCount = 0;
+      qsa('[data-domain-panel="list"] input:checked, [data-domain-panel="tag"] input:checked').forEach(function () { resCount++; });
+      var domainChip = qs(".scope-domain-tabs .chip.active[data-domain]");
+      var mode = domainChip ? domainChip.getAttribute("data-domain") : "list";
+      var domainLabel = mode === "all" ? "all of type"
+        : mode === "pattern" ? "pattern preview"
+        : resCount + " selected";
+      if (acts.length) {
+        summary.innerHTML = "Summary: <strong>vm</strong> [" + acts.slice(0, 8).join(", ") +
+          (acts.length > 8 ? "…" : "") + "] @ <strong>" + domainLabel + "</strong>";
+      }
+    }
+  }
+
+  document.addEventListener("change", function (e) {
+    var t = e.target;
+    if (!t) return;
+    if (t.matches("[data-pick-list] input[type=checkbox], .pick-item input")) {
+      var item = t.closest(".pick-item");
+      if (item) item.classList.toggle("selected", t.checked);
+      var panel = t.closest("[data-pick-list]");
+      if (panel) refreshPickCount(panel);
+      refreshCapSummary();
+    }
+    if (t.matches("[data-cap-matrix] input, [data-cap]")) {
+      refreshCapSummary(t.closest(".modal-b") || document);
+    }
+  });
+
+  document.addEventListener("input", function (e) {
+    var t = e.target;
+    if (t && t.matches("[data-pick-filter]")) {
+      var panel = t.closest("[data-pick-list]");
+      if (!panel) return;
+      var q = t.value.toLowerCase().trim();
+      qsa("[data-pick-item], .pick-item", panel).forEach(function (item) {
+        var text = item.textContent.toLowerCase();
+        item.style.display = !q || text.indexOf(q) !== -1 ? "" : "none";
+      });
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    var modeBtn = e.target.closest("[data-domain]");
+    if (modeBtn && modeBtn.closest("[data-domain-mode], .scope-domain-tabs")) {
+      var wrap = modeBtn.closest(".modal-b") || modeBtn.closest("[data-tabs]") || document;
+      var mode = modeBtn.getAttribute("data-domain");
+      if (mode) {
+        e.preventDefault();
+        qsa("[data-domain]", wrap).forEach(function (b) {
+          b.classList.toggle("active", b === modeBtn);
+        });
+        qsa("[data-domain-panel]", wrap).forEach(function (p) {
+          p.hidden = p.getAttribute("data-domain-panel") !== mode;
+        });
+        refreshCapSummary(wrap);
+        toast("Domain: " + mode, "info");
+        return;
+      }
+    }
+    var allBtn = e.target.closest("[data-cap-row-all]");
+    if (allBtn) {
+      e.preventDefault();
+      var rtype = allBtn.getAttribute("data-cap-row-all");
+      var row = allBtn.closest("tr");
+      qsa("input[type=checkbox]", row).forEach(function (c) { c.checked = true; });
+      refreshCapSummary(allBtn.closest(".modal-b"));
+      toast("All " + rtype + " actions selected", "info");
+      return;
+    }
+    var noneBtn = e.target.closest("[data-cap-row-none]");
+    if (noneBtn) {
+      e.preventDefault();
+      var row2 = noneBtn.closest("tr");
+      qsa("input[type=checkbox]", row2).forEach(function (c) { c.checked = false; });
+      refreshCapSummary(noneBtn.closest(".modal-b"));
+      return;
+    }
+    /* resource type chips in API key modal (non-domain) */
+    var typeChip = e.target.closest(".scope-domain-tabs .chip:not([data-domain])");
+    if (typeChip && typeChip.closest(".modal-b")) {
+      var tabs = typeChip.parentElement;
+      if (tabs && !tabs.hasAttribute("data-domain-mode") && !qs("[data-domain]", tabs)) {
+        qsa(".chip", tabs).forEach(function (c) { c.classList.toggle("active", c === typeChip); });
+        toast("Resource type: " + typeChip.textContent.trim(), "info");
+      }
+    }
+  });
+
+  qsa("[data-pick-list]").forEach(refreshPickCount);
+
   /* ── Table row select + bulk bar ────────────────────── */
   function initTables() {
     qsa("table.res").forEach(function (table) {
