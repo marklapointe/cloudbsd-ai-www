@@ -1,49 +1,34 @@
-# HTML mockup experiment
+# HTML mockup experiment (tabs + modals)
 
-Browsable HTML mockups for CloudBSD Admin product spine pages and shared components.
-
-## Location
-
-`.sisyphus/plans/html-mockups/`
+Browsable HTML for CloudBSD Admin spine pages, **full tab panels**, and **popup modals**.
 
 ## View
 
-Open `index.html` in a browser (double-click or `python3 -m http.server` from this directory).
+```bash
+xdg-open index.html
+# or
+python3 -m http.server 8765
+```
+
+## Behavior
+
+- **Tabs**: click tab labels; content panels switch (hash updated when possible).
+- **Modals**: action links/buttons use `data-open-modal="m-…"`. Esc or backdrop closes.
+- **Shared modal library**: injected on every shell page (stop VM, drain host, MCP edit, etc.).
 
 ## Layout
 
 | Path | Contents |
 |------|----------|
-| `pages/` | Spine screens (Dashboard, VMs, Hosts, MCP, Settings, System, …) |
-| `detail/` | Resource detail shells (VM, Host, Container, Jail, Volume) |
-| `components/` | Shared building blocks (ResourceTable, EmptyState, …) |
-| `modals/` | Confirm, frost-out, create dialogs |
-| `wizards/` | Create VM/container/jail, MCP add, onboarding |
-| `assets/` | Shared CSS + tiny JS |
-
-## Product rules baked in
-
-- **MCP is the plugin system** (`pages/mcp.html`, `wizards/mcp-add.html`)
-- Account vs Settings vs System split
-- Hosts inventory vs Cluster services
-- Management UX: describe → preflight → confirm
-- Live stream indicator; no Refresh chrome on resource pages
+| `pages/` | Spine screens with working tabs |
+| `detail/` | VM/Host/Container/Jail/Volume — all tabs |
+| `modals/` | Gallery pages auto-opening each modal |
+| `components/` | Shared building blocks |
+| `wizards/` | Multi-step wizards as tab steppers |
+| `generate.py` | Source of truth — regenerate overwrites HTML |
 
 ## Regenerate
 
 ```bash
 python3 generate.py
 ```
-
-Edits to generated HTML are overwritten; change `generate.py` or hand-tweak specific files and stop regenerating those.
-
-## Authority
-
-1. `docs/migration/product-ia-esxi-vsphere-2026-07-16.md`
-2. `docs/migration/component-catalog-plan.md`
-3. SVG Track 2 under `diagrams/screens/`
-4. This HTML kit (interactive experiment)
-
-## Not in scope
-
-Production Angular, real APIs, theme customizer gallery, file manager.

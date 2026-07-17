@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>CloudBSD Admin — Create jail wizard</title>
+  <title>CloudBSD Admin — Create jail</title>
   <link rel="stylesheet" href="../assets/mockup.css"/>
-  
 </head>
 <body data-nav="">
 <div class="app">
@@ -16,15 +15,13 @@
     <div class="header-right">
       <a href="../index.html" style="font-size:11px;color:var(--muted)">Mockup index</a>
       <span class="live">● live</span>
-      <select style="padding:3px 6px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px">
-        <option>UTC</option>
-      </select>
-      <div class="avatar" title="My Account">M</div>
+      <button type="button" class="btn-link" data-open-modal="m-mark-read" title="Notifications">🔔 2</button>
+      <select style="padding:3px 6px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px"><option>UTC</option></select>
+      <a class="avatar" href="../pages/account.html" title="My Account">M</a>
     </div>
   </header>
   <div class="body">
-    <aside class="sidebar">
-<div class="nav-group">Workload</div><nav>
+    <aside class="sidebar"><div class="nav-group">Workload</div><nav>
 <a href="../pages/dashboard.html" data-id="dashboard"><span>Dashboard</span></a>
 <a href="../pages/vms.html" data-id="vms"><span>Virtual Machines</span></a>
 <a href="../pages/containers.html" data-id="containers"><span>Containers</span></a>
@@ -53,31 +50,829 @@
 <a href="../pages/system.html" data-id="system"><span>System</span></a>
 <a href="../pages/about.html" data-id="about"><span>About</span></a>
 </nav>
-<div class="sidebar-footer"><div>Host: prod-node-01</div><div>Uptime: 14d 02:11</div></div>
-    </aside>
+<div class="sidebar-footer"><div>Host: prod-node-01</div><div>Uptime: 14d 02:11</div></div></aside>
     <main class="content">
 
 <div class="page-head">
-  <div>
-    <h1>Create jail</h1>
-    <p class="sub">Template → identity → resources → review</p>
-  </div>
+  <div><h1>Create jail</h1><p class="sub">Template → review</p></div>
   <div class="actions"></div>
 </div>
-
-<div class="stepper">
-  <span class="step active">1 Template</span>
-  <span class="step">2 Identity</span>
-  <span class="step">3 Resources</span>
-  <span class="step">4 Review</span>
+<div data-tabs>
+  <div class="tabs"><button type="button" class="active" data-tab="template">1 Template</button><button type="button" class="" data-tab="identity">2 Identity</button><button type="button" class="" data-tab="resources">3 Resources</button><button type="button" class="" data-tab="review">4 Review</button></div>
+  <div class="panel" data-panel="template"><div class="field"><label>Release</label><select><option>14.2-RELEASE</option></select></div></div><div class="panel" data-panel="identity" hidden><div class="field"><label>Name</label><input value="pkg-mirror-2"/></div></div><div class="panel" data-panel="resources" hidden><div class="field"><label>IP</label><input value="10.0.20.11"/></div></div><div class="panel" data-panel="review" hidden><button type="button" class="btn btn-primary" data-open-modal="m-confirm-generic">Create</button></div>
 </div>
-<div class="card card-pad" style="max-width:560px">
-  <div class="field"><label>Release</label><select><option>14.2-RELEASE</option></select></div>
-  <div class="actions" style="justify-content:flex-end"><button class="btn btn-primary">Next</button></div>
-</div>
-
-      <p class="mock-note">HTML mockup experiment · not production · IA: MCP is plugins · path: .sisyphus/plans/html-mockups/</p>
+      <p class="mock-note">HTML mockup · tabs + modals filled · MCP = plugins · .sisyphus/plans/html-mockups/</p>
     </main>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-stop-vm" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-stop-vm-title">
+    <div class="modal-h">
+      <h2 id="m-stop-vm-title">Stop virtual machine</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Stop <strong>nextcloud</strong> on prod-node-01?</p>
+        <div class="alert alert-info">Guest ACPI shutdown · timeout 120s · then force power off if needed.</div>
+        <div class="alert alert-ok">Preflight: OK — no blockers</div>
+        <div class="field"><label>Reason (audit)</label><input placeholder="Optional note for audit log"/></div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Stop VM</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-start-vm" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-start-vm-title">
+    <div class="modal-h">
+      <h2 id="m-start-vm-title">Start virtual machine</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Start <strong>win11-sandbox</strong> on prod-node-03?</p>
+        <div class="alert alert-ok">Preflight: host has capacity (CPU 12%, mem 30%).</div>
+        <div class="field"><label>Host</label><select><option>prod-node-03 (current)</option><option>Automatic</option><option>prod-node-01</option></select></div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Start VM</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-restart-vm" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-restart-vm-title">
+    <div class="modal-h">
+      <h2 id="m-restart-vm-title">Restart virtual machine</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Restart <strong>gitlab-runner</strong>?</p>
+        <div class="alert alert-warn">Guest is in error state. Soft reboot may hang — force reset available after 60s.</div>
+        </div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Restart</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-delete-vm" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-delete-vm-title">
+    <div class="modal-h">
+      <h2 id="m-delete-vm-title">Delete virtual machine</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Permanently delete <strong>win11-sandbox</strong> and its boot disk?</p>
+        <div class="alert alert-warn">Snapshots will be destroyed. This cannot be undone.</div>
+        <div class="field"><label>Type <code class="inline">DELETE</code> to confirm</label><input placeholder="DELETE"/></div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-danger" data-close-modal>Delete VM</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-migrate-vm" hidden>
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="m-migrate-vm-title">
+    <div class="modal-h">
+      <h2 id="m-migrate-vm-title">Migrate virtual machine</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Live-migrate <strong>nextcloud</strong> to another host.</p>
+        <div class="field"><label>Destination</label><select><option>prod-node-02</option><option>prod-node-04</option></select></div><div class="field"><label>Mode</label><select><option>Live (shared storage)</option><option>Cold</option></select></div><div class="alert alert-ok">Preflight: shared ZFS dataset reachable · network path OK</div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Start migration</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-snapshot" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-snapshot-title">
+    <div class="modal-h">
+      <h2 id="m-snapshot-title">Create snapshot</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><div class="field"><label>Name</label><input value="manual-2026-07-16"/></div><div class="field"><label>Recursive</label><select><option>Yes</option><option>No</option></select></div><div class="field"><label>Target</label><select><option>nextcloud (VM + disks)</option><option>tank/vms/nextcloud only</option></select></div><div class="alert alert-info">Describe → preflight → confirm. Snapshot is crash-consistent unless guest agent quiscing is enabled.</div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Create snapshot</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-delete-snapshot" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-delete-snapshot-title">
+    <div class="modal-h">
+      <h2 id="m-delete-snapshot-title">Delete snapshot</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Delete snapshot <strong>nextcloud@2026-07-15</strong>?</p>
+        <div class="alert alert-warn">Dependent clones: none. This cannot be undone.</div>
+        <div class="field"><label>Type <code class="inline">DELETE</code></label><input placeholder="DELETE"/></div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-danger" data-close-modal>Delete snapshot</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-stop-container" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-stop-container-title">
+    <div class="modal-h">
+      <h2 id="m-stop-container-title">Stop container</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Stop container <strong>redis-cache</strong>?</p>
+        <div class="alert alert-ok">Preflight: OK · SIGTERM then SIGKILL after 10s</div>
+        </div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Stop container</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-start-container" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-start-container-title">
+    <div class="modal-h">
+      <h2 id="m-start-container-title">Start container</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><p>Start container <strong>buildkit</strong> on prod-node-03?</p></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Start container</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-stop-jail" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-stop-jail-title">
+    <div class="modal-h">
+      <h2 id="m-stop-jail-title">Stop jail</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Stop jail <strong>pkg-mirror</strong>?</p>
+        <div class="alert alert-info">jail -r · network interfaces detached</div>
+        </div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Stop jail</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-start-jail" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-start-jail-title">
+    <div class="modal-h">
+      <h2 id="m-start-jail-title">Start jail</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><p>Start jail <strong>pkg-mirror</strong> on prod-node-01?</p></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Start jail</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-add-host" hidden>
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="m-add-host-title">
+    <div class="modal-h">
+      <h2 id="m-add-host-title">Add host</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <div class="stepper"><span class="step active">1 Connect</span><span class="step">2 Preflight</span><span class="step">3 Join</span></div>
+        <div class="field"><label>Hostname / IP</label><input placeholder="prod-node-06.local"/></div><div class="field"><label>Join token</label><input type="password" placeholder="••••••••"/></div><div class="alert alert-info">Preflight verifies agent version, TLS, and management network reachability.</div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Next · Preflight</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-drain-host" hidden>
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="m-drain-host-title">
+    <div class="modal-h">
+      <h2 id="m-drain-host-title">Drain host</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Drain <strong>prod-node-01</strong> — evacuate VMs/jails before maintenance.</p>
+        <div class="field"><label>Target hosts</label><select><option>Automatic (cluster)</option><option>prod-node-02</option></select></div><div class="field"><label>Mode</label><select><option>Live migrate when possible</option><option>Stop then restart elsewhere</option></select></div><div class="alert alert-warn">12 VMs will be migrated. Estimated 18–40 minutes.</div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Start drain</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-maint-host" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-maint-host-title">
+    <div class="modal-h">
+      <h2 id="m-maint-host-title">Enter maintenance</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Mark <strong>prod-node-03</strong> as maintenance?</p>
+        <div class="alert alert-info">New placements disabled. Existing workloads keep running unless drained first.</div>
+        <div class="field"><label>Note</label><input placeholder="Disk replacement"/></div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Enter maintenance</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-exit-maint" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-exit-maint-title">
+    <div class="modal-h">
+      <h2 id="m-exit-maint-title">Exit maintenance</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><p>Return <strong>prod-node-03</strong> to Ready and accept new placements?</p></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Exit maintenance</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-create-user" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-create-user-title">
+    <div class="modal-h">
+      <h2 id="m-create-user-title">Create user</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><div class="field"><label>Username</label><input placeholder="ops-charlie"/></div><div class="field"><label>Display name</label><input placeholder="Charlie Ops"/></div><div class="field"><label>Role</label><select><option>Operator</option><option>Admin</option><option>Auditor</option></select></div><div class="field"><label>Temporary password</label><input type="password"/></div><div class="field"><label>Require password change</label><select><option>Yes</option><option>No</option></select></div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Create user</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-edit-user" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-edit-user-title">
+    <div class="modal-h">
+      <h2 id="m-edit-user-title">Edit user</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><div class="field"><label>Username</label><input value="ops-alice" disabled/></div><div class="field"><label>Role</label><select><option>Operator</option><option selected>Admin</option><option>Auditor</option></select></div><div class="field"><label>Status</label><select><option>Active</option><option>Disabled</option></select></div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-disable-user" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-disable-user-title">
+    <div class="modal-h">
+      <h2 id="m-disable-user-title">Disable user</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Disable <strong>audit-bob</strong>? Sessions will be revoked.</p>
+        <div class="alert alert-warn">API keys owned by this user remain until rotated.</div>
+        </div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-danger" data-close-modal>Disable user</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-create-role" hidden>
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="m-create-role-title">
+    <div class="modal-h">
+      <h2 id="m-create-role-title">Create role</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><div class="field"><label>Name</label><input placeholder="BackupOperator"/></div><div class="field"><label>Capabilities</label><textarea>system.backups:write
+storage.snapshot:write
+*:read</textarea></div><div class="alert alert-info">v1 may ship Roles as Users sub-tabs.</div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Create role</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-api-key" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-api-key-title">
+    <div class="modal-h">
+      <h2 id="m-api-key-title">Create API key</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><div class="field"><label>Name</label><input value="ci-deploy"/></div><div class="field"><label>Owner</label><select><option>mlapointe (personal)</option><option>Service: ci</option></select></div><div class="field"><label>Expires</label><select><option>90 days</option><option>1 year</option><option>Never</option></select></div><div class="alert alert-warn">Secret is shown once after create. Store it in a vault.</div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Create key</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-backup-policy" hidden>
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="m-backup-policy-title">
+    <div class="modal-h">
+      <h2 id="m-backup-policy-title">Backup policy</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><div class="field"><label>Name</label><input value="nightly-zfs"/></div><div class="field"><label>Schedule (cron)</label><input value="0 2 * * *"/></div><div class="field"><label>Targets</label><input value="tank/vms/*"/></div><div class="field"><label>Retention</label><input value="14 daily · 8 weekly"/></div><div class="field"><label>Destination</label><select><option>backup pool</option><option>offsite-repl</option></select></div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Save policy</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-backup-run" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-backup-run-title">
+    <div class="modal-h">
+      <h2 id="m-backup-run-title">Run backup now</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Run policy <strong>nightly-zfs</strong> immediately?</p>
+        <div class="alert alert-info">Creates task under Tasks · does not change schedule.</div>
+        </div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Run backup</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-export-bundle" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-export-bundle-title">
+    <div class="modal-h">
+      <h2 id="m-export-bundle-title">Export support bundle</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Collect logs, config (redacted secrets), cluster state, and recent tasks.</p>
+        <div class="field"><label>Include</label><select><option>Last 24h logs</option><option>Last 7d logs</option></select></div><div class="alert alert-ok">Bundle is encrypted at rest · download once</div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Generate bundle</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-maintenance-mode" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-maintenance-mode-title">
+    <div class="modal-h">
+      <h2 id="m-maintenance-mode-title">Cluster maintenance mode</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Enable global maintenance mode? API writes (except admin break-glass) will be rejected.</p>
+        <div class="field"><label>Message for operators</label><input value="Planned maintenance until 04:00 UTC"/></div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-danger" data-close-modal>Enable maintenance</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-mcp-disable" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-mcp-disable-title">
+    <div class="modal-h">
+      <h2 id="m-mcp-disable-title">Disable MCP server</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Disable <strong>honcho</strong>? Tools disappear from agents until re-enabled.</p>
+        <div class="alert alert-warn">In-flight tool calls may fail.</div>
+        </div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-danger" data-close-modal>Disable</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-mcp-enable" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-mcp-enable-title">
+    <div class="modal-h">
+      <h2 id="m-mcp-enable-title">Enable MCP server</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><p>Enable <strong>operant</strong> and probe tools?</p></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Enable &amp; probe</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-mcp-probe" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-mcp-probe-title">
+    <div class="modal-h">
+      <h2 id="m-mcp-probe-title">Probe MCP server</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Probe <strong>honcho</strong> — handshake + list tools.</p>
+        <div class="card card-pad mono" style="background:#0f172a;color:#86efac;margin-top:8px">
+          handshake OK · protocol 2025-06-18<br/>
+          tools: 30 · latency 42ms
+        </div>
+        </div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Close</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Done</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-mcp-edit" hidden>
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="m-mcp-edit-title">
+    <div class="modal-h">
+      <h2 id="m-mcp-edit-title">Edit MCP server</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><div class="field"><label>Name</label><input value="honcho"/></div><div class="field"><label>URL</label><input class="mono" value="https://mcp.honcho.example.lan/"/></div><div class="field"><label>Authorization</label><input type="password" value="••••••••" placeholder="Leave blank to keep"/></div><div class="field"><label>Timeout (tools)</label><input value="600"/></div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-webhook" hidden>
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="m-webhook-title">
+    <div class="modal-h">
+      <h2 id="m-webhook-title">Create webhook</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><div class="field"><label>URL</label><input placeholder="https://hooks.example.lan/cloudbsd"/></div><div class="field"><label>Events</label><select multiple size="4"><option selected>task.failed</option><option selected>host.offline</option><option>vm.error</option><option>backup.failed</option></select></div><div class="field"><label>Secret</label><input type="password"/></div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Create webhook</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-ntp" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-ntp-title">
+    <div class="modal-h">
+      <h2 id="m-ntp-title">Add NTP server</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><div class="field"><label>Server</label><input placeholder="0.freebsd.pool.ntp.org"/></div><div class="field"><label>Prefer</label><select><option>No</option><option>Yes</option></select></div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Add NTP server</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-join-token" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-join-token-title">
+    <div class="modal-h">
+      <h2 id="m-join-token-title">Create join token</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><div class="field"><label>Label</label><input value="rack-b-hosts"/></div><div class="field"><label>Expires</label><select><option>1 hour</option><option>24 hours</option><option>7 days</option></select></div><div class="field"><label>Max uses</label><input value="5"/></div><div class="alert alert-warn">Token shown once. Treat as a secret.</div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Generate token</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-join-token-result" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-join-token-result-title">
+    <div class="modal-h">
+      <h2 id="m-join-token-result-title">Join token created</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Copy now — will not be shown again.</p>
+        <div class="card card-pad mono" style="word-break:break-all">cbjoin_8f3a9c2e1b7d4a6f0e5c8b2a1d9f7e3c</div>
+        </div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Close</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Copied</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-change-password" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-change-password-title">
+    <div class="modal-h">
+      <h2 id="m-change-password-title">Change password</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><div class="field"><label>Current password</label><input type="password"/></div><div class="field"><label>New password</label><input type="password"/></div><div class="field"><label>Confirm</label><input type="password"/></div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Update password</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-passkey" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-passkey-title">
+    <div class="modal-h">
+      <h2 id="m-passkey-title">Register passkey</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Your browser will prompt for a security key or platform authenticator.</p>
+        <div class="alert alert-info">Passkeys are personal (My Account), not cluster auth policy.</div>
+        </div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Continue in browser</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-totp" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-totp-title">
+    <div class="modal-h">
+      <h2 id="m-totp-title">Set up authenticator (TOTP)</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Scan with your authenticator app, then enter a code.</p>
+        <div class="card card-pad" style="text-align:center;font-family:monospace">QR · JBSWY3DPEHPK3PXP</div>
+        <div class="field"><label>Verification code</label><input placeholder="123456"/></div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Enable TOTP</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-recovery-codes" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-recovery-codes-title">
+    <div class="modal-h">
+      <h2 id="m-recovery-codes-title">Recovery codes</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Store these codes offline. Each works once.</p>
+        <div class="card card-pad mono">
+          A1B2-C3D4<br/>E5F6-G7H8<br/>I9J0-K1L2<br/>M3N4-O5P6<br/>Q7R8-S9T0
+        </div>
+        <div class="alert alert-warn">Download or print now. Codes will not be shown again in full.</div>
+        </div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Close</button>
+      <button type="button" class="btn btn-primary" data-close-modal>I saved them</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-revoke-session" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-revoke-session-title">
+    <div class="modal-h">
+      <h2 id="m-revoke-session-title">Revoke session</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><p>Revoke Safari session last active 2h ago? That device must sign in again.</p></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-danger" data-close-modal>Revoke</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-edit-ips" hidden>
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="m-edit-ips-title">
+    <div class="modal-h">
+      <h2 id="m-edit-ips-title">Edit IP addresses</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><div class="field"><label>Interface</label><select><option>vtnet0</option><option>vtnet1</option></select></div><div class="field"><label>Addresses</label><textarea>10.0.10.21/24
+fe80::1/64</textarea></div><div class="alert alert-warn">Preflight: changing management IP may disconnect this session.</div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Apply</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-edit-lacp" hidden>
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="m-edit-lacp-title">
+    <div class="modal-h">
+      <h2 id="m-edit-lacp-title">Edit LACP / bond</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><div class="field"><label>Bond</label><select><option>lagg0</option></select></div><div class="field"><label>Members</label><input value="igb0, igb1"/></div><div class="field"><label>LACP mode</label><select><option>active</option><option>passive</option></select></div><div class="alert alert-ok">Preflight: peer switch config assumed correct</div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Apply</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-cancel-task" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-cancel-task-title">
+    <div class="modal-h">
+      <h2 id="m-cancel-task-title">Cancel task</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Cancel <strong>ZFS send backup/nightly</strong>?</p>
+        <div class="alert alert-warn">Partial receive may need cleanup on destination.</div>
+        </div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-danger" data-close-modal>Cancel task</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-library-upload" hidden>
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="m-library-upload-title">
+    <div class="modal-h">
+      <h2 id="m-library-upload-title">Upload to library</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><div class="field"><label>Type</label><select><option>ISO</option><option>Cloud image</option><option>Jail template</option></select></div><div class="field"><label>File</label><input type="file"/></div><div class="field"><label>Name</label><input placeholder="FreeBSD-14.3-RELEASE-amd64-disc1.iso"/></div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Upload</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-library-delete" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-library-delete-title">
+    <div class="modal-h">
+      <h2 id="m-library-delete-title">Delete library item</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Delete <strong>ubuntu-24.04-cloudimg</strong>? 8 VMs reference this image as template source (clones unaffected).</p>
+        </div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-danger" data-close-modal>Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-scrub" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-scrub-title">
+    <div class="modal-h">
+      <h2 id="m-scrub-title">Start ZFS scrub</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Start scrub on pool <strong>tank</strong>?</p>
+        <div class="alert alert-info">I/O impact medium · estimated 4–6 hours</div>
+        </div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Start scrub</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-clone-dataset" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-clone-dataset-title">
+    <div class="modal-h">
+      <h2 id="m-clone-dataset-title">Clone dataset</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><div class="field"><label>Source</label><input value="tank/vms/nextcloud@2026-07-15" disabled/></div><div class="field"><label>Clone path</label><input value="tank/vms/nextcloud-clone"/></div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Clone</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-create-network" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-create-network-title">
+    <div class="modal-h">
+      <h2 id="m-create-network-title">Quick create network</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><div class="field"><label>Name</label><input value="vm-lab"/></div><div class="field"><label>CIDR</label><input value="10.0.50.0/24"/></div><div class="field"><label>Type</label><select><option>bridge</option><option>vlan</option></select></div><p style="font-size:12px;color:var(--muted)">Or use full wizard: <a href="../wizards/network-create.html">Create network wizard</a></p></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Create</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-delete-network" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-delete-network-title">
+    <div class="modal-h">
+      <h2 id="m-delete-network-title">Delete network</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Delete network <strong>guest-vlan40</strong>?</p>
+        <div class="alert alert-warn">3 attachments must be moved first. Preflight will block if still attached.</div>
+        </div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-danger" data-close-modal>Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-update-apply" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-update-apply-title">
+    <div class="modal-h">
+      <h2 id="m-update-apply-title">Apply updates</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Apply agent update <strong>14.2-p3</strong> to prod-node-03?</p>
+        <div class="alert alert-info">Rolling update · host enters brief maintenance · VMs stay running</div>
+        </div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Apply update</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-mark-read" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-mark-read-title">
+    <div class="modal-h">
+      <h2 id="m-mark-read-title">Mark notifications read</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><p>Mark all notifications as read?</p></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Mark all read</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-save-settings" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-save-settings-title">
+    <div class="modal-h">
+      <h2 id="m-save-settings-title">Save settings</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Apply cluster identity changes?</p>
+        <div class="alert alert-info">Some changes propagate via stream within a few seconds.</div>
+        </div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-confirm-generic" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-confirm-generic-title">
+    <div class="modal-h">
+      <h2 id="m-confirm-generic-title">Confirm action</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b">
+        <p>Proceed with the selected action?</p>
+        <div class="alert alert-ok">Preflight: OK</div>
+        <div class="field"><label>Reason (audit)</label><input placeholder="Optional"/></div></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="m-ctrl-alt-del" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-ctrl-alt-del-title">
+    <div class="modal-h">
+      <h2 id="m-ctrl-alt-del-title">Send Ctrl+Alt+Del</h2>
+      <button type="button" class="btn" data-close-modal aria-label="Close">×</button>
+    </div>
+    <div class="modal-b"><p>Send Ctrl+Alt+Del to the guest console for <strong>nextcloud</strong>?</p></div>
+    <div class="modal-f">
+      <button type="button" class="btn" data-close-modal>Cancel</button>
+      <button type="button" class="btn btn-primary" data-close-modal>Send</button>
+    </div>
+  </div>
+</div>
+
+<div class="frost" id="m-frost" hidden>
+  <div class="modal">
+    <div class="modal-h"><h2>Session expired</h2></div>
+    <div class="modal-b"><p>Your session is no longer valid. Sign in again to continue.</p></div>
+    <div class="modal-f"><a class="btn btn-primary" href="../pages/login.html">Sign in</a></div>
   </div>
 </div>
 <script src="../assets/mockup.js"></script>
