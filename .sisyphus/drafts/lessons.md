@@ -356,3 +356,65 @@ re-design (T125-T140 covers the retrofit).
 - `docs/migration/product-ia-esxi-vsphere-2026-07-16.md` + history snapshot
 
 **Rule for future agents**: Before adding Settings sections or sidebar items, read product IA §3–§4. Do not reintroduce dual Settings models or permanent product-wide view-only.
+
+---
+
+## 2026-07-16 — HTML mockup kits (browsable + feel functional)
+
+**Context**: After product IA + SVG spine planning, user asked for HTML
+mockups of pages/components under plans, then full tabs/modals, then
+behavior that feels functional for walkthroughs.
+
+**Location**: `.sisyphus/plans/html-mockups/`  
+Open `index.html`. Regenerate: `python3 generate.py`.
+
+### Architecture
+
+| Piece | Role |
+|-------|------|
+| `generate.py` | Source of truth for HTML (do not hand-edit 60+ files) |
+| `assets/mockup.css` | Shared shell + components |
+| `assets/mockup.js` | Demo runtime (filters, modals, toasts, live) |
+| `pages/` | Spine screens (Dashboard, VMs, MCP, Settings, System, …) |
+| `detail/` | Resource shells with **all** tabs filled |
+| `components/` | ResourceTable, EmptyState, Confirm pattern demos |
+| `modals/` | Gallery auto-opening each dialog |
+| `wizards/` | Multi-step flows as tab steppers |
+
+- Inject a **shared modal library** into every shell page (`data-open-modal="m-…"`).
+- Tabs: `data-tabs` / `data-tab` / `data-panel` with real content (Settings vertical, System/Account/detail horizontal).
+
+### Product rules baked into the kit
+
+- **MCP is the plugin system** — Configure → MCP (`/mcp`); not Plugins.
+- Account ≠ Settings ≠ System; Hosts inventory ≠ Cluster services.
+- Management UX: describe → preflight → confirm → execute.
+- Live stream indicator; no Refresh chrome on resource lists.
+- Realistic FreeBSD/bhyve/ZFS sample data (Rule #7 hostnames).
+
+### Make it feel functional (demo runtime)
+
+Static layout is not enough for walkthroughs:
+
+1. **Filters** — search + chips hide/show rows; show `n / total`
+2. **Confirms mutate UI** — Stop/Start/Delete updates row status, stats, toast
+3. **Type-to-confirm** — destructive modals require `DELETE`
+4. **Live** — pulse ● live; ticking “Ns ago”; optional log stream
+5. **Wizards** — Next/Back advance steps
+6. **Keyboard** — `/` focuses filter
+7. **Demo bar** — bottom strip + Reset localStorage state
+
+### Authority order
+
+product IA → component catalog → SVG Track 2 → **HTML kit (experiment)** → Angular
+
+### Anti-patterns
+
+- N×M density/empty SVG files instead of one table + CSS
+- Dead `href="#"` tabs without panels
+- Dual Settings / Cluster-as-host-table in mockups
+- Claiming production Angular readiness from HTML kit alone
+
+**Honcho**: Session `cloudbsd-admin-product-2026-07-15` + `lessons-2026`;  
+peer `prometheus` conclusions tagged html-mockups (2026-07-16). Search: “HTML mockup kits”.
+
