@@ -57,11 +57,24 @@ No Mermaid inside SVG. No Tailwind classes inside SVG foreignObject.
 
 ## Status
 
-**Planning: DONE.** Implementation starts at **W4** (Angular shell).  
+**Planning: DONE.** Implementation: **W4 mostly done / W5 in progress** (`web-new/`).  
 Details: [implementation.md](./implementation.md).
 
-**OpenAPI:** not in repo yet — backend must publish OpenAPI 3.1; until then WIRE_PROTOCOL is the interim contract. UI never talks past the backend (Rule #13).
+**OpenAPI:** WIRE_PROTOCOL is the interim contract; stubs live under `openapi/` and Go `GET /openapi.json`. UI never talks past the backend (Rule #13).
 
+**Go control plane:** `~/git/cloudbsd-admin-backend` — runnable on Linux (`:3080`) with DevAuth + SQLite until FreeBSD host agents exist. Express in this repo remains the interim UI mock path.
+
+### Honcho (cross-session memory)
+
+| Item | Value |
+|------|--------|
+| MCP | `https://mcp.honcho.cloudbsd.org/` |
+| Workspace | `default` |
+| Peer | `mlapointe` |
+| **Session** | **`angular-migration-web-new-2026-07-16`** |
+| Related | `cloudbsd-admin-product-2026-07-15`, `lessons-2026` |
+
+Agents **must** consult Honcho for product decisions and migration progress. Do not commit API keys to the repo.
 ---
 
 ## What we deleted from the “agent mess”

@@ -1,6 +1,6 @@
 # Makefile for CloudBSD Admin (Unified Frontend + Backend)
 
-.PHONY: all install build dev start clean test check-locales
+.PHONY: all install build dev start clean test check-locales angular angular-build angular-dev
 
 PREFIX?=/usr/local
 APPDIR?=$(PREFIX)/www/cloudbsd-admin
@@ -37,6 +37,15 @@ install: build
 
 build: security-check
 	npm run build
+
+# Angular migration UI (web-new/) — parallel to legacy React until cutover
+angular-build:
+	cd web-new && npm install && npm run build
+
+angular-dev:
+	cd web-new && npm start
+
+angular: angular-build
 
 security-check:
 	@echo "Running Security Checks..."

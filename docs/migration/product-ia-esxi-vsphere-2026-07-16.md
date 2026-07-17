@@ -541,7 +541,9 @@ Phase 6  — Visual regression, critical-path coverage, cutover
 - [x] Plan methodology Rule #1 reframed (management + RO role)  
 - [x] ADJUSTMENTS section for 2026-07-16 IA revision  
 - [ ] SVG mockups reconciled to single Settings model (follow-up visual wave)  
-- [ ] Honcho session `cloudbsd-admin-product-2026-07-15` seeded with IA summary (optional)  
+- [x] Honcho session `cloudbsd-admin-product-2026-07-15` seeded with IA summary  
+- [x] Honcho session `angular-migration-web-new-2026-07-16` seeded with W4/W5 implementation progress  
+
 
 ---
 

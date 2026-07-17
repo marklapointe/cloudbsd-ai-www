@@ -1,0 +1,102 @@
+openapi: 3.1.0
+info:
+  title: CloudBSD Admin API
+  version: 1.0.0-envelope
+  description: |
+    Primary UI contract is POST /api with CloudBSD envelopes
+    (application/vnd.cloudbsd+envelope). See .sisyphus/plans/WIRE_PROTOCOL.md.
+    Served live at GET /api/openapi.json from the Express gateway.
+  contact:
+    name: Mark LaPointe
+    email: mark@cloudbsd.org
+  license:
+    name: BSD-3-Clause
+servers:
+  - url: /
+paths:
+  /api:
+    post:
+      summary: Envelope exchange
+      operationId: envelopeExchange
+      tags: [Envelope]
+      security:
+        - bearerAuth: []
+        - {}
+      requestBody:
+        required: true
+        content:
+          application/vnd.cloudbsd+envelope:
+            schema:
+              $ref: '#/components/schemas/Envelope'
+      responses:
+        '200':
+          description: Envelope response
+          content:
+            application/vnd.cloudbsd+envelope:
+              schema:
+                $ref: '#/components/schemas/Envelope'
+            application/vnd.cloudbsd+error:
+              schema:
+                $ref: '#/components/schemas/Envelope'
+  /api/health:
+    get:
+      summary: Health
+      security: []
+      responses:
+        '200':
+          description: OK
+  /api/login:
+    post:
+      summary: Legacy JWT login
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username: { type: string }
+                password: { type: string }
+      responses:
+        '200':
+          description: token + user
+  /api/openapi.json:
+    get:
+      summary: This document as JSON
+      security: []
+      responses:
+        '200':
+          description: OpenAPI document
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Envelope:
+      type: object
+      required: [mime, requestId, timestamp, headers, payload]
+      properties:
+        mime:
+          type: string
+          enum: [application/vnd.cloudbsd+envelope, application/vnd.cloudbsd+error]
+        requestId: { type: string, format: uuid }
+        timestamp: { type: string, format: date-time }
+        headers:
+          type: array
+          items:
+            type: object
+            properties:
+              name: { type: string }
+              value: { type: string }
+        payload:
+          type: array
+          items:
+            type: object
+            properties:
+              mime: { type: string }
+              kind: { type: string }
+              data: {}
+        context: { type: object }
+        meta: { type: object }

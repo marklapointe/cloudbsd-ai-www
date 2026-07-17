@@ -284,49 +284,43 @@ Use this as the **only** allowed component inventory for v1 coding waves. Anythi
 
 ### 7.1 Shell
 
-- [ ] `LayoutComponent`
-- [ ] `SidebarComponent` (IA groups from product IA §3)
-- [ ] `HeaderComponent`
-- [ ] `UserMenuDropdownComponent`
-- [ ] `NotificationsDropdownComponent`
-- [ ] `LiveIndicatorComponent`
-- [ ] `FrostOutModalComponent`
-- [ ] `ConfirmActionModalComponent`
-- [ ] `ErrorHandlingService` + toast/banner
+- [x] `LayoutComponent` (`web-new`)
+- [x] `SidebarComponent` (IA groups from product IA §3)
+- [x] `HeaderComponent`
+- [x] `UserMenuDropdownComponent` (basic)
+- [x] `NotificationsDropdownComponent`
+- [x] `LiveIndicatorComponent`
+- [x] `FrostOutModalComponent` (inline on layout)
+- [x] `ConfirmActionModalComponent`
+- [x] `ToastService` + toast host (error/success)
 
 ### 7.2 Shared resource UI
 
-- [ ] `ResourceTableComponent` (+ sort, pagination, bulk select per scale review)
-- [ ] `FilterBarComponent`
-- [ ] `StatCardsRowComponent`
-- [ ] `EmptyStateComponent`
-- [ ] `DetailShellComponent`
-- [ ] `WizardShellComponent`
-- [ ] `CapabilityActionMenuComponent`
-- [ ] `DensityService` (cozy/compact/extra)
+- [x] `ResourceTableComponent` (+ sort, bulk select; pagination later)
+- [x] `FilterBarComponent`
+- [x] `StatCardsRowComponent` (`StatCardsComponent`)
+- [x] `EmptyStateComponent`
+- [x] `DetailShellComponent`
+- [x] `WizardShellComponent` (+ VM/Jail create wizards)
+- [x] `CapabilityActionMenuComponent`
+- [x] `DensityService` (cozy/compact/extra)
 
-### 7.3 Domain pages (spine)
+### 7.3 Domain pages (spine) — `web-new/` mocks
 
-- [ ] Dashboard, VMs, Containers, Jails, Storage, Networks (+ map view), Hosts, Cluster, Tasks  
-- [ ] Detail shells: VM, Container, Jail, Volume, Host  
-- [ ] Console (noVNC)  
-- [ ] Users, Roles (or Users tabs)  
-- [ ] **API keys** (Access) + personal tokens (Account) with **scope builder**  
-      (resource type × actions × domain: all / list / pattern / tag)  
-- [ ] **Selectable-only** role capabilities + resource domain pickers  
-      (catalog checklists / multi-select inventory — **no freeform capability text**)  
-- [ ] Snapshot actions on VM/volume detail: create, delete, **revert**; Task tracking  
-- [ ] **Library**: Base jails cache + **Repositories** (HTTPS auth: none/basic/bearer/header/mTLS)  
-- [ ] Jail create: select cached base (fetch-from-repo if missing); no freeform base URL  
-- [ ] Logs, Notifications, Audit  
-- [ ] Account shell (profile/security/appearance/prefs/tokens **with scopes**)  
-- [ ] Settings shell (cluster/auth/host/net/storage/integrations/licensing)  
-- [ ] System shell (backups/updates/diagnostics/exports/maintenance)  
-- [ ] **MCP** registry list + server detail + add wizard (HTTP/SSE/stdio)  
-- [ ] MCP probe/health + tools inventory  
-- [ ] *(Legacy “Plugins” label removed — MCP is the extension model)*
-- [ ] About  
-- [ ] Login + first-login + onboarding (single path each)
+- [x] Full spine nav + detail: VM, container, jail, volume, host  
+- [x] Create wizards: VM, Jail, Container, Volume, Network, MCP add, Restore  
+- [x] Users + Roles sub-tab; API keys + personal tokens with ScopeBuilder  
+- [x] Library bases + repositories; jail create from cached base only  
+- [x] Logs, Notifications, Audit, Settings, System, About, Account, Cluster, Tasks  
+- [x] MCP registry + add wizard (HTTP/SSE/stdio)  
+- [x] Login + onboarding; error pages 403/404/500/503  
+- [x] Console ticket page `/vms/:id/console` (backend-mediated)  
+- [x] VM detail snapshots tab + preflight actions  
+- [x] `@novnc/novnc` RFB on console (pixels need live websockify)  
+- [x] Express envelope `POST /api` + OpenAPI stub  
+- [x] Role capability catalog editor `/roles/capabilities`  
+- [ ] Prod `useMocks: false` + full WIRE coverage on gateway  
+- [ ] Live VNC agent behind console ticket  
 
 ### 7.4 Explicitly out of v1 scope
 
@@ -356,8 +350,8 @@ flowchart LR
 | **W1** | `diagrams/ARCHIVED.md` | List committed | **DONE** |
 | **W2** | Spine SVGs `150-spine-*` + IA `140-ia-*` | Chrome matches product IA | **DONE** |
 | **W3** | Mermaid flows + architecture | Under `diagrams/flows`, `architecture` | **DONE** |
-| **W4** | **Implementation**: shell + shared components | App shell navigable | **PENDING** |
-| **W5+** | Domain pages per §7.3 | Per-page DoD | **PENDING** |
+| **W4** | **Implementation**: shell + shared components | App shell navigable | **IN PROGRESS** (`web-new/`) |
+| **W5+** | Domain pages per §7.3 | Per-page DoD | **IN PROGRESS** (lists + shells; wizards/details next) |
 
 **Planning complete.** See [PLANNING-COMPLETE.md](./PLANNING-COMPLETE.md). Angular feature work starts at **W4**.
 

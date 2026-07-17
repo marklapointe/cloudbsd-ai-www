@@ -10,7 +10,11 @@
     "start": "node --experimental-strip-types server/src/index.ts",
     "lint": "eslint .",
     "security-audit": "npm audit --omit=dev --audit-level=high",
-    "test": "npm run build && vitest"
+    "test": "npm run build && vitest",
+    "angular:dev": "npm --prefix web-new start",
+    "angular:build": "npm --prefix web-new run build",
+    "angular:test": "npm --prefix web-new run test:unit",
+    "smoke": "bash scripts/smoke-envelope.sh"
   },
   "dependencies": {
     "@xterm/addon-fit": "^0.11.0",

@@ -11,8 +11,8 @@
 | W1 Archive map | **DONE** | [diagrams/ARCHIVED.md](../../diagrams/ARCHIVED.md) |
 | W2 Spine SVGs | **DONE** | `150-spine-*`, `140-ia-*`, `160-mcp-*` |
 | W3 Mermaid flows | **DONE** | `diagrams/flows`, `diagrams/architecture` |
-| W4 Angular shell | **NOT STARTED** | Layout, auth, stream, shared components |
-| W5 Domain pages | **NOT STARTED** | Spine pages per catalog §7 |
+| W4 Angular shell | **MOSTLY DONE** | Shell, shared UI, envelope mocks, preflight, toasts, stream invalidation |
+| W5 Domain pages | **IN PROGRESS** | Full spine nav live; remaining: wizards, more detail shells, real backend, OpenAPI |
 
 ## Before you write code
 
@@ -27,11 +27,54 @@
 
 ## Suggested first PR stack
 
-1. `web-new` Angular 20 shell + routing + Tailwind + signals  
-2. Auth + frost-out → `/login` + session cookie client  
-3. Layout sidebar (IA groups) + header  
-4. Shared `ResourceTable` + `EmptyState` + `ConfirmActionModal`  
-5. Dashboard + VMs list (first vertical slice)
+1. ~~`web-new` Angular 20 shell + routing + Tailwind + signals~~ **done**  
+2. ~~Auth + frost-out → `/login` + session / mock envelope client~~ **done**  
+3. ~~Layout sidebar (IA groups) + header~~ **done**  
+4. ~~Shared `ResourceTable` + `EmptyState` + `ConfirmActionModal`~~ **done**  
+5. ~~Dashboard + VMs list (first vertical slice)~~ **done** (mocks / WIRE)  
+
+### Status note
+
+W5 Angular UI is **done under mocks** + **Express envelope gateway** (`POST /api`) + **@novnc/novnc RFB** wired + OpenAPI stub.
+
+**Product Go control plane** (not Express) is scaffolded and runnable on Linux without FreeBSD:
+
+| Piece | Location |
+|-------|----------|
+| Angular app | `web-new/` |
+| Express interim gateway | `server/src/wire/envelope-gateway.ts` → `POST /api` |
+| **Go product backend** | **`~/git/cloudbsd-admin-backend`** (`cmd/cloudbsd-admin`, default `:3080`) |
+| OpenAPI | `GET /api/openapi.json`, `openapi/openapi-envelope.yaml`; Go also `GET /openapi.json` |
+| noVNC | `@novnc/novnc` in VM console page |
+| Unit (no Chrome) | `cd web-new && npm run test:unit` |
+
+Go backend (pre–host agent): chi + WIRE `POST /api` + session cookie + SQLite seed inventory + preflight + stream skeleton.  
+`make run` / `scripts/smoke.sh` · seed `admin` / `admin` · CORS via `CLOUDBSD_CORS`.
+
+### Smoke
+
+```bash
+npm run smoke          # health + envelope + angular static + unit-node
+npm run angular:build
+npm start              # serves Angular + envelope on :3001
+
+# Product Go control plane (separate repo)
+cd ~/git/cloudbsd-admin-backend && make test && make run
+./scripts/smoke.sh
+```
+
+### Remaining ops (when FreeBSD VM / hardware ready)
+
+1. Host agent registration + live inventory (replace SQLite-only seed)  
+2. Live websockify/agent for VNC (RFB client already loads)  
+3. PAM on FreeBSD; set `devAuth: false`  
+4. Point Angular proxy at Go `:3080`; drop Express as product path  
+5. E2E in CI with headless Chrome  
+
+### Honcho
+
+Session **`angular-migration-web-new-2026-07-16`** (peer `mlapointe`, workspace `default`) holds W4/W5 conclusions.  
+MCP endpoint: `https://mcp.honcho.cloudbsd.org/`. Query before re-planning.
 
 ## Defaults (unless product owner overrides)
 

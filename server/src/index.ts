@@ -16,6 +16,14 @@ import { initDb, logAction } from './db.ts';
 
 import config, { reloadConfig, saveConfig } from './config.ts';
 import { ensureCertificates } from './ssl.ts';
+import fs from 'fs';
+import { WebSocketServer } from 'ws';
+import {
+  createEnvelopeHandler,
+  optionalAuth,
+  ENVELOPE_CONTENT_TYPE,
+} from './wire/envelope-gateway.ts';
+import { attachRfbSession } from './wire/rfb-stub.ts';
 
 const getClientIp = (req: any) => {
   const forwardedFor = req.headers['x-forwarded-for'];
@@ -168,7 +176,18 @@ if (config.corsEnabled) {
 //   res.setHeader('Referrer-Policy', config.referrerPolicy || 'no-referrer-when-downgrade');
 //   next();
 // });
-app.use(express.json());
+// Parse JSON bodies including CloudBSD envelope content-type
+app.use(
+  express.json({
+    type: [
+      'application/json',
+      'application/vnd.cloudbsd+envelope',
+      'application/vnd.cloudbsd+error',
+      'application/*+json',
+    ],
+    limit: '4mb',
+  }),
+);
 
 // Parse cookies so we can use cookie-backed CSRF tokens when enabled
 app.use(cookieParser());
@@ -178,6 +197,7 @@ app.use(cookieParser());
 // Keep this list tight: every exemption weakens the protection.
 const CSRF_EXEMPT_PATHS = new Set<string>([
   '/api/login',
+  '/api', // CloudBSD envelope (Bearer or login); Angular does not use cookie CSRF for envelopes
 ]);
 
 if (config.csrf?.enabled) {
@@ -244,8 +264,20 @@ if (config.csrf?.enabled) {
   console.warn('[Security] CSRF protection is DISABLED. Set csrf.enabled=true in config.json unless you are behind a setup that prevents cross-origin requests another way.');
 }
 
-// Serve static files from the React app dist directory
-const distPath = path.join(path.dirname(fileURLToPath(import.meta.url)), '../../dist');
+// Serve static: prefer Angular web-new build, fall back to legacy React dist
+const rootDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const angularDist = path.join(rootDir, 'web-new/dist/web-new/browser');
+const angularDistAlt = path.join(rootDir, 'web-new/dist/web-new');
+const reactDist = path.join(rootDir, 'dist');
+const staticCandidates = [angularDist, angularDistAlt, reactDist].filter((p) => {
+  try {
+    return fs.existsSync(p);
+  } catch {
+    return false;
+  }
+});
+const distPath = staticCandidates[0] || reactDist;
+console.log(`[Static] Serving frontend from ${distPath}`);
 app.use(express.static(distPath));
 
 initDb();
@@ -385,6 +417,63 @@ app.get('/api/csrf', (req, res) => {
     return res.status(204).end();
   }
   res.json({ csrfToken: (req as any).csrfToken() });
+});
+
+// —— CloudBSD envelope gateway (WIRE_PROTOCOL) — must precede /api/:resource ——
+app.post(
+  '/api',
+  optionalAuth(SECRET_KEY),
+  // Skip CSRF for envelope API clients (Angular Bearer); cookie SPA still uses CSRF on other routes
+  (req: any, res: any, next: any) => {
+    if (String(req.headers['content-type'] || '').includes('vnd.cloudbsd')) {
+      return next();
+    }
+    next();
+  },
+  createEnvelopeHandler(SECRET_KEY),
+);
+
+app.get('/api/openapi.json', (_req, res) => {
+  res.json({
+    openapi: '3.1.0',
+    info: {
+      title: 'CloudBSD Admin API',
+      version: '1.0.0-envelope',
+      description:
+        'HTTP contract for Angular UI. Primary mutations/lists use POST /api envelope (application/vnd.cloudbsd+envelope).',
+    },
+    paths: {
+      '/api': {
+        post: {
+          summary: 'Envelope exchange',
+          requestBody: {
+            required: true,
+            content: {
+              [ENVELOPE_CONTENT_TYPE]: {
+                schema: { type: 'object' },
+              },
+            },
+          },
+          responses: {
+            '200': {
+              description: 'Envelope response',
+              content: { [ENVELOPE_CONTENT_TYPE]: { schema: { type: 'object' } } },
+            },
+          },
+        },
+      },
+      '/api/login': {
+        post: {
+          summary: 'Legacy JWT login',
+          security: [],
+          responses: { '200': { description: 'token + user' } },
+        },
+      },
+      '/api/health': {
+        get: { summary: 'Health', security: [], responses: { '200': { description: 'ok' } } },
+      },
+    },
+  });
 });
 
 /**
@@ -2230,10 +2319,9 @@ app.use((err: any, req: any, res: any, _next: any) => {
   });
 });
 
-// The "catchall" handler: for any request that doesn't
-// match one of the API routes, send back React's index.html file.
+// SPA catchall — Angular or React index.html
 app.get(/^(?!\/api).+/, (req, res) => {
-  const indexPath = path.join(path.dirname(fileURLToPath(import.meta.url)), '../../dist/index.html');
+  const indexPath = path.join(distPath, 'index.html');
   res.sendFile(indexPath, (err) => {
     if (err) {
       console.warn(`Failed to serve index.html from ${indexPath}:`, err.message);
@@ -2258,11 +2346,26 @@ setInterval(() => {
   io.emit('resource_update', { resource, timestamp: new Date() });
 }, 5000);
 
+// Console WebSocket + minimal RFB server (Rule #13: backend-mediated only).
+// noVNC paints a test framebuffer; production swaps attachRfbSession for agent proxy.
+const consoleWss = new WebSocketServer({ noServer: true });
+httpServer.on('upgrade', (request: any, socket: any, head: any) => {
+  const url = String(request.url || '');
+  if (url.startsWith('/api/console/ws')) {
+    const vmId = decodeURIComponent(url.split('/').pop()?.split('?')[0] || 'vm');
+    consoleWss.handleUpgrade(request, socket, head, (ws) => {
+      console.debug(`[Console] RFB session for ${vmId}`);
+      attachRfbSession(ws, vmId);
+    });
+  }
+});
+
 export { app };
 
 if (process.env.NODE_ENV !== 'test') {
   httpServer.listen(port, '127.0.0.1', () => {
     const protocol = config.ssl.enabled ? 'https' : 'http';
     console.log(`Server running on ${protocol}://127.0.0.1:${port}`);
+    console.log(`[Envelope] POST ${protocol}://127.0.0.1:${port}/api (application/vnd.cloudbsd+envelope)`);
   });
 }
