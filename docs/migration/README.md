@@ -101,6 +101,16 @@ Full text: `angular-migration.md` “Canonical Methodology”.
 
 ---
 
+## HTML mockup experiment
+
+Browsable HTML kit (pages + shared components + modals + wizards):
+
+**`.sisyphus/plans/html-mockups/`** — open `index.html` in a browser.  
+Regenerate: `python3 .sisyphus/plans/html-mockups/generate.py`.  
+Complements SVG Track 2; not production Angular.
+
+---
+
 ## Critical path (implementation)
 
 ```

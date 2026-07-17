@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>CloudBSD Admin — Virtual Machines</title>
+  <link rel="stylesheet" href="../assets/mockup.css"/>
+  
+</head>
+<body data-nav="vms">
+<div class="app">
+  <header class="header">
+    <div class="logo">C</div>
+    <span class="brand">CloudBSD Admin</span>
+    <span class="host-chip">prod-node-01.local</span>
+    <div class="header-right">
+      <a href="../index.html" style="font-size:11px;color:var(--muted)">Mockup index</a>
+      <span class="live">● live</span>
+      <select style="padding:3px 6px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px">
+        <option>UTC</option>
+      </select>
+      <div class="avatar" title="My Account">M</div>
+    </div>
+  </header>
+  <div class="body">
+    <aside class="sidebar">
+<div class="nav-group">Workload</div><nav>
+<a href="dashboard.html" data-id="dashboard"><span>Dashboard</span></a>
+<a href="vms.html" data-id="vms" class="active"><span>Virtual Machines</span></a>
+<a href="containers.html" data-id="containers"><span>Containers</span></a>
+<a href="jails.html" data-id="jails"><span>Jails</span></a>
+<a href="storage.html" data-id="storage"><span>Storage</span></a>
+<a href="networks.html" data-id="networks"><span>Networks</span></a>
+<a href="hosts.html" data-id="hosts"><span>Hosts</span></a>
+<a href="cluster.html" data-id="cluster"><span>Cluster</span></a>
+<a href="tasks.html" data-id="tasks"><span>Tasks</span></a>
+<a href="library.html" data-id="library"><span>Library</span></a>
+</nav>
+<div class="nav-group">Access</div><nav>
+<a href="users.html" data-id="users"><span>Users</span></a>
+<a href="roles.html" data-id="roles"><span>Roles</span></a>
+</nav>
+<div class="nav-group">Observe</div><nav>
+<a href="logs.html" data-id="logs"><span>Logs</span></a>
+<a href="notifications.html" data-id="notifications"><span>Notifications</span></a>
+<a href="audit.html" data-id="audit"><span>Audit</span></a>
+</nav>
+<div class="nav-group">Configure</div><nav>
+<a href="settings.html" data-id="settings"><span>Settings</span></a>
+<a href="mcp.html" data-id="mcp"><span>MCP</span></a>
+</nav>
+<div class="nav-group">Operate</div><nav>
+<a href="system.html" data-id="system"><span>System</span></a>
+<a href="about.html" data-id="about"><span>About</span></a>
+</nav>
+<div class="sidebar-footer"><div>Host: prod-node-01</div><div>Uptime: 14d 02:11</div></div>
+    </aside>
+    <main class="content">
+
+<div class="page-head">
+  <div>
+    <h1>Virtual Machines</h1>
+    <p class="sub">47 VMs across 5 hosts · <span class="live">● live</span></p>
+  </div>
+  <div class="actions"><a class="btn btn-primary" href="../wizards/vm-create.html">+ Create VM</a></div>
+</div>
+<div class="stats"><div class="stat"><div class="label">Total</div><div class="value">47</div></div><div class="stat"><div class="label">Running</div><div class="value">39</div></div><div class="stat"><div class="label">Stopped</div><div class="value">6</div></div><div class="stat"><div class="label">Error</div><div class="value">1</div></div><div class="stat"><div class="label">Paused</div><div class="value">1</div></div></div>
+<div class="filter-bar">
+  <input type="search" placeholder="Filter VMs…"/>
+  <button type="button" class="chip active">All</button><button type="button" class="chip">Run</button><button type="button" class="chip">Stop</button><button type="button" class="chip">Error</button>
+</div>
+
+<div class="card">
+  <table class="res">
+    <thead><tr><th>Status</th><th>Name</th><th>OS</th><th>Host</th><th>vCPU</th><th>RAM</th><th>IPs</th><th>Uptime</th><th>Actions</th></tr></thead>
+    <tbody>
+      <tr><td><span class="status-ok">● Run</span></td><td><a href="../detail/vm.html">nextcloud</a></td><td>FreeBSD 14</td><td>prod-node-01</td><td>4</td><td>8 GB</td><td>10.0.10.21</td><td>14d</td><td>View · Console · Stop</td></tr><tr><td><span class="status-ok">● Run</span></td><td>jellyfin</td><td>Linux</td><td>prod-node-02</td><td>8</td><td>16 GB</td><td>10.0.10.22</td><td>7d</td><td>View · Console · Stop</td></tr><tr><td><span class="status-off">○ Stop</span></td><td>win11-sandbox</td><td>Windows</td><td>prod-node-03</td><td>4</td><td>8 GB</td><td>—</td><td>—</td><td>View · Start · Delete</td></tr><tr><td><span class="status-err">✕ Error</span></td><td>gitlab-runner</td><td>Linux</td><td>prod-node-02</td><td>2</td><td>4 GB</td><td>10.0.10.30</td><td>2h</td><td>View · Console · Restart</td></tr>
+    </tbody>
+  </table>
+</div>
+
+      <p class="mock-note">HTML mockup experiment · not production · IA: MCP is plugins · path: .sisyphus/plans/html-mockups/</p>
+    </main>
+  </div>
+</div>
+<script src="../assets/mockup.js"></script>
+</body>
+</html>

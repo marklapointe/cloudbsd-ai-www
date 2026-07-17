@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>CloudBSD Admin — Containers</title>
+  <link rel="stylesheet" href="../assets/mockup.css"/>
+  
+</head>
+<body data-nav="containers">
+<div class="app">
+  <header class="header">
+    <div class="logo">C</div>
+    <span class="brand">CloudBSD Admin</span>
+    <span class="host-chip">prod-node-01.local</span>
+    <div class="header-right">
+      <a href="../index.html" style="font-size:11px;color:var(--muted)">Mockup index</a>
+      <span class="live">● live</span>
+      <select style="padding:3px 6px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px">
+        <option>UTC</option>
+      </select>
+      <div class="avatar" title="My Account">M</div>
+    </div>
+  </header>
+  <div class="body">
+    <aside class="sidebar">
+<div class="nav-group">Workload</div><nav>
+<a href="dashboard.html" data-id="dashboard"><span>Dashboard</span></a>
+<a href="vms.html" data-id="vms"><span>Virtual Machines</span></a>
+<a href="containers.html" data-id="containers" class="active"><span>Containers</span></a>
+<a href="jails.html" data-id="jails"><span>Jails</span></a>
+<a href="storage.html" data-id="storage"><span>Storage</span></a>
+<a href="networks.html" data-id="networks"><span>Networks</span></a>
+<a href="hosts.html" data-id="hosts"><span>Hosts</span></a>
+<a href="cluster.html" data-id="cluster"><span>Cluster</span></a>
+<a href="tasks.html" data-id="tasks"><span>Tasks</span></a>
+<a href="library.html" data-id="library"><span>Library</span></a>
+</nav>
+<div class="nav-group">Access</div><nav>
+<a href="users.html" data-id="users"><span>Users</span></a>
+<a href="roles.html" data-id="roles"><span>Roles</span></a>
+</nav>
+<div class="nav-group">Observe</div><nav>
+<a href="logs.html" data-id="logs"><span>Logs</span></a>
+<a href="notifications.html" data-id="notifications"><span>Notifications</span></a>
+<a href="audit.html" data-id="audit"><span>Audit</span></a>
+</nav>
+<div class="nav-group">Configure</div><nav>
+<a href="settings.html" data-id="settings"><span>Settings</span></a>
+<a href="mcp.html" data-id="mcp"><span>MCP</span></a>
+</nav>
+<div class="nav-group">Operate</div><nav>
+<a href="system.html" data-id="system"><span>System</span></a>
+<a href="about.html" data-id="about"><span>About</span></a>
+</nav>
+<div class="sidebar-footer"><div>Host: prod-node-01</div><div>Uptime: 14d 02:11</div></div>
+    </aside>
+    <main class="content">
+
+<div class="page-head">
+  <div>
+    <h1>Containers</h1>
+    <p class="sub">OCI containers · podman · live</p>
+  </div>
+  <div class="actions"><button class="btn btn-primary">+ Create container</button></div>
+</div>
+<div class="stats"><div class="stat"><div class="label">Total</div><div class="value">18</div></div><div class="stat"><div class="label">Running</div><div class="value">14</div></div><div class="stat"><div class="label">Exited</div><div class="value">3</div></div><div class="stat"><div class="label">Restarting</div><div class="value">1</div></div></div>
+<div class="filter-bar">
+  <input type="search" placeholder="Filter containers…"/>
+  <button type="button" class="chip active">All</button><button type="button" class="chip">Running</button><button type="button" class="chip">Exited</button>
+</div>
+
+<div class="card">
+  <table class="res">
+    <thead><tr><th>Status</th><th>Name</th><th>Image</th><th>Host</th><th>CPU</th><th>Mem</th><th>Actions</th></tr></thead>
+    <tbody>
+      <tr><td><span class="status-ok">●</span></td><td>redis-cache</td><td>redis:7</td><td>prod-node-01</td><td>2%</td><td>128 MB</td><td>View · Stop · Logs</td></tr><tr><td><span class="status-ok">●</span></td><td>traefik</td><td>traefik:v3</td><td>prod-node-01</td><td>4%</td><td>64 MB</td><td>View · Stop · Logs</td></tr><tr><td><span class="status-off">○</span></td><td>buildkit</td><td>moby/buildkit</td><td>prod-node-03</td><td>—</td><td>—</td><td>View · Start</td></tr>
+    </tbody>
+  </table>
+</div>
+
+      <p class="mock-note">HTML mockup experiment · not production · IA: MCP is plugins · path: .sisyphus/plans/html-mockups/</p>
+    </main>
+  </div>
+</div>
+<script src="../assets/mockup.js"></script>
+</body>
+</html>

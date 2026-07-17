@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>CloudBSD Admin — Hosts</title>
+  <link rel="stylesheet" href="../assets/mockup.css"/>
+  
+</head>
+<body data-nav="hosts">
+<div class="app">
+  <header class="header">
+    <div class="logo">C</div>
+    <span class="brand">CloudBSD Admin</span>
+    <span class="host-chip">prod-node-01.local</span>
+    <div class="header-right">
+      <a href="../index.html" style="font-size:11px;color:var(--muted)">Mockup index</a>
+      <span class="live">● live</span>
+      <select style="padding:3px 6px;font-size:11px;border:1px solid #cbd5e1;border-radius:5px">
+        <option>UTC</option>
+      </select>
+      <div class="avatar" title="My Account">M</div>
+    </div>
+  </header>
+  <div class="body">
+    <aside class="sidebar">
+<div class="nav-group">Workload</div><nav>
+<a href="dashboard.html" data-id="dashboard"><span>Dashboard</span></a>
+<a href="vms.html" data-id="vms"><span>Virtual Machines</span></a>
+<a href="containers.html" data-id="containers"><span>Containers</span></a>
+<a href="jails.html" data-id="jails"><span>Jails</span></a>
+<a href="storage.html" data-id="storage"><span>Storage</span></a>
+<a href="networks.html" data-id="networks"><span>Networks</span></a>
+<a href="hosts.html" data-id="hosts" class="active"><span>Hosts</span></a>
+<a href="cluster.html" data-id="cluster"><span>Cluster</span></a>
+<a href="tasks.html" data-id="tasks"><span>Tasks</span></a>
+<a href="library.html" data-id="library"><span>Library</span></a>
+</nav>
+<div class="nav-group">Access</div><nav>
+<a href="users.html" data-id="users"><span>Users</span></a>
+<a href="roles.html" data-id="roles"><span>Roles</span></a>
+</nav>
+<div class="nav-group">Observe</div><nav>
+<a href="logs.html" data-id="logs"><span>Logs</span></a>
+<a href="notifications.html" data-id="notifications"><span>Notifications</span></a>
+<a href="audit.html" data-id="audit"><span>Audit</span></a>
+</nav>
+<div class="nav-group">Configure</div><nav>
+<a href="settings.html" data-id="settings"><span>Settings</span></a>
+<a href="mcp.html" data-id="mcp"><span>MCP</span></a>
+</nav>
+<div class="nav-group">Operate</div><nav>
+<a href="system.html" data-id="system"><span>System</span></a>
+<a href="about.html" data-id="about"><span>About</span></a>
+</nav>
+<div class="sidebar-footer"><div>Host: prod-node-01</div><div>Uptime: 14d 02:11</div></div>
+    </aside>
+    <main class="content">
+
+<div class="page-head">
+  <div>
+    <h1>Hosts</h1>
+    <p class="sub">Inventory · drain · maintenance · agent version (not Cluster services)</p>
+  </div>
+  <div class="actions"><button class="btn btn-primary" data-open-modal="add-host">+ Add host</button></div>
+</div>
+<div class="stats"><div class="stat"><div class="label">Hosts</div><div class="value">5</div></div><div class="stat"><div class="label">Ready</div><div class="value">4</div></div><div class="stat"><div class="label">Maintenance</div><div class="value">1</div></div><div class="stat"><div class="label">Agent</div><div class="value">14.2</div></div></div>
+<div class="filter-bar">
+  <input type="search" placeholder="Filter hosts…"/>
+  <button type="button" class="chip active">All</button><button type="button" class="chip">Ready</button><button type="button" class="chip">Maintenance</button><button type="button" class="chip">Offline</button>
+</div>
+
+<div class="card">
+  <table class="res">
+    <thead><tr><th>Status</th><th>Name</th><th>CPU</th><th>Memory</th><th>VMs</th><th>Agent</th><th>Actions</th></tr></thead>
+    <tbody>
+      <tr><td><span class="status-ok">● Ready</span></td><td><a href="../detail/host.html">prod-node-01</a></td><td>62%</td><td>71%</td><td>12</td><td>14.2-p2</td><td>View · Drain · Maintenance</td></tr><tr><td><span class="status-ok">● Ready</span></td><td>prod-node-02</td><td>48%</td><td>55%</td><td>10</td><td>14.2-p2</td><td>View · Drain</td></tr><tr><td><span class="status-warn">◐ Maint</span></td><td>prod-node-03</td><td>12%</td><td>30%</td><td>4</td><td>14.1</td><td>View · Exit maint</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="modal-backdrop" id="add-host" hidden>
+  <div class="modal">
+    <div class="modal-h"><h2>Add host</h2><button class="btn" data-close-modal>×</button></div>
+    <div class="modal-b">
+      <div class="field"><label>Hostname / IP</label><input placeholder="prod-node-06.local"/></div>
+      <div class="field"><label>Join token</label><input type="password" placeholder="••••••••"/></div>
+      <div class="alert alert-info">Preflight will verify agent version and network reachability before join.</div>
+    </div>
+    <div class="modal-f">
+      <button class="btn" data-close-modal>Cancel</button>
+      <button class="btn btn-primary">Preflight &amp; join</button>
+    </div>
+  </div>
+</div>
+
+      <p class="mock-note">HTML mockup experiment · not production · IA: MCP is plugins · path: .sisyphus/plans/html-mockups/</p>
+    </main>
+  </div>
+</div>
+<script src="../assets/mockup.js"></script>
+</body>
+</html>
