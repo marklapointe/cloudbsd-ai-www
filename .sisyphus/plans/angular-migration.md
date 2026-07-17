@@ -1,10 +1,11 @@
 # CloudBSD Admin: React → Angular Migration (Hypervisor Control Plane + Plugin System)
 
 > **Agent entry point**: [`docs/migration/README.md`](../../docs/migration/README.md)  
-> **Canonical product IA**: [`../drafts/product-ia-esxi-vsphere-2026-07-16.md`](../drafts/product-ia-esxi-vsphere-2026-07-16.md)  
+> **Canonical product IA**: [`../../docs/migration/product-ia-esxi-vsphere-2026-07-16.md`](../../docs/migration/product-ia-esxi-vsphere-2026-07-16.md)  
+> **Component catalog (approve before code)**: [`../../docs/migration/component-catalog-plan.md`](../../docs/migration/component-catalog-plan.md)  
 > **UI order rules**: [`../drafts/ui-index.md`](../drafts/ui-index.md)  
 > **Wire protocol**: [`WIRE_PROTOCOL.md`](./WIRE_PROTOCOL.md)  
-> **Conflict rule**: product IA (2026-07-16) wins over older body text / SVG mockups in this file.
+> **Conflict rule**: product IA → component catalog → ui-index → this plan’s methodology → SVG mockups → older body text.
 
 ## TL;DR
 

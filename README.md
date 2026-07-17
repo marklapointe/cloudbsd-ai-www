@@ -97,6 +97,7 @@ Branch: `feat/angular-migration`.
 |-----|---------|
 | [Migration index](docs/migration/README.md) | Read order, conflict rules, methodology cheat-sheet |
 | [Product IA (ESXi/vSphere)](docs/migration/product-ia-esxi-vsphere-2026-07-16.md) | Sidebar, Settings/Account/System, screen value matrix |
+| [Component catalog plan](docs/migration/component-catalog-plan.md) | Sane KEEP/MERGE/ARCHIVE of all screens/components; approve before coding |
 | `.sisyphus/plans/angular-migration.md` | Full migration plan + methodology Rules #1–#9 |
 | `.sisyphus/drafts/ui-index.md` | Universal UI ordering rules |
 | `.sisyphus/plans/WIRE_PROTOCOL.md` | Wire protocol envelope + preflight |

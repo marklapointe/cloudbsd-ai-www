@@ -38,10 +38,12 @@ Older screens (`01`–`17`, `60`–`84`, …) remain until redrawn; **140–144 
 | Order | Document | Why |
 |------:|----------|-----|
 | 1 | [product-ia-esxi-vsphere-2026-07-16.md](./product-ia-esxi-vsphere-2026-07-16.md) | **Canonical product IA** — sidebar, Settings/Account/System, keep/defer matrix |
-| 2 | [diagrams/architecture/02-product-ia.md](../../diagrams/architecture/02-product-ia.md) | Mermaid IA (sidebar, settings split, action sequence) |
-| 3 | SVG set `140-ia-*` under `diagrams/screens/` | UI/UX examples for the same IA |
-| 4 | [../../.sisyphus/drafts/ui-index.md](../../.sisyphus/drafts/ui-index.md) | Universal visual order (columns, tabs, chrome). Sidebar §8 matches product IA |
-| 5 | [../../.sisyphus/plans/angular-migration.md](../../.sisyphus/plans/angular-migration.md) | Execution plan, methodology Rules #1–#9, waves/tasks |
+| 2 | [component-catalog-plan.md](./component-catalog-plan.md) | **Component/screen triage** — KEEP/MERGE/ARCHIVE; Angular module map; **approve before code** |
+| 3 | [diagrams/architecture/02-product-ia.md](../../diagrams/architecture/02-product-ia.md) | Mermaid IA (sidebar, settings split, action sequence) |
+| 4 | [diagrams/architecture/03-component-catalog.md](../../diagrams/architecture/03-component-catalog.md) | Mermaid catalog waves |
+| 5 | SVG set `140-ia-*` under `diagrams/screens/` | UI/UX examples for the same IA |
+| 6 | [../../.sisyphus/drafts/ui-index.md](../../.sisyphus/drafts/ui-index.md) | Universal visual order (columns, tabs, chrome). Sidebar §8 matches product IA |
+| 7 | [../../.sisyphus/plans/angular-migration.md](../../.sisyphus/plans/angular-migration.md) | Execution plan, methodology Rules #1–#9, waves/tasks |
 | 6 | [../../.sisyphus/plans/WIRE_PROTOCOL.md](../../.sisyphus/plans/WIRE_PROTOCOL.md) | Envelope, actions, preflight §2.31–2.32, stream |
 | 7 | [../../.sisyphus/drafts/data-structures.md](../../.sisyphus/drafts/data-structures.md) | Quantity, UnitKind, resource schemas |
 | 8 | [../../.sisyphus/drafts/ADJUSTMENTS.md](../../.sisyphus/drafts/ADJUSTMENTS.md) | Screen deltas + 2026-07-16 IA revision table |
