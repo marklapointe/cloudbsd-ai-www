@@ -189,3 +189,6 @@ Wire detail: **WIRE_PROTOCOL §2.35**. Complements Rule #13 (UI never bypasses b
 | Freeform jail base download URL | #12 |
 | Browser→DB / browser→host / user told to talk to infra | #13 |
 | UI mutating state without backend action | #13 |
+| Raw agent bus to browser / unfiltered stream fan-out | #14 |
+| Events to expired/revoked/disabled sessions | #14 |
+| Client-chosen topics without server ACL | #14 |
